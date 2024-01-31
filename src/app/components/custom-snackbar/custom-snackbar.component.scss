@@ -1,0 +1,15 @@
+.toaster-container{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding-left: 1rem;
+
+  .toaster-content {
+    align-items: center;
+   .close-icon{
+    cursor: pointer;
+   }
+  }
+}
+

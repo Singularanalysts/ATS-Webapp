@@ -1,0 +1,47 @@
+
+<div class="update-role-dialog-container">
+
+
+
+  <div class="header">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <hr>
+    <button mat-icon-button (click)="onAction('SAFE_CLOSE')" >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="content" mat-dialog-content>
+    <form class="add-role-form" [formGroup]="addRoleForm" #myFrom name="role-form" (ngSubmit)="onSubmit()">
+      <input type="hidden" formControlName="roleid">
+      <mat-form-field class="rolename-field">
+        <mat-label>Role Name</mat-label>
+        <input title="" matInput placeholder="Enter Role Name" formControlName="rolename" maxlength="25" >
+        <!-- errors -->
+        <mat-error class="error-message" *ngIf="roleForm.rolename.errors && roleForm.rolename.errors.required">Role Name is required</mat-error>
+      </mat-form-field>
+      <!-- <div class="error-message"  *ngIf="isFormSubmitted && roleForm.rolename.errors">
+        <mat-error class="error-message" *ngIf="isFormSubmitted && roleForm.rolename.errors">Please enter remarks</mat-error>
+      </div> -->
+      <mat-form-field class="description-field">
+        <mat-label>Description</mat-label>
+        <textarea title="" maxlength="250" matInput placeholder="Please enter the remarks" formControlName="description"></textarea>
+      </mat-form-field>
+      <!-- <div class="error-message"  *ngIf="showValidationError">
+        <mat-error>Please enter the remarks</mat-error>
+      </div> -->
+
+    </form>
+    <div class="actions" >
+      <button  mat-raised-button  (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+      <button type="submit"   mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+    </div>
+  </div>
+
+
+  <!-- <div class="actions" mat-dialog-actions>
+    <button  mat-raised-button  (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+    <button type="submit" form="role-form"  mat-raised-button color="primary">{{data.buttonSubmitText}}</button>
+  </div> -->
+  </div>
+

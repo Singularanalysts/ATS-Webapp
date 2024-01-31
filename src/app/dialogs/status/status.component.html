@@ -1,0 +1,36 @@
+
+<div class="status-dialog-container">
+
+
+
+  <div class="header">
+    <span class="header-text" mat-dialog-title>
+      {{data.title}}
+    </span>
+    <hr>
+    <button mat-icon-button (click)="onAction('SAFE_CLOSE')" >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="content" mat-dialog-content>
+    <form class="status-form" [formGroup]="statusForm" #myFrom name="status-form" (ngSubmit)="onAction('UPDATE')">
+      <mat-label>Reason for {{data.updateText}} {{data.type}}</mat-label>
+      <mat-form-field class="status-reason-field">
+        <textarea title="" [(ngModel)]="remarks"  minlength="4" matInput placeholder="Enter the reason for {{data.updateText}} {{data.type}}" formControlName="reasonForStatusUpdate"></textarea>
+        <mat-error  class="error-message" *ngIf="statusForm.controls['reasonForStatusUpdate'].hasError('required')" >Please enter the remarks</mat-error>
+        <mat-error  class="error-message" *ngIf="statusForm.controls['reasonForStatusUpdate'].hasError('maxlength')" >Remarks must not exceed 250
+          characters</mat-error>
+          <mat-error  class="error-message" *ngIf="statusForm.controls['reasonForStatusUpdate'].hasError('minlength')" >Remarks at least have 4
+            characters</mat-error>
+      </mat-form-field>
+
+    </form>
+
+  </div>
+
+  <div class="actions">
+    <button type="submit"  mat-raised-button color="primary" (click)="onAction('UPDATE')">{{data.buttonText}}</button>
+  </div>
+
+  </div>

@@ -1,0 +1,47 @@
+<div class="update-privilege-dialog-container">
+  <div class="header">
+    <h2 mat-dialog-title>{{'Add Privilege'}}</h2>
+    <hr>
+    <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="content" mat-dialog-content>
+    <form class="add-privilege-form" [formGroup]="form" name="privilege-form" (ngSubmit)="onSubmit()">
+      <mat-form-field class="name-field">
+        <mat-label>Type</mat-label>
+        <input title="" matInput placeholder="Enter Type" formControlName="type">
+        <!-- errors -->
+        <mat-error class="error-message" *ngIf="form.get('type').hasError('required')">Privilege Name is
+          required</mat-error>
+        <mat-error class="error-message" *ngIf="form.get('type').hasError('maxlength')">Maximum characters
+          reached</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="name-field">
+        <mat-label>Name</mat-label>
+        <input title="" matInput placeholder="Enter Name" formControlName="name">
+        <!-- errors -->
+        <mat-error class="error-message" *ngIf="form.get('name').hasError('required')">Privilege Type is
+          required</mat-error>
+        <mat-error class="error-message" *ngIf="form.get('name').hasError('maxlength')">Maximum characters
+          reached</mat-error>
+      </mat-form-field>
+      <!-- <div class="error-message"  *ngIf="showValidationError">
+        <mat-error>Please enter the remarks</mat-error>
+      </div> -->
+
+    </form>
+    <div class="actions">
+      <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+      <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+    </div>
+  </div>
+
+
+  <!-- <div class="actions" mat-dialog-actions>
+    <button  mat-raised-button  (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+    <button type="submit" form="privilege-form"  mat-raised-button color="primary">{{data.buttonSubmitText}}</button>
+  </div> -->
+</div>

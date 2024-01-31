@@ -1,0 +1,300 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "userid": 1,
+      "department": "IT",
+      "category": "Basic",
+      "qid": 1,
+      "status": "Initiate",
+      "options": [
+        {
+          "id": 6,
+          "optionA": "6",
+          "optionB": "7",
+          "optionC": "8",
+          "optionD": "9",
+          "question": "Number of primitive data types in Java are?",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 7,
+          "optionA": "32 and 64",
+          "optionB": "32 and 32",
+          "optionC": "64 and 32",
+          "optionD": "64 and 64",
+          "question": "What is the size of float and double in java?",
+          "userans": "A",
+          "answer": "optionA"
+        },
+        {
+          "id": 8,
+          "optionA": "short to int ",
+          "optionB": "long to int",
+          "optionC": "byte to int",
+          "optionD": "int to long",
+          "question": "Automatic type conversion is possible in which of the possible cases?",
+          "userans": "B",
+          "answer": "optionD"
+        },
+        {
+          "id": 9,
+          "optionA": "char[] ch = new char()",
+          "optionB": "char[] ch = new char(5)",
+          "optionC": "char[] ch = new char[5]",
+          "optionD": "char[] ch = new char()",
+          "question": "Select the valid statement",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 10,
+          "optionA": "int []a=(1,2,3)",
+          "optionB": "int []a={}",
+          "optionC": "int [][]a={1,2,3}",
+          "optionD": "int []a={1,2,3}",
+          "question": "Select the valid statement to declare and initialize an array",
+          "userans": "D",
+          "answer": "optionD"
+        }
+      ]
+    },
+    {
+      "userid": 1,
+      "department": "IT",
+      "category": "Basic",
+      "qid": 2,
+      "status": "Initiate",
+      "options": [
+        {
+          "id": 6,
+          "optionA": "6",
+          "optionB": "7",
+          "optionC": "8",
+          "optionD": "9",
+          "question": "Number of primitive data types in Java are?",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 7,
+          "optionA": "32 and 64",
+          "optionB": "32 and 32",
+          "optionC": "64 and 32",
+          "optionD": "64 and 64",
+          "question": "What is the size of float and double in java?",
+          "userans": "A",
+          "answer": "optionA"
+        },
+        {
+          "id": 8,
+          "optionA": "short to int ",
+          "optionB": "long to int",
+          "optionC": "byte to int",
+          "optionD": "int to long",
+          "question": "Automatic type conversion is possible in which of the possible cases?",
+          "userans": "B",
+          "answer": "optionD"
+        },
+        {
+          "id": 9,
+          "optionA": "char[] ch = new char()",
+          "optionB": "char[] ch = new char(5)",
+          "optionC": "char[] ch = new char[5]",
+          "optionD": "char[] ch = new char()",
+          "question": "Select the valid statement",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 10,
+          "optionA": "int []a=(1,2,3)",
+          "optionB": "int []a={}",
+          "optionC": "int [][]a={1,2,3}",
+          "optionD": "int []a={1,2,3}",
+          "question": "Select the valid statement to declare and initialize an array",
+          "userans": "D",
+          "answer": "optionD"
+        }
+      ]
+    },
+    {
+      "userid": 1,
+      "department": "IT",
+      "category": "Intermediate",
+      "qid": 3,
+      "status": "Initiate",
+      "options": [
+        {
+          "id": 6,
+          "optionA": "6",
+          "optionB": "7",
+          "optionC": "8",
+          "optionD": "9",
+          "question": "Number of primitive data types in Java are?",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 7,
+          "optionA": "32 and 64",
+          "optionB": "32 and 32",
+          "optionC": "64 and 32",
+          "optionD": "64 and 64",
+          "question": "What is the size of float and double in java?",
+          "userans": "A",
+          "answer": "optionA"
+        },
+        {
+          "id": 8,
+          "optionA": "short to int ",
+          "optionB": "long to int",
+          "optionC": "byte to int",
+          "optionD": "int to long",
+          "question": "Automatic type conversion is possible in which of the possible cases?",
+          "userans": "B",
+          "answer": "optionD"
+        },
+        {
+          "id": 9,
+          "optionA": "char[] ch = new char()",
+          "optionB": "char[] ch = new char(5)",
+          "optionC": "char[] ch = new char[5]",
+          "optionD": "char[] ch = new char()",
+          "question": "Select the valid statement",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 10,
+          "optionA": "int []a=(1,2,3)",
+          "optionB": "int []a={}",
+          "optionC": "int [][]a={1,2,3}",
+          "optionD": "int []a={1,2,3}",
+          "question": "Select the valid statement to declare and initialize an array",
+          "userans": "D",
+          "answer": "optionD"
+        }
+      ]
+    },
+    {
+      "userid": 1,
+      "department": "IT",
+      "category": "Advanced",
+      "qid": 4,
+      "status": "Initiate",
+      "options": [
+        {
+          "id": 6,
+          "optionA": "6",
+          "optionB": "7",
+          "optionC": "8",
+          "optionD": "9",
+          "question": "Number of primitive data types in Java are?",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 7,
+          "optionA": "32 and 64",
+          "optionB": "32 and 32",
+          "optionC": "64 and 32",
+          "optionD": "64 and 64",
+          "question": "What is the size of float and double in java?",
+          "userans": "A",
+          "answer": "optionA"
+        },
+        {
+          "id": 8,
+          "optionA": "short to int ",
+          "optionB": "long to int",
+          "optionC": "byte to int",
+          "optionD": "int to long",
+          "question": "Automatic type conversion is possible in which of the possible cases?",
+          "userans": "B",
+          "answer": "optionD"
+        },
+        {
+          "id": 9,
+          "optionA": "char[] ch = new char()",
+          "optionB": "char[] ch = new char(5)",
+          "optionC": "char[] ch = new char[5]",
+          "optionD": "char[] ch = new char()",
+          "question": "Select the valid statement",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 10,
+          "optionA": "int []a=(1,2,3)",
+          "optionB": "int []a={}",
+          "optionC": "int [][]a={1,2,3}",
+          "optionD": "int []a={1,2,3}",
+          "question": "Select the valid statement to declare and initialize an array",
+          "userans": "D",
+          "answer": "optionD"
+        }
+      ]
+    },
+    {
+      "userid": 1,
+      "department": "IT",
+      "category": "Basic",
+      "qid": 5,
+      "status": "Initiate",
+      "options": [
+        {
+          "id": 6,
+          "optionA": "6",
+          "optionB": "7",
+          "optionC": "8",
+          "optionD": "9",
+          "question": "Number of primitive data types in Java are?",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 7,
+          "optionA": "32 and 64",
+          "optionB": "32 and 32",
+          "optionC": "64 and 32",
+          "optionD": "64 and 64",
+          "question": "What is the size of float and double in java?",
+          "userans": "A",
+          "answer": "optionA"
+        },
+        {
+          "id": 8,
+          "optionA": "short to int ",
+          "optionB": "long to int",
+          "optionC": "byte to int",
+          "optionD": "int to long",
+          "question": "Automatic type conversion is possible in which of the possible cases?",
+          "userans": "B",
+          "answer": "optionD"
+        },
+        {
+          "id": 9,
+          "optionA": "char[] ch = new char()",
+          "optionB": "char[] ch = new char(5)",
+          "optionC": "char[] ch = new char[5]",
+          "optionD": "char[] ch = new char()",
+          "question": "Select the valid statement",
+          "userans": "C",
+          "answer": "optionC"
+        },
+        {
+          "id": 10,
+          "optionA": "int []a=(1,2,3)",
+          "optionB": "int []a={}",
+          "optionC": "int [][]a={1,2,3}",
+          "optionD": "int []a={1,2,3}",
+          "question": "Select the valid statement to declare and initialize an array",
+          "userans": "D",
+          "answer": "optionD"
+        }
+      ]
+    }
+  ]
+}

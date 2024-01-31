@@ -1,0 +1,161 @@
+<ul class="breadcrumb">
+    <li><a (click)="navigateToDashboard()">Home</a></li>
+    <li class="last">Recruiting</li>
+    <li class="last">Requirements</li>
+</ul>
+<div class="header-container mat-elevation-z1">
+    <span class="header-text">
+        Interviews
+    </span>
+
+    <div class="submission-actions">
+        <button mat-icon-button class="add-submission" (click)="backTo()">
+            <mat-icon class="item-icon">person_add</mat-icon>
+        </button>
+
+        <div class="search-submission">
+            <mat-icon class="item-icon">person_search</mat-icon>
+        </div>
+    </div>
+</div>
+<div>
+    <div>
+        <div class="row">
+            <div class="col-md-4">
+                Basic Details
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td style="width:30%"><strong>Email</strong></td>
+                                <td>{{entity.consultantemail}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contact Number</strong></td>
+                                <td>{{entity.contactnumber}}</td>
+                            </tr>
+
+                            <tr *ngIf="entity.linkedin!='' || entity.linkedin!=null">
+                                <td style="width:60%"><strong>Linked In</strong></td>
+                                <td><a href="https://www.linkedin.com/in/{{entity.linkedin}}"
+                                        target="_blank">{{entity.linkedin}}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Immigration Status</strong></td>
+                                <td>{{entity.visa.visastatus}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><strong>Current Location</strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">{{entity.currentlocation}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Relocation</strong></td>
+                                <td>{{entity.relocation}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                Work Details
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td style="width:40%"><strong>Experience</strong></td>
+                                <td>{{entity.experience}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rate</strong></td>
+                                <td>{{entity.hourlyrate}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Technology</strong></td>
+                                <td>{{entity.technology.technologyarea}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                Sales Person Contact Details
+                <div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td style="width:55%"><strong>Employee Name</strong></td>
+                                <td>{{entity.salesemp}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contact Number</strong></td>
+                                <td>{{entity.empcontact}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td>{{entity.empemail}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                Upload Documents
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="resumepath" class="form-label">Upload Resume</label>
+                        <input type="file" #resume
+                            accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            id="resumepath" (change)="uploaddoc($event)" name="resume"
+                            class="form-control rounded-pill">
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="h1bcopy" class="form-label">Upload Immigration Doc</label>
+                        <input type="file" #h1b
+                            accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            id="h1bcopy" (change)="uploadH1B($event)" name="h1bcopy"
+                            class="form-control rounded-pill">
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="file" class="form-label">Upload DL</label>
+                        <input type="file" #dl
+                            accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            id="dlcopy" (change)="uploadDL($event)" name="dlcopy"
+                            class="form-control rounded-pill">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="file" class="form-label">Other Documents</label>
+                        <input id="file" #multifiles type="file" multiple
+                            accept=".zip,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            class="form-control rounded-pill" (change)="onFileChange($event)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <strong>Skill Set</strong>
+                <table class="table  round">
+                    <tbody>
+                        <tr>
+                            <td *ngIf="entity.skills!=null">{{entity.skills}}</td>
+                            <td *ngIf="entity.skills==null">Skilss Not Available</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <strong>Summary</strong>
+                <table class="table  round">
+                    <tbody>
+                        <tr>
+                            <td *ngIf="entity.summary!=null">{{entity.summary}}</td>
+                            <td *ngIf="entity.summary==null">Summary Not Available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div>
+
+    </div>
+</div>

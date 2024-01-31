@@ -1,0 +1,27 @@
+<div class="update-qualification-dialog-container">
+
+    <div class="header">
+      <h2 mat-dialog-title>{{data.title}}</h2>
+      <hr>
+      <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <div class="content" mat-dialog-content>
+      <form class="add-qualification-form" [formGroup]="qualificationForm" name="qualification-form" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id">
+        <mat-form-field class="qualificationname-field">
+          <mat-label>Qualification</mat-label>
+          <input matInput formControlName="name" maxlength="15">
+          <!-- errors -->
+          <mat-error class="error-message" *ngIf="controls['name'].errors && controls['name'].errors['required']">Qualification is required</mat-error>
+        </mat-form-field>
+      </form>
+
+      <div class="actions">
+        <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+      </div>
+    </div>
+  </div>

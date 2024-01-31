@@ -1,0 +1,177 @@
+<div class="header">
+  <span mat-dialog-title class="title_text">{{'KPT'}}</span>
+  <hr>
+  <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div class="main-container" *ngIf="quizForm.controls.options.controls.length">
+
+  <mat-card class="mat-elevation-z8 card">
+    <!-- title -->
+
+  <mat-card-header class="card-header">
+    <mat-card-title class="card-title">Questionnaire</mat-card-title>
+    <!-- add button -->
+  <button [disabled]="!allowAdd && !quizForm.valid" mat-icon-button (click)="addQuestion()"
+     matTooltip="Add Question"
+     matTooltipPosition="left"
+    >
+    <mat-icon [ngClass]="{'item-icon': allowAdd }">add_circle</mat-icon>
+  </button>
+</mat-card-header>
+  <mat-card-content class="card-content">
+  <!-- form -->
+  <div class="form-container">
+    <form [formGroup]="quizForm" class="quiz-form" autocomplete="off" (ngSubmit)="onSubmit()">
+      <div  class="department-category-container" *ngIf="data.actionName === 'add-quiz'">
+        <div class="left-section">
+          <mat-form-field appearance="fill" class="category-field">
+            <!-- <input matInput formControlName="department" placeholder="Enter Department"> -->
+            <mat-select name="department" formControlName="department" placeholder="Select Department" (selectionChange)="onSelect($event, 'dept')">
+              <mat-option *ngFor="let option of deptOptions" [value]="option.name">
+                {{ option.name }}
+              </mat-option>
+            </mat-select>
+              <mat-error *ngIf="quizForm.get('department')?.errors?.required">Department is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="right-section">
+          <mat-form-field appearance="fill" class="category-field">
+            <!-- <input matInput formControlName="category" placeholder="Enter Category"> -->
+            <mat-select name="category" formControlName="category" placeholder="Select Category" (selectionChange)="onSelect($event, 'cat')">
+              <mat-option *ngFor="let option of categoryOptions" [value]="option.name">
+                {{ option.name }}
+              </mat-option>
+            </mat-select>
+              <mat-error *ngIf="quizForm.get('category')?.errors?.required">Category is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <ng-container formArrayName="options" *ngFor="let ctrl of quizForm.controls?.options?.controls let i = index">
+        <div [formGroupName]="i" class="fg">
+
+          <!-- Question -->
+
+          <div class="question-container">
+            <span class="quest-num">Q{{ i+1 }}</span>
+            <!-- Question Name -->
+            <div class="question-style">
+              <mat-form-field appearance="fill" class="question-field">
+                <input matInput formControlName="question" placeholder="Enter the question">
+
+                  <mat-error *ngIf="ctrl.get('question')?.errors?.required">Question value is required</mat-error>
+                  <mat-error *ngIf="ctrl.get('question')?.errors?.maxlength">Maximum characters reached</mat-error>
+
+              </mat-form-field>
+
+              <!-- delete button -->
+              <button  matTooltip="Remove" [disabled]="quizForm.controls.options.controls.length === 1"
+              matTooltipPosition="right" mat-icon-button (click)="removeQuestion(i)" id="{{ 'deleteBtn' + i }}">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- options section -->
+          <div class="option-container">
+
+            <!-- options -->
+            <div class="left-section">
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('answer')?.value === 'optionA'" [value]="'optionA'"
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+
+                  <mat-form-field appearance="fill" class="option-field">
+                    <input matInput type="text" class="option" formControlName="optionA" placeholder="Enter option A" />
+                    <mat-error *ngIf="ctrl.get('optionA')?.hasError('required')">
+                      Option value is required
+                    </mat-error>
+                    <mat-error *ngIf="ctrl.get('optionA')?.hasError('maxlength')">
+                      Maximum characters reached
+                    </mat-error>
+                  </mat-form-field>
+
+
+
+
+              </div>
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('answer')?.value === 'optionC'" [value]="'optionC'"
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+
+                  <mat-form-field appearance="fill" class="option-field">
+                    <input matInput type="text" class="form-control option"
+
+                      formControlName="optionC" placeholder="Enter option C" />
+                      <mat-error *ngIf="ctrl.get('optionC')?.hasError('required')">
+                        Option value is required
+                      </mat-error>
+                      <mat-error *ngIf="ctrl.get('optionC')?.hasError('maxlength')">
+                        Maximum characters reached
+                      </mat-error>
+                  </mat-form-field>
+
+
+              </div>
+
+            </div>
+            <div class="right-section">
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('answer')?.value === 'optionB'" [value]="'optionB'"
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+
+                  <mat-form-field appearance="fill" class="option-field">
+                    <input matInput type="text" class="option" formControlName="optionB" placeholder="Enter option B" />
+                    <mat-error *ngIf="ctrl.get('optionB')?.errors && ctrl.get('optionB')?.hasError('required')">
+                      Option value is required
+                    </mat-error>
+                    <mat-error *ngIf="ctrl.get('optionB')?.errors &&  ctrl.get('optionB')?.hasError('maxlength')">
+                      Maximum characters reached
+                    </mat-error>
+                  </mat-form-field>
+
+
+              </div>
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('answer')?.value === 'optionD'" [value]="'optionD'"
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+
+                  <mat-form-field appearance="fill" class="option-field">
+                    <input matInput type="text" class="option"
+                      formControlName="optionD" placeholder="Enter option D"/>
+                      <mat-error *ngIf="ctrl.get('optionD')?.hasError('required')">
+                        Option value is required
+                      </mat-error>
+                      <mat-error *ngIf="ctrl.get('optionD')?.hasError('maxlength')">
+                        Maximum characters reached
+                      </mat-error>
+                  </mat-form-field>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+
+    </form>
+
+  </div>
+
+</mat-card-content>
+ <!--bottom action button -->
+ <div class="actions">
+  <button mat-raised-button color="white" (click)="onAction('CANCEL')">Cancel</button>
+  <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">Save</button>
+</div>
+</mat-card>
+</div>

@@ -1,0 +1,150 @@
+<div class="purchase-order-container">
+    <ul class="breadcrumb">
+        <li><a (click)="navigateToDashboard()">Home</a></li>
+        <li class="last">Purchase Orders</li>
+    </ul>
+    <div class="header-container mat-elevation-z1">
+        <span class="header-text">
+            Purchase Orders
+        </span>
+
+        <div class="purchase-order-actions">
+            <button  matTooltip="Add" matTooltipPosition="left" mat-icon-button class="add-purchase-order" (click)="addPurchaseOrder()">
+                <mat-icon class="item-icon">add_circle</mat-icon>
+            </button>
+
+            <div class="search-submission">
+                <input matInput type="text" class="search" placeholder="search purchase order">
+            </div>
+        </div>
+    </div>
+    <div id="table-container" class="table-wrapper">
+        <section class="mat-elevation-z8 purchase-order-table-style">
+            <table mat-table [dataSource]="dataSource" oncopy="return false">
+                <!--- Note that these columns can be defined in any order.
+                                  The actual rendered columns are set as a property on the row definition" -->
+            
+                <!-- Serial Number Column -->
+                <ng-container matColumnDef="SerialNum">
+                    <th mat-header-cell *matHeaderCellDef> # </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+                </ng-container>
+            
+                <!-- Vendor Column -->
+                <ng-container matColumnDef="Vendor">
+                    <th mat-header-cell *matHeaderCellDef>Vendor</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Consultant Column -->
+                <ng-container matColumnDef="Consultant">
+                    <th mat-header-cell *matHeaderCellDef>Consultant</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Client Column -->
+                <ng-container matColumnDef="Client">
+                    <th mat-header-cell *matHeaderCellDef>Client</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Project Start Date Column -->
+                <ng-container matColumnDef="ProjectStartDate">
+                    <th mat-header-cell *matHeaderCellDef>Project
+                        Start Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Project End Date Column -->
+                <ng-container matColumnDef="ProjectEndDate">
+                    <th mat-header-cell *matHeaderCellDef>Project End
+                        Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Duration Column -->
+                <ng-container matColumnDef="Duration">
+                    <th mat-header-cell *matHeaderCellDef>Duration</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Billing Cycle Column -->
+                <ng-container matColumnDef="BillingCycle">
+                    <th mat-header-cell *matHeaderCellDef>Billing Cycle
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Net Term Column -->
+                <ng-container matColumnDef="NetTerm">
+                    <th mat-header-cell *matHeaderCellDef>Net Term</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Pay Rate Column -->
+                <ng-container matColumnDef="PayRate">
+                    <th mat-header-cell *matHeaderCellDef>Pay Rate</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Recruiter Name Column -->
+                <ng-container matColumnDef="RecruiterName">
+                    <th mat-header-cell *matHeaderCellDef>Recruiter
+                        Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Recruiter Email Column -->
+                <ng-container matColumnDef="RecruiterEmail">
+                    <th mat-header-cell *matHeaderCellDef>Recruiter
+                        Email</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Recruiter Contact Number Column -->
+                <ng-container matColumnDef="RecruiterContactNumber">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Recruiter Contact Number</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Account Person Name Column -->
+                <ng-container matColumnDef="AccountPersonName">
+                    <th mat-header-cell *matHeaderCellDef>Account
+                        Person Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Account Person Email Column -->
+                <ng-container matColumnDef="AccountPersonEmail">
+                    <th mat-header-cell *matHeaderCellDef>Account
+                        Person Email</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Account Person Contact Number Column -->
+                <ng-container matColumnDef="AccountPersonContactNumber">
+                    <th mat-header-cell *matHeaderCellDef>Account Person Contact Number</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Status Column -->
+                <ng-container matColumnDef="Status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+            
+                <!-- Action Column -->
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+                </ng-container>
+                <!-- table columns ends  -->
+            
+                <!-- table ROW -->
+                <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+            </table>
+        </section>
+    </div>
+</div>

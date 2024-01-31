@@ -1,0 +1,547 @@
+ resumeError: boolean = false;
+  aadharError: boolean = false;
+  panError: boolean = false;
+  bankError: boolean = false;
+  multifilesError: boolean = false;
+  resumeFileNameLength: boolean = false;
+  aadharFileNameLength: boolean = false;
+  panFileNameLength: boolean = false;
+  bankFileNameLength: boolean = false;
+  multifilesFileNameLength: boolean = false;
+
+  @ViewChild('multifiles')
+  multifiles: any = ElementRef;
+  sum = 0;
+  onFileChange(event: any) {
+    this.uploadedFileNames = [];
+    for (var i = 0; i < event.target.files.length; i++) {
+      const file = event.target.files[i];
+      var items = file.name.split(".");
+      const str = items[0];
+      const fileSizeInKB = Math.round(file.size / 1024);
+      this.sum = this.sum + fileSizeInKB;
+      if (str.length > 20) {
+        this.multifilesFileNameLength = true;
+      }
+      if (fileSizeInKB < 4048) {
+        this.uploadedfiles.push(event.target.files[i]);
+        this.uploadedFileNames.push(file.name);
+        this.multifilesError = false;
+      }
+      else {
+        this.multifiles.nativeElement.value = "";
+        this.uploadedfiles = [];
+        this.multifilesError = true;
+        this.multifilesFileNameLength = false;
+      }
+    }
+  }
+
+  flg = true;
+  @ViewChild('resume')
+  resume: any = ElementRef;
+  resumeupload!: any;
+  uploadResume(event: any) {
+    this.resumeupload = event.target.files[0];
+    const file = event.target.files[0];
+    const fileSizeInKB = Math.round(file.size / 1024);
+    var items = file.name.split(".");
+    const str = items[0];
+    if (str.length > 20) {
+      this.resumeFileNameLength = true;
+    }
+    if (fileSizeInKB > 2048) {
+      this.flg = false;
+      this.resumeError = true;
+    }
+    else {
+      this.resumeError = false;
+      this.flg = true;
+    }
+  }
+
+  @ViewChild('aadhar') aadhar: any = ElementRef;
+  aadharUpload!: any;
+  uploadAadhar(event: any) {
+    this.aadharUpload = event.target.files[0];
+    const file = event.target.files[0];
+    const fileSizeInKB = Math.round(file.size / 1024);
+    var items = file.name.split(".");
+    const str = items[0];
+    if (str.length > 20) {
+      this.aadharFileNameLength = true;
+    }
+    if (fileSizeInKB > 2048) {
+      this.flg = false;
+      this.aadharError = true;
+      return;
+    }
+    else {
+      this.aadharError = false;
+      this.flg = true;
+    }
+  }
+  @ViewChild('pan')
+  pan: any = ElementRef;
+  panUpload!: any;
+  uploadPan(event: any) {
+    this.panUpload = event.target.files[0];
+    const file = event.target.files[0];
+    const fileSizeInKB = Math.round(file.size / 1024);
+    var items = file.name.split(".");
+    const str = items[0];
+    if (str.length > 20) {
+      this.panFileNameLength = true;
+    }
+
+    if (fileSizeInKB > 2048) {
+      this.flg = false;
+      this.panError = true;
+      return;
+    }
+    else {
+      this.panError = false;
+    }
+  }
+
+  @ViewChild('bank')
+  bank: any = ElementRef;
+  bankUpload!: any;
+  uploadBank(event: any) {
+    this.bankUpload = event.target.files[0];
+    const file = event.target.files[0];
+    const fileSizeInKB = Math.round(file.size / 1024);
+    var items = file.name.split(".");
+    const str = items[0];
+    if (str.length > 20) {
+      this.bankFileNameLength = true;
+    }
+
+    if (fileSizeInKB > 2048) {
+      this.flg = false;
+      this.bankError = true;
+      return;
+    }
+    else {
+      this.bankError = false;
+      this.flg = true;
+    }
+  }
+
+
+  uploadFileOnSubmit(id: number) {
+    const formData = new FormData();
+    for (var i = 0; i < this.uploadedfiles.length; i++) {
+      formData.append("files", this.uploadedfiles[i]);
+    }
+
+    if (this.resumeupload != null) {
+      formData.append('resume', this.resumeupload, this.resumeupload.name);
+    }
+
+    if (this.aadharUpload != null) {
+      formData.append('aadhar', this.aadharUpload, this.aadharUpload.name);
+    }
+
+    if (this.panUpload != null) {
+      formData.append('pan', this.panUpload, this.panUpload.name);
+    }
+
+    if (this.bankUpload != null) {
+      formData.append('bank', this.bankUpload, this.bankUpload.name);
+    }
+
+    // console.log("formData:", formData);
+
+    for (let pair of (formData as any).entries()) {
+     // console.log(pair);
+      // console.log(`File: ${pair[1].name}, Size: ${pair[1].size} bytes, Type: ${pair[1].type}`);
+    }
+    // this.fileServ.uploadFile(formData, id)
+    //   .subscribe((response: any) => {
+    //     if (response.status === 200) {
+    // console.log('Files uploaded successfully:', response);
+    //     } else {
+    // console.error('Failed to upload files:', response);
+    //     }
+    //   }
+    //   );
+  }
+
+
+   downloadfile(id: number, filename: string) {
+    // var items = filename.split(".");
+    // this.fileServ
+    //   .downloadresume(id, true)
+    //   .subscribe( (blob: Blob )=> {
+    //     if (items[1] == 'pdf' || items[1] == 'PDF') {
+    //       var fileURL: any = URL.createObjectURL(blob);
+    //       var a = document.createElement("a");
+    //       a.href = fileURL;
+    //       a.target = '_blank';
+    //       // Don't set download attribute
+    //       //a.download = filename;
+    //       a.click();
+    //     }
+    //     else {
+    //       saveAs(blob, filename)
+    //     }
+    //   }
+    //   );
+  }
+
+
+   fileList?: [];
+  type!: any;
+  filedetails(fileData: any) {
+    this.type = fileData.filename;
+    var items = this.type.split(".");
+    // this.fileServ
+    //   .downloadfile(fileData.docid)
+    //   .subscribe((blob: Blob) => {
+    //     if (items[1] == 'pdf' || items[1] == 'PDF') {
+    //       var fileURL: any = URL.createObjectURL(blob);
+    //       var a = document.createElement("a");
+    //       a.href = fileURL;
+    //       a.target = '_blank';
+    //       // a.download = filename;
+    //       a.click();
+    //     }
+    //     else {
+    //       saveAs(blob, fileData.filename)
+    //     }
+    //   }
+    //     // saveAs(blob, fileData.filename)
+    //   );
+  }
+
+
+  
+
+
+  getDataOnEdit(id: number) {
+    this.empManagementServ.getEmployeeById(id).subscribe(
+      (response: any) => {
+        this.tech = response.data;
+      //  console.log(this.tech);
+        if(this.data.actionName === 'edit-employee'){
+          this.initilizeAddEmployeeForm(this.tech);
+        }
+        this.filesArr = response.data.edoc;
+        this.filesArr = [
+        {
+          createddate: "16-10-2023",
+          filename: " doc5.pdf",
+          docid: '5'
+        },
+        {
+          createddate: "17-10-2023",
+          filename: " doc6.pdf",
+          docid: '6'
+        },
+        {
+          createddate: "18-10-2023",
+          filename: " doc7.pdf",
+          docid: '7'
+        },
+        ];
+        this.allDocumentsData = [
+          // { createddate: this.tech.createddate, filename: this.tech.resume },
+          // { createddate: this.tech.createddate, filename: this.tech.pan },
+          // { createddate: this.tech.createddate, filename: this.tech.aadhar },
+          // { createddate: this.tech.createddate, filename: this.tech.bpassbook },
+          {
+            createddate: "12-10-2023",
+            filename: " doc1.pdf",
+            docid: '1'
+          },
+          {
+            createddate: "13-10-2023",
+            filename: " doc2.pdf",
+            docid: '2'
+          },
+          {
+            createddate: "14-10-2023",
+            filename: " doc3.pdf",
+            docid: '3'
+          },
+          {
+            createddate: "15-10-2023",
+            filename: " doc4.pdf",
+            docid: '4'
+          },
+          ...this.filesArr
+        ];
+      })
+  }
+
+
+  
+  deletemultiple(id: number) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to remove the file?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: { id },
+      actionName: 'delete-multiple-files'
+    };
+
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+      if (dialogRef.componentInstance.allowAction) {
+        // this.fileServ.removingfiles(id).subscribe(
+        //   (response: any) => {
+        //     if (response.status === 'success') {
+        //       this.dataTobeSentToSnackBarService.message = `File removed successfully`;
+        //       this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-success'];
+        //       this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+        //       this.ngOnInit();
+        //     } else {
+        //       this.dataTobeSentToSnackBarService.message = `Failed to remove File`;
+        //       this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+        //       this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+        //     }
+        //   }
+        // );
+      }
+    }
+    });
+  }
+
+
+  
+
+  deletefile(id: number) {
+    const did = this.data?.id;
+    // const fl = doctype.toUpperCase();
+
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: `Are you sure you want to remove the File?`,
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: { id },
+      actionName: 'delete-file'
+    };
+
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+      if (dialogRef.componentInstance.allowAction) {
+        // this.fileServ.removefile(id, doctype).subscribe(
+        //   (response: any) => {
+        //     if (response.status === 'success') {
+        //       this.dataTobeSentToSnackBarService.message = `Removed File successfully`;
+        //       this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-success'];
+        //       this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+        //       this.getDataOnEdit(did);
+        //     } else {
+        //       this.dataTobeSentToSnackBarService.message = `Failed to remove File`;
+        //       this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+        //       this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+        //     }
+        //   }
+        // );
+      }
+    }
+    });
+  }
+
+
+   <div class="header-container-upload-documents">
+      <span class="header-text">Upload Documents</span>
+    </div>
+    <div class="upload-documents">
+      <div class="upload-documents-left">
+        <!-- Resume Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="resume">Resume</mat-label>
+          <div class="upload-container">
+            <input matInput  readonly name="resumeName" class="file-input" [value]="resumeupload ? resumeupload.name : 'No file chosen'" />
+            <label for="resume" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="resume.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" #resume id="resume" (change)="uploadResume($event)"
+              name="resumeUploadFile"
+              accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="resumeError" style="color: #f44336; font-size: 12px;">Resume size should be less than 2 mb</mat-hint>
+          <mat-hint *ngIf="resumeFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20 characters before upload</mat-hint>
+        </mat-form-field>
+      
+        <!-- Aadhar Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="aadhar">Aadhar</mat-label>
+          <div class="upload-container">
+            <input matInput  readonly name="aadharName" class="file-input" [value]="aadharUpload ? aadharUpload.name : 'No file chosen'"/>
+            <label for="aadhar" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="aadhar.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" #aadhar id="aadhar" (change)="uploadAadhar($event)"
+              name="aadharUploadFile" 
+              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="aadharError" style="color: #f44336; font-size: 12px;">Aadhar size should be less than 2 mb</mat-hint>
+          <mat-hint *ngIf="aadharFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20 characters before upload</mat-hint>
+        </mat-form-field>
+      
+        <!-- Pan Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="pan">Pan</mat-label>
+          <div class="upload-container">
+            <input matInput  readonly name="pan" class="file-input" [value]="panUpload ? panUpload.name : 'No file chosen'"/>
+            <label for="pan" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="pan.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" #pan id="pan" (change)="uploadPan($event)" name="panUploadFile"
+              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="panError" style="color: #f44336; font-size: 12px;">Pan size should be less than 2 mb</mat-hint>
+          <mat-hint *ngIf="panFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20 characters before upload</mat-hint>
+        </mat-form-field>
+
+      </div>
+      <div class="upload-documents-right">
+        <!-- Bank Passbook Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="bank">Bank Passbook</mat-label>
+          <div class="upload-container">
+            <input matInput  readonly name="bank" class="file-input" [value]="bankUpload ? bankUpload .name : 'No file chosen'"/>
+            <label for="bank" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="bank.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" #bank id="bankPassbookUploadFile"
+              (change)="uploadBank($event)" name="bankPassbookUploadFile"
+              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="bankError" style="color: #f44336; font-size: 12px;">Bank Passbook size should be less than 2 mb</mat-hint>
+          <mat-hint *ngIf="bankFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20 characters before upload</mat-hint>
+        </mat-form-field>
+      
+        <!-- Other Documents Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="otherDocumentsUploadFile">Other Documents</mat-label>
+          <div class="upload-container">
+            <input matInput multiple  readonly name="otherDocumentsName" class="file-input"/>
+            <label for="otherDocumentsUploadFile" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="multifiles.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" id="otherDocumentsUploadFile"
+            (change)="onFileChange($event)" multiple #multifiles name="otherDocumentsUploadFile" multiple="multiple"
+              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="multifilesError" style="color: #f44336; font-size: 12px;">Other Documents size should be less than 4 mb</mat-hint>
+          <mat-hint *ngIf="multifilesFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20 characters before upload</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="documents-table"  *ngIf="data.actionName === 'edit-employee'">
+      <span class="header-text">List of documents</span>
+      <table mat-table  [dataSource]="allDocumentsData" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.createddate}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="document_name">
+          <th mat-header-cell *matHeaderCellDef> Document Name </th>
+          <td mat-cell *matCellDef="let element" style="cursor:pointer; color: #4154f1" (click)="filedetails(element)"> {{element.filename}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> Delete </th>
+          <td mat-cell *matCellDef="let element"> 
+          <button type="button" mat-icon-button (click)="deletefile(element.docid)"><mat-icon>delete</mat-icon></button> 
+          </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <!-- <table class="table table-sm  table-light table-bordered table-responsive">
+        <thead class="thead-light">
+            <tr>
+                <th>Date</th>
+                <th>Document Name</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td *ngIf="tech.resume !==null ">{{tech.createddate}}</td>
+                    <td *ngIf="tech.resume !==null "><a class="ab" style="cursor:pointer"
+                            (click)="downloadfile(tech.userid,tech.resume,'resume')">{{tech.resume}}</a>
+                    </td>
+                    <td *ngIf="tech.resume !==null "><i style="color:maroon;cursor:pointer"
+                            class="ri-delete-bin-fill d-flex flex-column align-items-center justify-content-center"
+                            (click)="deletefile(tech.userid,'resume')"></i></td>
+                </tr>
+            <tr>
+                <td *ngIf="tech.pan !==null ">{{tech.createddate}}</td>
+                <td *ngIf="tech.pan !==null "><a class="ab" style="cursor:pointer"
+                        (click)="downloadfile(tech.userid,tech.pan,'pan')">{{tech.pan}}</a>
+                </td>
+                <td *ngIf="tech.pan !==null "><i style="color:maroon;cursor:pointer"
+                        class="ri-delete-bin-fill d-flex flex-column align-items-center justify-content-center"
+                        (click)="deletefile(tech.userid,'pan')"></i></td>
+            </tr>
+            <tr> 
+                <td *ngIf="tech.aadhar !==null ">{{tech.createddate}}</td>
+                <td *ngIf="tech.aadhar !==null "><a class="ab"
+                        style="cursor:pointer;cursor:pointer"
+                        (click)="downloadfile(tech.userid,tech.aadhar,'aadhar')">{{tech.aadhar}}</a>
+                </td>
+                <td *ngIf="tech.aadhar !==null "><i style="color:maroon;cursor:pointer"
+                        class="ri-delete-bin-fill d-flex flex-column align-items-center justify-content-center"
+                        (click)="deletefile(tech.userid,'aadhar')"></i></td>
+            </tr> 
+
+            <tr> 
+                <td *ngIf="tech.bpassbook !==null ">{{tech.createddate}}</td>
+                <td *ngIf="tech.bpassbook !==null "><a class="ab"
+                        style="cursor:pointer;cursor:pointer"
+                        (click)="downloadfile(tech.userid,tech.bpassbook,'passbook')">{{tech.bpassbook}}</a>
+                </td>
+                <td *ngIf="tech.bpassbook !==null "><i style="color:maroon;cursor:pointer"
+                        class="ri-delete-bin-fill d-flex flex-column align-items-center justify-content-center"
+                        (click)="deletefile(tech.userid,'passbook')"></i></td>
+            </tr> 
+             <tr *ngFor="let data of filesArr">
+                <td>{{data.createddate}}</td>
+                <td><a class="ab" style="cursor:pointer"
+                          (click)="filedetails(data)">{{data.filename}}</a></td>
+                <td width="6%"><i style="color:maroon;cursor:pointer"
+                        class="ri-delete-bin-fill d-flex flex-column align-items-center justify-content-center"
+                        (click)="deletemultiple(data.docid)"></i></td>
+            </tr> 
+        </tbody>
+    </table> -->
+    </div>
+
+    <div class="form-button">
+      <!-- <div class="form-button-left">
+        <div class="form-button-inner">
+          <button mat-raised-button  >Back</button>
+        </div>
+      </div> -->
+
+    </div>

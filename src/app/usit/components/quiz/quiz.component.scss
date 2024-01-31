@@ -1,0 +1,132 @@
+body{
+  background-color: #ebdede;
+  overflow: hidden !important;
+
+}
+.main-container{
+  background-color: rgb(244, 243, 243);
+  /* color: #ddd; */
+  border-radius: 10px;
+  padding: 20px;
+  font-family: "Open Sans",sans-serif;
+  //max-width: 700px;
+  height: 81dvh;
+
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    margin-left: 14px;
+    padding: 14px;
+    font-size: large;
+    font-weight: 600;
+  }
+}
+
+
+
+.main-container > p{
+  font-size: 32px;
+}
+.card{
+  padding: 10px;
+  height: calc(100vh - 112px);
+}
+.card-title{
+  margin-left: 28px;
+  padding: 8px 8px 8px 0px !important;
+}
+.card-header{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0px;
+  background-color: whitesmoke;
+  margin-bottom: 4px;
+}
+.card-content{
+  height: 75dvh;
+
+  overflow: auto;
+}
+
+
+
+@media(max-width:576px){
+  .question-field .option-field{
+      width: 100%;
+      word-spacing: 2px;
+  }
+}
+
+.question-style{
+display: flex !important;
+flex-direction: row !important;
+align-items: center;
+//gap: 16px;
+justify-content: space-between;
+margin-left: 10px;
+
+}
+.quest-num{
+  font-size: larger;
+  margin-left: 10px;
+  margin-bottom: 4px;
+}
+
+.option-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 64px;
+}
+.option-style{
+
+display: flex;
+flex-direction: row !important;
+align-items: center;
+gap: 8px;
+}
+
+
+
+.question-field{
+  width: 90%;
+}
+.option-field{
+
+  width: 180% !important;
+}
+.actions{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.department-category-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  .left-section{
+    width: 50%;
+  }
+  .right-section{
+    width: 50%;
+  }
+  margin-left: 10px;
+}
+
+.category-field{
+  width: 75%;
+}
+
+:host ::ng-deep .mat-mdc-form-field-error-wrapper{
+  padding: 0px !important;
+}
+// mat-icon color
+.item-icon {
+  color: #3f51b5;
+}

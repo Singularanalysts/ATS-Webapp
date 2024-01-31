@@ -1,0 +1,165 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+    <form [formGroup]="submissionForm" (ngSubmit)="onSubmit()" class="vendor-form">
+        <div class="form">
+            <div class="form-column-left">
+                <input id="flg" name="flg"  type="hidden" formControlName="flg">
+                <input type="hidden" formControlName="user">
+                <input name="submissionid" type="hidden" formControlName="submissionid">
+                <input name="updatedby" type="hidden" formControlName="updatedby">
+                <input name="status" type="hidden" formControlName="status" >
+                <input name="remarks" type="hidden" formControlName="remarks" >
+                <input name="substatus" type="hidden" formControlName="substatus" >
+
+                <div class="fg-div" *ngIf="this.flag !== 'sales'">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Requirement</mat-label>
+                        <mat-select formControlName="requirement"  (selectionChange)="requirements($event)">
+                            <mat-option *ngFor="let obj of requirementdata" [value]="obj[0]">
+                                      {{obj[3]}} - {{obj[1]}} ({{obj[2]}})
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="submissionForm?.get('requirement')?.hasError('required')">Requirement
+                            is Required
+                          </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- <div class="fg-div" formGroupName="requirement" *ngIf="flag === 'Recruiting'">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Requirement</mat-label>
+                        <input type="text" matInput formControlName="requirementid" [matAutocomplete]="auto">
+                           <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let obj of filteredRequirements | async" [value]="obj[0]">
+                                {{obj[3]}} - {{obj[1]}} ({{obj[2]}})
+                            </mat-option>
+                           </mat-autocomplete>
+                        <mat-error *ngIf="submissionForm?.get('requirement.requirementid')?.hasError('required')">Requirement
+                            is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div> -->
+
+                <div class="fg-div">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Consultant</mat-label>
+                        <mat-select formControlName="consultant">
+                            <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
+                                {{obj[1]}} ({{obj[2]}} with {{obj[3]}})
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="submissionForm.get('consultant')!.hasError('required')">Consultant
+                            is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Position Title</mat-label>
+                    <input matInput formControlName="position" maxlength="25">
+                    <mat-error *ngIf="submissionForm.get('position')!.hasError('required')"> Position Title is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Project Location</mat-label>
+                    <input matInput formControlName="projectlocation" ngx-gp-autocomplete [options]='options' (onAddressChange)="handleAddressChange($event)">
+                    <mat-error *ngIf="submissionForm.get('projectlocation')!.hasError('required')"> Location is required</mat-error>
+                </mat-form-field>
+
+                <div style="width: 80%;">
+                    <mat-label>Rate Type</mat-label><br>
+                    <mat-radio-group formControlName="ratetype" aria-label="Select an option">
+                      <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.rate"  [value]="opt.value" (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
+                      <mat-error *ngIf="submissionForm.get('ratetype')!.hasError('required') && isRadSelected"> Rate Type is required</mat-error>
+                    </mat-radio-group>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Submission Rate</mat-label>
+                    <input matInput  formControlName="submissionrate" maxlength="5">
+                    <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('required')">Submission Rate is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>End Client</mat-label>
+                    <input matInput formControlName="endclient" maxlength="60">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Implementation Partner</mat-label>
+                    <input matInput formControlName="implpartner" maxlength="120">
+                </mat-form-field>
+
+                <div class="fg-div">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Company</mat-label>
+                        <mat-select formControlName="vendor" (selectionChange)="recruiterList($event)">
+                            <mat-option *ngFor="let obj of vendordata"
+                                      [value]="obj.id">
+                                      {{ obj.company }}
+                            </mat-option>
+                        </mat-select>
+                        <button type="button" matSuffix mat-icon-button (click)="goToVendorList()"><mat-icon>add</mat-icon></button>
+                        <mat-error *ngIf="submissionForm.get('vendor')!.hasError('required')">Vendor Company
+                            is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="fg-div">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Recruiter</mat-label>
+                        <mat-select formControlName="recruiter"  (selectionChange)="recruiterContact($event)">
+                            <mat-option *ngFor="let obj of recruiterName"
+                                      [value]="obj.id">
+                                      {{obj.recruiter}}
+                            </mat-option>
+                        </mat-select>
+                        <button type="button" matSuffix mat-icon-button (click)="goToVendorList()"><mat-icon>add</mat-icon></button>
+                        <mat-error *ngIf="submissionForm.get('recruiter')!.hasError('required')">Contact Person Name
+                            is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Contact Number</mat-label>
+                    <input matInput formControlName="empcontact" max-length="15" />
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="empmail" max-length="50" />
+                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('required')">Email is required</mat-error>
+                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('pattern')">Invalid Email Address</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Source</mat-label>
+                    <mat-select formControlName="source">
+                        <mat-option *ngFor="let option of selectOptionObj.sourceType" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="submissionForm.get('source')!.hasError('required')">Choose Source
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+        </div>
+    </form>
+
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

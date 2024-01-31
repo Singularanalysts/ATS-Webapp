@@ -1,0 +1,142 @@
+.breadcrumb{
+  display: flex;
+  flex-direction: row;
+}
+ul{
+  padding-inline-start: 10px;
+  background-color: rgb(228, 231, 234);
+  height: 2rem;
+  padding-top: 8px;
+  top: 0;
+}
+ul.breadcrumb {
+  list-style: none;
+}
+ul.breadcrumb li+li:before {
+  color: black;
+ // content: "/\00a0";
+}
+
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+  cursor: pointer;
+}
+ul.breadcrumb li:last-child {
+  color: black;
+  pointer-events: none;
+}
+
+
+.cards-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+
+
+}
+.info-card, .activity-card{
+  width: 50%;
+  height: 75svh;
+
+}
+.info-card-header, .activity-card-header{
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px !important;
+}
+
+.info-card-header-text{
+  font-weight: 400;
+  font-size: large;
+}
+
+
+table {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  // margin: auto;
+  margin-top: 1rem;
+}
+table {
+  border-collapse: collapse;
+}
+td:first-child{
+  font-weight: 600;
+}
+
+th,
+td {
+  border: 1px solid #a5a4a4;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: 600 !important;
+}
+.table-header-text{
+  font-weight: bold;
+}
+
+.approved {
+  color: #39c22d;
+  font-size: 12px;
+}
+
+.rejected {
+  color: #FF0000;
+  font-size: 12px;
+}
+
+.added {
+  color:#29abd3;
+  font-size: 12px;
+}
+
+.submssion{
+  color:#db1aab;
+  font-size: 12px;
+}
+::ng-deep .mat-step-icon-content {
+   display: none !important;
+   width: 10%;
+  }
+
+  ::ng-deep .mat-vertical-stepper-content
+{
+    visibility: visible !important;
+    height: 100% !important;
+}
+
+::ng-deep .mat-step-text-label{
+  font-weight: 100 !important;
+  color: rgb(148, 143, 143);
+}
+
+::ng-deep  .mat-step-header{
+  padding-top:12px !important;
+  padding-bottom: 12px !important;
+}
+
+::ng-deep .mat-step-icon {
+
+  height: 13px !important;
+  width: 13px !important;
+
+}
+
+::ng-deep .mat-vertical-content-container {
+  margin-left: 29px !important;
+}
+
+::ng-deep .mat-stepper-vertical-line::before {
+  border-left-width: 3px !important;
+}

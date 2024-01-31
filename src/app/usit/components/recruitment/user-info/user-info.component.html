@@ -1,0 +1,133 @@
+<div class="breadcrumb-container">
+  <ul class="breadcrumb">
+    <li><a [routerLink]="['../']">Home/</a></li>
+    <li>{{flag | titlecase}}</li>
+    <li>Employee</li>
+  </ul>
+</div>
+
+<div class="cards-container">
+  <mat-card class="info-card">
+    <mat-card-header class="info-card-header">
+      <span class="info-card-header-text">User Details</span>
+      <button mat-icon-button class="edit-user" [matTooltip]="'Edit Employee'" [matTooltipPosition]="'above'">
+        <mat-icon class="item-icon">edit</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+
+
+      <table class="table">
+        <tbody *ngFor="let vms of entity">
+          <tr>
+            <td style="width:43%"><span class="table-header-text">Full Name</span></td>
+            <td>{{vms.fullname}}</td>
+          </tr>
+          <tr>
+            <td style="width:43%"><span class="table-header-text">Pseudo Name</span></td>
+            <td>{{vms.pseudoname}}</td>
+          </tr>
+          <tr>
+            <td><span class="table-header-text">Mobile</span></td>
+            <td>{{vms.personalcontactnumber}}</td>
+          </tr>
+          <tr>
+            <td><span class="table-header-text">Email</span></td>
+            <td>{{vms.email}}</td>
+          </tr>
+          <tr>
+            <td><span class="table-header-text">Designation</span></td>
+            <td>{{vms.designation}}</td>
+          </tr>
+          <tr>
+            <td><span class="table-header-text">Manager </span></td>
+            <td>{{vms.manager}}</td>
+          </tr>
+          <tr>
+            <td><span class="table-header-text">Team Leader</span></td>
+            <td>{{vms.teamlead}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="activity-card">
+    <mat-card-header class="activity-card-header">
+      <h4>Recent Activity</h4>
+      <button mat-icon-button class="back">
+        <mat-icon class="item-icon"></mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content class="activity-card-content" [style.overflow]="'auto'">
+      <mat-stepper orientation="vertical" [linear]="true" #stepper class="custom-stepper"
+      >
+        <mat-step *ngFor="let data of datarr"
+         [color]="data.status =='Rejected' ? 'warn': data.status =='Submitted' ? 'accent' : data.status =='Approved' ? 'primary': 'primary'"
+          [completed]="true"
+          [state]="'final'"
+          >
+          <ng-template matStepLabel>{{data.trtime}} </ng-template>
+          <ng-template matStepContent>
+
+            <div class="activity-content" *ngIf="data.flg=='VMS'">
+              <span> <a [routerLink]="['/user/','dashboard',data.userid]">{{data.pseudoname}}</a>
+                <span
+                  [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
+                  <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
+                  <ng-template #rejected>
+                    <!-- <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal"
+                      #closeModal>{{data.status}}</span> -->
+                      <span>{{data.status}}</span>
+                  </ng-template>
+                  <ng-template #normal>
+                    {{data.status}}
+                  </ng-template>
+                </span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a title="Click Here to review" [routerLink]="['/edit-vendor',data.vms]" target="_blank"><u>
+                    {{data.company}}</u> </a>
+              </span>
+            </div>
+            <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
+              <span> <a [routerLink]="['/user/','dashboard',data.userid]">{{data.pseudoname}}</a>
+              </span>
+              {{data.status}} <span>
+                <a [routerLink]="['/consultant/','info','dashboard',data.consultantid]">{{data.consultantname}}</a>
+              </span>
+              Profile to <span>{{data.company}}(V)
+                <span *ngIf="data.submissionrate!==null">,
+                  {{data.submissionrate}}($/hr),</span>
+              </span> on
+              <span>{{data.emptype}}</span>
+              <span> <span *ngIf="data.endclient!=='NULL'">, {{data.endclient}}(client)
+                </span><span *ngIf="data.implpartner!=='NULL'">,
+                  {{data.implpartner}}(IMPL)</span> </span>
+            </div>
+
+            <div class="activity-content" *ngIf="data.flg=='SUB-Recruiting'">
+              <span> <a [routerLink]="['/user/','dashboard',data.userid]">{{data.pseudoname}}</a>
+              </span>
+              {{data.status}} <span>
+                <a [routerLink]="['/consultant/','info','dashboard',data.consultantid]">{{data.consultantname}}</a>
+              </span>
+              Profile for <span>{{data.reqnumber}}(Req No),<span
+                  *ngIf="data.company !== 'NULL'">{{data.company}}(V),</span>
+                <span *ngIf="data.submissionrate !== null">
+                  {{data.submissionrate}}($/hr),</span>
+              </span> on
+              <span>{{data.emptype}}</span>
+              <span> <span *ngIf="data.endclient !== 'NULL'">, {{data.endclient}}(client)</span>
+                <span *ngIf="data.implpartner !== null">, {{data.implpartner}}(IMPL)</span>
+              </span>
+            </div>
+
+          </ng-template>
+        </mat-step>
+
+      </mat-stepper>
+
+    </mat-card-content>
+  </mat-card>
+</div>

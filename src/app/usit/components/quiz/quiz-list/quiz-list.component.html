@@ -1,0 +1,87 @@
+
+<div class="container">
+  <ul class="breadcrumb">
+    <li><a routerLink="/dashboard">Home</a></li>
+    <li class="last">KPT</li>
+  </ul>
+<div class="kpt-header-container mat-elevation-z1" >
+  <span class="header-text">
+      KPT
+  </span>
+  <div class="kpt-actions">
+    <button [disabled]="!privilegeServ.hasPrivilege('ADD_KPT')" mat-icon-button class="add-user" (click)="addQuiz()" matTooltip="Add KPT" matTooltipPosition="left">
+      <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_KPT')}">add_circle</mat-icon>
+    </button>
+
+    <div class="search-kpt" >
+      <input matInput type="text"  class="search" placeholder="search KPT"
+      (keyup)="onFilter($event)">
+    </div>
+</div>
+</div>
+<div class="table-wrapper">
+  <section class="kpt-table-style mat-elevation-z8">
+
+    <table mat-table [dataSource]="dataSource" matSort  (matSortChange)="onSort($event)">
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Id Column -->
+      <ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ID"> S.No </th>
+        <td mat-cell *matCellDef="let element; let i=index"> {{ i+1 }} </td>
+      </ng-container>
+
+      <!-- Department Column -->
+      <ng-container matColumnDef="Department">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Department" > Department </th>
+          <td mat-cell *matCellDef="let element"> {{ element.department }} </td>
+      </ng-container>
+
+       <!-- Category Column -->
+       <ng-container matColumnDef="Category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category </th>
+        <td mat-cell *matCellDef="let element"> {{ element.category }} </td>
+    </ng-container>
+
+
+
+      <!-- actions -->
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let quiz" class="action-buttons">
+          <button  [disabled]="!privilegeServ.hasPrivilege('EDIT_KPT')" mat-icon-button (click)="editQuiz(quiz)" class="action-button-ed">
+            <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_KPT')}">edit</mat-icon>
+          </button>
+
+          <button [disabled]="!privilegeServ.hasPrivilege('DELETE_KPT')" mat-icon-button (click)="deleteQuiz(quiz)" class="action-button-ed">
+            <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_KPT')}">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+    <hr>
+    <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+  </section>
+    <!-- paginator -->
+
+    <div class="paginator" *ngIf="dataSource.filteredData.length">
+      <mat-paginator
+                  (page)="handlePageEvent($event)"
+                  [pageSize]="pageSize"
+                  [length]="totalItems"
+                  [disabled]="false"
+                  [showFirstLastButtons]="showFirstLastButtons"
+                  [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                  [hidePageSize]="true"
+                  [pageIndex]="currentPageIndex"
+                  aria-label="Select page">
+          </mat-paginator>
+    </div>
+
+</div>
+</div>

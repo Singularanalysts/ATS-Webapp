@@ -1,0 +1,212 @@
+<div class="requirement-container">
+  <ul class="breadcrumb">
+    <li><a (click)="navigateToDashboard()">Home</a></li>
+    <li class="last">{{ flag }}</li>
+    <li class="last">Requirements</li>
+  </ul>
+  <div class="header-container mat-elevation-z1">
+    <span class="header-text"> Requirements </span>
+
+    <div class="requirement-actions">
+      <button  [disabled]="!privilegeServ.hasPrivilege('ADD_REQUIREMENTS')" mat-icon-button class="add-user" (click)="addRequirement()">
+        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_REQUIREMENTS')}">add_circle</mat-icon>
+      </button>
+
+      <div class="search-requirement">
+        <input
+          matInput
+          type="search"
+          class="search"
+          placeholder="search requirement"
+          (keyup)="onFilter($event)"
+        />
+      </div>
+    </div>
+  </div>
+  <div id="table-container" class="table-wrapper">
+    <section class="requirement-table-style mat-elevation-z8">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        (matSortChange)="onSort($event)"
+        oncopy="return false"
+      >
+        <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- SNo Column -->
+        <ng-container matColumnDef="SerialNum">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Serial Number"
+          >
+            #
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element?.serialNum }}</td>
+        </ng-container>
+        <!-- Requirement No.-->
+        <ng-container matColumnDef="RequirementNumber">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by RequirementNumber"
+          >
+            Requirement Number
+          </th>
+          <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)">{{ element?.reqnumber }}</td>
+        </ng-container>
+        <!-- Date-->
+        <ng-container matColumnDef="Date">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Date"
+          >
+            Date
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element?.postedon }}</td>
+        </ng-container>
+        <!-- Job Title-->
+        <ng-container matColumnDef="JobTitle">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by JobTitle"
+          >
+            Job Title
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element?.jobtitle }}</td>
+        </ng-container>
+        <!-- Location-->
+        <ng-container matColumnDef="Location">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            sortActionDescription="Sort by Location"
+          >
+            Location
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element?.location }}</td>
+        </ng-container>
+        <!-- Email-->
+        <ng-container matColumnDef="IPVendor">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by IPVendor"
+          >
+            IP/Vendor
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element?.vendor }}</td>
+        </ng-container>
+        <!-- Contact Number-->
+        <ng-container matColumnDef="EmployementType">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by EmployementType"
+          >
+            Employement Type
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element?.employmenttype }}
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="Status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Status"
+          >
+            Status
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let requirement"
+          >
+          {{ requirement.status }}
+          </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let requirement" class="action-buttons">
+            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')"
+              mat-icon-button
+              (click)="editRequirement(requirement)"
+              class="action-button-ed"
+            >
+              <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')}">edit</mat-icon>
+            </button>
+
+            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_REQUIREMENTS')"
+              mat-icon-button
+              (click)="deleteRequirement(requirement)"
+              class="action-button-ed"
+            >
+              <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_REQUIREMENTS')}">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="Approve/Reject">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Approve/Reject"
+          >
+            Approve/Reject
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let requirement"
+            class="approve-buttons"
+          ></td>
+        </ng-container>
+
+        <!-- table columns ends  -->
+
+        <!-- table ROW -->
+        <tr
+          mat-header-row
+          *matHeaderRowDef="dataTableColumns; sticky: true"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: dataTableColumns"></tr>
+      </table>
+      <p class="no-data-found" *ngIf="!dataSource.filteredData.length">
+        {{ "No matching data found" }}
+      </p>
+    </section>
+    <hr />
+  </div>
+
+  <div class="paginator">
+    <!-- paginator -->
+    <mat-paginator
+      (page)="handlePageEvent($event)"
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [disabled]="false"
+      [showFirstLastButtons]="showFirstLastButtons"
+      [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+      [hidePageSize]="hidePageSize"
+      [pageIndex]="currentPageIndex"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
+</div>

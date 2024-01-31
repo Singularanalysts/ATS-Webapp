@@ -1,0 +1,12 @@
+<!-- Progress bar  -->
+<!-- <mat-progress-bar
+      [color]="color" *ngIf="isLoading$ | async"
+      mode="indeterminate">
+</mat-progress-bar> -->
+<app-sidebar *ngIf="!( _router.url === '' ||   _router.url === '/' ||  _router.url === '/login')" ></app-sidebar>
+
+<!-- <app-sidebar *ngIf="!['/login'].includes(currentURL)"></app-sidebar> -->
+<router-outlet></router-outlet>
+<router-outlet *ngIf="(  _router.url === '' ||  _router.url === '/' ||  _router.url === '/login')" ></router-outlet>
+<!-- <app-footer *ngIf="!['/login'].includes(currentURL)"></app-footer> -->
+<app-footer *ngIf="!(  _router.url === '' ||  _router.url === '/' ||  _router.url === '/login')" ></app-footer>

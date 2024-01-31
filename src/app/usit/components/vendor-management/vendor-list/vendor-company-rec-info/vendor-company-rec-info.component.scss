@@ -1,0 +1,91 @@
+
+/**** POP-UP HEADER - STARTS ****/
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  background-color: whitesmoke;
+  z-index: 99999;
+  top: 0;
+  overflow: hidden;
+}
+
+.close-btn{
+  overflow: hidden !important;
+}
+.header-text {
+  padding-left: 1.3rem;
+  font-weight: 600;
+  font-size: larger;
+}
+
+.card {
+  margin: 0 auto;
+
+  //height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+table {
+  width: 100%;
+}
+
+.mat-mdc-header-row {
+  background-color: rgb(213, 231, 231);
+  position: sticky;
+  top: 0;
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell{
+  padding: 0 4px 0 4px;
+}
+
+.mat-mdc-header-row  {
+  height: 30px !important;
+}
+.mat-mdc-row {
+  height: 30px !important;
+}
+thead {
+  position: sticky;
+  top: 0;
+}
+
+.mat-sort-header-arrow {
+  color: #1a1717;
+}
+
+.mat-mdc-column {
+  border-right: 1px solid currentColor;
+}
+
+.mat-column-RecruiterName,
+.mat-column-PhoneNumber,
+  .mat-column-Email,
+   .mat-column-Address,
+   .mat-column-AddedOn
+   {
+  border-right: 1px solid lightgrey;
+  padding-right: 24px;
+}
+.mat-column-RecruiterName{
+  border-left: 1px solid lightgrey;
+}
+.company-infor-table {
+  padding: 0 2px;
+  width: 100%;
+  // max-height: calc(100% - 2px);
+  height: 50dvh;
+  overflow: auto;
+  display: block;
+}
+
+.no-data-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-top: 64px;
+}

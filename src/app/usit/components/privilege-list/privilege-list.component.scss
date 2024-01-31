@@ -1,0 +1,98 @@
+.priv-container{
+
+  padding: 8px;
+}
+ul{
+  padding-inline-start: 10px;
+  background-color: rgb(228, 231, 234);
+  height: 2rem;
+  padding-top: 8PX;
+  top: 0;
+}
+
+ul.breadcrumb {
+  list-style: none;
+}
+
+ul.breadcrumb li {
+  display: inline;
+  cursor: pointer;
+}
+ul.breadcrub li:not(.breadcrumb-item-inactive){
+  cursor: default !important;
+}
+
+ul.breadcrumb li+li:before {
+  color: black;
+  content: "/\00a0";
+}
+
+ul.breadcrumb li  {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+ul.breadcrumb li:hover {
+  color: #01447e;
+  text-decoration: none;
+}
+ul.breadcrumb li:last-child {
+  color: black;
+  pointer-events: none;
+}
+ul.breadcrumb li:nth-child(2) {
+  color: black;
+  pointer-events: none;
+}
+.main-header{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: whitesmoke;
+
+}
+.add-privilege{
+  margin-right: 20px;
+}
+.main-card-header{
+  padding: 8px 8px 0 !important;
+  font-size: large;
+  font-weight: 600;
+
+  height: 32px;
+}
+.main-card-content{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 12px;
+  height: 57dvh;
+  overflow-y: auto;
+}
+
+.main-card-actions{
+  justify-content: flex-end !important;
+  gap: 4px;
+}
+.card {
+  height: 250px;
+  width: 300px;
+
+  margin: 4px;
+}
+
+.card-header{
+  background-color: #5767cd;
+  font-weight: 500;
+  font-size: large;
+  color: white;
+}
+
+.card-content{
+  overflow-x: auto;
+}
+
+.access-check-box{
+  margin-left: 32px;
+}

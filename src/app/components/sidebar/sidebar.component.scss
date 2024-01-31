@@ -1,0 +1,77 @@
+.mat-toolbar{
+  padding: 0px;
+}
+
+.button-divider {
+  flex: 1 1 auto;
+}
+
+img {
+  max-width: fit-content;
+  height: auto;
+}
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+    causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  // background-color: rgb(223, 222, 222) !important;
+  height: calc(100vh - 90px);
+  background: #eee;
+}
+
+.sidnav {
+  width: 16dvw;
+  box-sizing: border-box;
+  background: rgb(243, 243, 243);
+  overflow: auto !important;
+}
+
+.router-container {
+  height: calc(100vh - 90px);
+  background-color: white;
+  overflow-y: hidden;
+}
+
+.profile-icon {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-user-name{
+  margin-left: 8px;
+}
+.user-menu {
+  background-color: #d76666 !important;
+  margin-bottom: 2px !important;
+}
+.user-name {
+  align-items: center;
+  justify-content: center;
+}
+
+// @media (min-width: 320px) and (max-width: 480px) { // mobiles
+//   .sidnav{
+//     width: 100px;
+//   }
+// }
+// @media (min-width: 481px) and (max-width: 768px) { // ipad , tablets
+//   .sidnav{
+//     width: 100px;
+//   }
+// }
+// @media (min-width: 769px) and (max-width: 1024px) { // laptops
+//   .sidnav{
+//     width: 100px;
+//   }
+// }
+// @media (min-width: 1025px) and (max-width: 1200px) { // desktops
+//   .sidnav{
+//     width: 180px;
+//   }
+// }

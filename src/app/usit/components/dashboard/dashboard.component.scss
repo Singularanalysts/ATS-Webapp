@@ -1,0 +1,48 @@
+*{
+  inset: 0;
+}
+.container{
+  display: grid;
+  grid-template-columns:  1.25fr 1.25fr 1fr;
+
+  height: 100dvh;
+  grid-gap: 16px;
+  grid-template-areas:
+   "submisstions inteviews activity"
+
+   "closures closures activity"
+
+   "sourcing sourcing activity"
+
+
+  "topselling topselling activity";
+
+
+}
+
+#submisstions{
+  grid-area: submisstions;
+  height: 150px;
+}
+#inteviews{
+  grid-area: inteviews;
+  height: 150px;
+}
+#activity{
+  grid-area: activity;
+  height: 800px;
+}
+#closures{
+  grid-area: closures;
+  height: 400px;
+}
+#sourcing{
+  grid-area: sourcing;
+  height: 400px;
+}
+
+#topselling{
+  grid-area: topselling;
+  height: 400px;
+}
+

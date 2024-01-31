@@ -1,0 +1,271 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+    <form [formGroup]="purchaseOrderForm" (ngSubmit)="onSubmit()" class="purchase-order-form">
+        <div class="form">
+            <div class="form-column-left">
+
+                <mat-form-field>
+                    <mat-label>Select PO Type</mat-label>
+                    <mat-select formControlName="potype" (selectionChange)="onPoTypeSelect($event)">
+                        <mat-option value="From">From</mat-option>
+                        <mat-option value="To">To</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="purchaseOrderForm.get('potype')!.hasError('required')"> PO Type is
+                        required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Select Company</mat-label>
+                    <mat-select formControlName="company" (selectionChange)="onCompanySelect($event)">
+                        <mat-option value="Narvee">Narvee</mat-option>
+                        <mat-option value="Singular">Singular</mat-option>
+                        <mat-option value="ProBPM">ProBPM</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="purchaseOrderForm.get('company')!.hasError('required')"> Company is
+                        required</mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Vendor</mat-label>
+                    <mat-select formControlName="vendor" (selectionChange)="onVendorSelect($event)">
+                        <mat-option *ngFor="let obj of vendordata" [value]="obj.id">
+                                  {{ obj.vendor }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="purchaseOrderForm.get('vendor')!.hasError('required')">Vendor Company
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Consultant</mat-label>
+                    <mat-select formControlName="consultant" (selectionChange)="onConsultantSelect($event)">
+                        <mat-option *ngFor="let obj of consultantdata" [value]="obj.consultantid">
+                            {{ obj.consultantname }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="purchaseOrderForm.get('consultant')!.hasError('required')">Consultant
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>End Client</mat-label>
+                    <input matInput formControlName="endclient" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('endclient')!.hasError('required')">End Client
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Impl Partner/ System Integration</mat-label>
+                    <input matInput formControlName="implpartner" maxlength="60">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Pay Rate</mat-label>
+                    <input matInput formControlName="hourlyrate" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('hourlyrate')!.hasError('required')">Pay Rate
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="example-form-field">
+                    <mat-label>Project Start Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker" formControlName="projstartdate">
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker></mat-datepicker>
+                    <mat-error *ngIf="purchaseOrderForm.get('projstartdate')!.hasError('required')"> Project Start Date is
+                        required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
+                <mat-form-field class="example-form-field">
+                    <mat-label>Project End Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker2" formControlName="projenddate">
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker2></mat-datepicker>
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <mat-label>Project Duration</mat-label>
+                    <input type="text" matInput formControlName="duration">
+                    <mat-error *ngIf="purchaseOrderForm.get('duration')!.hasError('required')"> Project Duration is
+                        required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Select Billing Cycle</mat-label>
+                    <mat-select formControlName="billingcycle">
+                        <mat-option value="Weekly">Weekly</mat-option>
+                        <mat-option value="BiWeekly">BiWeekly</mat-option>
+                        <mat-option value="Monthly">Monthly</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="purchaseOrderForm.get('billingcycle')!.hasError('required')"> Billing Cycle is
+                        required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Select Net Term</mat-label>
+                    <mat-select formControlName="netterm">
+                        <mat-option *ngFor="let item of [].constructor(100); let i = index" [value]="i + 1">
+                            Net {{ i + 1 }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="purchaseOrderForm.get('netterm')!.hasError('required')"> Net Term is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- MSA Upload -->
+                <mat-form-field class="upload">
+                    <mat-label for="msa">Upload MSA</mat-label>
+                    <div class="upload-container">
+                        <input matInput readonly name="poName" class="file-input"
+                            [value]="msaupload ? msaupload.name : 'No file chosen'" />
+                        <label for="po" class="browse-button-label">
+                            <button type="button" mat-icon-button (click)="msa.click()"><mat-icon>upload_file</mat-icon></button>
+                        </label>
+                        <input type="file" #msa id="msa" (change)="uploadMsa($event)" name="msaUploadFile"
+                            accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            style="display: none;" />
+                    </div>
+                    <mat-hint *ngIf="msaError" style="color: #f44336; font-size: 12px;">MSA size should be less than 2
+                        mb</mat-hint>
+                    <mat-hint *ngIf="msaFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                        15-20 characters before upload</mat-hint>
+                </mat-form-field>
+            
+                <!-- PO Upload -->
+                <mat-form-field class="upload">
+                    <mat-label for="po">Upload PO</mat-label>
+                    <div class="upload-container">
+                        <input matInput readonly name="poName" class="file-input"
+                            [value]="poUpload ? poUpload.name : 'No file chosen'" />
+                        <label for="po" class="browse-button-label">
+                            <button type="button" mat-icon-button (click)="po.click()"><mat-icon>upload_file</mat-icon></button>
+                        </label>
+                        <input type="file" #po id="po" (change)="uploadPo($event)" name="aadharUploadFile"
+                            accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            style="display: none;" />
+                    </div>
+                    <mat-hint *ngIf="poError" style="color: #f44336; font-size: 12px;">PO size should be less than 2
+                        mb</mat-hint>
+                    <mat-hint *ngIf="poFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                        15-20 characters before upload</mat-hint>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="header-container-recruiter-details">
+            <span class="header-text">Recruiter Details</span>
+        </div>
+        <div class="form">
+            <div class="form-column-left">
+                <mat-form-field appearance="fill">
+                    <mat-label>Recruiter Name</mat-label>
+                    <input matInput formControlName="recname" maxlength="60">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Recruiter Email</mat-label>
+                    <input matInput formControlName="recemail" maxlength="60">
+                </mat-form-field>
+            </div>
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>Recruiter Contact Number</mat-label>
+                    <input matInput formControlName="recnumber" maxlength="60">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="header-container-recruiter-details">
+            <span class="header-text">Vendor AR Account Details</span>
+        </div>
+        <div class="form">
+            <div class="form-column-left">
+                <mat-form-field appearance="fill">
+                    <mat-label>Account Person Name</mat-label>
+                    <input matInput formControlName="acrname" maxlength="60">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Account Person Email</mat-label>
+                    <input matInput formControlName="acrmail" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acrmail')!.hasError('required')"> Account Person Email is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>Account Person Contact Number</mat-label>
+                    <input matInput formControlName="acrno" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acrno')!.hasError('required')"> Account Person Contact is
+                        required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="header-container-recruiter-details" *ngIf="recruitingFlag">
+            <span class="header-text">Third Party Recruiter Details</span>
+        </div>
+        <div class="form" *ngIf="recruitingFlag">
+            <div class="form-column-left">
+                <mat-form-field appearance="fill">
+                    <mat-label>Recruiter Name</mat-label>
+                    <input matInput formControlName="recname" maxlength="60">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Recruiter Email</mat-label>
+                    <input matInput formControlName="recemail" maxlength="60">
+                </mat-form-field>
+            </div>
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>Recruiter Contact Number</mat-label>
+                    <input matInput formControlName="recnumber" maxlength="60">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="header-container-recruiter-details" *ngIf="recruitingFlag">
+            <span class="header-text">Vendor AP Account Details</span>
+        </div>
+        <div class="form" *ngIf="recruitingFlag">
+            <div class="form-column-left">
+                <mat-form-field appearance="fill">
+                    <mat-label>Account Person Name</mat-label>
+                    <input matInput formControlName="acrname" maxlength="60">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Account Person Email</mat-label>
+                    <input matInput formControlName="acrmail" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acrmail')!.hasError('required')"> Account Person Email is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>Account Person Contact Number</mat-label>
+                    <input matInput formControlName="acrno" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acrno')!.hasError('required')"> Account Person Contact is
+                        required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

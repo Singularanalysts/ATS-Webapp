@@ -1,0 +1,108 @@
+<div class="main-container">
+  <mat-card class="mat-elevation-z8 card">
+    <!-- title -->
+
+  <mat-card-header class="card-header">
+    <mat-card-title class="card-title">Questionnaire</mat-card-title>
+    <span class="card-title" *ngIf="selectedDepartment && selectedCategory">Time: {{clock}}</span>
+</mat-card-header>
+  <mat-card-content class="card-content">
+  <!-- form -->
+  <div class="form-container">
+    <form [formGroup]="quizForm" class="quiz-form" autocomplete="off" (ngSubmit)="onSubmit()">
+      <div  class="department-category-container">
+        <div class="left-section">
+          <mat-form-field appearance="fill" class="category-field">
+            <!-- <input matInput formControlName="department" placeholder="Enter Department"> -->
+            <mat-select name="department" formControlName="department" placeholder="Select Department" (selectionChange)="onSelect($event, 'dept')">
+              <mat-option *ngFor="let option of deptOptions" [value]="option.name">
+                {{ option.name }}
+              </mat-option>
+            </mat-select>
+              <mat-error *ngIf="quizForm.get('department')?.errors?.required">Department is required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="right-section">
+          <mat-form-field appearance="fill" class="category-field">
+            <!-- <input matInput formControlName="category" placeholder="Enter Category"> -->
+             <mat-select name="category" formControlName="category" placeholder="Select Category" (selectionChange)="onSelect($event, 'cat')">
+              <mat-option *ngFor="let option of categoryOptions" [value]="option.name">
+                {{ option.name }}
+              </mat-option>
+            </mat-select>
+              <mat-error *ngIf="quizForm.get('category')?.errors?.required">Category is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <ng-container *ngIf="(quizForm.get('department')?.value && quizForm.get('category')?.value)">
+
+      <!-- new code -->
+      <ng-container  formArrayName="options" *ngFor="let ctrl of quizForm.controls?.options?.controls let i = index">
+        <div [formGroupName]="i" class="fg">
+
+          <!-- Question -->
+
+          <div class="question-container">
+            <span class="quest-num">Q{{i+1}}</span>
+            <!-- Question Name -->
+            <div class="question-style">
+              <input matInput formControlName="question" placeholder="Enter the question" style="display: none;">
+              <h3>{{ctrl.get('question')?.value}}</h3>
+            </div>
+
+          </div>
+
+          <!-- options section -->
+          <div class="option-container">
+
+            <!-- options -->
+            <div class="left-section">
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('userans')?.value === 'optionA'" [value]="'optionA'" ngDefaultControl
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+                <h4>{{ctrl.get('optionA')?.value}}</h4>
+              </div>
+
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('userans')?.value === 'optionC'" [value]="'optionC'"   ngDefaultControl
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+                <h4>{{ctrl.get('optionC')?.value}}</h4>
+              </div>
+            </div>
+
+            <div class="right-section">
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('userans')?.value === 'optionB'" [value]="'optionB'"  ngDefaultControl
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+                <h4>{{ctrl.get('optionB')?.value}}</h4>
+              </div>
+
+              <div class="option-style">
+                <mat-radio-button [checked]="ctrl.get('userans')?.value === 'optionD'" [value]="'optionD'"  ngDefaultControl
+                  class="form-check-input" name="{{'radio'+i}}" (change)="selectAnswer($event,  i)">
+                </mat-radio-button>
+                <h4>{{ctrl.get('optionD')?.value}}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      </ng-container>
+
+    </form>
+
+  </div>
+
+</mat-card-content>
+ <!--bottom action button -->
+ <div class="actions" *ngIf="(quizForm.get('department')?.value && quizForm.get('category')?.value)">
+  <button mat-raised-button color="white" (click)="onCancel()">Reset</button>
+  <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+</div>
+</mat-card>
+</div>
+

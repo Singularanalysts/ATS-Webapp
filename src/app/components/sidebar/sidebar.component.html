@@ -1,0 +1,65 @@
+<div class="sidebar-container">
+  <mat-toolbar color="primary" class="tool-bar-container">
+    <button  mat-icon-button matTooltip="{{sidenav.opened ? 'Close Sidenav' : 'Open Sidenav'}}"
+    matTooltipClass="custom-tooltip"
+    class="example-icon" aria-label="Example icon-button with menu icon"
+    (click)="sidenav.toggle()" >
+      <mat-icon [@rotate]="sidenav.opened ? 'close' : 'menu'">{{sidenav.opened ? 'close' : 'menu'}}</mat-icon>
+    </button>
+    <img src="assets/images/narvee-logo.png" alt="logo" width="100" height="100" loading="lazy">
+    <span class="button-divider"></span>
+    <!-- <button mat-icon-button class="login-icon" aria-label="login-icon" (click)="login()">
+      <mat-icon>login</mat-icon>
+    </button> -->
+    <button mat-icon-button class="profile-icon" aria-label="profile-icon" [matMenuTriggerFor]="menu">
+     <mat-icon>account_circle</mat-icon>
+     <span class="profile-user-name">{{ userManagementServ.getUserName() }}</span>
+    <!-- <mat-icon>arrow_drop_down</mat-icon> -->
+   </button>
+   <mat-menu #menu="matMenu" class="user-menu">
+    <button mat-menu-item class="user-name">
+      {{ userManagementServ.getUserName() }}
+    </button>
+    <button mat-menu-item>
+      My Profile
+      <mat-icon class="icon">person</mat-icon>
+    </button>
+    <button mat-menu-item>
+      <mat-icon class="icon">settings</mat-icon>
+      Account Settings
+    </button>
+    <button mat-menu-item>
+      <mat-icon class="icon">help</mat-icon>
+      Need Help?
+    </button>
+    <button mat-menu-item (click)="onSignOut()">
+      Sign Out
+      <mat-icon class="icon">logout</mat-icon>
+    </button>
+  </mat-menu>
+  </mat-toolbar>
+  <mat-sidenav-container class="sidebar-sidenav-container">
+    <mat-sidenav #sidenav mode="side"   opened="true" class="sidnav"  [fixedBottomGap]="10">
+      <app-side-navbar></app-side-navbar>
+    </mat-sidenav>
+    <!-- spinner -->
+
+
+    <mat-sidenav-content   class="router-container">
+      <!-- spinner -->
+      <!-- <mat-progress-spinner *ngIf="isLoading$ | async"
+        class="spinner"
+        [color]="color"
+        [mode]="progressSpinnerMode"
+        [value]="value">
+      </mat-progress-spinner> -->
+      <!-- progress-bar -->
+      <mat-progress-bar class="progress-bar"
+        [color]="color" *ngIf="isLoading$ | async"
+        [mode]="progressBarMode">
+      </mat-progress-bar>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+</div>

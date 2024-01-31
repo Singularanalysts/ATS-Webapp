@@ -1,0 +1,38 @@
+<div class="update-technology-dialog-container">
+    <div class="header">
+      <h2 mat-dialog-title>{{data.title}}</h2>
+      <hr>
+      <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="content" mat-dialog-content>
+      <form class="add-technology-form" [formGroup]="technologyForm" name="technology-form" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="id">
+        <mat-form-field class="technologyname-field">
+          <mat-label>Technology</mat-label>
+          <input title="" matInput formControlName="technologyarea" maxlength="75">
+          <!-- errors -->
+          <mat-error class="error-message" *ngIf="controls['technologyarea'].errors && controls['technologyarea'].errors['required']"> Technology is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="description-field">
+          <mat-label>Skills</mat-label>
+          <textarea maxlength="250" matInput formControlName="listofkeyword"></textarea>
+          <!-- errors -->
+          <mat-error class="error-message" *ngIf="controls['listofkeyword'].errors && controls['listofkeyword'].errors['required']">Skills are required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="description-field">
+            <mat-label>Comments</mat-label>
+            <textarea maxlength="250" matInput formControlName="comments"></textarea>
+          </mat-form-field>
+
+      </form>
+      <div class="actions">
+        <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+      </div>
+    </div>
+</div>

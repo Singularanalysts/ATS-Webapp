@@ -1,0 +1,22 @@
+<div class="dialog-container">
+
+
+
+<div class="header">
+  <h2 mat-dialog-title>{{data.title}}</h2>
+  <hr>
+  <button mat-icon-button (click)="onAction('SAFE_CLOSE')" >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div class="content" mat-dialog-content>
+  {{data.message}}
+</div>
+
+<div class="actions" mat-dialog-actions  >
+    <button mat-raised-button (click)="onAction('NO')">{{data.cancelText}}</button>
+    <button mat-raised-button color="primary" (click)="onAction('YES')">{{data.confirmText}}</button>
+</div>
+
+</div>

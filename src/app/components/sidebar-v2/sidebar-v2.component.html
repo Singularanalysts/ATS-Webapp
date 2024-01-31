@@ -1,0 +1,57 @@
+
+
+<mat-toolbar color="primary" class="tool-bar-container">
+  <button  mat-icon-button matTooltip="{{sidenav.opened ? 'Close Sidenav' : 'Open Sidenav'}}"
+  matTooltipClass="custom-tooltip"
+  class="example-icon" aria-label="Example icon-button with menu icon"
+  (click)="sidenav.toggle()" >
+    <mat-icon [@rotate]="sidenav.opened ? 'close' : 'menu'">{{sidenav.opened ? 'close' : 'menu'}}</mat-icon>
+  </button>
+  <img src="assets/images/narvee-logo.png" alt="logo" width="100" height="100" loading="lazy">
+  <span class="spacer"></span>
+  <!-- <button mat-icon-button class="login-icon" aria-label="login-icon" (click)="login()">
+    <mat-icon>login</mat-icon>
+  </button> -->
+  <button mat-icon-button class="profile-icon" aria-label="profile-icon" [matMenuTriggerFor]="menu">
+   <mat-icon>account_circle</mat-icon>
+ </button>
+ <mat-menu #menu="matMenu">
+  <button mat-menu-item>Profile
+    <mat-icon class="icon">person</mat-icon>
+  </button>
+  <button mat-menu-item (click)="onSignOut()">Sign Out
+    <mat-icon class="icon">logout</mat-icon>
+  </button>
+</mat-menu>
+</mat-toolbar>
+
+<mat-sidenav-container class="example-container">
+  <mat-sidenav mode="side" #sidenav mode="side" [opened]="true">
+    <mat-nav-list class="custom-sidebar-list">
+      <ng-container *ngFor="let menuItem of menuList; let i = index">
+        <mat-list-item class="custom-list-item" [routerLink]="menuItem.routerLink" >
+          <mat-icon class="custom-icon">{{ menuItem.icon }}</mat-icon>
+          {{ menuItem.text }}
+          <mat-icon class="custom-icon" (click)="toggleSubMenu(i)" style="margin-left: auto;" *ngIf="menuItem.children && menuItem.children.length > 0">
+            {{ isSubMenuOpen[i] ? 'expand_less' : 'expand_more' }}
+          </mat-icon>
+        </mat-list-item>
+        <div *ngIf="isSubMenuOpen[i] && menuItem.children && menuItem.children.length > 0"  style="display: flex">
+          <mat-nav-list class="custom-sidebar-list custom-submenu" >
+            <ng-container *ngFor="let subItem of menuItem.children">
+              <mat-list-item class="custom-list-item" [routerLink]="subItem.routerLink">
+                <mat-icon class="custom-icon">{{ subItem.icon }}</mat-icon>
+                {{ subItem.text }}
+              </mat-list-item>
+            </ng-container>
+          </mat-nav-list>
+        </div>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

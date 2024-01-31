@@ -1,0 +1,67 @@
+<div class="container">
+    <ul class="breadcrumb">
+      <li><a (click)="navigateToDashboard()">Home</a></li>
+      <li class="last">Masters</li>
+      <li class="last">Qualification</li>
+    </ul>
+  <div class="qualification-header-container mat-elevation-z1" >
+    <span class="header-text">
+        Qualification
+    </span>
+    <div class="qualification-actions">
+      <button  [disabled]="!privilegeServ.hasPrivilege('ADD_QUALIFICATION')" mat-icon-button class="add-user" (click)="addQualification()" matTooltip="Add Qualification" matTooltipPosition="left">
+        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_QUALIFICATION')}">add_circle</mat-icon>
+      </button>
+
+      <div class="search-qualification" >
+        <input matInput type="search"  class="search" placeholder="search qualification"
+        (keyup)="onFilter($event)"  >
+      </div>
+  </div>
+  </div>
+  <div class="table-wrapper">
+    <section class="table-style mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort  (matSortChange)="onSort($event)">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- Serial Number Column -->
+        <ng-container matColumnDef="SerialNum">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum"> # </th>
+          <td mat-cell *matCellDef="let element"> {{ element.serialNum }} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name">Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+          <!-- actions -->
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let qualification" class="action-buttons">
+            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_QUALIFICATION')" mat-icon-button (click)="editQualification(qualification)" class="action-button-ed">
+              <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_QUALIFICATION')}">edit</mat-icon>
+            </button>
+
+            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_QUALIFICATION')"  mat-icon-button (click)="deleteQualification(qualification)" class="action-button-ed">
+              <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_QUALIFICATION')}">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="getRowClass(row)"></tr>
+      </table>
+      <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+    </section>
+    <hr>
+    <!-- paginator -->
+  <mat-paginator #paginator [length]="dataSource.data.length" (page)="handlePageEvent($event)" [length]="length"
+  [pageSize]="pageSize" [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
+  [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="hidePageSize"
+  [pageIndex]="pageIndex" aria-label="Select page">
+</mat-paginator>
+  </div>
+  </div>

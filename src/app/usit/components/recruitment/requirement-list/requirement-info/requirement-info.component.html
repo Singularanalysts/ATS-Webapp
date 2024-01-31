@@ -1,0 +1,52 @@
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+      {{data.title}}
+    </span>
+    <button mat-icon-button  (click)="dialogRef.close()" class="btn-close" id="btnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+  </section>
+  <mat-card class="card mat-elevation-z8">
+    <mat-card-content class="card-content">
+        <div class="info-container">
+            <div class="info-item">
+              <span class="static-label">Requirement Number :</span>
+              <span class="dynamic-value">{{dataSource.reqnumber}}</span>
+            </div>
+            <div class="info-item">
+              <span class="static-label">Posted On :</span>
+              <span class="dynamic-value">{{dataSource.postedon}}</span>
+            </div>
+            <div class="info-item">
+              <span class="static-label">IP/Vendor :</span>
+              <span class="dynamic-value">{{dataSource.vendorip}}</span>
+            </div>
+            <div class="info-item">
+              <span class="static-label">Location :</span>
+              <span class="dynamic-value">{{dataSource.location}}</span>
+            </div>
+            <div class="info-item">
+              <span class="static-label">Job Title :</span>
+              <span class="dynamic-value">{{dataSource.jobtitle}}</span>
+            </div>
+            <div class="info-item">
+              <span class="static-label">Employment Type :</span>
+              <span class="dynamic-value">{{dataSource.employmenttype}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label">Hourly Rate :</span>
+                <span class="dynamic-value">{{dataSource.salary}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label">Experience :</span>
+                <span class="dynamic-value">{{dataSource.jobexperience}}</span>
+            </div>
+            <div class="info-item">
+              <span class="static-label">Job Description :</span>
+              <span class="dynamic-value">{{dataSource.jobdescription}}</span>
+          </div>
+          </div>
+    </mat-card-content>
+  </mat-card>
+  
+  

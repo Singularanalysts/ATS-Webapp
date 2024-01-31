@@ -1,0 +1,385 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<mat-card class="center-card">
+
+    <form [formGroup]="h1bForm" (ngSubmit)="onSubmit()" class="h1b-form">
+        <div class="form">
+            <div class="form-column-left">
+
+                <!-- Beneficiary Name -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Beneficiary Name</mat-label>
+                    <input matInput formControlName="employeename" maxlength="60">
+                    <mat-error *ngIf="h1bForm.get('employeename')?.hasError('required')"> Beneficiary Name is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Email -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" maxlength="50">
+                    <mat-error *ngIf="h1bForm.get('email')?.hasError('required')"> Email is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Contact Number -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Contact Number</mat-label>
+                    <input matInput formControlName="contactnumber" maxlength="10">
+                    <mat-error *ngIf="h1bForm.get('contactnumber')?.hasError('required')"> Contact Number is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!--  Immigration Status -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Immigration Status</mat-label>
+                    <mat-select formControlName="visa">
+                        <mat-option *ngFor="let option of visadata" [value]="option[0]">
+                            {{ option[1] }}
+                        </mat-option>
+                    </mat-select>
+                    <button type="button" matSuffix mat-icon-button><mat-icon>add</mat-icon></button>
+                    <mat-error *ngIf="h1bForm.get('visa')!.hasError('required')">Immigration Status
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Notice Type -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Notice Type</mat-label>
+                    <mat-select formControlName="noticetype">
+                        <mat-option *ngFor="let option of selectOptionObj.noticeType" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                    <button type="button" matSuffix mat-icon-button><mat-icon>add</mat-icon></button>
+                    <mat-error *ngIf="h1bForm.get('noticetype')!.hasError('required')">Notice Type
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Location -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Location</mat-label>
+                    <input matInput formControlName="location" ngx-gp-autocomplete [options]='options'
+                        (onAddressChange)="handleAddressChange($event)" maxlength="140">
+                    <mat-error *ngIf="h1bForm.get('location')?.hasError('required')"> Location is
+                        required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
+                <!-- Petitioner -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Petitioner</mat-label>
+                    <input matInput formControlName="petitioner" maxlength="50">
+                    <mat-error *ngIf="h1bForm.get('petitioner')?.hasError('required')"> Petitioner is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Receipt Number -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Receipt Number</mat-label>
+                    <input matInput formControlName="receiptnumber" maxlength="10">
+                    <mat-error *ngIf="h1bForm.get('receiptnumber')?.hasError('required')"> Receipt Number is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Service Center -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Service Center</mat-label>
+                    <input matInput formControlName="servicecenter" maxlength="50">
+                    <mat-error *ngIf="h1bForm.get('servicecenter')?.hasError('required')"> Service Center is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Consulate/POE -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Consulate/POE</mat-label>
+                    <input matInput formControlName="consulatepoe" maxlength="25">
+                </mat-form-field>
+
+                <!-- LCA Number -->
+                <mat-form-field appearance="fill">
+                    <mat-label>LCA Number</mat-label>
+                    <input matInput formControlName="lcanumber" maxlength="30">
+                </mat-form-field>
+
+                <!-- Company -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Company</mat-label>
+                    <mat-select formControlName="company">
+                        <mat-option *ngFor="let option of companydata" [value]="option[0]">
+                            {{ option[1] }}
+                        </mat-option>
+                    </mat-select>
+                    <button type="button" matSuffix mat-icon-button><mat-icon>add</mat-icon></button>
+                    <mat-error *ngIf="h1bForm.get('company')!.hasError('required')"> Company
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="form">
+            <div class="form-column-left">
+                <mat-form-field>
+                    <mat-label>Valid From Date</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="h1validfrom">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <mat-error *ngIf="h1bForm.get('h1validfrom')!.hasError('required')"> Valid From Date
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+        
+                <mat-form-field>
+                    <mat-label>Valid Till Date</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="h1validto">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <mat-error *ngIf="h1bForm.get('h1validto')!.hasError('required')"> Valid Till Date
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-column-right">
+                <mat-form-field>
+                    <mat-label>Everify Date</mat-label>
+                    <input matInput [matDatepicker]="picker3" formControlName="everifydate">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                    <mat-error *ngIf="h1bForm.get('everifydate')!.hasError('required')"> Everify Date
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+        
+                <mat-form-field>
+                    <mat-label>Last I9 Date</mat-label>
+                    <input matInput [matDatepicker]="picker4" formControlName="lasti9date">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                    <mat-error *ngIf="h1bForm.get('lasti9date')!.hasError('required')"> Last I9 Date
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="header-container-upload-documents">
+            <span class="header-text">Upload Documents:</span>
+        </div>
+
+        <div class="form">
+            <div class="form-column-left">
+              <!-- Passport Upload -->
+              <mat-form-field class="upload">
+                <mat-label for="passport">Passport</mat-label>
+                <div class="upload-inp-container">
+                  <input matInput readonly name="passportdocName" class="file-input"
+                    [value]="passportdocupload ? passportdocupload.name : 'No file chosen'" />
+                  <label for="passportdoc" class="browse-button-label">
+                    <button type="button" mat-icon-button (click)="passportdoc.click()"><mat-icon>upload_file</mat-icon></button>
+                  </label>
+                  <input type="file" #passportdoc id="passportdoc" (change)="uploadPassport($event)" name="passportdocUploadFile"
+                    accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    style="display: none;" />
+                </div>
+                <mat-hint *ngIf="passportError" style="color: #f44336; font-size: 12px;">Passport size should be less than 2
+                  mb</mat-hint>
+                <mat-hint *ngIf="passportFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                  15-20 characters before upload</mat-hint>
+              </mat-form-field>
+    
+    
+              <!-- EVerify Upload -->
+              <mat-form-field class="upload">
+                <mat-label for="everify">EVerify</mat-label>
+                <div class="upload-inp-container">
+                  <input matInput readonly name="everifydocName" class="file-input"
+                    [value]="everifydocUpload ? everifydocUpload.name : 'No file chosen'" />
+                  <label for="everifydoc" class="browse-button-label">
+                    <button type="button" mat-icon-button (click)="everifydoc.click()"><mat-icon>upload_file</mat-icon></button>
+                  </label>
+                  <input type="file" #everifydoc id="everifydoc" (change)="uploadEverify($event)" name="everifydocUploadFile"
+                    accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    style="display: none;" />
+                </div>
+                <mat-hint *ngIf="everifyError" style="color: #f44336; font-size: 12px;">Everify size should be less than 2
+                  mb</mat-hint>
+                <mat-hint *ngIf="everifyFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                  15-20 characters before upload</mat-hint>
+              </mat-form-field>
+    
+              <!-- I9 Upload -->
+              <mat-form-field class="upload">
+                <mat-label for="i9">I9</mat-label>
+                <div class="upload-inp-container">
+                  <input matInput readonly name="i9doc" class="file-input"
+                    [value]="i9docUpload ? i9docUpload.name : 'No file chosen'" />
+                  <label for="i9doc" class="browse-button-label">
+                    <button type="button" mat-icon-button (click)="i9doc.click()"><mat-icon>upload_file</mat-icon></button>
+                  </label>
+                  <input type="file" #i9doc id="i9doc" (change)="uploadI9($event)" name="i9docUploadFile"
+                    accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    style="display: none;" />
+                </div>
+                <mat-hint *ngIf="i9Error" style="color: #f44336; font-size: 12px;">I9 size should be less than 2
+                  mb</mat-hint>
+                <mat-hint *ngIf="i9FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                  15-20 characters before upload</mat-hint>
+              </mat-form-field>
+            </div>
+    
+            <div class="form-column-right">
+              <!-- I797 Upload -->
+              <mat-form-field class="upload">
+                <mat-label for="i797">I797</mat-label>
+                <div class="upload-inp-container">
+                  <input matInput readonly name="I797doc" class="file-input"
+                    [value]="I797docUpload ? I797docUpload .name : 'No file chosen'" />
+                  <label for="I797doc" class="browse-button-label">
+                    <button type="button" mat-icon-button (click)="I797doc.click()"><mat-icon>upload_file</mat-icon></button>
+                  </label>
+                  <input type="file" #I797doc id="I797docUploadFile" (change)="uploadI797($event)"
+                    name="I797docUploadFile"
+                    accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    style="display: none;" />
+                </div>
+                <mat-hint *ngIf="i797Error" style="color: #f44336; font-size: 12px;">I797 size should be less than 2
+                  mb</mat-hint>
+                <mat-hint *ngIf="i797FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                  15-20 characters before upload</mat-hint>
+              </mat-form-field>
+    
+              <!-- I94 Upload -->
+              <mat-form-field class="upload">
+                <mat-label for="i94">I94</mat-label>
+                <div class="upload-inp-container">
+                  <input matInput readonly name="i94doc" class="file-input"
+                    [value]="i94docUpload ? i94docUpload .name : 'No file chosen'" />
+                  <label for="i94doc" class="browse-button-label">
+                    <button type="button" mat-icon-button (click)="i94doc.click()"><mat-icon>upload_file</mat-icon></button>
+                  </label>
+                  <input type="file" #i94doc id="i94docUploadFile" (change)="uploadI94($event)"
+                    name="i94docUploadFile"
+                    accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    style="display: none;" />
+                </div>
+                <mat-hint *ngIf="i94Error" style="color: #f44336; font-size: 12px;">I94 size should be less than 2
+                  mb</mat-hint>
+                <mat-hint *ngIf="i94FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                  15-20 characters before upload</mat-hint>
+              </mat-form-field>
+
+              <!-- SSN Upload -->
+              <mat-form-field class="upload">
+                <mat-label for="ssn">SSN</mat-label>
+                <div class="upload-inp-container">
+                  <input matInput readonly name="ssndoc" class="file-input"
+                    [value]="ssndocUpload ? ssndocUpload .name : 'No file chosen'" />
+                  <label for="ssndoc" class="browse-button-label">
+                    <button type="button" mat-icon-button (click)="ssndoc.click()"><mat-icon>upload_file</mat-icon></button>
+                  </label>
+                  <input type="file" #ssndoc id="ssndocUploadFile" (change)="uploadSsn($event)"
+                    name="ssndocUploadFile"
+                    accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    style="display: none;" />
+                </div>
+                <mat-hint *ngIf="ssnError" style="color: #f44336; font-size: 12px;">SSN size should be less than 2
+                  mb</mat-hint>
+                <mat-hint *ngIf="ssnFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                  15-20 characters before upload</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="header-container-upload-documents"  *ngIf="data.actionName === 'edit-h1b'">
+            <span class="header-text">List Documents</span>
+          </div>
+          <div class="list-documents-table-container"  *ngIf="data.actionName === 'edit-h1b'">
+            <table>
+              <tr>
+                <th>Document Name</th>
+                <th>Action</th>
+              </tr>
+
+              <tr>
+                <td *ngIf="entity && entity.passportdoc !== null "><a  class="download-file" 
+                    (click)="downloadfile(entity.applicantid,entity.passportdoc,'passportdoc')">{{entity.passportdoc}}</a>
+                </td>
+                <td *ngIf="entity && entity.passportdoc !== null ">
+                  <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'passportdoc')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td *ngIf="entity && entity.everifydoc !== null "><a  class="download-file" 
+                    (click)="downloadfile(entity.applicantid,entity.everifydoc,'everifydoc')">{{entity.everifydoc}}</a>
+                </td>
+                <td *ngIf="entity && entity.everifydoc !== null ">
+                  <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'everifydoc')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+      
+              <tr>
+                <td *ngIf="entity && entity.i9doc !== null "><a  class="download-file" 
+                    (click)="downloadfile(entity.applicantid,entity.i9doc,'i9doc')">{{entity.i9doc}}</a>
+                </td>
+                <td *ngIf="entity && entity.i9doc !== null ">
+                  <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'i9doc')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td *ngIf="entity && entity.i797doc !== null "><a  class="download-file" 
+                    (click)="downloadfile(entity.applicantid,entity.i797doc,'i797doc')">{{entity.i797doc}}</a>
+                </td>
+                <td *ngIf="entity && entity.i797doc !== null ">
+                  <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'i797doc')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td *ngIf="entity && entity.i94doc !==null "><a  class="download-file" 
+                    (click)="downloadfile(entity.applicantid,entity.i94doc,'i94doc')">{{entity.i94doc}}</a>
+                </td>
+                <td *ngIf="entity && entity.i94doc !==null ">
+                  <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'i94doc')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td *ngIf="entity && entity.ssndoc !==null "><a  class="download-file" 
+                    (click)="downloadfile(entity.applicantid,entity.ssndoc,'ssndoc')">{{entity.ssndoc}}</a>
+                </td>
+                <td *ngIf="entity && entity.ssndoc !==null ">
+                  <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'ssndoc')">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </table>
+          </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

@@ -1,0 +1,48 @@
+<mat-nav-list class="nav-list">
+  <ng-container *ngFor="let menu of privilegeServ.menuList  ; index as i;">
+    <ng-container [ngTemplateOutlet]="menu.children ?  childMenu : parentMenu" [ngTemplateOutletContext]="{menu:menu}">
+    </ng-container>
+    <mat-divider *ngIf="menu.children"></mat-divider>
+  </ng-container>
+</mat-nav-list>
+
+<ng-template #parentMenu let-menu="menu">
+  <mat-nav-list class="nav-list">
+    <mat-list-item class="nav-list-item" [routerLink]="menu.routerLink" routerLinkActive="is-active"
+      [routerLinkActiveOptions]="{exact:
+        true}" [matTooltip]="menu.text" matTooltipPosition="right">
+      <mat-icon  matListItemIcon class="item-icon">{{menu.icon}}</mat-icon>
+       <span matListItemTitle>{{menu.text}}</span>
+    </mat-list-item>
+  </mat-nav-list>
+</ng-template>
+
+<ng-template #childMenu let-menu="menu">
+  <mat-expansion-panel [class.mat-elevation-z0]="true" #pannel [ngClass]="pannel.expanded ? 'expansion-panel-2': 'expansion-panel'">
+    <mat-expansion-panel-header class="expansion-panel-header" [matTooltip]="menu.text" matTooltipPosition="right">
+      <mat-icon mat-list-icon class="item-icon">{{menu.icon}}</mat-icon>
+      {{menu.text}}
+    </mat-expansion-panel-header>
+    <!-- <mat-divider *ngIf="pannel.expanded"></mat-divider> -->
+    <!-- <mat-nav-list class="nav-list"> -->
+
+
+      <mat-list-item class="nav-list-item" [routerLink]="submenu.routerLink" *ngFor="let submenu of menu.children"
+        routerLinkActive="is-active" [routerLinkActiveOptions]="{exact:
+                true}" [matTooltip]="submenu.text" matTooltipPosition="right">
+        <!-- <div class="nav-list-item">
+          <mat-icon class="item-icon">{{submenu.icon}}</mat-icon><span>
+          {{submenu.text}}</span>
+
+        </div> -->
+        <mat-icon matListItemIcon class="item-icon">{{submenu.icon}}</mat-icon>
+
+        <span matListItemTitle>
+          {{submenu.text}}</span>
+
+      </mat-list-item>
+
+    <!-- </mat-nav-list> -->
+
+  </mat-expansion-panel>
+</ng-template>

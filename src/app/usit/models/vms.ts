@@ -1,0 +1,34 @@
+export class Vms {
+    id!: number;
+    vmsid!: number;
+    companyname!: string;
+    recruitername!: string;
+    mobile!: string;
+    email!: string;
+    headQuarters!: string;
+    vendortype!: string;
+    details!: string;
+    status: string = 'Active';
+    createddate!: string;
+    remarks!: string;
+    addedbyname!: string;
+    addedby = localStorage.getItem('userid');
+    updatedby !:  any;
+    vms_stat = "Entry";
+    tyretype!: string;
+    client!: string;
+    company!: string;
+    companytype!: string;
+    //city!:string;
+    headquerter!: string;
+    fedid!: string;
+    updateddate!: string;
+    staff!: string;
+    revenue!: string;
+    website!: string;
+    facebook!: string;
+    industrytype!: string;
+    linkedinid!: string;
+    twitterid!: string;
+    autoInput!:string;
+}

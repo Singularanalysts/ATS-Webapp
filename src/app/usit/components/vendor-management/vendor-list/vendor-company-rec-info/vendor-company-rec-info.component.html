@@ -1,0 +1,79 @@
+<section class="header-container" id="mainHeader">
+  <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+    {{data.title}}
+  </span>
+  <button mat-icon-button  (click)="dialogRef.close()" class="btn-close" id="btnClose">
+    <mat-icon>close</mat-icon>
+  </button>
+</section>
+<mat-card class="card mat-elevation-z8">
+  <mat-card-content class="card-content">
+    <ng-container [ngTemplateOutlet]="tableRef"></ng-container>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #tableRef>
+
+    <section class="company-infor-table mat-elevation-z0">
+
+      <table mat-table [dataSource]="dataSource">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+
+        <!-- Department Column -->
+        <ng-container matColumnDef="RecruiterName">
+            <th mat-header-cell *matHeaderCellDef > Department </th>
+            <td mat-cell *matCellDef="let element"> {{ element.recruiter }} </td>
+        </ng-container>
+
+        <!-- Category Column -->
+        <ng-container matColumnDef="PhoneNumber">
+          <th mat-header-cell *matHeaderCellDef > Phone Number </th>
+          <td mat-cell *matCellDef="let element"> {{ element.usnumber }} </td>
+        </ng-container>
+
+            <!-- NumOfQuestions Column -->
+            <ng-container matColumnDef="Email">
+              <th mat-header-cell *matHeaderCellDef> Email </th>
+              <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+            </ng-container>
+      <!-- Address Column -->
+      <ng-container matColumnDef="Address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{ element.location }} </td>
+      </ng-container>
+
+
+      <!-- AddedOn Column -->
+      <ng-container matColumnDef="AddedOn">
+        <th mat-header-cell *matHeaderCellDef> Added On </th>
+        <td mat-cell *matCellDef="let element"> {{ element.createddate }} </td>
+      </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <hr>
+      <p class="no-data-found" *ngIf="!dataSource.data.length">{{'Vendor Company Info is not available!'}}</p>
+    </section>
+      <!-- paginator -->
+
+      <div class="paginator" *ngIf="false">
+        <mat-paginator
+                    (page)="handlePageEvent($event)"
+                    [pageSize]="pageSize"
+                    [length]="totalItems"
+                    [disabled]="false"
+                    [showFirstLastButtons]="showFirstLastButtons"
+                    [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                    [hidePageSize]="true"
+                    [pageIndex]="currentPageIndex"
+                    aria-label="Select page">
+            </mat-paginator>
+      </div>
+
+
+</ng-template>

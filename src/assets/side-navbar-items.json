@@ -1,0 +1,213 @@
+[
+    {
+      "text": "Dashboard",
+      "icon": "dashboard",
+      "routerLink": "/usit/dashboard"
+    },
+
+    {
+      "text": "VMS",
+      "icon": "work",
+      "children": [
+        {
+          "text": "Vendor",
+          "icon": "group",
+          "routerLink": "/usit/vendors"
+        },
+        {
+          "text": "Recruiters",
+          "icon": "business_center",
+          "routerLink": "/usit/recruiters"
+        }
+      ]
+    },
+
+    {
+      "text": "Technology Tags",
+      "icon": "build",
+      "routerLink": "/usit/technology-tag"
+    },
+    {
+      "text": "Immigration",
+      "icon": "label",
+      "children": [
+        {
+          "text": "H1B Immigration",
+          "icon": "flight_land",
+          "routerLink": "/usit/h1b-immigartion"
+        },
+        {
+          "text": "Future OPT/CPT",
+          "icon": "school",
+          "routerLink": "/usit/future-opt-cpt"
+        }
+      ]
+    },
+
+    {
+      "text": "Employees",
+      "icon": "people",
+      "routerLink": "/usit/employees"
+    },
+
+    {
+      "text": "Pre-sales",
+      "icon": "local_offer",
+      "routerLink": "/usit/pre-sales"
+    },
+
+    {
+      "text": "Sales",
+      "icon": "attach_money",
+      "children": [
+        {
+          "text": "Hot List",
+          "icon": "flash_on",
+          "routerLink": "/usit/hot-list"
+        },
+        {
+          "text": "Consultants",
+          "icon": "person",
+          "routerLink": "/usit/sales-consultants"
+        },
+        {
+          "text": "Submissions",
+          "icon": "assignment",
+          "routerLink": "/usit/sales-submissions"
+        },
+        {
+          "text": "Interviews",
+          "icon": "chat_bubble_outline",
+          "routerLink": "/usit/sales-interviews"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/sales-closures"
+        }
+      ]
+    },
+    {
+      "text": "Recruitment",
+      "icon": "business",
+      "children": [
+        {
+          "text": "Requirements",
+          "icon": "assignment_turned_in",
+          "routerLink": "/usit/rec-requirements"
+        },
+        {
+          "text": "Consultants",
+          "icon": "person_search",
+          "routerLink": "/usit/rec-consultants"
+        },
+        {
+          "text": "Submissions",
+          "icon": "assignment",
+          "routerLink": "/usit/rec-submissions"
+        },
+        {
+          "text": "Interviews",
+          "icon": "chat_bubble_outline",
+          "routerLink": "/usit/rec-interviews"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/rec-closures"
+        }
+      ]
+    },
+    {
+      "text": "Dom Recruitment",
+      "icon": "business",
+      "children": [
+        {
+          "text": "Requirements",
+          "icon": "assignment_turned_in",
+          "routerLink": "/usit/dom-requirements"
+        },
+        {
+          "text": "Consultants",
+          "icon": "person_search",
+          "routerLink": "/usit/dom-consultants"
+        },
+        {
+          "text": "Submissions",
+          "icon": "assignment",
+          "routerLink": "/usit/dom-submission"
+        },
+        {
+          "text": "Interviews",
+          "icon": "chat_bubble_outline",
+          "routerLink": "/usit/dom-interview"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/dom-closures"
+        }
+      ]
+    },
+
+
+    {
+      "text": "Roles - Privileges",
+      "icon": "assignment_ind",
+      "routerLink": "/usit/roles"
+    },
+
+    {
+      "text": "Masters",
+      "icon": "extension",
+      "children": [
+        {
+          "text": "Visa",
+          "icon": "credit_card",
+          "routerLink": "/usit/visa"
+        },
+        {
+          "text": "Qualification",
+          "icon": "school",
+          "routerLink": "/usit/qualification"
+        },
+        {
+          "text": "Companies",
+          "icon": "business",
+          "routerLink": "/usit/companies"
+        }
+      ]
+    },
+    {
+      "text": "KPT",
+      "icon": "quiz",
+      "children": [
+        {
+          "text": "KPT List",
+          "icon": "quiz",
+          "routerLink": "/usit/quiz-list"
+        },
+        {
+          "text": "Write KPT",
+          "icon": "assignment",
+          "routerLink": "/usit/attempt-quiz"
+        },
+        {
+          "text": "KPT Result",
+          "icon": "assignment",
+          "routerLink": "/usit/quiz-result"
+        }
+      ]
+    },
+    {
+      "text": "Accounts & Billing",
+      "icon": "receipt_long",
+      "children": [
+        {
+          "text": "Create PO",
+          "icon": "note_add",
+          "routerLink": "/usit/purchase-orders"
+        }
+      ]
+    }
+  ]

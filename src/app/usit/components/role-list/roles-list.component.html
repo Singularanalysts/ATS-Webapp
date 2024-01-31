@@ -1,0 +1,78 @@
+<div class="container">
+  <ul class="breadcrumb">
+    <li><a (click)="navigateToDashboard()">Home</a></li>
+    <li class="last">Roles</li>
+  </ul>
+  <div class="role-header-container mat-elevation-z1">
+    <span class="header-text">
+      Roles
+    </span>
+    <div class="role-actions">
+      <!-- <button mat-icon-button class="add-user" (click)="addPrivilege()" matTooltip="Add Privilege" matTooltipPosition="above">
+      <mat-icon class="item-icon">enhanced_encryption</mat-icon>
+    </button>[disabled]="!privilegeServ.hasPrivilege('ADD_ROLES')" -->
+      <button mat-icon-button class="add-user" (click)="addRole()" matTooltip="Add Role" matTooltipPosition="above">
+        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_ROLES')}">add_circle</mat-icon>
+      </button>
+
+      <div class="search-role">
+        <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
+        <input matInput type="search" class="search" placeholder="search role" (keyup)="onFilter($event)">
+      </div>
+    </div>
+  </div>
+  <div class="table-wrapper">
+    <table mat-table [dataSource]="dataSource" class="table-style mat-elevation-z8" matSort
+      (matSortChange)="onSort($event)">
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+      <!-- Name Column -->
+      <ng-container matColumnDef="RoleName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by roleName"> Role Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.rolename}}
+          <span [ariaDisabled]="!privilegeServ.hasPrivilege('PRIVILAGE')">
+            <mat-icon class="privileges item-icon" (click)="goToPrivilegeScreen(element)">lock_person</mat-icon>
+          </span>
+        </td>
+      </ng-container>
+      <!-- status -->
+      <!-- <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by symbol"> Status </th>
+        <td mat-cell *matCellDef="let role" [ngStyle]="{ color: role.status === 'Active' ? 'green' : 'accent' }" ><span><button mat-raised-button (click)="onStatusUpdate(role)" > {{role.status}}</button> </span></td>
+      </ng-container> -->
+
+      <!-- actions -->
+      <ng-container matColumnDef="Actions">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let role" class="action-buttons">
+          <button mat-icon-button (click)="editRole(role)" class="action-button-ed"
+            [disabled]="!privilegeServ.hasPrivilege('EDIT_ROLES')">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button mat-icon-button (click)="deleteRole(role)" class="action-button-ed"
+            [disabled]="!privilegeServ.hasPrivilege('DELETE_ROLES')">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+    <!-- paginator -->
+    <!-- <mat-paginator #paginator
+            [length]="elements.length"
+            (page)="handlePageEvent($event)"
+            [length]="length"
+            [pageSize]="pageSize"
+            [disabled]="false"
+            [showFirstLastButtons]="showFirstLastButtons"
+            [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [hidePageSize]="hidePageSize"
+            [pageIndex]="pageIndex"
+            aria-label="Select page">
+    </mat-paginator> -->
+
+  </div>
+</div>

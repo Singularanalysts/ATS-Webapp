@@ -1,0 +1,206 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+
+    <form [formGroup]="interviewForm" (ngSubmit)="onSubmit()" class="vendor-form" >
+      <div class="form">
+        <div class="form-column-left">
+          <input type="hidden" formControlName="intrid" name="intrid">
+          <!-- Submission -->
+          <div class="fg-div">
+            <mat-form-field appearance="fill">
+                <mat-label>Select Submission</mat-label>
+                <mat-select formControlName="submission">
+                    <mat-option *ngFor="let obj of submissiondata" [value]="obj[0]">
+                        {{obj[1]}} - {{obj[2]}} - {{obj[3]}} ({{obj[4]}})
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="interviewForm.get('submission')?.hasError('required')"> Submission is required</mat-error>
+            </mat-form-field>
+        </div>
+
+        <!-- Interview Date -->
+        <mat-form-field appearance="fill" *ngIf="false" >
+          <mat-label>Interview Date & Time</mat-label>
+          <input matInput [matDatepicker]="datepicker" formControlName="interviewdate" placeholder="DD/MM/YYYY">
+          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker></mat-datepicker>
+          <div *ngIf="interviewForm.get('interviewdate').value" class="formatted-date">
+            {{ interviewForm.get('interviewdate').value | date:'short' }}
+          </div>
+          <mat-error *ngIf="interviewForm.get('interviewdate')!.hasError('required')"> Interview Date is required</mat-error>
+        </mat-form-field>
+        <!-- interview-date time -->
+        <mat-form-field appearance="fill">
+          <mat-label>Interview Date & Time</mat-label>
+          <input matInput type="datetime-local"  formControlName="interviewdate" placeholder="DD/MM/YYYY">
+          <mat-error *ngIf="interviewForm.get('interviewdate')!.hasError('required')"> Interview Date is required</mat-error>
+        </mat-form-field>
+          <!--  Time Zone -->
+          <mat-form-field appearance="fill">
+            <mat-label>Select Time Zone</mat-label>
+              <mat-select formControlName="timezone">
+                <mat-option *ngFor="let option of selectOptionObj.timeZone"
+                  [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="interviewForm.get('timezone')!.hasError('required')">Time Zone
+                is Required
+              </mat-error>
+          </mat-form-field>
+
+        <!-- Round of Interview -->
+        <div style="width: 80%;">
+          <mat-label>Round of Interview</mat-label><br>
+          <mat-radio-group formControlName="round" aria-label="Select an option">
+            <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.interviewround" [value]="opt.value" (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
+            <mat-error *ngIf="interviewForm.get('round')!.hasError('required')  && isRadSelected"> Round of Interview is required</mat-error>
+          </mat-radio-group>
+        </div>
+        </div>
+
+        <div class="form-column-right">
+        <!-- Mode of Interview -->
+        <div style="width: 80%;">
+          <mat-label>Mode of Interview</mat-label><br>
+          <mat-radio-group formControlName="mode" aria-label="Select an option">
+            <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.interviewmode" [value]="opt.value" (change)="onModeRadioChange($event)">{{opt.value}}</mat-radio-button>
+            <mat-error *ngIf="interviewForm.get('mode')!.hasError('required') && isModeRadSelected"> Mode of Interview is required</mat-error>
+          </mat-radio-group>
+        </div>
+
+         <!-- Feedback   -->
+         <mat-form-field class="description-field">
+            <mat-label>Feedback</mat-label>
+            <textarea formControlName="feedback" rows="4" maxlength="255" matInput></textarea>
+            <mat-error *ngIf="interviewForm.get('feedback')!.hasError('required')">Feedback
+                is Required
+            </mat-error>
+          </mat-form-field>
+
+         <!-- Status -->
+        <!-- <mat-form-field appearance="fill">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="interviewstatus">
+                <mat-option *ngFor="let option of selectOptionObj.status" [value]="option"> {{ option }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="interviewForm.get('interviewstatus')!.hasError('required')">Status
+                is Required
+            </mat-error>
+        </mat-form-field> -->
+
+        <div style="width: 80%;">
+          <mat-label>Status</mat-label><br>
+          <mat-radio-group formControlName="interviewstatus" aria-label="Select an option">
+            <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.interviewstatus" [value]="opt.value" (change)="onStatusRadioChange($event)" (click)="Closure('false')">{{opt.value}}</mat-radio-button>
+            <mat-radio-button *ngIf="data.actionName === 'edit-interview' && (this.onBoard == 'Selected' || this.onBoard ==='OnBoarded')" value="OnBoarded" (click)="Closure('true')">
+              OnBoarded
+            </mat-radio-button>
+            <mat-error *ngIf="interviewForm.get('interviewstatus')!.hasError('required') && isStatusRadSelected "> Status is required</mat-error>
+          </mat-radio-group>
+        </div>
+
+        </div>
+      </div>
+
+      <div *ngIf="closureFlag">
+        <div class="header-container-closure-details">
+          <span class="header-text">Closure Details:</span>
+        </div>
+
+        <div  formGroupName="closure" class="form">
+          <div class="form-column-left">
+            <mat-form-field class="example-form-field">
+              <mat-label>Visa Validity</mat-label>
+              <input matInput [matDatepicker]="datepicker2" formControlName="visaValidity">
+              <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker2></mat-datepicker>
+              <mat-error *ngIf="interviewForm.get('closure.visaValidity')?.hasError('required')"> Visa Validity is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>Project Duration</mat-label>
+              <input type="text" matInput formControlName="projectDuration">
+              <mat-error *ngIf="interviewForm.get('closure.projectDuration')!.hasError('required')"> Project Duration is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>{{ paymentwithctc }}</mat-label>
+              <input type="text" matInput formControlName="billRateVendor">
+              <mat-error *ngIf="interviewForm.get('closure.billRateVendor')!.hasError('required')"> {{ paymentwithctc }} is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>Billing Cycle</mat-label>
+              <!-- <input type="text" matInput formControlName="billingCycle"> -->
+              <mat-select formControlName="billingCycle">
+                <mat-option value="Weekly">Weekly</mat-option>
+                <mat-option value="BiWeekly">BiWeekly</mat-option>
+                <mat-option value="Monthly">Monthly</mat-option>
+            </mat-select>
+              <mat-error *ngIf="interviewForm.get('closure.billingCycle')!.hasError('required')"> Billing Cycle is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field class="example-form-field">
+              <mat-label>Project End Date</mat-label>
+              <input matInput [matDatepicker]="datepicker3" formControlName="projectendtdate">
+              <mat-datepicker-toggle matIconSuffix [for]="datepicker3"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker3></mat-datepicker>
+              <mat-error *ngIf="interviewForm.get('closure.projectendtdate')!.hasError('required')"> Project End Date is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-column-right">
+            <mat-form-field class="example-form-field">
+              <mat-label>Project Start Date</mat-label>
+              <input matInput [matDatepicker]="datepicker4" formControlName="projectStartDate">
+              <mat-datepicker-toggle matIconSuffix [for]="datepicker4"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker4></mat-datepicker>
+              <mat-error *ngIf="interviewForm.get('closure.projectStartDate')!.hasError('required')"> Project Start Date is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>{{ payrateFromVendor }}</mat-label>
+              <input type="text" matInput formControlName="payRateConsultant">
+              <mat-error *ngIf="interviewForm.get('closure.payRateConsultant')!.hasError('required')"> {{ payrateFromVendor }} is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>Vendor AR Contact</mat-label>
+              <input type="text" matInput formControlName="vendorArPhoneNumber">
+              <mat-error *ngIf="interviewForm.get('closure.vendorArPhoneNumber')!.hasError('required')"> Vendor AR Contact is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="flag === 'Recruiting'">
+              <mat-label>Vendor Ap Contact</mat-label>
+              <input type="text" matInput formControlName="vendorApPhoneNumber">
+              <mat-error *ngIf="interviewForm.get('closure.vendorApPhoneNumber')!.hasError('required')"> Vendor AP Contact is required</mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-label>Payment Cycle</mat-label>
+              <mat-select formControlName="paymentCycle">
+                <mat-option *ngFor="let item of [].constructor(100); let i = index" [value]="i + 1">
+                  Net {{ i + 1 }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="interviewForm.get('closure.paymentCycle')!.hasError('required')"> Payment Cycle is
+                required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+    </form>
+    <div class="form-button-right">
+      <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+  </mat-card>

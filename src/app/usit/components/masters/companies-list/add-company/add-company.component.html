@@ -1,0 +1,32 @@
+<div class="update-company-dialog-container">
+    <div class="header">
+      <h2 mat-dialog-title>{{data.title}}</h2>
+      <hr>
+      <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <div class="content" mat-dialog-content>
+      <form class="add-company-form" [formGroup]="companyForm" name="company-form" (ngSubmit)="onSubmit()">
+        <input type="hidden" formControlName="companyid">
+        <mat-form-field class="companyname-field">
+          <mat-label>Company Name</mat-label>
+          <input title="" matInput formControlName="companyname" maxlength="15">
+          <!-- errors -->
+          <mat-error class="error-message" *ngIf="controls['companyname'].errors && controls['companyname'].errors['required']">Company Name is required</mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="description-field">
+          <mat-label>Description</mat-label>
+          <textarea title="" maxlength="250" matInput
+            formControlName="description"></textarea>
+        </mat-form-field>
+  
+      </form>
+      <div class="actions">
+        <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+        <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+      </div>
+    </div>
+</div>
