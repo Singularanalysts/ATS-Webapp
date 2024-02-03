@@ -11,7 +11,7 @@
           <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin()">
               <mat-form-field class="full-width"  >
                   <mat-label>Email</mat-label>
-                  <input matInput  type="email" formControlName="email" maxlength="35">
+                  <input matInput  type="email" formControlName="email" maxlength="50">
                   <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
                   <!-- errors -->
                   <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email is required</mat-error>

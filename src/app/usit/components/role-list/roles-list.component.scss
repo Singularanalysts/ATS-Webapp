@@ -1,5 +1,10 @@
-.table-wrapper{
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 86vh;
+}
 
+.table-wrapper{
   overflow: auto;
   padding: 4px;
 }
@@ -140,4 +145,8 @@ ul.breadcrumb li a:hover {
 
 .privileges{
   cursor: pointer !important;
+}
+
+.mat-mdc-header-row {
+  z-index: 1000;
 }

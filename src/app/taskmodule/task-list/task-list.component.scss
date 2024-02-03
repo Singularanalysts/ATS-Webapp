@@ -1,0 +1,260 @@
+.submission-container {
+    display: flex;
+    flex-direction: column;
+    height: 86vh;
+  }
+  
+  ul {
+    padding-inline-start: 10px;
+    background-color: rgb(228, 231, 234);
+    height: 2rem;
+    padding-top: 8PX;
+    top: 0;
+  }
+  
+  ul.breadcrumb {
+    list-style: none;
+  }
+  
+  ul.breadcrumb li {
+    display: inline;
+  }
+  
+  ul.breadcrumb li+li:before {
+    color: black;
+    content: "/\00a0";
+  }
+  
+  ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+  }
+  
+  .table-wrapper {
+    flex: 1;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  
+  }
+  
+  .mat-mdc-header-row {
+    background-color: rgb(213, 231, 231);
+    position: sticky;
+    top: 0;
+  }
+  
+  thead {
+    position: sticky;
+    top: 0;
+  }
+  
+  tbody {
+    text-align: left;
+  }
+  
+  .mat-sort-header-arrow {
+    color: #1a1717;
+  }
+  
+  .mat-mdc-column {
+    border-right: 1px solid currentColor;
+  }
+  
+  .mat-column-Designation {
+    width: 32px;
+    border-right: 1px solid lightgray;
+    padding-right: 24px;
+  }
+  
+  .mat-column-Name {
+    border-right: 1px solid lightgray;
+  }
+  
+  .mat-column-SerialNum,
+  .mat-column-ticketid,
+  .mat-column-taskname,
+  .mat-column-description,
+  .mat-column-targetdate,
+  .mat-column-status, 
+  .mat-column-Action {
+    border-right: 1px solid lightgray;
+  }
+  
+  .header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    background-color: white;
+    top: 0;
+    overflow: hidden;
+    margin: 4px;
+    background-color: rgb(228, 231, 234);
+  }
+  
+  .header-text {
+    padding-left: 8px;
+    font-weight: 600;
+  }
+  
+  .add-submission {
+    cursor: pointer;
+  }
+  
+  .submission-actions {
+    display: flex;
+    align-items: center;
+  
+    .search {
+      height: 32px;
+      padding: 0px 8px;
+    }
+  }
+  
+  .interview-table-style {
+    padding: 0 2px;
+    width: max-content;
+    max-height: calc(100% - 3px);
+    overflow: auto;
+    display: block;
+  }
+  
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding: 0 4px 0 4px;
+  }
+  
+  .mat-mdc-header-row {
+    z-index: 1000;
+  }
+  
+  .no-data-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 64px;
+  }
+  
+  
+  .responsive-table {
+    width: 100%;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .responsive-table {
+      table-layout: auto;
+    }
+  
+    .mdc-data-table__cell,
+    .mdc-data-table__header-cell {
+      padding: 0px 2px;
+    }
+  }
+  
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+  
+    .mdc-data-table__cell,
+    .mdc-data-table__header-cell {
+      padding: 0px 2px;
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    height: 43px;
+  }
+  
+  .action-buttons button {
+    margin: 0;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+    width: 30px !important;
+    height: 30px !important;
+    top: 10px;
+  }
+  
+  .filter-vendors {
+    display: flex;
+    column-gap: 5px;
+  }
+  
+  @media screen and (min-width: 1500px) {
+    .interview-table-style {
+      width: 100%;
+      height: calc(100% - 8px);
+      overflow: auto;
+    }
+  }
+  
+  .recruiting-companies {
+    color: #f44336;
+  }
+  
+  .bench-sales-recruiter {
+    color: #3f51b5;
+  }
+  
+  .both {
+    color: black;
+  }
+  
+  .edit-icon,
+  .delete-icon {
+    color: rgb(99, 98, 98);
+  }
+  
+  td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
+    display: flex;
+    column-gap: 5px;
+    height: 49px;
+    align-items: center;
+  }
+  
+  .mat-mdc-header-row {
+    height: 30px !important;
+  }
+  
+  .mat-mdc-row {
+    height: 30px !important;
+  }
+  
+  .filter-button {
+    width: fit-content;
+    height: 25px;
+  }
+  
+  .approve-reject-buttons {
+    width: fit-content;
+    height: auto;
+  }
+  
+  ul.breadcrumb li:last-child {
+    color: black;
+    pointer-events: none;
+  }
+
+  .employeer-name {
+    cursor: pointer;
+    color: #0275d8;
+  }

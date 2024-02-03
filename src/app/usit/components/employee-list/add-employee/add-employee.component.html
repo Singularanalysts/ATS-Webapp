@@ -35,7 +35,7 @@
         <!-- Official Email -->
         <mat-form-field appearance="fill">
           <mat-label>Official Email</mat-label>
-          <input matInput formControlName="email" maxlength="25">
+          <input matInput formControlName="email" maxlength="50">
           <mat-error *ngIf="employeeForm.get('email')!.hasError('required')">Email is
             required</mat-error>
           <mat-error *ngIf="employeeForm.get('email')!.hasError('email')">Invalid email
@@ -44,7 +44,7 @@
         <!-- Personal Email -->
         <mat-form-field appearance="fill">
           <mat-label>Personal Email</mat-label>
-          <input matInput formControlName="personalemail" maxlength="35">
+          <input matInput formControlName="personalemail" maxlength="50">
           <mat-error *ngIf="employeeForm.get('personalemail').hasError('required')">Email
             is required</mat-error>
           <mat-error *ngIf="employeeForm.get('personalemail').hasError('email')">Invalid

@@ -22,18 +22,18 @@ const routes: Routes = [
     path: 'change-password',
     component: ChangePasswordComponent
   },
-
   {
     path: 'sign-up',
     component: SignUpComponent
   },
   {
-
     path: 'usit',
     loadChildren: () => import('./usit/usit.module').then(m => m.UsitModule),
     canLoad: [CanLoadGuard] // add canactivate to check sign in
-
-
+  },
+  {
+    path: 'task',
+    loadChildren: () => import('./taskmodule/task.module').then(n => n.TaskModule)
   },
   {
     path: '**',
