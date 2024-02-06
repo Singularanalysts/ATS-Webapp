@@ -345,26 +345,55 @@ export class AddRequirementComponent {
   }
 
   
+  // toggleSelection(employee: any) {
+  //   const mapToApiFormat = (emp: any) => ({
+  //     userid: emp.userid,
+  //     fullname: emp.fullname,
+  //   });
+    
+  //     employee.selected = !employee.selected;
+  
+  //   if (employee.selected) {
+
+  //     this.selectData.push(employee);
+  //   }
+  //   // else {
+  //   //   const i = this.selectData.findIndex((value: any) => value.fullname === employee.fullname);
+  //   //   this.selectData.splice(i, 1);
+  //   // }
+  //   this.isAllOptionsSelected = !this.empArr.some((x: any) => x.selected === false)
+  //   const mappedData = this.selectData.map(mapToApiFormat);
+  //   this.requirementForm.get('empid')!.setValue(mappedData);
+  // };
+
   toggleSelection(employee: any) {
+    // Mapping function to convert employee object to API format
     const mapToApiFormat = (emp: any) => ({
       userid: emp.userid,
       fullname: emp.fullname,
     });
-    
-      employee.selected = !employee.selected;
+  
+    // Toggle the selected status of the employee
+    employee.selected = !employee.selected;
   
     if (employee.selected) {
-
+      // If employee is selected, add to selectData array
       this.selectData.push(employee);
+    } else {
+      // If employee is deselected, find index and remove from selectData array
+      const index = this.selectData.findIndex((emp: any) => emp.userid === employee.userid);
+      if (index !== -1) {
+        this.selectData.splice(index, 1);
+      }
     }
-    // else {
-    //   const i = this.selectData.findIndex((value: any) => value.fullname === employee.fullname);
-    //   this.selectData.splice(i, 1);
-    // }
-    this.isAllOptionsSelected = !this.empArr.some((x: any) => x.selected === false)
+  
+    // Update the isAllOptionsSelected flag based on selection status of all employees
+    this.isAllOptionsSelected = !this.empArr.some((x: any) => !x.selected);
+  
+    // Map the selected employee data to API format and update empid form control
     const mappedData = this.selectData.map(mapToApiFormat);
     this.requirementForm.get('empid')!.setValue(mappedData);
-  };
+  }
 
   onSubmit () {
     this.submitted = true;
