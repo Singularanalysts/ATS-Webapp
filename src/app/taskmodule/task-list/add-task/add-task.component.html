@@ -1,0 +1,82 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+       Add Task
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+    <form [formGroup]="requirementForm" (ngSubmit)="onSubmit()" class="vendor-form">
+        <div class="form">
+            <div class="form-column-left">
+                <!-- Client -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Task Name</mat-label>
+                    <input matInput formControlName="taskname" maxlength="120">
+                    <mat-error *ngIf="requirementForm.get('taskname')!.hasError('required')"> Task Name is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Job Description -->
+                <mat-form-field class="description-field">
+                    <mat-label>Task Description</mat-label>
+                    <textarea formControlName="description" matInput rows="4" maxlength="10000"></textarea>
+                    <mat-error *ngIf="requirementForm.get('description')!.hasError('required')"> Task Description is
+                        required</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>Target Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker" formControlName="targetdate" placeholder="DD-MM-YYYY">
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker></mat-datepicker>
+                    <div *ngIf="requirementForm.get('targetdate')?.value" class="formatted-date">
+                        {{ requirementForm.get('targetdate')?.value | date }}
+                    </div>
+                    <mat-error *ngIf="requirementForm.get('targetdate')!.hasError('required')"> Target Date is
+                        required</mat-error>
+                </mat-form-field>
+
+
+                <!-- Assign Recruiter -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Assign Employee</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Assign Recruiter" formControlName="assignedto">
+                        <mat-chip-row *ngFor="let employee of selectData" class="chip-style"
+                            (removed)="remove(employee)">
+                            {{ employee.fullname }}
+                            <button matChipRemove [attr.aria-label]="'remove ' + employee">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip-row>
+                    </mat-chip-grid>
+
+                    <input #employeeInput formControlName="assignedto" [matChipInputFor]="chipGrid"
+                        [matAutocomplete]="auto" (matChipInputTokenEnd)="add($event)" />
+                    <mat-autocomplete #auto="matAutocomplete" formControlName="assignedto">
+                        <mat-checkbox [checked]="isAllOptionsSelected" color="primary" (change)="onSelectAll($event)">{{
+                            isAllOptionsSelected ? 'UnSelect All': 'Select All'}}</mat-checkbox>
+                        <mat-option *ngFor="let employee of empArr">
+                            <div (click)="optionClicked($event, employee)">
+                                <mat-checkbox [checked]="employee.selected" color="primary"
+                                    (change)="toggleSelection(employee)" (click)="$event.stopPropagation()">
+                                    {{ employee.fullname }}
+                                </mat-checkbox>
+                            </div>
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error
+                        *ngIf="requirementForm.get('assignedto')!.hasError('required') || requirementForm.get('assignedto')?.value ">Select
+                        Employee</mat-error>
+                </mat-form-field>
+
+            </div>
+        </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

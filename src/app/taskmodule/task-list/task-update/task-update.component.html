@@ -1,0 +1,156 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        Update Task
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<mat-card class="center-card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="vendor-form">
+        <div class="form">
+            <div class="form-column-right">
+                <mat-form-field appearance="fill">
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker" formControlName="fromdate" placeholder="DD-MM-YYYY">
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker></mat-datepicker>
+                    <div *ngIf="form.get('fromdate')?.value" class="formatted-date">
+                        {{ form.get('fromdate')?.value | date }}
+                    </div>
+                    <mat-error *ngIf="form.get('fromdate')!.hasError('required')"> From Date is
+                        required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker1" formControlName="todate" placeholder="DD-MM-YYYY">
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker1"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker1></mat-datepicker>
+                    <div *ngIf="form.get('todate')?.value" class="formatted-date">
+                        {{ form.get('todate')?.value | date }}
+                    </div>
+                    <mat-error *ngIf="form.get('todate')!.hasError('required')"> To Date is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="fill">
+                    <mat-label>Duration</mat-label>
+                    <input matInput formControlName="duration" maxlength="20">
+                    <mat-error *ngIf="form.get('duration')!.hasError('required')"> Duration is
+                        required</mat-error>
+                </mat-form-field> -->
+
+                <!-- <mat-form-field appearance="fill">
+                    <mat-label>Select Time</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="ftime" placeholder="Select time">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker ></mat-datepicker>
+                    <mat-error *ngIf="form.get('ftime')!.hasError('required')"> Interview Time is required</mat-error>
+                </mat-form-field> -->
+
+                <mat-form-field appearance="fill">
+                    <mat-label>select Status</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option *ngFor="let option of selectOptionObj.noticeType" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                    <!-- <button type="button" matSuffix mat-icon-button><mat-icon>add</mat-icon></button> -->
+                    <mat-error *ngIf="form.get('status')!.hasError('required')">Status is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="description-field">
+                    <mat-label>Description</mat-label>
+                    <textarea formControlName="description" rows="4" maxlength="255" matInput></textarea>
+                    <mat-error *ngIf="form.get('description')!.hasError('required')">Description
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-left">
+                <div id="table-container" class="table-wrapper">
+                    <section class="mat-elevation-z8 interview-table-style">
+                        <table mat-table [dataSource]="dataSource" matSort oncopy="return false">
+                            <!-- <ng-container matColumnDef="SerialNum">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by SerialNum"> #
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.serialNum }} </td>
+                            </ng-container> -->
+                            <ng-container matColumnDef="ticketid">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    Ticket ID </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.ticketid }} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="taskname">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company"> Task
+                                    Name </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.taskName }} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    Description </th>
+                                <td mat-cell *matCellDef="let element"> <span >{{
+                                        element.description }}</span> </td>
+                            </ng-container>
+                            <ng-container matColumnDef="targetdate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    Target Date </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.targetdate }} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="fromdate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    From Date </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.fromdate }} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="todate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    To Date </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.todate }} </td>
+                            </ng-container>
+                            <!-- <ng-container matColumnDef="duration">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    Duration </th>
+                                <td mat-cell *matCellDef="let element"> {{ element.duration }} </td>
+                            </ng-container> -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Company">
+                                    Status</th>
+                                <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: dataTableColumns;" >
+                                <!-- <td mat-cell *matCellDef="let element" colspan="{{ dataTableColumns.length }}"> 
+                                    <span>{{ element.description }}</span> 
+                                </td> -->
+                                <!-- <td mat-cell *matCellDef="let element" colspan="7"> 
+                                    <span>Description: {{ element.description }}</span>
+                                </td> -->
+                            </tr>
+                        </table>
+                        <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+                    </section>
+                    <hr>
+                </div>
+                <!-- kiran -->
+            </div>
+        </div>
+    </form>
+
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>
