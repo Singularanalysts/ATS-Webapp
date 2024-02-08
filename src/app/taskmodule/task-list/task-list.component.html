@@ -10,9 +10,10 @@
         </span>
 
         <div class="submission-actions">
-            <button [disabled]="!privilegeServ.hasPrivilege('ADD_INTERVIEWS')" matTooltip="Add"
-                matTooltipPosition="left" mat-icon-button class="add-submission" (click)="addInterview()">
-                <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_INTERVIEWS')}">add_circle</mat-icon>
+            <button [disabled]="!privilegeServ.hasPrivilege('ADD_TASKMANAGEMENT')" matTooltip="Add"
+                matTooltipPosition="left" mat-icon-button class="add-submission" (click)="addTask()">
+                <mat-icon
+                    [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_TASKMANAGEMENT')}">add_circle</mat-icon>
             </button>
 
             <!-- <div class="search-submission">
@@ -55,19 +56,42 @@
                         Status</th>
                     <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
                 </ng-container>
-                <ng-container matColumnDef="Action">
-                    <th mat-header-cell *matHeaderCellDef>Actions</th>
-                    <td mat-cell *matCellDef="let element">
+
+                <ng-container matColumnDef="update">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company">
+                        Status</th>
+                    <td mat-cell *matCellDef="let element"> 
                         <ng-container *ngFor="let data1 of element.assignedto">
                             <span *ngIf="data1.userid == userid">
-                                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_EMPLOYEE')" mat-raised-button
-                                    style="width: 60px; height: 25px;" (click)="updateTask(element)"
+                                <button [disabled]="!privilegeServ.hasPrivilege('UPDATE_TASKMANAGEMENT')"
+                                    mat-raised-button style="width: 60px; height: 25px;" (click)="updateTask(element)"
                                     [ngStyle]="{ 'color': 'white', 'background-color': 'orange', 'font-weight': 'bold' }">
                                     Update
                                 </button>
-                                
                             </span>
                         </ng-container>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element">
+                        <!-- <ng-container *ngFor="let data1 of element.assignedto">
+                            <span *ngIf="data1.userid == userid">
+                                <button [disabled]="!privilegeServ.hasPrivilege('UPDATE_TASKMANAGEMENT')"
+                                    mat-raised-button style="width: 60px; height: 25px;" (click)="updateTask(element)"
+                                    [ngStyle]="{ 'color': 'white', 'background-color': 'orange', 'font-weight': 'bold' }">
+                                    Update
+                                </button>
+                            </span>
+                        </ng-container> -->
+                        <!-- <button [disabled]="!privilegeServ.hasPrivilege('DELETE_TASKMANAGEMENT')" mat-icon-button (click)="editTask(element)" class="action-button-ed">
+                            <mat-icon>edit</mat-icon>
+                          </button> -->
+                        <button [disabled]="!privilegeServ.hasPrivilege('DELETE_TASKMANAGEMENT')"  (click)="deleteTask(element.taskid)" mat-icon-button
+                            class="action-button-ed">
+                            <mat-icon 
+                                [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_TASKMANAGEMENT')}">delete</mat-icon>
+                        </button>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
@@ -85,4 +109,3 @@
     </div>
 
 </div>
-

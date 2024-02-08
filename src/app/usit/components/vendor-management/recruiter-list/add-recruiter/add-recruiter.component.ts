@@ -194,10 +194,8 @@ export class AddRecruiterComponent implements OnInit {
       // }),
 
     );
-
-
-
   }
+  protected isFormSubmitted: boolean = false;
   onSubmit() {
 
     const dataToBeSentToSnackBar: ISnackBarData = {
@@ -209,10 +207,14 @@ export class AddRecruiterComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     if (this.recruiterForm.invalid) {
+      this.isFormSubmitted = false;
       //this.blur = "enable"
       this.recruiterForm.markAllAsTouched();
       this.displayFormErrors();
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     this.submitted=true;
     const saveReqObj = this.getSaveData();
@@ -227,6 +229,7 @@ export class AddRecruiterComponent implements OnInit {
             this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
           }
           else {
+            this.isFormSubmitted = false;
             // this.blur = "enable"
             dataToBeSentToSnackBar.message =
               this.data.actionName === 'add-recruiter'
@@ -239,6 +242,7 @@ export class AddRecruiterComponent implements OnInit {
         },
         error: (err) => {
           //this.blur = 'enable';
+          this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-recruiter'
               ? 'Recruiter addition is failed'

@@ -15,13 +15,44 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
   childMenus!: QueryList<MatExpansionPanel>;
   private apiServ = inject(ApiService);
   protected privilegeServ = inject(PrivilegesService);
-
+  department : any;
   ngOnInit(): void {
-    this.getSideNavData()
+    this.department  = localStorage.getItem('department');
+
+    if(this.department == 'Administration' || this.department == 'SoftWare' ){
+      this.getSideNavData('assets/side-navbar-items.json')
+    }
+    else if(this.department == 'Sourcing' ){
+      this.getSideNavData('assets/side-navbar-sourcing-items.json')
+    }
+    else if(this.department == 'Bench Sales' ){
+      this.getSideNavData('assets/side-navbar-sales-items.json')
+    }
+    else if(this.department == 'Recruiting' ){
+      this.getSideNavData('assets/side-navbar-recruiting-items.json')
+    }
+    else if(this.department == 'Dom Recruiting' ){
+      this.getSideNavData('assets/side-navbar-dom-items.json')
+    }
+
+    else if(this.department == 'Accounts' ){
+      this.getSideNavData('assets/side-navbar-accounts-items.json')
+    }
+    else{
+      this.getSideNavData('assets/side-navbar-accounts-items.json')
+    }
   }
 
-  private getSideNavData() {
-    this.apiServ.getJson('assets/side-navbar-items.json').subscribe({
+  private getSideNavData(path:string) {
+    // 'Administration',
+    // 'Recruiting',
+    // 'SoftWare',
+    // 'Bench Sales',
+    // 'Sourcing',
+    // 'Accounts',
+    // 'Guest',
+
+    this.apiServ.getJson(path).subscribe({
       next: (data: any[]) => {
        this.privilegeServ.menuList = data;
         // let indexOfSideNavItem: number = 0;

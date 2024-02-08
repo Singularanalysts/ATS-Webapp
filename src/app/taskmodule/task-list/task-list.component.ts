@@ -28,13 +28,16 @@ import {
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
 import { Subject, takeUntil } from 'rxjs';
-import {  MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InterviewService } from 'src/app/usit/services/interview.service';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { TaskService } from '../services/task.service';
 import { TaskUpdateComponent } from './task-update/task-update.component';
+import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
+import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
+import { Task } from 'src/app/usit/models/task';
 
 
 @Component({
@@ -57,7 +60,7 @@ import { TaskUpdateComponent } from './task-update/task-update.component';
 })
 export class TaskListComponent implements OnInit {
   private service = inject(TaskService);
-  displayedColumns: string[] = ['SerialNum', 'ticketid', 'taskname', 'description', 'targetdate', 'status', 'Actions'];
+  displayedColumns: string[] = ['SerialNum', 'ticketid', 'taskname', 'description', 'targetdate', 'status','update','Actions'];
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -66,6 +69,7 @@ export class TaskListComponent implements OnInit {
     'description',
     'targetdate',
     'status',
+    'update',
     'Action',
   ];
   hasAcces!: any;
@@ -97,9 +101,16 @@ export class TaskListComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
-  
+  dataTobeSentToSnackBarService: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
 
-  
+
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
@@ -135,13 +146,22 @@ export class TaskListComponent implements OnInit {
     )
     */
   }
-
-  addInterview() {
+  editTask(emp: Task){
+    const dataToBeSentToDailog = {
+      title: 'Update Task',
+      taskData: emp,
+      actionName: 'edit-task',
+    };
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: false, edit: true, add: false});
+    const dialogRef =  this.dialogServ.openDialogWithComponent(AddTaskComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if(dialogRef.componentInstance.submitted){
+        this.getAll();
+    }})
+  }
+  addTask() {
     const actionData = {
       title: 'Add Task',
-      // interviewData: null,
-      // actionName: 'add-interview',
-      // flag: this.flag,
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
@@ -154,6 +174,62 @@ export class TaskListComponent implements OnInit {
         this.getAll();
       }
     })
+  }
+
+  deleteTask(id: number) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: id,
+      actionName: 'delete-task'
+    };
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+        if (dialogRef.componentInstance.allowAction) {
+          // call delete api
+          this.service.deleteTask(id).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
+                this.getAll();
+                this.dataTobeSentToSnackBarService.message =
+                  'Employee Deleted successfully';
+              } else {
+                this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+                this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataTobeSentToSnackBarService
+              );
+            },
+            error: (err) => {
+              this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+              this.dataTobeSentToSnackBarService.message = err.message;
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataTobeSentToSnackBarService
+              );
+            },
+          });
+        }
+      },
+    });
+  }
+
+  private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = action.edit || action.add ? '62dvw' : action.delete ? 'fit-content' : "400px";
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = dataToBeSentToDailog.actionName;
+    dialogConfig.data = dataToBeSentToDailog;
+    return dialogConfig;
   }
 
   updateTask(element: any) {
@@ -255,3 +331,5 @@ export class TaskListComponent implements OnInit {
     this.router.navigate(['usit/user-info', id])
   }
 }
+
+

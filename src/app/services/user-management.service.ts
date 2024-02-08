@@ -21,10 +21,6 @@ export class UserManagementService {
         return resp;
       }));
   }
-
-  // loginv2
-
-
   getUserName(): string {
     const userName = localStorage.getItem('userName');
     return userName !== null ? userName : ''

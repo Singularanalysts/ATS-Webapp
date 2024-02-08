@@ -7,7 +7,7 @@
     </button>
 </div>
 <mat-card class="center-card">
-    <form [formGroup]="submissionForm" (ngSubmit)="onSubmit()" class="vendor-form">
+    <form [formGroup]="submissionForm"  class="vendor-form">
         <div class="form">
             <div class="form-column-left">
                 <input id="flg" name="flg"  type="hidden" formControlName="flg">
@@ -160,6 +160,6 @@
 
     <div class="form-button-right">
         <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
     </div>
 </mat-card>

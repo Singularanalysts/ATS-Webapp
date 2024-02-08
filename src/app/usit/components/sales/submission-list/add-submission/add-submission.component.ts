@@ -81,7 +81,7 @@ import { SubmissionInfo } from 'src/app/usit/models/submissioninfo';
   styleUrls: ['./add-submission.component.scss']
 })
 export class AddSubmissionComponent implements OnInit{
-
+  protected isFormSubmitted: boolean = false;
   submissionForm: any = FormGroup;
   submitted = false;
   requirementdata: any = [];
@@ -339,9 +339,13 @@ export class AddSubmissionComponent implements OnInit{
 
     if (this.submissionForm.invalid) {
       // this.displayFormErrors();
+      this.isFormSubmitted = false
       this.submissionForm.markAllAsTouched();
       this.isRadSelected = true;
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     this.submitted = true;
     const dataToBeSentToSnackBar: ISnackBarData = {
@@ -367,12 +371,14 @@ export class AddSubmissionComponent implements OnInit{
                 : 'Submission updated successfully';
             this.dialogRef.close();
           } else {
+            this.isFormSubmitted = false;
             dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Submission already Exists';
             dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
         error: (err) => {
+          this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-submission'
               ? 'Submission addition is failed'

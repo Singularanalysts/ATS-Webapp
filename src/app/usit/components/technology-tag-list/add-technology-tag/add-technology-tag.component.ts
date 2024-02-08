@@ -84,8 +84,12 @@ export class AddTechnologyTagComponent {
       panelClass: ['custom-snack-success'],
     };
     if (this.technologyForm.invalid) {
+      this.isFormSubmitted = false
       this.displayFormErrors();
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     const userId = localStorage.getItem('userid');
     const addObj = {
