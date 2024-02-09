@@ -95,7 +95,7 @@ export class AddInterviewComponent implements OnInit {
   closureFlag = false;
   private datePipe = inject(DatePipe);
   intId: any;
-
+  protected isFormSubmitted: boolean = false;
   get frm() {
     return this.interviewForm.controls;
   }
@@ -248,13 +248,18 @@ export class AddInterviewComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.isFormSubmitted = false
     if (this.interviewForm.invalid) {
+      this.isFormSubmitted = false;
       this.isRadSelected = true;
       this.isModeRadSelected = true;
       this.isStatusRadSelected = true;
       this.interviewForm.markAllAsTouched();
       this.displayFormErrors();
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     if (this.interviewForm.get('interviewstatus').value === "OnBoarded") {
       const visaValidityFormControl = this.interviewForm.get('closure.visaValidity');
@@ -291,12 +296,14 @@ export class AddInterviewComponent implements OnInit {
                 : 'Interview updated successfully';
             this.dialogRef.close();
           } else {
+            this.isFormSubmitted = false;
             dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Interview already Exists';
             dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
         error: (err: any) => {
+          this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-interview'
               ? 'Interview addition is failed'

@@ -202,11 +202,9 @@
         </mat-form-field>
       </div>
     </div>
-
-
   </form>
   <div class="form-button-right">
     <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
   </div>
 </mat-card>

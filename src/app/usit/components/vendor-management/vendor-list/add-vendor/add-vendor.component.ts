@@ -346,6 +346,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   /**
    * Submit
    */
+  protected isFormSubmitted: boolean = false;
   onSubmit() {
     this.submitted = true;
     const dataToBeSentToSnackBar: ISnackBarData = {
@@ -358,8 +359,12 @@ export class AddVendorComponent implements OnInit, OnDestroy {
     };
 
     if (this.vendorForm.invalid) {
+      this.isFormSubmitted = false;
       this.displayFormErrors();
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     const saveReqObj = this.getSaveData();
     this.vendorServ
@@ -374,11 +379,13 @@ export class AddVendorComponent implements OnInit, OnDestroy {
                 : 'Vendor updated successfully';
             this.dialogRef.close();
           } else {
+            this.isFormSubmitted = false;
             dataToBeSentToSnackBar.message = 'Vendor already Exists';
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
         error: (err) => {
+          this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-vendor'
               ? 'Vendor addition is failed'

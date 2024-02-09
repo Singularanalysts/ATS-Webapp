@@ -32,7 +32,7 @@
       </form>
       <div class="actions">
         <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
-        <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
       </div>
     </div>
 </div>

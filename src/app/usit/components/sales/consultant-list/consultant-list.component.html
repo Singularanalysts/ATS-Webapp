@@ -220,14 +220,15 @@
               </ng-template>
 
               <ng-template #presales>
-                <span [style.cursor]="'pointer'" *ngIf="dept=='Administration' && consultant.status=='Verified'"
+                
+                <button mat-icon-button [disabled]="!privilegeServ.hasPrivilege('MOVETOSALES')" [style.cursor]="'pointer'" *ngIf="consultant.status=='Verified' && flag!='Recruiting'"
+                  (click)="moveProfileToSales(consultant)">
+                  <mat-icon  [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOSALES')}"  >arrow_right_alt</mat-icon>
+                </button>
+                <!-- <span [style.cursor]="'pointer'" *ngIf="dept=='Administration' && flag=='Recruiting'"
                   (click)="moveProfileToSales(consultant)">
                   <mat-icon class="edit-icon">arrow_right_alt</mat-icon>
-                </span>
-                <span [style.cursor]="'pointer'" *ngIf="dept=='Administration' && flag=='Recruiting'"
-                  (click)="moveProfileToSales(consultant)">
-                  <mat-icon class="edit-icon">arrow_right_alt</mat-icon>
-                </span>
+                </span> -->
               </ng-template>
               <!-- delete -->
               <button  [disabled]="!privilegeServ.hasPrivilege('DELETE_CONSULTANT')" *ngIf="hasAcces !== 'Employee' && hasAcces !== 'Team Lead'" mat-icon-button (click)="deleteConsultant(consultant)"

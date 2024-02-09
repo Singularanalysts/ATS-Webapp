@@ -27,4 +27,13 @@ export class DashboardService {
   public getClosureCount(flag:string) {
     return this.apiServ.get("dashboard/closurecount/"+flag);
   }
+
+  public getDiceRequirements() {
+    return this.apiServ.get("dashboard/reqempTags");
+  }
+
+  public getSourcingLeads(id: any) {
+    return this.apiServ.get("dashboard/all/"+ id);
+  }
+
 }

@@ -107,33 +107,35 @@ export class LoginComponent implements OnInit {
         if (result.status == 'success') {
           const loggedInUserData = result.data;
          // console.log(result.data);
-
           this.permissionServ.login(loggedInUserData).subscribe((data) => {
              this.router.navigate(['usit/dashboard']);
             const message = 'You have logged in successfully!';
             this.showErroNotification(message, 'success');
           });
-        } else if (result.status == 'locked') {
-          const message =
-            'Your Account has been locked, Please contact with admin';
-          this.showErroNotification(message);
-        } else if (result.status == 'inactive') {
-          const message = 'Account In Active';
-          this.showErroNotification(message);
-        }else{
-          //const message = result.includes('Unauthorized') ? 'Invalid Credentials, Please try with valid credentials' : result;
-          this.showErroNotification(result);
         }
       },
       error: err => {
         if (err.status == 401) {
           const message = 'Invalid Credentials, Please try with valid credentials';
           this.showErroNotification(message);
-        } else {
+        } 
+        else if (err.error.status == 'locked') {
+          const message =err.error.message;
+          this.showErroNotification(message);
+        } else if (err.error.status == 'inactive') {
+          const message =err.error.message;
+          this.showErroNotification(message);
+        }
+        // else {
+        //   //const message = result.includes('Unauthorized') ? 'Invalid Credentials, Please try with valid credentials' : result;
+        //   this.showErroNotification(result);
+        // }
+        else {
           const message = 'Failed to connect Server';
           this.showErroNotification(message);
         }
       }
+
   });
 
   }

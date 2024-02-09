@@ -180,7 +180,7 @@
     <!-- form-bottom action buttons -->
     <div class="form-action-buttons">
       <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
-      <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+      <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
     </div>
   </mat-card>
   <!-- mat-card-ends -->

@@ -89,10 +89,7 @@ export class H1bImmigrationComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'add-h1b';
     dialogConfig.data = actionData;
-
-
     const dialogRef = this.dialogServ.openDialogWithComponent(AddH1bImmigrantComponent, dialogConfig);
-
     dialogRef.afterClosed().subscribe(() => {
       if(dialogRef.componentInstance.submitted){
          this.getAll();

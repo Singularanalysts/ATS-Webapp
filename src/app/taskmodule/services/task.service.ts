@@ -30,4 +30,13 @@ export class TaskService {
     return this.apiServ.get("task/trackByUser/" + id);
   }
 
+  deleteTask(id: number) {
+    return this.apiServ.delete("task/delete/" + id);
+  }
+
+  getTaskById(taskid: number) {
+    return this.apiServ.get("task/getbyTaskId/" + taskid);
+  }
+
+
 }

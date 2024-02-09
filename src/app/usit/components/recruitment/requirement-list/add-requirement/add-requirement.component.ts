@@ -410,10 +410,14 @@ export class AddRequirementComponent {
     }
 
     if (this.requirementForm.invalid) {
+      this.isFormSubmitted = false
       this.displayFormErrors();
       this.isRadSelected = true;
       this.requirementForm.markAllAsTouched();
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     this.selectData.forEach(function (obj: any) {
         delete obj.selected

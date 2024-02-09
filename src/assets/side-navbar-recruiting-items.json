@@ -1,0 +1,117 @@
+[
+    {
+      "text": "Dashboard",
+      "icon": "dashboard",
+      "routerLink": "/usit/dashboard"
+    },
+
+    {
+      "text": "VMS",
+      "icon": "work",
+      "children": [
+        {
+          "text": "Vendor",
+          "icon": "group",
+          "routerLink": "/usit/vendors"
+        },
+        {
+          "text": "Recruiters",
+          "icon": "business_center",
+          "routerLink": "/usit/recruiters"
+        }
+      ]
+    },
+
+    {
+      "text": "Technology Tags",
+      "icon": "build",
+      "routerLink": "/usit/technology-tag"
+    },
+   
+    {
+      "text": "Recruitment",
+      "icon": "business",
+      "children": [
+        {
+          "text": "Requirements",
+          "icon": "assignment_turned_in",
+          "routerLink": "/usit/rec-requirements"
+        },
+        {
+          "text": "Consultants",
+          "icon": "person_search",
+          "routerLink": "/usit/rec-consultants"
+        },
+        {
+          "text": "Submissions",
+          "icon": "assignment",
+          "routerLink": "/usit/rec-submissions"
+        },
+        {
+          "text": "Interviews",
+          "icon": "chat_bubble_outline",
+          "routerLink": "/usit/rec-interviews"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/rec-closures"
+        }
+      ]
+    }
+   ,
+    {
+      "text": "Masters",
+      "icon": "extension",
+      "children": [
+        {
+          "text": "Visa",
+          "icon": "credit_card",
+          "routerLink": "/usit/visa"
+        },
+        {
+          "text": "Qualification",
+          "icon": "school",
+          "routerLink": "/usit/qualification"
+        },
+        {
+          "text": "Companies",
+          "icon": "business",
+          "routerLink": "/usit/companies"
+        }
+      ]
+    },
+    {
+      "text": "KPT",
+      "icon": "quiz",
+      "children": [
+        {
+          "text": "KPT List",
+          "icon": "quiz",
+          "routerLink": "/usit/quiz-list"
+        },
+        {
+          "text": "Write KPT",
+          "icon": "assignment",
+          "routerLink": "/usit/attempt-quiz"
+        },
+        {
+          "text": "KPT Result",
+          "icon": "assignment",
+          "routerLink": "/usit/quiz-result"
+        }
+      ]
+    }
+    ,
+    {
+      "text": "Task Management",
+      "icon": "receipt_long",
+      "children": [
+        {
+          "text": "Task List",
+          "icon": "note_add",
+          "routerLink": "/task/list-task"
+        }
+      ]
+    }
+  ]

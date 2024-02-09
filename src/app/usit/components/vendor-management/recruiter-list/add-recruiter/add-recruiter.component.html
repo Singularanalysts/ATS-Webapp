@@ -102,7 +102,7 @@
   <div class="form-button-right">
     <!-- <div class="form-button-inner"> -->
     <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()">
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">
       Submit
     </button>
     <!-- </div> -->

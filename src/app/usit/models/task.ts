@@ -7,4 +7,5 @@ export class Task {
     ticketid !: string;
     companyid !:number;
     companyname !: string;
+    assignedto!: any;
 }

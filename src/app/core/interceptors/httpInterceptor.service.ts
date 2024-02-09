@@ -21,16 +21,17 @@ export class HttpInterceptorService implements HttpInterceptor {
   constructor(
     private authService: PermissionsService,
     private loaderServ: LoaderService,
-    private router : Router
+    private router: Router
   ) //private ngxService: NgxUiLoaderService
-  {}
-
+  { }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    
     this.loaderServ.showLoader()
-    if (this.authService.getToken() && this.authService.isUserSignedin()  ) {
+    if (this.authService.getToken() && this.authService.isUserSignedin()) {
+      
       const request = req.clone({
         headers: new HttpHeaders({
           //   'content-type': 'application/json; charset=utf-8',
@@ -38,83 +39,33 @@ export class HttpInterceptorService implements HttpInterceptor {
         }),
       });
       return next.handle(request).pipe(
+        
         retry(1),
         finalize(() => {
           this.loaderServ.hideLoader();
         }),
         catchError((error: HttpErrorResponse) => {
-          // this.ngxService.stop();
-          // const errorMessage = this.handleServerSideError(error);
           this.handleServerSideError(error);
           console.log("error-message", error)
-          return throwError(() => error );
+          return throwError(() => error);
         })
-     );
+      );
+    }
+    else if ((this.router.url === '/' || this.router.url === '/logout')) {
+      //  this.router.navigate(['/']);
+    }
+    else {
+      // alert(this.router.url)
+      // alertify.error("Token Expired");
+      this.router.navigate(['/']);
     }
     return next.handle(req);
   }
 
+
+
+
   handleServerSideError(error: HttpErrorResponse) {
-
-   /* if (error instanceof TimeoutError) {
-      // return alertify.error("TimeoutError");//  this.openDialog('error', `Няма връзка до сървъра.`);
-    }
-
-    if (
-      error instanceof HttpErrorResponse &&
-      error.error &&
-      error.error.message
-    ) {
-      // return alertify.error(error.error.message);//this.openDialog('error', error.error.message);
-    }
-
-    if (error instanceof Error) {
-      switch (error.message) {
-        default:
-        //  return alertify.error("An unknown error occurred");//this.openDialog('error', `An unknown error occurred`);
-      }
-    }
-    // Generic HTTP errors
-    switch (error.status) {
-      case 400:
-        switch (error.error) {
-          case 'invalid_username_or_password':
-            this.authService.signout();
-          // return alertify.error("Invalid Credentials");//this.openDialog('error', 'Невалидно потребителско име или парола');
-          default:
-          //return alertify.error("Bad request");//this.openDialog('error', 'Bad request');
-        }
-
-      case 401:
-        this.authService.signout();
-      //return alertify.error("Authentication Error");///this.openDialog('error', 'Ще трябва да се логнете отново');
-
-      case 403:
-        this.authService.signout();
-      // return alertify.error("You don't have the required permissions");///this.openDialog('error', `You don't have the required permissions`);
-
-      case 404:
-      // return alertify.error("Resource not found");//this.openDialog('error', 'Resource not found');
-
-      case 422:
-       // return alertify.error('Invalid data provided'); //this.openDialog('error', 'Invalid data provided');
-
-      case 500:
-      case 501:
-      case 502:
-      case 503:
-      //return alertify.error("An internal server error occurred");//this.openDialog('error', 'An internal server error occurred');
-
-      case -1:
-      //return alertify.error("You appear to be offline. Please check your internet connection and try again.");//this.openDialog('error', 'You appear to be offline. Please check your internet connection and try again.' );
-
-      case 0:
-      //return alertify.error("CORS issue?");// this.openDialog('error', `CORS issue?`);
-
-      default:
-      //return alertify.error("An unknown error occurred");//this.openDialog('error', `An unknown error occurred`);
-    }
-    */
     switch (error.status) {
       case 400: {
         return `${HttpErrors[400]}: put your message here`;
@@ -123,7 +74,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         return `${HttpErrors[401]}: put your message here`;
       }
       case 403: {
-        return `${HttpErrors[403]}: put your message here`;
+        return `${HttpErrors[403]}: In Active User`;
       }
       case 404: {
         return `${HttpErrors[404]}: put your message here`;

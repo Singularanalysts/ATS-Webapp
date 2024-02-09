@@ -8,7 +8,7 @@
 </div>
 <mat-card class="center-card">
 
-  <form [formGroup]="consultantForm" (ngSubmit)="onSubmit()" class="consultant-form">
+  <form [formGroup]="consultantForm"  class="consultant-form">
     <input type="hidden" formControlName="consultantid">
     <input type="hidden" formControlName="consultantno">
     <input type="hidden" formControlName="dommaxno">
@@ -115,7 +115,7 @@
         </mat-form-field>
 
         <!-- priority   -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="flag == 'sales' || flag == 'presales' ">
           <mat-label>Select Priority</mat-label>
           <mat-select formControlName="priority">
             <mat-option *ngFor="let option of selectOptionObj.priority" [value]="option.code">
@@ -525,7 +525,7 @@
   <div class="form-button-right">
     <!-- <div class="form-button-inner"> -->
     <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
     <!-- </div> -->
   </div>
 </mat-card>

@@ -76,7 +76,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 export class AddconsultantComponent implements OnInit, OnDestroy {
   flag!: string;
   // private baseUrl: string = environment.API_BASE_URL;
-
+  protected isFormSubmitted: boolean = false;
   private api = inject(ApiService);
   private baseUrl = this.api.apiUrl;
   uploadedfiles: string[] = [];
@@ -167,8 +167,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     } else {
       this.initConsultantForm(new Consultantinfo());
     }
-
-
   }
   getFlag(type: string) {
     //alert(type)
@@ -192,9 +190,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
       resume: [consultantData ? consultantData.resume : ''],
       dlcopy: [consultantData ? consultantData.dlcopy : ''],
-
-
-
       firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
       lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
       consultantemail: [
@@ -281,7 +276,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         projectavailabity.clearValidators();
         availabilityforinterviews.clearValidators();
         position.clearValidators();
-        experience.clearValidators();contactnumber
+        experience.clearValidators();
         firstname.clearValidators();
         lastname.clearValidators();
         ratetype.clearValidators();
@@ -332,7 +327,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
 
     const priority = this.consultantForm.get('priority');
-    if (this.flag == 'sales') {
+    if (this.flag == 'sales' || this.flag == 'presales') {
       priority.setValidators(Validators.required);
       this.consultantForm.get('requirements')?.patchValue(null);
     } else {
@@ -386,9 +381,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.submitted = true;
     // stop here if consultantForm is invalid
     if (this.consultantForm.invalid) {
+      this.isFormSubmitted = false
       this.isRadSelected = true;
       this.displayFormErrors();
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     if (this.flag != 'presales') {
       this.consultantForm.get("status").setValue("Active");
@@ -513,8 +512,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         if (response.status == 'success') {
           this.message = '';
         } else if (response.status == 'fail') {
-          // const cn = this.consultantForm.get('number');
-          // cn.setValue('');
+           const cn = this.consultantForm.get('contactnumber');
+           cn.setValue('');
           this.message = 'Record already available with given Contact Number';
           this.dataToBeSentToSnackBar.message =  'Record already available with given Contact Number';
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];

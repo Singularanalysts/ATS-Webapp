@@ -432,7 +432,7 @@
   <!-- Bottom Action Buttons -->
   <div class="action-btns">
     <button class="btn-cancel" mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
   </div>
 </mat-card>
 <!-- matcard ends-->

@@ -25,7 +25,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { Router } from '@angular/router';
 import { Observable, startWith, map, takeUntil, Subject } from 'rxjs';
 import { EmployeeManagementService } from 'src/app/usit/services/employee-management.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -35,12 +34,10 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { SearchPipe } from 'src/app/pipes/search.pipe';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
 import { saveAs } from 'file-saver';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
-import { MatDialog } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -80,6 +77,7 @@ export class AddEmployeeComponent {
     'SoftWare',
     'Bench Sales',
     'Sourcing',
+    'Dom Recruiting',
     'Accounts',
     'Guest',
   ];
@@ -143,7 +141,7 @@ export class AddEmployeeComponent {
   private fileServ = inject(FileManagementService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
-
+  protected isFormSubmitted: boolean = false;
   ngOnInit(): void {
     this.getRoles(); // common for add employee
     this.getManager();// common for add employee
@@ -195,7 +193,7 @@ export class AddEmployeeComponent {
       ],
       pseudoname: [employeeData ? employeeData.pseudoname : ''],
       email: [
-        employeeData ? employeeData.email : 'SALES@MAIL.COM',
+        employeeData ? employeeData.email : '',
         [
           Validators.required,
           Validators.email,
@@ -205,12 +203,12 @@ export class AddEmployeeComponent {
       personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
       //['', [Validators.required]],
       companycontactnumber: [employeeData && employeeData.companycontactnumber ? employeeData.companycontactnumber : ''],
-      designation: [employeeData ? employeeData.designation : 'SALES'],
+      designation: [employeeData ? employeeData.designation : ''],
       department: [employeeData ? employeeData.department : '', Validators.required],
       joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
       relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
       personalemail: [
-        employeeData ? employeeData.personalemail : 'SALES@MAIL.COM',
+        employeeData ? employeeData.personalemail : '',
         [
           Validators.required,
           Validators.email,
@@ -219,21 +217,21 @@ export class AddEmployeeComponent {
       ],
       manager: [employeeData ? employeeData.manager : ''],
       aadharno: [
-        employeeData ? employeeData.aadharno : '123456789124',
+        employeeData ? employeeData.aadharno : '',
         [Validators.required, Validators.pattern(/^\d{12}$/)],
       ],
 
       panno: [
-        employeeData ? employeeData.panno : 'CRRPB1315H',
+        employeeData ? employeeData.panno : '',
         [Validators.required, Validators.pattern(/^[A-Z]{5}\d{4}[A-Z]{1}$/)],
       ],
-      bankname: [employeeData ? employeeData.bankname : 'AXIS', [Validators.required, Validators.maxLength(100)]],
-      accno: [employeeData ? employeeData.accno : '234235235235235', [Validators.required, Validators.pattern(/^\d{1,15}$/)]],
+      bankname: [employeeData ? employeeData.bankname : '', [Validators.required, Validators.maxLength(100)]],
+      accno: [employeeData ? employeeData.accno : '', [Validators.required, Validators.pattern(/^\d{1,15}$/)]],
       ifsc: [
-        employeeData ? employeeData.ifsc : 'UTIB0004055',
+        employeeData ? employeeData.ifsc : '',
         [Validators.required, Validators.pattern(/^([A-Za-z]{4}\d{7})$/)],
       ],
-      branch: [employeeData ? employeeData.branch : 'AMEERPET', [Validators.required]],
+      branch: [employeeData ? employeeData.branch : '', [Validators.required]],
       teamlead: [employeeData ? employeeData.teamlead : ''],
       // role: [employeeData ? employeeData.role.rolename : '', Validators.required],
       role: this.formBuilder.group({
@@ -434,7 +432,11 @@ export class AddEmployeeComponent {
     }
     if (this.employeeForm.invalid) {
       this.displayFormErrors();
+      this.isFormSubmitted = false
       return;
+    }
+    else{
+      this.isFormSubmitted = true
     }
     // updates employee object form values
     if (this.data.actionName === "edit-employee") {
