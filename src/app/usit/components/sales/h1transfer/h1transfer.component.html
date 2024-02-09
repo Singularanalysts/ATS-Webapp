@@ -2,22 +2,17 @@
     <ul class="breadcrumb">
         <li><a (click)="navigateToDashboard()">Home</a></li>
         <li class="last">Sales</li>
-        <li class="last">Hot List</li>
+        <li class="last">H1 Transfer List</li>
     </ul>
     <div class="header-container mat-elevation-z1">
         <span class="header-text">
-            Hot List &nbsp;&nbsp;&nbsp;
+            H1 Transfer List &nbsp;&nbsp;&nbsp;
         </span>
 
         <div class="hot-list-actions">
             <div class="search-hot-list">
-                <button  class="search" mat-raised-button (click)="handleExport()">Excel Import</button>
-            </div>
-        </div>
-
-        <div class="hot-list-actions">
-            <div class="search-hot-list">
-                <input matInput type="text" class="search" placeholder="search Hot List" (keyup)="applyFilter($event)">
+                    <button  class="search" mat-raised-button (click)="handleExport()">Excel Import</button>
+                <!-- <input matInput type="text" class="search" placeholder="search Hot List" (keyup)="applyFilter($event)"> -->
             </div>
         </div>
     </div>
@@ -25,10 +20,6 @@
     <div id="table-container" class="table-wrapper">
         <section class="mat-elevation-z8 hot-list-table-style">
             <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
-
-                <!--- Note that these columns can be defined in any order.
-                The actual rendered columns are set as a property on the row definition" -->
-
                 <!-- SNo Column -->
                 <ng-container matColumnDef="SerialNum">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number">

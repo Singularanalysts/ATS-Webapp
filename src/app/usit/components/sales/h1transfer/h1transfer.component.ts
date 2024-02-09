@@ -9,7 +9,7 @@ import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { utils, writeFile } from 'xlsx';
 @Component({
-  selector: 'app-hot-list',
+  selector: 'app-h1transfer',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,10 +19,10 @@ import { utils, writeFile } from 'xlsx';
     MatTableModule,
     MatPaginatorModule
   ],
-  templateUrl: './hot-list.component.html',
-  styleUrls: ['./hot-list.component.scss']
+  templateUrl: './h1transfer.component.html',
+  styleUrls: ['./h1transfer.component.scss']
 })
-export class HotListComponent implements OnInit {
+export class H1transferComponent implements OnInit{
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -58,7 +58,7 @@ export class HotListComponent implements OnInit {
   }
 
   getAllData(pagIdx = 1) {
-    this.consultantServ.getSalesHotList(pagIdx, this.itemsPerPage, this.field).subscribe(
+    this.consultantServ.getH1TransferList(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -79,7 +79,7 @@ export class HotListComponent implements OnInit {
   applyFilter(event : any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.consultantServ.getSalesHotList(1, this.itemsPerPage, keyword).subscribe(
+      return this.consultantServ.getH1TransferList(1, this.itemsPerPage, keyword).subscribe(
         ((response: any) => {
           this.dataSource.data  = response.data.content;
            // for serial-num {}
@@ -87,7 +87,6 @@ export class HotListComponent implements OnInit {
             x.serialNum = this.generateSerialNumber(i);
           });
           this.totalItems = response.data.totalElements;
-
         })
       );
     }

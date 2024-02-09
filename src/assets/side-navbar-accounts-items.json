@@ -21,12 +21,6 @@
         }
       ]
     },
-
-    {
-      "text": "Technology Tags",
-      "icon": "build",
-      "routerLink": "/usit/technology-tag"
-    },
     {
       "text": "Immigration",
       "icon": "label",
@@ -50,18 +44,7 @@
       "routerLink": "/usit/employees"
     },
 
-    {
-      "text": "H1 Transfer",
-      "icon": "people",
-      "routerLink": "/usit/h1transfer"
-    },
-
-    {
-      "text": "Pre-sales",
-      "icon": "local_offer",
-      "routerLink": "/usit/pre-sales"
-    },
-
+   
     {
       "text": "Sales",
       "icon": "attach_money",
@@ -155,28 +138,7 @@
         }
       ]
     },
-    {
-      "text": "Open Requirements",
-      "icon": "work",
-      "children": [
-        {
-          "text": "Dice Reqs",
-          "icon": "group",
-          "routerLink": "/usit/openreqs"
-        },
-        {
-          "text": "RSS",
-          "icon": "business_center",
-          "routerLink": "/usit/rssfeed"
-        }
-      ]
-    },
 
-    {
-      "text": "Roles - Privileges",
-      "icon": "assignment_ind",
-      "routerLink": "/usit/roles"
-    },
 
     {
       "text": "Masters",
@@ -199,27 +161,7 @@
         }
       ]
     },
-    {
-      "text": "KPT",
-      "icon": "quiz",
-      "children": [
-        {
-          "text": "KPT List",
-          "icon": "quiz",
-          "routerLink": "/usit/quiz-list"
-        },
-        {
-          "text": "Write KPT",
-          "icon": "assignment",
-          "routerLink": "/usit/attempt-quiz"
-        },
-        {
-          "text": "KPT Result",
-          "icon": "assignment",
-          "routerLink": "/usit/quiz-result"
-        }
-      ]
-    },
+   
     {
       "text": "Accounts & Billing",
       "icon": "receipt_long",

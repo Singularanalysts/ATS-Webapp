@@ -7,9 +7,9 @@ import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { utils, writeFile } from 'xlsx';
+
 @Component({
-  selector: 'app-hot-list',
+  selector: 'app-openreqs',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,23 +19,20 @@ import { utils, writeFile } from 'xlsx';
     MatTableModule,
     MatPaginatorModule
   ],
-  templateUrl: './hot-list.component.html',
-  styleUrls: ['./hot-list.component.scss']
+  templateUrl: './openreqs.component.html',
+  styleUrls: ['./openreqs.component.scss']
 })
-export class HotListComponent implements OnInit {
+export class OpenreqsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
-    'Name',
-    'Technology',
-    'Visa',
-    'Experience',
-    'Rate',
-    'Priority',
-    'CurrentLocation',
-    'Relocation',
-    'Phone',
-    'Email',
+    'posted_on',
+    'job_title',
+    'category_skill',
+    'employment_type',
+    'job_location',
+    'vendor',
+    'end_client',
   ];
   // pagination code
   page: number = 1;
@@ -58,7 +55,7 @@ export class HotListComponent implements OnInit {
   }
 
   getAllData(pagIdx = 1) {
-    this.consultantServ.getSalesHotList(pagIdx, this.itemsPerPage, this.field).subscribe(
+    this.consultantServ.getopenReqWithPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -79,7 +76,7 @@ export class HotListComponent implements OnInit {
   applyFilter(event : any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.consultantServ.getSalesHotList(1, this.itemsPerPage, keyword).subscribe(
+      return this.consultantServ.getopenReqWithPagination(1, this.itemsPerPage, keyword).subscribe(
         ((response: any) => {
           this.dataSource.data  = response.data.content;
            // for serial-num {}
@@ -112,51 +109,5 @@ export class HotListComponent implements OnInit {
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
-  }
-
-  handleExport() {
-    const currentDate = new Date();
-    const chicagoDate = new Intl.DateTimeFormat('en-US', {
-      timeZone: 'America/Chicago',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    }).format(currentDate);
-
-    const headings = [[
-      'Name',
-      'Technology',
-      'Visa',
-      'Exp',
-      'Rate',
-      'Priority',
-      'Location',
-      'Relocation',
-      'Phone',
-      'Email',
-    ]];
-    const excelData = this.dataSource.data.map(c => [
-      c.consultantname,
-      c.technologyarea,
-      c.visa_status,
-      c.experience,
-      c.hourlyrate,
-      c.priority,
-      c.currentlocation,
-      c.relocation,
-      c.contactnumber,
-      c.consultantemail
-    ]);
-
-    const wb = utils.book_new();
-    const ws: any = utils.json_to_sheet([]);
-    utils.sheet_add_aoa(ws, headings);
-    utils.sheet_add_json(ws, excelData, { origin: 'A2', skipHeader: true });
-    utils.book_append_sheet(wb, ws, 'data');
-    writeFile(wb, 'HotList@' + chicagoDate + '.xlsx');
   }
 }

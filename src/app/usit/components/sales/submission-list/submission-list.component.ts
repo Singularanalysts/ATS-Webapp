@@ -273,9 +273,15 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
             if (response.status == 'Success') {
               this.getAllData();
               dataToBeSentToSnackBar.message = 'Submission Deleted successfully';
-            } else {
+            } 
+
+            else if(response.status == 'fail'){
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            dataToBeSentToSnackBar.message = response.message;
+          }
+            else {
               dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              dataToBeSentToSnackBar.message = 'Record Deletion failed';
+              dataToBeSentToSnackBar.message = 'Submission not deleted';
             }
             this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
           }, error: (err: any) => {
