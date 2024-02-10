@@ -580,7 +580,7 @@ export class ConsultantListComponent
                     'Consultant Deleted successfully';
                 } else {
                   dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-                  dataToBeSentToSnackBar.message = 'Record Deletion failed';
+                  dataToBeSentToSnackBar.message = response.message;
                 }
                 this.snackBarServ.openSnackBarFromComponent(
                   dataToBeSentToSnackBar

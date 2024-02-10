@@ -54,6 +54,8 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   users: any[] = [];
   submission: any[] = [];
   interview: any[] = [];
+  sourcing_reports: any[] = [];
+  us_reports: any[] = [];
   privilegResp: any[] = [];
   company: any[] = [];
    // snackbar
@@ -89,7 +91,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyed$))
       .subscribe((response: any) => {
         this.vendor = response.data.vendor;
-        // console.log(JSON.stringify(this.vendor))
         this.recruiter = response.data.recruiter;
         this.tech_support = response.data.tech_support;
         this.consultant = response.data.consultant;
@@ -109,6 +110,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.submission = response.data.submission;
         //console.log(this.submission)
         this.interview = response.data.interview;
+        //reports privilages
+        this.sourcing_reports = response.data.sourcing_reports;
+        this.us_reports = response.data.us_reports;
         this.selecedPrivileges();
         this.mapResponseData();
       });
@@ -227,6 +231,23 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         privileges: this.taskmanagement,
         isSelected: this.taskmanagement
           ? this.taskmanagement.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      // reports
+
+      {
+        title: 'Sourcing Reports',
+        privileges: this.sourcing_reports,
+        isSelected: this.sourcing_reports
+          ? this.sourcing_reports.every((priv: any) => priv.selected === true)
+          : false,
+      },
+
+      {
+        title: 'S&R Reports',
+        privileges: this.us_reports,
+        isSelected: this.us_reports
+          ? this.us_reports.every((priv: any) => priv.selected === true)
           : false,
       }
 
@@ -360,8 +381,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
             });
           });
         }
-
-      
 //requirement
         if (this.qualification != null) {
           this.qualification.forEach((ele) => {
@@ -441,6 +460,31 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         if (this.company != null) {
           this.company.forEach((ele) => {
             response.data.company.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+              }
+            });
+          });
+        }
+
+
+        if (this.us_reports != null) {
+          this.us_reports.forEach((ele) => {
+            response.data.us_reports.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+              }
+            });
+          });
+        }
+
+
+
+        if (this.sourcing_reports != null) {
+          this.sourcing_reports.forEach((ele) => {
+            response.data.sourcing_reports.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;

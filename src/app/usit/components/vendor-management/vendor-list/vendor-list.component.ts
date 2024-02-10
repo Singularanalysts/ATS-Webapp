@@ -452,7 +452,7 @@ export class VendorListComponent implements OnInit {
                     'Vendor Deleted successfully';
                 } else {
                   dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-                  dataToBeSentToSnackBar.message = 'Record Deletion failed';
+                  dataToBeSentToSnackBar.message = response.message;
                 }
                 this.snackBarServ.openSnackBarFromComponent(
                   dataToBeSentToSnackBar

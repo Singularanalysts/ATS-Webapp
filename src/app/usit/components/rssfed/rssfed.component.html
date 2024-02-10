@@ -1,0 +1,108 @@
+<div class="hot-list-container">
+    <ul class="breadcrumb">
+        <li><a (click)="navigateToDashboard()">Home</a></li>
+        <li class="last">RSS Feed</li>
+    </ul>
+    <div class="header-container mat-elevation-z1">
+        <span class="header-text">
+            RSS Feed
+        </span>
+
+        <div class="hot-list-actions">
+            <div class="search-hot-list">
+                <button matInput (click)="readRSS()">Read RSS</button>
+            </div>
+        </div>
+        <div class="hot-list-actions">
+            <div class="search-hot-list">
+                <input matInput type="text" class="search" placeholder="search " (keyup)="applyFilter($event)">
+            </div>
+        </div>
+    </div>
+
+    <div id="table-container" class="table-wrapper">
+        <section class="mat-elevation-z8 hot-list-table-style">
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
+
+                <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- SNo Column -->
+                <ng-container matColumnDef="SerialNum">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number">
+                        # </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+                </ng-container>
+
+                <!-- Name Column-->
+                <ng-container matColumnDef="pubdate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name">Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.pubdate}} </td>
+                </ng-container>
+                <!-- Technology Column-->
+                <ng-container matColumnDef="company">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Technology">
+                        From  </th>
+                    <td mat-cell *matCellDef="let element"><span class="consultant-name">{{element?.company}}
+                        </span> </td>
+                </ng-container>
+
+                <!-- Visa Column-->
+                <ng-container matColumnDef="feedTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Visa">
+                        Subject/Job Role </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a href="{{element?.feedLink}}" target="_blank">{{element?.feedTitle}}</a> </td>
+                </ng-container>
+
+                <!-- Experience Column-->
+                <ng-container matColumnDef="city">
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"> Location </th>
+                    <td mat-cell *matCellDef="let element">{{element?.city}} , {{element?.state}} , {{element?.country}}</td>
+                </ng-container>
+                <ng-container matColumnDef="jobtype">
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"> Type </th>
+                    <td mat-cell *matCellDef="let element">{{element?.jobtype}} </td>
+                </ng-container>
+
+                <!-- Rate Column-->
+                <ng-container matColumnDef="payrate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Rate">
+                        Rate</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.payrate}}
+                    </td>
+                </ng-container>
+
+                <!-- Priority Column-->
+                <ng-container matColumnDef="empemail">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Priority">
+                        Email</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.empemail}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="empfirstname">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Priority">
+                        Employee Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.empfirstname}}
+                    </td>
+                </ng-container>
+                <!-- table ROW -->
+                <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+            </table>
+            <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+        </section>
+        <hr>
+    </div>
+
+
+    <div class="paginator">
+        <!-- paginator -->
+        <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+        </mat-paginator>
+    </div>
+
+</div>

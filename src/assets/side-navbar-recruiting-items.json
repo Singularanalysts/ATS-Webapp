@@ -27,7 +27,11 @@
       "icon": "build",
       "routerLink": "/usit/technology-tag"
     },
-   
+    {
+      "text": "H1 Transfer",
+      "icon": "people",
+      "routerLink": "/usit/h1transfer"
+    },
     {
       "text": "Recruitment",
       "icon": "business",
@@ -60,6 +64,22 @@
       ]
     }
    ,
+   {
+    "text": "Open Requirements",
+    "icon": "work",
+    "children": [
+      {
+        "text": "Dice Reqs",
+        "icon": "group",
+        "routerLink": "/usit/openreqs"
+      },
+      {
+        "text": "RSS",
+        "icon": "business_center",
+        "routerLink": "/usit/rssfeed"
+      }
+    ]
+  },
     {
       "text": "Masters",
       "icon": "extension",
@@ -103,6 +123,7 @@
       ]
     }
     ,
+
     {
       "text": "Task Management",
       "icon": "receipt_long",

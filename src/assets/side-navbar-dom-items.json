@@ -98,6 +98,22 @@
       ]
     },
     {
+      "text": "Open Requirements",
+      "icon": "work",
+      "children": [
+        {
+          "text": "Dice Reqs",
+          "icon": "group",
+          "routerLink": "/usit/openreqs"
+        },
+        {
+          "text": "RSS",
+          "icon": "business_center",
+          "routerLink": "/usit/rssfeed"
+        }
+      ]
+    },
+    {
       "text": "Task Management",
       "icon": "receipt_long",
       "children": [
