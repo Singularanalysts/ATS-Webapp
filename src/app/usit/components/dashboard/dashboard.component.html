@@ -104,6 +104,10 @@
     </div>
     <div class="left-div-inner-table">
       <div class="table-container table-wrapper">
+        <div class="header-container-leading-resources">
+          <span class="header-text">Sourcing Leads</span>
+        </div>
+        <hr>
         <section class="table-style mat-elevation-z8">
           <table mat-table [dataSource]="dataSource" class="responsive-table">
       
@@ -162,6 +166,7 @@
             <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
             <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
           </table>
+          <hr>
           <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
         </section>
       
@@ -230,6 +235,10 @@
 </div>
 
 <div class="table-container-dice table-wrapper">
+  <div class="header-container-leading-resources">
+    <span class="header-text">Dice Requirement Tags</span>
+  </div>
+   <hr>
   <section class="table-style-dice mat-elevation-z8">
     <table mat-table [dataSource]="dataSourceDice" class="responsive-table">
 
