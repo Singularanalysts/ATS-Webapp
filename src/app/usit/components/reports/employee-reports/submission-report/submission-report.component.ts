@@ -1,0 +1,204 @@
+import { Component, Inject, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ReportsService } from 'src/app/usit/services/reports.service';
+import { utils, writeFile } from 'xlsx';
+import { MatButtonModule } from '@angular/material/button';
+
+@Component({
+  selector: 'app-submission-report',
+  standalone: true,
+  imports: [CommonModule, MatButtonModule],
+  templateUrl: './submission-report.component.html',
+  styleUrls: ['./submission-report.component.scss'],
+})
+export class SubmissionReportComponent {
+  department: any;
+  excelName!: string;
+  headings!: string[][];
+  excelData: any;
+  consultant: any[] = [];
+  popUpImport() {
+    if (this.vo.vo.status == 'submission') {
+      this.headings = [
+        [
+          'DOS',
+          'Consultant',
+          'Requirement',
+          'Impl Partner',
+          'End Client',
+          'Vendor',
+          'Submission Rate',
+          'Project Location',
+          'Submitted By',
+          'Status',
+        ],
+      ];
+      this.excelData = this.consultant.map(
+        (c: {
+          createddate: any;
+          consultantname: any;
+          position: any;
+          implpartner: any;
+          endclient: any;
+          vendor: any;
+          submissionrate: any;
+          projectlocation: any;
+          pseudoname: any;
+          substatus: any;
+        }) => [
+          c.createddate,
+          c.consultantname,
+          c.position,
+          c.implpartner,
+          c.endclient,
+          c.vendor,
+          c.submissionrate,
+          c.projectlocation,
+          c.pseudoname,
+          c.substatus,
+        ]
+      );
+    } else if (
+      this.vo.vo.status == 'interview' ||
+      this.vo.vo.status == 'Schedule' ||
+      this.vo.vo.status == 'Hold' ||
+      this.vo.vo.status == 'Closed' ||
+      this.vo.vo.status == 'Rejected' ||
+      this.vo.vo.status == 'onboarded' ||
+      this.vo.vo.status == 'backout' ||
+      this.vo.vo.status == 'Selected'
+    ) {
+      this.headings = [
+        [
+          'Consultant Name',
+          'Date & Time Of Interview',
+          'Round',
+          'Mode',
+          'Vendor',
+          'End Client',
+          'Date Of Submission',
+          'Employee Name',
+          'Interview Status',
+        ],
+      ];
+      this.excelData = this.consultant.map(
+        (c: {
+          name: any;
+          interview_date: any;
+          round: any;
+          mode: any;
+          vendor: any;
+          endclient: any;
+          createddate: any;
+          pseudoname: any;
+          interview_status: any;
+        }) => [
+          c.name,
+          c.interview_date,
+          c.round,
+          c.mode,
+          c.vendor,
+          c.endclient,
+          c.createddate,
+          c.pseudoname,
+          c.pseudoname,
+          c.interview_status,
+        ]
+      );
+    } else if (this.vo.vo.status == 'consultant') {
+      this.headings = [
+        [
+          'Date',
+          'Name',
+          'Email',
+          'Contact Number',
+          'Visa',
+          'Current Location',
+          'Position',
+          'Exp',
+          'Relocation',
+          'Rate',
+        ],
+      ];
+      this.excelData = this.consultant.map(
+        (c: {
+          createddate: any;
+          consultantname: any;
+          consultantemail: any;
+          contactnumber: any;
+          visa_status: any;
+          currentlocation: any;
+          position: any;
+          experience: any;
+          relocation: any;
+          hourlyrate: any;
+        }) => [
+          c.createddate,
+          c.consultantname,
+          c.consultantemail,
+          c.contactnumber,
+          c.visa_status,
+          c.currentlocation,
+          c.position,
+          c.experience,
+          c.relocation,
+          c.hourlyrate,
+        ]
+      );
+    }
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, this.headings);
+    utils.sheet_add_json(ws, this.excelData, {
+      origin: 'A2',
+      skipHeader: true,
+    });
+    utils.book_append_sheet(wb, ws, 'data');
+    this.excelName =
+      'Report @' +
+      ' ' +
+      this.executive +
+      ' ' +
+      this.vo.vo.status +
+      ' ' +
+      this.vo.vo.flg +
+      ' ' +
+      this.vo.vo.startDate +
+      ' TO ' +
+      this.vo.vo.endDate +
+      '.xlsx';
+    writeFile(wb, this.excelName);
+  }
+  submenuflg = '';
+  executive = '';
+  consultantname = '';
+  uniquePseudonames: any;
+  @Input() message: string | undefined;
+  constructor(
+    public dialogRef: MatDialogRef<SubmissionReportComponent>,
+    @Inject(MAT_DIALOG_DATA) public vo: any,
+    private reportservice: ReportsService
+  ) {}
+
+  ngOnInit(): void {
+    console.log(this.vo);
+    console.log(this.vo.data);
+    if (this.vo.vo) {
+      this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
+        (response: any) => {
+          this.consultant = response.data;
+          this.executive = this.vo.additionalValue1;
+          console.log(this.executive);
+        },
+        (error) => {
+          console.error('Error fetching consultant data:', error);
+        }
+      );
+    }
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+}
