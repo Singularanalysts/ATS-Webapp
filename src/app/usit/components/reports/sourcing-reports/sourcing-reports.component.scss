@@ -1,0 +1,174 @@
+.mat-mdc-card {
+    position: relative;
+    top: 2rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    width: 94%;
+    margin-left: 3rem;
+    margin-right: 3rem;
+}
+.badge{
+    cursor: pointer;
+}
+ul.breadcrumb {
+    list-style: none;
+  }
+  
+  ul.breadcrumb li {
+    display: inline;
+  }
+  
+  ul.breadcrumb li+li:before {
+    color: black;
+    content: "/\00a0";
+  }
+  
+  ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+  }
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 350px;
+  }
+  table tr th,
+  table tr td {
+    border-right: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+    padding: 5px;
+  }
+  table tr th:first-child,
+  table tr td:first-child {
+    border-left: 1px solid #bbb;
+  }
+  table tr th {
+    background:#d5e7e7;
+    border-top: 1px solid #bbb;
+    text-align: left;
+  }
+  
+  /* top-left border-radius */
+  table tr:first-child th:first-child {
+    border-top-left-radius: 6px;
+  }
+  
+  /* top-right border-radius */
+  table tr:first-child th:last-child {
+    border-top-right-radius: 6px;
+  }
+  
+  /* bottom-left border-radius */
+  table tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+  }
+  
+  /* bottom-right border-radius */
+  table tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+  }
+  .show{
+   display: none;
+  }
+  table {
+    font-size: 80%;
+    user-select: none;
+    width: 100%;
+
+  }
+  table th{
+    font-weight: 500;
+
+  }
+
+  a{
+    cursor: pointer;
+  }
+  @media print {
+    table {
+      font-size: 20px;
+    }
+    form {
+      display: none;
+    }
+    .show{
+      display: block;
+     }
+     .kiran{
+      display: none;
+     }
+  }
+  .modal-xl {
+    max-width: 90% !important;
+}
+
+.narvee{
+  text-align: right;
+  font-weight: bold;
+  overflow: hidden;
+}
+.sticky{
+  position: sticky; top: 0;
+}
+.total{
+  color:red
+}
+.lesthan{
+  --bs-table-bg: none;
+  color:white;
+  background-color: rgb(196, 136, 136) !important;
+}
+
+.scroll {
+  overflow: auto;
+}
+/*
+form {
+      display: none;
+    }
+    */
+
+    
+
+
+    /* @media print {
+      main * {
+       visibility: hidden;
+      }
+      .modal-content * {
+       visibility: visible;
+       overflow: visible;
+      }
+      .main-page * {
+       display: none;
+      }
+      .modal {
+       position: absolute;
+       left: 0;
+       top: 0;
+       margin: 0;
+       padding: 0;
+    
+       visibility: visible;
+       
+      }
+      .modal-dialog {
+       visibility: visible !important;
+      
+      }
+     } */
+     .matcards{
+        position: relative;
+        top: 4rem;
+        padding-right: 3rem;
+        padding-left: 3rem;
+        width: 94%;
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }

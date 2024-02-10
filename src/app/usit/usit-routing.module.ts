@@ -24,6 +24,8 @@ import { UserInfoComponent } from './components/recruitment/user-info/user-info.
 import { H1bImmigrationComponent } from './components/Immigration/h1b-immigration/h1b-immigration.component';
 import { FutureOptCptComponent } from './components/Immigration/future-opt-cpt/future-opt-cpt.component';
 import { HotListComponent } from './components/sales/hot-list/hot-list.component';
+import { EmployeeReportsComponent } from './components/reports/employee-reports/employee-reports.component';
+import { SourcingReportsComponent } from './components/reports/sourcing-reports/sourcing-reports.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -181,6 +183,12 @@ const routes: Routes = [
   },
   {
     path: 'hot-list', component: HotListComponent,
+  },
+  { 
+    path: 'employee-report', component: EmployeeReportsComponent
+  },
+  { 
+    path: 'sourcing-report', component: SourcingReportsComponent 
   }
 ];
 

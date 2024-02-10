@@ -1,0 +1,88 @@
+import { Component, Inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ReportsService } from 'src/app/usit/services/reports.service';
+import { utils, writeFile } from 'xlsx';
+
+@Component({
+  selector: 'app-sourcing-consultant-report',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './sourcing-consultant-report.component.html',
+  styleUrls: ['./sourcing-consultant-report.component.scss']
+})  
+
+export class SourcingConsultantReportComponent {
+  department: any;
+  excelName !:string;
+    
+    headings!: string[][];
+    excelData: any;
+    consultant:any[]=[];
+exname: any;
+popUpImport(){
+  //console.log(this.vo+" = "+this.vo.status)
+    this.headings = [[
+    'Date',
+    'Name',
+    'Email',
+    'Contact Number',
+    'Visa',
+    'Current Location',
+    'Position',
+    'Exp',
+    'Relocation',
+    'Rate',
+  ]];
+  this.excelData = this.consultant.map(c => [
+    c.createddate,
+    c.consultantname,
+    c.consultantemail,
+    c.contactnumber,
+    c.visa_status,
+    c.currentlocation,
+    c.position,
+    c.experience,
+    c.relocation,
+    c.hourlyrate,
+  ]);
+
+const wb = utils.book_new();
+const ws: any = utils.json_to_sheet([]);
+utils.sheet_add_aoa(ws, this.headings);
+utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
+utils.book_append_sheet(wb, ws, 'data');
+this.excelName = 'Report @' +' '+this.exname+' '+this.vo.vo.status+' '+this.vo.vo.flg+' '+this.vo.vo.startDate +' TO '+this.vo.vo.endDate+'.xlsx'
+writeFile(wb, this.excelName);
+}
+
+    submenuflg = "";
+    executive = "";
+    consultantname ="";
+    //consult_data:any = [];
+   
+    constructor(
+      public dialogRef: MatDialogRef<SourcingConsultantReportComponent>,
+      @Inject(MAT_DIALOG_DATA) public vo: any // Expect 'vo' directly
+    , private reportservice :ReportsService) {}
+  
+    ngOnInit(): void {
+      if (this.vo.vo) {
+        this.reportservice.sourcing_DrillDown_report(this.vo.vo).subscribe(
+         (response: any) => {
+           this.consultant = response.data;
+           this.exname = this.vo.additionalValue1
+           console.log(this.exname);
+           
+         },
+         (error) => {
+           console.error('Error fetching consultant data:', error);
+         }
+       );
+     }
+    }
+  
+    closeDialog(): void {
+      this.dialogRef.close();
+    }
+}

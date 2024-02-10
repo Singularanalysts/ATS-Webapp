@@ -1,0 +1,78 @@
+<div mat-dialog-content>
+  <div
+    style="display: flex; justify-content: space-between; align-items: center"
+  >
+    <h1 mat-dialog-title>'{{ executive }}' {{ vo.vo.status }}'s</h1>
+    <div style="display: flex; gap: 8px">
+      <button
+        mat-raised-button
+        style="background-color: #4caf50; color: white"
+        (click)="popUpImport()"
+      >
+        Excel
+      </button>
+      <button
+        mat-raised-button
+        style="background-color: #774caf; color: white"
+        (click)="closeDialog()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+
+  &nbsp; &nbsp;
+  <button *ngIf="department == 'Administration'" class="btn btn-sm btn-warning">
+    Excel Import
+  </button>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+  ></button>
+
+  <div
+    class="row"
+    oncopy="return false"
+    onpaste="return false"
+    oncut="return false"
+    style="height: 700px; overflow: auto"
+  >
+    <table class="table table-light table-bordered">
+      <thead class="thead-light sticky">
+        <tr>
+          <th>#</th>
+          <th>Consultant Name</th>
+          <th>Date & Time Of Interview</th>
+          <th>Round</th>
+          <th>Mode</th>
+          <th>Vendor</th>
+          <th>Client</th>
+          <th>Date Of Submission</th>
+          <th>Employee Name</th>
+          <th>Interview Status</th>
+        </tr>
+      </thead>
+      <tbody class="tbody">
+        <tr *ngFor="let data of consultant; let i = index">
+          <td>
+            {{ i + 1 }}
+          </td>
+          <td>
+            {{ data.name }}
+          </td>
+          <td>{{ data.interview_date }} ({{ data.time_zone }})</td>
+          <td>{{ data.round }}</td>
+          <td>{{ data.mode }}</td>
+          <td>{{ data.vendor }}</td>
+          <td>{{ data.endclient }}</td>
+          <td>{{ data.createddate }}</td>
+          <td>{{ data.pseudoname }}</td>
+          <td>{{ data.interview_status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions style="float: right"></div>
