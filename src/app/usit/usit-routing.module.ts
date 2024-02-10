@@ -28,6 +28,9 @@ import { CanActivateGuard } from '../core/guards/can-activate.guard';
 import { H1transferComponent } from './components/sales/h1transfer/h1transfer.component';
 import { OpenreqsComponent } from './components/openreqs/openreqs.component';
 import { RssfedComponentimplements } from './components/rssfed/rssfed.component';
+import { EmployeeReportsComponent } from './components/reports/employee-reports/employee-reports.component';
+import { SourcingReportsComponent } from './components/reports/sourcing-reports/sourcing-reports.component';
+
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -199,6 +202,13 @@ const routes: Routes = [
   },
   {
     path: 'rssfeed', component: RssfedComponentimplements,
+  }
+  ,
+  { 
+    path: 'employee-report', component: EmployeeReportsComponent
+  },
+  { 
+    path: 'sourcing-report', component: SourcingReportsComponent 
   }
 
 ];

@@ -1,0 +1,51 @@
+<div mat-dialog-content>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"><b>{{consultantname}}</b> Leads </h1>
+        <div style="display: flex; gap: 8px;">
+            <button mat-raised-button style="background-color: #4CAF50; color: white;"
+                (click)="popUpImport()">Excel</button>
+            <button mat-raised-button style="background-color: #774caf; color: white;"
+                (click)="closeDialog()">Close</button>
+        </div>
+    </div>
+    &nbsp;
+    <div class="row" oncopy="return false" onpaste="return false" oncut="return false">
+        <table class="table table-light table-bordered ">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Visa</th>
+                    <th>Current Location</th>
+                    <th>Position</th>
+                    <th>Exp</th>
+                    <th>Relocation</th>
+                    <th>Rate</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr *ngFor="let data of consultant;let i = index">
+                    <td>{{i+1}}</td>
+                    <td>
+                        {{data.createddate}}
+                    </td>
+                    <td>{{data.consultantname}}</td>
+                    <td>{{data.consultantemail}}</td>
+                    <td>{{data.contactnumber}}</td>
+                    <td>{{data.visa_status}}</td>
+                    <td>{{data.currentlocation}}</td>
+                    <td>{{data.position}} </td>
+                    <td>{{data.experience}}</td>
+                    <td>{{data.relocation}}</td>
+                    <td style="text-align: right;"><b>{{data.hourlyrate }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div mat-dialog-actions>
+
+</div>
