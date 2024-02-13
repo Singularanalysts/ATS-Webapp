@@ -37,6 +37,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TaskService } from '../../services/task.service';
 import { Task } from 'src/app/usit/models/task';
+import { DEPARTMENT } from 'src/app/constants/department';
 @Component({
   selector: 'app-add-task',
   standalone: true,
@@ -71,6 +72,7 @@ import { Task } from 'src/app/usit/models/task';
   styleUrls: ['./add-task.component.scss']
 })
 export class AddTaskComponent {
+  deptOptions = DEPARTMENT;
   requirementForm!: FormGroup;
   private formBuilder = inject(FormBuilder);
   private snackBarServ = inject(SnackBarService);
@@ -122,6 +124,7 @@ export class AddTaskComponent {
       taskname: [requirementData ? requirementData.taskname : '', Validators.required],
       description: [requirementData ? requirementData.description : '', Validators.required],
       assignedto: [requirementData ? requirementData.assignedto : '', Validators.required],
+      department :  [requirementData ? requirementData.department : '', Validators.required],
       addedby: localStorage.getItem('userid'),
     });
   

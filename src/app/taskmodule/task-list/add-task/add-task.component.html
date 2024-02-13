@@ -72,6 +72,17 @@
                         Employee</mat-error>
                 </mat-form-field>
 
+                <mat-form-field appearance="fill" class="category-field">
+                    <mat-label>Select Department</mat-label>
+                    <!-- <input matInput formControlName="department" placeholder="Enter Department"> -->
+                    <mat-select name="department" formControlName="department" >
+                      <mat-option *ngFor="let option of deptOptions" [value]="option.name">
+                        {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                      <mat-error *ngIf="requirementForm.get('department')!.hasError('required')"> Department is required</mat-error>
+                  </mat-form-field>
+
             </div>
         </div>
     </form>
