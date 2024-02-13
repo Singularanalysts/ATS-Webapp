@@ -5,8 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { OpenreqService } from '../../services/openreq.service';
 
 @Component({
   selector: 'app-openreqs',
@@ -48,14 +48,20 @@ export class OpenreqsComponent implements OnInit {
   pageSizeOptions = [50, 75, 100];
 
   private router = inject(Router);
-  private consultantServ = inject(ConsultantService);
-
+  private service = inject(OpenreqService);
+userid!:any;
   ngOnInit(): void {
+    this.userid = localStorage.getItem('userid');
     this.getAllData();
   }
+  empTag(id:number){
+    this.service.openReqsEmpTagging(id, this.userid).subscribe(
+      (response: any) => {
 
+      })
+  }
   getAllData(pagIdx = 1) {
-    this.consultantServ.getopenReqWithPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
+    this.service.getopenReqWithPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -76,7 +82,7 @@ export class OpenreqsComponent implements OnInit {
   applyFilter(event : any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.consultantServ.getopenReqWithPagination(1, this.itemsPerPage, keyword).subscribe(
+      return this.service.getopenReqWithPagination(1, this.itemsPerPage, keyword).subscribe(
         ((response: any) => {
           this.dataSource.data  = response.data.content;
            // for serial-num {}

@@ -719,7 +719,7 @@ export class VendorListComponent implements OnInit {
       })
   }
 
-  goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+  goToUserInfo(id: any) {
+    this.router.navigate(['usit/user-info','vendor',id])
   }
 }

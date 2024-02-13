@@ -110,17 +110,20 @@ export class InterviewListComponent implements OnInit, OnDestroy{
     this.getFlag();
     this.getAll();
   }
-
+  subFlag!:any;
   getFlag(){
     const routeData = this.activatedRoute.snapshot.data;
     if (routeData['isSalesInterview']) {
       this.flag = "Sales";
+      this.subFlag = 'sales-interview';
 
     } else if (routeData['isRecInterview']) { // recruiting consutlant
       this.flag = "Recruiting";
+      this.subFlag = 'rec-interview';
     }
     else {
       this.flag = "Domrecruiting";
+      this.subFlag = 'dom-interview';
     }
 
   }
@@ -320,6 +323,10 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   }
 
   goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info',this.subFlag,id])
+  }
+
+  goToConsultantInfo(element: any, flag: string) {
+    this.router.navigate(['usit/consultant-info',flag, 'interview',element.consid])
   }
 }

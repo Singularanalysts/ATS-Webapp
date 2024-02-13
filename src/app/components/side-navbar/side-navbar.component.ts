@@ -35,9 +35,9 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
       this.getSideNavData('assets/side-navbar-dom-items.json')
     }
 
-    else if(this.department == 'Accounts' ){
-      this.getSideNavData('assets/side-navbar-accounts-items.json')
-    }
+    // else if(this.department == 'Accounts' ){
+    //   this.getSideNavData('assets/side-navbar-accounts-items.json')
+    // }
     else{
       this.getSideNavData('assets/side-navbar-accounts-items.json')
     }

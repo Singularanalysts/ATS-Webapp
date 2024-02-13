@@ -75,6 +75,7 @@ export class ConsultantListComponent
   ttitle1!: string;
   tclass!: string;
   dept!: any;
+  subFlag!:any;
   consultant_track: any[] = [];
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
@@ -153,25 +154,31 @@ export class ConsultantListComponent
       this.ttitle = 'back to pre sales';
       this.ttitle1 = 'move to sales';
       this.tclass = 'arrow_left_alt';
+      this.subFlag = 'sales-consultant';
     } else if (routeData['isRecConsultant']) {
       // recruiting consutlant
       this.flag = 'Recruiting';
       this.ttitle = 'move to sales';
       //this.ttitle1 = "back to pre sales";
       this.tclass = "arrow_right_alt";
+      this.subFlag = 'rec-consultant';
     } else if (routeData['isPreConsultant']) {
       // presales
       this.flag = 'presales';
       this.ttitle = 'move to sales';
       this.ttitle1 = 'back to pre sales';
       this.tclass = 'arrow_right_alt';
+      this.subFlag = 'presales-consultant';
     } else {
       this.flag = 'DomRecruiting';
+      this.subFlag = 'domrec-consultant';
     }
 
     if (
       this.flag.toLocaleLowerCase() === 'presales' ||
       this.flag.toLocaleLowerCase() === 'recruiting'
+      ||
+      this.flag.toLocaleLowerCase() === 'domrecruiting'
     ) {
       this.dataTableColumns.splice(15, 0, 'AddedBy');
     }
@@ -390,7 +397,7 @@ export class ConsultantListComponent
    * @param type
    */
   goToConsultantInfo(element: any, flag: string) {
-    // open popup with that data
+    this.router.navigate(['usit/consultant-info',flag, 'consultant',element.consultantid])
   }
   /**
    * on track
@@ -697,7 +704,7 @@ export class ConsultantListComponent
   }
 
   goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info',this.subFlag,id])
   }
 }
 

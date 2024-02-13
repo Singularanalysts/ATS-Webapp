@@ -37,7 +37,7 @@
                 <ng-container matColumnDef="job_title">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Technology">
                         Title  </th>
-                    <td mat-cell *matCellDef="let element"><span class="consultant-name"><a href="{{element?.job_source}}" target="_blank">{{element?.job_title}}</a>
+                    <td mat-cell *matCellDef="let element"><span class="consultant-name"><a href="{{element?.job_source}}" target="_blank" (click)="empTag(element.id)">{{element?.job_title}}</a>
                         </span> </td>
                 </ng-container>
 

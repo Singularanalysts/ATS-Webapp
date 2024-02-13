@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { utils, writeFile } from 'xlsx';
 import { MatButtonModule } from '@angular/material/button';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 
 @Component({
   selector: 'app-interview-report',
@@ -104,7 +105,6 @@ export class InterviewReportComponent {
           c.endclient,
           c.createddate,
           c.pseudoname,
-          c.pseudoname,
           c.interview_status,
         ]
       );
@@ -181,8 +181,16 @@ export class InterviewReportComponent {
     @Inject(MAT_DIALOG_DATA) public vo: any, // Expect 'vo' directly
     private reportservice: ReportsService
   ) {}
-
+  showReport: boolean = false;
+  protected privilegeServ = inject(PrivilegesService);
   ngOnInit(): void {
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
+
     if (this.vo.vo) {
       this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
         (response: any) => {

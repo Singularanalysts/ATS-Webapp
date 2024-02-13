@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,8 +6,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { utils, writeFile } from 'xlsx';
+import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-h1transfer',
   standalone: true,
@@ -38,17 +39,17 @@ export class H1transferComponent implements OnInit{
     'Email',
   ];
   // pagination code
-  page: number = 1;
-  itemsPerPage = 50;
-  AssignedPageNum !: any;
-  totalItems: any;
-  field = "empty";
-  currentPageIndex = 0;
-  pageEvent!: PageEvent;
+  totalItems = 0;
   pageSize = 50;
+  currentPageIndex = 0;
+  pageSizeOptions = [5, 10, 25];
+  hidePageSize = true;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
-  pageSizeOptions = [50, 75, 100];
+  pageEvent!: PageEvent;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  field = 'empty';
 
   private router = inject(Router);
   private consultantServ = inject(ConsultantService);
@@ -58,7 +59,7 @@ export class H1transferComponent implements OnInit{
   }
 
   getAllData(pagIdx = 1) {
-    this.consultantServ.getH1TransferList(pagIdx, this.itemsPerPage, this.field).subscribe(
+    this.consultantServ.getH1TransferList(pagIdx, this.pageSize, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -79,7 +80,7 @@ export class H1transferComponent implements OnInit{
   applyFilter(event : any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.consultantServ.getH1TransferList(1, this.itemsPerPage, keyword).subscribe(
+      return this.consultantServ.getH1TransferList(1, this.pageSize, keyword).subscribe(
         ((response: any) => {
           this.dataSource.data  = response.data.content;
            // for serial-num {}

@@ -82,7 +82,7 @@
         <ng-container matColumnDef="AddedBy">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by AddedBy"> Added By </th>
           <td mat-cell *matCellDef="let element">
-            <span class="user-info" (click)="goToUserInfo(element.addedby)"> {{element.pseudoname}}  </span>
+            <span class="user-info" (click)="goToUserInfo(element.addedby)" > {{element.pseudoname}}  </span>
           </td>
         </ng-container>
 

@@ -46,6 +46,12 @@ export class ConsultantService {
     return this.http.get("consultant/getbyid/" + id);
   }
 
+  consultantInfoByconId(id: number) {
+    return this.http.get("consultant/consultantInfoByconId/" + id);
+  }
+
+  //consultantInfoByconId
+
 
   getConsultantList2(flg: string, access: string, userid: number) {
     return this.http.get("consultant/all/" + flg + "/" + access + "/" + userid);
@@ -168,14 +174,4 @@ export class ConsultantService {
     return this.http.get(`consultant/all/${page}/${size}/${field}/p3`);
   }
 
-  public getopenReqWithPagination(pageNo: any, pageSize: any, field: any) {
-    const url = 'http://localhost:8090/usit/'
-    return this.ht.get(url + "Tbl_rec_requirementController/allreqs/" + pageNo + "/" + pageSize + "/" + field);
-  }
-  public rssfeedData() {
-    return this.http.get("rssfeed/getalldata");
-  }
-  public readrss() {
-    return this.http.get("rssfeed/read");
-  }
 }

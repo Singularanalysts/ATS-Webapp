@@ -111,6 +111,12 @@
           "icon": "business_center",
           "routerLink": "/usit/rssfeed"
         }
+        ,
+        {
+          "text": "LinkedIn Profiles",
+          "icon": "business_center",
+          "routerLink": "/usit/linkedinprofiles"
+        }
       ]
     },
     {

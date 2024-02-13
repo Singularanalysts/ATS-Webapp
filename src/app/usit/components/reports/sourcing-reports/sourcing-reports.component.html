@@ -1,4 +1,3 @@
-<p>sourcing-reports works!</p>
 <ul class="breadcrumb">
     <li><a (click)="navigateToDashboard()">Home</a></li>
     <li class="last">Sourcing Report</li>
@@ -34,9 +33,10 @@
       >&nbsp;&nbsp;
 
       <button (click)="onSubmit()" mat-raised-button color="primary">Submit</button>&nbsp;
-      <button mat-raised-button color="warn">Reset</button>&nbsp;
-      <button *ngIf="submitted" (click)="printPage()" mat-raised-button color="warn">Print</button>&nbsp;
-      <button *ngIf="submitted"mat-raised-button style="background-color: #4CAF50; color: white;" (click)="excelImport()">Excel Export</button>
+      <button mat-raised-button color="warn" (click)="reset()">Reset</button>&nbsp;
+      <!-- <button *ngIf="showReport" (click)="printPage()" mat-raised-button color="warn">Print</button> -->
+      &nbsp;
+      <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;" (click)="excelImport()">Excel Export</button>
     </mat-card-content>
   </mat-card>
 </form>

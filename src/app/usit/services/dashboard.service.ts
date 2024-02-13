@@ -36,4 +36,17 @@ export class DashboardService {
     return this.apiServ.get("dashboard/all/"+ id);
   }
 
+  // for executive and lead
+  public getClosureCountForExAndLead(flag:string,userid:number) {
+    return this.apiServ.get("dashboard/closurecount/"+flag+"/"+userid);
+  }
+
+  public getsubmissionCountForExAndLead(flag:string,userid:number) {
+    return this.apiServ.get("dashboard/submissionscount/"+flag+"/"+userid);
+  }
+
+  public getInterviewCountForExAndLead(flag:string,userid:number) {
+    return this.apiServ.get("dashboard/interviewscount/"+flag+"/"+userid);
+  }
+
 }

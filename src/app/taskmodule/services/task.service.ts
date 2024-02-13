@@ -39,4 +39,10 @@ export class TaskService {
   }
 
 
+  public popup(taskid: any) {
+    return this.apiServ.get("task/taskAssinInfo/" + taskid);
+  }
+
+  
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +6,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { OpenreqService } from '../../services/openreq.service';
+import { MatSort } from '@angular/material/sort';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-rssfed',
@@ -34,74 +37,83 @@ export class RssfedComponentimplements implements OnInit {
     'empemail',
     'empfirstname',
   ];
+   // paginator
+  length = 50;
+  pageIndex = 0;
+  pageSize = 50; // items per page
+  currentPageIndex = 0;
+  pageSizeOptions = [50, 75, 100];
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
-  AssignedPageNum !: any;
-  totalItems: any;
-  field = "empty";
-  currentPageIndex = 0;
-  pageEvent!: PageEvent;
-  pageSize = 50;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  pageSizeOptions = [50, 75, 100];
-
+  totalItems: number = 0;
+  field = 'empty';
   private router = inject(Router);
-  private consultantServ = inject(ConsultantService);
-
+  private service = inject(OpenreqService);
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 1500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+  private snackBarServ = inject(SnackBarService);
   ngOnInit(): void {
     this.getAllData();
   }
   readRSS(){
-    console.log("kiran")
-    this.consultantServ.readrss().subscribe(
+    this.service.readrss().subscribe(
       (response: any) => {
-        console.log("kiran "+response.data)
+        if (response.status == 'success') {
+          this.dataToBeSentToSnackBar.panelClass = [
+            'custom-snack-success',
+          ];
+          this.dataToBeSentToSnackBar.message =
+            'RSS read successfully';
+            this.getAllData();
+        } else {
+          this.dataToBeSentToSnackBar.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.dataToBeSentToSnackBar.message = response.message;
+        }
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataToBeSentToSnackBar
+        );
       })
   }
   getAllData(pagIdx = 1) {
-    this.consultantServ.rssfeedData().subscribe(
+    this.service.rssfeedData().subscribe(
       (response: any) => {
         this.dataSource.data = response.data;
         this.totalItems = response.data.totalElements;
+        console.log(this.totalItems);
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
-          x.serialNum = this.generateSerialNumber(i);
+          x.serialNum = i + 1;
         });
       }
     )
   }
 
-  generateSerialNumber(index: number): number {
-    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
-    const serialNumber = (pagIdx - 1) * 50 + index + 1;
-    return serialNumber;
-  }
-
-  applyFilter(event : any) {
-    const keyword = event.target.value;
-    if (keyword != '') {
-      return this.consultantServ.rssfeedData().subscribe(
-        ((response: any) => {
-          this.dataSource.data  = response.data.content;
-           // for serial-num {}
-           this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-          this.totalItems = response.data.totalElements;
-
-        })
-      );
-    }
-    if (keyword == '') {
-      this.field = 'empty';
-    }
-    return  this.getAllData(this.currentPageIndex + 1);
+  onFilter(event: any){
+    this.dataSource.filter = event.target.value;
   }
 
   onSort(event: any) {
 
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   handlePageEvent(event: PageEvent) {

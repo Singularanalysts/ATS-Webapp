@@ -33,7 +33,7 @@
                 <ng-container matColumnDef="ticketid">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company">
                         Ticket ID </th>
-                    <td mat-cell *matCellDef="let element"> {{ element.ticketid }} </td>
+                    <td mat-cell *matCellDef="let element" ><a style="cursor: pointer;" (click)="popup(element.taskid, element.ticketid)">{{ element.ticketid }} </a> </td>
                 </ng-container>
                 <ng-container matColumnDef="taskname">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company"> Task
@@ -59,11 +59,11 @@
 
                 <ng-container matColumnDef="update">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company">
-                        Status</th>
+                        Update</th>
                     <td mat-cell *matCellDef="let element"> 
                         <ng-container *ngFor="let data1 of element.assignedto">
                             <span *ngIf="data1.userid == userid">
-                                <button [disabled]="!privilegeServ.hasPrivilege('UPDATE_TASKMANAGEMENT')"
+                                <button 
                                     mat-raised-button style="width: 60px; height: 25px;" (click)="updateTask(element)"
                                     [ngStyle]="{ 'color': 'white', 'background-color': 'orange', 'font-weight': 'bold' }">
                                     Update

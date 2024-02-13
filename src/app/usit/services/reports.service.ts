@@ -11,18 +11,18 @@ export class ReportsService {
   private apiServ = inject(ApiService);
 
   consultant_report(value: any) {
-    return this.apiServ.post("reports/creport", value);
+    return this.apiServ.post("report/creport", value);
   }
 
   sources_report(value: any) {
-    return this.apiServ.post("reports/sourcingreport", value)
+    return this.apiServ.post("report/sourcingreport", value)
   }
 
   public sourcing_DrillDown_report(vo: any) {
-    return this.apiServ.post("reports/sourceleads", vo);
+    return this.apiServ.post("report/sourceleads", vo);
 
   }
-  
+
   public consultant_DrillDown_report(vo: any) {
     if (!vo || typeof vo.status === 'undefined') {
       // Handle the case where 'vo' or 'vo.status' is undefined
@@ -31,13 +31,13 @@ export class ReportsService {
     }
 
     if (vo.status == 'submission') {
-      return this.apiServ.post("reports/popupSub", vo);
+      return this.apiServ.post("report/popupSub", vo);
     } else if (vo.status == 'interview') {
-      return this.apiServ.post("reports/popupInt", vo);
+      return this.apiServ.post("report/popupInt", vo);
     } else if (vo.status == 'consultant') {
-      return this.apiServ.post("reports/recruiterleads", vo);
+      return this.apiServ.post("report/recruiterleads", vo);
     } else {
-      return this.apiServ.post("reports/popup", vo);
+      return this.apiServ.post("report/popup", vo);
     }
   }
 

@@ -421,6 +421,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.companyname = formVal.companyname;
         this.entity.company = formVal.company;
         this.entity.refname = formVal.refname;
+        this.entity.refemail = formVal.refemail;
         this.entity.refcont = formVal.refcont;
         this.entity.relocation = formVal.relocation;
         this.entity.relocatOther = formVal.relocatOther;

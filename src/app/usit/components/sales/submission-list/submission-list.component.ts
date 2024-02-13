@@ -130,15 +130,18 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-
+  subFlag!:any;
   getFlag(){
     const routeData = this.activatedRoute.snapshot.data;
     if (routeData['isSalesSubmission']) {
       this.flag = "Sales";
+      this.subFlag = 'sales-submission';
     }else if (routeData['isRecSubmission']) { // recruiting consutlant
       this.flag = "Recruiting";
+      this.subFlag = 'rec-submission';
     } else {
       this.flag = "Domrecruiting";
+      this.subFlag = 'dom-submission';
     }
   }
 
@@ -380,6 +383,10 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
 
   goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info',this.subFlag,id]);
+  }
+
+  goToConsultantInfo(element: any, flag: string) {
+    this.router.navigate(['usit/consultant-info',flag, 'submission',element.consultantid])
   }
 }

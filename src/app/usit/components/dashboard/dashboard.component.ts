@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DashboardService } from 'src/app/usit/services/dashboard.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -51,6 +51,7 @@ export class DashboardComponent implements OnInit {
   entity: any;
   datarr: any[] = [];
   private dashboardServ = inject(DashboardService);
+  private router = inject(Router);
   submissionCount: any;
   closureFlag = 'Monthly';
   interviewFlag = 'daily';
@@ -64,8 +65,12 @@ export class DashboardComponent implements OnInit {
   rintcount = 0;
   sclosecount = 0;
   rclosecount = 0;
-
+  userid!: any;
+  role!: any;
   ngOnInit(): void {
+    this.userid = localStorage.getItem('userid');
+
+    this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     this.getDiceReqs();
     this.getSourcingLeads();
     this.dashboardServ.vmstransactions().subscribe(
@@ -74,34 +79,15 @@ export class DashboardComponent implements OnInit {
       })
     );
 
-    this.dashboardServ.getsubmissionCount('daily').subscribe(
-      ((response: any) => {
-        this.subCountArr = response.data;
-        this.subCountArr.forEach((ent: any) => {
-          if (ent.salescount != null) {
-            this.subcount = ent.salescount;
-          }
-          if (ent.reccount != null) {
-            this.reccount = ent.reccount;
-          }
-        });
-      })
-    );
+    if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
+      this.countCallingExecutiveAndLead();
+    }
+    else {
+      this.countCallingHigherRole();
+    }
+  }
 
-    this.dashboardServ.getInterviewCount('daily').subscribe(
-      ((response: any) => {
-        this.intCountArr = response.data;
-        this.intCountArr.forEach((ent: any) => {
-          if (ent.salescount != null) {
-            this.sintcount = ent.salescount;
-          }
-          if (ent.reccount != null) {
-            this.rintcount = ent.reccount;
-          }
-        });
-      })
-    );
-
+  countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
@@ -115,44 +101,20 @@ export class DashboardComponent implements OnInit {
         });
       })
     );
-  }
-
-  getDiceReqs() {
-    this.dashboardServ.getDiceRequirements().subscribe(
-      (response: any) => {
-        this.entity = response.data;
-        this.dataSourceDice.data = response.data;
-        // this.dataSourceDice.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
-      }
-    )
-  }
-
-  userid = localStorage.getItem('userid');
-  getSourcingLeads() {
-    this.dashboardServ.getSourcingLeads(this.userid).subscribe(
-      (response: any) => {
-        this.entity = response.data;
-        this.dataSource.data = response.data;
-        // this.dataSource.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
-      }
-    )
-  }
-
-  getSubmissionCount() {
-    this.dashboardServ.getsubmissionCount('weekly').subscribe((response: any) => {
-      this.submissionCount = response.data;
-    })
-  }
-
-  subCount(flag: string, flg: string) {
-    this.subcount = 0;
-    this.reccount = 0;
-    this.submissionFlag = flg;
-    this.dashboardServ.getsubmissionCount(flag).subscribe(
+    this.dashboardServ.getInterviewCount('daily').subscribe(
+      ((response: any) => {
+        this.intCountArr = response.data;
+        this.intCountArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.sintcount = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.rintcount = ent.reccount;
+          }
+        });
+      })
+    );
+    this.dashboardServ.getsubmissionCount('daily').subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -166,31 +128,154 @@ export class DashboardComponent implements OnInit {
       })
     );
   }
+  getSourcingLeads() {
+    this.dashboardServ.getSourcingLeads(this.userid).subscribe(
+      (response: any) => {
+        this.entity = response.data;
+        this.dataSource.data = response.data;
+        // this.dataSource.data.map((x: any, i) => {
+        //   x.serialNum = i + 1;
+        // });
+      }
+    )
+  }
+  // getSubmissionCount() {
+  //   this.dashboardServ.getsubmissionCount('weekly').subscribe((response: any) => {
+  //     this.submissionCount = response.data;
+  //   })
+  // }
+  subCount(flag: string, flg: string) {
+    this.subcount = 0;
+    this.reccount = 0;
+    this.submissionFlag = flg;
+
+    if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
+      this.dashboardServ.getsubmissionCountForExAndLead(flag,this.userid).subscribe(
+        ((response: any) => {
+          this.subCountArr = response.data;
+          this.subCountArr.forEach((ent: any) => {
+            if (ent.salescount != null) {
+              this.subcount = ent.salescount;
+            }
+            if (ent.reccount != null) {
+              this.reccount = ent.reccount;
+            }
+          });
+        })
+      );
+    }
+    else {
+      this.dashboardServ.getsubmissionCount(flag).subscribe(
+        ((response: any) => {
+          this.subCountArr = response.data;
+          this.subCountArr.forEach((ent: any) => {
+            if (ent.salescount != null) {
+              this.subcount = ent.salescount;
+            }
+            if (ent.reccount != null) {
+              this.reccount = ent.reccount;
+            }
+          });
+        })
+      );
+    }
+
+  }
 
   intCount(flag: string, flg: string) {
     this.interviewFlag = flg;
     this.sintcount = 0;
     this.rintcount = 0;
-    this.dashboardServ.getInterviewCount(flag).subscribe(
-      ((response: any) => {
-        this.intCountArr = response.data;
-        this.intCountArr.forEach((ent: any) => {
-          if (ent.salescount != null) {
-            this.sintcount = ent.salescount;
-          }
-          if (ent.reccount != null) {
-            this.rintcount = ent.reccount;
-          }
-        });
-      })
-    );
+    if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
+      this.dashboardServ.getInterviewCountForExAndLead(flag,this.userid).subscribe(
+        ((response: any) => {
+          this.intCountArr = response.data;
+          this.intCountArr.forEach((ent: any) => {
+            if (ent.salescount != null) {
+              this.sintcount = ent.salescount;
+            }
+            if (ent.reccount != null) {
+              this.rintcount = ent.reccount;
+            }
+          });
+        })
+      );
+    }
+    else {
+      this.dashboardServ.getInterviewCount(flag).subscribe(
+        ((response: any) => {
+          this.intCountArr = response.data;
+          this.intCountArr.forEach((ent: any) => {
+            if (ent.salescount != null) {
+              this.sintcount = ent.salescount;
+            }
+            if (ent.reccount != null) {
+              this.rintcount = ent.reccount;
+            }
+          });
+        })
+      );
+    }
   }
 
   closureCount(flag: string, flg: string) {
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-    this.dashboardServ.getClosureCount(flag).subscribe(
+    if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
+
+      this.dashboardServ.getClosureCountForExAndLead(flag,this.userid).subscribe(
+        ((response: any) => {
+          this.closecountArr = response.data;
+          this.closecountArr.forEach((ent: any) => {
+            if (ent.salescount != null) {
+              this.sclosecount = ent.salescount;
+            }
+            if (ent.reccount != null) {
+              this.rclosecount = ent.reccount;
+            }
+          });
+        })
+      );
+    }
+    else {
+      this.dashboardServ.getClosureCount(flag).subscribe(
+        ((response: any) => {
+          this.closecountArr = response.data;
+          this.closecountArr.forEach((ent: any) => {
+            if (ent.salescount != null) {
+              this.sclosecount = ent.salescount;
+            }
+            if (ent.reccount != null) {
+              this.rclosecount = ent.reccount;
+            }
+          });
+        })
+      );
+    }
+  }
+  getDiceReqs() {
+    this.dashboardServ.getDiceRequirements().subscribe(
+      (response: any) => {
+        this.entity = response.data;
+        this.dataSourceDice.data = response.data;
+        // this.dataSourceDice.data.map((x: any, i) => {
+        //   x.serialNum = i + 1;
+        // });
+      }
+    )
+  }
+
+  goToConsultantInfo(id: any) {
+    this.router.navigate(['usit/consultant-info', 'dashboard', 'consultant', id])
+  }
+
+  goToUserInfo(id: any) {
+    this.router.navigate(['usit/user-info', 'dashboard', id])
+  }
+  // for executive and lead
+  countCallingExecutiveAndLead() {
+    this.dashboardServ.getClosureCountForExAndLead('monthly',this.userid).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -203,6 +288,31 @@ export class DashboardComponent implements OnInit {
         });
       })
     );
+    this.dashboardServ.getInterviewCountForExAndLead('daily',this.userid).subscribe(
+      ((response: any) => {
+        this.intCountArr = response.data;
+        this.intCountArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.sintcount = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.rintcount = ent.reccount;
+          }
+        });
+      })
+    );
+    this.dashboardServ.getsubmissionCountForExAndLead('daily',this.userid).subscribe(
+      ((response: any) => {
+        this.subCountArr = response.data;
+        this.subCountArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.subcount = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.reccount = ent.reccount;
+          }
+        });
+      })
+    );
   }
-
 }

@@ -16,22 +16,33 @@ import { PermissionsService } from 'src/app/services/permissions.service';
 import { HttpErrors } from '../models/http-errors';
 import { LoaderService } from 'src/app/services/loader.service';
 import { Router } from '@angular/router';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
   constructor(
     private authService: PermissionsService,
     private loaderServ: LoaderService,
-    private router: Router
+    private router: Router,
+    private snackBarServ: SnackBarService
   ) //private ngxService: NgxUiLoaderService
   { }
+
+  dataTobeSentToSnackBarService: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     
     this.loaderServ.showLoader()
+    console.log(this.authService.getToken()+"  ==  "+this.authService.isUserSignedin())
     if (this.authService.getToken() && this.authService.isUserSignedin()) {
-      
       const request = req.clone({
         headers: new HttpHeaders({
           //   'content-type': 'application/json; charset=utf-8',
@@ -39,7 +50,6 @@ export class HttpInterceptorService implements HttpInterceptor {
         }),
       });
       return next.handle(request).pipe(
-        
         retry(1),
         finalize(() => {
           this.loaderServ.hideLoader();
@@ -62,15 +72,20 @@ export class HttpInterceptorService implements HttpInterceptor {
     return next.handle(req);
   }
 
-
-
-
   handleServerSideError(error: HttpErrorResponse) {
     switch (error.status) {
       case 400: {
         return `${HttpErrors[400]}: put your message here`;
       }
       case 401: {
+        this.clearLocalStorageItemsOnLogOut();
+        this.dataTobeSentToSnackBarService.message = "Token Expired Please Login"
+        this.dataTobeSentToSnackBarService.panelClass = [
+          'custom-snack-failure',
+        ];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataTobeSentToSnackBarService
+        );
         return `${HttpErrors[401]}: put your message here`;
       }
       case 403: {
@@ -83,8 +98,15 @@ export class HttpInterceptorService implements HttpInterceptor {
         return `${HttpErrors[500]}: put your message here`;
       }
       case 503: {
-        this.clearLocalStorageItemsOnLogOut();
+        //this.clearLocalStorageItemsOnLogOut();
         // navigate to login
+        this.dataTobeSentToSnackBarService.message = "Service Not Available"
+        this.dataTobeSentToSnackBarService.panelClass = [
+          'custom-snack-failure',
+        ];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataTobeSentToSnackBarService
+        );
         return `${HttpErrors[500]}: Service Not Available`;
       }
       default: {

@@ -49,10 +49,10 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header
             sortActionDescription="Sort by ID"> ID </th>
           <td mat-cell *matCellDef="let element">
-            {{element?.consultantno}}
-            <!-- <span class="consultant-id"
+            <!-- {{element?.consultantno}} -->
+            <span class="consultant-id"
               (click)="goToConsultantInfo(element, flag)">{{element?.consultantno}}
-            </span> -->
+            </span>
           </td>
         </ng-container>
         <!-- Name-->
@@ -60,10 +60,9 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header
             sortActionDescription="Sort byName">Name </th>
           <td mat-cell *matCellDef="let element">
-            {{element?.consultantname}}
-            <!-- <span class="consultant-name" (click)="goToConsultantInfo(element, flag)">
-              {{element?.consultantname}}
-            </span> -->
+            <span class="consultant-id"
+            (click)="goToConsultantInfo(element, flag)">{{element?.consultantname}}
+          </span>
           </td>
         </ng-container>
         <!-- Track(S/I)-->
@@ -142,12 +141,12 @@
           <ng-container matColumnDef="Rate">
             <th mat-header-cell *matHeaderCellDef mat-sort-header
               sortActionDescription="Sort by Rate"> Rate </th>
-            <td mat-cell *matCellDef="let element"> {{element.hourlyrate}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.hourlyrate}}</td>
           </ng-container>
 
           <!-- Added By -->
 
-          <ng-container matColumnDef="AddedBy" *ngIf="(flag.toLocaleLowerCase() === 'presales' || flag.toLocaleLowerCase() === 'recruiting')">
+          <ng-container matColumnDef="AddedBy" *ngIf="(flag.toLocaleLowerCase() != 'sales')">
             <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Added By">Added By</th>
             <td mat-cell *matCellDef="let element">
               <ng-container

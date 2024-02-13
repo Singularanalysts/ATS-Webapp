@@ -10,12 +10,7 @@
         </span>
 
         <div class="hot-list-actions">
-            <div class="search-hot-list">
-                <button  class="search" mat-raised-button (click)="handleExport()">Excel Import</button>
-            </div>
-        </div>
-
-        <div class="hot-list-actions">
+            <button  class="search" mat-raised-button color="primary" (click)="handleExport()">Excel Import</button>
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search Hot List" (keyup)="applyFilter($event)">
             </div>

@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {MatStepper, MatStepperModule} from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -34,17 +34,17 @@ export class UserInfoComponent implements OnInit {
   // constructor(private _service:UsermanagementService,private activatedRoute:ActivatedRoute,private router: Router, private service: DashboardService) { }
 
   ngOnInit(): void {
-  setTimeout(() => {
+    setTimeout(() => {
 
 
       this.myStepper.next();
-  }, 100);
+    }, 100);
     this.hasAcces = localStorage.getItem('role');
-     this.id = this.activatedRoute.snapshot.params['id'];
+    this.id = this.activatedRoute.snapshot.params['id'];
     //const id = this.router.getCurrentNavigation()?.extras.state!['id'];
 
     this.flag = this.activatedRoute.snapshot.params['flg'];
-    // alert(this.flag+" = "+this.id)
+  //  alert(this.flag + " = " + this.id)
     this.empServ.getEmployeeInfoById(this.id).subscribe((response: any) => {
       this.entity = response.data;
       this.dataSource.data = response.data;
@@ -57,27 +57,81 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
+  goToConsultantInfo(id: any) {
+
+  }
+
+  goToUserInfo(id: any) {
+
+  }
+
   backtolist() {
     if (this.flag == 'sales-consultant')
       this.router.navigate(['sales-consultants/sales']);
-    else if (this.flag == 'presales-consultant')
-      this.router.navigate(['pre-sales/presales']);
-    else if (this.flag == 'vendor')
-      this.router.navigate(['list-vendor']);
+
+    if (this.flag == 'dashboard')
+      this.router.navigate(['usit/dashboard']);
+
     else if (this.flag == 'recruiter')
-      this.router.navigate(['list-recruiter']);
-    else if (this.flag == 'Recruiting-consultant')
-      this.router.navigate(['recruiting-consultants/recruiting']);
+      this.router.navigate(['usit/recruiters']);
+
+    else if (this.flag == 'vendor')
+      this.router.navigate(['usit/vendors']);
+
+
+    else if (this.flag == 'employee')
+      this.router.navigate(['usit/employees']);
+
+
+    else if (this.flag == 'sales-consultant')
+      this.router.navigate(['usit/sales-consultants']);
+
+    else if (this.flag == 'presales-consultant')
+      this.router.navigate(['usit/pre-sales']);
+
+    else if (this.flag == 'sales-consultant')
+      this.router.navigate(['usit/sales-consultants']);
+
+    else if (this.flag == 'domrec-consultant')
+      this.router.navigate(['usit/dom-consultants']);
+
+    else if (this.flag == 'rec-consultant')
+      this.router.navigate(['usit/rec-consultants']);
+
     else if (this.flag == 'sales-submission')
-      this.router.navigate(['sales-submission/sales']);
+      this.router.navigate(['usit/sales-submissions']);
+
+    else if (this.flag == 'dom-submission')
+      this.router.navigate(['usit/dom-submission']);
+
+    else if (this.flag == 'rec-submission')
+      this.router.navigate(['usit/rec-submissions']);
+
+
     else if (this.flag == 'sales-interview')
-      this.router.navigate(['sales-interview/sales']);
-    else if (this.flag == 'info')
-      this.router.navigate(['list-employees']);
-    else if (this.flag == 'Recruiting-submission')
-      this.router.navigate(['recruiting-submission/recruiting']);
-    else if (this.flag == 'Recruiting-interview')
-      this.router.navigate(['recruiting-interview/recruiting']);
+      this.router.navigate(['usit/sales-interviews']);
+
+    else if (this.flag == 'rec-interview')
+      this.router.navigate(['usit/rec-interviews']);
+
+    else if (this.flag == 'dom-interview')
+      this.router.navigate(['usit/dom-interview']);
+
+    /*
+        else if (this.flag == 'Recruiting-consultant')
+          this.router.navigate(['recruiting-consultants/recruiting']);
+        else if (this.flag == 'sales-submission')
+          this.router.navigate(['sales-submission/sales']);
+        else if (this.flag == 'sales-interview')
+          this.router.navigate(['sales-interview/sales']);
+        else if (this.flag == 'info')
+          this.router.navigate(['list-employees']);
+        else if (this.flag == 'Recruiting-submission')
+          this.router.navigate(['recruiting-submission/recruiting']);
+        else if (this.flag == 'Recruiting-interview')
+          this.router.navigate(['recruiting-interview/recruiting']);
+    
+          */
     else this.router.navigate(['dashboard']);
   }
 }

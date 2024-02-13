@@ -1,0 +1,303 @@
+<div class="breadcrumb-container">
+  <ul class="breadcrumb">
+    <li><a>Home</a></li>
+    <li>{{ flag | titlecase }}</li>
+    <li>Employee</li>
+  </ul>
+</div>
+<div class="header-container mat-elevation-z1">
+  <span class="header-text">
+    {{ entity.consultantname}}
+  </span>
+
+  <div class="info-actions">
+    <button mat-raised-button color="primary" (click)="backtolist()">Back</button>
+  </div>
+</div>
+<hr>
+<div class="card">
+  <div class="card-body">
+    <div class="cards-container">
+      <mat-card class="info-card">
+        <!-- <mat-card-header class="info-card-header">
+      <span class="info-card-header-text">User Details</span>
+      <button mat-icon-button class="edit-user" [matTooltip]="'Edit Employee'" [matTooltipPosition]="'above'">
+        <mat-icon class="item-icon">edit</mat-icon>
+      </button>
+    </mat-card-header> consultantname-->
+        <mat-card-content>
+          <div class="col-6">
+            <div class="header-text">
+              Basic Details
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td style="width: 43%">
+                      <span class="table-header-text">Consultant Name</span>
+                    </td>
+                    <td>{{ entity.consultantname}}</td>
+                  </tr>
+                  <tr>
+                    <td style="width: 43%">
+                      <span class="table-header-text">Email</span>
+                    </td>
+                    <td>{{ entity.consultantemail}}</td>
+                  </tr>
+                  <tr>
+                    <td style="width: 43%">
+                      <span class="table-header-text">Contact No</span>
+                    </td>
+                    <td>{{entity.contactnumber}}</td>
+                  </tr>
+                  <tr>
+                    <td><span class="table-header-text">Linked In</span></td>
+                    <td><a href="https://www.linkedin.com/in/{{entity.linkedin}}"
+                      target="_blank">{{entity.linkedin}}</a></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="table-header-text">Immigration Status</span>
+                    </td>
+                    <td>{{entity.visa_status}}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="table-header-text">Current Location</span>
+                    </td>
+                    <td>{{entity.currentlocation}}</td>
+                  </tr>
+                  <tr>
+                    <td><span class="table-header-text">Relocation</span></td>
+                    <td>{{entity.relocation}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="header-text">Work Details</div>
+
+          <table class="table">
+            <tbody>
+              <tr>
+                <td style="width: 43%">
+                  <span class="table-header-text">Experience</span>
+                </td>
+                <td>{{entity.experience}}</td>
+              </tr>
+              <tr>
+                <td style="width: 43%">
+                  <span class="table-header-text">Rate</span>
+                </td>
+                <td>{{entity.hourlyrate}}</td>
+              </tr>
+              <tr>
+                <td><span class="table-header-text">Technology </span></td>
+                <td>{{entity.technologyarea}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="header-text">
+            Sales Person Contact Details
+
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td style="width: 43%">
+                    <span class="table-header-text">Employee Name</span>
+                  </td>
+                  <td>{{entity.refname}}</td>
+                </tr>
+                <tr>
+                  <td style="width: 43%">
+                    <span class="table-header-text">Contact Number</span>
+                  </td>
+                  <td>{{entity.refcont}}</td>
+                </tr>
+                <tr>
+                  <td><span class="table-header-text">Email </span></td>
+                  <td>{{entity.refemail}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- <div class="header-container">
+              <span class="header-text">Upload Documents</span>
+            </div>
+            <div class="upload-documents">
+              <div class="form-column-left">
+                <mat-form-field class="upload">
+                  <mat-label for="resume">Resume</mat-label>
+                  <div class="upload-container">
+                    <input
+                      matInput
+                      readonly
+                      name="resumeName"
+                      class="file-input"
+                      [value]="
+                        resumeupload ? resumeupload.name : 'No file chosen'
+                      "
+                    />
+                    <label for="resume" class="browse-button-label">
+                      <div class="custom-upload-button">
+                        <mat-icon>upload_file</mat-icon>
+                       
+                      </div>
+                      <input
+                        type="file"
+                        #resume
+                        id="resume"
+                        (change)="uploaddoc($event)"
+                        name="resumeUploadFile"
+                        accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        style="display: none"
+                      />
+                    </label>
+                  </div>
+                </mat-form-field>
+                <mat-form-field class="upload">
+                  <mat-label for="h1b">H1B</mat-label>
+                  <div class="upload-container">
+                    <input
+                      matInput
+                      readonly
+                      name="h1b"
+                      class="file-input"
+                      [value]="h1bupload ? h1bupload.name : 'No file chosen'"
+                    />
+                    <label for="h1b" class="browse-button-label">
+                      <div class="custom-upload-button">
+                        <mat-icon>upload_file</mat-icon>
+                      
+                      </div>
+                      <input
+                        type="file"
+                        #h1b
+                        id="h1b"
+                        (change)="uploadH1B($event)"
+                        name="h1bUploadFile"
+                        accept=".jpg,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        style="display: none"
+                      />
+                    </label>
+                  </div>
+                </mat-form-field>
+              </div>
+              <div class="form-column-right">
+                <mat-form-field class="upload">
+                  <mat-label for="dl">DL</mat-label>
+                  <div class="upload-container">
+                    <input
+                      matInput
+                      readonly
+                      name="dl"
+                      class="file-input"
+                      [value]="dlupload ? dlupload.name : 'No file chosen'"
+                    />
+                    <label for="dl" class="browse-button-label">
+                      <div class="custom-upload-button">
+                        <mat-icon>upload_file</mat-icon>
+                       
+                      </div>
+                      <input
+                        type="file"
+                        #dl
+                        id="dl"
+                        (change)="uploadDL($event)"
+                        name="dlUploadFile"
+                        accept=".jpg,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        style="display: none"
+                      />
+                    </label>
+                  </div>
+                </mat-form-field>
+                <mat-form-field class="upload">
+                  <mat-label for="otherDocumentsUploadFile"
+                    >Other Documents</mat-label
+                  >
+                  <div class="upload-container">
+                    <input
+                      matInput
+                      multiple
+                      readonly
+                      name="otherDocumentsName"
+                      class="file-input"
+                    />
+                    <label
+                      for="otherDocumentsUploadFile"
+                      class="browse-button-label"
+                    >
+                      <div
+                        class="custom-upload-button"
+                        (click)="multifiles.click()"
+                      >
+                        <mat-icon>upload_file</mat-icon>
+                  
+                      </div>
+                      <input
+                        type="file"
+                        id="otherDocumentsUploadFile"
+                        (change)="onFileChange($event)"
+                        multiple
+                        #multifiles
+                        name="otherDocumentsUploadFile"
+                        multiple="multiple"
+                        accept=".zip,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        style="display: none"
+                      />
+                    </label>
+                  </div>
+                </mat-form-field>
+              </div>
+
+              
+            </div> -->
+          </div>
+          <!-- <div class="form-button-right">
+            <button mat-raised-button color="white" >Cancel</button>
+            <button mat-raised-button color="primary" >Edit consulatant</button>
+            <button mat-raised-button color="primary" >Submit</button>
+          </div> -->
+       
+        </mat-card-content>
+      </mat-card>
+      <div class="header-text" style="margin-top: 1rem"></div>
+      <mat-card class="activity-card">
+        <div style="font-weight: bold;">
+          Skill
+        </div>
+        <table class="table round">
+          <tbody>
+            <tr>
+              <td style="border:0">
+                {{entity.skills}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-weight: bold;">
+          Summary
+        </div>
+        <table class="table round">
+          <tbody>
+            <tr>
+              <td style="border:0">
+                <ng-container *ngIf="entity.summary != null; then summaryTemplate else noSummaryTemplate"></ng-container>
+                <ng-template #summaryTemplate>
+                  <span style="font-weight: 600;">{{ entity.summary }}
+                  </span>
+                </ng-template>
+                <ng-template #noSummaryTemplate>
+                  <span style="font-weight: 600;">No Summary Available</span>
+                </ng-template>
+              </td>
+      
+            </tr>
+          </tbody>
+        </table>
+      </mat-card>
+    </div>
+    
+  </div>
+</div>

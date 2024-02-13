@@ -58,7 +58,9 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Consultant">
                         Consultant </th>
                     <td mat-cell *matCellDef="let element">
-                        {{element?.consultantname}}
+                        <span class="consultant-id"
+                        (click)="goToConsultantInfo(element, flag)">{{element?.consultantname}}
+                      </span>
                         <!-- <span class="consultant-name" (click)="goToSubmissionInfo(element, 'name')"> 
                             {{element?.consultantname}}
                         </span> -->

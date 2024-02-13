@@ -110,6 +110,7 @@
   }
   
   .hot-list-actions {
+    gap: 10px;
     display: flex;
     align-items: center;
   
@@ -192,4 +193,9 @@
   ul.breadcrumb li:last-child {
     color: black;
     pointer-events: none;
+  }
+
+  a {
+    text-decoration: none;
+    color: #0d6efd;
   }

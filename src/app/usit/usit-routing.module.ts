@@ -30,6 +30,9 @@ import { OpenreqsComponent } from './components/openreqs/openreqs.component';
 import { RssfedComponentimplements } from './components/rssfed/rssfed.component';
 import { EmployeeReportsComponent } from './components/reports/employee-reports/employee-reports.component';
 import { SourcingReportsComponent } from './components/reports/sourcing-reports/sourcing-reports.component';
+import { LinkedprofilesComponent } from './components/linkedprofiles/linkedprofiles.component';
+import { ConsultantInfoComponent } from './components/sales/consultant-list/consultant-info/consultant-info.component';
+import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
 
 
 const routes: Routes = [
@@ -60,7 +63,7 @@ const routes: Routes = [
   },
   { path: 'employees', component: EmployeeListComponent },
   {
-    path: 'user-info/:id',
+    path: 'user-info/:flg/:id',
     component: UserInfoComponent,
   },
   { path: 'vendors', component: VendorListComponent },
@@ -202,6 +205,9 @@ const routes: Routes = [
   },
   {
     path: 'rssfeed', component: RssfedComponentimplements,
+  },
+  {
+    path: 'linkedinprofiles', component: LinkedprofilesComponent,
   }
   ,
   { 
@@ -209,6 +215,11 @@ const routes: Routes = [
   },
   { 
     path: 'sourcing-report', component: SourcingReportsComponent 
+  },
+  { path: 'consultant-info/:flg/:subFlag/:id', component: ConsultantInfoComponent },
+
+  { 
+    path: 'list-email', component: EmailextractionComponent 
   }
 
 ];
