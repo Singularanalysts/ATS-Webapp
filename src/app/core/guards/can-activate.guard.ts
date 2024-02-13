@@ -12,6 +12,7 @@ export class CanActivateGuard implements CanActivate {
   private router = inject(Router);
   private isLoggedIn = false;
   dept !: any;
+  role !: any;
   private snackBarServ = inject(SnackBarService);
   dataTobeSentToSnackBarService: ISnackBarData = {
     message: '',
@@ -28,7 +29,8 @@ export class CanActivateGuard implements CanActivate {
     //   map(isLoggedIn => isLoggedIn || this.router.createUrlTree(['']))
     // );
     this.dept = localStorage.getItem('department');
-    if (this.dept == 'Accounts'){
+    this.role = localStorage.getItem('role');
+    if (this.dept == 'Accounts' || this.role == 'Super Administrator'){
       return true;
     }
     else{
