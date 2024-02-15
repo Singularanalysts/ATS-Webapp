@@ -43,6 +43,7 @@ export class TaskService {
     return this.apiServ.get("task/taskAssinInfo/" + taskid);
   }
 
-  
-
+  task_report(value: any) {
+    return this.apiServ.post("getTaskReports", value);
+  }
 }
