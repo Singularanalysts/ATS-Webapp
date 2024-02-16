@@ -33,6 +33,7 @@ import { SourcingReportsComponent } from './components/reports/sourcing-reports/
 import { LinkedprofilesComponent } from './components/linkedprofiles/linkedprofiles.component';
 import { ConsultantInfoComponent } from './components/sales/consultant-list/consultant-info/consultant-info.component';
 import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
+import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
 
 
 const routes: Routes = [
@@ -220,7 +221,11 @@ const routes: Routes = [
 
   { 
     path: 'list-email', component: EmailextractionComponent 
-  }
+  },
+
+  { 
+    path: 'list-techsupport', component: TechSupportListComponent 
+  },
 
 ];
 

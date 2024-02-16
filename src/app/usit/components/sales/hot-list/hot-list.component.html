@@ -10,7 +10,8 @@
         </span>
 
         <div class="hot-list-actions">
-            <button  class="search" mat-raised-button color="primary" (click)="handleExport()">Excel Import</button>
+            <button *ngIf="showReport" class="search" mat-raised-button color="primary" (click)="handleExport()">Excel
+                Import</button>
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search Hot List" (keyup)="applyFilter($event)">
             </div>
@@ -94,7 +95,8 @@
 
                 <!-- Phone Number Column -->
                 <ng-container matColumnDef="Phone">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Phone"> Phone Number </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Phone"> Phone
+                        Number </th>
                     <td mat-cell *matCellDef="let element"> {{element?.contactnumber}}
                     </td>
                 </ng-container>

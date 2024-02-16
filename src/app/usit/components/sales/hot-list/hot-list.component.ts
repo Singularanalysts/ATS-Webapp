@@ -8,6 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { utils, writeFile } from 'xlsx';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 @Component({
   selector: 'app-hot-list',
   standalone: true,
@@ -49,11 +50,17 @@ export class HotListComponent implements OnInit {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageSizeOptions = [50, 75, 100];
-
+  protected privilegeServ = inject(PrivilegesService);
   private router = inject(Router);
   private consultantServ = inject(ConsultantService);
-
+  showReport: boolean = false;
   ngOnInit(): void {
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
     this.getAllData();
   }
 

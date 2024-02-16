@@ -1,27 +1,22 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
-  MatPaginator,
-  MatPaginatorModule,
-  PageEvent,
+  MatPaginatorModule
 } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { ReportsService } from 'src/app/usit/services/reports.service';
-import { utils, writeFile } from 'xlsx';
-import { DialogService } from 'src/app/services/dialog.service';
-import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { DEPARTMENT } from 'src/app/constants/department';
 import { TaskService } from '../services/task.service';
+import { DialogService } from 'src/app/services/dialog.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { AssignedUserComponent } from '../task-list/assigned-user/assigned-user.component';
 
 @Component({
   selector: 'app-task-report',
@@ -42,7 +37,7 @@ import { TaskService } from '../services/task.service';
   styleUrls: ['./task-report.component.scss']
 })
 export class TaskReportComponent implements OnInit {
-
+  private dialogServ = inject(DialogService);
   taskReport!: FormGroup;
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
@@ -50,14 +45,15 @@ export class TaskReportComponent implements OnInit {
   private taskService = inject(TaskService);
   tableColumns: string[] = [
     '#',
-    'Date',
     'TicketId',
     'TaskName',
+    'Date',
     'TargetDate',
     'Status',
     'Description',
     'UserName',
   ];
+  dataArr: any[] = [];
   showReport: boolean = false;
   submitted: boolean = false;
   vo = new TaskReport();
@@ -69,11 +65,6 @@ export class TaskReportComponent implements OnInit {
       targetDate: ['', Validators.required],
       department: ['', Validators.required],
     });
-
-    // Subscribe to form value changes
-    // this.taskReport.valueChanges.subscribe(() => {
-    //   this.updateDisplayedColumns();
-    // });
   }
 
   onSubmit() {
@@ -94,33 +85,13 @@ export class TaskReportComponent implements OnInit {
     this.vo.startDate = this.taskReport.get('startDate')?.value;
     this.vo.targetDate = this.taskReport.get('targetDate')?.value;
     this.vo.department = this.taskReport.get('department')?.value;
-    
+
     this.taskService.task_report(this.taskReport.value).subscribe((response: any) => {
       console.log(response);
+      this.dataArr = response.data;
+
     })
-
-    
-    // console.log(JSON.stringify(this.vo) + "   ==  " + JSON.stringify(this.employeeReport.value))
-    // this.taskReportservice.consultant_report(this.taskReport.value)
-    //   .subscribe((data: any) => {
-    //     this.c_data = data.data;
-    //     //  console.log(JSON.stringify(this.c_data))
-    //     this.subTotal = this.c_data.reduce((a, b) => a + b.submission, 0);
-    //     this.intTotal = this.c_data.reduce((a, b) => a + b.interview, 0);
-    //     this.scheduleTotal = this.c_data.reduce((a, b) => a + b.schedule, 0);
-    //     this.holdTotal = this.c_data.reduce((a, b) => a + b.onhold, 0);
-    //     this.closedTotal = this.c_data.reduce((a, b) => a + b.closed, 0);
-    //     this.rejectTotal = this.c_data.reduce((a, b) => a + b.rejected, 0);
-    //     this.onboardedCnt = this.c_data.reduce((a, b) => a + b.onboarded, 0);
-    //     this.selectTotal = this.c_data.reduce((a, b) => a + b.selected, 0);
-    //     this.backoutCnt = this.c_data.reduce((a, b) => a + b.backout, 0);
-    //     this.consultantTotal = this.c_data.reduce((a, b) => a + b.consultant, 0); // 
-    //     this.reqsTotal = this.c_data.reduce((a, b) => a + b.req_count, 0);
-    //   });
   }
-
- 
-
   reset() {
     this.taskReport.reset();
   }
@@ -128,10 +99,29 @@ export class TaskReportComponent implements OnInit {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+  popup(id: number, tid: string) {
+    const actionData = {
+      title: tid,
+      id: id,
+      Actionname: 'task-details'
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    dialogConfig.disableClose = false;
+    // dialogConfig.panelClass = 'add-interview';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(AssignedUserComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        // this.getAll();
+      }
+    })
+  }
+
 
 }
 
-export class  TaskReport {
+export class TaskReport {
   startDate: any;
   targetDate: any;
   department: any;

@@ -10,7 +10,7 @@
         </span>
 
         <div class="hot-list-actions">
-            <button  class="search" mat-raised-button color="primary" (click)="handleExport()">Excel Import</button>
+            <button  class="search" *ngIf="showReport" mat-raised-button color="primary" (click)="handleExport()">Excel Import</button>
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search H1 transfer"
                   (keyup)="applyFilter($event)">

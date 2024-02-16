@@ -349,8 +349,6 @@ export class TaskListComponent implements OnInit {
         this.getAll();
       }
     })
-
-
   }
 }
 

@@ -9,6 +9,7 @@ import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { utils, writeFile } from 'xlsx';
 import { MatSort } from '@angular/material/sort';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 @Component({
   selector: 'app-h1transfer',
   standalone: true,
@@ -50,12 +51,18 @@ export class H1transferComponent implements OnInit{
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   field = 'empty';
-
+  showReport: boolean = false;
   private router = inject(Router);
   private consultantServ = inject(ConsultantService);
-
+  protected privilegeServ = inject(PrivilegesService);
   ngOnInit(): void {
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
     this.getAllData();
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
   }
 
   getAllData(pagIdx = 1) {

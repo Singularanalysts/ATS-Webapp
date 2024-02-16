@@ -27,6 +27,12 @@
       "icon": "build",
       "routerLink": "/usit/technology-tag"
     },
+
+    {
+      "text": "Tech & Support",
+      "icon": "build",
+      "routerLink": "/usit/list-techsupport"
+    },
     {
       "text": "Immigration",
       "icon": "label",
@@ -262,6 +268,12 @@
           "text": "Task List",
           "icon": "note_add",
           "routerLink": "/task/list-task"
+        },
+
+        {
+          "text": "Task Report",
+          "icon": "note_add",
+          "routerLink": "/task/task-report"
         }
       ]
     }

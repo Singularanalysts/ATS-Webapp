@@ -44,6 +44,6 @@ export class TaskService {
   }
 
   task_report(value: any) {
-    return this.apiServ.post("getTaskReports", value);
+    return this.apiServ.post("task/getTaskReports", value);
   }
 }
