@@ -53,7 +53,7 @@
                   <th>Date</th>
                   <th>Target Date</th>
                   <th>Status</th>
-                  <th>Description</th>
+                  <!-- <th>Description</th> -->
                   <th>User Name</th>
                 </tr>
               </thead>
@@ -73,30 +73,23 @@
             "taskName": "Task Management Testing",
             "trackid": 1,
             "taskdescription": "Test Task Management module",
-            "fullname": null -->
-                <tr *ngFor="let data of dataArr let i=index">
-                  <td let i=index nowrap>{{ i+1}}</td>
-                  <td>
-                    <a style="cursor: pointer;color:#0d6efd" (click)="popup(data.taskid, data.ticketid)">{{data.ticketid}}</a>
-                  </td>
-                  <td>
-                    {{data.taskName}}
-                  </td>
-                  <td>
-                    {{data.createddate}}
-                  </td>
-                  <td>
-                    {{data.targetdate}}
-                  </td>
-                  <td>
-                    {{data.status}}
-                  </td>
-                  <td>{{data.description}}
-                  </td>
-                  <td>
-                    {{data.pseudoname}}
-                  </td>
-                </tr>
+            "fullname": null *ngFor="let data of dataArr let i=index"-->
+                <ng-container *ngFor="let data of dataArr let i=index">
+                  <tr>
+                    <td let i=index nowrap>{{ i+1}}</td>
+                    <td><a style="cursor: pointer;color:#0d6efd"
+                        (click)="popup(data.taskid, data.ticketid)">{{data.ticketid}}</a> </td>
+                    <td>{{data.taskName}} </td>
+                    <td> {{data.createddate}} </td>
+                    <td> {{data.targetdate}} </td>
+                    <td> {{data.status}} </td>
+                    <!-- <td>{{data.description}}</td> -->
+                    <td> {{data.pseudoname}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="8"><b>Description: </b> {{data.description}}</td>
+                  </tr>
+                </ng-container>
               </tbody>
             </table>
           </div>

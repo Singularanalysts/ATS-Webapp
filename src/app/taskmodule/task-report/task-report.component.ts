@@ -63,7 +63,7 @@ export class TaskReportComponent implements OnInit {
     this.taskReport = this.formBuilder.group({
       startDate: ['', Validators.required],
       targetDate: ['', Validators.required],
-      department: ['', Validators.required],
+      department: ['empty',],
     });
   }
 
