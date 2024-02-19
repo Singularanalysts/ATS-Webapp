@@ -9,6 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DialogService } from 'src/app/services/dialog.service';
+import { SourcingupdateComponent } from './sourcingupdate/sourcingupdate.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +33,7 @@ import { MatMenuModule } from '@angular/material/menu';
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
+  private dialogServ = inject(DialogService);
   dataTableColumns: string[] = [
     'Name',
     'Category',
@@ -131,8 +135,9 @@ export class DashboardComponent implements OnInit {
   getSourcingLeads() {
     this.dashboardServ.getSourcingLeads(this.userid).subscribe(
       (response: any) => {
-        this.entity = response.data;
+        //this.entity = response.data;
         this.dataSource.data = response.data;
+        console.log(response.data)
         // this.dataSource.data.map((x: any, i) => {
         //   x.serialNum = i + 1;
         // });
@@ -150,7 +155,7 @@ export class DashboardComponent implements OnInit {
     this.submissionFlag = flg;
 
     if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
-      this.dashboardServ.getsubmissionCountForExAndLead(flag,this.userid).subscribe(
+      this.dashboardServ.getsubmissionCountForExAndLead(flag, this.userid).subscribe(
         ((response: any) => {
           this.subCountArr = response.data;
           this.subCountArr.forEach((ent: any) => {
@@ -187,7 +192,7 @@ export class DashboardComponent implements OnInit {
     this.sintcount = 0;
     this.rintcount = 0;
     if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
-      this.dashboardServ.getInterviewCountForExAndLead(flag,this.userid).subscribe(
+      this.dashboardServ.getInterviewCountForExAndLead(flag, this.userid).subscribe(
         ((response: any) => {
           this.intCountArr = response.data;
           this.intCountArr.forEach((ent: any) => {
@@ -224,7 +229,7 @@ export class DashboardComponent implements OnInit {
     this.rclosecount = 0;
     if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter') {
 
-      this.dashboardServ.getClosureCountForExAndLead(flag,this.userid).subscribe(
+      this.dashboardServ.getClosureCountForExAndLead(flag, this.userid).subscribe(
         ((response: any) => {
           this.closecountArr = response.data;
           this.closecountArr.forEach((ent: any) => {
@@ -257,7 +262,7 @@ export class DashboardComponent implements OnInit {
   getDiceReqs() {
     this.dashboardServ.getDiceRequirements().subscribe(
       (response: any) => {
-        this.entity = response.data;
+        //this.entity = response.data;
         this.dataSourceDice.data = response.data;
         // this.dataSourceDice.data.map((x: any, i) => {
         //   x.serialNum = i + 1;
@@ -275,7 +280,7 @@ export class DashboardComponent implements OnInit {
   }
   // for executive and lead
   countCallingExecutiveAndLead() {
-    this.dashboardServ.getClosureCountForExAndLead('monthly',this.userid).subscribe(
+    this.dashboardServ.getClosureCountForExAndLead('monthly', this.userid).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -288,7 +293,7 @@ export class DashboardComponent implements OnInit {
         });
       })
     );
-    this.dashboardServ.getInterviewCountForExAndLead('daily',this.userid).subscribe(
+    this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -301,7 +306,7 @@ export class DashboardComponent implements OnInit {
         });
       })
     );
-    this.dashboardServ.getsubmissionCountForExAndLead('daily',this.userid).subscribe(
+    this.dashboardServ.getsubmissionCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -314,5 +319,28 @@ export class DashboardComponent implements OnInit {
         });
       })
     );
+  }
+
+  updateSlead(emp: any) {
+    console.log(emp)
+    const actionData = {
+      title: 'Add Visa',
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'add-visa',
+      souringData: emp
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "450px";
+    dialogConfig.height = "auto";
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = "add-visa";
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(SourcingupdateComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if(dialogRef.componentInstance.allowAction){
+        //this.getAllVisa();
+      }
+    })
   }
 }
