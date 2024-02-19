@@ -321,20 +321,20 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  updateSlead(emp: any) {
-    console.log(emp)
+  updateSlead(sourcingLeadData: any) {
+    console.log(sourcingLeadData)
     const actionData = {
-      title: 'Add Visa',
+      title: 'Sourcing Update',
       buttonCancelText: 'Cancel',
       buttonSubmitText: 'Submit',
-      actionName: 'add-visa',
-      souringData: emp
+      actionName: 'sourcing-update',
+      souringData: sourcingLeadData,
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "450px";
+    dialogConfig.width = "65vw";
     dialogConfig.height = "auto";
     dialogConfig.disableClose = false;
-    dialogConfig.panelClass = "add-visa";
+    dialogConfig.panelClass = "sourcing-update";
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(SourcingupdateComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
