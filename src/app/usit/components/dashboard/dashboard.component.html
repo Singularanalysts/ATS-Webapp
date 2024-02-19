@@ -238,7 +238,7 @@
               <a (click)="goToConsultantInfo(data.consultantid)" class="bold-text consultant-id">{{data.consultantname}}</a>
             </b>
             Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
-              <span *ngIf="data.submissionrate !== null" class="bold-text" > {{data.submissionrate}}(/LPA),</span>
+              <span *ngIf="data.submissionrate !== null" class="bold-text" > {{data.submissionrate}}(₹/LPA),</span>
             </b> 
             <!-- <b class="bold-text">{{data.emptype}}</b> -->
             <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span> 
