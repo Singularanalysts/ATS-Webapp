@@ -204,7 +204,7 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
    * submit form
    */
   onSubmit() {
-    console.log('form.value for save:', JSON.stringify(this.quizForm.value));
+   // console.log('form.value for save:', JSON.stringify(this.quizForm.value));
     if (this.quizForm.invalid) {
       // show errors
       this.displayFormErrors();
@@ -240,7 +240,7 @@ export class AttemptQuizComponent implements OnInit, OnDestroy {
           );
         },
         error: (err: any) => {
-          console.log(err.message);
+        //  console.log(err.message);
           this.dataTobeSentToSnackBarService.message = err.message;
           this.dataTobeSentToSnackBarService.panelClass = [
             'custom-snack-failure',

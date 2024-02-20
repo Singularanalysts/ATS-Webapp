@@ -76,9 +76,9 @@ dataToBeSentToSnackBar: ISnackBarData = {
   getAllData() {
     this.service.linkedinProfiles().subscribe(
       (response: any) => {
-        console.log(response.data)
+        //console.log(response.data)
         this.dataSource.data = response.data;
-        console.log(response.data)
+       // console.log(response.data)
         this.totalItems = response.data.totalElements;
          // for serial-num {}
          this.dataSource.data.map((x: any, i) => {

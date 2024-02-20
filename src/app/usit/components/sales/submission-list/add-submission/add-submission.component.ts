@@ -118,8 +118,9 @@ export class AddSubmissionComponent implements OnInit{
   get frm() {
     return this.submissionForm.controls;
   }
-
+userid!:any;
   ngOnInit(): void {
+    this.userid = localStorage.getItem('userid');
     this.getCompany();
     this.getFlag(this.data.flag.toLocaleLowerCase());
     this.getConsultant(this.flag)
@@ -173,10 +174,10 @@ export class AddSubmissionComponent implements OnInit{
 
 
   private initilizeSubmissionForm(submissionData: any) {
-
+  
     this.submissionForm = this.formBuilder.group({
-
-      user: localStorage.getItem('userid'),
+     // user:  [submissionData ? submissionData?.user : this.userid],
+      user: [this.data.actionName === "edit-submission" ?  submissionData?.user : localStorage.getItem('userid') ],
       requirement: [submissionData ? submissionData?.requirement : '', [Validators.required]],
       consultant: [submissionData ? submissionData?.consultant : '', [Validators.required]],
       position: [submissionData ? submissionData.position : '', [Validators.required]],
@@ -359,7 +360,7 @@ export class AddSubmissionComponent implements OnInit{
 
 
     const saveReqObj = this.getSaveData();
-    this.submissionServ
+ this.submissionServ
       .registerSubmission(saveReqObj)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({

@@ -87,7 +87,7 @@ export class TaskReportComponent implements OnInit {
     this.vo.department = this.taskReport.get('department')?.value;
 
     this.taskService.task_report(this.taskReport.value).subscribe((response: any) => {
-      console.log(response);
+     // console.log(response);
       this.dataArr = response.data;
 
     })

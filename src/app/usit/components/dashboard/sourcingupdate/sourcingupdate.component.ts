@@ -1,14 +1,12 @@
-import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   ISnackBarData,
   SnackBarService,
@@ -25,20 +23,8 @@ import { SearchPipe } from 'src/app/pipes/search.pipe';
 import { MatCardModule } from '@angular/material/card';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
-import {
-  Observable,
-  debounceTime,
-  distinctUntilChanged,
-  tap,
-  switchMap,
-  of,
-  Subject,
-  takeUntil,
-} from 'rxjs';
-import { InterviewService } from 'src/app/usit/services/interview.service';
-import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
-import { InterviewInfo } from 'src/app/usit/models/interviewinfo';
-import { Closure } from 'src/app/usit/models/closure';
+import { MatRadioModule } from '@angular/material/radio';
+import { OpenreqService } from 'src/app/usit/services/openreq.service';
 
 @Component({
   selector: 'app-sourcingupdate',
@@ -69,110 +55,76 @@ import { Closure } from 'src/app/usit/models/closure';
 export class SourcingupdateComponent implements OnInit {
 
   sourcingForm!: FormGroup;
-  interviewObj: any;
-  submissiondata: any = [];
-  flag!: any;
+
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<SourcingupdateComponent>);
-  private interviewServ = inject(InterviewService);
+  private service = inject(OpenreqService);
   private formBuilder = inject(FormBuilder);
-  private activatedRoute = inject(ActivatedRoute);
   private snackBarServ = inject(SnackBarService);
   submitted = false;
   selectOptionObj = {
     selectOptions: SELECT_OPTIONS,
   };
   dataArr: any[] = [];
-  entity: any;
-  // to clear subscriptions
-  private destroyed$ = new Subject<void>();
-  isRadSelected: any;
-  isModeRadSelected: any;
-  isStatusRadSelected: any;
-  payrateFromVendor!:any;
-  paymentwithctc!:any;
-  intno !: string;
-  onBoard!: any;
-  closureFlag = false;
-  private datePipe = inject(DatePipe);
-  intId: any;
+
   protected isFormSubmitted: boolean = false;
   get controls() {
     return this.sourcingForm.controls;
   }
 
   ngOnInit(): void {
-    this.getFlag(this.data.flag);
-    this.getsubdetails(this.flag);
-    if (this.flag == 'sales') {
-      this.payrateFromVendor = "Pay Rate to Consultant";
-      this.paymentwithctc = "Pay Rate From Vendor";
-    }
-    else if(this.flag == 'Recruiting') {
-      this.payrateFromVendor = "Bill Rate from Client";
-      this.paymentwithctc = "Pay Rate To Vendor";
-    } else {
-      this.payrateFromVendor = "Bill Rate from Client";
-      this.paymentwithctc = "Pay Rate To Vendor";
-    }
-    if (this.data.actionName === "edit-interview") {
-      this.initializeInterviewForm(new InterviewInfo());
-      this.interviewServ.getEntity(this.data.interviewData.intrid).subscribe(
-        (response: any) => {
-        // const ctc = response.data.submission.ratetype;
-        // if((ctc=='1099' || ctc=='W2') && this.flag != 'sales'){
-        //   this.paymentwithctc = "Pay Rate To Consultant";
-        // }
-        // else{
-        //   this.paymentwithctc = "Pay Rate To Vendor";
-        // }
-        this.entity = response.data;
-        this.intno = this.entity.interviewno;
-        this.onBoard = this.entity.interviewstatus;
-        this.intId = this.entity.intrid;
-        if (this.onBoard == 'OnBoarded') {
-          this.closureFlag = true;
-        }
-        else {
-          this.closureFlag = false;
-        }
-        this.initializeInterviewForm(response.data);
+   // console.log(this.data);
+    this.initializeInterviewForm(this.data.souringData);
+    this.service.getLeadById(this.data.souringData.c_id).subscribe(
+      (response: any) => {
+      //  console.log(response.data)
+        this.dataArr = response.data
       });
-    } else {
-      this.initializeInterviewForm(new InterviewInfo());
-    }
-  }
-
-  getFlag(type: string){
-    if (type === 'sales') {
-      this.flag = 'sales';
-    } else if(type === 'recruiting') {
-      this.flag = "Recruiting";
-    } else {
-      this.flag = 'Domrecruiting';
-    }
   }
 
   private initializeInterviewForm(data: any) {
     this.sourcingForm = this.formBuilder.group({
-      vid : [data ? data.vid : ''],
-      candidate_name: [data ? data.candidate_name : '', Validators.required],
-      description: [data ? data.description : ''],
-      comments: [data ? data.comments : '', Validators.required],
-      status: [data ? data.status : '', Validators.required],
-      dateandtime: [data ? data.dateandtime : '', Validators.required],
+      email: [data ? data.email : ''],
+      contactno: [data ? data.contactno : ''],
+      comments: [data ? data.comments : ''],
+      status: [data ? data.status : ''],
+      candidate_name: [data ? data.candidate_name : ''],
+      appointmentdate: [data ? data.appointmentdate : ''],
+      category: [data ? data.category : ''],
+      address: [data ? data.address : ''],
+      id: [data ? data.c_id : ''],
+      lockedby: [data ? data.lockedby : ''],
+      profile_url: [data ? data.profile_url : ''],
+      pseudoname: [data ? data.pseudoname : ''],
+      track: this.formBuilder.group({
+        cid: [data.c_id],
+        userid: [localStorage.getItem('userid')],
+        comments: [''],
+        consultantname: [data.candidate_name],
+        pseudoname: [data.pseudoname],
+        appointmentdate: [''],
+        status: ['']
+      })
     });
-  }
 
-  userid!: any;
-  role!: any;
-  getsubdetails(flg: string) {
-    this.userid = localStorage.getItem('userid');
-    this.role = localStorage.getItem('role');
-    this.interviewServ.getsubmissions(flg, this.userid, this.role).subscribe(
-      (response: any) => {
-        this.submissiondata = response.data;
-      });
+    this.sourcingForm.get('comments')?.valueChanges.subscribe((value) => {
+      this.sourcingForm.get('track.comments')?.setValue(value);
+    });
+
+    this.sourcingForm.get('appointmentdate')?.valueChanges.subscribe((value) => {
+      this.sourcingForm.get('track.appointmentdate')?.setValue(value);
+    });
+
+    const AppointmentDate = this.sourcingForm.get('appointmentdate')?.value;
+    this.sourcingForm.get('track.appointmentdate')?.setValue(AppointmentDate);
+
+    this.sourcingForm.get('status')?.valueChanges.subscribe((value) => {
+      this.sourcingForm.get('track.status')?.setValue(value);
+    });
+
+    const status = this.sourcingForm.get('status')?.value;
+    this.sourcingForm.get('track.status')?.setValue(status);
+
   }
 
   onSubmit() {
@@ -186,34 +138,28 @@ export class SourcingupdateComponent implements OnInit {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
-    const saveReqObj = this.getSaveData();
-    this.interviewServ
-      .addORUpdateInterview(saveReqObj,this.data.actionName)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (resp: any) => {
-          if (resp.status == 'Success') {
-            dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-interview'
-                ? 'Interview added successfully'
-                : 'Interview updated successfully';
+    // const saveReqObj = this.getSaveData();
+   // console.log(JSON.stringify(this.sourcingForm.value));
+    // updateSourcingLead
+    this.service.updateSourcingLead(this.sourcingForm.value).subscribe(
+      {
+        next: (data: any) => {
+          if (data.status == 'success') {
+            dataToBeSentToSnackBar.message = 'Track updated successfully!';
+            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
             this.dialogRef.close();
+
           } else {
-            this.isFormSubmitted = false;
-            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Interview already Exists';
-            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
+            dataToBeSentToSnackBar.message = 'ErrorWhile Updating!'
+            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
           }
+
+        }, error: (err: any) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
+          dataToBeSentToSnackBar.message = err.message
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        },
-        error: (err: any) => {
-          this.isFormSubmitted = false;
-          dataToBeSentToSnackBar.message =
-            this.data.actionName === 'add-interview'
-              ? 'Interview addition is failed'
-              : 'Interview updation is failed';
-          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        },
+        }
       });
   }
 
@@ -227,13 +173,6 @@ export class SourcingupdateComponent implements OnInit {
     });
   }
 
-  getSaveData() {
-    if(this.data.actionName === 'edit-interview'){
-      return {...this.entity, ...this.sourcingForm.value}
-    }
-    return this.sourcingForm.value;
-  }
-
   onCancel() {
     this.dialogRef.close();
   }
@@ -242,16 +181,17 @@ export class SourcingupdateComponent implements OnInit {
 
 export const SELECT_OPTIONS = {
   status: [
-    {value: 'Connection Pending', id: 1},
-    {value: 'Connected', id: 2},
-    {value: 'Discussion', id: 3},
-    {value: 'Interested', id: 4},
-    {value: 'Not Interested', id: 5},
-    {value: 'Open to Work', id: 6},
-    {value: 'On Other W2', id: 7},
-    {value: 'Independent', id: 8},
-    {value: 'Not Available', id: 9},
-    {value: 'Closed', id: 10},
+    { value: 'Locked', id: 1 },
+    { value: 'Connection Pending', id: 1 },
+    { value: 'Connected', id: 2 },
+    { value: 'Discussion', id: 3 },
+    { value: 'Interested', id: 4 },
+    { value: 'Not Interested', id: 5 },
+    { value: 'Open to Work', id: 6 },
+    { value: 'On Other W2', id: 7 },
+    { value: 'Independent', id: 8 },
+    { value: 'Not Available', id: 9 },
+    { value: 'Closed', id: 10 },
   ]
 }
 

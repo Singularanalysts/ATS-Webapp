@@ -110,7 +110,7 @@ export class ConsultantReportComponent {
         (response: any) => {
           this.consultant = response.data;
           this.consultantname = this.vo.additionalValue1;
-          console.log(this.consultantname);
+         // console.log(this.consultantname);
         },
         (error) => {
           console.error('Error fetching consultant data:', error);

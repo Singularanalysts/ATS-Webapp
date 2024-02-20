@@ -41,7 +41,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     
     this.loaderServ.showLoader()
-    console.log(this.authService.getToken()+"  ==  "+this.authService.isUserSignedin())
+  
     if (this.authService.getToken() && this.authService.isUserSignedin()) {
       const request = req.clone({
         headers: new HttpHeaders({
@@ -56,7 +56,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         }),
         catchError((error: HttpErrorResponse) => {
           this.handleServerSideError(error);
-          console.log("error-message", error)
+         // console.log("error-message", error)
           return throwError(() => error);
         })
       );

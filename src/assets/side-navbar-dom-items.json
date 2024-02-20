@@ -59,6 +59,23 @@
           "routerLink": "/usit/dom-closures"
         }
       ]
+    }
+    ,
+    {
+      "text": "Reports",
+      "icon": "reports",
+      "children": [
+        {
+          "text": "Employees Reports",
+          "icon": "assignment_ind",
+          "routerLink": "/usit/employee-report"
+        },
+        {
+          "text": "Sourcing Reports",
+          "icon": "dynamic_feed",
+          "routerLink": "/usit/sourcing-report"
+        }
+      ]
     },
     {
       "text": "Masters",

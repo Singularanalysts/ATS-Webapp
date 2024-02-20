@@ -139,7 +139,7 @@ options: any;
  
     this.service.gettechnicalskills().subscribe((response: any) => {
       this.techdata = response;
-      console.log("techdata",this.techdata)
+     // console.log("techdata",this.techdata)
       
     });
   }
@@ -249,7 +249,7 @@ getSaveData() {
 gettech() {
   this.service.gettechnicalskills().subscribe((response: any) => {
     this.techdata = response;
-    console.log(this.techdata, "dsdsh");
+    //console.log(this.techdata, "dsdsh");
   });
 }
 skilldata: any;
@@ -258,7 +258,7 @@ techSkills(event: any) {
   const newVal = event.value;
   this.service.getTechsupportById(newVal).subscribe( (response: any) => {
     this.registerForm.get('skills').setValue(response.data);
-    console.log(response.data)
+   // console.log(response.data)
   })
 }
 address = '';

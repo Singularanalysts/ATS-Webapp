@@ -31,5 +31,11 @@ export class OpenreqService {
   lockProfiles(id:number, userid:number) {
     return this.http.get("openreqs/linked/lock/"+id+"/"+userid);
   }
+  public updateSourcingLead(entity:any) {
+    return this.http.post("openreqs/linked/update",entity);
+  }
 
+  getLeadById(id:number) {
+    return this.http.get("openreqs/linked/getById/"+id);
+  }
 }

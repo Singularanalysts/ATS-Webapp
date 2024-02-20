@@ -71,6 +71,7 @@ export class DashboardComponent implements OnInit {
   rclosecount = 0;
   userid!: any;
   role!: any;
+  submitted = false;
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
 
@@ -137,7 +138,7 @@ export class DashboardComponent implements OnInit {
       (response: any) => {
         //this.entity = response.data;
         this.dataSource.data = response.data;
-        console.log(response.data)
+       // console.log(response.data)
         // this.dataSource.data.map((x: any, i) => {
         //   x.serialNum = i + 1;
         // });
@@ -322,7 +323,7 @@ export class DashboardComponent implements OnInit {
   }
 
   updateSlead(sourcingLeadData: any) {
-    console.log(sourcingLeadData)
+   // console.log(sourcingLeadData)
     const actionData = {
       title: 'Sourcing Update',
       buttonCancelText: 'Cancel',
@@ -337,10 +338,20 @@ export class DashboardComponent implements OnInit {
     dialogConfig.panelClass = "sourcing-update";
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(SourcingupdateComponent, dialogConfig);
+
+
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.allowAction){
-        //this.getAllVisa();
+      if(dialogRef.componentInstance.submitted){
+        this.getSourcingLeads();
       }
     })
+
+
+    // dialogRef.afterClosed().subscribe(() => {
+    //   if(dialogRef.componentInstance.allowAction){
+    //     //this.getAllVisa();
+    //     this.getSourcingLeads();
+    //   }
+    // })
   }
 }

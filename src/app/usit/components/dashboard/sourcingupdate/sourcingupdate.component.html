@@ -1,47 +1,41 @@
 <div class="header-container mat-elevation-z1">
   <span class="header-text" mat-dialog-title>
-    {{ data.title }}
+    {{ data.title }} (
+    <span class="bold-text"> Consultant Name:</span>
+        {{ data.souringData.candidate_name }} ,
+        <span class="bold-text">Owner Name:</span>
+        {{ data.souringData.pseudoname }}
+          )
   </span>
+  
   <button mat-icon-button (click)="onCancel()">
     <mat-icon>close</mat-icon>
   </button>
 </div>
 <mat-card class="center-card">
-  <div class="consultant-owner-names">
-    <div class="consultant-name">
-      <div class="consultant-name-div">
-        <span class="bold-text">Consultant Name:</span>
-        {{ data.souringData.candidate_name }}
-      </div>
-    </div>
-    <div class="owner-name">
-      <div class="owner-name-div">
-        <span class="bold-text">Owner Name:</span>
-        {{ data.souringData.pseudoname }}
-      </div>
-    </div>
-    <!-- <p>
-      <span class="bold-text">Consultant Name:</span>
-      {{ data.souringData.candidate_name }} <br />
-      <span class="bold-text">Owner Name:</span>
-      {{ data.souringData.pseudoname }}
-    </p> -->
-  </div>
 
   <form [formGroup]="sourcingForm" class="vendor-form">
     <div class="form">
       <div class="form-column-left">
         <!-- <input type="hidden" formControlName="intrid" name="intrid" /> -->
-
         <mat-form-field class="description-field">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="description" maxlength="15" />
+          <input matInput formControlName="email" maxlength="100" />
         </mat-form-field>
 
-        <mat-form-field class="description-field">
+        <!-- <mat-form-field class="description-field">
           <mat-label>Contact Number</mat-label>
-          <input matInput formControlName="description" maxlength="15" />
-        </mat-form-field>
+          <input matInput formControlName="contactno" maxlength="15" />
+        </mat-form-field> -->
+        
+        <mat-form-field appearance="fill">
+        <mat-label>Contact Number</mat-label>
+        <ngx-mat-intl-tel-input [preferredCountries]="['in','us']" class="intl-input"
+          formControlName="contactno" [enablePlaceholder]="true" [enableSearch]="true"
+          name="contactno" id="intlInputCompany" #contactno>
+        </ngx-mat-intl-tel-input>
+      </mat-form-field>
+
       </div>
 
       <div class="form-column-right">
@@ -53,10 +47,10 @@
         </mat-form-field>
 
         <mat-form-field appearance="fill">
-          <mat-label>Interview Date & Time</mat-label>
-          <input matInput type="datetime-local" formControlName="dateandtime" placeholder="DD/MM/YYYY" />
-          <mat-error *ngIf="sourcingForm.get('dateandtime')!.hasError('required')">
-            Date and Time is required</mat-error>
+          <mat-label>Appointment Date</mat-label>
+          <input matInput type="datetime-local" formControlName="appointmentdate" placeholder="DD/MM/YYYY" />
+          <!-- <mat-error *ngIf="sourcingForm.get('appointmentdate')!.hasError('required')">
+            Date and Time is required</mat-error> -->
         </mat-form-field>
 
         
@@ -81,26 +75,32 @@
 </mat-card>
 
 <mat-card class="center-card">
-  <div>
+  <div class="header-container-leading-resources">
+      <span class="header-text">Sourcing Lead Track</span>
+    </div>
+  <div style="overflow: auto;">
     <table class="table table-bordered table-responsive">
       <thead class="thead-light sticky">
         <tr>
           <th>#</th>
+          <th>Created Date</th>
           <th>Status</th>
+          <th>Appointment Date</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let data of dataArr let i=index">
           <tr>
-            <td let i=index nowrap>{{ i+1}}</td>
+            <td let i=index nowrap rowspan="2">{{ i+1}}</td>
+            <td> {{data.createddate}} </td>
             <td> {{data.status}} </td>
+            <td> {{data.appointmentdate}} </td>
           </tr>
           <tr>
-            <td colspan="2"><b>Description: </b> {{data.description}}</td>
+            <td colspan="3"><b>Comments: </b> {{data.comments}}</td>
           </tr>
         </ng-container>
       </tbody>
     </table>
   </div>
-  
 </mat-card>

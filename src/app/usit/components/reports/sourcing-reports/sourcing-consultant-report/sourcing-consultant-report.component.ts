@@ -73,7 +73,7 @@ writeFile(wb, this.excelName);
          (response: any) => {
            this.consultant = response.data;
            this.exname = this.vo.additionalValue1
-           console.log(this.exname);
+         //  console.log(this.exname);
            
          },
          (error) => {
