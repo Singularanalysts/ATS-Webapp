@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
@@ -84,9 +85,12 @@ export class SourcingupdateComponent implements OnInit {
 
   private initializeInterviewForm(data: any) {
     this.sourcingForm = this.formBuilder.group({
-      email: [data ? data.email : ''],
+      email: [data ? data.email : '', [
+        Validators.email,
+        Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+      ],],
       contactno: [data ? data.contactno : ''],
-      comments: [data ? data.comments : ''],
+      comments: [data ? data.comments : '', Validators.required],
       status: [data ? data.status : ''],
       candidate_name: [data ? data.candidate_name : ''],
       appointmentdate: [data ? data.appointmentdate : ''],
@@ -138,6 +142,12 @@ export class SourcingupdateComponent implements OnInit {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
+    if (this.sourcingForm.invalid) {
+      this.displayFormErrors();
+      this.sourcingForm.markAllAsTouched();
+      this.isFormSubmitted = false
+      return;
+    }
     // const saveReqObj = this.getSaveData();
    // console.log(JSON.stringify(this.sourcingForm.value));
     // updateSourcingLead
@@ -151,7 +161,7 @@ export class SourcingupdateComponent implements OnInit {
 
           } else {
             dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
-            dataToBeSentToSnackBar.message = 'ErrorWhile Updating!'
+            dataToBeSentToSnackBar.message = 'Error While Updating!'
             this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
           }
 
