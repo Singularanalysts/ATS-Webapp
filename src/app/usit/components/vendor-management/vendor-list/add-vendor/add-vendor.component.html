@@ -104,7 +104,7 @@
          <!-- client   -->
          <mat-form-field appearance="fill">
           <mat-label>Client Details</mat-label>
-          <input matInput formControlName="client" maxlength="50">
+          <input matInput formControlName="client" maxlength="200">
           <!-- <mat-error *ngIf="vendorForm.get('client')!.hasError('required')">Client
             is required</mat-error> -->
         </mat-form-field>
@@ -129,8 +129,6 @@
           <mat-label>Other Details</mat-label>
           <input matInput formControlName="details" maxlength="250">
         </mat-form-field>
-
-
         </div>
 
         <!-- form - right controls -->
@@ -144,7 +142,7 @@
           <!-- website -->
           <mat-form-field appearance="fill">
             <mat-label>Website</mat-label>
-            <input matInput formControlName="website" maxlength="50">
+            <input matInput formControlName="website" maxlength="150">
           </mat-form-field>
           <!-- facebook -->
           <mat-form-field appearance="fill">
@@ -154,12 +152,12 @@
            <!-- industrytype -->
            <mat-form-field appearance="fill">
             <mat-label>Industry</mat-label>
-            <input matInput formControlName="industrytype" maxlength="25">
+            <input matInput formControlName="industrytype" maxlength="155">
           </mat-form-field>
            <!-- twitterid -->
            <mat-form-field appearance="fill">
             <mat-label>Twitter Id</mat-label>
-            <input matInput formControlName="twitterid" maxlength="100">
+            <input matInput formControlName="twitterid" maxlength="150">
           </mat-form-field>
           <!-- revinue -->
           <mat-form-field appearance="fill">
@@ -169,10 +167,8 @@
           <!-- linkedinid -->
           <mat-form-field appearance="fill">
             <mat-label>LinkedIn Id</mat-label>
-            <input matInput formControlName="linkedinid" maxlength="100">
+            <input matInput formControlName="linkedinid" maxlength="150">
           </mat-form-field>
-
-
         </div>
       </section>
     </form>
