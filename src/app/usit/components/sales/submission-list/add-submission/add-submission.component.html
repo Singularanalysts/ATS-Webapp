@@ -47,9 +47,16 @@
                     </mat-form-field>
                 </div> -->
 
-                <div class="fg-div">
+                <!-- <div class="fg-div">
                     <mat-form-field appearance="fill">
                         <mat-label>Select Consultant</mat-label>
+                        <input matInput formControlName="consultant" [matAutocomplete]="consultantAutoCmp" maxlength="75">
+                        <mat-autocomplete #consultantAutoCmp="matAutocomplete">
+                            <mat-option *ngFor="let option of (searchCompanyOptions$ | async)"
+                              [value]="option.company.trim()">
+                              {{ option.company.trim() }}
+                            </mat-option>
+                        </mat-autocomplete>
                         <mat-select formControlName="consultant">
                             <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
                                 {{obj[1]}} ({{obj[2]}} with {{obj[3]}})
@@ -59,7 +66,23 @@
                             is Required
                         </mat-error>
                     </mat-form-field>
+                </div> -->
+
+                <div class="fg-div">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Consultant</mat-label>
+                        <input matInput formControlName="consultant" [matAutocomplete]="consultantAutoCmp" maxlength="75">
+                        <mat-autocomplete #consultantAutoCmp="matAutocomplete">
+                            <mat-option *ngFor="let option of (searchConsultantOptions$ | async)"
+                                [value]="option[0]">
+                                {{option[1]}} ({{option[2]}} with {{option[3]}})
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="submissionForm.get('consultant')!.hasError('required')">Consultant is Required
+                        </mat-error>
+                    </mat-form-field>
                 </div>
+                
 
                 <mat-form-field appearance="fill">
                     <mat-label>Position Title</mat-label>

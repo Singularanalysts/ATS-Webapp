@@ -109,6 +109,9 @@ export class AddSubmissionComponent implements OnInit {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   filteredRequirements!: Observable<any>;
+  searchConsultantOptions$!: Observable<any>;
+  consultantOptions: any = [];
+  isCompanyDataAvailable: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
@@ -145,10 +148,6 @@ export class AddSubmissionComponent implements OnInit {
     } else {
       this.initilizeSubmissionForm(new SubmissionInfo());
     }
-    // this.filteredRequirements = this.submissionForm!.get('requirement')!.valueChanges.pipe(
-    //   startWith(''),
-    //   map((value: any) => this.reqFilter(value)),
-    // );
   }
 
   getFlag(type: string) {
@@ -265,10 +264,28 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getConsultant(flg: string) {
-    this.submissionServ.getConsultantDropdown(flg).subscribe(
-      (response: any) => {
-        this.consultantdata = response.data;
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg).pipe(
+      map((response: any) => response.data),
+      tap(resp => {
+        if (resp && resp.length) {
+          this.getConsultantOptionsForAutoComplete(resp);
+        }
       })
+    );
+  }
+
+  getConsultantOptionsForAutoComplete(data: any) {
+    this.consultantOptions = data;
+    this.searchConsultantOptions$ = this.submissionForm.controls.consultant.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterOptions(value, this.consultantOptions))
+    );
+  }
+
+  private _filterOptions(value: any, options: any[]): any[] {
+    const filterValue = value ? value.trim().toLowerCase() : '';
+    console.log(options.filter(option => option[1].toLowerCase().includes(filterValue)));
+    return options.filter(option => option[1].toLowerCase().includes(filterValue));
   }
 
   handleAddressChange(address: any) {
