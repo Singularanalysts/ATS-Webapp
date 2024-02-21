@@ -116,6 +116,15 @@ export class RecruiterListComponent implements OnInit {
     this.department = localStorage.getItem('department');
     this.AssignedPageNum = localStorage.getItem('rnum');
     this.getAllRecruiters();
+    this.getemph();
+  }
+
+  getemph(){
+    return this.recruiterServ
+    .getemph()
+    .subscribe((response: any) => {
+      console.log(JSON.stringify(response.data));
+    });
   }
 
   ngAfterViewInit() {

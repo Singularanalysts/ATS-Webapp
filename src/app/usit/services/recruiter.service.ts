@@ -27,7 +27,9 @@ export class RecruiterService {
     return this.apiServ.get("vms/recruiter/all/" + access + "/" + userid);
   }
 
-
+  getemph() {
+    return this.apiServ.get("auth/users/emphierarchy");
+  }
 
   getAllRecruitersPagination( access: string, userid: number,page: any, size: any,field:any) {
     return this.apiServ.get("vms/recruiter/all/" + access + "/" + userid+"/"+page+"/"+size+"/"+field);
