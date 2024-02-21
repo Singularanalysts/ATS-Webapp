@@ -469,6 +469,7 @@ export class AddEmployeeComponent {
         this.empObj.role = formVal.role;
       })
     }
+    this.trimSpacesFromFormValues();
     const saveObj = this.data.actionName === "edit-employee" ? this.empObj : this.employeeForm.value;
     //this.uploadFileOnSubmit(1);
     this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
@@ -501,6 +502,15 @@ export class AddEmployeeComponent {
         this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
       },
+    });
+  }
+
+  trimSpacesFromFormValues() {
+    Object.keys(this.employeeForm.controls).forEach((controlName: string) => {
+      const control = this.employeeForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
     });
   }
 
@@ -933,6 +943,21 @@ export class AddEmployeeComponent {
       bankBranchNameControl?.updateValueAndValidity();
   }
 
+  camelCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = this.capitalizeFirstLetter(inputValue);
+  }
+  
+  capitalizeFirstLetter(input: string): string {
+    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+      return char.toUpperCase();
+    });
+  }
+
+  convertToLowerCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.toLowerCase();
+  }
 }
 
 export class FileData {

@@ -90,7 +90,7 @@ export class ConsultantListComponent
   dataTableColumns: string[] = [
     'SerialNum',
     'Date',
-    'Id',
+    // 'Id',
     'Name',
     'Email',
     'ContactNumber',
