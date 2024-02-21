@@ -34,23 +34,23 @@
     <section class="recruiter-table-style">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false"
       onpaste="return false" oncut="return false">
-        <ng-container matColumnDef="SerialNum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
+        <ng-container matColumnDef="SerialNum"><!-- mat-sort-header -->
+          <th mat-header-cell *matHeaderCellDef >#</th>
           <td mat-cell *matCellDef="let recruiter">{{ recruiter?.serialNum }}</td>
         </ng-container>
 
         <ng-container matColumnDef="Company">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+          <th mat-header-cell *matHeaderCellDef >Company</th>
           <td mat-cell *matCellDef="let recruiter">{{ recruiter.company }}</td>
         </ng-container>
 
         <ng-container matColumnDef="RecruiterName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Recruiter Name</th>
+          <th mat-header-cell *matHeaderCellDef >Recruiter Name</th>
           <td mat-cell *matCellDef="let recruiter">{{ recruiter.recruiter }}</td>
         </ng-container>
 
         <ng-container matColumnDef="PhoneNumber">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
+          <th mat-header-cell *matHeaderCellDef >Phone Number</th>
           <td mat-cell *matCellDef="let recruiter">
             <span>
 
@@ -63,25 +63,25 @@
         </ng-container>
 
         <ng-container matColumnDef="Email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <th mat-header-cell *matHeaderCellDef >Email</th>
           <td mat-cell *matCellDef="let recruiter">{{ recruiter.email }}</td>
         </ng-container>
 
         <ng-container matColumnDef="AddedBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Added By</th>
+          <th mat-header-cell *matHeaderCellDef >Added By</th>
           <td mat-cell *matCellDef="let recruiter">
             <span class="user-info" (click)="goToUserInfo(recruiter.addedby)">{{ recruiter.pseudoname }}</span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="AddedOn">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Added On</th>
-          <td mat-cell *matCellDef="let recruiter">{{ recruiter.createddate }}</td>
+          <th mat-header-cell *matHeaderCellDef >Added On</th>
+          <td mat-cell *matCellDef="let recruiter">{{ recruiter.createddate | date:'yyyy-MM-dd'}}</td>
         </ng-container>
 
         <ng-container matColumnDef="LastUpdated">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Updated</th>
-          <td mat-cell *matCellDef="let recruiter">{{ recruiter.updateddate }}</td>
+          <th mat-header-cell *matHeaderCellDef >Last Updated</th>
+          <td mat-cell *matCellDef="let recruiter">{{ recruiter.updateddate | date:'yyyy-MM-dd'}}</td>
         </ng-container>
 
         <!-- <ng-container matColumnDef="Status">
@@ -114,7 +114,7 @@
         </ng-container>
 
         <ng-container matColumnDef="Approve/Reject">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Approve/Reject</th>
+          <th mat-header-cell *matHeaderCellDef >Approve/Reject</th>
           <td mat-cell *matCellDef="let recruiter" class="approve-buttons">
                 <ng-container *ngIf="['Approved'].includes(recruiter.rec_stat);  else ifNotApproved">
 

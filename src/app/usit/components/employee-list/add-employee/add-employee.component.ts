@@ -546,6 +546,7 @@ export class AddEmployeeComponent {
     }
     return true;
   }
+  //
 
   private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
     const dialogConfig = new MatDialogConfig();

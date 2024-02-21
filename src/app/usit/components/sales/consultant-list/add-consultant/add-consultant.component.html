@@ -227,6 +227,7 @@
          <mat-form-field appearance="fill">
           <mat-label>Hourly Rate</mat-label>
           <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="5">
+          <mat-error *ngIf="consultantForm.get('hourlyrate').hasError('required')">Hourly Rate is required</mat-error>
         </mat-form-field>
 
            <!-- Rate Radio group-->
@@ -247,7 +248,9 @@
           <mat-radio-group aria-label="Select an option" formControlName="relocation">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.relocation" [value]="opt.value"
             (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
-
+            <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required')">Relocation is
+              required
+            </mat-error>
           </mat-radio-group>
         </div>
         <!-- Others Details -->
@@ -261,7 +264,6 @@
             </mat-error>
           </mat-form-field>
         </div>
-
       </div>
     </div>
 
@@ -281,7 +283,6 @@
               </mat-option>
             </mat-select>
             <button matSuffix mat-icon-button (click)="onAddQualification();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-
             <mat-error *ngIf="consultantForm.get('qualification')!.hasError('required')">Qualification is
               required
             </mat-error>

@@ -1,10 +1,6 @@
-import { Company } from "./company";
 import { Employee } from "./employee";
-import { Qualification } from "./qualification";
 import { Requirements } from "./requirements";
 
-import { Technology } from "./technology";
-import { Visa } from "./visa";
 
 export class Consultantinfo {
     consultantid!:number;

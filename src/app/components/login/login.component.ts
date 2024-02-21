@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
         '',//Kiran@123$
         [
           Validators.required,
-          Validators.maxLength(12),
+          Validators.maxLength(25),
           // this.passwordValidator(),
         ],
       ],

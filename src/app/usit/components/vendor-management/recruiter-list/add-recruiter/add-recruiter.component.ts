@@ -19,7 +19,6 @@ import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { RecruiterService } from 'src/app/usit/services/recruiter.service';
 import { Observable, debounceTime, distinctUntilChanged, tap, switchMap, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
 import { AddVendorComponent, COMPANY_TYPE, STATUS_TYPE } from '../../vendor-list/add-vendor/add-vendor.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -86,8 +85,8 @@ export class AddRecruiterComponent implements OnInit {
   ngOnInit(): void {
     //this.getvendorcompanydetails();
     this.getFlagDetails();
-    this.searchCompanyOptions$ = this.recruiterServ.getCompanies(this.dept).pipe(map((x:any)=> x.data), tap(resp =>{
-      if(resp && resp.length) {
+    this.searchCompanyOptions$ = this.recruiterServ.getCompanies(this.dept).pipe(map((x: any) => x.data), tap(resp => {
+      if (resp && resp.length) {
         this.getCompanyOptionsForAutoComplete(resp);
       }
     }));
@@ -129,20 +128,20 @@ export class AddRecruiterComponent implements OnInit {
         extension: [recruiterData ? recruiterData.extension : ''],
         recruitertype: [recruiterData ? recruiterData.recruitertype : '', Validators.required],
         details: [recruiterData ? recruiterData.details : ''],
-        addedby: [recruiterData ? recruiterData.addedby:  ''],
+        addedby: [recruiterData ? recruiterData.addedby : ''],
         updatedby: [recruiterData ? recruiterData.updatedby : ''],
         vendor: this.formBuilder.group({
-          vmsid: [recruiterData ? recruiterData.vendor.vmsid   : ''],
-          company: [recruiterData ? recruiterData.vendor.company   : '', Validators.required],
+          vmsid: [recruiterData ? recruiterData.vendor.vmsid : ''],
+          company: [recruiterData ? recruiterData.vendor.company : '', Validators.required],
         }),
         user: localStorage.getItem('userid'),
       }
     );
     if (this.data.actionName === 'edit-recruiter') {
-      this.recruiterForm.addControl('recid',this.formBuilder.control(recruiterData ? recruiterData.recid : ''));
-      this.recruiterForm.addControl('status',this.formBuilder.control(recruiterData ? recruiterData.status : ''));
-      this.recruiterForm.addControl('remarks',this.formBuilder.control(recruiterData ? recruiterData.remarks : ''));
-      this.recruiterForm.addControl('rec_stat',this.formBuilder.control(recruiterData ? recruiterData.rec_stat : ''));
+      this.recruiterForm.addControl('recid', this.formBuilder.control(recruiterData ? recruiterData.recid : ''));
+      this.recruiterForm.addControl('status', this.formBuilder.control(recruiterData ? recruiterData.status : ''));
+      this.recruiterForm.addControl('remarks', this.formBuilder.control(recruiterData ? recruiterData.remarks : ''));
+      this.recruiterForm.addControl('rec_stat', this.formBuilder.control(recruiterData ? recruiterData.rec_stat : ''));
     }
     this.validateControls()
     // this.companyAutoCompleteSearch()
@@ -195,6 +194,11 @@ export class AddRecruiterComponent implements OnInit {
 
     );
   }
+  emailValue: string = ''; // declare emailValue property
+
+  toLowercase(value: string) {
+    this.emailValue = value.toLowerCase(); // convert entered value to lowercase
+  }
   protected isFormSubmitted: boolean = false;
   onSubmit() {
 
@@ -213,11 +217,12 @@ export class AddRecruiterComponent implements OnInit {
       this.displayFormErrors();
       return;
     }
-    else{
+    else {
       this.isFormSubmitted = true
     }
-    this.submitted=true;
+    this.submitted = true;
     const saveReqObj = this.getSaveData();
+    console.log(saveReqObj)
     this.recruiterServ.addOrUpdateRecruiter(saveReqObj, this.data.actionName)
       .subscribe({
          next: (data: any) => {
@@ -251,17 +256,27 @@ export class AddRecruiterComponent implements OnInit {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
   });
-
   }
+
+  trimSpacesFromFormValues() {
+    Object.keys(this.recruiterForm.controls).forEach((controlName: string) => {
+      const control = this.recruiterForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
+    });
+  }
+
   getSaveData() {
+    this.trimSpacesFromFormValues();
     // updates employee object form values
-    if(this.data.actionName === "edit-recruiter"){
-    const obj = {...this.recruiterObj, ...this.recruiterForm.value};
-    obj.rec_stat = this.recruiterForm.value.status === "Active" ? "Initiated" : this.recruiterForm.value.status === "Approved" ? "Approved" : this.recruiterForm.value.rec_stat;
-    return obj
-   }
-   return this.recruiterForm.value;
- }
+    if (this.data.actionName === "edit-recruiter") {
+      const obj = { ...this.recruiterObj, ...this.recruiterForm.value };
+      obj.rec_stat = this.recruiterForm.value.status === "Active" ? "Initiated" : this.recruiterForm.value.status === "Approved" ? "Approved" : this.recruiterForm.value.rec_stat;
+      return obj
+    }
+    return this.recruiterForm.value;
+  }
 
   flg!: any;
   dept = 'all';
@@ -275,7 +290,7 @@ export class AddRecruiterComponent implements OnInit {
           this.recruiterForm.controls.vendor.controls.company.valueChanges.pipe(
             startWith(''),
             map((value: any) =>
-              this._filterOptions({ company: value }  || '', this.companyOptions)
+              this._filterOptions({ company: value } || '', this.companyOptions)
             )
           );
       }
@@ -307,13 +322,13 @@ export class AddRecruiterComponent implements OnInit {
 
   }
 
-  getCompanyOptionsForAutoComplete(data: any){
+  getCompanyOptionsForAutoComplete(data: any) {
     this.companyOptions = data;
     this.searchCompanyOptions$ =
       this.recruiterForm.controls.vendor.controls.company.valueChanges.pipe(
         startWith(''),
         map((value: any) =>
-          this._filterOptions({ company: value }  || '', this.companyOptions)
+          this._filterOptions({ company: value } || '', this.companyOptions)
         )
       );
   }
@@ -337,14 +352,14 @@ export class AddRecruiterComponent implements OnInit {
         else if (response.status == 'duplicate') {
           const cn = this.recruiterForm.get('email');
           cn.setValue('');
-          this.dataToBeSentToSnackBar.message =  'Record already available with given Mail address';
-              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+          this.dataToBeSentToSnackBar.message = 'Record already available with given Mail address';
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
         else {
-          this.dataToBeSentToSnackBar.message =  'Internal Server Error';
-              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+          this.dataToBeSentToSnackBar.message = 'Internal Server Error';
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
       }
     )
@@ -385,14 +400,35 @@ export class AddRecruiterComponent implements OnInit {
     this.dialogServ.openDialogWithComponent(AddVendorComponent, dialogConfig);
 
   }
-
+//
   goToVendorList() {
     this.dialogRef.close();
     this.router.navigate(['/usit/vendors']);
   }
 
-  onVendorSelect(vendor: any){
+  onVendorSelect(vendor: any) {
     this.recruiterForm.get('vendor.vmsid').setValue(vendor.id);
   }
 
+  convertToLowerCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.toLowerCase();
+  }
+  onInputChange(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = this.capitalizeFirstLetter(inputValue);
+  }
+   
+  capitalizeFirstLetter(input: string): string {
+    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+      return char.toUpperCase();
+    });
+  }
+
+  onlyNumberKey(evt: any) {
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+      return false;
+    return true;
+  }
 }

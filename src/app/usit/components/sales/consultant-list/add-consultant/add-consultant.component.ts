@@ -5,7 +5,6 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
-  FormControl,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -78,7 +77,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   // private baseUrl: string = environment.API_BASE_URL;
   protected isFormSubmitted: boolean = false;
   private api = inject(ApiService);
-  private baseUrl = this.api.apiUrl;
   uploadedfiles: string[] = [];
   message: any;
   consultantForm: any = FormGroup;
@@ -121,7 +119,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   private snackBarServ = inject(SnackBarService);
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
-  private activatedRoute = inject(ActivatedRoute);
   private dialogServ = inject(DialogService);
   private fileService = inject(FileManagementService);
   data = inject(MAT_DIALOG_DATA);
@@ -132,7 +129,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   submitted: boolean = false;
   dailCode: string = "";
   constructor(
-    private http: HttpClient,
+   
   ) { }
   get frm() {
     return this.consultantForm.controls;
@@ -213,7 +210,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       position: [consultantData ? consultantData.position : '', Validators.required],
       status: [this.data.actionName === "edit-consultant" ?  consultantData.status : 'Initiated'],
       experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      hourlyrate: [consultantData ? consultantData.hourlyrate : ''],
+      hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
       skills: [consultantData ? consultantData.skills : ''],
       ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
       technology: [consultantData ? consultantData.technology : '', Validators.required],
@@ -235,7 +232,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
      refcont: [consultantData ? consultantData.refcont : ''],
      // // number: ['', Validators.required],
       // status:[this.consultantForm.status],
-     relocation: [consultantData ? consultantData.relocation : ''],//  kiran
+     relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
      relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
       consultantflg: this.data.flag.toLocaleLowerCase(),
       /* requirements: this.formBuilder.group({
