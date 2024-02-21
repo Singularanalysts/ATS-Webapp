@@ -191,17 +191,18 @@ export class SourcingupdateComponent implements OnInit {
 
 export const SELECT_OPTIONS = {
   status: [
-    { value: 'Locked', id: 1 },
-    { value: 'Connection Pending', id: 1 },
-    { value: 'Connected', id: 2 },
-    { value: 'Discussion', id: 3 },
-    { value: 'Interested', id: 4 },
-    { value: 'Not Interested', id: 5 },
-    { value: 'Open to Work', id: 6 },
-    { value: 'On Other W2', id: 7 },
-    { value: 'Independent', id: 8 },
-    { value: 'Not Available', id: 9 },
-    { value: 'Closed', id: 10 },
+    { value: 'Locked', label: 'Locked' },
+    { value: 'Connection Pending', label: 'Connection Pending' },
+    { value: 'Connected', label: 'Connected' },
+    { value: 'Discussion', label: 'Discussion' },
+    { value: 'Interested', label: 'Interested' },
+    { value: 'Not Interested', label: 'Not Interested' },
+    { value: 'Open to Work', label: 'Open to Work' },
+    { value: 'On Other W2', label: 'On Other W2' },
+    { value: 'Independent', label: 'Independent' },
+    { value: 'Not Available', label: 'Not Available' },
+    { value: 'Closed', label: 'Closed'},
+    { value: '', label: 'Release'},
   ]
 }
 
