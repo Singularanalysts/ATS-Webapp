@@ -414,7 +414,7 @@ export class AddRecruiterComponent implements OnInit {
     const inputValue = event.target.value;
     event.target.value = inputValue.toLowerCase();
   }
-  onInputChange(event: any) {
+  camelCase(event: any) {
     const inputValue = event.target.value;
     event.target.value = this.capitalizeFirstLetter(inputValue);
   }

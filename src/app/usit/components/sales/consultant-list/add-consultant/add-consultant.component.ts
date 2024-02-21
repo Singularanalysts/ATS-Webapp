@@ -424,7 +424,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.relocatOther = formVal.relocatOther;
       })
     }
-
+    this.trimSpacesFromFormValues();
     const saveObj = this.data.actionName === "edit-consultant" ? this.entity : this.consultantForm.value;
 
     const lenkedIn = this.consultantForm.get('linkedin')?.value;
@@ -454,7 +454,19 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+  trimSpacesFromFormValues() {
+    Object.keys(this.consultantForm.controls).forEach((controlName: string) => {
+      const control = this.consultantForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
+    });
+  }
+
+
   getSaveObjData() {
+    this.trimSpacesFromFormValues();
     if (this.data.actioName === 'edit-consultant') {
       return { ...this.entity, ...this.consultantForm.value }
     }
@@ -909,6 +921,28 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  camelCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = this.capitalizeFirstLetter(inputValue);
+  }
+  capitalizeFirstLetter(input: string): string {
+    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+      return char.toUpperCase();
+    });
+  }
+
+  convertToLowerCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.toLowerCase();
+  }
+
+  onlyNumberKey(evt: any) {
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+      return false;
+    return true;
   }
 }
 export const IV_AVAILABILITY = [

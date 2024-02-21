@@ -29,7 +29,7 @@
         <!-- staff   -->
         <mat-form-field appearance="fill">
           <mat-label>Recruiter Name</mat-label>
-          <input matInput formControlName="recruiter" maxlength="30" (input)="onInputChange($event)"/>
+          <input matInput formControlName="recruiter" maxlength="30" (input)="camelCase($event)"/>
         </mat-form-field>
 
         <!-- Email -->
