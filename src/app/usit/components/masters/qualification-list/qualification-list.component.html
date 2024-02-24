@@ -57,6 +57,8 @@
       <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
     </section>
     <hr>
+  </div>
+  <div class="paginator">
     <!-- paginator -->
   <mat-paginator #paginator [length]="dataSource.data.length" (page)="handlePageEvent($event)" [length]="length"
   [pageSize]="pageSize" [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"

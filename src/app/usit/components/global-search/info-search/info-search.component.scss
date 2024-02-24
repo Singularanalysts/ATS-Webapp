@@ -1,0 +1,21 @@
+/* info-dialog.component.css */
+
+.search-input {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .highlight {
+    background-color: yellow;
+    animation: highlightAnimation 1s infinite alternate;
+  }
+  
+  @keyframes highlightAnimation {
+    from {
+      background-color: yellow;
+    }
+    to {
+      background-color: transparent;
+    }
+  }
+  

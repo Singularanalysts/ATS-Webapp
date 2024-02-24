@@ -31,6 +31,7 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { SubmissionService } from 'src/app/usit/services/submission.service';
 import { AddSubmissionComponent } from './add-submission/add-submission.component';
+import { SubmissionRequirementInfoComponent } from './submission-requirement-info/submission-requirement-info.component';
 
 @Component({
   selector: 'app-submission-list',
@@ -388,5 +389,24 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
   goToConsultantInfo(element: any, flag: string) {
     this.router.navigate(['usit/consultant-info',flag, 'submission',element.consultantid])
+  }
+
+  goToReqInfo(element: any) {
+    console.log(element);
+    const actionData = {
+      title: `${element.reqnumber}`,
+      id: element.reqid,
+      actionName: 'sub-req-info',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'sub-req-info';
+    dialogConfig.data = actionData;
+
+   this.dialogServ.openDialogWithComponent(
+      SubmissionRequirementInfoComponent,
+      dialogConfig
+    );
   }
 }

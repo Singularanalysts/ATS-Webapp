@@ -88,10 +88,12 @@
                         <ng-container *ngIf="this.flag == 'Recruiting'; then trueCondition else elseTemplate"></ng-container>
                         <ng-container *ngIf="this.flag === 'Domrecruiting'; then anotherCondition"></ng-container>
                         <ng-template #trueCondition>
-                            {{ element?.reqnumber }}
+                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber }}
+                            </span>
                         </ng-template>
                         <ng-template #anotherCondition>
-                            {{ element?.reqnumber }}
+                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber }}
+                            </span>
                         </ng-template>
                         <ng-template #elseTemplate>
                             {{ element?.position }}
@@ -166,12 +168,14 @@
                 <ng-container matColumnDef="Action">
                     <th mat-header-cell *matHeaderCellDef> Action </th>
                     <td mat-cell *matCellDef="let submission">
-                        <button [disabled]="!privilegeServ.hasPrivilege('EDIT_SUBMISSIONS')" mat-icon-button (click)="editSubmission(submission)" class="action-button-ed">
-                            <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_SUBMISSIONS')}">edit</mat-icon>
-                        </button>
-                        <button  [disabled]="!privilegeServ.hasPrivilege('DELETE_SUBMISSIONS')" mat-icon-button (click)="deleteSubmission(submission)" class="action-button-ed">
-                            <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_SUBMISSIONS')}">delete</mat-icon>
-                        </button>
+                        <span class="action-buttons">
+                            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_SUBMISSIONS')" mat-icon-button (click)="editSubmission(submission)" class="action-button-ed">
+                                <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_SUBMISSIONS')}">edit</mat-icon>
+                            </button>
+                            <button  [disabled]="!privilegeServ.hasPrivilege('DELETE_SUBMISSIONS')" mat-icon-button (click)="deleteSubmission(submission)" class="action-button-ed">
+                                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_SUBMISSIONS')}">delete</mat-icon>
+                            </button>
+                        </span>
                     </td>
                 </ng-container>
                 <!-- table columns ends  -->

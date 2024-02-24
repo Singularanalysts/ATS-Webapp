@@ -311,3 +311,9 @@ ul.breadcrumb li:last-child {
   cursor: pointer !important;
   color: #4154f1;
 }
+
+@media screen and (min-width: 1920px) {
+  .container {
+    height: 90vh;
+  }
+}

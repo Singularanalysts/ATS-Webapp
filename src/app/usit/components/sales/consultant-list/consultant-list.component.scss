@@ -293,3 +293,9 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   cursor: pointer;
   color:#0275d8
 }
+
+@media screen and (min-width: 1920px) {
+  .consultant-container {
+    height: 90vh;
+  }
+}

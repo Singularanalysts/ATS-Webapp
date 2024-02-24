@@ -162,11 +162,17 @@ ul.breadcrumb li a:hover {
   padding: 0 2px;
   width: 100%;
   // max-height: calc(100% - 2px);
-  height: 61vh;
+  height: 85vh;
   overflow: auto;
   display: block;
 }
 .edit-icon,
 .delete-icon {
   color: rgb(99, 98, 98);
+}
+
+@media screen and (min-width: 1920px) {
+  .container {
+    height: 90vh;
+  }
 }

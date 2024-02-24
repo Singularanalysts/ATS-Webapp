@@ -34,6 +34,7 @@ import { LinkedprofilesComponent } from './components/linkedprofiles/linkedprofi
 import { ConsultantInfoComponent } from './components/sales/consultant-list/consultant-info/consultant-info.component';
 import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
 import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
+import { GlobalSearchComponent } from './components/global-search/global-search.component';
 
 
 const routes: Routes = [
@@ -225,6 +226,9 @@ const routes: Routes = [
 
   { 
     path: 'list-techsupport', component: TechSupportListComponent 
+  },
+  { 
+    path: 'search', component: GlobalSearchComponent 
   },
 
 ];

@@ -61,13 +61,14 @@
       </table>
       <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
     </section>
-    
+
+  </div>
+  <div class="paginator" *ngIf="dataSource.filteredData.length">
     <!-- paginator -->
   <mat-paginator #paginator [length]="dataSource.data.length" (page)="handlePageEvent($event)" [length]="length"
   [pageSize]="pageSize" [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
   [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="hidePageSize"
   [pageIndex]="pageIndex" aria-label="Select page">
 </mat-paginator>
-
   </div>
 </div>

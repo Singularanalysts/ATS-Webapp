@@ -121,7 +121,7 @@
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef> Action </th>
           <td mat-cell *matCellDef="let vendor">
-            <span class="action-btns">
+            <span class="action-buttons">
               <button [disabled]="!privilegeServ.hasPrivilege('EDIT_VENDOR')" mat-icon-button
                 (click)="editVendor(vendor)" class="action-button-ed">
                 <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_VENDOR')}">edit</mat-icon>
@@ -148,7 +148,7 @@
               </button>
             </ng-container>
             <ng-template #ifNotApproved>
-              <span class="action-btns">
+              <span class="action-buttons">
                 <!-- Initiated BUTTON -->
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
                   *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button

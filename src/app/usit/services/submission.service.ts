@@ -54,4 +54,8 @@ export class SubmissionService {
   addORUpdateSubmission(entity: any, action: 'edit-submission' | 'add-submission'){
     return action === 'edit-submission' ? this.registerSubmission(entity): this.registerSubmission(entity);
   }
+
+  getSubReqInfo(id: any) {
+    return this.apiServ.get("requirement/getbyid/" + id);
+  }
 }

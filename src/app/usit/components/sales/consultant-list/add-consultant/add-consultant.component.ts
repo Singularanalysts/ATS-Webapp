@@ -11,7 +11,7 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, map, startWith, takeUntil, tap } from 'rxjs';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -128,6 +128,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   isRadSelected: any;
   submitted: boolean = false;
   dailCode: string = "";
+  searchTechOptions$!: Observable<any>;
+  technologyOptions!: any;
+  isTechnologyDataAvailable: boolean = false;
+
   constructor(
    
   ) { }
@@ -340,7 +344,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   //     this.autoskills = response.data;
   //   });
   // }
-  techskills(event: MatSelectChange) {
+  techskills(event: any) {
     const newVal = event.value;
     this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
       this.consultantForm.get('skills').setValue(response.data);
@@ -429,6 +433,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     const saveObj = this.data.actionName === "edit-consultant" ? this.entity : this.consultantForm.value;
 
     const lenkedIn = this.consultantForm.get('linkedin')?.value;
+    
     if (this.flg == true) {
      // const saveReqObj = this.getSaveObjData()
       this.consultantServ.registerconsultant(saveObj)
@@ -454,6 +459,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
       );
     }
+    
   }
 
   trimSpacesFromFormValues() {
@@ -485,10 +491,37 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
   }
   gettech() {
-    this.consultantServ.gettech().subscribe((response: any) => {
-      this.techdata = response.data;
-    });
+    // this.consultantServ.gettech().subscribe((response: any) => {
+    //   this.techdata = response.data;
+    // });
+    this.searchTechOptions$ = this.consultantServ.gettech().pipe(map((x: any) => x.data), tap(resp => {
+      if (resp && resp.length) {
+        this.getTechOptionsForAutoComplete(resp);
+      }
+    }));
+    
   }
+
+  getTechOptionsForAutoComplete(data: any) {
+    this.technologyOptions = data;
+    this.searchTechOptions$ =
+      this.consultantForm.controls.technology.valueChanges.pipe(
+        startWith(''),
+        map((value: any) =>
+          this._filterOptions(value, this.technologyOptions)
+        )
+      );
+  }
+
+  private _filterOptions(value: any, options: string[]): string[] {
+    const filterValue = value.trim().toLowerCase();
+  const filteredTechnologies = options.filter((option: string) =>
+    option[1].toLowerCase().includes(filterValue)
+  );
+  this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
+  return filteredTechnologies;
+  }
+  
   getQualification() {
     this.consultantServ.getQualification().subscribe((response: any) => {
       this.QualArr = response.data;

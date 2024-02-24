@@ -243,4 +243,9 @@
       overflow: auto;
     }
   }
-  
+
+  @media screen and (min-width: 1920px) {
+    .container {
+      height: 90vh;
+    }
+  }

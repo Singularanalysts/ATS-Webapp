@@ -166,6 +166,10 @@ export class ConsultantService {
     return this.http.get("consultant/hotlist/" + page + "/" + size + "/" + field);
   }
 
+  getSalesAllHotList() {
+    return this.http.get("consultant/hotlist/empty");
+  }
+
   getOptCptList(page: any, size: any, field: any) {
     return this.http.get(`consultant/all/${page}/${size}/${field}/p5`);
   }
@@ -173,5 +177,6 @@ export class ConsultantService {
   getH1TransferList(page: any, size: any, field: any) {
     return this.http.get(`consultant/all/${page}/${size}/${field}/p3`);
   }
+  
 
 }
