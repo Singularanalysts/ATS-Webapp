@@ -135,6 +135,7 @@ export class ConsultantListComponent
     this.userid = localStorage.getItem('userid');
     this.dept = localStorage.getItem('department');
     this.getFlag();
+    // alert(this.flag)
 
     this.getAllData();
   }
@@ -429,11 +430,11 @@ export class ConsultantListComponent
    *
    * @param consultant
    */
-  moveProfileToSales(consultant: Consultantinfo) {
+  moveProfileToSales(consultant: Consultantinfo,cond:string) {
     //alertify.confirm("Move Profile", "Are you sure you want to move Profile to Sales ? ", () => {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
-      message: 'Are you sure you want to Move Profiles to Sales?',
+      message: 'Are you sure you want to Move Profiles to '+cond+' ?',
       confirmText: 'Yes',
       cancelText: 'No',
       actionData: consultant,
@@ -447,7 +448,6 @@ export class ConsultantListComponent
       ConfirmComponent,
       dialogConfig
     );
-
     // call moveToSales api after  clicked 'Yes' on dialog click
 
     dialogRef.afterClosed().subscribe({
@@ -457,7 +457,6 @@ export class ConsultantListComponent
             .moveToSales(
               consultant.consultantid,
               this.flag,
-              consultant.comment,
               this.userid
             )
             .subscribe((resp: any) => {
@@ -465,8 +464,8 @@ export class ConsultantListComponent
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-success',
                 ];
-                this.dataToBeSentToSnackBar.message =
-                  'Profile moved to sales successfully';
+                this.dataToBeSentToSnackBar.message =resp.message=='presales'? 'Profile moved to Pre-Sales successfully' : 'Profile moved to Sales successfully';
+                  
               } else {
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-failure',
@@ -481,6 +480,7 @@ export class ConsultantListComponent
         }
       },
     });
+
   }
   /**
    * Add

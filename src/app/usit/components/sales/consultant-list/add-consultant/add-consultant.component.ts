@@ -248,6 +248,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (this.flag == 'Recruiting' || this.flag == 'sales') {
       this.consultantForm.get('status').setValue('Active');
     }
+    
 
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
       const consultantemail = this.consultantForm.get('consultantemail');

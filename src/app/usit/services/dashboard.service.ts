@@ -12,20 +12,20 @@ export class DashboardService {
     return this.apiServ.get("dashboard/dailyvmsTrack");
   }
 
-  public getUserTrack(id:number) {
-    return this.apiServ.get("dashboard/getUserTrack/"+id);
+  public getUserTrack(id: number) {
+    return this.apiServ.get("dashboard/getUserTrack/" + id);
   }
 
-  public getsubmissionCount(flag:string) {
-    return this.apiServ.get("dashboard/submissionscount/"+flag);
+  public getsubmissionCount(flag: string) {
+    return this.apiServ.get("dashboard/submissionscount/" + flag);
   }
 
-  public getInterviewCount(flag:string) {
-    return this.apiServ.get("dashboard/interviewscount/"+flag);
+  public getInterviewCount(flag: string) {
+    return this.apiServ.get("dashboard/interviewscount/" + flag);
   }
 
-  public getClosureCount(flag:string) {
-    return this.apiServ.get("dashboard/closurecount/"+flag);
+  public getClosureCount(flag: string) {
+    return this.apiServ.get("dashboard/closurecount/" + flag);
   }
 
   public getDiceRequirements() {
@@ -33,20 +33,47 @@ export class DashboardService {
   }
 
   public getSourcingLeads(id: any) {
-    return this.apiServ.get("dashboard/all/"+ id);
+    return this.apiServ.get("dashboard/all/" + id);
   }
 
   // for executive and lead
-  public getClosureCountForExAndLead(flag:string,userid:number) {
-    return this.apiServ.get("dashboard/closurecount/"+flag+"/"+userid);
+  public getClosureCountForExAndLead(flag: string, userid: number) {
+    return this.apiServ.get("dashboard/closurecount/" + flag + "/" + userid);
   }
 
-  public getsubmissionCountForExAndLead(flag:string,userid:number) {
-    return this.apiServ.get("dashboard/submissionscount/"+flag+"/"+userid);
+  public getsubmissionCountForExAndLead(flag: string, userid: number) {
+    return this.apiServ.get("dashboard/submissionscount/" + flag + "/" + userid);
   }
 
-  public getInterviewCountForExAndLead(flag:string,userid:number) {
-    return this.apiServ.get("dashboard/interviewscount/"+flag+"/"+userid);
+  public getInterviewCountForExAndLead(flag: string, userid: number) {
+    return this.apiServ.get("dashboard/interviewscount/" + flag + "/" + userid);
+  }
+
+  // for count pop ups
+  public getClosureCountPopup(flag: string, duration: string) {
+    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration);
+  }
+
+  public getsubmissionCountPopup(flag: string, duration: string) {
+    return this.apiServ.get("dashboard/subpopups/" + flag + "/" + duration);
+  }
+
+
+
+  public getInterviewCountPopup(flag: string, duration: string) {
+    return this.apiServ.get("dashboard/interviewpopUp/" + flag + "/" + duration);
+  }
+
+  public getsubmissionCountPopupemp(flag: string, duration: string, userid:any) {
+    return this.apiServ.get("dashboard/subpopups/" + flag + "/" + duration+"/"+userid);
+  }
+
+  public getInterviewCountPopupEmp(flag: string, duration: string, userid:any) {
+    return this.apiServ.get("dashboard/interviewpopUp/" + flag + "/" + duration+"/"+userid);
+  }
+
+  public getClosureCountPopupEmp(flag: string, duration: string, userid:any) {
+    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration+"/"+userid);
   }
 
 }

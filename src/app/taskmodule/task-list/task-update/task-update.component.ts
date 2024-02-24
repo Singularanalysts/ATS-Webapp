@@ -67,6 +67,8 @@ export class TaskUpdateComponent implements OnInit {
     public dialogRef: MatDialogRef<TaskUpdateComponent>
   ) { }
   userid !: any;
+  dataArr: any[] = [];
+  
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getTrack();
@@ -137,7 +139,7 @@ export class TaskUpdateComponent implements OnInit {
   getTrack() {
     this.taskService.trackByUser(this.userid).subscribe(
       ((response: any) => {
-        this.dataSource.data= response.data;
+        this.dataArr= response.data;
         // console.log(JSON.stringify(response.data) + " ===");
       })
     );

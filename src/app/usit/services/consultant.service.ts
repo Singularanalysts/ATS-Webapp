@@ -77,8 +77,8 @@ export class ConsultantService {
   }
 
   //used for delete the consultant
-  moveToSales(id: number, flg: string, remarks: string, userid: number) {
-    return this.http.get("consultant/movedtosales/" + id + "/" + flg + "/" + remarks + "/" + userid);
+  moveToSales(id: number, flg: string, userid: number) {
+    return this.http.get("consultant/movedtosales/" + id + "/" + flg +  "/" + userid);
   }
 
   //used for delete the consultant

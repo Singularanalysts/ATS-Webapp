@@ -93,6 +93,7 @@ ul.breadcrumb li a:hover {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-bottom: 10px;
 }
 
 .left-div-inner-cards .card-1,
@@ -102,7 +103,7 @@ ul.breadcrumb li a:hover {
 }
 
 .table-container {
-  padding-top: 10px;
+  // padding-top: 10px;
   flex: 1;
 }
 
@@ -222,8 +223,14 @@ mat-typography p {
   --mat-mdc-fab-color: #2eca6a; /* icon color */
 }
 
-.mat-mdc-card.activity-card {
+.mat-mdc-card.activity-card-individual {
   height: 678px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.mat-mdc-card.activity-card {
+  height: 808px;
   padding: 15px;
   overflow-y: auto;
 }

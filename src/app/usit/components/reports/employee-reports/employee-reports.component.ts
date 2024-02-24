@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -45,6 +45,7 @@ interface Select {
     MatInputModule,
     ReactiveFormsModule,
   ],
+  providers: [DatePipe]
 })
 export class EmployeeReportsComponent {
   excutivewiseSales: string[] = [
@@ -319,6 +320,7 @@ export class EmployeeReportsComponent {
   constructor(
     private formBuilder: FormBuilder,
     private reportservice: ReportsService,
+    private datePipe: DatePipe,
     private dialog: MatDialog
   ) { }
 
@@ -378,8 +380,23 @@ export class EmployeeReportsComponent {
       this.showReport = false;
     }
 
-    this.vo.startDate = this.employeeReport.get('startDate')?.value;
-    this.vo.endDate = this.employeeReport.get('endDate')?.value;
+    // this.vo.startDate = this.employeeReport.get('startDate')?.value;
+    // this.vo.endDate = this.employeeReport.get('endDate')?.value;
+
+    const joiningDateFormControl = this.employeeReport.get('startDate');
+    const relievingDateFormControl = this.employeeReport.get('endDate');
+    if (joiningDateFormControl?.value) {
+      const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
+      const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl?.value, 'yyyy-MM-dd');
+
+      // Update the form controls with the formatted dates
+      joiningDateFormControl.setValue(formattedJoiningDate);
+      relievingDateFormControl?.setValue(formattedRelievingDate);
+    }
+  // Assign the formatted dates to the properties in your component
+  this.vo.startDate = joiningDateFormControl?.value;
+  this.vo.endDate = relievingDateFormControl?.value;
+
     this.vo.flg = this.employeeReport.get('flg')?.value;
     this.vo.groupby = this.employeeReport.get('groupby')?.value;
     const groupBy = this.employeeReport.get('groupby')?.value;
@@ -455,7 +472,7 @@ export class EmployeeReportsComponent {
   }
 
   excelImport() {
-    console.log(this.vo)
+    //console.log(this.vo)
     if (this.vo.groupby == 'employee' && this.vo.flg == 'sales') {
       this.headings = [[
         'Employee Name',

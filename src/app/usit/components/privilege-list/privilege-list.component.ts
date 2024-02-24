@@ -620,7 +620,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
    * save
    */
   savePrivileges() {
-    console.log("Save Privileges Object", this.entity)
+    //console.log("Save Privileges Object", this.entity)
     this.privilegServ.addPrevilegeToRole(this.entity).pipe(takeUntil(this.destroyed$)).subscribe(
       (result) => {
         this.dataToBeSentToSnackBar.message =  'Previleges added successfully!';

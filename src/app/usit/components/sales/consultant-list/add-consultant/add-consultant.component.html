@@ -225,8 +225,9 @@
 
          <!-- Hourly Rate -->
          <mat-form-field appearance="fill">
-          <mat-label>Hourly Rate</mat-label>
-          <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="5">
+          <mat-label *ngIf="flag=='DomRecruiting'">Monthly Salary</mat-label>
+          <mat-label *ngIf="flag!='DomRecruiting'">Hourly Rate</mat-label>
+          <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="10">
           <mat-error *ngIf="consultantForm.get('hourlyrate').hasError('required')">Hourly Rate is required</mat-error>
         </mat-form-field>
 

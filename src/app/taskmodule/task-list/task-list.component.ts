@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  ChangeDetectorRef,
   Component,
-  OnDestroy,
   OnInit,
-  ViewChild,
   inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,12 +11,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
-  MatPaginator,
-  MatPaginatorIntl,
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSortModule} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import {
@@ -94,7 +88,6 @@ export class TaskListComponent implements OnInit {
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
   // services
-  private activatedRoute = inject(ActivatedRoute);
   private interviewServ = inject(InterviewService);
   private dialogServ = inject(DialogService);
   private router = inject(Router);
@@ -202,7 +195,7 @@ export class TaskListComponent implements OnInit {
               if (response.status == 'success') {
                 this.getAll();
                 this.dataTobeSentToSnackBarService.message =
-                  'Employee Deleted successfully';
+                  'Task Deleted successfully';
               } else {
                 this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
                 this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';

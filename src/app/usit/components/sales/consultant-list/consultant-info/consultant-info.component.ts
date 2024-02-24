@@ -238,6 +238,7 @@ export class ConsultantInfoComponent implements OnInit {
       this.consultantServ.consultantInfoByconId(this.id).subscribe((response: any) => {
         this.entity = response.data;
         this.dataSource.data = response.data;
+        //console.log(response.data)
       });
     }
   
