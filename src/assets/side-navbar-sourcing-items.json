@@ -9,7 +9,11 @@
     "icon": "build",
     "routerLink": "/usit/technology-tag"
   },
-
+  {
+    "text": "Search",
+    "icon": "search",
+    "routerLink": "/usit/search"
+  },
   {
     "text": "Pre-sales",
     "icon": "local_offer",
