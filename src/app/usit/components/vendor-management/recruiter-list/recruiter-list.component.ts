@@ -119,12 +119,12 @@ export class RecruiterListComponent implements OnInit {
     this.getemph();
   }
 
-  getemph(){
+  getemph() {
     return this.recruiterServ
-    .getemph()
-    .subscribe((response: any) => {
-    //  console.log(JSON.stringify(response.data));
-    });
+      .getemph()
+      .subscribe((response: any) => {
+        //  console.log(JSON.stringify(response.data));
+      });
   }
 
   ngAfterViewInit() {
@@ -143,7 +143,9 @@ export class RecruiterListComponent implements OnInit {
         this.loginId,
         pageNumber,
         this.pageSize,
-        this.field
+        this.field,
+        this.sortField,
+        this.sortOrder
       )
       .subscribe((response: any) => {
         this.datarr = response.data.content;
@@ -151,24 +153,6 @@ export class RecruiterListComponent implements OnInit {
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = this.generateSerialNumber(i);
-        });
-        this.totalItems = response.data.totalElements;
-      });
-  }
-  gty(page: any) {
-    this.assignToPage = page;
-    return this.recruiterServ
-      .getAllRecruitersPagination(
-        this.hasAcces,
-        this.loginId,
-        page,
-        this.itemsPerPage,
-        this.field
-      )
-      .subscribe((response: any) => {
-        this.datarr = response.data.content;
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = i + 1;
         });
         this.totalItems = response.data.totalElements;
       });
@@ -192,7 +176,9 @@ export class RecruiterListComponent implements OnInit {
           this.loginId,
           1,
           this.pageSize,
-          keyword
+          keyword,
+          this.sortField,
+          this.sortOrder
         )
         .subscribe((response: any) => {
           this.datarr = response.data.content;
@@ -214,67 +200,24 @@ export class RecruiterListComponent implements OnInit {
    * Sort
    * @param event
    */
+  sortField = 'updateddate';
+  sortOrder = 'desc';
   onSort(event: Sort) {
-    const sortDirection = event.direction;
-    const activeSortHeader = event.active;
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
 
-    if (sortDirection === '' || !activeSortHeader) {
-      return;
-    }
+    this.sortOrder = event.direction;
 
-    const isAsc = sortDirection === 'asc';
-    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
-      const serialNumA = (a.serialNum || '').toString();
-      const serialNumB = (b.serialNum || '').toString();
-      switch (activeSortHeader) {
-        case 'SerialNum':
-          return (isAsc ? 1 : -1) * serialNumA.localeCompare(serialNumB);
-        case 'Company':
-          return (
-            (isAsc ? 1 : -1) * (a.company || '').localeCompare(b.company || '')
-          );
-        case 'RecruiterName':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.recruiter || '').localeCompare(b.recruiter || '')
-          );
-        case 'PhoneNumber':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.usnumber || '').localeCompare(b.usnumber || '')
-          );
-        case 'Email':
-          return (
-            (isAsc ? 1 : -1) * (a.email || '').localeCompare(b.email || '')
-          );
-        case 'AddedBy':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.pseudoname || '').localeCompare(b.pseudoname || '')
-          );
-        case 'AddedOn':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.createddate || '').localeCompare(b.createddate || '')
-          );
-        case 'LastUpdated':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.updateddate || '').localeCompare(b.updateddate || '')
-          );
-        // case 'Status':
-        //   return (
-        //     (isAsc ? 1 : -1) * (a.status || '').localeCompare(b.status || '')
-        //   );
-        case 'Approve/Reject':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.rec_stat || '').localeCompare(b.rec_stat || '')
-          );
-        default:
-          return 0;
+    if (event.direction != '') {
+      if (this.vendorTypeFlag == false) {
+        this.getAllRecruiters();
       }
-    });
+      else {
+        this.getAllVendorByType(this.companyType, 1)
+      }
+    }
   }
 
   // uploadRecruiterExcel() {
@@ -445,7 +388,7 @@ export class RecruiterListComponent implements OnInit {
             .changeStatus2(recruiter.id, recruiter.status, recruiter.remarks)
             .subscribe((response: any) => {
               if (response.status == 'Success') {
-                this.gty(this.page);
+                ///  this.gty(this.page);
                 dataToBeSentToSnackBar.message = 'Status updated successfully';
               } else {
                 dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -504,11 +447,10 @@ export class RecruiterListComponent implements OnInit {
       dialogConfig.width = 'fit-content';
       dialogConfig.height = 'auto';
       dialogConfig.disableClose = false;
-      dialogConfig.panelClass = `${
-        recruiter.rec_stat == 'Initiated' && !rejectRecruiter
-          ? 'approve'
-          : 'reject'
-      }-recruiter`;
+      dialogConfig.panelClass = `${recruiter.rec_stat == 'Initiated' && !rejectRecruiter
+        ? 'approve'
+        : 'reject'
+        }-recruiter`;
       const isApprove =
         recruiter.rec_stat == 'Initiated' && !rejectRecruiter
           ? dataToBeSentToDailogForStatus
@@ -528,13 +470,13 @@ export class RecruiterListComponent implements OnInit {
             : 'Reject',
         id: recruiter.id,
         userid: this.loginId,
-       // remarks: dialogRef.componentInstance.remarks,
+        // remarks: dialogRef.componentInstance.remarks,
       };
       dialogRef.afterClosed().subscribe(() => {
         if (dialogRef.componentInstance.allowAction) {
           this.recruiterServ
             .approveORRejectRecruiter(
-              {...statReqObj, remarks: dialogRef.componentInstance.remarks},
+              { ...statReqObj, remarks: dialogRef.componentInstance.remarks },
               statReqObj.action as 'Approved' | 'Reject'
             )
             .pipe(takeUntil(this.destroyed$))
@@ -615,7 +557,7 @@ export class RecruiterListComponent implements OnInit {
       this.pageEvent = event;
       const currentPageIndex = event.pageIndex;
       this.currentPageIndex = currentPageIndex;
-      if(this.companyType) {
+      if (this.companyType) {
         this.getAllVendorByType(this.companyType, event.pageIndex + 1)
         return
       }
@@ -627,22 +569,25 @@ export class RecruiterListComponent implements OnInit {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
-
+  vendorTypeFlag = false;
   getAllVendorByType(type: string, pageIndex = 0) {
+    this.vendorTypeFlag = true;
     this.companyType = type;
-    const page = pageIndex ?  pageIndex : this.page;
-    this.recruiterServ.getAllVendorByType( this.hasAcces,this.loginId, page,this.pageSize, type, this.field).subscribe(
-      (response: any) => {
-        this.dataSource.data = response.data.content
-        // for serial-num {}
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = this.generateSerialNumber(i);
-        });
-        this.totalItems = response.data.totalElements;
-      })
+    const page = pageIndex ? pageIndex : this.page;
+    this.recruiterServ.getAllVendorByType(this.hasAcces, this.loginId, page, this.pageSize, type, this.field,
+      this.sortField,
+      this.sortOrder).subscribe(
+        (response: any) => {
+          this.dataSource.data = response.data.content
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
   }
 
   goToUserInfo(id: any) {
-    this.router.navigate(['usit/user-info','recruiter',id])
+    this.router.navigate(['usit/user-info', 'recruiter', id])
   }
 }

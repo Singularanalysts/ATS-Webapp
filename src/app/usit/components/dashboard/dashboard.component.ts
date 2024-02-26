@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
   interviewFlag = 'daily';
   submissionFlag = 'daily';
 
-  closureFlagInd= 'Monthly';
+  closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
   submissionFlagInd = 'daily';
 
@@ -66,7 +66,6 @@ export class DashboardComponent implements OnInit {
   subCountIndArr: any[] = [];
   closureCountIndArr: [] = [];
   intCountIndArr: any[] = [];
-
 
   subcount = 0;
   subcountIndividual = 0;
@@ -86,9 +85,8 @@ export class DashboardComponent implements OnInit {
   userid!: any;
   role!: any;
   submitted = false;
- individualCounts = true;
+  individualCounts = true;
   ngOnInit(): void {
-    //console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     this.getDiceReqs();
@@ -111,7 +109,6 @@ export class DashboardComponent implements OnInit {
     this.dashboardServ.getClosureCount('monthly').subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
-        //console.log(response.data)
         this.closecountArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sclosecount = ent.salescount;
@@ -195,119 +192,113 @@ export class DashboardComponent implements OnInit {
     this.subcount = 0;
     this.reccount = 0;
     this.submissionFlag = flg;
-   // console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
-      this.dashboardServ.getsubmissionCount(flag).subscribe(
-        ((response: any) => {
-          this.subCountArr = response.data;
-          this.subCountArr.forEach((ent: any) => {
-            if (ent.salescount != null) {
-              this.subcount = ent.salescount;
-            }
-            if (ent.reccount != null) {
-              this.reccount = ent.reccount;
-            }
-          });
-        })
-      );
+    this.dashboardServ.getsubmissionCount(flag).subscribe(
+      ((response: any) => {
+        this.subCountArr = response.data;
+        this.subCountArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.subcount = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.reccount = ent.reccount;
+          }
+        });
+      })
+    );
 
   }
   subCountInd(flag: string, flg: string) {
     this.subcountIndividual = 0;
     this.reccountIndividual = 0;
     this.submissionFlagInd = flg;
-    //console.log(this.submissionFlagInd + " = " + this.interviewFlag + " = " + this.closureFlag)
-      this.dashboardServ.getsubmissionCountForExAndLead(flag, this.userid).subscribe(
-        ((response: any) => {
-          this.subCountIndArr = response.data;
-          this.subCountIndArr.forEach((ent: any) => {
-            if (ent.salescount != null) {
-              this.subcountIndividual = ent.salescount;
-            }
-            if (ent.reccount != null) {
-              this.reccountIndividual = ent.reccount;
-            }
-          });
-        })
-      );
+    this.dashboardServ.getsubmissionCountForExAndLead(flag, this.userid).subscribe(
+      ((response: any) => {
+        this.subCountIndArr = response.data;
+        this.subCountIndArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.subcountIndividual = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.reccountIndividual = ent.reccount;
+          }
+        });
+      })
+    );
   }
   intCount(flag: string, flg: string) {
     this.interviewFlag = flg;
-    //console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.sintcount = 0;
     this.rintcount = 0;
-      this.dashboardServ.getInterviewCount(flag).subscribe(
-        ((response: any) => {
-          this.intCountArr = response.data;
-          this.intCountArr.forEach((ent: any) => {
-            if (ent.salescount != null) {
-              this.sintcount = ent.salescount;
-            }
-            if (ent.reccount != null) {
-              this.rintcount = ent.reccount;
-            }
-          });
-        })
-      );
+    this.dashboardServ.getInterviewCount(flag).subscribe(
+      ((response: any) => {
+        this.intCountArr = response.data;
+        this.intCountArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.sintcount = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.rintcount = ent.reccount;
+          }
+        });
+      })
+    );
   }
 
   intCountInd(flag: string, flg: string) {
     this.interviewFlagInd = flg;
-   // console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.sintcountIndividual = 0;
     this.rintcountIndividual = 0;
-      this.dashboardServ.getInterviewCountForExAndLead(flag, this.userid).subscribe(
-        ((response: any) => {
-          this.intCountIndArr = response.data;
-          this.intCountIndArr.forEach((ent: any) => {
-            if (ent.salescount != null) {
-              this.sintcountIndividual = ent.salescount;
-            }
-            if (ent.reccount != null) {
-              this.rintcountIndividual = ent.reccount;
-            }
-          });
-        })
-      );
- 
+    this.dashboardServ.getInterviewCountForExAndLead(flag, this.userid).subscribe(
+      ((response: any) => {
+        this.intCountIndArr = response.data;
+        this.intCountIndArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.sintcountIndividual = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.rintcountIndividual = ent.reccount;
+          }
+        });
+      })
+    );
   }
   closureCount(flag: string, flg: string) {
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-   // console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
-   
-      this.dashboardServ.getClosureCount(flag).subscribe(
-        ((response: any) => {
-          this.closecountArr = response.data;
-          this.closecountArr.forEach((ent: any) => {
-            if (ent.salescount != null) {
-              this.sclosecount = ent.salescount;
-            }
-            if (ent.reccount != null) {
-              this.rclosecount = ent.reccount;
-            }
-          });
-        })
-      );
+    // console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
+    this.dashboardServ.getClosureCount(flag).subscribe(
+      ((response: any) => {
+        this.closecountArr = response.data;
+        this.closecountArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.sclosecount = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.rclosecount = ent.reccount;
+          }
+        });
+      })
+    );
   }
   closureCountInd(flag: string, flg: string) {
     this.closureFlagInd = flg;
     this.sclosecountIndividual = 0;
     this.rclosecountIndividual = 0;
     //console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
-      this.dashboardServ.getClosureCountForExAndLead(flag, this.userid).subscribe(
-        ((response: any) => {
-          this.closureCountIndArr = response.data;
-          this.closureCountIndArr.forEach((ent: any) => {
-            if (ent.salescount != null) {
-              this.sclosecountIndividual = ent.salescount;
-            }
-            if (ent.reccount != null) {
-              this.rclosecountIndividual = ent.reccount;
-            }
-          });
-        })
-      );
+    this.dashboardServ.getClosureCountForExAndLead(flag, this.userid).subscribe(
+      ((response: any) => {
+        this.closureCountIndArr = response.data;
+        this.closureCountIndArr.forEach((ent: any) => {
+          if (ent.salescount != null) {
+            this.sclosecountIndividual = ent.salescount;
+          }
+          if (ent.reccount != null) {
+            this.rclosecountIndividual = ent.reccount;
+          }
+        });
+      })
+    );
 
   }
 
@@ -359,7 +350,7 @@ export class DashboardComponent implements OnInit {
     // })
   }
 
-  subPop(element: any, condition:any) {
+  subPop(element: any, condition: any) {
     const actionData = {
       title: element + ' Submissions',
       buttonCancelText: 'Cancel',
@@ -369,7 +360,6 @@ export class DashboardComponent implements OnInit {
       duration: this.submissionFlag,
       condition: condition,
       userduration: this.submissionFlagInd,
-
       // souringData: sourcingLeadData,
     };
     const dialogConfig = new MatDialogConfig();
@@ -384,7 +374,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  intPop(element: any, condition:any) {
+  intPop(element: any, condition: any) {
     //console.log(this.interviewFlag)
     const actionData = {
       title: element + ' Interviews',
@@ -409,9 +399,9 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  closurePop(element: any, condition:any) {
+  closurePop(element: any, condition: any) {
     const actionData = {
-      title: element+' Closures',
+      title: element + ' Closures',
       buttonCancelText: 'Cancel',
       buttonSubmitText: 'Submit',
       actionName: 'submission-count',

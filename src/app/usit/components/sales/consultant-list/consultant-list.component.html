@@ -188,10 +188,10 @@
             <ng-container
               *ngIf="(flag.toLocaleLowerCase() === 'presales' ||  flag.toLocaleLowerCase() === 'recruiting') then presales else sales">
             </ng-container>
-            <ng-template #sales>
-              <button mat-icon-button [disabled]="!privilegeServ.hasPrivilege('MOVETOSALES')" [style.cursor]="'pointer'"
-                *ngIf="consultant.status=='Active' && flag!='Recruiting'" (click)="moveProfileToSales(consultant,'Pre-Sales')">
-                <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOSALES')}">
+            <ng-template #sales><!--[disabled]="!privilegeServ.hasPrivilege('MOVETOPRESALES')"-->
+              <button mat-icon-button  [style.cursor]="'pointer'"
+                *ngIf="move2sales == true && consultant.status=='Active' && flag!='Recruiting'" (click)="moveProfileToSales(consultant,'Pre-Sales')">
+                <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOPRESALES')}">
                   arrow_backward</mat-icon>
               </button>
             </ng-template>

@@ -30,10 +30,13 @@ export class VendorService {
     return this.apiServ.get("vms/vendor/all/" + access + "/" + userid);
   }
 
-  getAllVendorsByPagination(access: string, userid: number, page: any, size: any, field: any) {
+  getAllVendorsByPagination2(access: string, userid: number, page: any, size: any, field: any) {
     return this.apiServ.get("vms/vendor/all/" + access + "/" + userid + "/" + page + "/" + size + "/" + field);
   }
 
+  getAllVendorsByPagination(access: string, userid: number, page: any, size: any, field: any, sortField:string,sortOrder:string ) {
+    return this.apiServ.get("vms/vendor/all/" + access + "/" + userid + "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+  }
   deleteEntity(id: number) {
     return this.apiServ.delete("vms/vendor/delete/" + id);
   }

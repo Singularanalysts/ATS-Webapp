@@ -129,8 +129,12 @@ export class ConsultantListComponent
 
   userid: any;
   page: number = 1;
-
+  move2sales = false;
   ngOnInit(): void {
+    const mvt= this.privilegeServ.hasPrivilege('MOVETOPRESALES');
+    if(mvt){
+      this.move2sales = true;
+    }
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.dept = localStorage.getItem('department');

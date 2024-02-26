@@ -31,9 +31,10 @@ export class RecruiterService {
     return this.apiServ.get("auth/users/emphierarchy");
   }
 
-  getAllRecruitersPagination( access: string, userid: number,page: any, size: any,field:any) {
-    return this.apiServ.get("vms/recruiter/all/" + access + "/" + userid+"/"+page+"/"+size+"/"+field);
+  getAllRecruitersPagination( access: string, userid: number,page: any, size: any,field:any, sortField:string,sortOrder:string) {
+    return this.apiServ.get("vms/recruiter/all/" + access + "/" + userid+"/"+page+"/"+size+"/"+field+"/"+sortField+"/"+sortOrder);
   }
+
 
   deleteEntity(id: number) {
     return this.apiServ.delete("vms/recruiter/delete/" + id);
@@ -89,7 +90,9 @@ export class RecruiterService {
     return action === 'Approved' ? this.approve(entity.action, entity.id, entity.userid): this.rejectRecruiter(entity.id, entity.remarks);
   }
 
-  getAllVendorByType(access: string, userid: number,page: any, size: any, recruitertype: any, field:any) {
-    return this.apiServ.get("vms/recruiter/getAll/" + access + "/" + userid+"/"+page+"/"+size+"/"+ recruitertype + "/" +field);
+  getAllVendorByType(access: string, userid: number,page: any, size: any, recruitertype: any, field:any, sortField:string,sortOrder:string) {
+    return this.apiServ.get("vms/recruiter/getAll/" + access + "/" + userid+"/"+page+"/"+size+"/"+ recruitertype + "/" +field+"/"+sortField+"/"+sortOrder);
   }
+
+ 
 }

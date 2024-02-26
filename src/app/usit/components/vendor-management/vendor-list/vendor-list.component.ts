@@ -145,7 +145,9 @@ export class VendorListComponent implements OnInit {
         this.loginId,
         currentPageIndex,
         this.pageSize,
-        this.field
+        this.field,
+        this.sortField,
+        this.sortOrder
       )
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -165,26 +167,7 @@ export class VendorListComponent implements OnInit {
         },
       });
   }
-  gty(page: any) {
-    // this.assignToPage = page;
-    return this.vendorServ
-      .getAllVendorsByPagination(
-        this.hasAcces,
-        this.loginId,
-        page,
-        50,
-        this.field
-      )
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((response: any) => {
-        this.datarr = response.data.content;
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = i + 1;
-        });
-        // this.totalItems = response.data.totalElements;
-        // this.length = response.data.totalElements;
-      });
-  }
+
   /**
    * get all vendor data
    * @returns vendor data
@@ -232,7 +215,9 @@ export class VendorListComponent implements OnInit {
           this.loginId,
           1,
           this.pageSize,
-          keyword
+          keyword,
+          this.sortField,
+          this.sortOrder
         )
         .subscribe((response: any) => {
           this.datarr = response.data.content;
@@ -254,84 +239,32 @@ export class VendorListComponent implements OnInit {
    * Sort
    * @param event
    */
+  sortField = 'updateddate';
+  sortOrder = 'desc';
   onSort(event: Sort) {
-    const sortDirection = event.direction;
-    const activeSortHeader = event.active;
-
-    if (sortDirection === '' || !activeSortHeader) {
-      return;
+    console.log(event);
+    //this.sortField = event.active;
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    ///this.sortOrder = event.direction;
+    this.getAllData();
     }
-
-    const isAsc = sortDirection === 'asc';
-    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
-      switch (activeSortHeader) {
-        case 'SerialNum':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.serialNum || '').localeCompare(b.serialNum || '')
-          );
-        case 'Company':
-          return (
-            (isAsc ? 1 : -1) * (a.company || '').localeCompare(b.company || '')
-          );
-        case 'HeadQuarter':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.headquerter || '').localeCompare(b.headquerter || '')
-          );
-        // case 'Fed-Id':
-        //   return (
-        //     (isAsc ? 1 : -1) *
-        //     (a.fedid || '').localeCompare(b.fedid || '')
-        //   );
-        case 'VendorType':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.vendortype || '').localeCompare(b.vendortype || '')
-          );
-        case 'TierType':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.tyretype || '').localeCompare(b.tyretype || '')
-          );
-        case 'AddedBy':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.pseudoname || '').localeCompare(b.pseudoname || '')
-          );
-        case 'AddedOn':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.createddate || '').localeCompare(b.createddate || '')
-          );
-        case 'LastUpdated':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.updateddate || '').localeCompare(b.updateddate || '')
-          );
-        // case 'Status':
-        //   return (
-        //     (isAsc ? 1 : -1) * (a.status || '').localeCompare(b.status || '')
-        //   );
-        case 'ApproveOrReject':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.vms_stat || '').localeCompare(b.vms_stat || '')
-          );
-        default:
-          return 0;
-      }
-    });
   }
   /**uplload
    *
    */
-  uploadVendor() {}
+  uploadVendor() { }
 
   /**
    * go to company-info
    */
-  goToCompanyRecInfo(element: any){
+  goToCompanyRecInfo(element: any) {
     const actionData = {
       title: `${element.company} Recruiter's`,
       id: element.id,
@@ -343,7 +276,7 @@ export class VendorListComponent implements OnInit {
     dialogConfig.panelClass = 'vendor-rec-company-info';
     dialogConfig.data = actionData;
 
-   this.dialogServ.openDialogWithComponent(
+    this.dialogServ.openDialogWithComponent(
       VendorCompanyRecInfoComponent,
       dialogConfig
     );
@@ -582,9 +515,8 @@ export class VendorListComponent implements OnInit {
       dialogConfig.width = 'fit-content';
       dialogConfig.height = 'auto';
       dialogConfig.disableClose = false;
-      dialogConfig.panelClass = `${
-        vendor.vms_stat == 'Initiated' && !rejectVendor ? 'approve' : 'reject'
-      }-vendor`;
+      dialogConfig.panelClass = `${vendor.vms_stat == 'Initiated' && !rejectVendor ? 'approve' : 'reject'
+        }-vendor`;
       const isApprove =
         vendor.vms_stat == 'Initiated' && !rejectVendor
           ? dataToBeSentToDailogForStatus
@@ -610,7 +542,7 @@ export class VendorListComponent implements OnInit {
         if (dialogRef.componentInstance.allowAction) {
           this.vendorServ
             .approveORRejectVendor(
-              {...statReqObj, remarks: dialogRef.componentInstance.remarks},
+              { ...statReqObj, remarks: dialogRef.componentInstance.remarks },
               statReqObj.action as 'Approved' | 'Reject'
             )
             .pipe(takeUntil(this.destroyed$))
@@ -658,7 +590,7 @@ export class VendorListComponent implements OnInit {
       this.pageEvent = event;
       const currentPageIndex = event.pageIndex;
       this.currentPageIndex = currentPageIndex;
-      if(this.companyType) {
+      if (this.companyType) {
         this.getAllVendorByType(this.companyType, event.pageIndex + 1)
         return
       }
@@ -707,8 +639,8 @@ export class VendorListComponent implements OnInit {
 
   getAllVendorByType(type: string, pageIndex = 0) {
     this.companyType = type;
-    const page = pageIndex ?  pageIndex : this.page;
-    this.vendorServ.getAllVendorByType( this.hasAcces,this.loginId, page,this.pageSize, type, this.field).subscribe(
+    const page = pageIndex ? pageIndex : this.page;
+    this.vendorServ.getAllVendorByType(this.hasAcces, this.loginId, page, this.pageSize, type, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content
         // for serial-num {}
@@ -720,6 +652,6 @@ export class VendorListComponent implements OnInit {
   }
 
   goToUserInfo(id: any) {
-    this.router.navigate(['usit/user-info','vendor',id])
+    this.router.navigate(['usit/user-info', 'vendor', id])
   }
 }
