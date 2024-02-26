@@ -190,7 +190,7 @@
             </ng-container>
             <ng-template #sales><!--[disabled]="!privilegeServ.hasPrivilege('MOVETOPRESALES')"-->
               <button mat-icon-button  [style.cursor]="'pointer'"
-                *ngIf="move2sales == true && consultant.status=='Active' && flag!='Recruiting'" (click)="moveProfileToSales(consultant,'Pre-Sales')">
+                *ngIf="move2sales == true && consultant.status=='Active' && flag=='sales'" (click)="moveProfileToSales(consultant,'Pre-Sales')">
                 <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOPRESALES')}">
                   arrow_backward</mat-icon>
               </button>

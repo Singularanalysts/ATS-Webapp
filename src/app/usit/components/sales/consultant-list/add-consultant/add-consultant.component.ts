@@ -491,14 +491,14 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
   }
   gettech() {
-    // this.consultantServ.gettech().subscribe((response: any) => {
-    //   this.techdata = response.data;
-    // });
-    this.searchTechOptions$ = this.consultantServ.gettech().pipe(map((x: any) => x.data), tap(resp => {
-      if (resp && resp.length) {
-        this.getTechOptionsForAutoComplete(resp);
-      }
-    }));
+    this.consultantServ.gettech().subscribe((response: any) => {
+      this.techdata = response.data;
+    });
+    // this.searchTechOptions$ = this.consultantServ.gettech().pipe(map((x: any) => x.data), tap(resp => {
+    //   if (resp && resp.length) {
+    //     this.getTechOptionsForAutoComplete(resp);
+    //   }
+    // }));
     
   }
 

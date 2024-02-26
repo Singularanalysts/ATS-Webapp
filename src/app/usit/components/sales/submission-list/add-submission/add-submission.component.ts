@@ -264,14 +264,19 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getConsultant(flg: string) {
-    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg).pipe(
-      map((response: any) => response.data),
-      tap(resp => {
-        if (resp && resp.length) {
-          this.getConsultantOptionsForAutoComplete(resp);
-        }
+    // this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg).pipe(
+    //   map((response: any) => response.data),
+    //   tap(resp => {
+    //     if (resp && resp.length) {
+    //       this.getConsultantOptionsForAutoComplete(resp);
+    //     }
+    //   })
+    // );
+
+    this.submissionServ.getConsultantDropdown(flg).subscribe(
+      (response: any) => {
+        this.consultantdata = response.data;
       })
-    );
   }
 
   getConsultantOptionsForAutoComplete(data: any) {

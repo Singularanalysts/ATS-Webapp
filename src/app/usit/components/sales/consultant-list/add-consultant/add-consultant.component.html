@@ -192,7 +192,7 @@
             Name is required</mat-error>
         </mat-form-field>
           <!-- Technology -->
-          <!-- <div class="select-technology-field">
+          <div class="select-technology-field">
             <mat-form-field appearance="fill">
               <mat-label>Select Technology</mat-label>
               <mat-select name="technology" formControlName="technology" (selectionChange)="techskills($event)">
@@ -203,9 +203,9 @@
               <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
               <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is required</mat-error>
             </mat-form-field>
-          </div> -->
+          </div>
 
-          <div class="select-technology-field">
+          <!-- <div class="select-technology-field">
             <mat-form-field appearance="fill">
               <mat-label>Select Technology</mat-label>
               <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" maxlength="75">
@@ -217,7 +217,7 @@
               <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
               <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is required</mat-error>
             </mat-form-field>
-          </div>
+          </div> -->
            <!-- Skill Set -->
            <div class="form-details-textarea">
             <mat-form-field>
