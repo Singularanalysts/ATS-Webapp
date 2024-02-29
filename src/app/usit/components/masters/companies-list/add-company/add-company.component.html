@@ -8,7 +8,7 @@
     </div>
   
     <div class="content" mat-dialog-content>
-      <form class="add-company-form" [formGroup]="companyForm" name="company-form" (ngSubmit)="onSubmit()">
+      <form class="add-company-form" [formGroup]="companyForm" name="company-form" >
         <input type="hidden" formControlName="companyid">
         <mat-form-field class="companyname-field">
           <mat-label>Company Name</mat-label>

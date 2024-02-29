@@ -44,6 +44,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { FileManagementService } from 'src/app/usit/services/file-management.service';
 import { Employee } from 'src/app/usit/models/employee';
 import { HttpClient } from '@angular/common/http';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-add-employee',
@@ -65,6 +66,7 @@ import { HttpClient } from '@angular/common/http';
     SearchPipe,
     NgxMatIntlTelInputComponent,
     MatTableModule,
+    MatCheckboxModule
   ],
   providers: [DatePipe],
 
@@ -142,6 +144,8 @@ export class AddEmployeeComponent {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   protected isFormSubmitted: boolean = false;
+  showOtherDetails: boolean = false;
+
   ngOnInit(): void {
     this.getRoles(); // common for add employee
     this.getManager();// common for add employee
@@ -168,12 +172,14 @@ export class AddEmployeeComponent {
               this.managerflg = false;
               this.teamleadflg = false;
             }
+            this.toggleOtherDetails(false);
           }
         })
     } else {
       //  for add employee
       this.initilizeAddEmployeeForm(null);
       this.validateControls();
+      this.toggleOtherDetails(false);
     }
     // common for add employee
     // this.validateControls();
@@ -217,21 +223,18 @@ export class AddEmployeeComponent {
       ],
       manager: [employeeData ? employeeData.manager : ''],
       aadharno: [
-        employeeData ? employeeData.aadharno : '',
-        [Validators.required, Validators.pattern(/^\d{12}$/)],
+        employeeData ? employeeData.aadharno : ''
       ],
 
       panno: [
-        employeeData ? employeeData.panno : '',
-        [Validators.required, Validators.pattern(/^[A-Z]{5}\d{4}[A-Z]{1}$/)],
+        employeeData ? employeeData.panno : ''
       ],
-      bankname: [employeeData ? employeeData.bankname : '', [Validators.required, Validators.maxLength(100)]],
-      accno: [employeeData ? employeeData.accno : '', [Validators.required, Validators.pattern(/^\d{1,15}$/)]],
+      bankname: [employeeData ? employeeData.bankname : ''],
+      accno: [employeeData ? employeeData.accno : ''],
       ifsc: [
-        employeeData ? employeeData.ifsc : '',
-        [Validators.required, Validators.pattern(/^([A-Za-z]{4}\d{7})$/)],
+        employeeData ? employeeData.ifsc : ''
       ],
-      branch: [employeeData ? employeeData.branch : '', [Validators.required]],
+      branch: [employeeData ? employeeData.branch : ''],
       teamlead: [employeeData ? employeeData.teamlead : ''],
       // role: [employeeData ? employeeData.role.rolename : '', Validators.required],
       role: this.formBuilder.group({
@@ -277,6 +280,8 @@ export class AddEmployeeComponent {
       // tl.updateValueAndValidity();
     });
   }
+
+
   get addEmpForm() {
     return this.employeeForm.controls;
   }
@@ -464,6 +469,7 @@ export class AddEmployeeComponent {
         this.empObj.role = formVal.role;
       })
     }
+    this.trimSpacesFromFormValues();
     const saveObj = this.data.actionName === "edit-employee" ? this.empObj : this.employeeForm.value;
     //this.uploadFileOnSubmit(1);
     this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
@@ -496,6 +502,15 @@ export class AddEmployeeComponent {
         this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
       },
+    });
+  }
+
+  trimSpacesFromFormValues() {
+    Object.keys(this.employeeForm.controls).forEach((controlName: string) => {
+      const control = this.employeeForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
     });
   }
 
@@ -541,6 +556,7 @@ export class AddEmployeeComponent {
     }
     return true;
   }
+  //
 
   private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
     const dialogConfig = new MatDialogConfig();
@@ -888,6 +904,59 @@ export class AddEmployeeComponent {
          // saveAs(blob, fileData.filename)
        );
 
+  }
+
+  toggleOtherDetails(checked: boolean): void {
+    const aadharControl = this.employeeForm.get('aadharno');
+    const panControl = this.employeeForm.get('panno');
+    const bankNameControl = this.employeeForm.get('bankname');
+    const bankAccountNoControl = this.employeeForm.get('accno');
+    const bankIfscControl = this.employeeForm.get('ifsc');
+    const bankBranchNameControl = this.employeeForm.get('branch');
+    
+    if (checked) {
+      this.showOtherDetails = true;
+      // Add validators when checkbox is checked
+      aadharControl?.setValidators([Validators.required, Validators.pattern(/^\d{12}$/)]);
+      panControl?.setValidators([Validators.required, Validators.pattern(/^[A-Z]{5}\d{4}[A-Z]{1}$/)],);
+      bankNameControl?.setValidators( [Validators.required, Validators.maxLength(100)]);
+      bankAccountNoControl?.setValidators([Validators.required, Validators.pattern(/^\d{1,15}$/)]);
+      bankIfscControl?.setValidators([Validators.required, Validators.pattern(/^([A-Za-z]{4}\d{7})$/)]);
+      bankBranchNameControl?.setValidators([Validators.required]);
+    } else {
+      this.showOtherDetails = false;
+      // Remove validators when checkbox is unchecked
+      aadharControl?.clearValidators();
+      panControl?.clearValidators();
+      bankNameControl?.clearValidators();
+      bankAccountNoControl?.clearValidators();
+      bankIfscControl?.clearValidators();
+      bankBranchNameControl?.clearValidators();
+    }
+
+    // Update validators status
+    aadharControl?.updateValueAndValidity();
+    panControl?.updateValueAndValidity();
+    bankNameControl?.updateValueAndValidity();
+      bankAccountNoControl?.updateValueAndValidity();
+      bankIfscControl?.updateValueAndValidity();
+      bankBranchNameControl?.updateValueAndValidity();
+  }
+
+  camelCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = this.capitalizeFirstLetter(inputValue);
+  }
+  
+  capitalizeFirstLetter(input: string): string {
+    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+      return char.toUpperCase();
+    });
+  }
+
+  convertToLowerCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.toLowerCase();
   }
 }
 

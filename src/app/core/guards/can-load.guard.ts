@@ -17,7 +17,7 @@ export class CanLoadGuard implements CanActivate, CanLoad {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    console.log('in can-activate guard')
+    //console.log('in can-activate guard')
     return this.isAdminUser();
   }
   canLoad(
@@ -25,10 +25,10 @@ export class CanLoadGuard implements CanActivate, CanLoad {
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
       if(this.permServ.isUserSignedin()){
-        console.log('in can-load guard')
+        //console.log('in can-load guard')
         return true;
       }else{
-        console.log('in can-load guard - show token expired')
+        //console.log('in can-load guard - show token expired')
         const dataToBeSentToSnackBar: ISnackBarData = {
           message: 'Token expired, Please login',
           duration: 3000,

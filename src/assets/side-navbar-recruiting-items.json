@@ -1,117 +1,217 @@
 [
-    {
-      "text": "Dashboard",
-      "icon": "dashboard",
-      "routerLink": "/usit/dashboard"
-    },
+  {
+    "text": "Dashboard",
+    "icon": "dashboard",
+    "routerLink": "/usit/dashboard"
+  },
+  {
+    "text": "Search",
+    "icon": "search",
+    "routerLink": "/usit/search"
+  },
+  {
+    "text": "VMS",
+    "icon": "work",
+    "children": [
+      {
+        "text": "Vendor",
+        "icon": "group",
+        "routerLink": "/usit/vendors"
+      },
+      {
+        "text": "Recruiters",
+        "icon": "business_center",
+        "routerLink": "/usit/recruiters"
+      }
+    ]
+  },
 
-    {
-      "text": "VMS",
-      "icon": "work",
-      "children": [
-        {
-          "text": "Vendor",
-          "icon": "group",
-          "routerLink": "/usit/vendors"
-        },
-        {
-          "text": "Recruiters",
-          "icon": "business_center",
-          "routerLink": "/usit/recruiters"
-        }
-      ]
-    },
+  {
+    "text": "Technology Tags",
+    "icon": "build",
+    "routerLink": "/usit/technology-tag"
+  },
+  
+  {
+    "text": "Pre-sales",
+    "icon": "local_offer",
+    "routerLink": "/usit/pre-sales"
+  },
 
-    {
-      "text": "Technology Tags",
-      "icon": "build",
-      "routerLink": "/usit/technology-tag"
-    },
-   
-    {
-      "text": "Recruitment",
-      "icon": "business",
-      "children": [
-        {
-          "text": "Requirements",
-          "icon": "assignment_turned_in",
-          "routerLink": "/usit/rec-requirements"
-        },
-        {
-          "text": "Consultants",
-          "icon": "person_search",
-          "routerLink": "/usit/rec-consultants"
-        },
-        {
-          "text": "Submissions",
-          "icon": "assignment",
-          "routerLink": "/usit/rec-submissions"
-        },
-        {
-          "text": "Interviews",
-          "icon": "chat_bubble_outline",
-          "routerLink": "/usit/rec-interviews"
-        },
-        {
-          "text": "Closures",
-          "icon": "check_circle",
-          "routerLink": "/usit/rec-closures"
-        }
-      ]
-    }
-   ,
-    {
-      "text": "Masters",
-      "icon": "extension",
-      "children": [
-        {
-          "text": "Visa",
-          "icon": "credit_card",
-          "routerLink": "/usit/visa"
-        },
-        {
-          "text": "Qualification",
-          "icon": "school",
-          "routerLink": "/usit/qualification"
-        },
-        {
-          "text": "Companies",
-          "icon": "business",
-          "routerLink": "/usit/companies"
-        }
-      ]
-    },
-    {
-      "text": "KPT",
-      "icon": "quiz",
-      "children": [
-        {
-          "text": "KPT List",
-          "icon": "quiz",
-          "routerLink": "/usit/quiz-list"
-        },
-        {
-          "text": "Write KPT",
-          "icon": "assignment",
-          "routerLink": "/usit/attempt-quiz"
-        },
-        {
-          "text": "KPT Result",
-          "icon": "assignment",
-          "routerLink": "/usit/quiz-result"
-        }
-      ]
-    }
-    ,
-    {
-      "text": "Task Management",
-      "icon": "receipt_long",
-      "children": [
-        {
-          "text": "Task List",
-          "icon": "note_add",
-          "routerLink": "/task/list-task"
-        }
-      ]
-    }
-  ]
+  {
+    "text": "Hot List",
+    "icon": "local_offer",
+    "routerLink": "/usit/hot-list"
+  },
+  {
+    "text": "Recruitment",
+    "icon": "business",
+    "children": [
+      {
+        "text": "Requirements",
+        "icon": "assignment_turned_in",
+        "routerLink": "/usit/rec-requirements"
+      },
+      {
+        "text": "Consultants",
+        "icon": "person_search",
+        "routerLink": "/usit/rec-consultants"
+      },
+      {
+        "text": "Submissions",
+        "icon": "assignment",
+        "routerLink": "/usit/rec-submissions"
+      },
+      {
+        "text": "Interviews",
+        "icon": "chat_bubble_outline",
+        "routerLink": "/usit/rec-interviews"
+      },
+      {
+        "text": "Closures",
+        "icon": "check_circle",
+        "routerLink": "/usit/rec-closures"
+      }
+    ]
+  },
+  {
+    "text": "Dom Recruitment",
+    "icon": "business",
+    "children": [
+      {
+        "text": "Requirements",
+        "icon": "assignment_turned_in",
+        "routerLink": "/usit/dom-requirements"
+      },
+      {
+        "text": "Consultants",
+        "icon": "person_search",
+        "routerLink": "/usit/dom-consultants"
+      },
+      {
+        "text": "Submissions",
+        "icon": "assignment",
+        "routerLink": "/usit/dom-submission"
+      },
+      {
+        "text": "Interviews",
+        "icon": "chat_bubble_outline",
+        "routerLink": "/usit/dom-interview"
+      },
+      {
+        "text": "Closures",
+        "icon": "check_circle",
+        "routerLink": "/usit/dom-closures"
+      }
+    ]
+  },
+  {
+    "text": "Open Requirements",
+    "icon": "work",
+    "children": [
+      {
+        "text": "Dice Reqs",
+        "icon": "group",
+        "routerLink": "/usit/openreqs"
+      },
+      {
+        "text": "RSS",
+        "icon": "business_center",
+        "routerLink": "/usit/rssfeed"
+      }
+      ,
+      {
+        "text": "LinkedIn Profiles",
+        "icon": "business_center",
+        "routerLink": "/usit/linkedinprofiles"
+      }
+    ]
+  },
+  {
+    "text": "Reports",
+    "icon": "reports",
+    "children": [
+      {
+        "text": "Employees Reports",
+        "icon": "assignment_ind",
+        "routerLink": "/usit/employee-report"
+      },
+      {
+        "text": "Sourcing Reports",
+        "icon": "dynamic_feed",
+        "routerLink": "/usit/sourcing-report"
+      }
+    ]
+  },
+
+  {
+    "text": "Masters",
+    "icon": "extension",
+    "children": [
+      {
+        "text": "Visa",
+        "icon": "credit_card",
+        "routerLink": "/usit/visa"
+      },
+      {
+        "text": "Qualification",
+        "icon": "school",
+        "routerLink": "/usit/qualification"
+      },
+      {
+        "text": "Companies",
+        "icon": "business",
+        "routerLink": "/usit/companies"
+      }
+    ]
+  },
+  {
+    "text": "KPT",
+    "icon": "quiz",
+    "children": [
+      {
+        "text": "KPT List",
+        "icon": "quiz",
+        "routerLink": "/usit/quiz-list"
+      },
+      {
+        "text": "Write KPT",
+        "icon": "assignment",
+        "routerLink": "/usit/attempt-quiz"
+      },
+      {
+        "text": "KPT Result",
+        "icon": "assignment",
+        "routerLink": "/usit/quiz-result"
+      }
+    ]
+  },
+  {
+    "text": "Accounts & Billing",
+    "icon": "receipt_long",
+    "children": [
+      {
+        "text": "Create PO",
+        "icon": "note_add",
+        "routerLink": "/usit/purchase-orders"
+      }
+    ]
+  },
+  {
+    "text": "Task Management",
+    "icon": "receipt_long",
+    "children": [
+      {
+        "text": "Task List",
+        "icon": "note_add",
+        "routerLink": "/task/list-task"
+      },
+
+      {
+        "text": "Task Report",
+        "icon": "note_add",
+        "routerLink": "/task/task-report"
+      }
+    ]
+  }
+]

@@ -2,301 +2,411 @@
   <li><a>Home</a></li>
   <li class="last">Dashboard</li>
 </ul>
-<div class="header-container mat-elevation-z1">
+<!-- <div class="header-container mat-elevation-z1">
   <span class="header-text">
     Dashboard
   </span>
-</div>
+</div> -->
 <div class="overall-container">
-<div class="container">
-  <div class="left-div">
-    <div class="left-div-inner-cards">
-      <div class="card-1">
-        <mat-card>
-          <div class="card">
-            <mat-card-title>Submissions <span>| {{ submissionFlag }}</span></mat-card-title>
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="subCount('daily','Today')">Today</button>
-              <button mat-menu-item (click)="subCount('weekly','Weekly')">Weekly</button>
-              <button mat-menu-item (click)="subCount('monthly', 'Monthly')">Monthly</button>
-              <button mat-menu-item (click)="subCount('YearToDate', 'Yearly')">YTD</button>
-            </mat-menu>
-          </div>
-          <mat-card-content>
-            <div style="display: flex;">
-              <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
-                <!-- <mat-icon class="class-icon">assignment</mat-icon> -->
-                <button mat-fab class="submission-icon">
-                  <mat-icon>assignment</mat-icon>
-                </button>
-              </div>
-              <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
-                <p class="dashboard">Sales : <span style="color: #4154f1; font-weight: bold;"> {{ subcount }} </span></p>
-                <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold;"> {{ reccount }} </span></p>
-              </div>
+  <div class="container">
+    <div class="left-div">
+      <div class="left-div-inner-cards">
+        <div class="card-1">
+          <mat-card>
+            <div class="card">
+              <mat-card-title>Submissions <span>| {{ submissionFlag }}</span></mat-card-title>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="subCount('daily','Today')">Today</button>
+                <button mat-menu-item (click)="subCount('weekly','Weekly')">Weekly</button>
+                <button mat-menu-item (click)="subCount('monthly', 'Monthly')">Monthly</button>
+                <button mat-menu-item (click)="subCount('YearToDate', 'Yearly')">YTD</button>
+              </mat-menu>
             </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      <div class="card-2">
-        <mat-card>
-          <div class="card">
-            <mat-card-title>Interviews <span>| {{ interviewFlag }}</span></mat-card-title>
-            <button mat-icon-button [matMenuTriggerFor]="menu1">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
-            <mat-menu #menu1="matMenu">
-              <button mat-menu-item (click)="intCount('daily','Daily')">Today</button>
-              <button mat-menu-item (click)="intCount('weekly','Weekly')">Weekly</button>
-              <button mat-menu-item (click)="intCount('monthly','Monthly')">Monthly</button>
-              <button mat-menu-item (click)="intCount('YearToDate','YTD')">YTD</button>
-            </mat-menu>
-          </div>
-          <mat-card-content>
-            <div style="display: flex;">
-              <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
-                <button mat-fab class="interview-icon">
-                  <mat-icon>chat_bubble_outline</mat-icon>
-                </button>
-                <!-- <mat-icon class="class-icon">chat_bubble_outline</mat-icon> -->
+            <mat-card-content>
+              <div style="display: flex;">
+                <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                  <!-- <mat-icon class="class-icon">assignment</mat-icon> -->
+                  <button mat-fab class="submission-icon">
+                    <mat-icon>assignment</mat-icon>
+                  </button>
+                </div>
+                <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                  <p class="dashboard">Sales : <span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="subPop('Sales','admin')"> {{ subcount }} </span>
+                  </p>
+                  <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="subPop('Recruiting','admin')"> {{ reccount }}
+                    </span></p>
+                </div>
               </div>
-              <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
-                <p class="dashboard">Sales :<span style="color: #4154f1; font-weight: bold; ">{{sintcount}}</span></p>
-                <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold;">{{rintcount}}</span></p>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      <div class="card-3">
-        <mat-card>
-          <div class="card">
-            <mat-card-title>Closures <span>| {{ closureFlag }} </span></mat-card-title>
-            <button mat-icon-button [matMenuTriggerFor]="menu2">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
-            <mat-menu #menu2="matMenu">
-              <button mat-menu-item (click)="closureCount('daily','Daily')">Today</button>
-              <button mat-menu-item (click)="closureCount('weekly','Weekly')">Weekly</button>
-              <button mat-menu-item (click)="closureCount('monthly', 'Monthly')">Monthly</button>
-              <button mat-menu-item (click)="closureCount('YearToDate', 'YTD')">YTD</button>
-            </mat-menu>
-          </div>
-          <mat-card-content>
-            <div style="display: flex;">
-              <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
-                <button mat-fab class="closure-icon">
-                  <mat-icon>check_circle</mat-icon>
-                </button>
-                <!-- <mat-icon class="class-icon">check_circle</mat-icon> -->
-              </div>
-              <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
-                <p class="dashboard">Sales :<span style="color: rgb(25,135,84); font-weight: bold;">{{sclosecount}}</span></p>
-                <p class="dashboard">Recruiting :<span style="color: rgb(25,135,84); font-weight: bold;">{{rclosecount}}</span></p>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-    <div class="left-div-inner-table">
-      <div class="table-container table-wrapper">
-        <div class="header-container-leading-resources">
-          <span class="header-text">Sourcing Leads</span>
+            </mat-card-content>
+          </mat-card>
         </div>
-        <hr>
-        <section class="table-style mat-elevation-z8">
-          <table mat-table [dataSource]="dataSource" class="responsive-table">
-      
-            <!--- Note that these columns can be defined in any order.
-                  The actual rendered columns are set as a property on the row definition" -->
-      
-            <!-- Name Column -->
-            <ng-container matColumnDef="Name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name"> Name </th>
-              <td mat-cell *matCellDef="let element">
-                <a href="{{ element.profile_url }}" target="_blank">{{ element.candidate_name }}</a>
-              </td>
-            </ng-container>
-      
-            <!-- Category Column -->
-            <ng-container matColumnDef="Category">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category </th>
-              <td mat-cell *matCellDef="let element"> {{element?.category}} </td>
-            </ng-container>
-      
-            <!-- Address Column -->
-            <ng-container matColumnDef="Address">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Address"> Address </th>
-              <td mat-cell *matCellDef="let element"> {{element.address}} </td>
-            </ng-container>
-      
-            <!-- Email Column -->
-            <ng-container matColumnDef="Email">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Email"> Email
-              </th>
-              <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-            </ng-container>
-      
-            <!-- Contact Number Column -->
-            <ng-container matColumnDef="ContactNumber">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Contact Number">
-                Contact </th>
-              <td mat-cell *matCellDef="let element">{{element.personalcontactnumber}}</td>
-            </ng-container>
-      
-            <!-- Owner Column -->
-            <ng-container matColumnDef="Owner">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Owner"> Owner
-              </th>
-              <td mat-cell *matCellDef="let element"> {{element.pseudoname}} </td>
-            </ng-container>
-      
-            <!-- Track Column -->
-            <ng-container matColumnDef="Track">
-              <th mat-header-cell *matHeaderCellDef> Track </th>
-              <td mat-cell *matCellDef="let emp" class="action-buttons">
-                <button mat-raised-button class="track-button">Update</button>
-              </td>
-            </ng-container>
-      
-            <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
-          </table>
+        <div class="card-2">
+          <mat-card>
+            <div class="card">
+              <mat-card-title>Interviews <span>| {{ interviewFlag }}</span></mat-card-title>
+              <button mat-icon-button [matMenuTriggerFor]="menu1">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menu1="matMenu">
+                <button mat-menu-item (click)="intCount('daily','Daily')">Today</button>
+                <button mat-menu-item (click)="intCount('weekly','Weekly')">Weekly</button>
+                <button mat-menu-item (click)="intCount('monthly','Monthly')">Monthly</button>
+                <button mat-menu-item (click)="intCount('YearToDate','YTD')">YTD</button>
+              </mat-menu>
+            </div>
+            <mat-card-content>
+              <div style="display: flex;">
+                <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                  <button mat-fab class="interview-icon">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                  <!-- <mat-icon class="class-icon">chat_bubble_outline</mat-icon> -->
+                </div>
+                <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                  <p class="dashboard">Sales :<span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="intPop('Sales','admin')">{{sintcount}}</span></p>
+                  <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="intPop('Recruiting','admin')">{{rintcount}}</span>
+                  </p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="card-3">
+          <mat-card>
+            <div class="card">
+              <mat-card-title>Closures <span>| {{ closureFlag }} </span></mat-card-title>
+              <button mat-icon-button [matMenuTriggerFor]="menu2">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menu2="matMenu">
+                <button mat-menu-item (click)="closureCount('daily','Daily')">Today</button>
+                <button mat-menu-item (click)="closureCount('weekly','Weekly')">Weekly</button>
+                <button mat-menu-item (click)="closureCount('monthly', 'Monthly')">Monthly</button>
+                <button mat-menu-item (click)="closureCount('YearToDate', 'YTD')">YTD</button>
+              </mat-menu>
+            </div>
+            <mat-card-content>
+              <div style="display: flex;">
+                <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                  <button mat-fab class="closure-icon">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                  <!-- <mat-icon class="class-icon">check_circle</mat-icon> -->
+                </div>
+                <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                  <p class="dashboard">Sales :<span
+                      style="color: rgb(25,135,84); font-weight: bold; cursor: pointer" (click)="closurePop('Sales','admin')">{{sclosecount}}</span></p>
+                  <p class="dashboard">Recruiting :<span
+                      style="color: rgb(25,135,84); font-weight: bold; cursor: pointer" (click)="closurePop('Recruiting','admin')">{{rclosecount}}</span></p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <div class="left-div-inner-cards" *ngIf="individualCounts">
+        <div class="card-1">
+          <mat-card>
+            <div class="card">
+              <mat-card-title>Submissions  <span>| {{ submissionFlagInd }}</span></mat-card-title>
+              <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menuSub="matMenu">
+                <button mat-menu-item (click)="subCountInd('daily','Today')">Today </button>
+                <button mat-menu-item (click)="subCountInd('weekly','Weekly')">Weekly </button>
+                <button mat-menu-item (click)="subCountInd('monthly', 'Monthly')">Monthly </button>
+                <button mat-menu-item (click)="subCountInd('YearToDate', 'Yearly')">YTD </button>
+              </mat-menu>
+            </div>
+            <mat-card-content>
+              <div style="display: flex;">
+                <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                  <button mat-fab class="submission-icon">
+                    <mat-icon>assignment</mat-icon>
+                  </button>
+                </div>
+                <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                  <p class="dashboard">Sales : <span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="subPop('Sales','emp')"> {{ subcountIndividual }} </span>
+                  </p>
+                  <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="subPop('Recruiting','emp')"> {{ reccountIndividual }}
+                    </span></p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="card-2">
+          <mat-card>
+            <div class="card">
+              <mat-card-title>Interviews <span>| {{ interviewFlagInd }}</span></mat-card-title>
+              <button mat-icon-button [matMenuTriggerFor]="menuInt">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menuInt="matMenu">
+                <button mat-menu-item (click)="intCountInd('daily','Daily')">Today </button>
+                <button mat-menu-item (click)="intCountInd('weekly','Weekly')">Weekly </button>
+                <button mat-menu-item (click)="intCountInd('monthly','Monthly')">Monthly </button>
+                <button mat-menu-item (click)="intCountInd('YearToDate','YTD')">YTD </button>
+              </mat-menu>
+            </div>
+            <mat-card-content>
+              <div style="display: flex;">
+                <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                  <button mat-fab class="interview-icon">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                </div>
+                <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                  <p class="dashboard">Sales :<span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="intPop('Sales','emp')">{{sintcountIndividual}}</span></p>
+                  <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold; cursor: pointer" (click)="intPop('Recruiting','emp')">{{rintcountIndividual}}</span>
+                  </p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="card-3">
+          <mat-card>
+            <div class="card">
+              <mat-card-title>Closures <span>| {{ closureFlagInd }} </span></mat-card-title>
+              <button mat-icon-button [matMenuTriggerFor]="menuClose">
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menuClose="matMenu">
+                <button mat-menu-item (click)="closureCountInd('daily','Daily')">Today</button>
+                <button mat-menu-item (click)="closureCountInd('weekly','Weekly')">Weekly</button>
+                <button mat-menu-item (click)="closureCountInd('monthly', 'Monthly')">Monthly</button>
+                <button mat-menu-item (click)="closureCountInd('YearToDate', 'YTD')">YTD</button>
+              </mat-menu>
+            </div>
+            <mat-card-content>
+              <div style="display: flex;">
+                <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                  <button mat-fab class="closure-icon">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                </div>
+                <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                  <p class="dashboard">Sales :<span
+                      style="color: rgb(25,135,84); font-weight: bold; cursor: pointer" (click)="closurePop('Sales','emp')">{{sclosecountIndividual}}</span></p>
+                  <p class="dashboard">Recruiting :<span
+                      style="color: rgb(25,135,84); font-weight: bold; cursor: pointer" (click)="closurePop('Recruiting','emp')">{{rclosecountIndividual}}</span></p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <div class="left-div-inner-table">
+        <div class="table-container table-wrapper">
+          <div class="header-container-leading-resources">
+            <span class="header-text">Sourcing Leads</span>
+          </div>
           <hr>
-          <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
-        </section>
-      
-      
-      </div>
-    </div>
-  </div>
-  <div class="right-div">
-    <mat-card class="activity-card">
-      <div class="card-body">
-        <h3 class="card-title bold-text">Recent Activity 
-          <!-- <span>| Today</span> -->
-        </h3>
-        <div class="activity" *ngFor="let data of datarr">
-          <div class="time">
-            {{data.trtime}}
-          </div>
-          <div class="activity-content" *ngIf="data.flg=='VMS'">
-            <b> <a class="name" [routerLink]="['/user/','dashboard',data.userid]" class="bold-text">{{data.pseudoname}}</a>&nbsp;
-              <span
-                [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
-                <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
-                <ng-template #rejected>
-                  <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal"
-                    #closeModal class="bold-text">{{data.status}}</span>
-                </ng-template>
-                <ng-template #normal>
-                  <span class="bold-text">{{data.status}}</span>
-                </ng-template>
-              </span>
-              &nbsp;
-              <a title="Click Here to review" [routerLink]="['/edit-vendor',data.vms]" target="_blank" class="bold-text">
-                  {{data.company}} </a>
-            </b>
-          </div>
-          <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
-            <b> <a [routerLink]="['/user/','dashboard',data.userid]" class="bold-text">{{data.pseudoname}}</a> </b>
-            {{data.status}} <b>
-              <a [routerLink]="['/consultant/','info','dashboard',data.consultantid]" class="bold-text">{{data.consultantname}}</a>
-            </b>
-            Profile to <b class="bold-text">{{data.company}}(V)
-              <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
-              <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span>
-            </b> on
-            <b class="bold-text">{{data.emptype}}</b>
-            <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
-                *ngIf="data.implpartner!=='NULL'" >, {{data.implpartner}}(IMPL)</span> </b>
-          </div>
-      
-          <div class="activity-content" *ngIf="data.flg=='SUB-recruiting'">
-            <b> <a [routerLink]="['/user/','dashboard',data.userid]" class="bold-text">{{data.pseudoname}}</a> </b>
-            {{data.status}} <b>
-              <a [routerLink]="['/consultant/','info','dashboard',data.consultantid]" class="bold-text">{{data.consultantname}}</a>
-            </b>
-            Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}}(V),</span>
-              <span *ngIf="data.submissionrate !== null" class="bold-text" > {{data.submissionrate}}($/hr),</span>
-            </b> on
-            <b class="bold-text">{{data.emptype}}</b>
-            <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text">, {{data.endclient}}(client)</span> <span
-                *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> </b>
-          </div>
+          <section class="table-style mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" class="responsive-table">
+              <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name"> Name </th>
+                <td mat-cell *matCellDef="let element">
+                  <a href="{{ element.profile_url }}" target="_blank">{{ element.candidate_name }}</a>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="Category">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element?.category}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Address">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Address"> Address
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Email"> Email
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+              <ng-container matColumnDef="ContactNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Contact Number">
+                  Contact </th>
+                <td mat-cell *matCellDef="let element">{{element.contactno}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Owner">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Owner"> Owner
+                </th>
+                <td mat-cell *matCellDef="let element"> {{element.pseudoname}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Track">
+                <th mat-header-cell *matHeaderCellDef> Track </th>
+                <td mat-cell *matCellDef="let emp" class="action-buttons">
+                  <button mat-raised-button class="track-button" *ngIf="emp.lockedby == userid " (click)="updateSlead(emp)">Update</button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+            </table>
+            <hr>
+            <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+          </section>
         </div>
       </div>
-    </mat-card>
-  </div>
-</div>
+    </div>
+    <div class="right-div">
+      <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' ">
+        <div class="card-body">
+          <h3 class="card-title bold-text">Recent Activity
+          </h3>
+          <div class="activity" *ngFor="let data of datarr">
+            <div class="time">
+              {{data.trtime}}
+            </div>
+            <div class="activity-content" *ngIf="data.flg=='VMS'">
+              <b> <a (click)="goToUserInfo(data.userid)"
+                  class="bold-text name consultant-id">{{data.pseudoname}}</a>&nbsp;
+                <span
+                  [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
+                  <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
+                  <ng-template #rejected>
+                    <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
+                      class="bold-text">{{data.status}}</span>
+                  </ng-template>
+                  <ng-template #normal>
+                    <span class="bold-text">{{data.status}}</span>
+                  </ng-template>
+                </span>
+                &nbsp;
+                {{data.company}}
+              </b>
+            </div>
+            <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
+              <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+              {{data.status}} <b>
+                <a (click)="goToConsultantInfo(data.consultantid)"
+                  class="bold-text consultant-id">{{data.consultantname}}</a>
+              </b>
+              Profile to <b class="bold-text">{{data.company}}(V)
+                <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
+                <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
+              </b> on
+              <b class="bold-text">{{data.emptype}}</b>
+              <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+                  *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
+            </div>
 
-<div class="table-container-dice table-wrapper">
-  <div class="header-container-leading-resources">
-    <span class="header-text">Dice Requirement Tags</span>
-  </div>
-   <hr>
-  <section class="table-style-dice mat-elevation-z8">
-    <table mat-table [dataSource]="dataSourceDice" class="responsive-table">
+            <div class="activity-content" *ngIf="data.flg=='SUB-recruiting' || data.flg=='SUB-Recruiting'">
+              <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+              {{data.status}} <b>
+                <a (click)="goToConsultantInfo(data.consultantid)"
+                  class="bold-text consultant-id">{{data.consultantname}}</a>
+              </b>
+              Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
+                  class="bold-text">{{data.company}}(V),</span>
+                <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
+              </b> on
+              <b class="bold-text">{{data.emptype}}</b>
+              <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text">, {{data.endclient}}(client)</span> <span
+                  *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> </b>
+            </div>
 
-      <!--- Note that these columns can be defined in any order.
+            <div class="activity-content" *ngIf="data.flg=='SUB-domrecruiting'">
+              <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+              {{data.status}} <b>
+                <a (click)="goToConsultantInfo(data.consultantid)"
+                  class="bold-text consultant-id">{{data.consultantname}}</a>
+              </b>
+              Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
+                  class="bold-text">{{data.company}} (V),</span>
+                <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
+              </b>
+              <!-- <b class="bold-text">{{data.emptype}}</b> -->
+              <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
+                <!-- <span *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> -->
+              </b>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="table-container-dice table-wrapper" style="margin-bottom: 120px;">
+    <div class="header-container-leading-resources">
+      <span class="header-text">Dice Requirement Tags</span>
+    </div>
+    <hr>
+    <section class="table-style-dice mat-elevation-z8" style="height: 630px; overflow-Y: scroll;">
+      <table mat-table [dataSource]="dataSourceDice" class="responsive-table">
+
+        <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
-      <!-- Posted Date Column -->
-      <ng-container matColumnDef="PostedDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted Date </th>
-        <td mat-cell *matCellDef="let element"> {{element?.posted_on}} </td>
-      </ng-container>
+        <!-- Posted Date Column -->
+        <ng-container matColumnDef="PostedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted Date
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element?.posted_on}} </td>
+        </ng-container>
 
-      <!-- Job Title Column -->
-      <ng-container matColumnDef="JobTitle">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title </th>
-        <td mat-cell *matCellDef="let element"> <a href="{{ element.job_source }}">{{element?.job_title}}</a> </td>
-      </ng-container>
+        <!-- Job Title Column -->
+        <ng-container matColumnDef="JobTitle">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+          </th>
+          <td mat-cell *matCellDef="let element"> <a href="{{ element.job_source }}"
+              target="_blank">{{element?.job_title}}</a> </td>
+        </ng-container>
 
-      <!-- Category Column -->
-      <ng-container matColumnDef="Category">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category </th>
-        <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
-      </ng-container>
+        <!-- Category Column -->
+        <ng-container matColumnDef="Category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category </th>
+          <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
+        </ng-container>
 
-      <!-- Job Location Column -->
-      <ng-container matColumnDef="JobLocation">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
-      </ng-container>
+        <!-- Job Location Column -->
+        <ng-container matColumnDef="JobLocation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job
+            Location
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+        </ng-container>
 
-      <!-- Vendor Column -->
-      <ng-container matColumnDef="Vendor">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
-          Vendor </th>
-        <td mat-cell *matCellDef="let element">{{element.vendor}}</td>
-      </ng-container>
+        <!-- Vendor Column -->
+        <ng-container matColumnDef="Vendor">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+            Vendor </th>
+          <td mat-cell *matCellDef="let element">{{element.vendor}}</td>
+        </ng-container>
 
-      <!-- Owner Column -->
-      <ng-container matColumnDef="TaggedDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Tagged Date
-        </th>
-        <td mat-cell *matCellDef="let element"> {{element.createddate}} </td>
-      </ng-container>
+        <!-- Owner Column -->
+        <ng-container matColumnDef="TaggedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Tagged Date
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.createddate}} </td>
+        </ng-container>
 
-      <!-- Track Column -->
-      <ng-container matColumnDef="TaggedBy">
-        <th mat-header-cell *matHeaderCellDef> TaggedBy </th>
-        <td mat-cell *matCellDef="let element"> {{ element.pseudoname }} </td>
-      </ng-container>
+        <!-- Track Column -->
+        <ng-container matColumnDef="TaggedBy">
+          <th mat-header-cell *matHeaderCellDef> TaggedBy </th>
+          <td mat-cell *matCellDef="let element"> {{ element.pseudoname }} </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
-    </table>
-    <hr>
-    <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
-  </section>
+        <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+      </table>
+      <hr>
+      <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+    </section>
 
 
+  </div>
 </div>
-</div>
+
+<br>
+<br>
+<br>

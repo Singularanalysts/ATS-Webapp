@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  ChangeDetectorRef,
   Component,
-  OnDestroy,
   OnInit,
-  ViewChild,
   inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,12 +11,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
-  MatPaginator,
-  MatPaginatorIntl,
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatSortModule} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import {
@@ -38,6 +32,7 @@ import { TaskUpdateComponent } from './task-update/task-update.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { Task } from 'src/app/usit/models/task';
+import { AssignedUserComponent } from './assigned-user/assigned-user.component';
 
 
 @Component({
@@ -93,7 +88,6 @@ export class TaskListComponent implements OnInit {
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
   // services
-  private activatedRoute = inject(ActivatedRoute);
   private interviewServ = inject(InterviewService);
   private dialogServ = inject(DialogService);
   private router = inject(Router);
@@ -127,7 +121,8 @@ export class TaskListComponent implements OnInit {
             x.serialNum = i + 1;
           });
         },
-        error: (err) => console.log(err)
+        error: (err) => 
+        console.log(err)
       }
     );
     /*this.userid = localStorage.getItem('userid');
@@ -200,7 +195,7 @@ export class TaskListComponent implements OnInit {
               if (response.status == 'success') {
                 this.getAll();
                 this.dataTobeSentToSnackBarService.message =
-                  'Employee Deleted successfully';
+                  'Task Deleted successfully';
               } else {
                 this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
                 this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
@@ -239,6 +234,7 @@ export class TaskListComponent implements OnInit {
       // actionName: 'add-interview',
       // flag: this.flag,
       taskid: element.taskid
+      
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
@@ -329,6 +325,24 @@ export class TaskListComponent implements OnInit {
 
   goToUserInfo(id: number) {
     this.router.navigate(['usit/user-info', id])
+  }
+  popup(id: number,tid:string){
+    const actionData = {
+      title: tid,
+      id:id,
+      Actionname:'task-details'
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    dialogConfig.disableClose = false;
+    // dialogConfig.panelClass = 'add-interview';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(AssignedUserComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
+      }
+    })
   }
 }
 

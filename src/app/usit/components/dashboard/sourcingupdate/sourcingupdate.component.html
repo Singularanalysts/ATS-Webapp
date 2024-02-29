@@ -1,0 +1,101 @@
+<div class="header-container mat-elevation-z1">
+  <span class="header-text" mat-dialog-title>
+    {{ data.title }} (
+    <span class="bold-text"> Consultant Name:</span>
+        {{ data.souringData.candidate_name }} ,
+        <span class="bold-text">Owner Name:</span>
+        {{ data.souringData.pseudoname }}
+          )
+  </span>
+  
+  <button mat-icon-button (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-card class="center-card">
+
+  <form [formGroup]="sourcingForm" class="vendor-form">
+    <div class="form">
+      <div class="form-column-left">
+        <mat-form-field class="description-field">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" maxlength="100" />
+          <mat-error *ngIf="sourcingForm.get('email')?.invalid && (sourcingForm.get('email')?.dirty || sourcingForm.get('email')?.touched) && sourcingForm.get('email')?.hasError('email')">Enter Valid email
+            address</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+        <mat-label>Contact Number</mat-label>
+        <ngx-mat-intl-tel-input [preferredCountries]="['in','us']" class="intl-input"
+          formControlName="contactno" [enablePlaceholder]="true" [enableSearch]="true"
+          name="contactno" id="intlInputCompany" #contactno>
+        </ngx-mat-intl-tel-input>
+      </mat-form-field>
+
+      </div>
+
+      <div class="form-column-right">
+        <mat-form-field class="description-field">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let opt of selectOptionObj.selectOptions.status" [value]="opt.value">{{ opt.label }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Appointment Date</mat-label>
+          <input matInput type="datetime-local" formControlName="appointmentdate" placeholder="DD/MM/YYYY" />
+        </mat-form-field>
+
+        
+      </div>
+
+    </div>
+    <div class="comments">
+      <div class="comments-inner">
+        <mat-form-field class="description-field">
+          <mat-label>Comments</mat-label>
+          <textarea matInput formControlName="comments" maxlength="1500"></textarea>
+          <mat-error *ngIf="sourcingForm.get('comments')?.hasError('required')"> Comments are required</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <div class="form-button-right">
+    <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">
+      Submit
+    </button>
+  </div>
+</mat-card>
+
+<mat-card class="center-card">
+  <div class="header-container-leading-resources">
+      <span class="header-text">Sourcing Lead Track</span>
+    </div>
+  <div style="overflow: auto;">
+    <table class="table table-bordered table-responsive">
+      <thead class="thead-light sticky">
+        <tr>
+          <th>#</th>
+          <th>Created Date</th>
+          <th>Status</th>
+          <th>Appointment Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of dataArr let i=index">
+          <tr>
+            <td let i=index nowrap rowspan="2">{{ i+1}}</td>
+            <td> {{data.createddate}} </td>
+            <td> {{data.status}} </td>
+            <td> {{data.appointmentdate}} </td>
+          </tr>
+          <tr>
+            <td colspan="3" ><span class="bold-text">Comments:</span>{{data.comments}}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</mat-card>

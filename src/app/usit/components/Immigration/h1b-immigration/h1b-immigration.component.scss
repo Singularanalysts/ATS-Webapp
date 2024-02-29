@@ -214,3 +214,9 @@
   .mat-mdc-row {
     height: 30px !important;
   }
+
+  @media screen and (min-width: 1920px) {
+    .h1b-container {
+      height: 90vh;
+    }
+  }

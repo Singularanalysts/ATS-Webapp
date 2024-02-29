@@ -304,6 +304,7 @@ export class AddRequirementComponent {
     this.requirementServ.getEmployee().subscribe(
       (response: any) => {
         this.empArr = response.data;
+       // console.log(response.data)
         this.empArr.map((x: any)=> x.selected = false);
         this.prepopulateSelectedEmployees();
     }
@@ -312,6 +313,7 @@ export class AddRequirementComponent {
 
   recruiterArr: any[] = [];
   recruiterList(event: any) {
+
     const newVal =  event.value;
     this.requirementServ.getRecruiterOfTheVendor(newVal, 'Recruiter').subscribe(
       (response: any) => {

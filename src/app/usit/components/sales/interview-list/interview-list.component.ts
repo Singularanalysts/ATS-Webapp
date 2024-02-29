@@ -1,11 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
-  ViewChild,
   inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,25 +12,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
-  MatPaginator,
-  MatPaginatorIntl,
+ 
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import {  MatSortModule} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import {
   ISnackBarData,
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
-import { Recruiter } from 'src/app/usit/models/recruiter';
-import { StatusComponent } from 'src/app/dialogs/status/status.component';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { Subject, takeUntil } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InterviewService } from 'src/app/usit/services/interview.service';
 import { AddInterviewComponent } from './add-interview/add-interview.component';
@@ -110,17 +103,20 @@ export class InterviewListComponent implements OnInit, OnDestroy{
     this.getFlag();
     this.getAll();
   }
-
+  subFlag!:any;
   getFlag(){
     const routeData = this.activatedRoute.snapshot.data;
     if (routeData['isSalesInterview']) {
       this.flag = "Sales";
+      this.subFlag = 'sales-interview';
 
     } else if (routeData['isRecInterview']) { // recruiting consutlant
       this.flag = "Recruiting";
+      this.subFlag = 'rec-interview';
     }
     else {
       this.flag = "Domrecruiting";
+      this.subFlag = 'dom-interview';
     }
 
   }
@@ -320,6 +316,10 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   }
 
   goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info',this.subFlag,id])
+  }
+
+  goToConsultantInfo(element: any, flag: string) {
+    this.router.navigate(['usit/consultant-info',flag, 'interview',element.consid])
   }
 }

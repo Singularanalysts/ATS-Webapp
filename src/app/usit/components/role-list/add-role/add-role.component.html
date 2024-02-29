@@ -12,7 +12,7 @@
   </div>
 
   <div class="content" mat-dialog-content>
-    <form class="add-role-form" [formGroup]="addRoleForm" #myFrom name="role-form" (ngSubmit)="onSubmit()">
+    <form class="add-role-form" [formGroup]="addRoleForm" #myFrom name="role-form" >
       <input type="hidden" formControlName="roleid">
       <mat-form-field class="rolename-field">
         <mat-label>Role Name</mat-label>

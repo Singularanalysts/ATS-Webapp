@@ -22,7 +22,7 @@
         <!-- First Name -->
         <mat-form-field appearance="fill">
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstname" maxlength="50">
+          <input matInput formControlName="firstname" maxlength="50" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('firstname').hasError('required')">First
             Name is required</mat-error>
           <mat-error *ngIf="consultantForm.get('firstname').hasError('minlength')">First
@@ -36,7 +36,7 @@
         <!-- last Name -->
         <mat-form-field appearance="fill">
           <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastname" maxlength="35">
+          <input matInput formControlName="lastname" maxlength="35"  (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('lastname').hasError('required')">Last
             Name is required</mat-error>
         </mat-form-field>
@@ -44,7 +44,7 @@
         <!-- consulatant Email -->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)">
+          <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)">
           <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('required')">Email
             is
             required</mat-error>
@@ -75,7 +75,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Project Availability</mat-label>
           <input matInput formControlName="projectavailabity" placeholder="Project Availability (In days)"
-            maxlength="3">
+            maxlength="3"  (keypress)="onlyNumberKey($event)" >
           <mat-error *ngIf="consultantForm.get('projectavailabity').hasError('required')">Project Availability is
             required</mat-error>
           <mat-error *ngIf="consultantForm.get('projectavailabity').hasError('pattern')">
@@ -148,7 +148,7 @@
         <!-- Position *ngIf="flag !== 'Recruiting' && flag !== 'sales'" -->
         <mat-form-field appearance="fill">
           <mat-label>Position</mat-label>
-          <input matInput formControlName="position" placeholder="Position" maxlength="30">
+          <input matInput formControlName="position" placeholder="Position" maxlength="30" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('position')!.hasError('required')">Position
             is required</mat-error>
         </mat-form-field>
@@ -178,7 +178,7 @@
         <!-- Total Exp  -->
         <mat-form-field appearance="fill">
           <mat-label>Total Experience</mat-label>
-          <input matInput formControlName="experience" placeholder="Total Experience" maxlength="2">
+          <input matInput formControlName="experience" placeholder="Total Experience" maxlength="2" (keypress)="onlyNumberKey($event)" >
           <mat-error *ngIf="consultantForm.get('experience')!.hasError('required')">Experience
             is required</mat-error>
           <mat-error *ngIf="consultantForm.get('experience')!.hasError('pattern')">Enter only number</mat-error>
@@ -204,6 +204,20 @@
               <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is required</mat-error>
             </mat-form-field>
           </div>
+
+          <!-- <div class="select-technology-field">
+            <mat-form-field appearance="fill">
+              <mat-label>Select Technology</mat-label>
+              <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" maxlength="75">
+              <mat-autocomplete #techAutoCmp="matAutocomplete">
+                <mat-option *ngFor="let option of (searchTechOptions$ | async)" (selectionChange)="techskills($event)" [value]="option[0]">
+                  {{ option[1] }}
+                </mat-option>
+              </mat-autocomplete>
+              <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+              <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is required</mat-error>
+            </mat-form-field>
+          </div> -->
            <!-- Skill Set -->
            <div class="form-details-textarea">
             <mat-form-field>
@@ -225,8 +239,10 @@
 
          <!-- Hourly Rate -->
          <mat-form-field appearance="fill">
-          <mat-label>Hourly Rate</mat-label>
-          <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="5">
+          <mat-label *ngIf="flag=='DomRecruiting'">Monthly Salary</mat-label>
+          <mat-label *ngIf="flag!='DomRecruiting'">Hourly Rate</mat-label>
+          <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="10">
+          <mat-error *ngIf="consultantForm.get('hourlyrate').hasError('required')">Hourly Rate is required</mat-error>
         </mat-form-field>
 
            <!-- Rate Radio group-->
@@ -247,7 +263,9 @@
           <mat-radio-group aria-label="Select an option" formControlName="relocation">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.relocation" [value]="opt.value"
             (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
-
+            <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required')">Relocation is
+              required
+            </mat-error>
           </mat-radio-group>
         </div>
         <!-- Others Details -->
@@ -261,7 +279,6 @@
             </mat-error>
           </mat-form-field>
         </div>
-
       </div>
     </div>
 
@@ -281,7 +298,6 @@
               </mat-option>
             </mat-select>
             <button matSuffix mat-icon-button (click)="onAddQualification();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-
             <mat-error *ngIf="consultantForm.get('qualification')!.hasError('required')">Qualification is
               required
             </mat-error>
@@ -298,7 +314,7 @@
         <!-- YOP -->
         <mat-form-field appearance="fill">
           <mat-label>Year of Passing</mat-label>
-          <input matInput formControlName="yop" maxlength="4">
+          <input matInput formControlName="yop" maxlength="4" (keypress)="onlyNumberKey($event)" >
         </mat-form-field>
       </div>
     </div>
@@ -311,13 +327,13 @@
         <!-- Ref Person Name -->
         <mat-form-field appearance="fill">
           <mat-label>Reference Person Name</mat-label>
-          <input matInput formControlName="emprefname" maxlength="30">
+          <input matInput formControlName="emprefname" maxlength="30" (input)="camelCase($event)">
 
         </mat-form-field>
         <!-- Ref Email -->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="emprefemail" maxlength="25">
+          <input matInput formControlName="emprefemail" maxlength="40" (input)="convertToLowerCase($event)">
           <!-- <mat-error *ngIf="consultantForm.get('emprefemail')!.hasError('required')">Email
             is
             required</mat-error>
@@ -373,7 +389,7 @@
         <!-- Reference Name-->
         <mat-form-field appearance="fill">
           <mat-label>Reference Name</mat-label>
-          <input matInput formControlName="refname" maxlength="30">
+          <input matInput formControlName="refname" maxlength="30" (input)="camelCase($event)">
 
         </mat-form-field>
       </div>
@@ -381,7 +397,7 @@
         <!-- Reference EMail-->
         <mat-form-field appearance="fill">
           <mat-label>Reference Email</mat-label>
-          <input matInput formControlName="refemail" maxlength="20">
+          <input matInput formControlName="refemail" maxlength="40" (input)="convertToLowerCase($event)">
           <!-- <mat-error *ngIf="consultantForm.get('refemail')!.hasError('required')">Email
             is
             required</mat-error>

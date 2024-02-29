@@ -3,7 +3,7 @@
     <li><a (click)="navigateToDashboard()">Home</a></li>
     <li class="last">Employee Performance Report</li>
   </ul>
-  <form [formGroup]="employeeReport" (ngSubmit)="onSubmit()">
+  <form [formGroup]="employeeReport">
 
     <mat-card mt-3 style="z-index: 1">
       <mat-card-content>
@@ -14,6 +14,7 @@
           <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
         </mat-form-field>
+
         &nbsp;&nbsp;
 
         <mat-form-field color="accent">
@@ -22,6 +23,7 @@
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
           <mat-datepicker #picker2 color="primary"></mat-datepicker> </mat-form-field>&nbsp;&nbsp;
+
 
         <mat-form-field>
           <mat-label>Select an option</mat-label>
@@ -48,9 +50,9 @@
 
         <button (click)="onSubmit()" mat-raised-button color="primary">Submit</button>
         <button (click)="reset()" mat-raised-button color="warn">Reset</button>
-        <button *ngIf="submitted" (click)="excelImport()" mat-raised-button
+        <button *ngIf="showReport" (click)="excelImport()" mat-raised-button
           style="background-color: #4CAF50; color: white;">Excel</button>
-      </mat-card-content>
+      </mat-card-content><!-- [disabled]="!privilegeServ.hasPrivilege('US_M1EXCELIMP')" -->
     </mat-card>
   </form>
 
@@ -62,7 +64,7 @@
             <table class="table table-sm  table-light table-bordered table-responsive">
               <thead class="thead-light sticky">
                 <tr>
-                  <th>#</th>
+                  <th>S.No</th>
                   <th>Consultant/Employee/Vendor</th>
                   <th *ngIf="flag3">Reqs</th>
                   <th>Submission</th>

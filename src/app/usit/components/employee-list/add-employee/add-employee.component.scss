@@ -283,3 +283,21 @@ mat-mdc-menu-content {
   }
 }
 /**** RESPONSIVE - ENDS ****/
+
+/* Hide the ripple effect by default */
+.custom-checkbox .mat-checkbox-ripple {
+  display: none;
+}
+
+/* Show the ripple effect when the checkbox is hovered */
+.custom-checkbox:hover .mat-checkbox-ripple {
+  display: block;
+}
+
+.other-details-div{
+  width: 100%;
+}
+
+.other-details-inner-div {
+  padding: 0px 10px;
+}

@@ -26,12 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import {
-  Observable,
-  debounceTime,
-  distinctUntilChanged,
-  tap,
-  switchMap,
-  of,
+ 
   Subject,
   takeUntil,
 } from 'rxjs';
@@ -162,7 +157,8 @@ export class AddInterviewComponent implements OnInit {
       mode: [interviewData ? interviewData.mode : '', Validators.required],
       feedback: [interviewData ? interviewData.feedback : '', Validators.required],
       interviewstatus: [interviewData ? interviewData.interviewstatus : '', [Validators.required]],
-      users: localStorage.getItem('userid'),
+      // users: localStorage.getItem('userid'),
+      users: [this.data.actionName === "edit-interview" ?  interviewData?.users : localStorage.getItem('userid') ],
       interviewno: [this.data.actionName === "edit-interview" ? interviewData.interviewno : ''],
       updatedby: [this.data.actionName === "edit-interview" ? localStorage.getItem('userid') : '0'],
       intrid: [interviewData ? interviewData.intrid : ''],
@@ -284,6 +280,7 @@ export class AddInterviewComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const saveReqObj = this.getSaveData();
+    ///console.log(saveReqObj)
     this.interviewServ
       .addORUpdateInterview(saveReqObj,this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -312,6 +309,7 @@ export class AddInterviewComponent implements OnInit {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
+      
   }
 
   /** to display form validation messages */

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,6 +22,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { InterviewReportComponent } from './interview-report/interview-report.component';
 import { ConsultantReportComponent } from './consultant-report/consultant-report.component';
 import { SubmissionReportComponent } from './submission-report/submission-report.component';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 
 interface Select {
   value: string;
@@ -44,6 +45,7 @@ interface Select {
     MatInputModule,
     ReactiveFormsModule,
   ],
+  providers: [DatePipe]
 })
 export class EmployeeReportsComponent {
   excutivewiseSales: string[] = [
@@ -100,16 +102,15 @@ export class EmployeeReportsComponent {
     { value: 'requirements', display: 'Vendor Wise' },
   ];
   consultant: any;
+  protected privilegeServ = inject(PrivilegesService);
   reset() {
     this.employeeReport.reset();
   }
   private router = inject(Router);
-  private consultantServ = inject(ConsultantService);
   disFlg!: boolean;
   flag!: boolean;
   hideflg = true;
   groupby = '';
-
   flag2 = false;
   flag3 = false;
   subTotal = 0;
@@ -125,12 +126,10 @@ export class EmployeeReportsComponent {
   backoutCnt = 0;
   submitted: boolean = false;
   showReport: boolean = false;
-  private dialogServ = inject(DialogService);
-  onSort(event: any) {}
-
+  passName!:string;
+  onSort(event: any) { }
   c_data: any[] = [];
   Activecnt = 0;
-
   stdate!: any;
   eddate!: any;
   hiddenflg = 'main';
@@ -143,13 +142,24 @@ export class EmployeeReportsComponent {
     company: string
   ) {
     this.submissionPopup();
+    if (this.vo.groupby == 'employee') {
+      this.passName = executive;
+    }
+    else if (this.vo.groupby == 'consultant') {
+      this.passName = consul;
+    }
+    else {
+      this.passName = company;
+    }
+
+
     if (status == 'submission') {
       const dialogRef = this.dialog.open(SubmissionReportComponent, {
         width: '80%', // adjust the width as needed
         // data: this.vo,
         data: {
           vo: this.vo,
-          additionalValue1: executive,
+          additionalValue1: this.passName,
         },
       });
 
@@ -171,7 +181,7 @@ export class EmployeeReportsComponent {
         // data: this.vo,
         data: {
           vo: this.vo,
-          additionalValue1: executive,
+          additionalValue1: this.passName,
         },
       });
 
@@ -183,7 +193,7 @@ export class EmployeeReportsComponent {
         width: '80%', // adjust the width as needed
         data: {
           vo: this.vo,
-          additionalValue1: executive,
+          additionalValue1: this.passName,
         },
       });
 
@@ -245,28 +255,12 @@ export class EmployeeReportsComponent {
       // Set default columns if no specific condition is met
       this.dataTableColumns = ['number', 'cost'];
     }
-    console.log('selected group By ', selectedGroupBy);
-    console.log('Selected Columns: ', this.dataTableColumns);
-    console.log('selected group By ', selectedDepartment);
   }
 
   generateSerialNumber(index: number): string {
     const serialNumber = (this.page - 1) * this.tableSize + index + 1;
     return serialNumber.toString();
   }
-  // getAllData(pagIdx = 1) {
-  //   this.consultantServ.getSalesHotList(pagIdx, this.itemsPerPage, this.field).subscribe(
-  //     (response: any) => {
-  //       this.dataSource.data = response.data.content;
-  //       this.totalItems = response.data.totalElements;
-  //       // for serial-num {}
-  //       this.dataSource.data.map((x: any, i) => {
-  //         x.serialNum = this.generateSerialNumber(i);
-  //       });
-  //     }
-  //   )
-  // }
-
   dataSource = new MatTableDataSource<any>([]);
   page: number = 1;
   count: number = 0;
@@ -314,8 +308,8 @@ export class EmployeeReportsComponent {
       action.edit || action.add
         ? '62dvw'
         : action.delete
-        ? 'fit-content'
-        : '400px';
+          ? 'fit-content'
+          : '400px';
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = dataToBeSentToDailog.actionName;
@@ -326,8 +320,9 @@ export class EmployeeReportsComponent {
   constructor(
     private formBuilder: FormBuilder,
     private reportservice: ReportsService,
+    private datePipe: DatePipe,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.employeeReport = this.formBuilder.group({
@@ -371,18 +366,37 @@ export class EmployeeReportsComponent {
   }
   grpby = '';
   onSubmit() {
+
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
     this.submitted = true;
     if (this.employeeReport.invalid) {
       this.showReport = false;
       return;
-    } else {
+    }
+    //consultant_report
+    if (shoWresult) {
       this.showReport = true;
-    } //consultant_report
+    } else {
+      this.showReport = false;
+    }
 
-    this.vo.startDate = this.employeeReport.get('startingDate')?.value;
-    this.vo.endDate = this.employeeReport.get('endingDate')?.value;
-    this.stdate = this.vo.startDate;
-    this.eddate = this.vo.endDate;
+    // this.vo.startDate = this.employeeReport.get('startDate')?.value;
+    // this.vo.endDate = this.employeeReport.get('endDate')?.value;
+
+    const joiningDateFormControl = this.employeeReport.get('startDate');
+    const relievingDateFormControl = this.employeeReport.get('endDate');
+    if (joiningDateFormControl?.value) {
+      const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
+      const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl?.value, 'yyyy-MM-dd');
+
+      // Update the form controls with the formatted dates
+      joiningDateFormControl.setValue(formattedJoiningDate);
+      relievingDateFormControl?.setValue(formattedRelievingDate);
+    }
+  // Assign the formatted dates to the properties in your component
+  this.vo.startDate = joiningDateFormControl?.value;
+  this.vo.endDate = relievingDateFormControl?.value;
+
     this.vo.flg = this.employeeReport.get('flg')?.value;
     this.vo.groupby = this.employeeReport.get('groupby')?.value;
     const groupBy = this.employeeReport.get('groupby')?.value;
@@ -393,28 +407,28 @@ export class EmployeeReportsComponent {
       this.hideflg = false;
       this.grpby = 'employee';
     }
-    else if (groupBy == 'requirements' && this.vo.flg!='sales'){
+    else if (groupBy == 'requirements' && this.vo.flg != 'sales') {
       this.hideflg = true;
       this.grpby = 'requirements';
-      this.flag3=true;
+      this.flag3 = true;
     }
-    else{
+    else {
       this.hideflg = true;
       this.grpby = 'requirements';
-     this.flag3=false;
+      this.flag3 = false;
     }
-   
-    if (this.vo.flg == 'Recruiting' && this.grpby!='requirements') {
+
+    if (this.vo.flg == 'Recruiting' && this.grpby != 'requirements') {
       this.flag2 = true;
     }
     else {
       this.flag2 = false;
     }
-    console.log(this.employeeReport.value)
-      this.reportservice.consultant_report(this.employeeReport.value)
+    // console.log(JSON.stringify(this.vo) + "   ==  " + JSON.stringify(this.employeeReport.value))
+    this.reportservice.consultant_report(this.employeeReport.value)
       .subscribe((data: any) => {
         this.c_data = data.data;
-      //  console.log(JSON.stringify(this.c_data))
+        //  console.log(JSON.stringify(this.c_data))
         this.subTotal = this.c_data.reduce((a, b) => a + b.submission, 0);
         this.intTotal = this.c_data.reduce((a, b) => a + b.interview, 0);
         this.scheduleTotal = this.c_data.reduce((a, b) => a + b.schedule, 0);
@@ -434,7 +448,7 @@ export class EmployeeReportsComponent {
   }
   headings: any[] = [];
   excelData: any[] = [];
-  
+
   submissionPopup() {
     // const dataToBeSentToDailog = {
     //   title: 'Add Employee',
@@ -458,124 +472,151 @@ export class EmployeeReportsComponent {
   }
 
   excelImport() {
-     console.log(this.vo)
-    if(this.vo.groupby=='employee' && this.vo.flg=='sales'){
+    //console.log(this.vo)
+    if (this.vo.groupby == 'employee' && this.vo.flg == 'sales') {
       this.headings = [[
-      'Employee Name',
-      'Submission',
-      'Interview',
-      'Schedule',
-      'Hold',
-      'Closed',
-      'Rejected',
-      'On Boarded',
-      'Back Out',
-      'Selected',
-    ]];
-    this.excelData = this.c_data.map(c => [
-      c.pseudoname,
-      c.submission,
-      c.interview,
-      c.schedule,
-      c.onhold,
-      c.closed,
-      c.rejected,
-      c.onboarded,
-      c.backout,
-      c.selected,
-    ]);
-  }
-   else if (this.vo.groupby=='consultant' && this.vo.flg=='sales'){
-    this.headings = [[
-      'Consultant Name',
-      'Submission',
-      'Interview',
-      'Schedule',
-      'Hold',
-      'Closed',
-      'Rejected',
-      'On Boarded',
-      'Back Out',
-      'Selected',
-    ]];
-    this.excelData = this.c_data.map(c => [
-      c.consultantname,
-      c.submission,
-      c.interview,
-      c.schedule,
-      c.onhold,
-      c.closed,
-      c.rejected,
-      c.onboarded,
-      c.backout,
-      c.selected,
-    ]);
-  }
+        'Employee Name',
+        'Submission',
+        'Interview',
+        'Schedule',
+        'Hold',
+        'Closed',
+        'Rejected',
+        'On Boarded',
+        'Back Out',
+        'Selected',
+      ]];
+      this.excelData = this.c_data.map(c => [
+        c.pseudoname,
+        c.submission,
+        c.interview,
+        c.schedule,
+        c.onhold,
+        c.closed,
+        c.rejected,
+        c.onboarded,
+        c.backout,
+        c.selected,
+      ]);
+    }
+    else if (this.vo.groupby == 'consultant' && this.vo.flg == 'sales') {
+      this.headings = [[
+        'Consultant Name',
+        'Submission',
+        'Interview',
+        'Schedule',
+        'Hold',
+        'Closed',
+        'Rejected',
+        'On Boarded',
+        'Back Out',
+        'Selected',
+      ]];
+      this.excelData = this.c_data.map(c => [
+        c.consultantname,
+        c.submission,
+        c.interview,
+        c.schedule,
+        c.onhold,
+        c.closed,
+        c.rejected,
+        c.onboarded,
+        c.backout,
+        c.selected,
+      ]);
+    }
 
-  else if (this.vo.groupby=='employee' && this.vo.flg=='Recruiting'){
-    this.headings = [[
-      'Employee Name',
-      'Profiles Pulled',
-      'Submission',
-      'Interview',
-      'Schedule',
-      'Hold',
-      'Closed',
-      'Rejected',
-      'On Boarded',
-      'Back Out',
-      'Selected',
-    ]];
-    this.excelData = this.c_data.map(c => [
-      c.pseudoname,
-      c.consultant,
-      c.submission,
-      c.interview,
-      c.schedule,
-      c.onhold,
-      c.closed,
-      c.rejected,
-      c.onboarded,
-      c.backout,
-      c.selected,
-    ]); //groupby: "requirements", flg: "Recruiting"
-  }
+    else if (this.vo.groupby == 'employee' && this.vo.flg == 'Recruiting') {
+      this.headings = [[
+        'Employee Name',
+        'Submission',
+        'Interview',
+        'Schedule',
+        'Hold',
+        'Closed',
+        'Rejected',
+        'On Boarded',
+        'Back Out',
+        'Profiles Pulled',
+        'Selected',
+      ]];
+      this.excelData = this.c_data.map(c => [
+        c.pseudoname,
+        c.submission,
+        c.interview,
+        c.schedule,
+        c.onhold,
+        c.closed,
+        c.rejected,
+        c.onboarded,
+        c.backout,
+        c.consultant,
+        c.selected,
+      ]); //groupby: "requirements", flg: "Recruiting"
+    }
 
-  else if (this.vo.groupby=='requirements'){
-    this.headings = [[
-      'Vendor',
-      'Reqs',
-      'Submission',
-      'Interview',
-      'Schedule',
-      'Hold',
-      'Closed',
-      'Rejected',
-      'On Boarded',
-      'Back Out',
-      'Selected',
-    ]];
-    this.excelData = this.c_data.map(c => [
-      c.company,
-      c.req_count,
-      c.submission,
-      c.interview,
-      c.schedule,
-      c.onhold,
-      c.closed,
-      c.rejected,
-      c.onboarded,
-      c.backout,
-      c.selected,
-    ]); 
-  }
+    else if (this.vo.groupby == 'requirements' && this.vo.flg == 'Recruiting') {
+      this.headings = [[
+        'Vendor',
+        'Reqs',
+        'Submission',
+        'Interview',
+        'Schedule',
+        'Hold',
+        'Closed',
+        'Rejected',
+        'On Boarded',
+        'Back Out',
+        'Selected',
+      ]];
+      this.excelData = this.c_data.map(c => [
+        c.company,
+        c.req_count,
+        c.submission,
+        c.interview,
+        c.schedule,
+        c.onhold,
+        c.closed,
+        c.rejected,
+        c.onboarded,
+        c.backout,
+        c.selected,
+      ]);
+    }
+
+    else if (this.vo.groupby == 'requirements' && this.vo.flg == 'sales') {
+      this.headings = [[
+        'Vendor',
+        'Submission',
+        'Interview',
+        'Schedule',
+        'Hold',
+        'Closed',
+        'Rejected',
+        'On Boarded',
+        'Back Out',
+        'Selected',
+      ]];
+      this.excelData = this.c_data.map(c => [
+        c.company,
+        c.submission,
+        c.interview,
+        c.schedule,
+        c.onhold,
+        c.closed,
+        c.rejected,
+        c.onboarded,
+        c.backout,
+        c.selected,
+      ]);
+    }
 
     const wb = utils.book_new();
     const ws: any = utils.json_to_sheet([]);
     utils.sheet_add_aoa(ws, this.headings);
     utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
     utils.book_append_sheet(wb, ws, 'data');
-    writeFile(wb, 'Report@' +this.vo.groupby+' '+this.vo.flg+' '+this.vo.startDate +' TO '+this.vo.endDate+'.xlsx');
+    writeFile(wb, 'Report@' + this.vo.groupby + ' ' + this.vo.flg + ' ' + this.vo.startDate + ' TO ' + this.vo.endDate + '.xlsx');
   }
 
 }

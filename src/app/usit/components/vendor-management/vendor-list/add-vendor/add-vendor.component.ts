@@ -1,17 +1,15 @@
-import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import {
   ISnackBarData,
   SnackBarService,
@@ -42,9 +40,8 @@ import {
   startWith,
   map,
 } from 'rxjs';
-import { Company } from 'src/app/usit/models/company';
 import {
-  NgxGpAutocompleteDirective,
+
   NgxGpAutocompleteOptions,
   NgxGpAutocompleteService
 } from "@angular-magic/ngx-gp-autocomplete";
@@ -91,12 +88,10 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   statearr: any = [];
   private vendorServ = inject(VendorService);
   private snackBarServ = inject(SnackBarService);
-  private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   // options = {
   //   componentRestrictions: { country: ['IN', 'US'] },
   // };
-
   companySearchData: any[] = [];
   searchCompanyOptions$!: Observable<any>;
   selectOptionObj = {
@@ -109,7 +104,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   dialogRef = inject(MatDialogRef<AddVendorComponent>);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
-   
+
   designation = localStorage.getItem('designation');
   isCompanyDataAvailable: boolean = false;
 
@@ -125,14 +120,14 @@ export class AddVendorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-   // this.getvendorcompanydetails(); 
-   //This below snippet will be  for company auto-complete search
-    this.searchCompanyOptions$ = this.vendorServ.getCompanies().pipe(map((x:any)=> x.data), tap(resp => {
-        if (resp && resp.length) {
-          this.getCompanyOptionsForAutoComplete(resp);
-        }
+    // this.getvendorcompanydetails(); 
+    //This below snippet will be  for company auto-complete search
+    this.searchCompanyOptions$ = this.vendorServ.getCompanies().pipe(map((x: any) => x.data), tap(resp => {
+      if (resp && resp.length) {
+        this.getCompanyOptionsForAutoComplete(resp);
+      }
     }));
-    if(this.data.actionName === "edit-vendor"){
+    if (this.data.actionName === "edit-vendor") {
       this.bindFormControlValueOnEdit();
     }
     this.iniVendorForm(new Vms());
@@ -158,7 +153,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
           //init form and  update control values on edit
           this.iniVendorForm(this.vendorObj);
         }
-      }, error: err =>{
+      }, error: err => {
         dataToBeSentToSnackBar.message = err.message;
         dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
@@ -178,32 +173,32 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       ],
       //  fedid: [this.data.vendorData ? this.data.vendorData.fedid : ''],
       vendortype: [
-       vendorData ?vendorData.vendortype : '',
+        vendorData ? vendorData.vendortype : '',
         Validators.required,
       ],
       companytype: [
-       vendorData ?vendorData.companytype : '',Validators.required,
+        vendorData ? vendorData.companytype : '', Validators.required,
       ],
-      tyretype: [vendorData ?vendorData.tyretype : ''],
-      client: [vendorData ?vendorData.client : ''],
+      tyretype: [vendorData ? vendorData.tyretype : ''],
+      client: [vendorData ? vendorData.client : ''],
       addedby: [this.vendorObj.addedby],
       updatedby: [this.vendorObj.updatedby],
-      details: [vendorData ?vendorData.details : ''],
-      staff: [vendorData ?vendorData.staff : ''],
-      revenue: [vendorData ?vendorData.revenue : ''],
-      website: [vendorData ?vendorData.website : ''],
-      facebook: [vendorData ?vendorData.facebook : ''],
+      details: [vendorData ? vendorData.details : ''],
+      staff: [vendorData ? vendorData.staff : ''],
+      revenue: [vendorData ? vendorData.revenue : ''],
+      website: [vendorData ? vendorData.website : ''],
+      facebook: [vendorData ? vendorData.facebook : ''],
       industrytype: [
-       vendorData ?vendorData.industrytype : '',
+        vendorData ? vendorData.industrytype : '',
       ],
-      linkedinid: [vendorData ?vendorData.linkedinid : ''],
-      twitterid: [vendorData ?vendorData.twitterid : ''],
+      linkedinid: [vendorData ? vendorData.linkedinid : ''],
+      twitterid: [vendorData ? vendorData.twitterid : ''],
       // user: this.formBuilder.group({
       //   userid: localStorage.getItem('userid'),
       // }),
       user: localStorage.getItem('userid'),
       headquerter: [
-       vendorData ?vendorData.headquerter : '',
+        vendorData ? vendorData.headquerter : '',
         [Validators.required, this.atLeastTwoNumbers]
       ],
     });
@@ -233,14 +228,14 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   atLeastTwoNumbers(control: AbstractControl): { [key: string]: boolean } | null {
     const value: string = control.value || '';
     const numDigits = value.replace(/[^0-9]/g, '').length;
-  
+
     if (numDigits < 2) {
-      return { 'atLeastTwoNumbers': true }; 
+      return { 'atLeastTwoNumbers': true };
     }
-  
-    return null; 
+
+    return null;
   }
-  
+
   validateControls(action = 'add-vendor') {
     if (action === 'edit-vendor') {
       this.vendorForm.get('status').valueChanges.subscribe((res: any) => {
@@ -278,14 +273,14 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       }
       trtype.updateValueAndValidity();
     });
-  //  this.companyAutoCompleteSearch();
-// this.searchCompanyOptions$ =
-//     this.vendorForm.controls.company.valueChanges.pipe(
-//       startWith(''),
-//       map((value: any) =>
-//         this._filterOptions({company: value} || '', this.companyOptions)
-//       )
-//     );
+    //  this.companyAutoCompleteSearch();
+    // this.searchCompanyOptions$ =
+    //     this.vendorForm.controls.company.valueChanges.pipe(
+    //       startWith(''),
+    //       map((value: any) =>
+    //         this._filterOptions({company: value} || '', this.companyOptions)
+    //       )
+    //     );
   }
   private _filterOptions(value: any, options: string[]): string[] {
     const filterValue = value.company.trim().toLowerCase();
@@ -300,27 +295,27 @@ export class AddVendorComponent implements OnInit, OnDestroy {
    * getVendor Company Details : NOT USED
    */
   getvendorcompanydetails() {
-    this.vendorServ.getCompanies() .subscribe((response: any) => {
-          this.companyOptions = response.data;
-          this.searchCompanyOptions$ =
-          this.vendorForm.controls.company.valueChanges.pipe(
-            startWith(''),
-            map((value: any) =>
-              this._filterOptions({company: value} || '', this.companyOptions)
-            )
-          );
-      });
+    this.vendorServ.getCompanies().subscribe((response: any) => {
+      this.companyOptions = response.data;
+      this.searchCompanyOptions$ =
+        this.vendorForm.controls.company.valueChanges.pipe(
+          startWith(''),
+          map((value: any) =>
+            this._filterOptions({ company: value } || '', this.companyOptions)
+          )
+        );
+    });
   }
 
-  getCompanyOptionsForAutoComplete(data: any){
+  getCompanyOptionsForAutoComplete(data: any) {
     this.companyOptions = data;
     this.searchCompanyOptions$ =
-    this.vendorForm.controls.company.valueChanges.pipe(
-      startWith(''),
-      map((value: any) =>
-        this._filterOptions({company: value} || '', this.companyOptions)
-      )
-    );
+      this.vendorForm.controls.company.valueChanges.pipe(
+        startWith(''),
+        map((value: any) =>
+          this._filterOptions({ company: value } || '', this.companyOptions)
+        )
+      );
   }
 
   // not used
@@ -363,7 +358,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       this.displayFormErrors();
       return;
     }
-    else{
+    else {
       this.isFormSubmitted = true
     }
     const saveReqObj = this.getSaveData();
@@ -394,32 +389,42 @@ export class AddVendorComponent implements OnInit, OnDestroy {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
+    
+  }
+  trimSpacesFromFormValues() {
+    Object.keys(this.vendorForm.controls).forEach((controlName: string) => {
+      const control = this.vendorForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
+    });
   }
 
   // return to be saved/ updated data
   getSaveData() {
-     // updates employee object form values
-     if(this.data.actionName === "edit-vendor"){
-      [this.vendorForm.value].forEach( (formVal, idx) => {
+    this.trimSpacesFromFormValues();
+    // updates employee object form values
+    if (this.data.actionName === "edit-vendor") {
+      [this.vendorForm.value].forEach((formVal, idx) => {
         this.vendorObj.company = formVal.company;
         this.vendorObj.vendortype = formVal.vendortype;
         this.vendorObj.companytype = formVal.companytype;
-        this.vendorObj.tyretype =  formVal.tyretype;
-        this.vendorObj.client =  formVal.client;
+        this.vendorObj.tyretype = formVal.tyretype;
+        this.vendorObj.client = formVal.client;
         this.vendorObj.addedby = localStorage.getItem('userid');;
-        this.vendorObj.email =  formVal.email;
-        this.vendorObj.updatedby =  localStorage.getItem('userid');
-        this.vendorObj.headquerter =  formVal.headquerter;
-        this.vendorObj.status =  formVal.status;
-        this.vendorObj.vmsid =  this.data.vendorData.id;
+        this.vendorObj.email = formVal.email;
+        this.vendorObj.updatedby = localStorage.getItem('userid');
+        this.vendorObj.headquerter = formVal.headquerter;
+        this.vendorObj.status = formVal.status;
+        this.vendorObj.vmsid = this.data.vendorData.id;
         this.vendorObj.vms_stat = formVal.status === "Active" ? "Initiated" : formVal.status === "Approved" ? "Approved" : formVal.vms_stat;
         // this.vendorObj.vms_stat =  formVal.status === "Active"  ? "Initiated" : formVal.vms_stat;
         this.vendorObj.twitterid = formVal.twitterid;
-        this.vendorObj.linkedinid =  formVal.linkedinid;
+        this.vendorObj.linkedinid = formVal.linkedinid;
         this.vendorObj.industrytype = formVal.industrytype;
         this.vendorObj.facebook = formVal.facebook;
         this.vendorObj.website = formVal.website;
-        this.vendorObj.revenue =  formVal.revenue;
+        this.vendorObj.revenue = formVal.revenue;
         this.vendorObj.staff = formVal.staff;
         this.vendorObj.details = formVal.details;
         this.vendorObj.client = formVal.client;

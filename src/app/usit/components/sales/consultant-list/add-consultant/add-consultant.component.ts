@@ -5,14 +5,13 @@ import {
   FormGroup,
   FormBuilder,
   Validators,
-  FormControl,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, map, startWith, takeUntil, tap } from 'rxjs';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -78,7 +77,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   // private baseUrl: string = environment.API_BASE_URL;
   protected isFormSubmitted: boolean = false;
   private api = inject(ApiService);
-  private baseUrl = this.api.apiUrl;
   uploadedfiles: string[] = [];
   message: any;
   consultantForm: any = FormGroup;
@@ -121,7 +119,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   private snackBarServ = inject(SnackBarService);
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
-  private activatedRoute = inject(ActivatedRoute);
   private dialogServ = inject(DialogService);
   private fileService = inject(FileManagementService);
   data = inject(MAT_DIALOG_DATA);
@@ -131,8 +128,12 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   isRadSelected: any;
   submitted: boolean = false;
   dailCode: string = "";
+  searchTechOptions$!: Observable<any>;
+  technologyOptions!: any;
+  isTechnologyDataAvailable: boolean = false;
+
   constructor(
-    private http: HttpClient,
+   
   ) { }
   get frm() {
     return this.consultantForm.controls;
@@ -213,7 +214,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       position: [consultantData ? consultantData.position : '', Validators.required],
       status: [this.data.actionName === "edit-consultant" ?  consultantData.status : 'Initiated'],
       experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      hourlyrate: [consultantData ? consultantData.hourlyrate : ''],
+      hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
       skills: [consultantData ? consultantData.skills : ''],
       ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
       technology: [consultantData ? consultantData.technology : '', Validators.required],
@@ -235,7 +236,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
      refcont: [consultantData ? consultantData.refcont : ''],
      // // number: ['', Validators.required],
       // status:[this.consultantForm.status],
-     relocation: [consultantData ? consultantData.relocation : ''],//  kiran
+     relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
      relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
       consultantflg: this.data.flag.toLocaleLowerCase(),
       /* requirements: this.formBuilder.group({
@@ -251,6 +252,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (this.flag == 'Recruiting' || this.flag == 'sales') {
       this.consultantForm.get('status').setValue('Active');
     }
+    
 
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
       const consultantemail = this.consultantForm.get('consultantemail');
@@ -342,7 +344,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   //     this.autoskills = response.data;
   //   });
   // }
-  techskills(event: MatSelectChange) {
+  techskills(event: any) {
     const newVal = event.value;
     this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
       this.consultantForm.get('skills').setValue(response.data);
@@ -421,15 +423,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.companyname = formVal.companyname;
         this.entity.company = formVal.company;
         this.entity.refname = formVal.refname;
+        this.entity.refemail = formVal.refemail;
         this.entity.refcont = formVal.refcont;
         this.entity.relocation = formVal.relocation;
         this.entity.relocatOther = formVal.relocatOther;
       })
     }
-
+    this.trimSpacesFromFormValues();
     const saveObj = this.data.actionName === "edit-consultant" ? this.entity : this.consultantForm.value;
 
     const lenkedIn = this.consultantForm.get('linkedin')?.value;
+    
     if (this.flg == true) {
      // const saveReqObj = this.getSaveObjData()
       this.consultantServ.registerconsultant(saveObj)
@@ -455,8 +459,21 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
       );
     }
+    
   }
+
+  trimSpacesFromFormValues() {
+    Object.keys(this.consultantForm.controls).forEach((controlName: string) => {
+      const control = this.consultantForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
+    });
+  }
+
+
   getSaveObjData() {
+    this.trimSpacesFromFormValues();
     if (this.data.actioName === 'edit-consultant') {
       return { ...this.entity, ...this.consultantForm.value }
     }
@@ -477,7 +494,34 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.consultantServ.gettech().subscribe((response: any) => {
       this.techdata = response.data;
     });
+    // this.searchTechOptions$ = this.consultantServ.gettech().pipe(map((x: any) => x.data), tap(resp => {
+    //   if (resp && resp.length) {
+    //     this.getTechOptionsForAutoComplete(resp);
+    //   }
+    // }));
+    
   }
+
+  getTechOptionsForAutoComplete(data: any) {
+    this.technologyOptions = data;
+    this.searchTechOptions$ =
+      this.consultantForm.controls.technology.valueChanges.pipe(
+        startWith(''),
+        map((value: any) =>
+          this._filterOptions(value, this.technologyOptions)
+        )
+      );
+  }
+
+  private _filterOptions(value: any, options: string[]): string[] {
+    const filterValue = value.trim().toLowerCase();
+  const filteredTechnologies = options.filter((option: string) =>
+    option[1].toLowerCase().includes(filterValue)
+  );
+  this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
+  return filteredTechnologies;
+  }
+  
   getQualification() {
     this.consultantServ.getQualification().subscribe((response: any) => {
       this.QualArr = response.data;
@@ -911,6 +955,28 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  camelCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = this.capitalizeFirstLetter(inputValue);
+  }
+  capitalizeFirstLetter(input: string): string {
+    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+      return char.toUpperCase();
+    });
+  }
+
+  convertToLowerCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.toLowerCase();
+  }
+
+  onlyNumberKey(evt: any) {
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+      return false;
+    return true;
   }
 }
 export const IV_AVAILABILITY = [

@@ -16,10 +16,65 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
   private apiServ = inject(ApiService);
   protected privilegeServ = inject(PrivilegesService);
   department : any;
+  role : any;
   ngOnInit(): void {
     this.department  = localStorage.getItem('department');
+    this.role  = localStorage.getItem('role');
+// role
+    //Super Administrator
+    //Recruiting
 
-    if(this.department == 'Administration' || this.department == 'SoftWare' ){
+    // 'Administration',
+    // 'Recruiting',
+    // 'SoftWare',
+    // 'Bench Sales',
+    // 'Sourcing',
+    // 'Dom Recruiting',
+    // 'Accounts',
+    // 'Guest',
+
+//     Super Administrator 
+// Administrator 
+// Sales Manager 
+// Recruiting Manager 
+// Team Leader Sales 
+// Team Leader Recruiting 
+// Sales Executive 
+// Recruiter 
+// Guest 
+// OPT Recruiter 
+// Developer 
+// HR Manager 
+    if(this.role=='Super Administrator' || this.role=='HR Manager'){
+      this.getSideNavData('assets/side-navbar-Super-Admin.json')
+    }
+    else if (this.role=='Administrator'  || this.department=='SoftWare' || this.department=='Software'){
+      this.getSideNavData('assets/side-navbar-Admin.json')
+    }
+    else if(this.role=='Sales Manager'){
+      this.getSideNavData('assets/side-navbar-sales-manager.json')
+    }
+    else if (this.role=='Recruiting Manager'){
+      this.getSideNavData('assets/side-navbar-recruiting-manager.json')
+    }
+
+    else if ( (this.role=='Team Leader Recruiting' || this.role=='Recruiter') && (this.department == 'Recruiting')){
+      this.getSideNavData('assets/side-navbar-recruiting-items.json')
+    }
+
+    else if ( (this.role=='Team Leader Sales' || this.role=='Sales Executive') && (this.department == 'Bench Sales')){
+      this.getSideNavData('assets/side-navbar-sales-items.json')
+    }
+
+    else if (this.department=='Sourcing'){
+      this.getSideNavData('assets/side-navbar-sourcing.json')
+    }
+    else{
+      this.getSideNavData('assets/side-navbar-Super-Admin.json')
+    }
+
+/*
+    if(this.department == 'Dom Recruiting'){
       this.getSideNavData('assets/side-navbar-items.json')
     }
     else if(this.department == 'Sourcing' ){
@@ -35,12 +90,13 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
       this.getSideNavData('assets/side-navbar-dom-items.json')
     }
 
-    else if(this.department == 'Accounts' ){
-      this.getSideNavData('assets/side-navbar-accounts-items.json')
-    }
+    // else if(this.department == 'Accounts' ){
+    //   this.getSideNavData('assets/side-navbar-accounts-items.json')
+    // }
     else{
       this.getSideNavData('assets/side-navbar-accounts-items.json')
     }
+    */
   }
 
   private getSideNavData(path:string) {

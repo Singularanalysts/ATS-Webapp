@@ -24,8 +24,18 @@ import { UserInfoComponent } from './components/recruitment/user-info/user-info.
 import { H1bImmigrationComponent } from './components/Immigration/h1b-immigration/h1b-immigration.component';
 import { FutureOptCptComponent } from './components/Immigration/future-opt-cpt/future-opt-cpt.component';
 import { HotListComponent } from './components/sales/hot-list/hot-list.component';
+import { CanActivateGuard } from '../core/guards/can-activate.guard';
+import { H1transferComponent } from './components/sales/h1transfer/h1transfer.component';
+import { OpenreqsComponent } from './components/openreqs/openreqs.component';
+import { RssfedComponentimplements } from './components/rssfed/rssfed.component';
 import { EmployeeReportsComponent } from './components/reports/employee-reports/employee-reports.component';
 import { SourcingReportsComponent } from './components/reports/sourcing-reports/sourcing-reports.component';
+import { LinkedprofilesComponent } from './components/linkedprofiles/linkedprofiles.component';
+import { ConsultantInfoComponent } from './components/sales/consultant-list/consultant-info/consultant-info.component';
+import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
+import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
+import { GlobalSearchComponent } from './components/global-search/global-search.component';
+
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -55,7 +65,7 @@ const routes: Routes = [
   },
   { path: 'employees', component: EmployeeListComponent },
   {
-    path: 'user-info/:id',
+    path: 'user-info/:flg/:id',
     component: UserInfoComponent,
   },
   { path: 'vendors', component: VendorListComponent },
@@ -159,16 +169,19 @@ const routes: Routes = [
   {
     path: 'sales-closures',
     component: ClosureListComponent,
+    canActivate:[CanActivateGuard],
     data: { isSalesClosure: true },
   },
   {
     path: 'rec-closures',
     component: ClosureListComponent,
+    canActivate:[CanActivateGuard],
     data: { isRecClosure: true },
   },
   {
     path: 'dom-closures',
     component: ClosureListComponent,
+    canActivate:[CanActivateGuard],
     data: { isDomClosure: true },
   },
   {
@@ -183,13 +196,41 @@ const routes: Routes = [
   },
   {
     path: 'hot-list', component: HotListComponent,
+  }
+  ,
+  {
+    path: 'h1transfer', component: H1transferComponent,
+  }
+  ,
+  {
+    path: 'openreqs', component: OpenreqsComponent,
   },
+  {
+    path: 'rssfeed', component: RssfedComponentimplements,
+  },
+  {
+    path: 'linkedinprofiles', component: LinkedprofilesComponent,
+  }
+  ,
   { 
     path: 'employee-report', component: EmployeeReportsComponent
   },
   { 
     path: 'sourcing-report', component: SourcingReportsComponent 
-  }
+  },
+  { path: 'consultant-info/:flg/:subFlag/:id', component: ConsultantInfoComponent },
+
+  { 
+    path: 'list-email', component: EmailextractionComponent 
+  },
+
+  { 
+    path: 'list-techsupport', component: TechSupportListComponent 
+  },
+  { 
+    path: 'search', component: GlobalSearchComponent 
+  },
+
 ];
 
 @NgModule({

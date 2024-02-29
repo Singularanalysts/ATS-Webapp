@@ -1,9 +1,10 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { utils, writeFile } from 'xlsx';
 import { MatButtonModule } from '@angular/material/button';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 
 @Component({
   selector: 'app-submission-report',
@@ -18,6 +19,7 @@ export class SubmissionReportComponent {
   headings!: string[][];
   excelData: any;
   consultant: any[] = [];
+  protected privilegeServ = inject(PrivilegesService);
   popUpImport() {
     if (this.vo.vo.status == 'submission') {
       this.headings = [
@@ -174,6 +176,7 @@ export class SubmissionReportComponent {
   executive = '';
   consultantname = '';
   uniquePseudonames: any;
+  showReport: boolean = false;
   @Input() message: string | undefined;
   constructor(
     public dialogRef: MatDialogRef<SubmissionReportComponent>,
@@ -182,14 +185,18 @@ export class SubmissionReportComponent {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.vo);
-    console.log(this.vo.data);
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
     if (this.vo.vo) {
       this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
         (response: any) => {
           this.consultant = response.data;
           this.executive = this.vo.additionalValue1;
-          console.log(this.executive);
+         // console.log(this.executive);
         },
         (error) => {
           console.error('Error fetching consultant data:', error);

@@ -7,7 +7,7 @@
   </button>
 </div>
 <mat-card class="center-card">
-  <form [formGroup]="recruiterForm" (ngSubmit)="onSubmit()" class="vendor-form">
+  <form [formGroup]="recruiterForm"  class="vendor-form">
     <div class="form">
       <div class="form-column-left">
         <!-- Company Name-->
@@ -29,13 +29,13 @@
         <!-- staff   -->
         <mat-form-field appearance="fill">
           <mat-label>Recruiter Name</mat-label>
-          <input matInput formControlName="recruiter" maxlength="50"/>
+          <input matInput formControlName="recruiter" maxlength="30" (input)="camelCase($event)"/>
         </mat-form-field>
 
         <!-- Email -->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" (change)="emailDuplicate($event)" maxlength="50"/>
+          <input matInput formControlName="email" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)"  maxlength="30" />
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('required')">Email is required</mat-error>
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('pattern')">Invalid Email Address</mat-error>
         </mat-form-field>
@@ -59,8 +59,8 @@
         
         <!-- website -->
         <mat-form-field appearance="fill">
-          <mat-label>Extension</mat-label>
-          <input matInput formControlName="extension" maxlength="4"/>
+          <mat-label>Extension(Numbers only)</mat-label>
+          <input matInput formControlName="extension" maxlength="5"  (keypress)="onlyNumberKey($event)" />
         </mat-form-field>
 
         <mat-form-field appearance="fill" *ngIf="data.actionName === 'edit-recruiter'">

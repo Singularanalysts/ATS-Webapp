@@ -24,7 +24,7 @@
 
                 <!-- SNo Column -->
                 <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum"> # </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum"> S.No    </th>
                     <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
                 </ng-container>
 
@@ -78,7 +78,7 @@
                 <!-- Current Location Column-->
                 <ng-container matColumnDef="CurrentLocation">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by CurrentLocation"> Current Location </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.currentlocation}}
+                    <td mat-cell *matCellDef="let element"> {{element?.currentlocation.replace(', USA', '')}}
                     </td>
                 </ng-container>
 
@@ -92,9 +92,11 @@
                 <ng-container matColumnDef="Action">
                     <th mat-header-cell *matHeaderCellDef> Action </th>
                     <td mat-cell *matCellDef="let optcpt">
-                        <button  mat-icon-button (click)="editOptCpt(optcpt)" class="action-button-ed">
-                            <mat-icon>edit</mat-icon>
-                        </button>
+                        <span class="action-buttons">
+                            <button  mat-icon-button (click)="editOptCpt(optcpt)" class="action-button-ed">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </span>
                         <!-- <button mat-icon-button (click)="deleteInterview(interview)" class="action-button-ed">
                             <mat-icon [ngClass]="'delete-icon'">delete</mat-icon>
                         </button> -->

@@ -1,7 +1,7 @@
 <div class="login-container">
   <mat-card class="login-card">
       <div class="logo">
-          <img src="assets/images/logo-removebg-preview.png" alt="Logo">
+          <img src="assets/images/singular-logo.png" alt="Logo">
       </div>
       <mat-card-header class="header-no-padding">
           <mat-card-title>Login to Your Account</mat-card-title>
@@ -21,7 +21,7 @@
               <mat-form-field class="full-width"  >
                   <mat-label>Password</mat-label>
                   <input matInput type="{{ hidePassword ? 'password' : 'text' }}"
-                      formControlName="password" maxlength="12">
+                      formControlName="password" maxlength="25">
                       <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
                   <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
                       <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>

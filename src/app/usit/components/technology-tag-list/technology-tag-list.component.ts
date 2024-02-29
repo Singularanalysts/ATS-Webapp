@@ -191,7 +191,16 @@ export class TechnologyTagListComponent implements OnInit, AfterViewInit{
                   );
                   // call get api after deleting a technology
                   this.getAllTechnologies();
-                } else {
+                }
+                else if (resp.status == 'associated') {
+                  dataToBeSentToSnackBar.message =resp.message;
+                  this.snackBarServ.openSnackBarFromComponent(
+                    dataToBeSentToSnackBar
+                  );
+                  // call get api after deleting a technology
+                  this.getAllTechnologies();
+                }
+                else {
                   dataToBeSentToSnackBar.message = resp.message;
                   this.snackBarServ.openSnackBarFromComponent(
                     dataToBeSentToSnackBar

@@ -1,0 +1,38 @@
+<div mat-dialog-content style="padding: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"> {{title}} </h1>
+        <div style="display: flex; gap: 8px;">
+            <button mat-raised-button style="background-color: #774caf; color: white;"
+                (click)="closeDialog()">Close</button>
+        </div>
+    </div>
+    &nbsp;
+    <div class="row" oncopy="return false" onpaste="return false" oncut="return false">
+        <table class="table table-light table-bordered ">
+            <thead class="thead-light">
+                <tr><th>#</th>
+                    <th>Ticket ID</th>
+                    <th>Created Date</th>
+                    <th>Target Date</th>
+                    <th>Created By</th>
+                    <th>Assigned Users</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr *ngFor="let s of taskDatarr;let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{s.ticketid}}</td>
+                    <td>{{s.createddate}}</td>
+                    <td>{{s.targetdate}}</td>
+                    <td>{{s.createdby}}</td>
+                    <td>{{s.pseudoname}}</td>
+                    <td>{{s.status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div mat-dialog-actions>
+
+</div>

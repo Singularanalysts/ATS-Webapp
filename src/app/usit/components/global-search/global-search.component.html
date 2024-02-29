@@ -1,0 +1,84 @@
+<mat-card mt-3 style="z-index: 1">
+    <mat-card-content>
+        <div class="center-container">
+            <div class="card row justify-content-center center col-sm-12">
+                <div class="search-container col-md-12 col-sm-12">
+                    <div class="d-flex" style="display: flex;">
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Job Position And Company</mat-label>
+                            <input matInput [(ngModel)]="jobPositionAndCompany" maxlength="140">
+                            <mat-error>Location is required</mat-error>
+                        </mat-form-field>&nbsp; &nbsp;
+
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Location</mat-label>
+                            <input matInput [(ngModel)]="location" [matAutocomplete]="auto" maxlength="140"
+                                (input)="search()">
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of locationSuggestions" [value]="option.job_location">
+                                    {{ option.job_location }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error>Location is required</mat-error>
+                        </mat-form-field>&nbsp; &nbsp;&nbsp; &nbsp;
+
+                        <button mat-raised-button style="background-color: #3a62cf; color: white ; margin-top: 1rem;"
+                            (click)="searchBotton()">Search</button>
+                            <button *ngIf="filteredVendorList.length>0" mat-raised-button style="background-color: #4CAF50; color: white ; margin-top: 1rem;"
+                            (click)="popUpImport()">Excel</button>
+                            <mat-icon (click)="newinfo()" style="    margin-top: 1.5rem; cursor: pointer;">help</mat-icon>
+                           
+                    </div>
+                    
+                        
+                </div>
+            </div>
+
+        </div>
+    </mat-card-content>
+
+</mat-card>
+
+<mat-card *ngIf="tableactive" mt-3 style="z-index: 1; overflow-y: auto;
+height: 678px; top:4rem">
+    <mat-card-content>
+        <div class="row justify-content-center center" style="z-index: 1;">
+
+            <div *ngIf="tableactive" class=" col-md-12">
+                <table class="table table-sm  table-light table-bordered table-responsive">
+                    <thead class="thead-light sticky">
+                        <tr>
+                            <th scope="col">S.NO</th>
+                            <th scope="col">Vendor Company</th>
+                            <th scope="col">Job Position</th>
+                            <th scope="col">Location</th>
+                            <!-- <th scope="col">Recruiter </th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let vendor of filteredVendorList; let i = index">
+                            <td scope="row">{{ i + 1 }}</td>
+                            <td class="user-info narvee clickable"> <a
+                                    (click)="navigateToJobSource(vendor.job_source)">{{ vendor.vendor }} </a> </td>
+
+                            <td class="narvee">{{ vendor.job_title }}</td>
+                            <td class="narvee">{{ vendor.job_location}}</td>
+                            <!-- <td class="narvee"><a (click)="openEmail(vendor.email)" class="email-link">{{ vendor.email }}</a></td> -->
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination justify-content-end">
+                    <!-- Add the following to your HTML template -->
+                    <div class="pagination justify-content-end">
+                      
+             
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </mat-card-content>
+</mat-card>

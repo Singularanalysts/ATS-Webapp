@@ -73,6 +73,11 @@
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
+            <div  class="error-style">
+              <!-- mat-error for unanswered question -->
+              <mat-error *ngIf="isQuestionUnanswered(i) && isFormSubmitted">Please select an answer for this question</mat-error>
+            
+            </div>
 
           </div>
 

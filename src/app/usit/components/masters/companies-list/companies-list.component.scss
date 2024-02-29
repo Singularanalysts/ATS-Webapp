@@ -1,3 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 86vh;
+}
+
 .table-wrapper {
   overflow: auto;
   padding: 4px;

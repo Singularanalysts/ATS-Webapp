@@ -31,6 +31,7 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { SubmissionService } from 'src/app/usit/services/submission.service';
 import { AddSubmissionComponent } from './add-submission/add-submission.component';
+import { SubmissionRequirementInfoComponent } from './submission-requirement-info/submission-requirement-info.component';
 
 @Component({
   selector: 'app-submission-list',
@@ -130,15 +131,18 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-
+  subFlag!:any;
   getFlag(){
     const routeData = this.activatedRoute.snapshot.data;
     if (routeData['isSalesSubmission']) {
       this.flag = "Sales";
+      this.subFlag = 'sales-submission';
     }else if (routeData['isRecSubmission']) { // recruiting consutlant
       this.flag = "Recruiting";
+      this.subFlag = 'rec-submission';
     } else {
       this.flag = "Domrecruiting";
+      this.subFlag = 'dom-submission';
     }
   }
 
@@ -273,9 +277,15 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
             if (response.status == 'Success') {
               this.getAllData();
               dataToBeSentToSnackBar.message = 'Submission Deleted successfully';
-            } else {
+            } 
+
+            else if(response.status == 'fail'){
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            dataToBeSentToSnackBar.message = response.message;
+          }
+            else {
               dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              dataToBeSentToSnackBar.message = 'Record Deletion failed';
+              dataToBeSentToSnackBar.message = 'Submission not deleted';
             }
             this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
           }, error: (err: any) => {
@@ -374,6 +384,29 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
 
   goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info',this.subFlag,id]);
+  }
+
+  goToConsultantInfo(element: any, flag: string) {
+    this.router.navigate(['usit/consultant-info',flag, 'submission',element.consultantid])
+  }
+
+  goToReqInfo(element: any) {
+    console.log(element);
+    const actionData = {
+      title: `${element.reqnumber}`,
+      id: element.reqid,
+      actionName: 'sub-req-info',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'sub-req-info';
+    dialogConfig.data = actionData;
+
+   this.dialogServ.openDialogWithComponent(
+      SubmissionRequirementInfoComponent,
+      dialogConfig
+    );
   }
 }

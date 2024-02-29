@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { utils, writeFile } from 'xlsx';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-sourcing-consultant-report',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './sourcing-consultant-report.component.html',
   styleUrls: ['./sourcing-consultant-report.component.scss']
 })  
@@ -72,7 +73,7 @@ writeFile(wb, this.excelName);
          (response: any) => {
            this.consultant = response.data;
            this.exname = this.vo.additionalValue1
-           console.log(this.exname);
+         //  console.log(this.exname);
            
          },
          (error) => {

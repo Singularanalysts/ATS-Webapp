@@ -216,14 +216,38 @@ export class QuizComponent implements OnInit,OnDestroy{ // add quiz component
     this.quizForm.controls.options.removeAt(id);
   }
 
+  areAllQuestionsAnswered(): boolean {
+    const formArray = this.quizForm.controls['options'] as FormArray;
+    for (let i = 0; i < formArray.length; i++) {
+      const answerControl = formArray.at(i).get('answer');
+      if (!answerControl || !answerControl.value) {
+        return false; // At least one question is unanswered
+      }
+    }
+    return true; // All questions have been answered
+  }
+  
+  isQuestionUnanswered(index: number): boolean {
+    const formArray = this.quizForm.controls['options'] as FormArray;
+    const answerControl = formArray.at(index).get('answer');
+    
+    // Check if answerControl is defined
+    if (answerControl && answerControl.value == "") {
+      return true;
+    }
+  
+    // If answerControl is undefined, return false
+    return false;
+  }
+  
   /**
    *
    * submit form
    */
   onSubmit() {
     this.isFormSubmitted = true;
-    console.log('form.value for save:', JSON.stringify(this.quizForm.value));
-    if (this.quizForm.invalid) {
+    //console.log('form.value for save:', JSON.stringify(this.quizForm.value));
+    if (this.quizForm.invalid || !this.areAllQuestionsAnswered()) {
       // show errors
       this.displayFormErrors();
       return;

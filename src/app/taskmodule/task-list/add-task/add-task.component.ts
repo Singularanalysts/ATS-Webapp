@@ -22,13 +22,11 @@ import {
   ISnackBarData,
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
-import { RequirementService } from 'src/app/usit/services/requirement.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable, Subject, debounceTime, distinctUntilChanged,  of, switchMap, takeUntil } from 'rxjs';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import { Loader } from '@googlemaps/js-api-loader';
-import { Router } from '@angular/router';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -37,6 +35,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TaskService } from '../../services/task.service';
 import { Task } from 'src/app/usit/models/task';
+import { DEPARTMENT } from 'src/app/constants/department';
 @Component({
   selector: 'app-add-task',
   standalone: true,
@@ -71,6 +70,7 @@ import { Task } from 'src/app/usit/models/task';
   styleUrls: ['./add-task.component.scss']
 })
 export class AddTaskComponent {
+  deptOptions = DEPARTMENT;
   requirementForm!: FormGroup;
   private formBuilder = inject(FormBuilder);
   private snackBarServ = inject(SnackBarService);
@@ -96,7 +96,7 @@ export class AddTaskComponent {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data.actionName)
+   // console.log(this.data.actionName)
     this.getEmployee();
     this.initializeTaskForm(null);
     if (this.data.actionName === 'edit-task') {
@@ -122,6 +122,7 @@ export class AddTaskComponent {
       taskname: [requirementData ? requirementData.taskname : '', Validators.required],
       description: [requirementData ? requirementData.description : '', Validators.required],
       assignedto: [requirementData ? requirementData.assignedto : '', Validators.required],
+      department :  [requirementData ? requirementData.department : '', Validators.required],
       addedby: localStorage.getItem('userid'),
     });
   
@@ -139,24 +140,6 @@ export class AddTaskComponent {
       }
     )
   }
-
-  // toggleSelection(employee: any) {
-  //   const mapToApiFormat = (emp: any) => ({
-  //     userid: emp.userid,
-  //     fullname: emp.fullname,
-  //   });
-
-  //   employee.selected = !employee.selected;
-
-  //   if (employee.selected) {
-
-  //     this.selectData.push(employee);
-  //   }
-  //   this.isAllOptionsSelected = !this.empArr.some((x: any) => x.selected === false)
-  //   const mappedData = this.selectData.map(mapToApiFormat);
-  //   this.requirementForm.get('assignedto')!.setValue(mappedData);
-  // };
-
   toggleSelection(employee: any) {
     // Mapping function to convert employee object to API format
     const mapToApiFormat = (emp: any) => ({

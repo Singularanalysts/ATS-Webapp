@@ -1,0 +1,110 @@
+<div class="container">
+  <ul class="breadcrumb">
+    <li><a (click)="navigateToDashboard()">Home</a></li>
+    <li class="last">Task Report</li>
+  </ul>
+  <form [formGroup]="taskReport">
+
+    <mat-card mt-3 style="z-index: 1">
+      <mat-card-content>
+        <mat-form-field color="accent">
+          <mat-label>Choose Starting Date</mat-label>
+          <input matInput [matDatepicker]="picker1" formControlName="startDate" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+        &nbsp;&nbsp;
+
+        <mat-form-field color="accent">
+          <mat-label>Choose Target Date</mat-label>
+          <input matInput [matDatepicker]="picker2" formControlName="targetDate" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2 color="primary"></mat-datepicker> </mat-form-field>&nbsp;&nbsp;
+
+        &nbsp; &nbsp;
+        <mat-form-field>
+          <mat-label>Select Department</mat-label>
+          <mat-select formControlName="department">
+            <ng-container *ngFor="let department of deptOptions;">
+              <mat-option [value]="department.name">{{department.name}}</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+
+        <button (click)="onSubmit()" mat-raised-button color="primary">Submit</button>
+        <button (click)="reset()" mat-raised-button color="warn">Reset</button>
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+  <mat-card class="matcards ">
+    <mat-card-content>
+      <div id="table-container" class="table-wrapper">
+        <section class="section">
+          <div class="row scroll" style="height:600px;">
+            <table class="table table-sm  table-light table-bordered table-responsive">
+              <thead class="thead-light sticky">
+                <tr>
+                  <th>#</th>
+                  <th>Ticket ID</th>
+                  <th>Task Name</th>
+                  <th>Date</th>
+                  <th>Target Date</th>
+                  <th>Status</th>
+                  <!-- <th>Description</th> -->
+                  <th>User Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- "description": "Testing the application",
+            "duration": null,
+            "status": "Started",
+            "pseudoname": "Kiran",
+            "ticketid": "T24021300001",
+            "createddate": "2024-02-13 04:23",
+            "targetdate": "2024-02-14",
+            "ttime": null,
+            "todate": "2024-02-13",
+            "taskid": 1,
+            "fromdate": "2024-02-12",
+            "ftime": null,
+            "taskName": "Task Management Testing",
+            "trackid": 1,
+            "taskdescription": "Test Task Management module",
+            "fullname": null *ngFor="let data of dataArr let i=index"-->
+                <ng-container *ngFor="let data of dataArr let i=index">
+                  <tr>
+                    <td let i=index nowrap>{{ i+1}}</td>
+                    <td><a style="cursor: pointer;color:#0d6efd"
+                        (click)="popup(data.taskid, data.ticketid)">{{data.ticketid}}</a> </td>
+                    <td>{{data.taskName}} </td>
+                    <td> {{data.createddate}} </td>
+                    <td> {{data.targetdate}} </td>
+                    <td> {{data.status}} </td>
+                    <!-- <td>{{data.description}}</td> -->
+                    <td> {{data.pseudoname}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="8"><b>Description: </b> {{data.description}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="paginator">
+        <!-- paginator -->
+        <!-- <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+          </mat-paginator> -->
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>

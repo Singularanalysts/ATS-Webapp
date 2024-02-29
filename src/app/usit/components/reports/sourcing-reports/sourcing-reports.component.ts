@@ -42,7 +42,6 @@ export class SourcingReportsComponent {
   get f() { return this.sourcingreport.controls; }
   department!: any;
   ngOnInit() {
-    alert('shan');
     this.department = localStorage.getItem('department');
     this.sourcingreport = this.formBuilder.group({
       startDate: ['', Validators.required],

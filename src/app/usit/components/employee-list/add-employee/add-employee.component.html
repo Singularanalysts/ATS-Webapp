@@ -17,7 +17,7 @@
         <!-- Full Name -->
         <mat-form-field appearance="fill">
           <mat-label>Full Name</mat-label>
-          <input matInput formControlName="fullname" maxlength="50">
+          <input matInput formControlName="fullname" maxlength="50" (input)="camelCase($event)">
           <mat-error *ngIf="employeeForm.get('fullname').hasError('required')">Full
             Name is required</mat-error>
           <mat-error *ngIf="employeeForm.get('fullname').hasError('minlength')">Full Name must be at least 6
@@ -28,14 +28,14 @@
         <!-- Psuedo Name -->
         <mat-form-field appearance="fill">
           <mat-label>Psuedo Name</mat-label>
-          <input matInput formControlName="pseudoname" maxlength="15">
+          <input matInput formControlName="pseudoname" maxlength="15" (input)="camelCase($event)">
           <mat-error *ngIf="employeeForm.get('pseudoname').hasError('required')">Psuedo
             Name is required</mat-error>
         </mat-form-field>
         <!-- Official Email -->
         <mat-form-field appearance="fill">
           <mat-label>Official Email</mat-label>
-          <input matInput formControlName="email" maxlength="50">
+          <input matInput formControlName="email" maxlength="50" (input)="convertToLowerCase($event)">
           <mat-error *ngIf="employeeForm.get('email')!.hasError('required')">Email is
             required</mat-error>
           <mat-error *ngIf="employeeForm.get('email')!.hasError('email')">Invalid email
@@ -44,7 +44,7 @@
         <!-- Personal Email -->
         <mat-form-field appearance="fill">
           <mat-label>Personal Email</mat-label>
-          <input matInput formControlName="personalemail" maxlength="50">
+          <input matInput formControlName="personalemail" maxlength="50" (input)="convertToLowerCase($event)">
           <mat-error *ngIf="employeeForm.get('personalemail').hasError('required')">Email
             is required</mat-error>
           <mat-error *ngIf="employeeForm.get('personalemail').hasError('email')">Invalid
@@ -56,7 +56,7 @@
           <!-- <input matInput formControlName="personalcontactnumber"> -->
           <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']"
             formControlName="personalcontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
-            name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb>
+            name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb (keypress)="onlyNumberKey($event)">
           </ngx-mat-intl-tel-input>
           <mat-error *ngIf="employeeForm.get('personalcontactnumber').hasError('required')">Personal
             Contact
@@ -68,7 +68,7 @@
           <!-- <input matInput formControlName="companycontactnumber"> -->
           <ngx-mat-intl-tel-input [preferredCountries]="['in','us']" class="intl-input"
             formControlName="companycontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
-            name="companycontactnumber" id="intlInputCompany" #companycontactnumber>
+            name="companycontactnumber" id="intlInputCompany" #companycontactnumber (keypress)="onlyNumberKey($event)">
           </ngx-mat-intl-tel-input>
         </mat-form-field>
         <!-- Joining Date -->
@@ -95,8 +95,16 @@
           <mat-error *ngIf="employeeForm.controls.relievingdate.hasError('relievingBeforeJoining')">Relieving date
             cannot be earlier than joining date.</mat-error>
         </mat-form-field>
+
+        <div style="display: flex;" class="other-details-div">
+          <!-- Other Details Checkbox -->
+          <div class="other-details-inner-div">
+            <mat-checkbox class="custom-checkbox" (change)="toggleOtherDetails($event.checked)">Other Details</mat-checkbox>
+          </div>
+        </div>
+
         <!-- Aadhar -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="showOtherDetails">
           <mat-label>Aadhar Number</mat-label>
           <input matInput formControlName="aadharno" maxlength="12" (keypress)="onlyNumberKey($event)">
           <mat-error *ngIf="employeeForm.get('aadharno').hasError('required')">Aadhar Number is required</mat-error>
@@ -104,7 +112,7 @@
             digits</mat-error>
         </mat-form-field>
         <!-- PAN -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="showOtherDetails">
           <mat-label>PAN Number</mat-label>
           <input matInput formControlName="panno" placeholder="Ex: ABCDE1234F" maxlength="10"
             (keypress)="onlyAlphanumericKey($event)">
@@ -114,34 +122,34 @@
       </div>
       <div class="form-column-right">
         <!-- BANK -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="showOtherDetails">
           <mat-label>Bank Name</mat-label>
-          <input matInput formControlName="bankname" maxlength="100">
+          <input matInput formControlName="bankname" maxlength="100" (input)="camelCase($event)">
           <mat-error *ngIf="employeeForm.get('bankname').hasError('required')">Bank Name is required</mat-error>
         </mat-form-field>
         <!-- AC NUMBER -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="showOtherDetails">
           <mat-label>Account Number</mat-label>
           <input matInput formControlName="accno" maxlength="15" (keypress)="onlyNumberKey($event)">
           <mat-error *ngIf="employeeForm.get('accno').hasError('required')">Account Number is required</mat-error>
         </mat-form-field>
         <!-- IFSC -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="showOtherDetails">
           <mat-label>IFSC Code</mat-label>
           <input matInput formControlName="ifsc" maxlength="11" (keypress)="onlyAlphanumericKey($event)">
           <mat-error *ngIf="employeeForm.get('ifsc').hasError('required')">IFSC Code is required</mat-error>
           <mat-error *ngIf="employeeForm.get('ifsc').hasError('pattern')">Invalid IFSC Code</mat-error>
         </mat-form-field>
         <!-- Branch -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="showOtherDetails">
           <mat-label>Branch Name</mat-label>
-          <input matInput formControlName="branch" maxlength="50">
+          <input matInput formControlName="branch" maxlength="50" (input)="camelCase($event)">
           <mat-error *ngIf="employeeForm.get('branch').hasError('required')">Branch Name is required</mat-error>
         </mat-form-field>
         <!-- Designation -->
         <mat-form-field appearance="fill">
           <mat-label>Designation</mat-label>
-          <input matInput formControlName="designation" maxlength="25">
+          <input matInput formControlName="designation" maxlength="25" (input)="camelCase($event)">
         </mat-form-field>
         <!--Select Department -->
         <mat-form-field appearance="fill">

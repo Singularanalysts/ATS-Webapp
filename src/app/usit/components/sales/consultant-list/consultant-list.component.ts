@@ -75,6 +75,7 @@ export class ConsultantListComponent
   ttitle1!: string;
   tclass!: string;
   dept!: any;
+  subFlag!:any;
   consultant_track: any[] = [];
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
@@ -89,7 +90,7 @@ export class ConsultantListComponent
   dataTableColumns: string[] = [
     'SerialNum',
     'Date',
-    'Id',
+    // 'Id',
     'Name',
     'Email',
     'ContactNumber',
@@ -128,12 +129,17 @@ export class ConsultantListComponent
 
   userid: any;
   page: number = 1;
-
+  move2sales = false;
   ngOnInit(): void {
+    const mvt= this.privilegeServ.hasPrivilege('MOVETOPRESALES');
+    if(mvt){
+      this.move2sales = true;
+    }
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.dept = localStorage.getItem('department');
     this.getFlag();
+    // alert(this.flag)
 
     this.getAllData();
   }
@@ -153,25 +159,31 @@ export class ConsultantListComponent
       this.ttitle = 'back to pre sales';
       this.ttitle1 = 'move to sales';
       this.tclass = 'arrow_left_alt';
+      this.subFlag = 'sales-consultant';
     } else if (routeData['isRecConsultant']) {
       // recruiting consutlant
       this.flag = 'Recruiting';
       this.ttitle = 'move to sales';
       //this.ttitle1 = "back to pre sales";
       this.tclass = "arrow_right_alt";
+      this.subFlag = 'rec-consultant';
     } else if (routeData['isPreConsultant']) {
       // presales
       this.flag = 'presales';
       this.ttitle = 'move to sales';
       this.ttitle1 = 'back to pre sales';
       this.tclass = 'arrow_right_alt';
+      this.subFlag = 'presales-consultant';
     } else {
       this.flag = 'DomRecruiting';
+      this.subFlag = 'domrec-consultant';
     }
 
     if (
       this.flag.toLocaleLowerCase() === 'presales' ||
       this.flag.toLocaleLowerCase() === 'recruiting'
+      ||
+      this.flag.toLocaleLowerCase() === 'domrecruiting'
     ) {
       this.dataTableColumns.splice(15, 0, 'AddedBy');
     }
@@ -390,7 +402,7 @@ export class ConsultantListComponent
    * @param type
    */
   goToConsultantInfo(element: any, flag: string) {
-    // open popup with that data
+    this.router.navigate(['usit/consultant-info',flag, 'consultant',element.consultantid])
   }
   /**
    * on track
@@ -422,11 +434,11 @@ export class ConsultantListComponent
    *
    * @param consultant
    */
-  moveProfileToSales(consultant: Consultantinfo) {
+  moveProfileToSales(consultant: Consultantinfo,cond:string) {
     //alertify.confirm("Move Profile", "Are you sure you want to move Profile to Sales ? ", () => {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
-      message: 'Are you sure you want to Move Profiles to Sales?',
+      message: 'Are you sure you want to Move Profiles to '+cond+' ?',
       confirmText: 'Yes',
       cancelText: 'No',
       actionData: consultant,
@@ -440,7 +452,6 @@ export class ConsultantListComponent
       ConfirmComponent,
       dialogConfig
     );
-
     // call moveToSales api after  clicked 'Yes' on dialog click
 
     dialogRef.afterClosed().subscribe({
@@ -450,7 +461,6 @@ export class ConsultantListComponent
             .moveToSales(
               consultant.consultantid,
               this.flag,
-              consultant.comment,
               this.userid
             )
             .subscribe((resp: any) => {
@@ -458,8 +468,8 @@ export class ConsultantListComponent
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-success',
                 ];
-                this.dataToBeSentToSnackBar.message =
-                  'Profile moved to sales successfully';
+                this.dataToBeSentToSnackBar.message =resp.message=='presales'? 'Profile moved to Pre-Sales successfully' : 'Profile moved to Sales successfully';
+                  
               } else {
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-failure',
@@ -474,6 +484,7 @@ export class ConsultantListComponent
         }
       },
     });
+
   }
   /**
    * Add
@@ -580,7 +591,7 @@ export class ConsultantListComponent
                     'Consultant Deleted successfully';
                 } else {
                   dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-                  dataToBeSentToSnackBar.message = 'Record Deletion failed';
+                  dataToBeSentToSnackBar.message = response.message;
                 }
                 this.snackBarServ.openSnackBarFromComponent(
                   dataToBeSentToSnackBar
@@ -697,7 +708,7 @@ export class ConsultantListComponent
   }
 
   goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info',this.subFlag,id])
   }
 }
 

@@ -1,10 +1,10 @@
-<div mat-dialog-content>
+<div mat-dialog-content style="padding: 10px;">
   <div
     style="display: flex; justify-content: space-between; align-items: center"
   >
     <h1 mat-dialog-title>'{{ executive }}' {{ vo.vo.status }}'s</h1>
     <div style="display: flex; gap: 8px">
-      <button
+      <button *ngIf="showReport"
         mat-raised-button
         style="background-color: #4caf50; color: white"
         (click)="popUpImport()"
@@ -31,7 +31,7 @@
     <table class="table table-light table-bordered">
       <thead class="thead-light sticky">
         <tr>
-          <th>#</th>
+          <th>S.No</th>
           <th>DOS</th>
           <th>Consultant</th>
           <th>Requirement</th>

@@ -37,11 +37,11 @@ ul.breadcrumb li:last-child {
 
 
 }
-.info-card, .activity-card{
-  width: 50%;
-  height: 75svh;
+// .info-card, .activity-card{
+//   width: 50%;
+//   height: 75svh;
 
-}
+// }
 .info-card-header, .activity-card-header{
   background-color: whitesmoke;
   display: flex;
@@ -58,15 +58,14 @@ ul.breadcrumb li:last-child {
 
 
 table {
-  width: 100%;
+  margin: auto;
+  width: 96%;
   justify-content: center;
   align-items: center;
-  // margin: auto;
   margin-top: 1rem;
-}
-table {
   border-collapse: collapse;
 }
+
 td:first-child{
   font-weight: 600;
 }
@@ -139,4 +138,220 @@ th {
 
 ::ng-deep .mat-stepper-vertical-line::before {
   border-left-width: 3px !important;
+}
+
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0px 10px;
+  background-color: white;
+  top: 0;
+  overflow: hidden;
+  margin: 4px;
+  background-color: rgb(228, 231, 234);
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.header-container-leading-resources {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0px;
+  z-index: 99999;
+  top: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+.overall-container {
+  height: 100vh;
+  overflow: auto;
+  padding: 10px 10px 0 10px;
+  background-color: rgb(228, 231, 234);
+}
+
+.container {
+  display: flex;
+  height: auto;
+  justify-content: space-between;
+}
+
+.container .left-div {
+  width: 49%;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+}
+
+.container .right-div {
+  width: 49%;
+  // overflow: auto;
+}
+
+.left-div  {
+  display: flex;
+}
+
+
+
+.table-container {
+  padding-top: 10px;
+  flex: 1;
+}
+
+.table-style {
+  width: 100%;
+  overflow: auto;
+  height: 100vh;
+  display: block;
+  background-color: white;
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+  background-color: rgb(147, 204, 204);
+}
+
+.mat-mdc-row {
+  height: 30px !important;
+}
+
+.no-data-found{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-top: 64px;
+}
+
+.mat-column-Name,
+.mat-column-Category,
+.mat-column-Address,
+.mat-column-Email,
+.mat-column-ContactNumber,
+.mat-column-Owner,
+.mat-column-Track,
+.mat-column-PostedDate,
+.mat-column-JobTitle,
+.mat-column-JobLocation,
+.mat-column-Vendor,
+.mat-column-TaggedDate,
+.mat-column-TaggedBy {
+  border-right: 1px solid lightgray !important;
+}
+
+
+
+.mat-mdc-card-title, .mat-mdc-card-subtitle {
+  font-size: 14px;
+  margin: 0;
+  font-weight: 700;
+}
+
+mat-typography p {
+  margin: 0px;
+}
+
+.dashboard {
+  font-size: .875em;
+  font-weight: 700!important;
+  margin-bottom: 0px !important;
+}
+
+.track-button {
+  width: fit-content !important;
+  padding: 0px !important;
+  height: auto !important;
+  background-color: green !important;
+  color: white !important;
+}
+
+
+.mat-mdc-card.activity-card {
+  height: 678px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+a .name {
+  font-size: 14px;
+  font-weight: bolder;
+  color: #717ff5;
+}
+
+.activity {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 5px;
+  justify-content: space-between;
+}
+
+.activity .activity-content{
+  width: 79%;
+}
+
+.activity .time{
+  margin: 0px auto;
+  width: 19%;
+}
+
+.approved {
+  color: #39c22d;
+  font-size: 12px;
+}
+
+.rejected {
+  color: #FF0000;
+  font-size: 12px;
+}
+
+.added {
+  color:#29abd3;
+  font-size: 12px;
+}
+
+.submssion{
+  color:#db1aab;
+  font-size: 12px;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+b {
+  font-weight: bold;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.mat-mdc-card-content {
+  padding: 0px 0px 16px 0px;
+}
+
+.consultant-id{
+  cursor: pointer;
+  color:#0275d8
+}
+
+.consultant-actions{
+  display: flex;
+  align-items: center;
 }

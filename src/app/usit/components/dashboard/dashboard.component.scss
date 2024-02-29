@@ -65,7 +65,7 @@ ul.breadcrumb li a:hover {
   height: 100vh;
   overflow: auto;
   padding: 10px 10px 0 10px;
-  background-color: rgb(228, 231, 234)
+  background-color: rgb(228, 231, 234);
 }
 
 .container {
@@ -93,6 +93,7 @@ ul.breadcrumb li a:hover {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-bottom: 10px;
 }
 
 .left-div-inner-cards .card-1,
@@ -102,15 +103,16 @@ ul.breadcrumb li a:hover {
 }
 
 .table-container {
-  padding-top: 10px;
+  // padding-top: 10px;
   flex: 1;
 }
 
 .table-container-dice {
   padding-top: 10px;
   flex: 1;
-  overflow: auto;
+  // overflow: auto;
   height: 700px;
+  // margin-bottom: 30px;
 }
 
 .table-style {
@@ -221,10 +223,16 @@ mat-typography p {
   --mat-mdc-fab-color: #2eca6a; /* icon color */
 }
 
-.mat-mdc-card.activity-card {
+.mat-mdc-card.activity-card-individual {
   height: 678px;
   padding: 15px;
-  // overflow-y: auto;
+  overflow-y: auto;
+}
+
+.mat-mdc-card.activity-card {
+  height: 808px;
+  padding: 15px;
+  overflow-y: auto;
 }
 
 a {
@@ -290,8 +298,7 @@ b {
   padding: 0px 0px 16px 0px;
 }
 
-// @media screen and (min-width: 1440px) {
-//  .container {
-//   height: 72%;
-//  }
-// }
+.consultant-id{
+  cursor: pointer;
+  color:#0275d8
+}

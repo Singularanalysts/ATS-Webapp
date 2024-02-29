@@ -346,8 +346,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   goToUserInfo(id: number){
-
-    this.router.navigate(['usit/user-info',id])
+    this.router.navigate(['usit/user-info','employee',id])
   }
   /** clean up subscriptions */
   ngOnDestroy(): void {

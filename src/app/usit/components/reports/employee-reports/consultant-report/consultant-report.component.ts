@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { utils, writeFile } from 'xlsx';
 import { MatButtonModule } from '@angular/material/button';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 
 @Component({
   selector: 'app-consultant-report',
@@ -20,6 +21,8 @@ export class ConsultantReportComponent {
   excelData: any;
   consultant: any[] = [];
   uniquePseudonames: any;
+  showReport: boolean = false;
+  protected privilegeServ = inject(PrivilegesService);
   popUpImport() {
     this.headings = [
       [
@@ -96,12 +99,18 @@ export class ConsultantReportComponent {
   ) {}
 
   ngOnInit(): void {
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
     if (this.vo.vo) {
       this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
         (response: any) => {
           this.consultant = response.data;
           this.consultantname = this.vo.additionalValue1;
-          console.log(this.consultantname);
+         // console.log(this.consultantname);
         },
         (error) => {
           console.error('Error fetching consultant data:', error);
