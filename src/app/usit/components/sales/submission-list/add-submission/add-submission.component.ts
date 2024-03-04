@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ISnackBarData,
@@ -44,6 +44,9 @@ import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SubmissionService } from 'src/app/usit/services/submission.service';
 import { SubmissionInfo } from 'src/app/usit/models/submissioninfo';
+import { DialogService } from 'src/app/services/dialog.service';
+import { AddRecruiterComponent } from '../../../vendor-management/recruiter-list/add-recruiter/add-recruiter.component';
+import { AddVendorComponent } from '../../../vendor-management/vendor-list/add-vendor/add-vendor.component';
 
 
 @Component({
@@ -111,7 +114,11 @@ export class AddSubmissionComponent implements OnInit {
   filteredRequirements!: Observable<any>;
   searchConsultantOptions$!: Observable<any>;
   consultantOptions: any = [];
+  isConsultantDataAvailable: boolean = false;
+  searchCompanyOptions$!: Observable<any>;
+  companyOptions: any = [];
   isCompanyDataAvailable: boolean = false;
+  private dialogServ = inject(DialogService);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
@@ -174,6 +181,8 @@ export class AddSubmissionComponent implements OnInit {
 
   private initilizeSubmissionForm(submissionData: any) {
 
+
+
     this.submissionForm = this.formBuilder.group({
       // user:  [submissionData ? submissionData?.user : this.userid],
       user: [this.data.actionName === "edit-submission" ? submissionData?.user : localStorage.getItem('userid')],
@@ -199,7 +208,31 @@ export class AddSubmissionComponent implements OnInit {
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
     });
-    this.submissionForm.get('consultant')?.setValue(submissionData?.consultant);
+    if ( this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
+      this.submissionServ.getConsultantDropdown(this.flag,submissionData.consultant).subscribe(
+          (consultant: any) => {
+              if (consultant && consultant.data[0].consultantname) {
+                  this.submissionForm.get('consultant').setValue(consultant.data[0].consultantname);
+              }
+          },
+          (error: any) => {
+              console.error('Error fetching consultant details:', error);
+          }
+      );
+  }
+  if (this.data.actionName === "edit-submission" && submissionData && submissionData.vendor) {
+    this.submissionServ.getVendorById(submissionData.vendor).subscribe(
+        (vendor: any) => {
+            if (vendor && vendor.data.company) {
+                this.submissionForm.get('vendor').setValue(vendor.data.company);
+            }
+        },
+        (error: any) => {
+            console.error('Error fetching consultant details:', error);
+        }
+    );
+}
+    // this.submissionForm.get('consultant')?.setValue(submissionData?.consultant);
     this.validateControls();
   }
 
@@ -213,25 +246,47 @@ export class AddSubmissionComponent implements OnInit {
       this.submissionForm.get("requirement").patchValue("null");
     }
     requirement.updateValueAndValidity();
+    this.validateRatetypeControls()
     this.submissionForm.get('ratetype').valueChanges.subscribe((res: any) => {
-      const vendor = this.submissionForm.get('vendor');
-      const recruiter = this.submissionForm.get("recruiter");
-      const empmail = this.submissionForm.get('empmail');;
-      if (res == '1099' || res == 'W2' || res == 'Full Time') {
+      this.validateRatetypeControls();
+      // const vendor = this.submissionForm.get('vendor');
+      // const recruiter = this.submissionForm.get("recruiter");
+      // const empmail = this.submissionForm.get('empmail');;
+      // if (res == '1099' || res == 'W2' || res == 'Full Time') {
+      //   vendor.clearValidators();
+      //   recruiter.clearValidators();
+      //   empmail.clearValidators();
+      // }
+      // else {
+      //   empmail.setValidators([Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')]);
+      //   vendor.setValidators(Validators.required);
+      //   recruiter.setValidators(Validators.required);
+      // }
+      // empmail.updateValueAndValidity();
+      // vendor.updateValueAndValidity();
+      // recruiter.updateValueAndValidity();
+    });
+  }
+
+  private validateRatetypeControls() {
+    const vendor = this.submissionForm.get('vendor');
+    const recruiter = this.submissionForm.get("recruiter");
+    const empmail = this.submissionForm.get('empmail');
+    const ratetype = this.submissionForm.get('ratetype').value;
+
+    if (ratetype == '1099' || ratetype == 'W2' || ratetype == 'Full Time') {
         vendor.clearValidators();
         recruiter.clearValidators();
         empmail.clearValidators();
-      }
-      else {
+    } else {
         empmail.setValidators([Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')]);
         vendor.setValidators(Validators.required);
         recruiter.setValidators(Validators.required);
-      }
-      empmail.updateValueAndValidity();
-      vendor.updateValueAndValidity();
-      recruiter.updateValueAndValidity();
-    });
-  }
+    }
+    empmail.updateValueAndValidity();
+    vendor.updateValueAndValidity();
+    recruiter.updateValueAndValidity();
+}
 
   getRequirements(flg: string) {
     this.submissionServ.getRequirements(flg).subscribe(
@@ -264,33 +319,43 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getConsultant(flg: string) {
-    // this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg).pipe(
-    //   map((response: any) => response.data),
-    //   tap(resp => {
-    //     if (resp && resp.length) {
-    //       this.getConsultantOptionsForAutoComplete(resp);
-    //     }
-    //   })
-    // );
-
-    this.submissionServ.getConsultantDropdown(flg).subscribe(
-      (response: any) => {
-        this.consultantdata = response.data;
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg,0).pipe(
+      map((response: any) => response.data),
+      tap(resp => {
+        if (resp && resp.length) {
+          this.getConsultantOptionsForAutoComplete(resp);
+        }
       })
+    );
+
+    // this.submissionServ.getConsultantDropdown(flg).subscribe(
+    //   (response: any) => {
+    //     this.consultantdata = response.data;
+    //   })
   }
 
   getConsultantOptionsForAutoComplete(data: any) {
     this.consultantOptions = data;
     this.searchConsultantOptions$ = this.submissionForm.controls.consultant.valueChanges.pipe(
-        startWith(''),
-        map(value => this._filterOptions(value, this.consultantOptions))
+      startWith(''),
+      map(value => this._filterOptions(value, this.consultantOptions))
     );
   }
 
+  obj: any;
   private _filterOptions(value: any, options: any[]): any[] {
-    const filterValue = value ? value.trim().toLowerCase() : '';
-    console.log(options.filter(option => option[1].toLowerCase().includes(filterValue)));
-    return options.filter(option => option[1].toLowerCase().includes(filterValue));
+   // alert(value)
+    const filterValue = (value ? value.toString() : '').toLowerCase();
+    const filteredOptions = options.filter(option =>
+      option.consultantname.toLowerCase().includes(filterValue)
+    );
+    console.log(filteredOptions);
+    
+    if (filteredOptions.length === 1) {
+      this.obj =filteredOptions[0].consultantid;
+    }
+    this.isConsultantDataAvailable = filteredOptions.length === 0;
+    return filteredOptions;
   }
 
   handleAddressChange(address: any) {
@@ -308,11 +373,40 @@ export class AddSubmissionComponent implements OnInit {
     if (role == 'Super Administrator' || role == 'Administrator' || role == 'Sales Manager' || role == 'Recruiting Manager') {
       this.flg = "all";
     }
-    this.submissionServ.getCompanies(this.flg).subscribe(
-      (response: any) => {
-        this.vendordata = response.data;
-      }
-    )
+    // this.submissionServ.getCompanies(this.flg).subscribe(
+    //   (response: any) => {
+    //     this.vendordata = response.data;
+    //   }
+    // )
+
+    this.searchCompanyOptions$ = this.submissionServ.getCompanies(this.flg).pipe(
+      map((response: any) => response.data),
+      tap(resp => {
+        if (resp && resp.length) {
+          this.getCompanyOptionsForAutoComplete(resp);
+        }
+      })
+    );
+  }
+
+  getCompanyOptionsForAutoComplete(data: any) {
+    this.companyOptions = data;
+    this.searchCompanyOptions$ = this.submissionForm.controls.vendor.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCompanyOptions(value, this.companyOptions))
+    );
+  }
+  companyid: any;
+  private _filterCompanyOptions(value: any, options: any[]): any[] {
+    const filterValue = (value ? value.toString() : '').toLowerCase();
+    const filteredOptions = options.filter(option => 
+      option.company.toLowerCase().includes(filterValue)
+    );
+    if (filteredOptions.length === 1) {
+      this.companyid =filteredOptions[0].vmsid;
+    }
+    // this.isConsultantDataAvailable = filteredOptions.length === 0;
+    return filteredOptions;
   }
 
   idd!: any;
@@ -326,8 +420,8 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   recruiterName: any[] = [];
-  recruiterList(event: any) {
-    const newVal = event.value;
+  recruiterList(option: any) {
+    const newVal = option.vmsid;
     this.submissionServ.getRecruiterOfTheVendor(newVal, this.flgOpposite).subscribe(
       (response: any) => {
         this.recruiterName = response.data;
@@ -379,8 +473,10 @@ export class AddSubmissionComponent implements OnInit {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
-
+    // alert()
     this.trimSpacesFromFormValues();
+    this.submissionForm.get('consultant').setValue(this.obj);
+    this.submissionForm.get('vendor').setValue(this.companyid);
     const saveReqObj = this.getSaveData();
     this.submissionServ
       .registerSubmission(saveReqObj)
@@ -455,6 +551,56 @@ export class AddSubmissionComponent implements OnInit {
 
   onRadioChange(event: MatRadioChange) {
     this.isRadSelected = event.value
+  }
+
+  addVendor() {
+    const actionData = {
+      title: 'Add Vendor',
+      vendorData: null,
+      actionName: 'add-vendor',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'add-vendor';
+    dialogConfig.data = actionData;
+
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      AddVendorComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        // this.getAllData(this.currentPageIndex + 1);
+      }
+    });
+  }
+
+
+  addRecruiter() {
+      const actionData = {
+        title: 'Add Recruiter',
+        recruiterData: null,
+        actionName: 'add-recruiter',
+      };
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '65vw';
+      //dialogConfig.height = "100vh";
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = 'add-recruiter';
+      dialogConfig.data = actionData;
+  
+      const dialogRef = this.dialogServ.openDialogWithComponent(
+        AddRecruiterComponent,
+        dialogConfig
+      );
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          // this.getAllRecruiters(this.currentPageIndex + 1);
+        }
+      });
+
   }
 }
 

@@ -6,18 +6,16 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { DialogService } from 'src/app/services/dialog.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
-import { Technology } from '../../models/technology';
 import { TechnologyTagService } from '../../services/technology-tag.service';
 import { AddTechnologyTagComponent } from './add-technology-tag/add-technology-tag.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
@@ -41,73 +39,107 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
   templateUrl: './technology-tag-list.component.html',
   styleUrls: ['./technology-tag-list.component.scss']
 })
-export class TechnologyTagListComponent implements OnInit, AfterViewInit{
-
-  displayedColumns: string[] = ['SerialNum','Technology', 'Skills', 'Actions'];
-  dataSource = new MatTableDataSource<any>([]);
-  technologyTagList: Technology[] = [];
-  // paginator
-  length = 50;
-  pageIndex = 0;
-  pageSize = 50; // items per page
-  currentPageIndex = 0;
-  pageSizeOptions = [50, 75, 100];
-  hidePageSize = false;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  pageEvent!: PageEvent;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+export class TechnologyTagListComponent implements OnInit {
   protected privilegeServ = inject(PrivilegesService);
+  private dialogServ = inject(DialogService);
+  private techTagServ = inject(TechnologyTagService);
+  private snackBarServ = inject(SnackBarService);
+  dataSource = new MatTableDataSource<any>([]);
+
+  dataTableColumns: string[] = ['SerialNum', 'Technology', 'Skills', 'Actions'];
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
-  totalItems: number = 0;
-  field = 'empty';
-  datarr: any[] = [];
-  hasAcces!: any;
-  loginId!: any;
-  department!: any;
+  AssignedPageNum !: any;
+  totalItems: any;
+  field = "empty";
+  currentPageIndex = 0;
+  pageEvent!: PageEvent;
+  pageSize = 50;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageSizeOptions = [50, 75, 100];
 
-  // to clear subscriptions
-  private destroyed$ = new Subject<void>();
-
-  private techTagServ = inject(TechnologyTagService);
-  private snackBarServ = inject(SnackBarService);
-  private dialogServ = inject(DialogService);
   private router = inject(Router);
-
+  userid!: any;
   ngOnInit(): void {
-    this.hasAcces = localStorage.getItem('role');
-    this.loginId = localStorage.getItem('userid');
-    this.department = localStorage.getItem('department');
-
-    this.getAllTechnologies()
+    this.userid = localStorage.getItem('userid');
+    this.getAllData();
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  getAllData(pagIdx = 1) {
+    this.techTagServ.getAllTechnologiesByPagination(pagIdx, this.itemsPerPage, this.field,
+      this.sortField,
+      this.sortOrder).subscribe(
+      (response: any) => {
+        this.dataSource.data = response.data.content;
+        this.totalItems = response.data.totalElements;
+        // for serial-num {}
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
+        });
+      }
+    )
   }
 
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    return serialNumber;
+  }
 
-  getAllTechnologies() {
-    return this.techTagServ.getAllTechnologies().pipe(takeUntil(this.destroyed$)).subscribe(
-      {
-        next: (response: any) => {
-          this.technologyTagList = response.data;
-          this.dataSource.data = response.data;
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = i + 1;
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      return  this.techTagServ.getAllTechnologiesByPagination(1, this.itemsPerPage, keyword,
+        this.sortField,
+        this.sortOrder).subscribe(
+      // return this.service.getopenReqWithPagination(1, this.itemsPerPage, keyword).subscribe(
+        ((response: any) => {
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
           });
           this.totalItems = response.data.totalElements;
-        },
-        error: (err: any) => console.log(err)
-      }
-    );
+
+        })
+      );
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return this.getAllData(this.currentPageIndex + 1);
   }
 
+  sortField = 'technologyarea';
+  sortOrder = 'asc';
+  onSort(event: Sort) {
+    //console.log(event);
+    if (event.active == 'SerialNum')
+      this.sortField = 'technologyarea'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAllData();
+    }
+  }
 
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      this.currentPageIndex = event.pageIndex;
+      this.getAllData(event.pageIndex + 1)
+    }
+    return;
+  }
+
+  navigateToDashboard() {
+    this.router.navigateByUrl('/usit/dashboard');
+  }
 
   addTechnology() {
     const actionData = {
@@ -124,8 +156,8 @@ export class TechnologyTagListComponent implements OnInit, AfterViewInit{
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddTechnologyTagComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.allowAction){
-        this.getAllTechnologies();
+      if (dialogRef.componentInstance.allowAction) {
+        this.getAllData();
       }
     })
 
@@ -147,14 +179,14 @@ export class TechnologyTagListComponent implements OnInit, AfterViewInit{
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddTechnologyTagComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.allowAction){
-        this.getAllTechnologies();
+      if (dialogRef.componentInstance.allowAction) {
+        this.getAllData();
       }
     })
   }
 
   deleteTechnology(technology: any) {
-    const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to delete?',
       confirmText: 'Yes',
@@ -170,7 +202,7 @@ export class TechnologyTagListComponent implements OnInit, AfterViewInit{
     const dialogRef = this.dialogServ.openDialogWithComponent(ConfirmComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe({
-      next: () =>{
+      next: () => {
         if (dialogRef.componentInstance.allowAction) {
           const dataToBeSentToSnackBar: ISnackBarData = {
             message: '',
@@ -190,15 +222,15 @@ export class TechnologyTagListComponent implements OnInit, AfterViewInit{
                     dataToBeSentToSnackBar
                   );
                   // call get api after deleting a technology
-                  this.getAllTechnologies();
+                  this.getAllData();
                 }
                 else if (resp.status == 'associated') {
-                  dataToBeSentToSnackBar.message =resp.message;
+                  dataToBeSentToSnackBar.message = resp.message;
                   this.snackBarServ.openSnackBarFromComponent(
                     dataToBeSentToSnackBar
                   );
                   // call get api after deleting a technology
-                  this.getAllTechnologies();
+                  this.getAllData();
                 }
                 else {
                   dataToBeSentToSnackBar.message = resp.message;
@@ -213,30 +245,4 @@ export class TechnologyTagListComponent implements OnInit, AfterViewInit{
       }
     })
   }
-
-  // search
-  onFilter(event: any){
-    this.dataSource.filter = event.target.value;
-  }
-
-  onSort(event: any) {
-
-  }
-
-  handlePageEvent(e: PageEvent) {
-    this.pageEvent = e;
-    this.length = e.length;
-    this.pageSize = e.pageSize;
-    this.pageIndex = e.pageIndex;
-  }
-
-  getRowClass(row: any): string {
-    const rowIndex = this.dataSource.filteredData.indexOf(row);
-    return rowIndex % 2 === 0 ? 'even-row' : 'odd-row';
-  }
-
-  navigateToDashboard() {
-    this.router.navigateByUrl('/usit/dashboard');
-  }
-
 }

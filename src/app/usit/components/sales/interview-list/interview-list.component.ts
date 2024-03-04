@@ -16,7 +16,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import {  MatSortModule} from '@angular/material/sort';
+import {  MatSortModule, Sort} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import {
@@ -124,7 +124,9 @@ export class InterviewListComponent implements OnInit, OnDestroy{
 
   getAll(pagIdx=1 ) {
     this.userid = localStorage.getItem('userid');
-    this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, this.field)
+    this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, this.field,
+      this.sortField,
+      this.sortOrder)
     .pipe(takeUntil(this.destroyed$)).subscribe(
       (response: any) => {
         this.entity = response.data.content;
@@ -240,7 +242,9 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   applyFilter(event: any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword).subscribe(
+      return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
+        this.sortField,
+        this.sortOrder).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.dataSource.data  = response.data.content;
@@ -249,15 +253,27 @@ export class InterviewListComponent implements OnInit, OnDestroy{
             x.serialNum = this.generateSerialNumber(i);
           });
           this.totalItems = response.data.totalElements;
-
         })
       );
     }
     return  this.getAll(this.currentPageIndex + 1)
   }
 
-  onSort(event: any) {
-
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    //this.sortField = event.active;
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    ///this.sortOrder = event.direction;
+    this.getAll();
+    }
   }
 
   generateSerialNumber(index: number): number {

@@ -8,8 +8,10 @@ export class SubmissionService {
 
   constructor(private apiServ: ApiService) { }
 
-  getConsultantDropdown(flg: string) {
-    return this.apiServ.get("submission/consultantinfo/" + flg);
+  getConsultantDropdown(flg: string,id:number) {
+   // getconsultInfo
+    return this.apiServ.get("submission/getconsultInfo/" + flg+"/"+id);
+    //return this.apiServ.get("submission/consultantinfo/" + flg);
   }
 
   
@@ -21,7 +23,7 @@ export class SubmissionService {
     return this.apiServ.get("submission/getRecruiters/"+id+"/"+flg);
   }
   getCompanies(flg:string) {
-    return this.apiServ.get("submission/venodorCompanies/"+flg);
+    return this.apiServ.get("submission/getVenodorCompanies/"+flg);
   }
 
   //used for create the resource
@@ -38,8 +40,8 @@ export class SubmissionService {
     return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid);
   }
 
-  public getsubmissiondataPagination(flg: string,access:string,userid:number, page: any, size: any, field: any) {
-    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field);
+  public getsubmissiondataPagination(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string) {
+    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
   }
  
   deletesubmission(id: number) {
@@ -57,5 +59,13 @@ export class SubmissionService {
 
   getSubReqInfo(id: any) {
     return this.apiServ.get("requirement/getbyid/" + id);
+  }
+
+  getConsultantById(id: number) {
+    return this.apiServ.get("consultant/getbyid/" + id);
+  }
+
+  getVendorById(id: number) {
+    return this.apiServ.get("vms/vendor/vendor/" + id);
   }
 }

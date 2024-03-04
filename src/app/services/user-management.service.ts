@@ -26,6 +26,11 @@ export class UserManagementService {
     return userName !== null ? userName : ''
   }
 
+  getRoleName(): string {
+    const roleName = localStorage.getItem('role');
+    return roleName !== null ? roleName : ''
+  }
+
   /**************ROLES SERVICES -  STARTS************* */
   // roles management
   //register role

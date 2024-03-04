@@ -92,7 +92,7 @@ export class AddVisaComponent {
       updatedby: userId,
       vid : this.visaForm.get('vid')!.value,
       visastatus: this.visaForm.get('visastatus')!.value,
-      description: this.visaForm.get('description')!.value
+      description: this.visaForm.get('description')!.value,
     };
     const updateObj = {
       ...this.data.visaData,

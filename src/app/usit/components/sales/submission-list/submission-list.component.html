@@ -32,19 +32,19 @@
 
                 <!-- SNo Column mat-sort-header-->
                 <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" mat-sort-header>
                         S.No </th>
                     <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
                 </ng-container>
                 <!-- Date-->
                 <ng-container matColumnDef="Dos">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Date"> DOS
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Date" mat-sort-header> DOS
                     </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.createddate}} </td>
+                    <td mat-cell *matCellDef="let element" nowrap> {{element?.createddate | date:'MM-dd-yyyy HH:mm'}} </td>
                 </ng-container>
                 <!-- ID-->
                 <ng-container matColumnDef="Id">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ID"> Submission
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ID" mat-sort-header> Submission
                         ID </th>
                     <td mat-cell *matCellDef="let element">
                         {{element?.subno}}
@@ -55,7 +55,7 @@
                 </ng-container>
                 <!-- Name-->
                 <ng-container matColumnDef="Consultant">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Consultant">
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Consultant" mat-sort-header>
                         Consultant </th>
                     <td mat-cell *matCellDef="let element">
                         <span class="consultant-id"
@@ -81,7 +81,7 @@
                 </ng-container> -->
                 <!-- Requirement-->
                 <ng-container matColumnDef="Requirement">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Requirement">
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Requirement" mat-sort-header>
                         Requirement
                     </th>
                     <td mat-cell *matCellDef="let element">
@@ -103,14 +103,14 @@
 
                 <!-- Implementation Partner-->
                 <ng-container matColumnDef="ImplementationPartner">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ImplementationPartner">
-                        Implementation Partner </th>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ImplementationPartner" mat-sort-header>
+                        IP / Vendor </th>
                     <td mat-cell *matCellDef="let element"> {{element?.implpartner}}
                     </td>
                 </ng-container>
                 <!-- End Client-->
                 <ng-container matColumnDef="EndClient">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by EndClient"> End
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by EndClient" mat-sort-header> End
                         Client </th>
                     <td mat-cell *matCellDef="let element"> {{element?.endclient}}
                     </td>
@@ -118,27 +118,27 @@
                 <!-- Vendor Location -->
                 <ng-container matColumnDef="Vendor">
                     <th mat-header-cell *matHeaderCellDef 
-                        sortActionDescription="Sort by Current Vendor"> Vendor </th>
+                        sortActionDescription="Sort by Current Vendor" mat-sort-header> Third Party Vendor </th>
                     <td mat-cell *matCellDef="let element"> {{element?.vendor}}
                     </td>
                 </ng-container>
                 <!-- Sub Rate Column -->
                 <ng-container matColumnDef="SubRate">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubRate">
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubRate" mat-sort-header>
                         Sub Rate</th>
                     <td mat-cell *matCellDef="let element"> {{element.submissionrate}}
                     </td>
                 </ng-container>
                 <!-- Project Location Column -->
                 <ng-container matColumnDef="ProjectLocation">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ProjectLocation">
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ProjectLocation" mat-sort-header>
                         Project Location</th>
                     <td mat-cell *matCellDef="let element"> {{element.projectlocation}} </td>
                 </ng-container>
 
                 <!-- Submitted By Column -->
                 <ng-container matColumnDef="SubmittedBy">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubmittedBy">
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubmittedBy" mat-sort-header>
                         Submitted By
                     </th>
                     <td mat-cell *matCellDef="let element"> 
@@ -158,7 +158,7 @@
 
                 <!-- Sub Status Column -->
                 <ng-container matColumnDef="SubStatus">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubStatus">
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubStatus" mat-sort-header>
                         Sub Status
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element.substatus}} </td>

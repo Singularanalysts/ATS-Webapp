@@ -57,9 +57,9 @@ export class ConsultantService {
     return this.http.get("consultant/all/" + flg + "/" + access + "/" + userid);
   }
 
-  getAllConsultantData(flg: string, access: string, userid: number, page: any, size: any, field: any) {
+  getAllConsultantData(flg: string, access: string, userid: number, page: any, size: any, field: any, sortField:string,sortOrder:string ) {
     // "/all/{access}/{userid}/{page}/{size}/{field}
-    return this.http.get("consultant/all/" + flg + "/" + access + "/" + userid + "/" + page + "/" + size + "/" + field);
+    return this.http.get("consultant/all/" + flg + "/" + access + "/" + userid + "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
   }
 
   getAllH1TransferConsultantData(page: any, size: any, field: any) {
@@ -117,6 +117,11 @@ export class ConsultantService {
   public gettech() {
     return this.http.get("consultant/technology/tech");
   }
+
+  public gettechDropDown(techid: any) {
+    return this.http.get("consultant/technology/"+techid);
+  }
+
 
   getQualification() {
     return this.http.get("consultant/qualification/all");

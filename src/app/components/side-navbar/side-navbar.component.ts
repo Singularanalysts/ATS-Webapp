@@ -67,7 +67,7 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
     }
 
     else if (this.department=='Sourcing'){
-      this.getSideNavData('assets/side-navbar-sourcing.json')
+      this.getSideNavData('assets/side-navbar-sourcing-items.json')
     }
     else{
       this.getSideNavData('assets/side-navbar-Super-Admin.json')

@@ -40,8 +40,8 @@
         </ng-container>
         <!-- Date-->
         <ng-container matColumnDef="Date">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Date"> Date </th>
-          <td mat-cell *matCellDef="let element"> {{element?.createddate | date:'yyyy-MM-dd'}} </td>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Date" mat-sort-header> Date </th>
+          <td mat-cell *matCellDef="let element"  nowrap> {{element?.createddate | date:'MM-dd-yyyy'}} </td>
         </ng-container>
         <!-- ID-->
         <!-- <ng-container matColumnDef="Id">
@@ -55,8 +55,8 @@
         </ng-container> -->
         <!-- Name-->
         <ng-container matColumnDef="Name">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort byName">Name </th>
-          <td mat-cell *matCellDef="let element">
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort byName" mat-sort-header >Name </th>
+          <td mat-cell *matCellDef="let element" >
             <span class="consultant-id" (click)="goToConsultantInfo(element, flag)">{{element?.consultantname}}
             </span>
           </td>
@@ -75,45 +75,45 @@
           </ng-container> -->
         <!-- Email-->
         <ng-container matColumnDef="Email">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Email"> Email</th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Email" mat-sort-header > Email</th>
           <td mat-cell *matCellDef="let element"> {{element?.consultantemail}}
           </td>
         </ng-container>
         <!-- Contact Number-->
         <ng-container matColumnDef="ContactNumber">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Contact Number">
-            ContactNumber </th>
-          <td mat-cell *matCellDef="let element"> {{element?.contactnumber}}
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Contact Number" >
+            Contact Number </th>
+          <td mat-cell *matCellDef="let element" nowrap> {{element?.contactnumber}}
           </td>
         </ng-container>
         <!-- Visa-->
         <ng-container matColumnDef="Visa">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Visa"> Visa</th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Visa" mat-sort-header > Visa</th>
           <td mat-cell *matCellDef="let element"> {{element?.visa_status}}
           </td>
         </ng-container>
         <!-- Current Location -->
         <ng-container matColumnDef="CurrentLocation">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Current Location">Current
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Current Location" mat-sort-header >Current
             Location </th>
           <td mat-cell *matCellDef="let element"> {{element?.currentlocation.replace(', USA', '')}}
           </td>
         </ng-container>
         <!-- Company Column -->
         <ng-container matColumnDef="Company">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Company"> Company</th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Company" mat-sort-header > Company</th>
           <td mat-cell *matCellDef="let element"> {{element.companyname}}
           </td>
         </ng-container>
         <!-- Position Column -->
         <ng-container matColumnDef="Position">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Position"> Position</th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Position" mat-sort-header > Position</th>
           <td mat-cell *matCellDef="let element"> {{element.position}} </td>
         </ng-container>
 
         <!-- Exp Column -->
         <ng-container matColumnDef="Experience">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"> Experience
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience" mat-sort-header > Experience
           </th>
           <td mat-cell *matCellDef="let element"> {{element.experience}} </td>
         </ng-container>
@@ -127,14 +127,14 @@
 
         <!-- RAte Column -->
         <ng-container matColumnDef="Rate">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Rate"> Rate </th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Rate" mat-sort-header > Rate </th>
           <td mat-cell *matCellDef="let element"> {{element.hourlyrate}}</td>
         </ng-container>
 
         <!-- Added By -->
 
         <ng-container matColumnDef="AddedBy" *ngIf="(flag.toLocaleLowerCase() != 'sales')">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Added By">Added By</th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Added By" mat-sort-header >Added By</th>
           <td mat-cell *matCellDef="let element">
             <ng-container
               *ngIf="element.consultantflg === 'sales' || element.consultantflg === 'presales'; then salesOrPreSales else recruiting"></ng-container>
@@ -150,24 +150,24 @@
         </ng-container>
         <!-- Priority Column -->
         <ng-container matColumnDef="Priority">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Priority">Priority </th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Priority" mat-sort-header >Priority </th>
           <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
         </ng-container>
 
         <!-- Status Column -->
         <ng-container matColumnDef="Status">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Status"> Status </th>
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Status" mat-sort-header > Status </th>
           <td mat-cell *matCellDef="let consultant">
             <!-- <span><button mat-raised-button (click)="onStatusUpdate(consultant)" > {{consultant.status}}</button> </span> -->
             <ng-container
               *ngIf="consultant.status == 'Rejected' ||  consultant.status == 'InActive'; then trueCondition else elseTemplate"></ng-container>
             <ng-template #trueCondition>
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')"
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')" style="width: 60px; height: 25px;"
                 [ngClass]="consultant.status === 'Active' || consultant.status === 'Completed' || consultant.status === 'Initiated' || consultant.status === 'Verified' ? 'mat-primary' : 'mat-warn'"
                 mat-raised-button (click)="goToConsultantTrackDetails(consultant)">{{consultant.status}}</button>
             </ng-template>
             <ng-template #elseTemplate>
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')"
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')" style="width: 60px; height: 25px;"
                 [ngClass]="consultant.status === 'Active' || consultant.status === 'Completed' || consultant.status === 'Initiated' || consultant.status === 'Verified' ? 'mat-primary' : 'mat-warn'"
                 mat-raised-button>{{consultant.status}}
               </button>
@@ -178,7 +178,8 @@
         <!-- Action Column -->
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let consultant">
+          <td mat-cell *matCellDef="let consultant" nowrap>
+            <span class="action-buttons">
             <button [disabled]="!privilegeServ.hasPrivilege('EDIT_CONSULTANT')" mat-icon-button
               *ngIf="consultant.status!='Verified' || hasAcces!='Employee'" (click)="editConsultant(consultant)"
               class="action-button-ed">
@@ -207,6 +208,7 @@
               (click)="deleteConsultant(consultant)" class="action-button-ed">
               <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_CONSULTANT')}">delete</mat-icon>
             </button>
+          </span>
           </td>
         </ng-container>
         <!-- table columns ends  -->

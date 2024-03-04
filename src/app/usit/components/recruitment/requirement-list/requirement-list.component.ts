@@ -16,7 +16,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
@@ -136,7 +136,9 @@ export class RequirementListComponent implements OnInit, OnDestroy {
         this.flag,
         currentPageIndex,
         this.pageSize,
-        this.field
+        this.field,
+        this.sortField,
+        this.sortOrder
       )
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -155,6 +157,51 @@ export class RequirementListComponent implements OnInit, OnDestroy {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
+  }
+
+  applyFilter(event: any) {
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+    const keyword = event.target.value;
+    this.field = keyword;
+    if (keyword != '') {
+      return this.requirementServ
+      .getAllRequirementData(
+        this.flag,
+        1,
+        this.pageSize,
+        this.field,
+        this.sortField,
+        this.sortOrder
+      )
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.requirement = response.data.content;
+          this.dataSource.data = response.data.content;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        },
+        error: (err: any) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          dataToBeSentToSnackBar.message = err.message;
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return this.getAllData(this.currentPageIndex + 1);
   }
 
   addRequirement() {
@@ -178,9 +225,7 @@ export class RequirementListComponent implements OnInit, OnDestroy {
         this.getAllData(this.currentPageIndex + 1);
       }
     })
-
   }
-
 
   editRequirement(requirement: any){
     const actionData = {
@@ -260,8 +305,24 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     this.dataSource.filter = event.target.value;
   }
 
-  onSort(event: any) {
 
+
+  sortField = 'postedon';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    console.log(event);
+    //this.sortField = event.active;
+    if (event.active == 'SerialNum')
+      this.sortField = 'postedon'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    ///this.sortOrder = event.direction;
+    this.getAllData();
+    }
   }
 
   generateSerialNumber(index: number): number {

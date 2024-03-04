@@ -92,12 +92,14 @@ export class AddCompanyComponent {
       companyname: this.companyForm.get('companyname')!.value,
       description: this.companyForm.get('description')!.value,
       companyid: this.companyForm.get('companyid')!.value,
+      addedby: userId,
     };
     const updateObj = {
       ...this.data.companyData,
       companyname: this.companyForm.get('companyname')!.value,
       description: this.companyForm.get('description')!.value,
       companyid: this.companyForm.get('companyid')!.value,
+      updatedby: userId,
     };
     const saveObj = this.data.actionName === "update-company" ? updateObj : addObj;
 
