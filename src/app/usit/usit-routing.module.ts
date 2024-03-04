@@ -35,6 +35,9 @@ import { ConsultantInfoComponent } from './components/sales/consultant-list/cons
 import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
 import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
+import { LinkedinRequirementsComponent } from './components/openreqs/linkedin-requirements/linkedin-requirements.component';
+import { JobcubeRequirementsComponent } from './components/openreqs/jobcube-requirements/jobcube-requirements.component';
+import { JobliftRequirementsComponent } from './components/openreqs/joblift-requirements/joblift-requirements.component';
 
 
 const routes: Routes = [
@@ -203,7 +206,16 @@ const routes: Routes = [
   }
   ,
   {
-    path: 'openreqs', component: OpenreqsComponent,
+    path: 'dicereqs', component: OpenreqsComponent,
+  },
+  {
+    path: 'linkedinreqs', component: LinkedinRequirementsComponent,
+  },
+  {
+    path: 'jobcubereqs', component: JobcubeRequirementsComponent,
+  },
+  {
+    path: 'jobliftreqs', component: JobliftRequirementsComponent,
   },
   {
     path: 'rssfeed', component: RssfedComponentimplements,

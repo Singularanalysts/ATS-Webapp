@@ -21,7 +21,7 @@
           </mat-autocomplete>
         
 
-          <button matSuffix mat-icon-button (click)="goToVendorList()"><mat-icon>add</mat-icon></button>
+          <button matSuffix mat-icon-button (click)="navigateToAddVendor()"><mat-icon>add</mat-icon></button>
           <mat-hint *ngIf="isCompanyDataAvailable">No results found, click '+' to add vendor</mat-hint>
           <mat-error *ngIf="recruiterForm.get('vendor.company')!.hasError('required')">Company Name is Required</mat-error>
         </mat-form-field>

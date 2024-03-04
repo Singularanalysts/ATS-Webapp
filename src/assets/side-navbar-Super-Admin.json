@@ -172,7 +172,22 @@
         {
           "text": "Dice Reqs",
           "icon": "group",
-          "routerLink": "/usit/openreqs"
+          "routerLink": "/usit/dicereqs"
+        },
+        {
+          "text": "LinkedIn Reqs",
+          "icon": "group",
+          "routerLink": "/usit/linkedinreqs"
+        },
+        {
+          "text": "Jobcube Reqs",
+          "icon": "group",
+          "routerLink": "/usit/jobcubereqs"
+        },
+        {
+          "text": "Joblift Reqs",
+          "icon": "group",
+          "routerLink": "/usit/jobliftreqs"
         },
         {
           "text": "RSS",

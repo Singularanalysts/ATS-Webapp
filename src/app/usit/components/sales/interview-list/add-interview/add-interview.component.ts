@@ -433,11 +433,11 @@ export const RADIO_OPTIONS = {
     { value: 'Webex', id: 4 },
   ],
   interviewstatus: [
-    { value: 'Schedule', id: 1 },
-    { value: 'Closed', id: 2 },
-    { value: 'Hold', id: 3 },
-    { value: 'Rejected', id: 4 },
-    { value: 'Selected', id: 5 },
-    { value: 'Back Out', id: 6 },
+    {value: 'Schedule', id: 1},
+    {value: 'Closed', id: 2},
+    {value: 'Hold', id: 3},
+    {value: 'Rejected', id: 4},
+    {value: 'Selected', id: 5},
+    {value: 'BackOut', id: 6},
   ]
 }

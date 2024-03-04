@@ -162,12 +162,12 @@
             <ng-container
               *ngIf="consultant.status == 'Rejected' ||  consultant.status == 'InActive'; then trueCondition else elseTemplate"></ng-container>
             <ng-template #trueCondition>
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')" style="width: 60px; height: 25px;"
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')" class="status-button"
                 [ngClass]="consultant.status === 'Active' || consultant.status === 'Completed' || consultant.status === 'Initiated' || consultant.status === 'Verified' ? 'mat-primary' : 'mat-warn'"
                 mat-raised-button (click)="goToConsultantTrackDetails(consultant)">{{consultant.status}}</button>
             </ng-template>
             <ng-template #elseTemplate>
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')" style="width: 60px; height: 25px;"
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_CONSULTANT')" class="status-button"
                 [ngClass]="consultant.status === 'Active' || consultant.status === 'Completed' || consultant.status === 'Initiated' || consultant.status === 'Verified' ? 'mat-primary' : 'mat-warn'"
                 mat-raised-button>{{consultant.status}}
               </button>

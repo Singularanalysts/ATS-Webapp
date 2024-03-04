@@ -6,10 +6,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { OpenreqService } from '../../services/openreq.service';
+import { OpenreqService } from 'src/app/usit/services/openreq.service';
+
 
 @Component({
-  selector: 'app-openreqs',
+  selector: 'app-linkedin-requirements',
   standalone: true,
   imports: [
     CommonModule,
@@ -19,10 +20,11 @@ import { OpenreqService } from '../../services/openreq.service';
     MatTableModule,
     MatPaginatorModule
   ],
-  templateUrl: './openreqs.component.html',
-  styleUrls: ['./openreqs.component.scss']
+  templateUrl: './linkedin-requirements.component.html',
+  styleUrls: ['./linkedin-requirements.component.scss']
 })
-export class OpenreqsComponent implements OnInit {
+
+export class LinkedinRequirementsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -47,8 +49,7 @@ export class OpenreqsComponent implements OnInit {
   showFirstLastButtons = true;
   pageSizeOptions = [50, 75, 100];
   isCompanyExist: any;
-  source = 'dice'
-
+  source = 'linkedin';
   private router = inject(Router);
   private service = inject(OpenreqService);
 userid!:any;
