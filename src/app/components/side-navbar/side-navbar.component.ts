@@ -20,36 +20,15 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.department  = localStorage.getItem('department');
     this.role  = localStorage.getItem('role');
-// role
-    //Super Administrator
-    //Recruiting
 
-    // 'Administration',
-    // 'Recruiting',
-    // 'SoftWare',
-    // 'Bench Sales',
-    // 'Sourcing',
-    // 'Dom Recruiting',
-    // 'Accounts',
-    // 'Guest',
-
-//     Super Administrator 
-// Administrator 
-// Sales Manager 
-// Recruiting Manager 
-// Team Leader Sales 
-// Team Leader Recruiting 
-// Sales Executive 
-// Recruiter 
-// Guest 
-// OPT Recruiter 
-// Developer 
-// HR Manager 
     if(this.role=='Super Administrator' || this.role=='HR Manager'){
       this.getSideNavData('assets/side-navbar-Super-Admin.json')
     }
     else if (this.role=='Administrator'  || this.department=='SoftWare' || this.department=='Software'){
       this.getSideNavData('assets/side-navbar-Admin.json')
+    }
+    else if(this.department=='DomRecruiting'){
+      this.getSideNavData('assets/side-navbar-dom-items.json')
     }
     else if(this.role=='Sales Manager'){
       this.getSideNavData('assets/side-navbar-sales-manager.json')
