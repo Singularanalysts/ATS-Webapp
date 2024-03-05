@@ -282,7 +282,7 @@ export class AddInterviewComponent implements OnInit {
 
   getSubmissionOptionsForAutoComplete(data: any) {
     this.submissionOptions = data;
-    console.log(data);
+   // console.log(data);
     this.searchSubmissionOptions$ = this.interviewForm.controls.submission.valueChanges.pipe(
       startWith(''),
       map(value => this._filterSubmissionOptions(value, this.submissionOptions))
@@ -290,7 +290,7 @@ export class AddInterviewComponent implements OnInit {
   }
   submissionid: any;
   private _filterSubmissionOptions(value: any, options: any[]): any[] {
-    console.log(value);
+    //(value);
     const filterValue = (value ? value.toString() : '').toLowerCase();
     const filteredOptions = options.filter(option =>
       option.subdetails.toLowerCase().includes(filterValue)
@@ -298,7 +298,7 @@ export class AddInterviewComponent implements OnInit {
     // console.log(filteredOptions);
     if (filteredOptions.length === 1) {
       this.submissionid = filteredOptions[0].subid;
-      console.log(this.submissionid);
+      //console.log(this.submissionid);
     }
     // this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;

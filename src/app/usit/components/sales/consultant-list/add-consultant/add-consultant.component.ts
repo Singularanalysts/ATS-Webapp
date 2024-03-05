@@ -465,7 +465,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (this.flag != 'presales') {
       this.consultantForm.get("status").setValue("Active");
     }
-    console.log(this.techid);
+   // console.log(this.techid);
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
     if (this.data.actionName === "edit-consultant") {
@@ -601,7 +601,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     // this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
     if (filteredTechnologies.length === 1) {
       this.techid = filteredTechnologies[0].id;
-      console.log(this.techid);
+     // console.log(this.techid);
     }
     return filteredTechnologies;
   }

@@ -212,6 +212,7 @@ export class AddSubmissionComponent implements OnInit {
       this.submissionServ.getConsultantDropdown(this.flag,submissionData.consultant).subscribe(
           (consultant: any) => {
               if (consultant && consultant.data[0].consultantname) {
+                this.obj = consultant.data[0].consultantid;
                   this.submissionForm.get('consultant').setValue(consultant.data[0].consultantname);
               }
           },
@@ -224,7 +225,8 @@ export class AddSubmissionComponent implements OnInit {
     this.submissionServ.getVendorById(submissionData.vendor).subscribe(
         (vendor: any) => {
             if (vendor && vendor.data.company) {
-                this.submissionForm.get('vendor').setValue(vendor.data.company);
+              this.companyid =vendor.data.vmsid;
+              this.submissionForm.get('vendor').setValue(vendor.data.company);
             }
         },
         (error: any) => {
@@ -349,7 +351,7 @@ export class AddSubmissionComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.consultantname.toLowerCase().includes(filterValue)
     );
-    console.log(filteredOptions);
+    //console.log(filteredOptions);
     
     if (filteredOptions.length === 1) {
       this.obj =filteredOptions[0].consultantid;

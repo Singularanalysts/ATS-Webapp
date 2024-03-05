@@ -192,7 +192,7 @@ export class ConsultantListComponent
       this.flag.toLocaleLowerCase() === 'domrecruiting'
     ) {
       const priorityIndex = this.dataTableColumns.indexOf('Priority');
-      console.log(priorityIndex);
+      //console.log(priorityIndex);
       if (priorityIndex !== -1) {
         this.dataTableColumns.splice(priorityIndex, 1);
       }
@@ -286,7 +286,7 @@ export class ConsultantListComponent
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    console.log(event);
+    //console.log(event);
     //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'

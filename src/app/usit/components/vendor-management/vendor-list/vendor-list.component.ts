@@ -242,7 +242,7 @@ export class VendorListComponent implements OnInit {
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    console.log(event);
+    //console.log(event);
     //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'

@@ -96,7 +96,7 @@ export class GlobalSearchComponent {
         .subscribe(
           (resp: any) => {
             this.locationSuggestions = resp.data.content;
-            console.log('location suggestion' + this.locationSuggestions);
+          //  console.log('location suggestion' + this.locationSuggestions);
 
             // Remove duplicates from the locationSuggestions array
             const uniqueLocations = Array.from(
@@ -160,7 +160,7 @@ export class GlobalSearchComponent {
                     .subscribe(
                       (resp: any) => {
                         this.filteredVendorList = resp.data.content;
-                        console.log('companies', this.filteredVendorList);
+                      //  console.log('companies', this.filteredVendorList);
                         this.suggestionList = Array.from(
                           new Set(
                             this.filteredVendorList.map((item) => item.company)
@@ -175,11 +175,11 @@ export class GlobalSearchComponent {
                 }
               }
               this.jobpositioncross = resp.data.content;
-              console.log('getJobpostionAndCompany', this.filteredVendorList);
+             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              console.log('filtered data');
+             // console.log('filtered data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -212,7 +212,7 @@ export class GlobalSearchComponent {
                     .subscribe(
                       (resp: any) => {
                         this.filteredVendorList = resp.data.content;
-                        console.log('location ' + this.filteredVendorList);
+                       // console.log('location ' + this.filteredVendorList);
                       },
                       (error: any) => {
                         console.error(
@@ -224,7 +224,7 @@ export class GlobalSearchComponent {
                     );
                 }
               }
-              console.log('location ' + this.filteredVendorList);
+             // console.log('location ' + this.filteredVendorList);
             },
             (error: any) => {
               console.error('Error fetching location suggestions:', error);
@@ -249,11 +249,11 @@ export class GlobalSearchComponent {
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-              console.log('getJobpostionAndCompany', this.filteredVendorList);
+             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              console.log('filtered new data', this.filteredVendorList);
+              //console.log('filtered new data', this.filteredVendorList);
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -274,11 +274,11 @@ export class GlobalSearchComponent {
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-              console.log('getJobpostionAndCompany', this.filteredVendorList);
+             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              console.log('filtered data 3 data');
+              //console.log('filtered data 3 data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -295,10 +295,10 @@ export class GlobalSearchComponent {
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-              console.log(
-                'filtered company not there',
-                this.filteredVendorList
-              );
+              // console.log(
+              //   'filtered company not there',
+              //   this.filteredVendorList
+              // );
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -315,11 +315,11 @@ export class GlobalSearchComponent {
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-              console.log('getJobpostionAndCompany', this.filteredVendorList);
+             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              console.log('filtered data');
+             // console.log('filtered data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -336,10 +336,10 @@ export class GlobalSearchComponent {
         .subscribe(
           (resp: any) => {
             this.filteredVendorList = resp.data.content;
-            console.log('location ' + this.filteredVendorList);
+           // console.log('location ' + this.filteredVendorList);
           },
           (error: any) => {
-            console.error('Error fetching location suggestions:', error);
+           // console.error('Error fetching location suggestions:', error);
             this.filteredVendorList = [];
           }
         );

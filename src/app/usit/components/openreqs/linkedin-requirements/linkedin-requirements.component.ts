@@ -85,6 +85,7 @@ userid!:any;
 
   applyFilter(event : any) {
     const keyword = event.target.value;
+    this.field = keyword;
     if (keyword != '') {
       return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
         ((response: any) => {

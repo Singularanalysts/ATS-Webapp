@@ -62,7 +62,7 @@ export class AddTechnologyTagComponent {
   }
 
   private initializeTechnologyForm(data: any) {
-    console.log(this.data.actionName+" ==============KIRAN =========")
+   // console.log(this.data.actionName+" ==============KIRAN =========")
     this.technologyForm = this.formBuilder.group({
       technologyarea: [data ? data.technologyarea : '', Validators.required],
       listofkeyword: [data ? data.listofkeyword : '', Validators.required],
