@@ -38,6 +38,13 @@ import { GlobalSearchComponent } from './components/global-search/global-search.
 import { LinkedinRequirementsComponent } from './components/openreqs/linkedin-requirements/linkedin-requirements.component';
 import { JobcubeRequirementsComponent } from './components/openreqs/jobcube-requirements/jobcube-requirements.component';
 import { JobliftRequirementsComponent } from './components/openreqs/joblift-requirements/joblift-requirements.component';
+import { AdzunaRequirementsComponent } from './components/openreqs/adzuna-requirements/adzuna-requirements.component';
+import { IndeedRequirementsComponent } from './components/openreqs/indeed-requirements/indeed-requirements.component';
+import { JujuRequirementsComponent } from './components/openreqs/juju-requirements/juju-requirements.component';
+import { PostJobFreeRequirementsComponent } from './components/openreqs/post-job-free-requirements/post-job-free-requirements.component';
+import { RecruitNetRequirementsComponent } from './components/openreqs/recruit.net-requirements/recruit.net-requirements.component';
+import { SimplyhiredRquirementsComponent } from './components/openreqs/simplyhired-rquirements/simplyhired-rquirements.component';
+import { SnaprecruitRequirementsComponent } from './components/openreqs/snaprecruit-requirements/snaprecruit-requirements.component';
 
 
 const routes: Routes = [
@@ -213,6 +220,27 @@ const routes: Routes = [
   },
   {
     path: 'jobcubereqs', component: JobcubeRequirementsComponent,
+  },
+  {
+    path: 'adzunareqs', component: AdzunaRequirementsComponent,
+  },
+  {
+    path: 'indeedreqs', component: IndeedRequirementsComponent,
+  },
+  {
+    path: 'jujureqs', component: JujuRequirementsComponent,
+  },
+  {
+    path: 'postjobfreereqs', component: PostJobFreeRequirementsComponent,
+  },
+  {
+    path: 'recruitnetreqs', component: RecruitNetRequirementsComponent,
+  },
+  {
+    path: 'simplyhiredreqs', component: SimplyhiredRquirementsComponent,
+  },
+  {
+    path: 'snaprecruitreqs', component: SnaprecruitRequirementsComponent,
   },
   {
     path: 'jobliftreqs', component: JobliftRequirementsComponent,
