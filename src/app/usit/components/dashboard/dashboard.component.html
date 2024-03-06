@@ -351,7 +351,7 @@
         <ng-container matColumnDef="PostedDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted Date
           </th>
-          <td mat-cell *matCellDef="let element"> {{element?.posted_on}} </td>
+          <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on}} </td>
         </ng-container>
 
         <!-- Job Title Column -->
@@ -387,7 +387,7 @@
         <ng-container matColumnDef="TaggedDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Tagged Date
           </th>
-          <td mat-cell *matCellDef="let element"> {{element.createddate}} </td>
+          <td mat-cell *matCellDef="let element" nowrap> {{element.createddate}} </td>
         </ng-container>
 
         <!-- Track Column -->

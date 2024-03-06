@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { DashboardService } from 'src/app/usit/services/dashboard.service';
@@ -16,6 +16,7 @@ import { SubmissionCountListComponent } from './submission-count-list/submission
 import { Closure } from '../../models/closure';
 import { ClosureCountListComponent } from './closure-count-list/closure-count-list.component';
 import { InterviewCountListComponent } from './interview-count-list/interview-count-list.component';
+import { interval, Subscription } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -86,7 +87,38 @@ export class DashboardComponent implements OnInit {
   role!: any;
   submitted = false;
   individualCounts = true;
+
+  private intervalSubscription!: Subscription;
+
+  private ngZone = inject(NgZone);
+
+  refresh() {
+    console.log('Dash Board Refreshed '+this.refreshFlg);
+    // You can perform any actions or logic inside this method
+    if (this.refreshFlg == 'executive') {
+      this.countCallingExecutiveAndLead();
+    }
+    else {
+      this.countCallingHigherRole();
+    }
+
+    this.dashboardServ.vmstransactions().subscribe(
+      ((response: any) => {
+        this.datarr = response.data;
+      })
+    );
+  }
+refreshFlg = 'executive';
   ngOnInit(): void {
+    // this.intervalSubscription = interval(1 * 60 * 1000)
+    this.intervalSubscription = interval(30 * 1000)
+      .subscribe(() => {
+        this.ngZone.run(() => {
+          this.refresh();
+        });
+      });
+
+
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     this.getDiceReqs();
@@ -94,16 +126,26 @@ export class DashboardComponent implements OnInit {
     this.dashboardServ.vmstransactions().subscribe(
       ((response: any) => {
         this.datarr = response.data;
-        this.countCallingExecutiveAndLead();
-        this.countCallingHigherRole();
       })
     );
     if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
       this.individualCounts = true;
+      this.countCallingExecutiveAndLead();
+      this.refreshFlg = 'executive'
     }
     else {
       this.individualCounts = false;
+      this.countCallingHigherRole();
+      this.refreshFlg = 'company'
     }
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from the interval to prevent memory leaks
+    if (this.intervalSubscription) {
+      this.intervalSubscription.unsubscribe();
+    }
+   console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
