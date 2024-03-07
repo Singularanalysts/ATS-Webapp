@@ -72,4 +72,9 @@ export class FileManagementService {
       responseType: 'blob',
     });
   }
+
+  excelUploadFile(formData:any, id: number) {
+    return this.http.post(this.apiServ.apiUrl + `vms/vendor/excelUpload/${id}`, formData, {observe: "response"});
+  }
+
 }

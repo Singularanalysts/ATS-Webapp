@@ -1,0 +1,68 @@
+.header-text {
+    padding-left: 8px;
+    font-weight: 600;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 20px;
+    height: 48px;
+    background-color: whitesmoke;
+    z-index: 99999;
+    top: 0;
+    overflow: hidden;
+}
+
+.table-wrapper {
+    flex: 1;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    padding-bottom: 30px;
+}
+
+#table-container {
+    padding: 0px 20px;
+}
+
+.mat-mdc-header-row {
+    background-color: rgb(213, 231, 231);
+    height: 30px !important;
+}
+
+.mat-mdc-column {
+    border-right: 1px solid currentColor;
+}
+
+.mat-column-Company,
+.mat-column-Name,
+.mat-column-Email,
+.mat-column-Type,
+.mat-column-VendorType,
+.mat-column-CompanyType,
+.mat-column-Location,
+.mat-column-Contact {
+    border-right: 1px solid lightgray;
+}
+
+.uploadexcel {
+    margin: 20px;
+}
+
+.upload {
+    width: 30%;
+    // height: 92px !important;
+}
+
+.vms-table-style {
+    padding: 0 2px;
+    width: 100%;
+    max-height: calc(100% - 3px);
+    overflow: auto;
+    display: block;
+  }
