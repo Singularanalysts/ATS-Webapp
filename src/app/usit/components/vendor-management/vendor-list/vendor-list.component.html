@@ -16,9 +16,9 @@
         (click)="getAllVendorByType('Both')">Both Recruiting & Staffing</button>
     </span> -->
     <div class="vendor-actions">
-      <!-- <button mat-icon-button class="add-user" (click)="uploadVendor()">
+      <button mat-icon-button (click)="uploadVmsExcelData()" matTooltip="Upload VMS Excel Data" matTooltipPosition="above">
         <mat-icon class="item-icon">upload</mat-icon>
-      </button> -->
+      </button>
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_VENDOR')" mat-icon-button class="add-user"
         (click)="addVendor()" matTooltip="Add Vendor" matTooltipPosition="above">
         <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_VENDOR')}">add_circle</mat-icon>

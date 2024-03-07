@@ -221,20 +221,6 @@ export class RecruiterListComponent implements OnInit {
     }
   }
 
-  uploadRecruiterExcel() {
-    const actionData = {
-      title: 'Upload Vendors and Recruiters',
-      vendorData: null,
-      actionName: 'upload-vendor-and-recruiter',
-    };
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '85vw';
-    dialogConfig.disableClose = false;
-    dialogConfig.panelClass = 'upload-recruiter';
-    dialogConfig.data = actionData;
-
-    this.dialogServ.openDialogWithComponent(UploadVmsExcelComponent, dialogConfig);
-  }
 
   /**
    * add

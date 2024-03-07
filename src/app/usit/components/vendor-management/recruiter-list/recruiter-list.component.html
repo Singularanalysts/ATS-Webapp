@@ -15,9 +15,6 @@
     </div> -->
 
     <div class="recruiter-actions">
-      <button mat-icon-button (click)="uploadRecruiterExcel()" matTooltip="Upload Excel" matTooltipPosition="above">
-        <mat-icon class="item-icon">upload</mat-icon>
-      </button>
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_RECRUITER')" mat-icon-button class="add-user"
         (click)="addRecruiter()" matTooltip="Add Recruiter" matTooltipPosition="above">
         <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_RECRUITER')}">add_circle</mat-icon>

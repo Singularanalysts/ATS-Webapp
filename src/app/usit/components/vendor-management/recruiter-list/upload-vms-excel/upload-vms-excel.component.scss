@@ -16,10 +16,6 @@
     overflow: hidden;
 }
 
-.table-wrapper {
-    flex: 1;
-    overflow: auto;
-}
 
 table {
     width: 100%;
@@ -27,6 +23,7 @@ table {
 }
 
 #table-container {
+    height: calc(100% - 48px - 166px - 20px);
     padding: 0px 20px;
 }
 
@@ -39,6 +36,7 @@ table {
     border-right: 1px solid currentColor;
 }
 
+.mat-column-SNo,
 .mat-column-Company,
 .mat-column-Name,
 .mat-column-Email,
@@ -52,17 +50,45 @@ table {
 
 .uploadexcel {
     margin: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upload-excel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
 }
 
 .upload {
-    width: 30%;
-    // height: 92px !important;
+    width: 300px;
+}
+
+.upload-button {
+    align-items: center;
+}
+
+.upload-doc-cotainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.upload-inp-container {
+    display: flex;
 }
 
 .vms-table-style {
     padding: 0 2px;
     width: 100%;
-    max-height: calc(100% - 3px);
+    height: 100%;
     overflow: auto;
     display: block;
-  }
+}
+
+.no-data-found {
+    margin-top: 64px;
+    text-align: center;
+}
