@@ -97,6 +97,7 @@ export class DashboardComponent implements OnInit {
     // You can perform any actions or logic inside this method
     if (this.refreshFlg == 'executive') {
       this.countCallingExecutiveAndLead();
+      this.countCallingHigherRole();
     }
     else {
       this.countCallingHigherRole();
@@ -109,6 +110,8 @@ export class DashboardComponent implements OnInit {
     );
   }
 refreshFlg = 'executive';
+department!:any;
+sourcingLead = true;
   ngOnInit(): void {
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
@@ -118,8 +121,14 @@ refreshFlg = 'executive';
         });
       });
 
-
     this.userid = localStorage.getItem('userid');
+    this.department = localStorage.getItem('department');
+    if(this.department == 'Bench Sales' || this.department == 'Recruiting'){
+      this.sourcingLead = false;
+    }
+    else{
+      this.sourcingLead = true;
+    }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     this.getDiceReqs();
     this.getSourcingLeads();
@@ -130,14 +139,14 @@ refreshFlg = 'executive';
     );
     if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
       this.individualCounts = true;
-      this.countCallingExecutiveAndLead();
       this.refreshFlg = 'executive'
     }
     else {
       this.individualCounts = false;
-      this.countCallingHigherRole();
       this.refreshFlg = 'company'
     }
+    this.countCallingExecutiveAndLead();
+    this.countCallingHigherRole();
   }
 
   ngOnDestroy() {
@@ -205,6 +214,7 @@ refreshFlg = 'executive';
     this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountIndArr = response.data;
+       
         this.intCountIndArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcountIndividual = ent.salescount;
@@ -274,6 +284,8 @@ refreshFlg = 'executive';
     this.dashboardServ.getInterviewCount(flag).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
+        console.log(response.data);
+        
         this.intCountArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcount = ent.salescount;

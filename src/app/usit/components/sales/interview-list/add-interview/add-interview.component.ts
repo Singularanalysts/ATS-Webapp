@@ -189,10 +189,12 @@ export class AddInterviewComponent implements OnInit {
     if (this.data.actionName === "edit-interview" && interviewData && interviewData.submission) {
       this.interviewServ.getsubmissionsDropDown(this.flag, this.userid, this.role, interviewData.submission).subscribe(
         (submission: any) => {
-          //console.log(JSON.stringify(submission)+" ====================");
-          if (submission && submission.data) {
+          if (submission && submission.data.length>0) {
             this.submissionid = submission.data[0].subid;
             this.interviewForm.get('submission').setValue(submission.data[0].subdetails);
+          }
+          else{
+            this.submissionid = interviewData.submission;
           }
         },
         (error: any) => {
@@ -343,7 +345,7 @@ export class AddInterviewComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const saveReqObj = this.getSaveData();
-    ///console.log(saveReqObj)
+    console.log(saveReqObj)
     this.interviewServ
       .addORUpdateInterview(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -372,6 +374,8 @@ export class AddInterviewComponent implements OnInit {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
+
+      
 
   }
 
