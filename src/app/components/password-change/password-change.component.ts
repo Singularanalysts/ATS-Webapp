@@ -1,28 +1,24 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserManagementService } from 'src/app/services/user-management.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { RouterModule ,Routes} from '@angular/router';
+
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 @Component({
-  selector: 'app-password-change',
-  standalone: true,
-  imports: [CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule
-    ],
+  selector: 'app-userprofile',
+  standalone:true,
   templateUrl: './password-change.component.html',
-  styleUrls: ['./password-change.component.scss']
+  styleUrls: ['./password-change.component.scss'],
+  imports:[CommonModule,ReactiveFormsModule,MatButtonModule,MatInputModule,MatFormFieldModule,RouterModule,MatTabsModule,MatIconModule]
 })
-export class PasswordChangeComponent implements OnInit{
+export class PasswordChangeComponent implements OnInit {
   form: any = FormGroup;
   currentpassword!: string;
   newpassword!: string;
@@ -32,9 +28,12 @@ export class PasswordChangeComponent implements OnInit{
   submitted = false;
   username = localStorage.getItem('userName');
   designation = localStorage.getItem('designation');
-  constructor(private formBuilder: FormBuilder, private service: UserManagementService,
-    ) { }
+  password: string = '';
+  passwordTouched: boolean = false;
+  touchedReenter: boolean = false;
+  constructor(private formBuilder: FormBuilder, private service: UserManagementService) { }
   get f() { return this.form.controls; }
+  showNewPasswordError = false;
   ngOnInit(): void {
     const addedby = localStorage.getItem('userid');
     this.form = this.formBuilder.group(
@@ -46,6 +45,8 @@ export class PasswordChangeComponent implements OnInit{
       });
   }
   private snackBarServ = inject(SnackBarService);
+
+
   onSubmit() {
 
     const dataToBeSentToSnackBar: ISnackBarData = {
@@ -55,6 +56,7 @@ export class PasswordChangeComponent implements OnInit{
       horizontalPosition: 'center',
       direction: 'above',
       panelClass: ['custom-snack-success'],
+    
     };
 
 
@@ -64,60 +66,55 @@ export class PasswordChangeComponent implements OnInit{
     }
     if (this.newpassword != null && this.confirmpassword != null) {
       if (this.newpassword != this.confirmpassword) {
-        this.fail = "New Password & Confirm Password are not same !";
-        this.message = "";
+        const message= "New Password & Confirm Password are not the same!";
+        dataToBeSentToSnackBar.message = message;
+      //  this.showErroNotification(message,'fail',);
+      dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         return;
       }
     }
-    //console.log(JSON.stringify(this.form.value, null, 2));
+
     this.service.resetpassword(this.form.value)
       .subscribe((data: any) => {
-        //console.log(data)
         if (data.status == 'samepassword') {
-          // const message = 'New Password and Old Password Both are same';
-          // this.showErroNotification(message, 'failure');
-          // this.fail = " Your New Password and Old Password Both are same, please enter different password"
-          //this.form.reset(); Kiran123$
           this.submitted = false;
-          dataToBeSentToSnackBar.message =  'New Password and Old Password Both are same';
+          dataToBeSentToSnackBar.message=  'New Password and Old Password Both are the same';
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-
-
+          this.submitted = false;
         }
         else if (data.status == 'fail') {
-          // const message = 'Old Password is Incorrect';
-          // this.showErroNotification(message, 'failure');
-          // this.fail = " Old Password is Incorrect";
-
           dataToBeSentToSnackBar.message =  'Old Password is Incorrect';
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-
-
           this.submitted = false;
-        }
+        } 
         else if (data.status == 'success') {
           const message = data.message;
-          // this.showErroNotification(message, 'success');
-          // this.message = data.message;
-
+          this.showErroNotification(message,'success',);
+        
+          this.message = data.message;
           dataToBeSentToSnackBar.message =  message;
-          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-
-
-          this.fail = "";
-          this.submitted = false;
-          this.form.reset();
-        }
+           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+           this.fail = "";
+           this.submitted = false;
+           this.form.reset();
+        } 
         else {
-          const message = 'Sorry Server not available now';
-          // this.showErroNotification(message, 'failure');
+          const message = 'Sorry, the server is not available now';
           dataToBeSentToSnackBar.message =  message;
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         }
       });
   }
+
+  openSnackBar(dataToBeSentToSnackBar: ISnackBarData) {
+    throw new Error('Method not implemented.');
+  }
+
   showErroNotification(message: string, arg1: string) {
     throw new Error('Method not implemented.');
   }
- 
 }
