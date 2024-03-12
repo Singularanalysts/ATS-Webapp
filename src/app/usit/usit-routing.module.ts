@@ -35,6 +35,7 @@ import { ConsultantInfoComponent } from './components/sales/consultant-list/cons
 import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
 import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
+import { OpenRequirementsReportsComponent } from './components/reports/open-requirements-reports/open-requirements-reports.component';
 
 
 const routes: Routes = [
@@ -217,6 +218,9 @@ const routes: Routes = [
   },
   { 
     path: 'sourcing-report', component: SourcingReportsComponent 
+  },
+  { 
+    path: 'open-reqs-report', component: OpenRequirementsReportsComponent
   },
   { path: 'consultant-info/:flg/:subFlag/:id', component: ConsultantInfoComponent },
 
