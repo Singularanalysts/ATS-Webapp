@@ -22,6 +22,7 @@ export class PasswordChangeComponent implements OnInit {
   form: any = FormGroup;
   currentpassword!: string;
   newpassword!: string;
+  renewpassword!:string;
   confirmpassword!: string;
   message!: string;
   fail!: string;
@@ -31,6 +32,7 @@ export class PasswordChangeComponent implements OnInit {
   password: string = '';
   passwordTouched: boolean = false;
   touchedReenter: boolean = false;
+  newPassword: null | undefined;
   constructor(private formBuilder: FormBuilder, private service: UserManagementService) { }
   get f() { return this.form.controls; }
   showNewPasswordError = false;
@@ -38,9 +40,9 @@ export class PasswordChangeComponent implements OnInit {
     const addedby = localStorage.getItem('userid');
     this.form = this.formBuilder.group(
       {
-        password: ['', Validators.required],
+        password: ['', Validators.required],    
         userid: localStorage.getItem('userid'),
-        newpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
+        newPassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
         renewpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
       });
   }
@@ -65,16 +67,15 @@ export class PasswordChangeComponent implements OnInit {
       return;
     }
     if (this.newpassword != null && this.confirmpassword != null) {
+      
+    
       if (this.newpassword != this.confirmpassword) {
-        const message= "New Password & Confirm Password are not the same!";
-        dataToBeSentToSnackBar.message = message;
-      //  this.showErroNotification(message,'fail',);
-      dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-        this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        return;
-      }
-    }
-
+          const message = "New Password & Confirm Password are not the same!";
+          dataToBeSentToSnackBar.message = message;
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+          return;
+      }}
     this.service.resetpassword(this.form.value)
       .subscribe((data: any) => {
         if (data.status == 'samepassword') {
@@ -93,9 +94,8 @@ export class PasswordChangeComponent implements OnInit {
         else if (data.status == 'success') {
           const message = data.message;
           this.showErroNotification(message,'success',);
-        
-          this.message = data.message;
-          dataToBeSentToSnackBar.message =  message;
+           this.message = data.message;
+           dataToBeSentToSnackBar.message =  message;
            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
            this.fail = "";
            this.submitted = false;
