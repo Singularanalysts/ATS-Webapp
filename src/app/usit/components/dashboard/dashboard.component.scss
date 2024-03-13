@@ -166,6 +166,18 @@ ul.breadcrumb li a:hover {
   justify-content: space-between;
 }
 
+.sourcing-card {
+  padding-bottom: 10px;
+}
+
+.sourcing-card .card {
+  display: flex;
+  flex-direction: row;
+  padding: 0px 5px;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .mat-mdc-card-title, .mat-mdc-card-subtitle {
   font-size: 14px;
   margin: 0;
@@ -223,14 +235,21 @@ mat-typography p {
   --mat-mdc-fab-color: #2eca6a; /* icon color */
 }
 
+.mat-mdc-fab.mat-accent.sourcing-icon, 
+.mat-mdc-mini-fab.mat-accent.sourcing-icon .sourcing-icon {
+  --mdc-fab-container-color: #d6d8e9; /* icon background color */
+  --mdc-fab-icon-color: white;
+  --mat-mdc-fab-color: #3f51b5; /* icon color */
+}
+
 .mat-mdc-card.activity-card-individual {
-  height: 678px;
+  height: 548px;
   padding: 15px;
   overflow-y: auto;
 }
 
 .mat-mdc-card.activity-card {
-  height: 808px;
+  height: 678px;
   padding: 15px;
   overflow-y: auto;
 }

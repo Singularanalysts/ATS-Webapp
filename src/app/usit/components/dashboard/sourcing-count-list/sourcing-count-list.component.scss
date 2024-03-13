@@ -1,0 +1,114 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 6px 0px 6px 0px;
+    justify-content: space-between;
+    height: 48px;
+    background-color: whitesmoke;
+    z-index: 99999;
+    top: 0;
+    overflow: hidden;
+}
+
+.header-text {
+    font-weight: 600;
+}
+
+.mat-elevation-z1 {
+    box-shadow: none;
+}
+
+.table-wrapper {
+    flex: 1;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+
+}
+
+.mat-mdc-header-row {
+    background-color: rgb(213, 231, 231);
+    position: sticky;
+    top: 0;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+}
+
+tbody {
+    text-align: left;
+}
+
+.mat-sort-header-arrow {
+    color: #1a1717;
+}
+
+.mat-mdc-column {
+    border-right: 1px solid currentColor;
+}
+
+.mat-column-Designation {
+    width: 32px;
+    border-right: 1px solid lightgray;
+    padding-right: 24px;
+}
+
+.mat-column-Name {
+    border-right: 1px solid lightgray;
+}
+
+.mat-column-SerialNum,
+.mat-column-Date,
+.mat-column-Id,
+.mat-column-Name,
+.mat-column-Email,
+.mat-column-ContactNumber,
+.mat-column-Visa,
+.mat-column-CurrentLocation,
+.mat-column-Company,
+.mat-column-Position,
+.mat-column-Experience,
+.mat-column-Relocation,
+.mat-column-Rate,
+.mat-column-Priority,
+.mat-column-Status {
+    border-right: 1px solid lightgray;
+}
+
+.consultant-table-style {
+    width: 100%;
+    max-height: 60svh;
+    overflow-y: auto;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+    padding: 0 4px 0 4px;
+}
+
+.mat-mdc-header-row {
+    height: 30px !important;
+    z-index: 1000;
+}
+
+.mat-mdc-row {
+    height: 30px !important;
+}
+
+.no-data-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 64px;
+}
+
+
+.responsive-table {
+    width: 100%;
+}
