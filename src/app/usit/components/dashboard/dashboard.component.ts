@@ -13,11 +13,11 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { SourcingupdateComponent } from './sourcingupdate/sourcingupdate.component';
 import { SubmissionCountListComponent } from './submission-count-list/submission-count-list.component';
-import { Closure } from '../../models/closure';
 import { ClosureCountListComponent } from './closure-count-list/closure-count-list.component';
 import { InterviewCountListComponent } from './interview-count-list/interview-count-list.component';
 import { interval, Subscription } from 'rxjs';
 import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count-list.component';
+import { OpenReqsAnalysisComponent } from './open-reqs-analysis/open-reqs-analysis.component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -29,6 +29,8 @@ import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
+  dataSourceTech = new MatTableDataSource([]);
+  dataSourceVendor = new MatTableDataSource([]);
   private dialogServ = inject(DialogService);
   dataTableColumns: string[] = [
     'Name',
@@ -47,6 +49,18 @@ export class DashboardComponent implements OnInit {
     'Vendor',
     'TaggedDate',
     'TaggedBy'
+  ];
+  dataTableColumnsTechAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Category',
+    'VendorCount',
+  ];
+  dataTableColumnsVendorAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Vendor',
+    'CategoryCount',
   ];
   entity: any;
   datarr: any[] = [];
@@ -140,6 +154,8 @@ sourcingLead = true;
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     this.getDiceReqs();
     this.getSourcingLeads();
+    this.getReqVendorCount();
+    this.getReqCatergoryCount();
     this.dashboardServ.vmstransactions().subscribe(
       ((response: any) => {
         this.datarr = response.data;
@@ -547,6 +563,50 @@ sourcingLead = true;
       dialogConfig
     );
   }
-
   
+  search = 'empty'
+  getReqVendorCount() {
+    this.dashboardServ.getReqCounts(this.search, 'count', 'vendor', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceTech.data = response.data;
+        this.dataSourceTech.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+  
+  getReqCatergoryCount() {
+    this.dashboardServ.getReqCounts(this.search, 'count', 'category', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceVendor.data = response.data;
+        this.dataSourceVendor.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  vendorCategoryPopup(vendorOrCategory: any, date: any, type: any) {
+    const actionData = {
+      title: vendorOrCategory,
+      vendorOrCategory: vendorOrCategory,
+      date: date,
+      type: type,
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'vendor-category-count',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '90dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'vendor-category-count';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      OpenReqsAnalysisComponent,
+      dialogConfig
+    );
+  }
+
 }

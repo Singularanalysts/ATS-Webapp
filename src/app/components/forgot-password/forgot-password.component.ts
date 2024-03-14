@@ -97,6 +97,9 @@ export class ForgotPasswordComponent implements OnInit {
         this.form.get('otp')!.disable();
         this.validateOtp = false; 
         this.showPasswordFields = true;
+      } else {
+        this.showErrorNotification(response.message, 'failure');
+        this.validateOtp = true;
       }
     });
   }

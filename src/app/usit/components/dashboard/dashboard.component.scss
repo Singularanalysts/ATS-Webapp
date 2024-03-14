@@ -156,6 +156,15 @@ ul.breadcrumb li a:hover {
   border-right: 1px solid lightgray !important;
 }
 
+.mat-column-SNo,
+.mat-column-Date,
+.mat-column-Category,
+.mat-column-VendorCount,
+.mat-column-Vendor,
+.mat-column-CategoryCount {
+  border-right: 1px solid lightgray !important;
+}
+
 .card-1 .card,
 .card-2 .card,
 .card-3 .card {
@@ -320,4 +329,25 @@ b {
 .consultant-id{
   cursor: pointer;
   color:#0275d8
+}
+
+.analysis-container {
+  display: flex;
+  height: auto;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.analysis-container .analysis-left-div {
+  width: 49%;
+}
+
+.analysis-container .analysis-right-div {
+  width: 49%;
+}
+
+.count {
+  color: #4154f1;
+  font-weight: bold;
+  cursor: pointer;
 }

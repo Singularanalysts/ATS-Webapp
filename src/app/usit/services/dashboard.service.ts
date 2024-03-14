@@ -84,5 +84,8 @@ export class DashboardService {
     return this.apiServ.get("dashboard/sourcingCountPopup/" + flag + "/" + duration);
   }
 
+  public getReqCounts(search: string,flag: string, type: string, date: any) {
+    return this.apiServ.get("dashboard/reqCounts/" + search + "/" +flag + "/" + type + "/" + date);
+  }
 
 }
