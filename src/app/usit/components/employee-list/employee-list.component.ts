@@ -61,7 +61,7 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
+export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   dataTableColumns: string[] = [
@@ -146,11 +146,11 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   onSort(event: Sort) {
-    const sortDirection = event.direction ;
+    const sortDirection = event.direction;
     const activeSortHeader = event.active;
 
     if (sortDirection === '') {
-       this.dataSource.data = this.dataSource.data;
+      this.dataSource.data = this.dataSource.data;
       return;
     }
 
@@ -207,12 +207,13 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
       empployeeData: null,
       actionName: 'add-employee',
     };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: false, edit: false, add: true});
-    const dialogRef =  this.dialogServ.openDialogWithComponent(AddEmployeeComponent, dialogConfig);
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddEmployeeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
+      if (dialogRef.componentInstance.submitted) {
         this.getAllEmployees()
-    }})
+      }
+    })
   }
 
   editEmployee(emp: Employee) {
@@ -221,12 +222,13 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
       employeeData: emp,
       actionName: 'edit-employee',
     };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: false, edit: true, add: false});
-    const dialogRef =  this.dialogServ.openDialogWithComponent(AddEmployeeComponent, dialogConfig);
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: true, add: false });
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddEmployeeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
+      if (dialogRef.componentInstance.submitted) {
         this.getAllEmployees()
-    }})
+      }
+    })
   }
 
   deleteEmployee(emp: Employee) {
@@ -239,7 +241,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
       actionName: 'delete-employee'
     };
 
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: true, edit: false, add: false});
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
     const dialogRef = this.dialogServ.openDialogWithComponent(
       ConfirmComponent,
       dialogConfig
@@ -277,9 +279,9 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
     });
   }
 
-  private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: {delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean}) {
+  private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = action.edit ||  action.add  ?  '62dvw' : action.delete ? 'fit-content' : "400px";
+    dialogConfig.width = action.edit || action.add ? '62dvw' : action.delete ? 'fit-content' : "400px";
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = dataToBeSentToDailog.actionName;
@@ -287,6 +289,59 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
     return dialogConfig;
   }
 
+  unlock(emp: Employee) {
+    console.log(emp)
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to UnLock '+emp.pseudoname+' ?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: emp,
+      actionName: 'delete-employee'
+    };
+
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+    // call delete api after  clicked 'Yes' on dialog click
+
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+        if (dialogRef.componentInstance.allowAction) {
+          // call delete api
+          this.empManagementServ.unlockEmployee(emp).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
+                this.getAllEmployees();
+                this.dataTobeSentToSnackBarService.message =
+                  'Employee Unlocked successfully';// 1000 24 reactjs 108 qa ba project 
+              } else {
+                this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+                this.dataTobeSentToSnackBarService.message = 'operation failed';
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataTobeSentToSnackBarService
+              );
+            },
+            error: (err) => {
+              this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+              this.dataTobeSentToSnackBarService.message = err.message;
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataTobeSentToSnackBarService
+              );
+            },
+          });
+        }
+      },
+    });
+  }
+
+  // lavanya 
+
+
+  // 
   // status update
   onStatusUpdate(emp: Employee) {
     const dataToBeSentToDailog = {
@@ -297,7 +352,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
       actionData: emp,
       actionName: 'update-employee-status'
     };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, {delete: false, edit: false, add: false, updateSatus: true});
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: false, updateSatus: true });
     const dialogRef = this.dialogServ.openDialogWithComponent(
       StatusComponent,
       dialogConfig
@@ -345,8 +400,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy{
     this.pageIndex = e.pageIndex;
   }
 
-  goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info','employee',id])
+  goToUserInfo(id: number) {
+    this.router.navigate(['usit/user-info', 'employee', id])
   }
   /** clean up subscriptions */
   ngOnDestroy(): void {
