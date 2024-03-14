@@ -36,6 +36,7 @@ import { EmailextractionComponent } from './components/emailextraction/emailextr
 import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { OpenRequirementsReportsComponent } from './components/reports/open-requirements-reports/open-requirements-reports.component';
+import { MassMailingListComponent } from './components/vendor-management/mass-mailing-list/mass-mailing-list.component';
 
 
 const routes: Routes = [
@@ -234,6 +235,10 @@ const routes: Routes = [
   { 
     path: 'search', component: GlobalSearchComponent 
   },
+  { 
+    path: 'mass-mailing-list', component: MassMailingListComponent 
+  }
+
 
 ];
 
