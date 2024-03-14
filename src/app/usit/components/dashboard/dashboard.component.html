@@ -340,80 +340,124 @@
 
     </div>
     <div class="right-div">
-      <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' ">
-        <div class="card-body">
-          <h3 class="card-title bold-text">Recent Activity
-          </h3>
-          <div class="activity" *ngFor="let data of datarr">
-            <div class="time">
-              {{data.trtime}}
+      <div class="sourcing-card">
+        <mat-card>
+          <div class="card">
+            <mat-card-title>Sourcing Leads <span>| {{ sourcingFlag }}</span></mat-card-title>
+            <button mat-icon-button [matMenuTriggerFor]="menuSub">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <mat-menu #menuSub="matMenu">
+              <button mat-menu-item (click)="sourcingCount('daily','Today')">Today </button>
+              <button mat-menu-item (click)="sourcingCount('weekly','Weekly')">Weekly </button>
+              <button mat-menu-item (click)="sourcingCount('monthly', 'Monthly')">Monthly </button>
+              <button mat-menu-item (click)="sourcingCount('YearToDate', 'Yearly')">YTD </button>
+            </mat-menu>
+          </div>
+          <mat-card-content>
+            <div style="display: flex;">
+              <div style="width: 40%; align-items: center; justify-content: center; display: flex;">
+                <button mat-fab class="sourcing-icon">
+                  <mat-icon>person</mat-icon>
+                </button>
+              </div>
+              <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                <p class="dashboard">Initiated : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                    (click)="sourcingPop('Initiated','emp')"> {{ sourcingInitiatedcount }} </span>
+                </p>
+                <p class="dashboard">Completed : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                    (click)="sourcingPop('Completed','emp')"> {{ sourcingCompletedcount }}
+                  </span></p>
+              </div>
+              <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
+                <p class="dashboard">Verified : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                    (click)="sourcingPop('Verified','emp')"> {{ sourcingVerifiedcount }} </span>
+                </p>
+                <p class="dashboard">Move To Sales : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                    (click)="sourcingPop('Active','emp')"> {{ sourcingMoveToSalescount }}
+                  </span></p>
+              </div>
             </div>
-            <div class="activity-content" *ngIf="data.flg=='VMS'">
-              <b> <a (click)="goToUserInfo(data.userid)"
-                  class="bold-text name consultant-id">{{data.pseudoname}}</a>&nbsp;
-                <span
-                  [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
-                  <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
-                  <ng-template #rejected>
-                    <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                      class="bold-text">{{data.status}}</span>
-                  </ng-template>
-                  <ng-template #normal>
-                    <span class="bold-text">{{data.status}}</span>
-                  </ng-template>
-                </span>
-                &nbsp;
-                {{data.company}}
-              </b>
-            </div>
-            <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
-              <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
-              {{data.status}} <b>
-                <a (click)="goToConsultantInfo(data.consultantid)"
-                  class="bold-text consultant-id">{{data.consultantname}}</a>
-              </b>
-              Profile to <b class="bold-text">{{data.company}}(V)
-                <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
-                <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
-              </b> on
-              <b class="bold-text">{{data.emptype}}</b>
-              <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
-                  *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
-            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
-            <div class="activity-content" *ngIf="data.flg=='SUB-recruiting' || data.flg=='SUB-Recruiting'">
-              <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
-              {{data.status}} <b>
-                <a (click)="goToConsultantInfo(data.consultantid)"
-                  class="bold-text consultant-id">{{data.consultantname}}</a>
-              </b>
-              Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                  class="bold-text">{{data.company}}(V),</span>
-                <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
-              </b> on
-              <b class="bold-text">{{data.emptype}}</b>
-              <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text">, {{data.endclient}}(client)</span> <span
-                  *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> </b>
-            </div>
+      <div>
+        <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' ">
+          <div class="card-body">
+            <h3 class="card-title bold-text">Recent Activity
+            </h3>
+            <div class="activity" *ngFor="let data of datarr">
+              <div class="time">
+                {{data.trtime}}
+              </div>
+              <div class="activity-content" *ngIf="data.flg=='VMS'">
+                <b> <a (click)="goToUserInfo(data.userid)"
+                    class="bold-text name consultant-id">{{data.pseudoname}}</a>&nbsp;
+                  <span
+                    [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
+                    <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
+                    <ng-template #rejected>
+                      <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
+                        class="bold-text">{{data.status}}</span>
+                    </ng-template>
+                    <ng-template #normal>
+                      <span class="bold-text">{{data.status}}</span>
+                    </ng-template>
+                  </span>
+                  &nbsp;
+                  {{data.company}}
+                </b>
+              </div>
+              <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
+                <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+                {{data.status}} <b>
+                  <a (click)="goToConsultantInfo(data.consultantid)"
+                    class="bold-text consultant-id">{{data.consultantname}}</a>
+                </b>
+                Profile to <b class="bold-text">{{data.company}}(V)
+                  <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
+                  <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
+                </b> on
+                <b class="bold-text">{{data.emptype}}</b>
+                <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+                    *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
+              </div>
 
-            <div class="activity-content" *ngIf="data.flg=='SUB-domrecruiting'">
-              <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
-              {{data.status}} <b>
-                <a (click)="goToConsultantInfo(data.consultantid)"
-                  class="bold-text consultant-id">{{data.consultantname}}</a>
-              </b>
-              Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                  class="bold-text">{{data.company}} (V),</span>
-                <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
-              </b>
-              <!-- <b class="bold-text">{{data.emptype}}</b> -->
-              <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
-                <!-- <span *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> -->
-              </b>
+              <div class="activity-content" *ngIf="data.flg=='SUB-recruiting' || data.flg=='SUB-Recruiting'">
+                <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+                {{data.status}} <b>
+                  <a (click)="goToConsultantInfo(data.consultantid)"
+                    class="bold-text consultant-id">{{data.consultantname}}</a>
+                </b>
+                Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
+                    class="bold-text">{{data.company}}(V),</span>
+                  <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
+                </b> on
+                <b class="bold-text">{{data.emptype}}</b>
+                <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text">, {{data.endclient}}(client)</span> <span
+                    *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> </b>
+              </div>
+
+              <div class="activity-content" *ngIf="data.flg=='SUB-domrecruiting'">
+                <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+                {{data.status}} <b>
+                  <a (click)="goToConsultantInfo(data.consultantid)"
+                    class="bold-text consultant-id">{{data.consultantname}}</a>
+                </b>
+                Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
+                    class="bold-text">{{data.company}} (V),</span>
+                  <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
+                </b>
+                <!-- <b class="bold-text">{{data.emptype}}</b> -->
+                <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
+                  <!-- <span *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> -->
+                </b>
+              </div>
             </div>
           </div>
-        </div>
-      </mat-card>
+        </mat-card>
+      </div>
     </div>
   </div>
 

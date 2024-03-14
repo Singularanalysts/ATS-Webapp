@@ -163,59 +163,9 @@
       "icon": "work",
       "children": [
         {
-          "text": "Adzuna Reqs",
+          "text": "Portal Reqs",
           "icon": "group",
-          "routerLink": "/usit/adzunareqs"
-        },
-        {
-          "text": "Dice Reqs",
-          "icon": "group",
-          "routerLink": "/usit/dicereqs"
-        },
-        {
-          "text": "Indeed Reqs",
-          "icon": "group",
-          "routerLink": "/usit/indeedreqs"
-        },
-        {
-          "text": "Jobcube Reqs",
-          "icon": "group",
-          "routerLink": "/usit/jobcubereqs"
-        },
-        {
-          "text": "Joblift Reqs",
-          "icon": "group",
-          "routerLink": "/usit/jobliftreqs"
-        },
-        {
-          "text": "Juju Reqs",
-          "icon": "group",
-          "routerLink": "/usit/jujureqs"
-        },
-        {
-          "text": "LinkedIn Reqs",
-          "icon": "group",
-          "routerLink": "/usit/linkedinreqs"
-        },
-        {
-          "text": "Post Job Free Reqs",
-          "icon": "group",
-          "routerLink": "/usit/postjobfreereqs"
-        },
-        {
-          "text": "Recruit Reqs",
-          "icon": "group",
-          "routerLink": "/usit/recruitnetreqs"
-        },
-        {
-          "text": "SimplyHired Reqs",
-          "icon": "group",
-          "routerLink": "/usit/simplyhiredreqs"
-        },
-        {
-          "text": "Snaprecruit Reqs",
-          "icon": "group",
-          "routerLink": "/usit/snaprecruitreqs"
+          "routerLink": "/usit/portalreqs"
         },
         {
           "text": "RSS",

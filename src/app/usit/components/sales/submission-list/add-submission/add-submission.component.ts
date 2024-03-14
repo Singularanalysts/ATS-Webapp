@@ -180,9 +180,6 @@ export class AddSubmissionComponent implements OnInit {
 
 
   private initilizeSubmissionForm(submissionData: any) {
-
-
-
     this.submissionForm = this.formBuilder.group({
       // user:  [submissionData ? submissionData?.user : this.userid],
       user: [this.data.actionName === "edit-submission" ? submissionData?.user : localStorage.getItem('userid')],
@@ -208,32 +205,32 @@ export class AddSubmissionComponent implements OnInit {
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
     });
-    if ( this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
-      this.submissionServ.getConsultantDropdown(this.flag,submissionData.consultant).subscribe(
-          (consultant: any) => {
-              if (consultant && consultant.data[0].consultantname) {
-                this.obj = consultant.data[0].consultantid;
-                  this.submissionForm.get('consultant').setValue(consultant.data[0].consultantname);
-              }
-          },
-          (error: any) => {
-              console.error('Error fetching consultant details:', error);
+    if (this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
+      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant).subscribe(
+        (consultant: any) => {
+          if (consultant && consultant.data[0].consultantname) {
+            this.obj = consultant.data[0].consultantid;
+            this.submissionForm.get('consultant').setValue(consultant.data[0].consultantname);
           }
-      );
-  }
-  if (this.data.actionName === "edit-submission" && submissionData && submissionData.vendor) {
-    this.submissionServ.getVendorById(submissionData.vendor).subscribe(
-        (vendor: any) => {
-            if (vendor && vendor.data.company) {
-              this.companyid =vendor.data.vmsid;
-              this.submissionForm.get('vendor').setValue(vendor.data.company);
-            }
         },
         (error: any) => {
-            console.error('Error fetching consultant details:', error);
+          console.error('Error fetching consultant details:', error);
         }
-    );
-}
+      );
+    }
+    if (this.data.actionName === "edit-submission" && submissionData && submissionData.vendor) {
+      this.submissionServ.getVendorById(submissionData.vendor).subscribe(
+        (vendor: any) => {
+          if (vendor && vendor.data.company) {
+            this.companyid = vendor.data.vmsid;
+            this.submissionForm.get('vendor').setValue(vendor.data.company);
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching consultant details:', error);
+        }
+      );
+    }
     // this.submissionForm.get('consultant')?.setValue(submissionData?.consultant);
     this.validateControls();
   }
@@ -277,18 +274,18 @@ export class AddSubmissionComponent implements OnInit {
     const ratetype = this.submissionForm.get('ratetype').value;
 
     if (ratetype == '1099' || ratetype == 'W2' || ratetype == 'Full Time') {
-        vendor.clearValidators();
-        recruiter.clearValidators();
-        empmail.clearValidators();
+      vendor.clearValidators();
+      recruiter.clearValidators();
+      empmail.clearValidators();
     } else {
-        empmail.setValidators([Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')]);
-        vendor.setValidators(Validators.required);
-        recruiter.setValidators(Validators.required);
+      empmail.setValidators([Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')]);
+      vendor.setValidators(Validators.required);
+      recruiter.setValidators(Validators.required);
     }
     empmail.updateValueAndValidity();
     vendor.updateValueAndValidity();
     recruiter.updateValueAndValidity();
-}
+  }
 
   getRequirements(flg: string) {
     this.submissionServ.getRequirements(flg).subscribe(
@@ -321,7 +318,7 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getConsultant(flg: string) {
-    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg,0).pipe(
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
@@ -346,15 +343,15 @@ export class AddSubmissionComponent implements OnInit {
 
   obj: any;
   private _filterOptions(value: any, options: any[]): any[] {
-   // alert(value)
+
     const filterValue = (value ? value.toString() : '').toLowerCase();
     const filteredOptions = options.filter(option =>
       option.consultantname.toLowerCase().includes(filterValue)
     );
     //console.log(filteredOptions);
-    
+
     if (filteredOptions.length === 1) {
-      this.obj =filteredOptions[0].consultantid;
+      this.obj = filteredOptions[0].consultantid;
     }
     this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;
@@ -401,12 +398,14 @@ export class AddSubmissionComponent implements OnInit {
   companyid: any;
   private _filterCompanyOptions(value: any, options: any[]): any[] {
     const filterValue = (value ? value.toString() : '').toLowerCase();
-    const filteredOptions = options.filter(option => 
+    const filteredOptions = options.filter(option =>
       option.company.toLowerCase().includes(filterValue)
     );
-    if (filteredOptions.length === 1) {
-      this.companyid =filteredOptions[0].vmsid;
-    }
+    // console.log(filteredOptions)
+    // if (filteredOptions.length > 1) {
+    //   this.companyid = filteredOptions[0].vmsid;
+    // }
+    // console.log(this.companyid)
     // this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;
   }
@@ -423,6 +422,7 @@ export class AddSubmissionComponent implements OnInit {
 
   recruiterName: any[] = [];
   recruiterList(option: any) {
+    this.companyid = option.vmsid;
     const newVal = option.vmsid;
     this.submissionServ.getRecruiterOfTheVendor(newVal, this.flgOpposite).subscribe(
       (response: any) => {
@@ -527,6 +527,9 @@ export class AddSubmissionComponent implements OnInit {
     return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
       return char.toUpperCase();
     });
+    // return input.toLowerCase().replace(/\b\w/g, function(char) {
+    //   return char.toUpperCase();
+    // });
   }
 
   /** to display form validation messages */
@@ -581,27 +584,27 @@ export class AddSubmissionComponent implements OnInit {
 
 
   addRecruiter() {
-      const actionData = {
-        title: 'Add Recruiter',
-        recruiterData: null,
-        actionName: 'add-recruiter',
-      };
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = '65vw';
-      //dialogConfig.height = "100vh";
-      dialogConfig.disableClose = false;
-      dialogConfig.panelClass = 'add-recruiter';
-      dialogConfig.data = actionData;
-  
-      const dialogRef = this.dialogServ.openDialogWithComponent(
-        AddRecruiterComponent,
-        dialogConfig
-      );
-      dialogRef.afterClosed().subscribe(() => {
-        if (dialogRef.componentInstance.submitted) {
-          // this.getAllRecruiters(this.currentPageIndex + 1);
-        }
-      });
+    const actionData = {
+      title: 'Add Recruiter',
+      recruiterData: null,
+      actionName: 'add-recruiter',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    //dialogConfig.height = "100vh";
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'add-recruiter';
+    dialogConfig.data = actionData;
+
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      AddRecruiterComponent,
+      dialogConfig
+    );
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        // this.getAllRecruiters(this.currentPageIndex + 1);
+      }
+    });
 
   }
 }

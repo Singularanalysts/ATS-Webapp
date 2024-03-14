@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router, RouterModule, Routes } from '@angular/router';
-
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
@@ -34,7 +33,6 @@ export class PasswordChangeComponent implements OnInit {
   touchedReenter: boolean = false;
   newPassword: null | undefined;
 
-
   constructor(private formBuilder: FormBuilder, private service: UserManagementService, private router: Router) { }
   get f() { return this.form.controls; }
   showNewPasswordError = false;
@@ -42,7 +40,7 @@ export class PasswordChangeComponent implements OnInit {
     const addedby = localStorage.getItem('userid');
     this.form = this.formBuilder.group(
       {
-        password: ['', Validators.required],
+        password: ['', Validators.required],    
         userid: localStorage.getItem('userid'),
         newPassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
         renewpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
@@ -61,6 +59,7 @@ export class PasswordChangeComponent implements OnInit {
       direction: 'above',
       panelClass: ['custom-snack-success'],
 
+
     };
 
 
@@ -77,10 +76,12 @@ export class PasswordChangeComponent implements OnInit {
         return;
       }
     }
+
     this.service.resetpassword(this.form.value)
       .subscribe((data: any) => {
         if (data.status == 'samepassword') {
           this.submitted = false;
+
           dataToBeSentToSnackBar.message = 'New Password and Old Password Both are the same';
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
@@ -114,7 +115,6 @@ export class PasswordChangeComponent implements OnInit {
         }
       });
   }
-
 
   openSnackBar(dataToBeSentToSnackBar: ISnackBarData) {
     throw new Error('Method not implemented.');

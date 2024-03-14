@@ -17,6 +17,7 @@ import { Closure } from '../../models/closure';
 import { ClosureCountListComponent } from './closure-count-list/closure-count-list.component';
 import { InterviewCountListComponent } from './interview-count-list/interview-count-list.component';
 import { interval, Subscription } from 'rxjs';
+import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count-list.component';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -55,6 +56,7 @@ export class DashboardComponent implements OnInit {
   closureFlag = 'Monthly';
   interviewFlag = 'daily';
   submissionFlag = 'daily';
+  sourcingFlag = 'daily';
 
   closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
@@ -63,6 +65,7 @@ export class DashboardComponent implements OnInit {
   subCountArr: any[] = [];
   intCountArr: any[] = [];
   closecountArr: [] = [];
+  sourcingcountArr: [] = [];
 
   subCountIndArr: any[] = [];
   closureCountIndArr: [] = [];
@@ -82,6 +85,11 @@ export class DashboardComponent implements OnInit {
   sclosecountIndividual = 0;
   rclosecount = 0;
   rclosecountIndividual = 0;
+
+  sourcingInitiatedcount = 0;
+  sourcingCompletedcount = 0;
+  sourcingVerifiedcount = 0;
+  sourcingMoveToSalescount = 0;
 
   userid!: any;
   role!: any;
@@ -196,6 +204,15 @@ sourcingLead = true;
         });
       })
     );
+    this.dashboardServ.getsourcingCount('daily').subscribe(
+      ((response: any) => {
+        this.sourcingcountArr = response.data;
+        this.sourcingVerifiedcount = response.data.verified;
+        this.sourcingMoveToSalescount = response.data.moveToSales;
+        this.sourcingInitiatedcount = response.data.initiated;
+        this.sourcingCompletedcount = response.data.completed;
+      })
+    );
   }
   countCallingExecutiveAndLead() {
     this.dashboardServ.getClosureCountForExAndLead('monthly', this.userid).subscribe(
@@ -284,8 +301,6 @@ sourcingLead = true;
     this.dashboardServ.getInterviewCount(flag).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
-        console.log(response.data);
-        
         this.intCountArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcount = ent.salescount;
@@ -320,7 +335,6 @@ sourcingLead = true;
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-    // console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.dashboardServ.getClosureCount(flag).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
@@ -339,7 +353,6 @@ sourcingLead = true;
     this.closureFlagInd = flg;
     this.sclosecountIndividual = 0;
     this.rclosecountIndividual = 0;
-    //console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.dashboardServ.getClosureCountForExAndLead(flag, this.userid).subscribe(
       ((response: any) => {
         this.closureCountIndArr = response.data;
@@ -356,12 +369,28 @@ sourcingLead = true;
 
   }
 
+  sourcingCount(flag: string, flg: string) {
+    this.sourcingFlag = flg;
+    this.sourcingInitiatedcount = 0;
+    this.sourcingCompletedcount = 0;
+    this.sourcingVerifiedcount = 0;
+    this.sourcingMoveToSalescount = 0;
+    this.dashboardServ.getsourcingCount(flag).subscribe(
+      ((response: any) => {
+        this.sourcingcountArr = response.data;
+        this.sourcingVerifiedcount = response.data.verified;
+        this.sourcingMoveToSalescount = response.data.moveToSales;
+        this.sourcingInitiatedcount = response.data.initiated;
+        this.sourcingCompletedcount = response.data.completed;
+      })
+    );
+  }
+
   getSourcingLeads() {
     this.dashboardServ.getSourcingLeads(this.userid).subscribe(
       (response: any) => {
         //this.entity = response.data;
         this.dataSource.data = response.data;
-        // console.log(response.data)
         // this.dataSource.data.map((x: any, i) => {
         //   x.serialNum = i + 1;
         // });
@@ -372,7 +401,6 @@ sourcingLead = true;
 
 
   updateSlead(sourcingLeadData: any) {
-    // console.log(sourcingLeadData)
     const actionData = {
       title: 'Sourcing Update',
       buttonCancelText: 'Cancel',
@@ -429,7 +457,6 @@ sourcingLead = true;
   }
 
   intPop(element: any, condition: any) {
-    //console.log(this.interviewFlag)
     const actionData = {
       title: element + ' Interviews',
       buttonCancelText: 'Cancel',
@@ -496,4 +523,30 @@ sourcingLead = true;
       }
     )
   }
+
+  sourcingPop(element: any, condition: any) {
+    const actionData = {
+      title: element + ' Consultants List',
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'sourcing-count',
+      flag: element,
+      duration: this.sourcingFlag,
+      condition: condition,
+      // userduration: this.closureFlagInd,
+      // souringData: sourcingLeadData,
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '90dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'sourcing-count';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      SourcingCountListComponent,
+      dialogConfig
+    );
+  }
+
+  
 }
