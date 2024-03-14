@@ -31,13 +31,13 @@ export class OpenreqsComponent implements OnInit {
   dataTableColumns: string[] = [
     'SerialNum',
     'posted_on',
-    'source',
     'job_title',
     'category_skill',
     'employment_type',
     'job_location',
     'vendor',
-    'end_client',
+    'source',
+   // 'end_client',
   ];
   // pagination code
   page: number = 1;
