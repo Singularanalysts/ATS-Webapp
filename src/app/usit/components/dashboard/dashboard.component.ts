@@ -18,12 +18,14 @@ import { InterviewCountListComponent } from './interview-count-list/interview-co
 import { interval, Subscription } from 'rxjs';
 import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count-list.component';
 import { OpenReqsAnalysisComponent } from './open-reqs-analysis/open-reqs-analysis.component';
+import { MatInputModule } from '@angular/material/input';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule
+  imports: [CommonModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -607,6 +609,14 @@ sourcingLead = true;
       OpenReqsAnalysisComponent,
       dialogConfig
     );
+  }
+
+  onVendorFilter(event: any){
+    this.dataSourceVendor.filter = event.target.value;
+  }
+
+  onCategoryFilter(event: any){
+    this.dataSourceTech.filter = event.target.value;
   }
 
 }

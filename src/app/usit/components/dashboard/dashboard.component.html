@@ -464,8 +464,14 @@
   <div class="analysis-container">
     <div class="analysis-left-div">
       <div class="table-container table-wrapper">
-        <div class="header-container-leading-resources">
+        <div class="header-container-analysis">
           <span class="header-text">Category Analysis</span>
+
+          <div class="vendor-actions">
+            <div class="search-vendor">
+              <input matInput type="text" class="search" placeholder="search category" (keyup)="onCategoryFilter($event)">
+            </div>
+          </div>
         </div>
         <hr>
         <section class="table-style mat-elevation-z8">
@@ -507,9 +513,16 @@
     </div>
     <div class="analysis-right-div">
       <div class="table-container table-wrapper">
-        <div class="header-container-leading-resources">
+        <div class="header-container-analysis">
           <span class="header-text">Vendor Analysis</span>
+
+          <div class="vendor-actions">
+            <div class="search-vendor">
+              <input matInput type="text" class="search" placeholder="search vendor" (keyup)="onVendorFilter($event)">
+            </div>
+          </div>
         </div>
+        
         <hr>
         <section class="table-style mat-elevation-z8">
           <table mat-table [dataSource]="dataSourceVendor" class="responsive-table">
