@@ -14,12 +14,14 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
 @Component({
   selector: 'app-linkedprofiles',
   standalone: true,
-  imports: [ CommonModule,
+  imports: [ 
+    CommonModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule],
+    MatPaginatorModule
+  ],
   templateUrl: './linkedprofiles.component.html',
   styleUrls: ['./linkedprofiles.component.scss']
 })
@@ -77,9 +79,7 @@ dataToBeSentToSnackBar: ISnackBarData = {
   getAllData() {
     this.service.linkedinProfiles().subscribe(
       (response: any) => {
-        //console.log(response.data)
         this.dataSource.data = response.data;
-       // console.log(response.data)
         this.totalItems = response.data.totalElements;
          // for serial-num {}
          this.dataSource.data.map((x: any, i) => {
@@ -88,6 +88,19 @@ dataToBeSentToSnackBar: ISnackBarData = {
       }
     )
   }
+
+  // getAllData(pagIdx = 1) {
+  //   this.service.getopenReqWithPaginationAndSource(pagIdx, this.itemsPerPage, this.field, this.source).subscribe(
+  //     (response: any) => {
+  //       this.dataSource.data = response.data;
+  //       this.totalItems = response.data.totalElements;
+  //       // for serial-num {}
+  //       this.dataSource.data.map((x: any, i) => {
+  //         x.serialNum = this.generateSerialNumber(i);
+  //       });
+  //     }
+  //   )
+  // }
 
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
@@ -102,6 +115,28 @@ dataToBeSentToSnackBar: ISnackBarData = {
   onSort(event: any) {
 
   }
+
+  // applyFilter(event : any) {
+  //   const keyword = event.target.value;
+  //   this.field = keyword;
+  //   if (keyword != '') {
+  //     return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
+  //       ((response: any) => {
+  //         this.dataSource.data  = response.data.content;
+  //          // for serial-num {}
+  //          this.dataSource.data.map((x: any, i) => {
+  //           x.serialNum = this.generateSerialNumber(i);
+  //         });
+  //         this.totalItems = response.data.totalElements;
+
+  //       })
+  //     );
+  //   }
+  //   if (keyword == '') {
+  //     this.field = 'empty';
+  //   }
+  //   return  this.getAllData(this.currentPageIndex + 1);
+  // }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
