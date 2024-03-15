@@ -103,7 +103,7 @@ export class LoginComponent implements OnInit {
     };
     this.userManagementServ.login(userObj).subscribe({
      next: (result: any) => {
-      console.log("result", result)
+      //console.log("result", result)
         if (result.status == 'success') {
           const loggedInUserData = result.data;
          // console.log(result.data);

@@ -92,7 +92,7 @@ export class SubmissionCountListComponent implements OnInit {
     // this.submissionFlag
     this.dashboardServ.getsubmissionCountPopup(flag, this.submissionFlag).subscribe(
       ((response: any) => {
-        console.log(response.data)
+       // console.log(response.data)
       }));
   }
   */
