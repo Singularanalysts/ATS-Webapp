@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
   private ngZone = inject(NgZone);
 
   refresh() {
-    console.log('Dash Board Refreshed '+this.refreshFlg);
+    //console.log('Dash Board Refreshed '+this.refreshFlg);
     // You can perform any actions or logic inside this method
     if (this.refreshFlg == 'executive') {
       this.countCallingExecutiveAndLead();
