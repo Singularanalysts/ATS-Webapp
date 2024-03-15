@@ -22,7 +22,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
+import { transform } from 'src/app/functions/timer';
+const TIMEOUT_VALUE = 120;
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
@@ -46,6 +47,9 @@ export class ForgotPasswordComponent implements OnInit {
   id: any;
   requestOtp = true;
   validateOtp = true;
+  clock: string = '';
+  interval!: any;
+  timeLeft: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,6 +80,7 @@ export class ForgotPasswordComponent implements OnInit {
       if (response.status == "success") {
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
+        this.onTimeout();
         this.form.get('email')!.disable();
         this.requestOtp = false;
         this.isOTPSent = true;
@@ -156,6 +161,27 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     return null;
+  }
+
+  onTimeout() {
+    this.timeLeft = this.timeLeft + 60;
+    this.interval = setInterval(() => {
+      if (this.timeLeft === 0) {
+        this.showErrorNotification('OTP Expired', 'failure');
+        this.requestOtp = true;
+        this.isOTPSent = false;
+        this.form.get('email')!.enable();
+        this.pauseTimer();
+      } else {
+        this.timeLeft--;
+      }
+      this.clock = transform(this.timeLeft);
+      console.log(this.clock);
+    }, 1000);
+  }
+
+  pauseTimer() {
+    clearInterval(this.interval);
   }
 
   goBackToLogin() {
