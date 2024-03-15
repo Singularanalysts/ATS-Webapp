@@ -6,7 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { MatSort } from '@angular/material/sort';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
@@ -46,8 +46,6 @@ export class LinkedprofilesComponent  implements OnInit {
    showPageSizeOptions = true;
    showFirstLastButtons = true;
    pageEvent!: PageEvent;
-   @ViewChild(MatPaginator) paginator!: MatPaginator;
-   @ViewChild(MatSort) sort!: MatSort;
    // pagination code
    page: number = 1;
    itemsPerPage = 50;
@@ -76,31 +74,36 @@ dataToBeSentToSnackBar: ISnackBarData = {
 
       })
   }
-  getAllData() {
-    this.service.linkedinProfiles().subscribe(
+  // getAllData() {
+  //   this.service.linkedinProfiles().subscribe(
+  //     (response: any) => {
+  //       this.dataSource.data = response.data;
+  //       this.totalItems = response.data.totalElements;
+  //        // for serial-num {}
+  //        this.dataSource.data.map((x: any, i) => {
+  //         x.serialNum = i + 1;
+  //       });
+  //     }
+  //   )
+
+
+  //   linkedInPagination
+
+
+  // }
+
+  getAllData(pagIdx = 1) {
+    this.service.linkedInPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
-        this.dataSource.data = response.data;
+        this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
-         // for serial-num {}
-         this.dataSource.data.map((x: any, i) => {
-          x.serialNum = i + 1;
+        // for serial-num {
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
         });
       }
     )
   }
-
-  // getAllData(pagIdx = 1) {
-  //   this.service.getopenReqWithPaginationAndSource(pagIdx, this.itemsPerPage, this.field, this.source).subscribe(
-  //     (response: any) => {
-  //       this.dataSource.data = response.data;
-  //       this.totalItems = response.data.totalElements;
-  //       // for serial-num {}
-  //       this.dataSource.data.map((x: any, i) => {
-  //         x.serialNum = this.generateSerialNumber(i);
-  //       });
-  //     }
-  //   )
-  // }
 
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
@@ -116,38 +119,33 @@ dataToBeSentToSnackBar: ISnackBarData = {
 
   }
 
-  // applyFilter(event : any) {
-  //   const keyword = event.target.value;
-  //   this.field = keyword;
-  //   if (keyword != '') {
-  //     return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
-  //       ((response: any) => {
-  //         this.dataSource.data  = response.data.content;
-  //          // for serial-num {}
-  //          this.dataSource.data.map((x: any, i) => {
-  //           x.serialNum = this.generateSerialNumber(i);
-  //         });
-  //         this.totalItems = response.data.totalElements;
+  applyFilter(event : any) {
+    const keyword = event.target.value;
+    this.field = keyword;
+    if (keyword != '') {
+      return this.service.linkedInPagination(1, this.itemsPerPage, keyword).subscribe(
+        ((response: any) => {
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
 
-  //       })
-  //     );
-  //   }
-  //   if (keyword == '') {
-  //     this.field = 'empty';
-  //   }
-  //   return  this.getAllData(this.currentPageIndex + 1);
-  // }
-
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+        })
+      );
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return  this.getAllData(this.currentPageIndex + 1);
   }
 
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      this.getAllData()
+      this.getAllData(event.pageIndex + 1)
     }
     return;
   }

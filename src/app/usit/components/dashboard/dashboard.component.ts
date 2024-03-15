@@ -615,6 +615,10 @@ sourcingLead = true;
     this.dataSourceVendor.filter = event.target.value;
   }
 
+  onDiceFilter(event: any){
+    this.dataSourceDice.filter = event.target.value;
+  }
+
   onCategoryFilter(event: any){
     this.dataSourceTech.filter = event.target.value;
   }

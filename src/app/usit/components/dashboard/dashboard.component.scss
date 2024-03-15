@@ -98,7 +98,7 @@ ul.breadcrumb li a:hover {
   // overflow: auto;
 }
 
-.left-div  {
+.left-div {
   display: flex;
 }
 
@@ -145,7 +145,7 @@ ul.breadcrumb li a:hover {
   height: 30px !important;
 }
 
-.no-data-found{
+.no-data-found {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,7 +200,8 @@ ul.breadcrumb li a:hover {
   justify-content: space-between;
 }
 
-.mat-mdc-card-title, .mat-mdc-card-subtitle {
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle {
   font-size: 14px;
   margin: 0;
   font-weight: 700;
@@ -212,7 +213,7 @@ mat-typography p {
 
 .dashboard {
   font-size: .875em;
-  font-weight: 700!important;
+  font-weight: 700 !important;
   margin-bottom: 0px !important;
 }
 
@@ -236,32 +237,40 @@ mat-typography p {
   min-height: 30px !important;
 }
 
-.mat-mdc-fab.mat-accent.submission-icon, 
+.mat-mdc-fab.mat-accent.submission-icon,
 .mat-mdc-mini-fab.mat-accent.submission-icon .submission-icon {
-  --mdc-fab-container-color: #ffffcc; /* icon background color */
+  --mdc-fab-container-color: #ffffcc;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #ffcc00; /* icon color */
+  --mat-mdc-fab-color: #ffcc00;
+  /* icon color */
 }
 
-.mat-mdc-fab.mat-accent.interview-icon, 
+.mat-mdc-fab.mat-accent.interview-icon,
 .mat-mdc-mini-fab.mat-accent.interview-icon .interview-icon {
-  --mdc-fab-container-color: #ffecdf; /* icon background color */
+  --mdc-fab-container-color: #ffecdf;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #ff771d; /* icon color */
+  --mat-mdc-fab-color: #ff771d;
+  /* icon color */
 }
 
-.mat-mdc-fab.mat-accent.closure-icon, 
+.mat-mdc-fab.mat-accent.closure-icon,
 .mat-mdc-mini-fab.mat-accent.closure-icon .closure-icon {
-  --mdc-fab-container-color: #e0f8e9; /* icon background color */
+  --mdc-fab-container-color: #e0f8e9;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #2eca6a; /* icon color */
+  --mat-mdc-fab-color: #2eca6a;
+  /* icon color */
 }
 
-.mat-mdc-fab.mat-accent.sourcing-icon, 
+.mat-mdc-fab.mat-accent.sourcing-icon,
 .mat-mdc-mini-fab.mat-accent.sourcing-icon .sourcing-icon {
-  --mdc-fab-container-color: #d6d8e9; /* icon background color */
+  --mdc-fab-container-color: #d6d8e9;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #3f51b5; /* icon color */
+  --mat-mdc-fab-color: #3f51b5;
+  /* icon color */
 }
 
 .mat-mdc-card.activity-card-individual {
@@ -294,11 +303,11 @@ a .name {
   justify-content: space-between;
 }
 
-.activity .activity-content{
+.activity .activity-content {
   width: 79%;
 }
 
-.activity .time{
+.activity .time {
   margin: 0px auto;
   width: 19%;
 }
@@ -314,16 +323,16 @@ a .name {
 }
 
 .added {
-  color:#29abd3;
+  color: #29abd3;
   font-size: 12px;
 }
 
-.submssion{
-  color:#db1aab;
+.submssion {
+  color: #db1aab;
   font-size: 12px;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
@@ -339,9 +348,9 @@ b {
   padding: 0px 0px 16px 0px;
 }
 
-.consultant-id{
+.consultant-id {
   cursor: pointer;
-  color:#0275d8
+  color: #0275d8
 }
 
 .analysis-container {
@@ -379,4 +388,10 @@ b {
     padding: 0px 8px;
 
   }
+
+  .dice {
+    width: 350px;
+  }
+
+
 }

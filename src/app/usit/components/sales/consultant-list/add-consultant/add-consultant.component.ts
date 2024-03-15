@@ -138,6 +138,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   get frm() {
     return this.consultantForm.controls;
   }
+
+  kiran!:any;
   ngOnInit(): void {
     this.role = localStorage.getItem('role');
     // below apis are common for add / update consultant
@@ -146,7 +148,9 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.getQualification();
     this.getCompanies();
     this.getFlag(this.data.flag.toLocaleLowerCase());
+   
     if (this.data.actionName === "edit-consultant") {
+      this.kiran = 'edit'
       this.initConsultantForm(new Consultantinfo());
       this.consultantServ.getConsultantById(this.data.consultantData.consultantid)
         .subscribe(
@@ -213,6 +217,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       company: [consultantData ? consultantData.company : '', Validators.required],
       position: [consultantData ? consultantData.position : '', Validators.required],
       status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
+      // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
       experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
       hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
       skills: [consultantData ? consultantData.skills : ''],
@@ -266,9 +271,11 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.validateControls();
   }
   private validateControls() {
-    if (this.flag == 'Recruiting' || this.flag == 'sales') {
+    if (this.kiran !== "edit" && (this.flag === 'Recruiting' || this.flag === 'sales')) {
+      // alert()
       this.consultantForm.get('status').setValue('Active');
-    }
+  }
+  
 
 
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
@@ -462,9 +469,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     else {
       this.isFormSubmitted = true
     }
-    if (this.flag != 'presales') {
-      this.consultantForm.get("status").setValue("Active");
-    }
+    // commented by kiran
+    // if (this.flag != 'presales') {
+    //   this.consultantForm.get("status").setValue("Active");
+    // }
    // console.log(this.techid);
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
@@ -1084,7 +1092,6 @@ export const PRIORITY = [
 ]
 
 export const STATUS = [
-
   'Completed',
   'Verified',
   'Tagged',

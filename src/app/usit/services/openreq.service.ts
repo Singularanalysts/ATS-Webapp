@@ -20,6 +20,10 @@ export class OpenreqService {
     return this.http.get("openreqs/linked/all");
   }
 
+  public linkedInPagination(pageNo: any, pageSize: any, field: any) {
+    return this.http.get("openreqs/linked/LinkedInPofiles/" + pageNo + "/" + pageSize + "/" + field );
+  }
+
   public readrss() {
     return this.http.get("openreqs/rssfeed/read");
   }

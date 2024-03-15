@@ -22,12 +22,8 @@
           "text": "Recruiters",
           "icon": "business_center",
           "routerLink": "/usit/recruiters"
-        },
-        {
-          "text": "Mass Mailing List",
-          "icon": "mail",
-          "routerLink": "/usit/mass-mailing-list"
         }
+      
       ]
     },
 
@@ -211,11 +207,6 @@
           "text": "Sourcing Reports",
           "icon": "dynamic_feed",
           "routerLink": "/usit/sourcing-report"
-        },
-        {
-          "text": "Open Reqs Reports",
-          "icon": "dynamic_feed",
-          "routerLink": "/usit/open-reqs-report"
         }
       ]
     },
