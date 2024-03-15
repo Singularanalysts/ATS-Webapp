@@ -1,48 +1,44 @@
-<mat-card mt-3 style="z-index: 1">
-    <mat-card-content>
-        <div class="center-container">
-            <div class="card row justify-content-center center col-sm-12">
-                <div class="search-container col-md-12 col-sm-12">
-                    <div class="d-flex" style="display: flex;">
+<ul class="breadcrumb">
+    <li><a routerLink = "/usit/dashboard">Home</a></li>
+    <li class="last">Search</li>
+</ul>
+<mat-card>
+    <mat-card-content class="card-content">
+        <mat-form-field appearance="fill" class="job-postion-form-field">
+            <mat-label>Job Position And Company</mat-label>
+            <input matInput [(ngModel)]="jobPositionAndCompany" maxlength="140">
+            <mat-error>Location is required</mat-error>
+        </mat-form-field>
 
-                        <mat-form-field appearance="fill">
-                            <mat-label>Job Position And Company</mat-label>
-                            <input matInput [(ngModel)]="jobPositionAndCompany" maxlength="140">
-                            <mat-error>Location is required</mat-error>
-                        </mat-form-field>&nbsp; &nbsp;
 
+        <mat-form-field appearance="fill" class="location-form-field">
+            <mat-label>Location</mat-label>
+            <input matInput [(ngModel)]="location" [matAutocomplete]="auto" maxlength="140" (input)="search()">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of locationSuggestions" [value]="option.job_location">
+                    {{ option.job_location }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error>Location is required</mat-error>
+        </mat-form-field>
 
-                        <mat-form-field appearance="fill">
-                            <mat-label>Location</mat-label>
-                            <input matInput [(ngModel)]="location" [matAutocomplete]="auto" maxlength="140"
-                                (input)="search()">
-                            <mat-autocomplete #auto="matAutocomplete">
-                                <mat-option *ngFor="let option of locationSuggestions" [value]="option.job_location">
-                                    {{ option.job_location }}
-                                </mat-option>
-                            </mat-autocomplete>
-                            <mat-error>Location is required</mat-error>
-                        </mat-form-field>&nbsp; &nbsp;&nbsp; &nbsp;
-
-                        <button mat-raised-button style="background-color: #3a62cf; color: white ; margin-top: 1rem;"
-                            (click)="searchBotton()">Search</button>
-                            <button *ngIf="filteredVendorList.length>0" mat-raised-button style="background-color: #4CAF50; color: white ; margin-top: 1rem;"
-                            (click)="popUpImport()">Excel</button>
-                            <mat-icon (click)="newinfo()" style="    margin-top: 1.5rem; cursor: pointer;">help</mat-icon>
-                           
-                    </div>
-                    
-                        
-                </div>
-            </div>
-
+        <div>
+            <button mat-raised-button class="search-button" (click)="searchBotton()">Search</button>
+        </div>
+        <div>
+            <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button" (click)="popUpImport()">Excel</button>
+        </div>
+        <!-- style="    margin-top: 1.5rem; cursor: pointer;" -->
+        <div>
+            <mat-icon (click)="newinfo()">help</mat-icon>
         </div>
     </mat-card-content>
-
 </mat-card>
 
+
+
 <mat-card *ngIf="tableactive" mt-3 style="z-index: 1; overflow-y: auto;
-height: 678px; top:4rem">
+height: 650px">
     <mat-card-content>
         <div class="row justify-content-center center" style="z-index: 1;">
 

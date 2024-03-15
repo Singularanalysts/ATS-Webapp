@@ -16,9 +16,9 @@
         (click)="getAllVendorByType('Both')">Both Recruiting & Staffing</button>
     </span> -->
     <div class="vendor-actions">
-      <!-- <button mat-icon-button class="add-user" (click)="uploadVendor()">
+      <button mat-icon-button (click)="uploadVmsExcelData()" matTooltip="Upload VMS Excel Data" matTooltipPosition="above">
         <mat-icon class="item-icon">upload</mat-icon>
-      </button> -->
+      </button>
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_VENDOR')" mat-icon-button class="add-user"
         (click)="addVendor()" matTooltip="Add Vendor" matTooltipPosition="above">
         <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_VENDOR')}">add_circle</mat-icon>
@@ -53,9 +53,9 @@
 
         <!-- HeadQuarter Column mat-sort-header sortActionDescription="Sort by Head Quarter"-->
         <ng-container matColumnDef="HeadQuarter">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by headquerter" style="width: 16%"> Head
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by headquerter" style="width: 20%"> Head
             Quarter </th>
-          <td mat-cell *matCellDef="let element" style="width: 16%"> {{element.headquerter}} </td>
+          <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.headquerter}} </td>
         </ng-container>
 
         <!-- Fed-Id Column -->
@@ -66,9 +66,9 @@
 
         <!-- VendorType Column mat-sort-header  -->
         <ng-container matColumnDef="VendorType">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendortype"  mat-sort-header > Vendor Type
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendortype"  mat-sort-header style="width: 10%"> Vendor Type
           </th>
-          <td mat-cell *matCellDef="let element"> {{element.vendortype}} </td>
+          <td mat-cell *matCellDef="let element" style="width: 10%"> {{element.vendortype}} </td>
         </ng-container>
 
         <!-- TierType Column -->
@@ -80,9 +80,9 @@
 
         <!-- AddedBy Column -->
         <ng-container matColumnDef="AddedBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname" style="width: 5%"> Added By </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname" style="width: 8%"> Added By </th>
           <td mat-cell *matCellDef="let element">
-            <span class="user-info" (click)="goToUserInfo(element.addedby)" style="width: 5%"> {{element.pseudoname}}  </span>
+            <span class="user-info" (click)="goToUserInfo(element.addedby)" style="width: 8%"> {{element.pseudoname}}  </span>
           </td>
         </ng-container>
 
@@ -136,9 +136,9 @@
 
         <!-- Approve/Reject Column -->
         <ng-container matColumnDef="ApproveOrReject">
-          <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ApproveOrReject" style="width: 20%">
+          <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ApproveOrReject" >
             Approve/Reject </th>
-          <td mat-cell *matCellDef="let vendor" class="approve-buttons" style="width: 20%">
+          <td mat-cell *matCellDef="let vendor" class="approve-buttons" >
             <ng-container *ngIf="['Approved'].includes(vendor.vms_stat);  else ifNotApproved">
               <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" mat-raised-button
                 class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor)" style="width: 75px; height: 25px;"
@@ -148,13 +148,14 @@
               </button>
             </ng-container>
             <ng-template #ifNotApproved>
-              <span class="action-buttons">
                 <!-- Initiated BUTTON -->
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
                   *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button
                   class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor)" [ngStyle]="{ color: 'white' }"
                   style="width: 75px; height: 25px;" [ngClass]="'mat-primary'"> {{vendor.vms_stat}}
                 </button>
+
+                &nbsp;
 
                 <!-- Reject BUTTON -->
 
@@ -168,7 +169,6 @@
                   mat-raised-button class="approve-reject-buttons" [ngStyle]="{ color: 'white' }"
                   style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{vendor.vms_stat}}
                 </button>
-              </span>
             </ng-template>
           </td>
         </ng-container>

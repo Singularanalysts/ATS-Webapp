@@ -1,0 +1,90 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+
+    <form [formGroup]="massMailingForm" class="vendor-form">
+        <div class="form">
+            <div class="form-column-left">
+                <!-- Technology -->
+                <mat-form-field appearance="fill" class="category-field">
+                    <mat-label>Select Technology</mat-label>
+                    <mat-select formControlName="technology">
+                        <mat-option value="Bench Sales">Bench Sales</mat-option>
+                        <mat-option value="Recruiting">Recruiting</mat-option>
+                        <mat-option value="Transfer">Transfer</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="massMailingForm.get('technology')!.hasError('required')"> Department is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Company -->
+                <mat-form-field appearance="fill" class="category-field">
+                    <mat-label>Select Company</mat-label>
+                    <mat-select formControlName="company">
+                        <mat-option value="Bench Sales">Bench Sales</mat-option>
+                        <mat-option value="Recruiting">Recruiting</mat-option>
+                        <mat-option value="Transfer">Transfer</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="massMailingForm.get('company')!.hasError('required')"> Department is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Email -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email">
+                </mat-form-field>
+
+            </div>
+
+            <div class="form-column-right">
+
+                <!--  MM Type -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select MM Type</mat-label>
+                    <mat-select formControlName="mmtype">
+                        <mat-option value="DPV">DPV</mat-option>
+                        <mat-option value="APV">APV</mat-option>
+                        <mat-option value="Implement">Implement</mat-option>
+                        <mat-option value="System Integrators">System Integrators</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="massMailingForm.get('mmtype')!.hasError('required')">MM Type
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- MM For -->
+                <mat-form-field appearance="fill" class="category-field">
+                    <mat-label>Select MM For</mat-label>
+                    <mat-select formControlName="mmfor">
+                        <mat-option value="Bench Sales">Bench Sales</mat-option>
+                        <mat-option value="Recruiting">Recruiting</mat-option>
+                        <mat-option value="Transfer">Transfer</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="massMailingForm.get('mmfor')!.hasError('required')"> MM for is
+                        required</mat-error>
+                </mat-form-field>
+
+                <!-- Name -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name">
+                    <mat-error *ngIf="massMailingForm.get('name')!.hasError('required')"> Name is
+                        required</mat-error>
+                </mat-form-field>
+
+            </div>
+        </div>
+
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

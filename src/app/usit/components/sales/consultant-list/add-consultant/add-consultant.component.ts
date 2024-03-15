@@ -133,7 +133,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   isTechnologyDataAvailable: boolean = false;
 
   constructor(
-   
+
   ) { }
   get frm() {
     return this.consultantForm.controls;
@@ -178,15 +178,15 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     } else if (type === 'recruiting') { // for edit
       this.flag = "Recruiting";
     } else {
-      this.flag  = 'DomRecruiting';
+      this.flag = 'DomRecruiting';
     }
   }
   initConsultantForm(consultantData: Consultantinfo) {
     this.consultantForm = this.formBuilder.group({
-      consultantid : [consultantData ? consultantData.consultantid : ''],
-      consultantno : [consultantData ? consultantData.consultantno : ''],
-      salesmaxno : [consultantData ? consultantData.salesmaxno : ''],
-      dommaxno : [consultantData ? consultantData.dommaxno : ''],
+      consultantid: [consultantData ? consultantData.consultantid : ''],
+      consultantno: [consultantData ? consultantData.consultantno : ''],
+      salesmaxno: [consultantData ? consultantData.salesmaxno : ''],
+      dommaxno: [consultantData ? consultantData.dommaxno : ''],
       recmaxno: [consultantData ? consultantData.recmaxno : ''],
       h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
       resume: [consultantData ? consultantData.resume : ''],
@@ -212,7 +212,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       priority: [consultantData ? consultantData.priority : ''],
       company: [consultantData ? consultantData.company : '', Validators.required],
       position: [consultantData ? consultantData.position : '', Validators.required],
-      status: [this.data.actionName === "edit-consultant" ?  consultantData.status : 'Initiated'],
+      status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
       experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
       hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
       skills: [consultantData ? consultantData.skills : ''],
@@ -230,14 +230,14 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       emprefcont: [consultantData ? consultantData.emprefcont : ''],
       companyname: [consultantData ? consultantData.companyname : ''],
       refname: [consultantData ? consultantData.refname : ''],
-     // refemail: new FormControl(consultantData ? consultantData.refemail : ''),
-     refemail: [consultantData ? consultantData.refemail : ''],
-     //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
-     refcont: [consultantData ? consultantData.refcont : ''],
-     // // number: ['', Validators.required],
+      // refemail: new FormControl(consultantData ? consultantData.refemail : ''),
+      refemail: [consultantData ? consultantData.refemail : ''],
+      //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
+      refcont: [consultantData ? consultantData.refcont : ''],
+      // // number: ['', Validators.required],
       // status:[this.consultantForm.status],
-     relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
-     relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
+      relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
+      relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
       consultantflg: this.data.flag.toLocaleLowerCase(),
       /* requirements: this.formBuilder.group({
          requirementid: id
@@ -246,13 +246,30 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       addedby: localStorage.getItem('userid'),
     });
 
+    if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
+      // console.log(consultantData.technology);
+
+      this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
+        (technology: any) => {
+          if (technology && technology.data) {
+            this.techid = technology.data[0].id;
+            console.log(technology.data[0].technologyarea);
+            this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching consultant details:', error);
+        }
+      );
+    }
+
     this.validateControls();
   }
   private validateControls() {
     if (this.flag == 'Recruiting' || this.flag == 'sales') {
       this.consultantForm.get('status').setValue('Active');
     }
-    
+
 
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
       const consultantemail = this.consultantForm.get('consultantemail');
@@ -271,8 +288,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
 
       if (res == 'Tagged') {
-        this.consultantForm.get('technology.id').setValue('14');
-        this.consultantForm.get('qualification.id').setValue('6');
+        this.consultantForm.get('technology').setValue('14');
+        this.consultantForm.get('qualification').setValue('6');
         consultantemail.clearValidators();
         contactnumber.clearValidators();
         projectavailabity.clearValidators();
@@ -284,37 +301,89 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         ratetype.clearValidators();
         currentlocation.clearValidators();
       } else {
-        consultantemail.setValidators([
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
-        ]);
-        contactnumber.setValidators(Validators.required);
-        projectavailabity.setValidators([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]);
-        availabilityforinterviews.setValidators(Validators.required);
-        position.setValidators(Validators.required);
-        experience.setValidators([
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ]);
-        firstname.setValidators(Validators.required);
-        lastname.setValidators(Validators.required);
-        ratetype.setValidators(Validators.required);
-        currentlocation.setValidators(Validators.required);
+        if (consultantemail) {
+          consultantemail.setValidators([
+            Validators.required,
+            Validators.email,
+            Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+          ]);
+        }
+        if (contactnumber) {
+          contactnumber.setValidators(Validators.required);
+        }
+
+        if (projectavailabity) {
+          projectavailabity.setValidators([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]);
+        }
+        if (availabilityforinterviews) {
+          availabilityforinterviews.setValidators(Validators.required);
+        }
+        if (position) {
+          position.setValidators(Validators.required);
+        }
+        if (experience) {
+          experience.setValidators([
+            Validators.required,
+            Validators.pattern('^[0-9]*$'),
+          ]);
+        }
+        if (firstname) {
+          firstname.setValidators(Validators.required);
+        }
+        if (lastname) {
+          lastname.setValidators(Validators.required);
+        }
+        if (ratetype) {
+          ratetype.setValidators(Validators.required);
+        }
+        if (currentlocation) {
+          currentlocation.setValidators(Validators.required);
+        }
       }
-      consultantemail.updateValueAndValidity();
-      contactnumber.updateValueAndValidity();
-      projectavailabity.updateValueAndValidity();
-      availabilityforinterviews.updateValueAndValidity();
-      position.updateValueAndValidity();
-      experience.updateValueAndValidity();
-      firstname.updateValueAndValidity();
-      lastname.updateValueAndValidity();
-      ratetype.updateValueAndValidity();
-      currentlocation.updateValueAndValidity();
+      if (consultantemail) {
+        consultantemail.updateValueAndValidity();
+      }
+      if (contactnumber) {
+        contactnumber.updateValueAndValidity();
+      }
+
+      if (projectavailabity) {
+        projectavailabity.updateValueAndValidity();
+      }
+      if (availabilityforinterviews) {
+        availabilityforinterviews.updateValueAndValidity();
+      }
+      if (position) {
+        position.updateValueAndValidity();
+      }
+      if (experience) {
+        experience.updateValueAndValidity();
+      }
+      if (firstname) {
+        firstname.updateValueAndValidity();
+      }
+      if (lastname) {
+        lastname.updateValueAndValidity();
+      }
+      if (ratetype) {
+        ratetype.updateValueAndValidity();
+      }
+      if (currentlocation) {
+        currentlocation.updateValueAndValidity();
+      }
+      // consultantemail.updateValueAndValidity();
+      // contactnumber.updateValueAndValidity();
+      // projectavailabity.updateValueAndValidity();
+      // availabilityforinterviews.updateValueAndValidity();
+      // position.updateValueAndValidity();
+      // experience.updateValueAndValidity();
+      // firstname.updateValueAndValidity();
+      // lastname.updateValueAndValidity();
+      // ratetype.updateValueAndValidity();
+      // currentlocation.updateValueAndValidity();
     });
     this.consultantForm.get('relocation').valueChanges.subscribe((res: any) => {
       const relocatOther = this.consultantForm.get('relocatOther');
@@ -344,8 +413,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   //     this.autoskills = response.data;
   //   });
   // }
-  techskills(event: any) {
-    const newVal = event.value;
+  techskills(option: any) {
+    // console.log(option);
+    const newVal = option.id;
+    this.techid = option.id;
     this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
       this.consultantForm.get('skills').setValue(response.data);
     });
@@ -377,7 +448,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.router.navigate(['recruiting-consultants/recruiting']);
     }
   }
-  enableButton = '';
+  enableButton = ''
   onSubmit() {
     this.onFileSubmitted = true;
     this.submitted = true;
@@ -388,26 +459,29 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.displayFormErrors();
       return;
     }
-    else{
+    else {
       this.isFormSubmitted = true
     }
     if (this.flag != 'presales') {
       this.consultantForm.get("status").setValue("Active");
     }
-    if (this.data.actionName === "edit-consultant"){
+   // console.log(this.techid);
+    this.consultantForm.get('technology').setValue(this.techid);
+    this.trimSpacesFromFormValues();
+    if (this.data.actionName === "edit-consultant") {
       [this.consultantForm.value].forEach((formVal, idx) => {
-        this.entity.firstname = formVal.firstname;
-        this.entity.lastname = formVal.lastname;
+        this.entity.firstname = formVal.firstname.trim();
+        this.entity.lastname = formVal.lastname.trim();
         this.entity.consultantemail = formVal.consultantemail;
         this.entity.linkedin = formVal.linkedin;
         this.entity.projectavailabity = formVal.projectavailabity;
         this.entity.visa = formVal.visa;
         this.entity.availabilityforinterviews = formVal.availabilityforinterviews;
         this.entity.priority = formVal.priority;
-        this.entity.position = formVal.position;
+        this.entity.position = formVal.position.trim();
         this.entity.status = formVal.status;
         this.entity.contactnumber = formVal.contactnumber;
-        this.entity.hourlyrate = formVal.hourlyrate;
+        this.entity.hourlyrate = formVal.hourlyrate.trim();
         this.entity.skills = formVal.skills;
         this.entity.experience = formVal.experience;
         this.entity.ratetype = formVal.ratetype;
@@ -433,33 +507,32 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     const saveObj = this.data.actionName === "edit-consultant" ? this.entity : this.consultantForm.value;
 
     const lenkedIn = this.consultantForm.get('linkedin')?.value;
-    
+
     if (this.flg == true) {
-     // const saveReqObj = this.getSaveObjData()
+      // const saveReqObj = this.getSaveObjData()
       this.consultantServ.registerconsultant(saveObj)
-      .subscribe({
-        next: (data: any) => {
-          if (data.status == 'success') {
-            this.dataToBeSentToSnackBar.message = this.data.actionName === "edit-consultant" ? 'Consultant updated successfully' : 'Consultant added successfully';
-            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
-            this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-            this.onFileSubmit(data.data.consultantid);
-            this.dialogRef.close();
-          } else {
+        .subscribe({
+          next: (data: any) => {
+            if (data.status == 'success') {
+              this.dataToBeSentToSnackBar.message = this.data.actionName === "edit-consultant" ? 'Consultant updated successfully' : 'Consultant added successfully';
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+              this.onFileSubmit(data.data.consultantid);
+              this.dialogRef.close();
+            } else {
+              this.enableButton = '';
+              this.message = data.message;
+              this.dataToBeSentToSnackBar.message = "Record Insertion failed";
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+            }
+          },
+          error: err => {
             this.enableButton = '';
-            this.message = data.message;
-            this.dataToBeSentToSnackBar.message = "Record Insertion failed";
-            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-            this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
           }
-        },
-        error: err => {
-          this.enableButton = '';
         }
-      }
-      );
+        );
     }
-    
   }
 
   trimSpacesFromFormValues() {
@@ -470,7 +543,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 
   getSaveObjData() {
     this.trimSpacesFromFormValues();
@@ -491,19 +563,24 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
   }
   gettech() {
-    this.consultantServ.gettech().subscribe((response: any) => {
-      this.techdata = response.data;
-    });
-    // this.searchTechOptions$ = this.consultantServ.gettech().pipe(map((x: any) => x.data), tap(resp => {
-    //   if (resp && resp.length) {
-    //     this.getTechOptionsForAutoComplete(resp);
-    //   }
-    // }));
-    
+    // this.consultantServ.gettechDropDown().subscribe((response: any) => {
+    //   console.log(response.data);
+    // });
+    // this.consultantServ.gettech().subscribe((response: any) => {
+    //   this.techdata = response.data;
+    // });
+    this.searchTechOptions$ = this.consultantServ.gettechDropDown(0).pipe(map((x: any) => x.data), tap(resp => {
+      if (resp && resp.length) {
+        this.getTechOptionsForAutoComplete(resp);
+        // console.log(resp);
+      }
+    }));
+    //this.searchTechOptions$.subscribe()
   }
 
   getTechOptionsForAutoComplete(data: any) {
     this.technologyOptions = data;
+    // console.log(data);
     this.searchTechOptions$ =
       this.consultantForm.controls.technology.valueChanges.pipe(
         startWith(''),
@@ -512,16 +589,23 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         )
       );
   }
-
-  private _filterOptions(value: any, options: string[]): string[] {
-    const filterValue = value.trim().toLowerCase();
-  const filteredTechnologies = options.filter((option: string) =>
-    option[1].toLowerCase().includes(filterValue)
-  );
-  this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
-  return filteredTechnologies;
+  techid!: any;
+  private _filterOptions(value: any, options: any[]): any[] {
+    ///console.log(options);
+    const filterValue = (value ? value.toString() : '').toLowerCase();
+    // console.log(filterValue);
+    const filteredTechnologies = options.filter((option: any) =>
+      option.technologyarea.toLowerCase().includes(filterValue)
+    );
+    // console.log(filteredTechnologies);
+    // this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
+    if (filteredTechnologies.length === 1) {
+      this.techid = filteredTechnologies[0].id;
+     // console.log(this.techid);
+    }
+    return filteredTechnologies;
   }
-  
+
   getQualification() {
     this.consultantServ.getQualification().subscribe((response: any) => {
       this.QualArr = response.data;
@@ -537,13 +621,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         const cn = this.consultantForm.get('consultantemail');
         cn.setValue('');
         this.message = 'Record already available with given Mail address';
-        this.dataToBeSentToSnackBar.message =  'Record already available with given Mail address';
-              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        this.dataToBeSentToSnackBar.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       } else {
-        this.dataToBeSentToSnackBar.message =  'Internal Server Error';
-              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        this.dataToBeSentToSnackBar.message = 'Internal Server Error';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
     });
   }
@@ -556,14 +640,14 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         if (response.status == 'success') {
           this.message = '';
         } else if (response.status == 'fail') {
-           const cn = this.consultantForm.get('contactnumber');
-           cn.setValue('');
+          const cn = this.consultantForm.get('contactnumber');
+          cn.setValue('');
           this.message = 'Record already available with given Contact Number';
-          this.dataToBeSentToSnackBar.message =  'Record already available with given Contact Number';
+          this.dataToBeSentToSnackBar.message = 'Record already available with given Contact Number';
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         } else {
-          this.dataToBeSentToSnackBar.message =  'Internal Server Error';
+          this.dataToBeSentToSnackBar.message = 'Internal Server Error';
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
@@ -573,7 +657,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
    *
    * @param event fetch dial-code of the country for contact number
    */
-  onContryChange(event: any){
+  onContryChange(event: any) {
     this.dailCode = event.dialCode;
   }
   @ViewChild('multifiles')
@@ -585,7 +669,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       var items = file.name.split('.');
       const str = items[0];
       if (str.length > 20) {
-        this.dataToBeSentToSnackBar.message =  'File name is too large, please rename the file before upload, it should be 15 to 20 characters';
+        this.dataToBeSentToSnackBar.message = 'File name is too large, please rename the file before upload, it should be 15 to 20 characters';
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         this.multifiles.nativeElement.value = '';
@@ -597,7 +681,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       } else {
         this.multifiles.nativeElement.value = '';
         this.uploadedfiles = [];
-        this.dataToBeSentToSnackBar.message =  'Files size should not exceed 4 mb';
+        this.dataToBeSentToSnackBar.message = 'Files size should not exceed 4 mb';
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
@@ -615,7 +699,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (fileSizeInKB > 4300) {
       this.flg = false;
       this.resume.nativeElement.value = '';
-      this.dataToBeSentToSnackBar.message =  'Resume size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'Resume size should be less than 2 mb';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
 
@@ -635,7 +719,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.flg = false;
       this.h1b.nativeElement.value = '';
       this.message = 'H1B size should be less than 2 mb';
-      this.dataToBeSentToSnackBar.message =  'H1B size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'H1B size should be less than 2 mb';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       return;
@@ -663,7 +747,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.flg = false;
       this.dl.nativeElement.value = '';
       this.message = 'DL size should be less than 2 mb';
-      this.dataToBeSentToSnackBar.message =  'DL size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'DL size should be less than 2 mb';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       return;
@@ -734,7 +818,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
     })
   }
-  stopEvntProp(event: Event){
+  stopEvntProp(event: Event) {
     event.preventDefault();
     event.stopPropagation();
   }
@@ -784,7 +868,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '40vw';
-    dialogConfig.data =  dataToBeSentToDailog;
+    dialogConfig.data = dataToBeSentToDailog;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddQualificationComponent, dialogConfig)
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.allowAction) {
@@ -795,153 +879,153 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   onRadioChange(event: MatRadioChange) {
     this.isRadSelected = event.value
   }
-   // fileList?: FileData[];
-   type!: any;
-   filedetails(fileData: FileData) {
-   this.type = fileData.filename;
-      var items = this.type.split(".");
-      this.fileService
-        .downloadConsultantfile(fileData.docid)
-        .subscribe(blob => {
-          if (items[1] == 'pdf' || items[1] == 'PDF') {
-            var fileURL: any = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = fileURL;
-            a.target = '_blank';
-            // a.download = filename;
-            a.click();
-          }
-          else {
-            saveAs(blob, fileData.filename)
-          }
+  // fileList?: FileData[];
+  type!: any;
+  filedetails(fileData: FileData) {
+    this.type = fileData.filename;
+    var items = this.type.split(".");
+    this.fileService
+      .downloadConsultantfile(fileData.docid)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          // a.download = filename;
+          a.click();
         }
-          // saveAs(blob, fileData.filename)
-        );
+        else {
+          saveAs(blob, fileData.filename)
+        }
+      }
+        // saveAs(blob, fileData.filename)
+      );
 
-   }
-   downloadfile(id: number, filename: string, flg: string) {
+  }
+  downloadfile(id: number, filename: string, flg: string) {
 
     var items = filename.split(".");
-     this.fileService
-       .downloadconresume(id, flg)
-       .subscribe(blob => {
-         if (items[1] == 'pdf' || items[1] == 'PDF') {
-           var fileURL: any = URL.createObjectURL(blob);
-           var a = document.createElement("a");
-           a.href = fileURL;
-           a.target = '_blank';
-           // Don't set download attribute
-           //a.download = filename;
-           a.click();
-         }
-         else {
-           saveAs(blob, filename)
-         }
-       }
-       );
+    this.fileService
+      .downloadconresume(id, flg)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          // Don't set download attribute
+          //a.download = filename;
+          a.click();
+        }
+        else {
+          saveAs(blob, filename)
+        }
+      }
+      );
 
   }
 
   deletefile(id: number, doctype: string) {
-      const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
-        title: 'Confirmation',
-        message: 'Are you sure you want to delete?',
-        confirmText: 'Yes',
-        cancelText: 'No',
-        actionData: id,
-        actionName: 'delete-employee'
-      };
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = dataToBeSentToDailog;
-      dialogConfig.width = "fit-content";
-      const dialogRef = this.dialogServ.openDialogWithComponent(
-        ConfirmComponent,
-        dialogConfig
-      );
-      // call delete api after  clicked 'Yes' on dialog click
-      dialogRef.afterClosed().subscribe({
-        next: (resp) => {
-          if (dialogRef.componentInstance.allowAction) {
-            // call delete api
-            this.fileService.conremovefile(id,doctype).pipe(takeUntil(this.destroyed$)).subscribe({
-              next: (response: any) => {
-                if (response.status == 'success') {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: id,
+      actionName: 'delete-employee'
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = dataToBeSentToDailog;
+    dialogConfig.width = "fit-content";
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+    // call delete api after  clicked 'Yes' on dialog click
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+        if (dialogRef.componentInstance.allowAction) {
+          // call delete api
+          this.fileService.conremovefile(id, doctype).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
                 //  this.getAllEmployees();
-                  this.dataToBeSentToSnackBar.message =
-                    'File Deleted successfully';
-                    this.dialogRef.close();
-                } else {
-                  this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-                  this.dataToBeSentToSnackBar.message = 'Record Deletion failed';
-                }
-                this.snackBarServ.openSnackBarFromComponent(
-                  this.dataToBeSentToSnackBar
-                );
-              },
-              error: (err) => {
+                this.dataToBeSentToSnackBar.message =
+                  'File Deleted successfully';
+                this.dialogRef.close();
+              } else {
                 this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-                this.dataToBeSentToSnackBar.message = err.message;
-                this.snackBarServ.openSnackBarFromComponent(
-                  this.dataToBeSentToSnackBar
-                );
-              },
-            });
-          }
-        },
-      });
+                this.dataToBeSentToSnackBar.message = 'Record Deletion failed';
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+            },
+            error: (err) => {
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.dataToBeSentToSnackBar.message = err.message;
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+            },
+          });
+        }
+      },
+    });
   }
   /**
    *
    * @param id docid
    */
-   deletemultiple(id: number){
-  const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
-    title: 'Confirmation',
-    message: 'Are you sure you want to delete?',
-    confirmText: 'Yes',
-    cancelText: 'No',
-    actionData: id,
-    actionName: 'delete-employee'
-  };
-  const dialogConfig = new MatDialogConfig();
-  dialogConfig.data = dataToBeSentToDailog;
-  dialogConfig.width = "fit-content";
-  const dialogRef = this.dialogServ.openDialogWithComponent(
-    ConfirmComponent,
-    dialogConfig
-  );
-  // call delete api after  clicked 'Yes' on dialog click
-  dialogRef.afterClosed().subscribe({
-    next: (resp) => {
-      if (dialogRef.componentInstance.allowAction) {
-        // call delete api
-        this.fileService.conremovefiles(id).pipe(takeUntil(this.destroyed$)).subscribe({
-          next: (response: any) => {
-            if (response.status == 'success') {
-            //  this.getAllEmployees();
-              this.dataToBeSentToSnackBar.message =
-                'File Deleted successfully';
+  deletemultiple(id: number) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: id,
+      actionName: 'delete-employee'
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = dataToBeSentToDailog;
+    dialogConfig.width = "fit-content";
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+    // call delete api after  clicked 'Yes' on dialog click
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+        if (dialogRef.componentInstance.allowAction) {
+          // call delete api
+          this.fileService.conremovefiles(id).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
+                //  this.getAllEmployees();
+                this.dataToBeSentToSnackBar.message =
+                  'File Deleted successfully';
                 this.dialogRef.close();
-            } else {
+              } else {
+                this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+                this.dataToBeSentToSnackBar.message = 'Record Deletion failed';
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+            },
+            error: (err) => {
               this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              this.dataToBeSentToSnackBar.message = 'Record Deletion failed';
-            }
-            this.snackBarServ.openSnackBarFromComponent(
-              this.dataToBeSentToSnackBar
-            );
-          },
-          error: (err) => {
-            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-            this.dataToBeSentToSnackBar.message = err.message;
-            this.snackBarServ.openSnackBarFromComponent(
-              this.dataToBeSentToSnackBar
-            );
-          },
-        });
-      }
-    },
-  });
- }
+              this.dataToBeSentToSnackBar.message = err.message;
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+            },
+          });
+        }
+      },
+    });
+  }
 
 
   /**

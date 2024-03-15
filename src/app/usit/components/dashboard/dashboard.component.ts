@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { DashboardService } from 'src/app/usit/services/dashboard.service';
@@ -13,20 +13,26 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { SourcingupdateComponent } from './sourcingupdate/sourcingupdate.component';
 import { SubmissionCountListComponent } from './submission-count-list/submission-count-list.component';
-import { Closure } from '../../models/closure';
 import { ClosureCountListComponent } from './closure-count-list/closure-count-list.component';
 import { InterviewCountListComponent } from './interview-count-list/interview-count-list.component';
+import { interval, Subscription } from 'rxjs';
+import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count-list.component';
+import { OpenReqsAnalysisComponent } from './open-reqs-analysis/open-reqs-analysis.component';
+import { MatInputModule } from '@angular/material/input';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule
+  imports: [CommonModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
 })
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
+  dataSourceTech = new MatTableDataSource([]);
+  dataSourceVendor = new MatTableDataSource([]);
   private dialogServ = inject(DialogService);
   dataTableColumns: string[] = [
     'Name',
@@ -46,6 +52,18 @@ export class DashboardComponent implements OnInit {
     'TaggedDate',
     'TaggedBy'
   ];
+  dataTableColumnsTechAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Category',
+    'VendorCount',
+  ];
+  dataTableColumnsVendorAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Vendor',
+    'CategoryCount',
+  ];
   entity: any;
   datarr: any[] = [];
   private dashboardServ = inject(DashboardService);
@@ -54,6 +72,7 @@ export class DashboardComponent implements OnInit {
   closureFlag = 'Monthly';
   interviewFlag = 'daily';
   submissionFlag = 'daily';
+  sourcingFlag = 'daily';
 
   closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
@@ -62,6 +81,7 @@ export class DashboardComponent implements OnInit {
   subCountArr: any[] = [];
   intCountArr: any[] = [];
   closecountArr: [] = [];
+  sourcingcountArr: [] = [];
 
   subCountIndArr: any[] = [];
   closureCountIndArr: [] = [];
@@ -82,28 +102,85 @@ export class DashboardComponent implements OnInit {
   rclosecount = 0;
   rclosecountIndividual = 0;
 
+  sourcingInitiatedcount = 0;
+  sourcingCompletedcount = 0;
+  sourcingVerifiedcount = 0;
+  sourcingMoveToSalescount = 0;
+
   userid!: any;
   role!: any;
   submitted = false;
   individualCounts = true;
-  ngOnInit(): void {
-    this.userid = localStorage.getItem('userid');
-    this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
-    this.getDiceReqs();
-    this.getSourcingLeads();
+
+  private intervalSubscription!: Subscription;
+
+  private ngZone = inject(NgZone);
+
+  refresh() {
+    console.log('Dash Board Refreshed '+this.refreshFlg);
+    // You can perform any actions or logic inside this method
+    if (this.refreshFlg == 'executive') {
+      this.countCallingExecutiveAndLead();
+      this.countCallingHigherRole();
+    }
+    else {
+      this.countCallingHigherRole();
+    }
+
     this.dashboardServ.vmstransactions().subscribe(
       ((response: any) => {
         this.datarr = response.data;
-        this.countCallingExecutiveAndLead();
-        this.countCallingHigherRole();
+      })
+    );
+  }
+refreshFlg = 'executive';
+department!:any;
+sourcingLead = true;
+  ngOnInit(): void {
+    // this.intervalSubscription = interval(1 * 60 * 1000)
+    this.intervalSubscription = interval(30 * 1000)
+      .subscribe(() => {
+        this.ngZone.run(() => {
+          this.refresh();
+        });
+      });
+
+    this.userid = localStorage.getItem('userid');
+    this.department = localStorage.getItem('department');
+    if(this.department == 'Bench Sales' || this.department == 'Recruiting'){
+      this.sourcingLead = false;
+    }
+    else{
+      this.sourcingLead = true;
+    }
+    this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
+    this.getDiceReqs();
+    this.getSourcingLeads();
+    this.getReqVendorCount();
+    this.getReqCatergoryCount();
+    this.dashboardServ.vmstransactions().subscribe(
+      ((response: any) => {
+        this.datarr = response.data;
       })
     );
     if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
       this.individualCounts = true;
+      this.refreshFlg = 'executive'
     }
     else {
       this.individualCounts = false;
+      this.refreshFlg = 'company'
     }
+    this.countCallingExecutiveAndLead();
+    this.countCallingHigherRole();
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe from the interval to prevent memory leaks
+    if (this.intervalSubscription) {
+      this.intervalSubscription.unsubscribe();
+    }
+   console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
@@ -145,6 +222,15 @@ export class DashboardComponent implements OnInit {
         });
       })
     );
+    this.dashboardServ.getsourcingCount('daily').subscribe(
+      ((response: any) => {
+        this.sourcingcountArr = response.data;
+        this.sourcingVerifiedcount = response.data.verified;
+        this.sourcingMoveToSalescount = response.data.moveToSales;
+        this.sourcingInitiatedcount = response.data.initiated;
+        this.sourcingCompletedcount = response.data.completed;
+      })
+    );
   }
   countCallingExecutiveAndLead() {
     this.dashboardServ.getClosureCountForExAndLead('monthly', this.userid).subscribe(
@@ -163,6 +249,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountIndArr = response.data;
+       
         this.intCountIndArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcountIndividual = ent.salescount;
@@ -266,7 +353,6 @@ export class DashboardComponent implements OnInit {
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-    // console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.dashboardServ.getClosureCount(flag).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
@@ -285,7 +371,6 @@ export class DashboardComponent implements OnInit {
     this.closureFlagInd = flg;
     this.sclosecountIndividual = 0;
     this.rclosecountIndividual = 0;
-    //console.log(this.submissionFlag + " = " + this.interviewFlag + " = " + this.closureFlag)
     this.dashboardServ.getClosureCountForExAndLead(flag, this.userid).subscribe(
       ((response: any) => {
         this.closureCountIndArr = response.data;
@@ -302,12 +387,28 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  sourcingCount(flag: string, flg: string) {
+    this.sourcingFlag = flg;
+    this.sourcingInitiatedcount = 0;
+    this.sourcingCompletedcount = 0;
+    this.sourcingVerifiedcount = 0;
+    this.sourcingMoveToSalescount = 0;
+    this.dashboardServ.getsourcingCount(flag).subscribe(
+      ((response: any) => {
+        this.sourcingcountArr = response.data;
+        this.sourcingVerifiedcount = response.data.verified;
+        this.sourcingMoveToSalescount = response.data.moveToSales;
+        this.sourcingInitiatedcount = response.data.initiated;
+        this.sourcingCompletedcount = response.data.completed;
+      })
+    );
+  }
+
   getSourcingLeads() {
     this.dashboardServ.getSourcingLeads(this.userid).subscribe(
       (response: any) => {
         //this.entity = response.data;
         this.dataSource.data = response.data;
-        // console.log(response.data)
         // this.dataSource.data.map((x: any, i) => {
         //   x.serialNum = i + 1;
         // });
@@ -318,7 +419,6 @@ export class DashboardComponent implements OnInit {
 
 
   updateSlead(sourcingLeadData: any) {
-    // console.log(sourcingLeadData)
     const actionData = {
       title: 'Sourcing Update',
       buttonCancelText: 'Cancel',
@@ -375,7 +475,6 @@ export class DashboardComponent implements OnInit {
   }
 
   intPop(element: any, condition: any) {
-    //console.log(this.interviewFlag)
     const actionData = {
       title: element + ' Interviews',
       buttonCancelText: 'Cancel',
@@ -442,4 +541,82 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
+
+  sourcingPop(element: any, condition: any) {
+    const actionData = {
+      title: element + ' Consultants List',
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'sourcing-count',
+      flag: element,
+      duration: this.sourcingFlag,
+      condition: condition,
+      // userduration: this.closureFlagInd,
+      // souringData: sourcingLeadData,
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '90dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'sourcing-count';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      SourcingCountListComponent,
+      dialogConfig
+    );
+  }
+  
+  search = 'empty'
+  getReqVendorCount() {
+    this.dashboardServ.getReqCounts(this.search, 'count', 'vendor', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceTech.data = response.data;
+        this.dataSourceTech.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+  
+  getReqCatergoryCount() {
+    this.dashboardServ.getReqCounts(this.search, 'count', 'category', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceVendor.data = response.data;
+        this.dataSourceVendor.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  vendorCategoryPopup(vendorOrCategory: any, date: any, type: any) {
+    const actionData = {
+      title: vendorOrCategory,
+      vendorOrCategory: vendorOrCategory,
+      date: date,
+      type: type,
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'vendor-category-count',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '90dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'vendor-category-count';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      OpenReqsAnalysisComponent,
+      dialogConfig
+    );
+  }
+
+  onVendorFilter(event: any){
+    this.dataSourceVendor.filter = event.target.value;
+  }
+
+  onCategoryFilter(event: any){
+    this.dataSourceTech.filter = event.target.value;
+  }
+
 }

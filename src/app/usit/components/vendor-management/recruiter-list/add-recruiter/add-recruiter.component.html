@@ -21,7 +21,7 @@
           </mat-autocomplete>
         
 
-          <button matSuffix mat-icon-button (click)="goToVendorList()"><mat-icon>add</mat-icon></button>
+          <button matSuffix mat-icon-button (click)="navigateToAddVendor()"><mat-icon>add</mat-icon></button>
           <mat-hint *ngIf="isCompanyDataAvailable">No results found, click '+' to add vendor</mat-hint>
           <mat-error *ngIf="recruiterForm.get('vendor.company')!.hasError('required')">Company Name is Required</mat-error>
         </mat-form-field>
@@ -36,7 +36,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)"  maxlength="30" />
-          <mat-error *ngIf="recruiterForm.get('email')!.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="recruiterForm.get('email')!.hasError('required')">Email is Required</mat-error>
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('pattern')">Invalid Email Address</mat-error>
         </mat-form-field>
 

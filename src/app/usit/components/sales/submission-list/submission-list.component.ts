@@ -15,7 +15,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -147,7 +147,9 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
 
   getAllData(pageIndex = 1 ) {
-    this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, pageIndex, this.pageSize, this.field).subscribe(
+    this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, pageIndex, this.pageSize, this.field,
+      this.sortField,
+      this.sortOrder).subscribe(
       (response: any) => {
         this.entity = response.data.content;
         this.dataSource.data =  response.data.content;
@@ -167,7 +169,9 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     const keyword = event.target.value;
     this.field=keyword;
     if (keyword != '') {
-      return this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword).subscribe(
+      return this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
+        this.sortField,
+        this.sortOrder).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.totalItems = response.data.totalElements;
@@ -185,8 +189,22 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     return this.getAllData(this.currentPageIndex + 1);
   }
 
-  onSort(event: any) {
-
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+   // console.log(event);
+    //this.sortField = event.active;
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    ///this.sortOrder = event.direction;
+    this.getAllData();
+    }
   }
 
   goToSubmissionInfo(element: any, flag: any) {
@@ -335,44 +353,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     return { 'background-color': backgroundColor, 'color': color };
   }
 
-  getAllData2(pageIndex = 1) {
-    const dataToBeSentToSnackBar: ISnackBarData = {
-      message: '',
-      duration: 1500,
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-      direction: 'above',
-      panelClass: ['custom-snack-success'],
-    };
 
-    return this.submissionServ.getsubmissiondataPagination(
-        this.flag,
-        this.hasAcces,
-        this.userid,
-        pageIndex,
-        this.pageSize,
-        this.field
-      )
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-        //  this.consultant = response.data.content;
-          this.entity = response.data.content;
-          this.dataSource.data = response.data.content;
-          // for serial-num {}
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-          this.totalItems = response.data.totalElements;
-          //  this.length = response.data.totalElements;
-        },
-        error: (err: any) => {
-          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          dataToBeSentToSnackBar.message = err.message;
-          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        },
-      });
-  }
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
@@ -392,7 +373,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
 
   goToReqInfo(element: any) {
-    console.log(element);
+   // console.log(element);
     const actionData = {
       title: `${element.reqnumber}`,
       id: element.reqid,

@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-openreqs',
@@ -17,7 +19,9 @@ import { OpenreqService } from '../../services/openreq.service';
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   templateUrl: './openreqs.component.html',
   styleUrls: ['./openreqs.component.scss']
@@ -32,7 +36,8 @@ export class OpenreqsComponent implements OnInit {
     'employment_type',
     'job_location',
     'vendor',
-    'end_client',
+    'source',
+   // 'end_client',
   ];
   // pagination code
   page: number = 1;
@@ -46,13 +51,15 @@ export class OpenreqsComponent implements OnInit {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageSizeOptions = [50, 75, 100];
+  isCompanyExist: any;
+  source = 'all';
 
   private router = inject(Router);
   private service = inject(OpenreqService);
 userid!:any;
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
-    this.getAllData();
+    this.getAllreqsData();
   }
   empTag(id:number){
     this.service.openReqsEmpTagging(id, this.userid).subscribe(
@@ -60,10 +67,27 @@ userid!:any;
 
       })
   }
+
+  onSelectionChange(event: MatSelectChange) {
+    console.log('Selected value:', event.value);
+    this.source = event.value;
+    console.log(this.source);
+    this.getAllreqsData()
+  }
+
+  getAllreqsData() {
+    if (this.source && this.source !== 'empty') {
+      this.getAllData(1); // Call API with source
+    } else {
+      this.getAllData(1); // Call API without source
+    }
+  }
+
   getAllData(pagIdx = 1) {
-    this.service.getopenReqWithPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
+    this.service.getopenReqWithPaginationAndSource(pagIdx, this.itemsPerPage, this.field, this.source).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
+        // this.isCompanyExist = response.data.content[0].isexist;
         this.totalItems = response.data.totalElements;
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
@@ -81,8 +105,9 @@ userid!:any;
 
   applyFilter(event : any) {
     const keyword = event.target.value;
+    this.field = keyword;
     if (keyword != '') {
-      return this.service.getopenReqWithPagination(1, this.itemsPerPage, keyword).subscribe(
+      return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
         ((response: any) => {
           this.dataSource.data  = response.data.content;
            // for serial-num {}
@@ -115,5 +140,21 @@ userid!:any;
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
+  }
+
+  getRowStyles(row: any): any {
+    const companyStatus = row.isexist;
+    let backgroundColor = '';
+
+    switch (companyStatus) {
+      case '1':
+        backgroundColor = 'rgba(40, 160, 76, 0.945)';
+        break;
+      default:
+        backgroundColor = '';
+        break;
+    }
+    
+    return { 'background-color': backgroundColor };
   }
 }

@@ -14,7 +14,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
-import {  MatSelectModule } from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
 import { SearchPipe } from "src/app/pipes/search.pipe";
 import { MatTableModule } from "@angular/material/table";
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
@@ -48,7 +48,6 @@ import { Techsupport } from "src/app/usit/models/TechSupport";
     MatFormFieldModule,
     MatCardModule,
     NgxGpAutocompleteModule
-   
   ],
   providers: [
     {
@@ -64,8 +63,7 @@ import { Techsupport } from "src/app/usit/models/TechSupport";
 })
 export class AddTechSupportComponent implements OnInit {
   private dialogServ = inject(DialogService);
-onAddTechnology() {
-  
+  onAddTechnology() {
     const dataToBeSentToDailog = {
       title: 'Add Tech-Support',
       buttonCancelText: 'Cancel',
@@ -81,10 +79,9 @@ onAddTechnology() {
       if (dialogRef.componentInstance.allowAction) {
         this.gettech()
       }
-  })
-  
-}
-options: any;
+    })
+  }
+  options: any;
   selectData: never[] | undefined;
   isAllOptionsSelected: any;
   isRadSelected!: boolean;
@@ -114,79 +111,66 @@ options: any;
     this.service.getTechsupportById(this.data.consultantData.id).subscribe(
       (response: any) => {
         this.techArr = response.data;
-        this.techArr.map((x: any)=> x.selected = false);
-       
-    }
+        this.techArr.map((x: any) => x.selected = false);
+      }
     )
   }
 
   ngOnInit(): void {
     this.gettech();
-    if(this.data.actionName === "edit-tech-support"){
+    if (this.data.actionName === "edit-tech-support") {
       this.initializeRequirementForm(new Techsupport());
       this.service.getTechsupportId(this.data.consultantData.id).subscribe(
         (response: any) => {
           this.entity = response.data;
           this.initializeRequirementForm(response.data);
-
         }
       )
-   
-    
-    }else{
-        this.initializeRequirementForm(null);
+    } else {
+      this.initializeRequirementForm(null);
     }
- 
+
     this.service.gettechnicalskills().subscribe((response: any) => {
       this.techdata = response;
-     // console.log("techdata",this.techdata)
-      
+      // console.log("techdata",this.techdata)
     });
   }
-
-
-    private initializeRequirementForm(requirementData : any) {
-      this.registerForm = this.formBuilder.group({
-        name: [requirementData ? requirementData.name : '', Validators.required],
-      pseudoname: [requirementData ? requirementData.pseudoname : '',  Validators.required],
-      location: [requirementData ? requirementData.location : '',  Validators.required, this.registerForm.location],
+  private initializeRequirementForm(requirementData: any) {
+    this.registerForm = this.formBuilder.group({
+      name: [requirementData ? requirementData.name : '', Validators.required],
+      pseudoname: [requirementData ? requirementData.pseudoname : '', Validators.required],
+      location: [requirementData ? requirementData.location : '', Validators.required, this.registerForm.location],
       email: [
-        requirementData ? requirementData.email : '', 
+        requirementData ? requirementData.email : '',
         [
           Validators.required,
           Validators.email,
           Validators.pattern("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
         ],
       ],
-      mobile: [requirementData ? requirementData.mobile : '',  Validators.required], 
-      secmobile: [requirementData ? requirementData.secmobile : '',  Validators.required],
-      experience: [requirementData ? requirementData.experience : '',  [Validators.required, Validators.pattern("^[0-9]*$")]],
+      mobile: [requirementData ? requirementData.mobile : '', Validators.required],
+      secmobile: [requirementData ? requirementData.secmobile : '', Validators.required],
+      experience: [requirementData ? requirementData.experience : '', [Validators.required, Validators.pattern("^[0-9]*$")]],
       technology: [requirementData ? requirementData.technology : '', Validators.required],
-      skills: [requirementData ? requirementData.skills : '',  Validators.required],
+      skills: [requirementData ? requirementData.skills : '', Validators.required],
       id: [requirementData ? requirementData.id : '', this.registerForm.id],
-  
     });
-    
-   
     if (this.data.actionName === 'edit-requirement') {
-      this.registerForm.addControl('status',this.formBuilder.control(requirementData ? requirementData.status : ''));
-
+      this.registerForm.addControl('status', this.formBuilder.control(requirementData ? requirementData.status : ''));
     }
- 
-    
   }
 
-private destroyed$ = new Subject<void>();
-getSaveData() {
-  if(this.data.actionName === 'edit-requirement'){
-    return {...this.entity, ...this.registerForm.value}
+  private destroyed$ = new Subject<void>();
+  getSaveData() {
+    this.trimSpacesFromFormValues();
+    if (this.data.actionName === 'edit-requirement') {
+      return { ...this.entity, ...this.registerForm.value }
+    }
+    return this.registerForm.value;
   }
-  return this.registerForm.value;
-}
   onSubmit() {
     this.message = "";
     this.submitted = true;
-
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 2500,
@@ -202,11 +186,11 @@ getSaveData() {
       this.registerForm.markAllAsTouched();
       return;
     }
-  
-  const consultantId = this.data?.consultantData?.id;
-  if (consultantId) {
-    this.registerForm.get('id')!.setValue(consultantId);
-  }   
+
+    const consultantId = this.data?.consultantData?.id;
+    if (consultantId) {
+      this.registerForm.get('id')!.setValue(consultantId);
+    }
     const saveReqObj = this.getSaveData();
     this.service
       .addORUpdateH1bImmigrant(saveReqObj, this.data.actionName)
@@ -216,11 +200,11 @@ getSaveData() {
           if (resp.status == 'success') {
             dataToBeSentToSnackBar.message =
               this.data.actionName === 'add-tech-support'
-                ? 'Requirement added successfully'
-                : 'Requirement updated successfully';
+                ? 'Tech Support added successfully'
+                : 'Tech Support updated successfully';
             this.dialogRef.close();
           } else {
-            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Requirement already Exists';
+            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Tech Support already Exists';
             dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
@@ -228,12 +212,21 @@ getSaveData() {
         error: (err: any) => {
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-requirement'
-              ? 'Requirement addition is failed'
-              : 'Requirement updation is failed';
+              ? 'Tech Support addition is failed'
+              : 'Tech Support updation is failed';
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
+  }
+
+  trimSpacesFromFormValues() {
+    Object.keys(this.registerForm.controls).forEach((controlName: string) => {
+      const control = this.registerForm.get(controlName);
+      if (control.value && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
+    });
   }
   displayFormErrors() {
     Object.keys(this.registerForm.controls).forEach((field) => {
@@ -244,28 +237,38 @@ getSaveData() {
     });
   }
 
-  
+  camelCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = this.capitalizeFirstLetter(inputValue);
+  }
+  capitalizeFirstLetter(input: string): string {
+    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+      return char.toUpperCase();
+    });
+  }
 
-gettech() {
-  this.service.gettechnicalskills().subscribe((response: any) => {
-    this.techdata = response;
-    //console.log(this.techdata, "dsdsh");
-  });
-}
-skilldata: any;
+  convertToLowerCase(event: any) {
+    const inputValue = event.target.value;
+    event.target.value = inputValue.toLowerCase();
+  }
+  gettech() {
+    this.service.gettechnicalskills().subscribe((response: any) => {
+      this.techdata = response;
+      //console.log(this.techdata, "dsdsh");
+    });
+  }
+  skilldata: any;
 
-techSkills(event: any) {
-  const newVal = event.value;
-  this.service.getTechsupportById(newVal).subscribe( (response: any) => {
-    this.registerForm.get('skills').setValue(response.data);
-   // console.log(response.data)
-  })
-}
-address = '';
+  techSkills(event: any) {
+    const newVal = event.value;
+    this.service.getTechsupportById(newVal).subscribe((response: any) => {
+      this.registerForm.get('skills').setValue(response.data);
+      // console.log(response.data)
+    })
+  }
+  address = '';
   handleAddressChange(address: any) {
     // this.address = address.formatted_address;
     this.registerForm.get('location').setValue(address.formatted_address);
   }
-
-
 }

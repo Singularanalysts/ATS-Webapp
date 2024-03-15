@@ -18,7 +18,7 @@
           type="search"
           class="search"
           placeholder="search requirement"
-          (keyup)="onFilter($event)"
+          (keyup)="applyFilter($event)"
         />
       </div>
     </div>
@@ -32,54 +32,56 @@
         (matSortChange)="onSort($event)"
         oncopy="return false"
       >
-        <!--- Note that these columns can be defined in any order.
-                The actual rendered columns are set as a property on the row definition" -->
-
         <!-- SNo Column -->
         <ng-container matColumnDef="SerialNum">
           <th
             mat-header-cell
             *matHeaderCellDef
+            mat-sort-header
             sortActionDescription="Sort by Serial Number"
+            style="width: 2%"
           >
             S.No
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.serialNum }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 2%">{{ element?.serialNum }}</td>
         </ng-container>
         <!-- Requirement No.-->
         <ng-container matColumnDef="RequirementNumber">
-          <th
+          <th mat-sort-header
             mat-header-cell
             *matHeaderCellDef
             sortActionDescription="Sort by RequirementNumber"
+            style="width: 5%"
           >
             Requirement Number
           </th>
-          <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)">{{ element?.reqnumber }}</td>
+          <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)" style="width: 5%">{{ element?.reqnumber }}</td>
         </ng-container>
         <!-- Date  mat-sort-header-->
         <ng-container matColumnDef="Date">
           <th
             mat-header-cell
             *matHeaderCellDef
-           
+            mat-sort-header
             sortActionDescription="Sort by Date"
+            style="width: 5%"
           >
             Date
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.postedon }}</td>
+          <td mat-cell *matCellDef="let element" nowrap style="width: 5%">{{ element?.postedon | date:'MM-dd-yyyy' }}</td>
         </ng-container>
         <!-- Job Title-->
         <ng-container matColumnDef="JobTitle">
           <th
             mat-header-cell
             *matHeaderCellDef
-            
+            mat-sort-header
             sortActionDescription="Sort by JobTitle"
+            style="width: 30%"
           >
             Job Title
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.jobtitle }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 30%">{{ element?.jobtitle }}</td>
         </ng-container>
         <!-- Location-->
         <ng-container matColumnDef="Location">
@@ -87,34 +89,38 @@
             mat-header-cell
             *matHeaderCellDef
             sortActionDescription="Sort by Location"
+            mat-sort-header
+            style="width: 23%"
           >
             Location
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.location.replace(', USA', '') }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 23%">{{ element?.location.replace(', USA', '') }}</td>
         </ng-container>
         <!-- Email-->
         <ng-container matColumnDef="IPVendor">
           <th
             mat-header-cell
             *matHeaderCellDef
-            
+            mat-sort-header
             sortActionDescription="Sort by IPVendor"
+            style="width: 17%"
           >
             IP/Vendor
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.vendor }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 17%">{{ element?.vendor }}</td>
         </ng-container>
         <!-- Contact Number-->
         <ng-container matColumnDef="EmployementType">
           <th
             mat-header-cell
             *matHeaderCellDef
-           
+            mat-sort-header
             sortActionDescription="Sort by EmployementType"
+            style="width: 5%"
           >
             Employement Type
           </th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let element" style="width: 5%">
             {{ element?.employmenttype }}
           </td>
         </ng-container>
@@ -124,14 +130,16 @@
           <th
             mat-header-cell
             *matHeaderCellDef
-           
+            mat-sort-header
             sortActionDescription="Sort by Status"
+            style="width: 3%"
           >
             Status
           </th>
           <td
             mat-cell
             *matCellDef="let requirement"
+            style="width: 3%"
           >
           {{ requirement.status }}
           </td>

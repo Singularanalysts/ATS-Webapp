@@ -34,8 +34,8 @@ export class RequirementService {
     return this.apiServ.get("requirement/recruiterlist");
   }
 
-  getAllRequirementData(flg: string, page: number,  size: any, field: any) {
-    return this.apiServ.get( "requirement/all/" + flg  + "/" + page  + "/" + size + "/" + field);
+  getAllRequirementData(flg: string, page: number,  size: any, field: any, sortField:string,sortOrder:string) {
+    return this.apiServ.get( "requirement/all/" + flg  + "/" + page  + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
   }
 
   getRecruiterOfTheVendor(id:number, flg:string) {
@@ -68,4 +68,11 @@ export class RequirementService {
     return this.apiServ.get("requirement/all/" + page + "/" + size + "/" + field);
   }
 
+  public gettechDropDown(techid: any) {
+    return this.apiServ.get("consultant/technology/"+techid);
+  }
+
+  getVendorById(id: number) {
+    return this.apiServ.get("vms/vendor/vendor/" + id);
+  }
 }

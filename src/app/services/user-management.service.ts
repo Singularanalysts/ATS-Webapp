@@ -26,6 +26,15 @@ export class UserManagementService {
     return userName !== null ? userName : ''
   }
 
+  resetpassword(user: any) {
+    return this.apiServ.post("auth/login/reset_password", user);
+  }
+
+  getRoleName(): string {
+    const roleName = localStorage.getItem('role');
+    return roleName !== null ? roleName : ''
+  }
+
   /**************ROLES SERVICES -  STARTS************* */
   // roles management
   //register role

@@ -28,7 +28,7 @@ export class Requirements {
 	maxnumber!:string;
 	updatedby = localStorage.getItem('userid');
 	createddate!:string;
-	technology = new Technology();
+	technology!:number;
 	client!:string;
 	vendorimpl = new Vms();
 	recruiter = new Recruiter();

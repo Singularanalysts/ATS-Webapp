@@ -38,7 +38,7 @@
               <mat-hint>Please search with company name</mat-hint>
               <mat-error
                 *ngIf="vendorForm.get('headquerter')!.hasError('required') && vendorForm.get('headquerter')!.touched">Location
-                Name is required</mat-error>
+                 is Required</mat-error>
               <mat-error
                 *ngIf="vendorForm.get('headquerter')!.hasError('atLeastTwoNumbers') && vendorForm.get('headquerter')!.value">Please
                 Enter the full address of the company</mat-error>
@@ -122,7 +122,7 @@
             </mat-select>
           <!-- </mat-autocomplete> -->
             <mat-error *ngIf="vendorForm.get('status')!.hasError('required')">Status
-            is required</mat-error>
+            is Required</mat-error>
         </mat-form-field>
          <!-- details   -->
          <mat-form-field appearance="fill">

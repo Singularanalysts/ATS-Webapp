@@ -125,4 +125,16 @@ export class PermissionsService {
   getCurrentURL(): string {
     return window.location.pathname;
   }
+
+  sendOtp(email: any) {
+    return this.http.post(this.apiServ.apiUrl + "auth/login/forgotPassword", email);
+  }
+
+  validateOtp(userId: any, otp: any) {
+    return this.http.get(this.apiServ.apiUrl + "auth/login/validate/" + userId + "/"+ otp);
+  }
+  
+  changePassword(value: any) {
+    return this.http.post(this.apiServ.apiUrl + "auth/login/change_password", value);
+  }
 }

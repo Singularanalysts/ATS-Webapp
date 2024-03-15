@@ -12,8 +12,8 @@ export class OpenreqService {
     return this.http.get("openreqs/dice/empTagging/" + reqid + "/" + empid);
   }
 
-  public getopenReqWithPagination(pageNo: any, pageSize: any, field: any) {
-    return this.http.get("openreqs/dice/allreqs/" + pageNo + "/" + pageSize + "/" + field);
+  public getopenReqWithPaginationAndSource(pageNo: any, pageSize: any, field: any, source: any) {
+    return this.http.get("openreqs/dice/allreqs/" + pageNo + "/" + pageSize + "/" + field + "/" + source);
   }
 
   public linkedinProfiles() {

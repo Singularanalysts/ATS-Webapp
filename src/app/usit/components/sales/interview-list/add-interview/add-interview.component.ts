@@ -26,9 +26,12 @@ import { MatCardModule } from '@angular/material/card';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import {
- 
+
   Subject,
+  map,
+  startWith,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { InterviewService } from 'src/app/usit/services/interview.service';
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
@@ -83,14 +86,17 @@ export class AddInterviewComponent implements OnInit {
   isRadSelected: any;
   isModeRadSelected: any;
   isStatusRadSelected: any;
-  payrateFromVendor!:any;
-  paymentwithctc!:any;
+  payrateFromVendor!: any;
+  paymentwithctc!: any;
   intno !: string;
   onBoard!: any;
   closureFlag = false;
   private datePipe = inject(DatePipe);
   intId: any;
   protected isFormSubmitted: boolean = false;
+  searchSubmissionOptions$: any;
+  submissionOptions: any;
+
   get frm() {
     return this.interviewForm.controls;
   }
@@ -102,7 +108,7 @@ export class AddInterviewComponent implements OnInit {
       this.payrateFromVendor = "Pay Rate to Consultant";
       this.paymentwithctc = "Pay Rate From Vendor";
     }
-    else if(this.flag == 'Recruiting') {
+    else if (this.flag == 'Recruiting') {
       this.payrateFromVendor = "Bill Rate from Client";
       this.paymentwithctc = "Pay Rate To Vendor";
     } else {
@@ -113,34 +119,34 @@ export class AddInterviewComponent implements OnInit {
       this.initializeInterviewForm(new InterviewInfo());
       this.interviewServ.getEntity(this.data.interviewData.intrid).subscribe(
         (response: any) => {
-        // const ctc = response.data.submission.ratetype;
-        // if((ctc=='1099' || ctc=='W2') && this.flag != 'sales'){
-        //   this.paymentwithctc = "Pay Rate To Consultant";
-        // }
-        // else{
-        //   this.paymentwithctc = "Pay Rate To Vendor";
-        // }
-        this.entity = response.data;
-        this.intno = this.entity.interviewno;
-        this.onBoard = this.entity.interviewstatus;
-        this.intId = this.entity.intrid;
-        if (this.onBoard == 'OnBoarded') {
-          this.closureFlag = true;
-        }
-        else {
-          this.closureFlag = false;
-        }
-        this.initializeInterviewForm(response.data);
-      });
+          // const ctc = response.data.submission.ratetype;
+          // if((ctc=='1099' || ctc=='W2') && this.flag != 'sales'){
+          //   this.paymentwithctc = "Pay Rate To Consultant";
+          // }
+          // else{
+          //   this.paymentwithctc = "Pay Rate To Vendor";
+          // }
+          this.entity = response.data;
+          this.intno = this.entity.interviewno;
+          this.onBoard = this.entity.interviewstatus;
+          this.intId = this.entity.intrid;
+          if (this.onBoard == 'OnBoarded') {
+            this.closureFlag = true;
+          }
+          else {
+            this.closureFlag = false;
+          }
+          this.initializeInterviewForm(response.data);
+        });
     } else {
       this.initializeInterviewForm(new InterviewInfo());
     }
   }
 
-  getFlag(type: string){
+  getFlag(type: string) {
     if (type === 'sales') {
       this.flag = 'sales';
-    } else if(type === 'recruiting') {
+    } else if (type === 'recruiting') {
       this.flag = "Recruiting";
     } else {
       this.flag = 'Domrecruiting';
@@ -158,7 +164,7 @@ export class AddInterviewComponent implements OnInit {
       feedback: [interviewData ? interviewData.feedback : '', Validators.required],
       interviewstatus: [interviewData ? interviewData.interviewstatus : '', [Validators.required]],
       // users: localStorage.getItem('userid'),
-      users: [this.data.actionName === "edit-interview" ?  interviewData?.users : localStorage.getItem('userid') ],
+      users: [this.data.actionName === "edit-interview" ? interviewData?.users : localStorage.getItem('userid')],
       interviewno: [this.data.actionName === "edit-interview" ? interviewData.interviewno : ''],
       updatedby: [this.data.actionName === "edit-interview" ? localStorage.getItem('userid') : '0'],
       intrid: [interviewData ? interviewData.intrid : ''],
@@ -179,6 +185,23 @@ export class AddInterviewComponent implements OnInit {
           null,
       })
     });
+
+    if (this.data.actionName === "edit-interview" && interviewData && interviewData.submission) {
+      this.interviewServ.getsubmissionsDropDown(this.flag, this.userid, this.role, interviewData.submission).subscribe(
+        (submission: any) => {
+          if (submission && submission.data.length>0) {
+            this.submissionid = submission.data[0].subid;
+            this.interviewForm.get('submission').setValue(submission.data[0].subdetails);
+          }
+          else{
+            this.submissionid = interviewData.submission;
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching consultant details:', error);
+        }
+      );
+    }
 
     this.interviewForm.get('interviewstatus').valueChanges.subscribe((res: any) => {
       const visaValidity = this.interviewForm.get('closure.visaValidity');
@@ -202,7 +225,7 @@ export class AddInterviewComponent implements OnInit {
         paymentCycle.setValidators(Validators.required);
         // projectendtdate.setValidators(Validators.required);
         vendorApPhoneNumber.setValidators(Validators.required);
-      } else if (res == "OnBoarded" && localStorage.getItem('department') !== "Accounts"){
+      } else if (res == "OnBoarded" && localStorage.getItem('department') !== "Accounts") {
         projectStartDate.setValidators(Validators.required);
         projectDuration.setValidators(Validators.required);
         billRateVendor.setValidators(Validators.required);
@@ -236,10 +259,51 @@ export class AddInterviewComponent implements OnInit {
   getsubdetails(flg: string) {
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');
-    this.interviewServ.getsubmissions(flg, this.userid, this.role).subscribe(
-      (response: any) => {
-        this.submissiondata = response.data;
-      });
+
+    // this.interviewServ.getsubmissions(flg, this.userid, this.role).subscribe(
+    //   (response: any) => {
+    //     this.submissiondata = response.data;
+    //     console.log( this.submissiondata);
+    //   });
+
+    // this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role).subscribe(
+    //   (response: any) => {
+    //     this.submissiondata = response.data;
+    //     console.log( this.submissiondata);
+    //   });
+    this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0).pipe(
+      map((response: any) => response.data),
+      tap(resp => {
+        if (resp && resp.length) {
+         // console.log(resp);
+          this.getSubmissionOptionsForAutoComplete(resp);
+        }
+      })
+    );
+  }
+
+  getSubmissionOptionsForAutoComplete(data: any) {
+    this.submissionOptions = data;
+   // console.log(data);
+    this.searchSubmissionOptions$ = this.interviewForm.controls.submission.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterSubmissionOptions(value, this.submissionOptions))
+    );
+  }
+  submissionid: any;
+  private _filterSubmissionOptions(value: any, options: any[]): any[] {
+    //(value);
+    const filterValue = (value ? value.toString() : '').toLowerCase();
+    const filteredOptions = options.filter(option =>
+      option.subdetails.toLowerCase().includes(filterValue)
+    );
+    // console.log(filteredOptions);
+    if (filteredOptions.length === 1) {
+      this.submissionid = filteredOptions[0].subid;
+      //console.log(this.submissionid);
+    }
+    // this.isConsultantDataAvailable = filteredOptions.length === 0;
+    return filteredOptions;
   }
 
   onSubmit() {
@@ -254,9 +318,10 @@ export class AddInterviewComponent implements OnInit {
       this.displayFormErrors();
       return;
     }
-    else{
+    else {
       this.isFormSubmitted = true
     }
+    this.interviewForm.get('submission').setValue(this.submissionid);
     if (this.interviewForm.get('interviewstatus').value === "OnBoarded") {
       const visaValidityFormControl = this.interviewForm.get('closure.visaValidity');
       const projectStartFormControl = this.interviewForm.get('closure.projectStartDate');
@@ -280,9 +345,9 @@ export class AddInterviewComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const saveReqObj = this.getSaveData();
-    ///console.log(saveReqObj)
+    console.log(saveReqObj)
     this.interviewServ
-      .addORUpdateInterview(saveReqObj,this.data.actionName)
+      .addORUpdateInterview(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (resp: any) => {
@@ -309,7 +374,9 @@ export class AddInterviewComponent implements OnInit {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
+
       
+
   }
 
   /** to display form validation messages */
@@ -323,8 +390,8 @@ export class AddInterviewComponent implements OnInit {
   }
 
   getSaveData() {
-    if(this.data.actionName === 'edit-interview'){
-      return {...this.entity, ...this.interviewForm.value}
+    if (this.data.actionName === 'edit-interview') {
+      return { ...this.entity, ...this.interviewForm.value }
     }
     return this.interviewForm.value;
   }
@@ -333,16 +400,16 @@ export class AddInterviewComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onRadioChange(event: MatRadioChange){
-    this.isRadSelected =  event.value
+  onRadioChange(event: MatRadioChange) {
+    this.isRadSelected = event.value
   }
 
-  onModeRadioChange(event: MatRadioChange){
-    this.isModeRadSelected =  event.value
+  onModeRadioChange(event: MatRadioChange) {
+    this.isModeRadSelected = event.value
   }
 
-  onStatusRadioChange(event: MatRadioChange){
-    this.isStatusRadSelected =  event.value
+  onStatusRadioChange(event: MatRadioChange) {
+    this.isStatusRadSelected = event.value
   }
 
   Closure(val: string) {
@@ -359,15 +426,15 @@ export const TIME_ZONE = [
 
 export const RADIO_OPTIONS = {
   interviewround: [
-    {value: 'First', id: 1 , selected: true},
-    {value: 'Second', id: 2},
-    {value: 'Third', id: 3},
+    { value: 'First', id: 1, selected: true },
+    { value: 'Second', id: 2 },
+    { value: 'Third', id: 3 },
   ],
   interviewmode: [
-    {value: 'F2F', id: 1},
-    {value: 'Skype', id: 2},
-    {value: 'Telephonic', id: 3},
-    {value: 'Webex', id: 4},
+    { value: 'F2F', id: 1 },
+    { value: 'Skype', id: 2 },
+    { value: 'Telephonic', id: 3 },
+    { value: 'Webex', id: 4 },
   ],
   interviewstatus: [
     {value: 'Schedule', id: 1},
@@ -375,6 +442,6 @@ export const RADIO_OPTIONS = {
     {value: 'Hold', id: 3},
     {value: 'Rejected', id: 4},
     {value: 'Selected', id: 5},
-    {value: 'Back Out', id: 6},
+    {value: 'BackOut', id: 6},
   ]
 }

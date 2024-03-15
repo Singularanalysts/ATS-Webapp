@@ -147,7 +147,7 @@ tbody{
 
 .consultant-table-style {
   padding: 0 2px;
-  width: max-content;
+  width: 100%;
   max-height: calc(100% - 4px);
   overflow: auto;
   display: block;
@@ -275,7 +275,7 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 
 .dom-consultant-table-style {
   padding: 0 2px;
-  width: max-content;
+  width: 100%;
   max-height: calc(100% - 4px);
   overflow: auto;
   display: block;
@@ -298,4 +298,9 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   .consultant-container {
     height: 90vh;
   }
+}
+
+.status-button {
+  height: max-content;
+  width: max-content;
 }

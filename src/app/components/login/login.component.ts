@@ -103,7 +103,7 @@ export class LoginComponent implements OnInit {
     };
     this.userManagementServ.login(userObj).subscribe({
      next: (result: any) => {
-      //console.log("result", result)
+      console.log("result", result)
         if (result.status == 'success') {
           const loggedInUserData = result.data;
          // console.log(result.data);
@@ -113,6 +113,12 @@ export class LoginComponent implements OnInit {
             this.showErroNotification(message, 'success');
           });
         }
+
+        if (result.status == 'locked') {
+          const message ="You're Account locked due to InActive for More Than 4 days";
+          this.showErroNotification(message);
+        }
+
       },
       error: err => {
         if (err.status == 401) {

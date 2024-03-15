@@ -61,6 +61,19 @@ ul.breadcrumb li a:hover {
   background-color: white;
 }
 
+.header-container-analysis {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0px 6px 0px 0px;
+  z-index: 99999;
+  top: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
 .overall-container {
   height: 100vh;
   overflow: auto;
@@ -156,9 +169,30 @@ ul.breadcrumb li a:hover {
   border-right: 1px solid lightgray !important;
 }
 
+.mat-column-SNo,
+.mat-column-Date,
+.mat-column-Category,
+.mat-column-VendorCount,
+.mat-column-Vendor,
+.mat-column-CategoryCount {
+  border-right: 1px solid lightgray !important;
+}
+
 .card-1 .card,
 .card-2 .card,
 .card-3 .card {
+  display: flex;
+  flex-direction: row;
+  padding: 0px 5px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sourcing-card {
+  padding-bottom: 10px;
+}
+
+.sourcing-card .card {
   display: flex;
   flex-direction: row;
   padding: 0px 5px;
@@ -223,14 +257,21 @@ mat-typography p {
   --mat-mdc-fab-color: #2eca6a; /* icon color */
 }
 
+.mat-mdc-fab.mat-accent.sourcing-icon, 
+.mat-mdc-mini-fab.mat-accent.sourcing-icon .sourcing-icon {
+  --mdc-fab-container-color: #d6d8e9; /* icon background color */
+  --mdc-fab-icon-color: white;
+  --mat-mdc-fab-color: #3f51b5; /* icon color */
+}
+
 .mat-mdc-card.activity-card-individual {
-  height: 678px;
+  height: 548px;
   padding: 15px;
   overflow-y: auto;
 }
 
 .mat-mdc-card.activity-card {
-  height: 808px;
+  height: 678px;
   padding: 15px;
   overflow-y: auto;
 }
@@ -301,4 +342,41 @@ b {
 .consultant-id{
   cursor: pointer;
   color:#0275d8
+}
+
+.analysis-container {
+  display: flex;
+  height: auto;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.analysis-container .analysis-left-div {
+  width: 49%;
+}
+
+.analysis-container .analysis-right-div {
+  width: 49%;
+}
+
+.count {
+  color: #4154f1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.vendor-actions {
+  display: flex;
+  align-items: center;
+
+  input:focus {
+    border: solid 2px #3f51b5 !important;
+    outline: none;
+  }
+
+  .search {
+    height: 32px;
+    padding: 0px 8px;
+
+  }
 }

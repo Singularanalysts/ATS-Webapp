@@ -37,6 +37,7 @@ import { Recruiter } from 'src/app/usit/models/recruiter';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import { AddVendorComponent } from './add-vendor/add-vendor.component';
 import { VendorCompanyRecInfoComponent } from './vendor-company-rec-info/vendor-company-rec-info.component';
+import { UploadVmsExcelComponent } from '../recruiter-list/upload-vms-excel/upload-vms-excel.component';
 
 @Component({
   selector: 'app-vendor-list',
@@ -242,7 +243,7 @@ export class VendorListComponent implements OnInit {
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    console.log(event);
+    //console.log(event);
     //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
@@ -653,5 +654,22 @@ export class VendorListComponent implements OnInit {
 
   goToUserInfo(id: any) {
     this.router.navigate(['usit/user-info', 'vendor', id])
+  }
+
+  uploadVmsExcelData() {
+    const actionData = {
+      title: 'VMS Data Upload',
+      vendorData: null,
+      userId: this.loginId,
+      actionName: 'upload-vendor-and-recruiter',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '85vw';
+    dialogConfig.height = '80vh';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'upload-recruiter';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(UploadVmsExcelComponent, dialogConfig);
   }
 }

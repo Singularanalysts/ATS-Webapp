@@ -92,11 +92,14 @@ export class AddQualificationComponent {
     const addObj = {
       name: this.qualificationForm.get('name')!.value,
       id : this.qualificationForm.get('id')!.value,
+      addedby: userId,
+
     };
     const updateObj = {
       ...this.data.qualificationData,
       name: this.qualificationForm.get('name')!.value,
       id : this.qualificationForm.get('id')!.value,
+      updatedby: userId,
     };
     const saveObj = this.data.actionName === "update-qualification" ? updateObj : addObj;
 

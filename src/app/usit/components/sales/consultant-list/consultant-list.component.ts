@@ -187,6 +187,16 @@ export class ConsultantListComponent
     ) {
       this.dataTableColumns.splice(15, 0, 'AddedBy');
     }
+    if (
+      this.flag.toLocaleLowerCase() === 'recruiting' ||
+      this.flag.toLocaleLowerCase() === 'domrecruiting'
+    ) {
+      const priorityIndex = this.dataTableColumns.indexOf('Priority');
+      //console.log(priorityIndex);
+      if (priorityIndex !== -1) {
+        this.dataTableColumns.splice(priorityIndex, 1);
+      }
+    }
   }
 
   /**
@@ -210,7 +220,9 @@ export class ConsultantListComponent
         this.userid,
         pageIndex,
         this.pageSize,
-        this.field
+        this.field,
+        this.sortField,
+        this.sortOrder
       )
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -235,43 +247,7 @@ export class ConsultantListComponent
   /**
    * get data by pagination
    */
-  getAllDataByPagination(pageIndex: number) {
-    const dataToBeSentToSnackBar: ISnackBarData = {
-      message: '',
-      duration: 1500,
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-      direction: 'above',
-      panelClass: ['custom-snack-success'],
-    };
 
-    return this.consultantServ
-      .getAllConsultantData(
-        this.flag,
-        this.hasAcces,
-        this.userid,
-        pageIndex,
-        this.pageSize,
-        this.field
-      )
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          this.consultant = response.data.content;
-          this.dataSource.data = response.data.content;
-          // for serial-num {}
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-          this.totalItems = response.data.totalElements;
-        },
-        error: (err: any) => {
-          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          dataToBeSentToSnackBar.message = err.message;
-          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        },
-      });
-  }
   /**
    * on filter
    * @param event
@@ -283,7 +259,9 @@ export class ConsultantListComponent
     const keyword = event.target.value;
     this.field = keyword;
     if (keyword != '') {
-      return this.consultantServ.getAllConsultantData(this.flag, this.hasAcces, this.userid, 1, this.pageSize, keyword).subscribe(
+      return this.consultantServ.getAllConsultantData(this.flag, this.hasAcces, this.userid, 1, this.pageSize, keyword,
+        this.sortField,
+        this.sortOrder).subscribe(
         ((response: any) => {
           this.consultant = response.data.content;
           this.dataSource.data  = response.data.content;
@@ -304,92 +282,26 @@ export class ConsultantListComponent
    * Sort
    * @param event
    */
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
   onSort(event: Sort) {
-    const sortDirection = event.direction;
-    const activeSortHeader = event.active;
-
-    if (sortDirection === '' || !activeSortHeader) {
-      return;
+    //console.log(event);
+    //this.sortField = event.active;
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    ///this.sortOrder = event.direction;
+   this.getAllData();
     }
-
-    const isAsc = sortDirection === 'asc';
-    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
-      switch (activeSortHeader) {
-        case 'SerialNum':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.serialNum || '').localeCompare(b.serialNum || '')
-          );
-        case 'Date':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.createddate || '').localeCompare(b.createddate || '')
-          );
-        case 'Company':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.companyname || '').localeCompare(b.companyname || '')
-          );
-        case 'Email':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.consultantemail || '').localeCompare(b.consultantemail || '')
-          );
-        case 'Id':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.consultantno || '').localeCompare(b.consultantno || '')
-          );
-        case 'Visa':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.visa_status || '').localeCompare(b.visa_status || '')
-          );
-        case 'ContactNumber':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.contactnumber || '').localeCompare(b.contactnumber || '')
-          );
-        case 'position':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.position || '').localeCompare(b.position || '')
-          );
-        case 'Status':
-          return (
-            (isAsc ? 1 : -1) * (a.status || '').localeCompare(b.status || '')
-          );
-        case 'CurrentLocation':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.currentlocation || '').localeCompare(b.currentlocation || '')
-          );
-
-        case 'Experience':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.experience || '').localeCompare(b.experience || '')
-          );
-        case 'Relocation':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.relocation || '').localeCompare(b.relocation || '')
-          );
-        case 'Rate':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.hourlyrate || '').localeCompare(b.hourlyrate || '')
-          );
-        case 'Priority':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.priority || '').localeCompare(b.priority || '')
-          );
-        default:
-          return 0;
-      }
-    });
   }
+
+ 
 
   navTo(to: string, id: any) {
     this.router.navigate([

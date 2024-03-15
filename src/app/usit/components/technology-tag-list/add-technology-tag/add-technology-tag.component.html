@@ -14,14 +14,14 @@
           <mat-label>Technology</mat-label>
           <input title="" matInput formControlName="technologyarea" maxlength="75">
           <!-- errors -->
-          <mat-error class="error-message" *ngIf="controls['technologyarea'].errors && controls['technologyarea'].errors['required']"> Technology is required</mat-error>
+          <mat-error class="error-message" *ngIf="controls['technologyarea'].errors && controls['technologyarea'].errors['required']"> Technology is Required</mat-error>
         </mat-form-field>
 
         <mat-form-field class="description-field">
           <mat-label>Skills</mat-label>
-          <textarea maxlength="250" matInput formControlName="listofkeyword"></textarea>
+          <textarea maxlength="2000" matInput formControlName="listofkeyword"></textarea>
           <!-- errors -->
-          <mat-error class="error-message" *ngIf="controls['listofkeyword'].errors && controls['listofkeyword'].errors['required']">Skills are required</mat-error>
+          <mat-error class="error-message" *ngIf="controls['listofkeyword'].errors && controls['listofkeyword'].errors['required']">Skills are Required</mat-error>
         </mat-form-field>
 
         <mat-form-field class="description-field">

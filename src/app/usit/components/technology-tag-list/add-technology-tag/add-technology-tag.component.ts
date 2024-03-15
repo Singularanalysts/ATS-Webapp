@@ -45,26 +45,31 @@ export class AddTechnologyTagComponent {
   private snackBarServ = inject(SnackBarService);
   protected isFormSubmitted: boolean = false;
   allowAction = false;
-
+  userid!: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddTechnologyTagComponent>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    if(this.data.actionName === "update-technology"){
+
+    this.userid = localStorage.getItem('userid');
+    if (this.data.actionName === "update-technology") {
       this.initializeTechnologyForm(this.data.technologyData);
-    }else{
+    } else {
       this.initializeTechnologyForm(this.data.technologyData);
     }
   }
 
-  private initializeTechnologyForm(data : any) {
+  private initializeTechnologyForm(data: any) {
+   // console.log(this.data.actionName+" ==============KIRAN =========")
     this.technologyForm = this.formBuilder.group({
       technologyarea: [data ? data.technologyarea : '', Validators.required],
       listofkeyword: [data ? data.listofkeyword : '', Validators.required],
       comments: [data ? data.comments : ''],
-      id: [data ? data.id : '']
+      id: [data ? data.id : ''],
+      addedby: [this.data.actionName === "update-technology" ? data?.addedby : localStorage.getItem('userid')],
+      updatedby: [this.data.actionName === "update-technology" ? localStorage.getItem('userid') : '0'],
     });
   }
 
@@ -72,7 +77,7 @@ export class AddTechnologyTagComponent {
     return this.technologyForm.controls;
   }
 
-  onSubmit(){
+  onSubmit() {
     this.isFormSubmitted = true;
     this.allowAction = true;
     const dataToBeSentToSnackBar: ISnackBarData = {
@@ -88,46 +93,50 @@ export class AddTechnologyTagComponent {
       this.displayFormErrors();
       return;
     }
-    else{
+    else {
       this.isFormSubmitted = true
     }
-    const userId = localStorage.getItem('userid');
+    //const userId = localStorage.getItem('userid');
     const addObj = {
-      technologyarea: this.technologyForm.get('technologyarea')!.value,
+      technologyarea: this.technologyForm.get('technologyarea')!.value.trim(),
       listofkeyword: this.technologyForm.get('listofkeyword')!.value,
       comments: this.technologyForm.get('comments')!.value,
       id: this.technologyForm.get('id')!.value,
+      addedby: localStorage.getItem('userid'),
+      
     };
     const updateObj = {
       ...this.data.technologyData,
-      technologyarea: this.technologyForm.get('technologyarea')!.value,
+      technologyarea: this.technologyForm.get('technologyarea')!.value.trim(),
       listofkeyword: this.technologyForm.get('listofkeyword')!.value,
       comments: this.technologyForm.get('comments')!.value,
       id: this.technologyForm.get('id')!.value,
+      updatedby: localStorage.getItem('userid')
+
     };
     const saveObj = this.data.actionName === "update-technology" ? updateObj : addObj;
 
     this.techTagServ.addOrUpdateTechnology(saveObj, this.data.actionName).subscribe(
       {
-      next:(data: any) => {
+        next: (data: any) => {
 
-      if (data.status == 'success') {
-        dataToBeSentToSnackBar.message =  this.data.actionName === 'add-technology' ?
-        'Technology added successfully!' :' Technology updated successfully!';
-        this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        this.dialogRef.close();
-      } else {
-        dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
-        dataToBeSentToSnackBar.message =  'Technology Already Exists!'
-        this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-      }
+          if (data.status == 'success') {
+            dataToBeSentToSnackBar.message = this.data.actionName === 'add-technology' ?
+              'Technology added successfully!' : ' Technology updated successfully!';
+            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+            this.dialogRef.close();
+          } else {
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
+            dataToBeSentToSnackBar.message = 'Technology Already Exists!'
+            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+          }
 
-    }, error: (err : any) =>{
-      dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
-      dataToBeSentToSnackBar.message =  err.message
-      this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-    }
-  });
+        }, error: (err: any) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']
+          dataToBeSentToSnackBar.message = err.message
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        }
+      });
   }
 
   displayFormErrors() {

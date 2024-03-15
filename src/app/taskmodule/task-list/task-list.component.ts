@@ -250,23 +250,23 @@ export class TaskListComponent implements OnInit {
   }
 
 
-  applyFilter(event: any) {
-    const keyword = event.target.value;
-    if (keyword != '') {
-      return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword).subscribe(
-        ((response: any) => {
-          this.entity = response.data.content;
-          this.dataSource.data = response.data.content;
-          // for serial-num {}
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-          this.totalItems = response.data.totalElements;
-        })
-      );
-    }
-    return this.getAll()
-  }
+  // applyFilter(event: any) {
+  //   const keyword = event.target.value;
+  //   if (keyword != '') {
+  //     return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword).subscribe(
+  //       ((response: any) => {
+  //         this.entity = response.data.content;
+  //         this.dataSource.data = response.data.content;
+  //         // for serial-num {}
+  //         this.dataSource.data.map((x: any, i) => {
+  //           x.serialNum = this.generateSerialNumber(i);
+  //         });
+  //         this.totalItems = response.data.totalElements;
+  //       })
+  //     );
+  //   }
+  //   return this.getAll()
+  // }
   onSort(event: any) {
   }
 

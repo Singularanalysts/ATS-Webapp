@@ -96,16 +96,15 @@
       "icon": "work",
       "children": [
         {
-          "text": "Dice Reqs",
+          "text": "Portal Reqs",
           "icon": "group",
-          "routerLink": "/usit/openreqs"
+          "routerLink": "/usit/portalreqs"
         },
         {
           "text": "RSS",
           "icon": "business_center",
           "routerLink": "/usit/rssfeed"
-        }
-        ,
+        },
         {
           "text": "LinkedIn Profiles",
           "icon": "business_center",

@@ -142,7 +142,7 @@ tbody {
 
 .submission-table-style {
   padding: 0 2px;
-  width: max-content;
+  width: 100%;
   max-height: calc(100% - 2px);
   overflow: auto;
   display: block;
@@ -299,7 +299,7 @@ ul.breadcrumb li:last-child {
 
 .dom-submission-table-style {
   padding: 0 2px;
-  width: max-content;
+  width: 100%;
   max-height: calc(100% - 2px);
   overflow: auto;
   display: block;

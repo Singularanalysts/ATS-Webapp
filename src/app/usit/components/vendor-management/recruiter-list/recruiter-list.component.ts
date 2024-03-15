@@ -36,6 +36,7 @@ import {
 import { Recruiter } from 'src/app/usit/models/recruiter';
 import { RecruiterService } from 'src/app/usit/services/recruiter.service';
 import { AddRecruiterComponent } from './add-recruiter/add-recruiter.component';
+import { UploadVmsExcelComponent } from './upload-vms-excel/upload-vms-excel.component';
 
 @Component({
   selector: 'app-recruiter-list',
@@ -220,21 +221,6 @@ export class RecruiterListComponent implements OnInit {
     }
   }
 
-  // uploadRecruiterExcel() {
-  //   const actionData = {
-  //     title: 'Upload Recruiter',
-  //     vendorData: null,
-  //     actionName: 'upload-recruiter',
-  //   };
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.width = '65vw';
-  //   // dialogConfig.height = "100vh";
-  //   dialogConfig.disableClose = false;
-  //   dialogConfig.panelClass = 'upload-recruiter';
-  //   dialogConfig.data = actionData;
-
-  //   this.dialogServ.openDialogWithComponent(UploadRecuiterExcelComponent, dialogConfig);
-  // }
 
   /**
    * add

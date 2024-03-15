@@ -141,7 +141,7 @@ export class EmployeeReportsComponent {
     consul: string,
     company: string
   ) {
-    this.submissionPopup();
+    //this.submissionPopup();
     if (this.vo.groupby == 'employee') {
       this.passName = executive;
     }
@@ -217,12 +217,11 @@ export class EmployeeReportsComponent {
     this.vo.groupby = this.employeeReport.get('groupby')?.value;
     this.vo.flg = this.employeeReport.get('flg')?.value;
     this.vo.status = status;
-    return this.reportservice
-      .consultant_DrillDown_report(this.vo)
-      .subscribe((response: any) => {
-        this.consultant = response.data;
-        // console.log(JSON.stringify(response.data))
-      });
+    // return this.reportservice
+    //   .consultant_DrillDown_report(this.vo)
+    //   .subscribe((response: any) => {
+    //     this.consultant = response.data;
+    //   });
   }
 
   vo = new ReportVo();

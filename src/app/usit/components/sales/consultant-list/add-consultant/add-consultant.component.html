@@ -8,7 +8,7 @@
 </div>
 <mat-card class="center-card">
 
-  <form [formGroup]="consultantForm"  class="consultant-form">
+  <form [formGroup]="consultantForm" class="consultant-form" autocomplete="off" >
     <input type="hidden" formControlName="consultantid">
     <input type="hidden" formControlName="consultantno">
     <input type="hidden" formControlName="dommaxno">
@@ -24,7 +24,7 @@
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstname" maxlength="50" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('firstname').hasError('required')">First
-            Name is required</mat-error>
+            Name is Required</mat-error>
           <mat-error *ngIf="consultantForm.get('firstname').hasError('minlength')">First
             Name must be at least 6
             characters</mat-error>
@@ -36,18 +36,19 @@
         <!-- last Name -->
         <mat-form-field appearance="fill">
           <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastname" maxlength="35"  (input)="camelCase($event)">
+          <input matInput formControlName="lastname" maxlength="35" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('lastname').hasError('required')">Last
-            Name is required</mat-error>
+            Name is Required</mat-error>
         </mat-form-field>
 
         <!-- consulatant Email -->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)">
+          <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)"
+            (input)="convertToLowerCase($event)">
           <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('required')">Email
             is
-            required</mat-error>
+            Required</mat-error>
           <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('email')">Invalid
             email
             address</mat-error>
@@ -56,13 +57,13 @@
         <!-- Contact Number-->
         <mat-form-field appearance="fill">
           <mat-label> Contact Number </mat-label>
-          <ngx-mat-intl-tel-input class="intl-input" maxlength="18" [preferredCountries]="['in','us']" formControlName="contactnumber"
-            (change)="changeFn($event)" (countryChanged)="onContryChange($event)" [enablePlaceholder]="true" [enableSearch]="true" name="contactnumber"
-            id="intlInput" #contactnumber #pNumb>
+          <ngx-mat-intl-tel-input class="intl-input" maxlength="18" [preferredCountries]="['in','us']"
+            formControlName="contactnumber" (change)="changeFn($event)" (countryChanged)="onContryChange($event)"
+            [enablePlaceholder]="true" [enableSearch]="true" name="contactnumber" id="intlInput" #contactnumber #pNumb>
           </ngx-mat-intl-tel-input>
           <mat-error *ngIf="consultantForm.get('contactnumber').hasError('required')">Personal
             Contact
-            Number is required</mat-error>
+            Number is Required</mat-error>
         </mat-form-field>
 
         <!-- linkedinid -->
@@ -74,10 +75,10 @@
         <!-- Project Availability -->
         <mat-form-field appearance="fill">
           <mat-label>Project Availability</mat-label>
-          <input matInput formControlName="projectavailabity" placeholder="Project Availability (In days)"
-            maxlength="3"  (keypress)="onlyNumberKey($event)" >
+          <input matInput formControlName="projectavailabity" placeholder="Project Availability (In days)" maxlength="3"
+            (keypress)="onlyNumberKey($event)">
           <mat-error *ngIf="consultantForm.get('projectavailabity').hasError('required')">Project Availability is
-            required</mat-error>
+            Required</mat-error>
           <mat-error *ngIf="consultantForm.get('projectavailabity').hasError('pattern')">
             Enter numeric data</mat-error>
         </mat-form-field>
@@ -93,9 +94,10 @@
                 {{ option[1] }}
               </mat-option>
             </mat-select>
-            <button matSuffix mat-icon-button  (click)="onAddVisa();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <button matSuffix mat-icon-button
+              (click)="onAddVisa();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
             <mat-error *ngIf="consultantForm.get('visa').hasError('required')">Immigration
-              status is required</mat-error>
+              status is Required</mat-error>
           </mat-form-field>
         </div>
 
@@ -110,7 +112,7 @@
           <mat-error *ngIf="consultantForm.get('availabilityforinterviews')!.hasError('required')">Availability
             for
             the Interviews is
-            required
+            Required
           </mat-error>
         </mat-form-field>
 
@@ -124,7 +126,7 @@
           </mat-select>
           <mat-error *ngIf="consultantForm.get('priority')!.hasError('required')">Priority
             is
-            required
+            Required
           </mat-error>
         </mat-form-field>
 
@@ -137,10 +139,11 @@
                 {{ option[1] }}
               </mat-option>
             </mat-select>
-            <button matSuffix mat-icon-button (click)="onAddCompany();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <button matSuffix mat-icon-button
+              (click)="onAddCompany();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
 
             <mat-error *ngIf="consultantForm.get('company')!.hasError('required')">Company is
-              required
+              Required
             </mat-error>
           </mat-form-field>
         </div>
@@ -150,7 +153,7 @@
           <mat-label>Position</mat-label>
           <input matInput formControlName="position" placeholder="Position" maxlength="30" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('position')!.hasError('required')">Position
-            is required</mat-error>
+            is Required</mat-error>
         </mat-form-field>
 
         <!-- status -->
@@ -163,7 +166,7 @@
           </mat-select>
 
           <mat-error *ngIf="consultantForm.get('status')!.hasError('required')">Status is
-            required
+            Required
           </mat-error>
         </mat-form-field>
 
@@ -178,53 +181,55 @@
         <!-- Total Exp  -->
         <mat-form-field appearance="fill">
           <mat-label>Total Experience</mat-label>
-          <input matInput formControlName="experience" placeholder="Total Experience" maxlength="2" (keypress)="onlyNumberKey($event)" >
+          <input matInput formControlName="experience" placeholder="Total Experience" maxlength="2"
+            (keypress)="onlyNumberKey($event)">
           <mat-error *ngIf="consultantForm.get('experience')!.hasError('required')">Experience
-            is required</mat-error>
+            is Required</mat-error>
           <mat-error *ngIf="consultantForm.get('experience')!.hasError('pattern')">Enter only number</mat-error>
         </mat-form-field>
-         <!-- Location - HeadQuarters -->
-         <mat-form-field appearance="fill">
+        <!-- Location - HeadQuarters -->
+        <mat-form-field appearance="fill">
           <mat-label>Location</mat-label>
           <input matInput formControlName="currentlocation" maxlength="250" ngx-gp-autocomplete [options]='options'
             (onAddressChange)="handleAddressChange($event)">
           <mat-error *ngIf="consultantForm.get('currentlocation')!.hasError('required')">Location
-            Name is required</mat-error>
+            Name is Required</mat-error>
         </mat-form-field>
-          <!-- Technology -->
-          <div class="select-technology-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Select Technology</mat-label>
-              <mat-select name="technology" formControlName="technology" (selectionChange)="techskills($event)">
-                <mat-option *ngFor="let option of techdata" [value]="option[0]">
-                  {{ option[1] }}
-                </mat-option>
-              </mat-select>
-              <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-              <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is required</mat-error>
-            </mat-form-field>
-          </div>
+        <!-- Technology -->
+        <!-- <div class="select-technology-field">
+          <mat-form-field appearance="fill">
+            <mat-label>Select Technology</mat-label>
+            <mat-select name="technology" formControlName="technology" (selectionChange)="techskills($event)">
+              <mat-option *ngFor="let option of techdata" [value]="option[0]">
+                {{ option[1] }}
+              </mat-option>
+            </mat-select>
+            <button matSuffix mat-icon-button
+              (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is Required</mat-error>
+          </mat-form-field>
+        </div> -->
 
-          <!-- <div class="select-technology-field">
+        <div class="select-technology-field">
             <mat-form-field appearance="fill">
               <mat-label>Select Technology</mat-label>
-              <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" maxlength="75">
+              <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" >
               <mat-autocomplete #techAutoCmp="matAutocomplete">
-                <mat-option *ngFor="let option of (searchTechOptions$ | async)" (selectionChange)="techskills($event)" [value]="option[0]">
-                  {{ option[1] }}
+                <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techskills(option)" [value]="option.technologyarea">
+                  {{ option.technologyarea }}
                 </mat-option>
               </mat-autocomplete>
               <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-              <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is required</mat-error>
-            </mat-form-field>
-          </div> -->
-           <!-- Skill Set -->
-           <div class="form-details-textarea">
-            <mat-form-field>
-              <mat-label>Skills</mat-label>
-              <textarea matInput formControlName="skills" maxlength="2000" placeholder="Skill Set"></textarea>
+              <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is Required</mat-error>
             </mat-form-field>
           </div>
+        <!-- Skill Set -->
+        <div class="form-details-textarea">
+          <mat-form-field>
+            <mat-label>Skills</mat-label>
+            <textarea matInput formControlName="skills" maxlength="2000" placeholder="Skill Set"></textarea>
+          </mat-form-field>
+        </div>
 
         <!-- summary -->
         <div class="form-details-textarea">
@@ -237,34 +242,34 @@
       </div>
       <div class="form-column-right">
 
-         <!-- Hourly Rate -->
-         <mat-form-field appearance="fill">
+        <!-- Hourly Rate -->
+        <mat-form-field appearance="fill">
           <mat-label *ngIf="flag=='DomRecruiting'">Monthly Salary</mat-label>
           <mat-label *ngIf="flag!='DomRecruiting'">Hourly Rate</mat-label>
           <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="10">
-          <mat-error *ngIf="consultantForm.get('hourlyrate').hasError('required')">Hourly Rate is required</mat-error>
+          <mat-error *ngIf="consultantForm.get('hourlyrate').hasError('required')">Hourly Rate is Required</mat-error>
         </mat-form-field>
 
-           <!-- Rate Radio group-->
-           <div class="radio-group" style="width: 80%;">
+        <!-- Rate Radio group-->
+        <div class="radio-group" style="width: 80%;">
 
-            <mat-label>Rate Type</mat-label>
-            <mat-radio-group aria-label="Select an option" formControlName="ratetype">
-              <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.rate" [value]="opt.value"
-                (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
-              <mat-error *ngIf="consultantForm.get('ratetype').hasError('required') && isRadSelected">Rate Type is
-                required</mat-error>
-            </mat-radio-group>
-          </div>
+          <mat-label>Rate Type</mat-label>
+          <mat-radio-group aria-label="Select an option" formControlName="ratetype">
+            <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.rate" [value]="opt.value"
+              (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
+            <mat-error *ngIf="consultantForm.get('ratetype').hasError('required') && isRadSelected">Rate Type is
+              Required</mat-error>
+          </mat-radio-group>
+        </div>
         <!-- Relocate Other Radio group-->
         <div class="radio-group" style="width: 80%;">
 
           <mat-label>Relocation Type</mat-label>
           <mat-radio-group aria-label="Select an option" formControlName="relocation">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.relocation" [value]="opt.value"
-            (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
+              (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
             <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required')">Relocation is
-              required
+              Required
             </mat-error>
           </mat-radio-group>
         </div>
@@ -275,7 +280,7 @@
             <textarea matInput formControlName="relocatOther" maxlength="250" placeholder="Enter other details">
             </textarea>
             <mat-error *ngIf="consultantForm.get('relocatOther')!.hasError('required')">Please enter other details
-              required
+              Required
             </mat-error>
           </mat-form-field>
         </div>
@@ -297,9 +302,10 @@
                 {{ option.name }}
               </mat-option>
             </mat-select>
-            <button matSuffix mat-icon-button (click)="onAddQualification();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <button matSuffix mat-icon-button
+              (click)="onAddQualification();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
             <mat-error *ngIf="consultantForm.get('qualification')!.hasError('required')">Qualification is
-              required
+              Required
             </mat-error>
           </mat-form-field>
         </div>
@@ -314,7 +320,7 @@
         <!-- YOP -->
         <mat-form-field appearance="fill">
           <mat-label>Year of Passing</mat-label>
-          <input matInput formControlName="yop" maxlength="4" (keypress)="onlyNumberKey($event)" >
+          <input matInput formControlName="yop" maxlength="4" (keypress)="onlyNumberKey($event)">
         </mat-form-field>
       </div>
     </div>
@@ -411,8 +417,8 @@
         <!-- Contact Number-->
         <mat-form-field appearance="fill">
           <mat-label> Contact Number </mat-label>
-          <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']" formControlName="refcont" [enablePlaceholder]="true"
-            [enableSearch]="true" name="refcont" id="intlInput" #contactnumber #pNumb>
+          <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']" formControlName="refcont"
+            [enablePlaceholder]="true" [enableSearch]="true" name="refcont" id="intlInput" #contactnumber #pNumb>
           </ngx-mat-intl-tel-input>
           <!-- <mat-error *ngIf="consultantForm.get('refcont').hasError('required')">Personal
             Contact
@@ -487,48 +493,51 @@
         </mat-form-field>
       </div>
     </div>
-    <div class="header-container"  *ngIf="data.actionName === 'edit-consultant'">
+    <div class="header-container" *ngIf="data.actionName === 'edit-consultant'">
       <span class="header-text">List Documents</span>
     </div>
-    <div class="list-documents"  *ngIf="data.actionName === 'edit-consultant'">
+    <div class="list-documents" *ngIf="data.actionName === 'edit-consultant'">
       <table>
         <tr>
           <th>Document Name</th>
           <th>Delete</th>
         </tr>
         <tr>
-          <td *ngIf="entity.resume !==null "><a  class="download-file"
+          <td *ngIf="entity.resume !==null "><a class="download-file"
               (click)="downloadfile(entity.consultantid,entity.resume,'resume')">{{entity.resume}}</a>
           </td>
           <td *ngIf="entity.resume !==null ">
-            <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.consultantid,'resume')">
+            <button mat-icon-button type="button" class="action-button-ed"
+              (click)="deletefile(entity.consultantid,'resume')">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
         </tr>
         <tr>
-          <td *ngIf="entity.h1bcopy !==null "><a  class="download-file"
+          <td *ngIf="entity.h1bcopy !==null "><a class="download-file"
               (click)="downloadfile(entity.consultantid,entity.h1bcopy,'h1b')">{{entity.h1bcopy}}</a>
           </td>
           <td *ngIf="entity.h1bcopy !==null ">
-            <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.consultantid,'h1bcopy')">
+            <button mat-icon-button type="button" class="action-button-ed"
+              (click)="deletefile(entity.consultantid,'h1bcopy')">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
         </tr>
 
         <tr>
-          <td *ngIf="entity.dlcopy !==null "><a  class="download-file"
+          <td *ngIf="entity.dlcopy !==null "><a class="download-file"
               (click)="downloadfile(entity.consultantid,entity.dlcopy,'dl')">{{entity.dlcopy}}</a>
           </td>
           <td *ngIf="entity.dlcopy !==null ">
-            <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.consultantid,'dlcopy')">
+            <button mat-icon-button type="button" class="action-button-ed"
+              (click)="deletefile(entity.consultantid,'dlcopy')">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
         </tr>
         <tr *ngFor="let data of filesArr">
-          <td><a  class="download-file"  (click)="filedetails(data)">{{data.filename}}</a></td>
+          <td><a class="download-file" (click)="filedetails(data)">{{data.filename}}</a></td>
           <td width="6%">
             <button mat-icon-button type="button" class="action-button-ed" (click)="deletemultiple(data.docid)">
               <mat-icon>delete</mat-icon>

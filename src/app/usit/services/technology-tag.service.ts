@@ -21,12 +21,12 @@ export class TechnologyTagService {
   }
 
   // get all technologies
-  getAllTechnologies() {
-    return this.apiServ.get("auth/technology/all");
-  }
-
-  getAllTechnologiesByPagination(access: string, userid: number, page: any, size: any, field: any) {
-    return this.apiServ.get("auth/technology/all/" + access + "/" + userid + "/" + page + "/" + size + "/" + field);
+  // getAllTechnologies() {
+  //   return this.apiServ.get("auth/technology/all");
+  // }
+///allTech/{pageNo}/{pageSize}/{field}",
+  getAllTechnologiesByPagination(pageNo: any, pageSize: number, field: any, sortField:string,sortOrder:string) {
+    return this.apiServ.get("auth/technology/allTech/" + pageNo + "/" + pageSize + "/" + field+"/"+sortField+"/"+sortOrder);
   }
 
   // delete technology

@@ -31,6 +31,7 @@ export class LinkedprofilesComponent  implements OnInit {
     'address',
     'category',
     'profile_url',
+    'job_title'
   ];
 
    // paginator

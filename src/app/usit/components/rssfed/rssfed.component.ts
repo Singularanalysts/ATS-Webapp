@@ -94,7 +94,7 @@ export class RssfedComponentimplements implements OnInit {
       (response: any) => {
         this.dataSource.data = response.data;
         this.totalItems = response.data.totalElements;
-        console.log(this.totalItems);
+        //console.log(this.totalItems);
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = i + 1;
