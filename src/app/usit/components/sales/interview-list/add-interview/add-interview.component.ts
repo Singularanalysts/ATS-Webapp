@@ -421,7 +421,7 @@ export class AddInterviewComponent implements OnInit {
 }
 
 export const TIME_ZONE = [
-  'AST', 'EST', 'EDT', 'CST', 'CDT', 'MST', 'MDT', 'PST', 'PDT', 'AKST', 'AKDT', 'HST', 'HAST', 'HADT', 'SST', 'SDT', 'CHST'
+  'AST', 'EST', 'EDT', 'CST', 'CDT', 'MST', 'MDT', 'PST', 'PDT', 'AKST', 'AKDT', 'HST', 'HAST', 'HADT', 'SST', 'SDT', 'CHST','IST'
 ] as const;
 
 export const RADIO_OPTIONS = {

@@ -78,7 +78,7 @@
   .mat-column-candidate_name,
   .mat-column-address,
   .mat-column-category,
-  .mat-column-profile_url
+  .mat-column-experience_summary
   {
     border-right: 1px solid lightgray;
   }
@@ -198,3 +198,13 @@
 .profile {
   cursor: pointer;
 }
+.cell-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.right-align {
+  margin-left: auto;
+}
+
+

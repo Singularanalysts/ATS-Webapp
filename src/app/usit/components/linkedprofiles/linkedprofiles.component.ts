@@ -32,7 +32,7 @@ export class LinkedprofilesComponent  implements OnInit {
     'candidate_name',
     'address',
     'category',
-    'profile_url',
+    'experience_summary',
     'job_title'
   ];
 
