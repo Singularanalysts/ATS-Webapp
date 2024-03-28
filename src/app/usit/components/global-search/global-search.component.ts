@@ -1,19 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MaterialModule } from 'src/app/material.module';
 import { debounceTime } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { utils, writeFile } from 'xlsx';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { InfoSearchComponent } from './info-search/info-search.component';
 import { GlobalSearchService } from '../../services/global-search.service';
+import { OpenReqsAnalysisComponent } from '../dashboard/open-reqs-analysis/open-reqs-analysis.component';
+import { DialogService } from 'src/app/services/dialog.service';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-global-search',
@@ -67,6 +70,10 @@ export class GlobalSearchComponent {
     this.inputValue = value;
   }
   ngOnInit() {
+
+    this.getReqVendorCount();
+    this.getReqCatergoryCount();
+
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.search();
     });
@@ -398,5 +405,75 @@ export class GlobalSearchComponent {
     utils.book_append_sheet(wb, ws, 'data');
     this.excelName = 'Report @' + 'Search Results' + '.xlsx';
     writeFile(wb, this.excelName);
+  }
+
+  dataSource = new MatTableDataSource([]);
+  dataSourceTech = new MatTableDataSource([]);
+  dataSourceVendor = new MatTableDataSource([]);
+
+  dataTableColumnsTechAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Category',
+    'VendorCount',
+  ];
+  dataTableColumnsVendorAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Vendor',
+    'CategoryCount',
+  ];
+  private dialogServ = inject(DialogService);
+  vendorCategoryPopup(vendorOrCategory: any, date: any, type: any) {
+    const actionData = {
+      title: vendorOrCategory,
+      vendorOrCategory: vendorOrCategory,
+      date: date,
+      type: type,
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'vendor-category-count',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '90dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'vendor-category-count';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      OpenReqsAnalysisComponent,
+      dialogConfig
+    );
+  }
+
+  onVendorFilter(event: any){
+    this.dataSourceVendor.filter = event.target.value;
+  }
+
+  onCategoryFilter(event: any){
+    this.dataSourceTech.filter = event.target.value;
+  }
+  private dashboardServ = inject(DashboardService);
+  search1 = 'empty'
+  getReqVendorCount() {
+    this.dashboardServ.getReqCounts(this.search1, 'count', 'vendor', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceTech.data = response.data;
+        this.dataSourceTech.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+  
+  getReqCatergoryCount() {
+    this.dashboardServ.getReqCounts(this.search1, 'count', 'category', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceVendor.data = response.data;
+        this.dataSourceVendor.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
   }
 }

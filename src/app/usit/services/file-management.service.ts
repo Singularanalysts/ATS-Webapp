@@ -20,6 +20,10 @@ export class FileManagementService {
     return this.http.post(this.apiServ.apiUrl + `consultant/uploadMultiple/${id}`, formData, {observe: "response"});
   }
 
+  poFilesUpload(formData:any, id: number) {
+    return this.http.post(this.apiServ.apiUrl + `billpay/po/fileupload/${id}`, formData, {observe: "response"});
+  }
+
   h1bUploadFile(formData:any, id: number) {
     return this.http.post(this.apiServ.apiUrl + `img/H1BApplicants/h1docs/${id}`, formData, {observe: "response"});
   }

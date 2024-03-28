@@ -186,6 +186,16 @@
           "text": "Create PO",
           "icon": "note_add",
           "routerLink": "/usit/purchase-orders"
+        },
+        {
+          "text": "Invoices",
+          "icon": "note_add",
+          "routerLink": "/usit/invoices"
+        },
+        {
+          "text": "Receipts",
+          "icon": "note_add",
+          "routerLink": "/usit/receipts"
         }
       ]
     },

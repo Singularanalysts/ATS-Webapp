@@ -79,6 +79,7 @@ export class AddInterviewComponent implements OnInit {
   selectOptionObj = {
     timeZone: TIME_ZONE,
     radioOptions: RADIO_OPTIONS,
+    netterm: NETTERM,
   };
   entity: any;
   // to clear subscriptions
@@ -154,6 +155,8 @@ export class AddInterviewComponent implements OnInit {
   }
 
   private initializeInterviewForm(interviewData: any) {
+    // alert(interviewData.closure.vendorApPhoneNumber)
+    console.log(interviewData)
     this.interviewForm = this.formBuilder.group({
       submission: [interviewData ? interviewData.submission : '', [Validators.required]],
       flg: [this.data.flag ? this.data.flag.toLocaleLowerCase() : ''],
@@ -178,7 +181,7 @@ export class AddInterviewComponent implements OnInit {
         projectendtdate: [interviewData && interviewData.closure ? interviewData.closure.projectendtdate : ''],
         projectStartDate: [interviewData && interviewData.closure ? interviewData.closure.projectStartDate : ''],
         payRateConsultant: [interviewData && interviewData.closure ? interviewData.closure.payRateConsultant : ''],
-        vendorArPhoneNumber: [interviewData && interviewData.closure ? interviewData.closure.vendorArPhoneNumber : ''],
+      //Comment by Kiran  vendorArPhoneNumber: [interviewData && interviewData.closure ? interviewData.closure.vendorArPhoneNumber : ''],
         paymentCycle: [interviewData && interviewData.closure ? parseInt(interviewData.closure.paymentCycle, 10) : ''],
         vendorApPhoneNumber: this.flag === 'Recruiting' ?
           this.formBuilder.control(interviewData && interviewData.closure ? interviewData.closure.vendorApPhoneNumber : '') :
@@ -209,7 +212,7 @@ export class AddInterviewComponent implements OnInit {
       const projectDuration = this.interviewForm.get('closure.projectDuration');
       const payRateConsultant = this.interviewForm.get('closure.payRateConsultant');
       const billRateVendor = this.interviewForm.get('closure.billRateVendor');
-      const vendorArPhoneNumber = this.interviewForm.get('closure.vendorArPhoneNumber');
+      // comment by Chary const vendorArPhoneNumber = this.interviewForm.get('closure.vendorArPhoneNumber');
       const billingCycle = this.interviewForm.get('closure.billingCycle');
       const paymentCycle = this.interviewForm.get('closure.paymentCycle');
       const projectendtdate = this.interviewForm.get('closure.projectendtdate');
@@ -220,7 +223,7 @@ export class AddInterviewComponent implements OnInit {
         projectDuration.setValidators(Validators.required);
         payRateConsultant.setValidators(Validators.required);
         billRateVendor.setValidators(Validators.required);
-        vendorArPhoneNumber.setValidators(Validators.required);
+       // vendorArPhoneNumber.setValidators(Validators.required);
         billingCycle.setValidators(Validators.required);
         paymentCycle.setValidators(Validators.required);
         // projectendtdate.setValidators(Validators.required);
@@ -236,7 +239,7 @@ export class AddInterviewComponent implements OnInit {
         projectDuration.clearValidators();
         payRateConsultant.clearValidators();
         billRateVendor.clearValidators();
-        vendorArPhoneNumber.clearValidators();
+       // vendorArPhoneNumber.clearValidators();
         billingCycle.clearValidators();
         paymentCycle.clearValidators();
         // projectendtdate.clearValidators();
@@ -247,7 +250,7 @@ export class AddInterviewComponent implements OnInit {
       projectDuration.updateValueAndValidity();
       payRateConsultant.updateValueAndValidity();
       billRateVendor.updateValueAndValidity();
-      vendorArPhoneNumber.updateValueAndValidity();
+      //vendorArPhoneNumber.updateValueAndValidity();
       billingCycle.updateValueAndValidity();
       paymentCycle.updateValueAndValidity();
       // projectendtdate.updateValueAndValidity();
@@ -346,6 +349,8 @@ export class AddInterviewComponent implements OnInit {
     };
     const saveReqObj = this.getSaveData();
     console.log(saveReqObj)
+
+    
     this.interviewServ
       .addORUpdateInterview(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -374,9 +379,7 @@ export class AddInterviewComponent implements OnInit {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
-
       
-
   }
 
   /** to display form validation messages */
@@ -424,6 +427,14 @@ export const TIME_ZONE = [
   'AST', 'EST', 'EDT', 'CST', 'CDT', 'MST', 'MDT', 'PST', 'PDT', 'AKST', 'AKDT', 'HST', 'HAST', 'HADT', 'SST', 'SDT', 'CHST','IST'
 ] as const;
 
+
+export const NETTERM = [
+  'Net 15',
+  'Net 30',
+  'Net 45',
+  'Net 60',
+  'Net 90',
+]
 export const RADIO_OPTIONS = {
   interviewround: [
     { value: 'First', id: 1, selected: true },

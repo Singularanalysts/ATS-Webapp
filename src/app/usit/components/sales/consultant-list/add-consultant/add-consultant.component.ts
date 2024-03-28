@@ -439,8 +439,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   getCompanies() {
-    //getCompanies
-    //  alert()
     this.consultantServ.getCompanies().subscribe((response: any) => {
       this.company = response.data;
     });

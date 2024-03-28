@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 
@@ -6,7 +7,18 @@ import { ApiService } from 'src/app/core/services/api.service';
 })
 export class OpenreqService {
 
-  constructor(private http: ApiService) { }
+  constructor(private http: ApiService, private http2: HttpClient) { }
+
+  // readonly apiUrl = 'http://69.216.19.140:1122/';
+  //API_BASE_URL = "http://69.216.19.140:8080/extract/"
+  readmail(entity: any) {
+    //return this.http.post(this.API_BASE_URL + "mail/extractEmail", entity);
+     return this.http.post("mail/extractEmail", entity);
+  }
+
+  fetch( page: any, size: any,searchQuery:string) {
+    return this.http.get("mail/read/"+page + "/" + size+"/"+searchQuery);
+  }
 
   public openReqsEmpTagging(reqid: number, empid: number) {
     return this.http.get("openreqs/dice/empTagging/" + reqid + "/" + empid);

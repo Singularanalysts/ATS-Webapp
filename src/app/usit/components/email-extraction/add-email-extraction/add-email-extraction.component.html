@@ -18,14 +18,17 @@
                         address</mat-error>
                 </mat-form-field>
 
-
                 <mat-form-field appearance="fill">
                     <mat-label>From Date</mat-label>
-                    <input matInput [matDatepicker]="datepicker" formControlName="fromdate" placeholder="DD-MM-YYYY" />
+                    <input matInput [matDatepicker]="datepicker" formControlName="fromDate" placeholder="DD-MM-YYYY" />
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker></mat-datepicker>
-                    <mat-error *ngIf="emailExtractForm.get('fromdate')!.hasError('required')">
-                        From Date is required</mat-error>
+                    <!-- <mat-error *ngIf="isFormSubmitted && loginFrom.fromDate.errors && loginFrom.fromDate.errors.required">From Date is required</mat-error> -->
+
+                  <!-- <mat-error *ngIf="emailExtractForm.get('fromDate')!.hasError('required')">
+                        From Date is required</mat-error> -->
+                        <mat-error *ngIf="emailExtractForm.get('fromDate')!.hasError('required')">From Date is required
+                          </mat-error>
                 </mat-form-field>
             </div>
 
@@ -36,18 +39,18 @@
                     <input matInput formControlName="password" type="password" />
                     <mat-error *ngIf="emailExtractForm.get('password')!.hasError('required')">Password is
                         required</mat-error>
-                    <mat-error *ngIf="emailExtractForm.get('password')!.hasError('pattern')">
+                    <!-- <mat-error *ngIf="emailExtractForm.get('password')!.hasError('pattern')">
                         password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1
                         num]
-                    </mat-error>
+                    </mat-error> -->
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
                     <mat-label>To Date</mat-label>
-                    <input matInput [matDatepicker]="datepicker1" formControlName="todate" placeholder="DD-MM-YYYY" />
+                    <input matInput [matDatepicker]="datepicker1" formControlName="toDate" placeholder="DD-MM-YYYY" />
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker1"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker1></mat-datepicker>
-                    <mat-error *ngIf="emailExtractForm.get('todate')!.hasError('required')">
+                    <mat-error *ngIf="emailExtractForm.get('toDate')!.hasError('required')">
                         To Date is required</mat-error>
                 </mat-form-field>
             </div>

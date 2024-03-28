@@ -24,6 +24,11 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
     if(this.role=='Super Administrator' || this.role=='HR Manager'){
       this.getSideNavData('assets/side-navbar-Super-Admin.json')
     }
+
+    else if (this.department=='Accounts'){
+      this.getSideNavData('assets/side-navbar-accounts-items.json')
+    }
+    
     else if (this.role=='Administrator'  || this.department=='SoftWare' || this.department=='Software'){
       this.getSideNavData('assets/side-navbar-Admin.json')
     }
@@ -48,6 +53,10 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
     else if (this.department=='Sourcing'){
       this.getSideNavData('assets/side-navbar-sourcing-items.json')
     }
+
+   
+
+
     else{
       this.getSideNavData('assets/side-navbar-Super-Admin.json')
     }

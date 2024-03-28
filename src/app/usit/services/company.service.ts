@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 
@@ -8,8 +9,7 @@ export class CompanyService {
 
   private apiServ = inject(ApiService);
 
-  constructor() { }
-
+ 
   //register company
   addCompany(entity: any) {
     return this.apiServ.post("auth/company/save", entity);

@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   FormBuilder,
@@ -8,10 +8,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
-  ISnackBarData,
-  SnackBarService,
+  ISnackBarData, SnackBarService,
 } from 'src/app/services/snack-bar.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,19 +23,8 @@ import { SearchPipe } from 'src/app/pipes/search.pipe';
 import { MatCardModule } from '@angular/material/card';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
-import {
-
-  Subject,
-  map,
-  startWith,
-  takeUntil,
-  tap,
-} from 'rxjs';
-import { InterviewService } from 'src/app/usit/services/interview.service';
-import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
-import { InterviewInfo } from 'src/app/usit/models/interviewinfo';
-import { Closure } from 'src/app/usit/models/closure';
-
+import { Subject, takeUntil } from 'rxjs';
+import { OpenreqService } from 'src/app/usit/services/openreq.service';
 @Component({
   selector: 'app-add-email-extraction',
   standalone: true,
@@ -56,8 +43,7 @@ import { Closure } from 'src/app/usit/models/closure';
     SearchPipe,
     MatCardModule,
     NgxMatIntlTelInputComponent,
-    NgxGpAutocompleteModule,
-    MatRadioModule
+    NgxGpAutocompleteModule
   ],
   providers: [DatePipe],
   templateUrl: './add-email-extraction.component.html',
@@ -65,108 +51,43 @@ import { Closure } from 'src/app/usit/models/closure';
 })
 
 export class AddEmailExtractionComponent implements OnInit {
+  private service = inject(OpenreqService);
+  emailExtractForm!: FormGroup;
+  protected isFormSubmitted: boolean = false;
 
-  emailExtractForm: any = FormGroup;
-  interviewObj: any;
-  submissiondata: any = [];
-  flag!: any;
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<AddEmailExtractionComponent>);
-  private interviewServ = inject(InterviewService);
   private formBuilder = inject(FormBuilder);
-  private activatedRoute = inject(ActivatedRoute);
-  private snackBarServ = inject(SnackBarService);
   submitted = false;
-  entity: any;
   // to clear subscriptions
-  private destroyed$ = new Subject<void>();
-  isRadSelected: any;
-  isModeRadSelected: any;
-  isStatusRadSelected: any;
-  payrateFromVendor!: any;
-  paymentwithctc!: any;
-  intno !: string;
-  onBoard!: any;
-  closureFlag = false;
   private datePipe = inject(DatePipe);
-  intId: any;
-  protected isFormSubmitted: boolean = false;
-  searchSubmissionOptions$: any;
-  submissionOptions: any;
-
-  get frm() {
-    return this.emailExtractForm.controls;
-  }
+ 
 
   ngOnInit(): void {
-    this.initializeemailExtractForm(null);
-    if (this.data.actionName === "edit-interview") {
-      this.initializeemailExtractForm(new InterviewInfo());
-      this.interviewServ.getEntity(this.data.interviewData.intrid).subscribe(
-        (response: any) => {
-          this.entity = response.data;
-          this.intno = this.entity.interviewno;
-          this.onBoard = this.entity.interviewstatus;
-          this.intId = this.entity.intrid;
-          if (this.onBoard == 'OnBoarded') {
-            this.closureFlag = true;
-          }
-          else {
-            this.closureFlag = false;
-          }
-          this.initializeemailExtractForm(response.data);
-        });
-    } else {
-      this.initializeemailExtractForm(new InterviewInfo());
-    }
-  }
-
-  
-
-  private initializeemailExtractForm(interviewData: any) {
     this.emailExtractForm = this.formBuilder.group({
-      email: [interviewData ? interviewData.submission : '', [Validators.required]],
-      password: [this.data.flag ? this.data.flag.toLocaleLowerCase() : '', [Validators.required]],
-      fromdate: [interviewData ? interviewData.interviewdate : '', Validators.required],
-      todate: [interviewData ? interviewData.timezone : '', Validators.required],
+      email: ['', [Validators.required]],
+      password: ['', [Validators.required]],
+      fromDate: [new Date(), Validators.required],
+      toDate: [new Date(), Validators.required],
     });
-
-    
-
   }
 
- 
-
+  get controls() {
+    return this.emailExtractForm.controls;
+  }
+  private destroyed$ = new Subject<void>();
+  vo = new RequestVo();
+  private snackBarServ = inject(SnackBarService);
+  displayFormErrors() {
+    Object.keys(this.emailExtractForm.controls).forEach((field) => {
+      const control = this.emailExtractForm.get(field);
+      if (control && control.invalid) {
+        control.markAsTouched();
+      }
+    });
+  }
   
- 
   onSubmit() {
-    this.submitted = true;
-    this.isFormSubmitted = false
-    if (this.emailExtractForm.invalid) {
-      this.isFormSubmitted = false;
-      this.isRadSelected = true;
-      this.isModeRadSelected = true;
-      this.isStatusRadSelected = true;
-      this.emailExtractForm.markAllAsTouched();
-      return;
-    }
-    else {
-      this.isFormSubmitted = true
-    }
-    if (this.emailExtractForm.get('interviewstatus').value === "OnBoarded") {
-      const visaValidityFormControl = this.emailExtractForm.get('closure.visaValidity');
-      const projectStartFormControl = this.emailExtractForm.get('closure.projectStartDate');
-      const projectEndFormControl = this.emailExtractForm.get('closure.projectendtdate')
-      // const paymentCycleFormControl = this.emailExtractForm.get('closure.paymentCycle')
-      const formattedVisaValidity = this.datePipe.transform(visaValidityFormControl.value, 'yyyy-MM-dd');
-      const formattedProjectStart = this.datePipe.transform(projectStartFormControl.value, 'yyyy-MM-dd');
-      const formattedProjectEnd = this.datePipe.transform(projectEndFormControl.value, 'yyyy-MM-dd');
-      // const formattedPaymentCycle = paymentCycleFormControl.value.toString();
-      visaValidityFormControl.setValue(formattedVisaValidity);
-      projectStartFormControl.setValue(formattedProjectStart);
-      projectEndFormControl.setValue(formattedProjectEnd);
-      // paymentCycleFormControl.setValue(formattedPaymentCycle);
-    }
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 2500,
@@ -175,69 +96,74 @@ export class AddEmailExtractionComponent implements OnInit {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
-    const saveReqObj = this.getSaveData();
-    console.log(saveReqObj)
-    this.interviewServ
-      .addORUpdateInterview(saveReqObj, this.data.actionName)
+
+    this.submitted = true;
+    this.isFormSubmitted = true
+    if (this.emailExtractForm.invalid) {
+      this.isFormSubmitted = false;
+      dataToBeSentToSnackBar.message ='Please fill all fields and extract between 2 dates for fast performance';
+      dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+      this.displayFormErrors();
+      return;
+    }
+    else {
+      this.isFormSubmitted = true
+    }
+  
+
+    const joiningDateFormControl = this.emailExtractForm.get('fromDate');
+    const relievingDateFormControl = this.emailExtractForm.get('toDate');
+    if (joiningDateFormControl?.value) {
+      const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
+      const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl?.value, 'yyyy-MM-dd');
+      // Update the form controls with the formatted dates
+      joiningDateFormControl.setValue(formattedJoiningDate);
+      relievingDateFormControl?.setValue(formattedRelievingDate);
+    }
+
+    this.vo.fromDate = joiningDateFormControl?.value;
+    this.vo.toDate = relievingDateFormControl?.value;
+
+    this.vo.email = this.emailExtractForm.get('email')?.value;
+    this.vo.password = this.emailExtractForm.get('password')?.value;
+
+    // console.log(this.emailExtractForm.value + " = " + this.vo)
+
+    this.service
+      .readmail(this.vo)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (resp: any) => {
-          if (resp.status == 'Success') {
-            dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-interview'
-                ? 'Interview added successfully'
-                : 'Interview updated successfully';
+          if (resp.status == 'success') {
+            dataToBeSentToSnackBar.message ='Email Extraction Completed';
             this.dialogRef.close();
-          } else {
+          } 
+          else {
             this.isFormSubmitted = false;
-            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Interview already Exists';
+            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Extraction Falied';
             dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
         error: (err: any) => {
           this.isFormSubmitted = false;
-          dataToBeSentToSnackBar.message =
-            this.data.actionName === 'add-interview'
-              ? 'Interview addition is failed'
-              : 'Interview updation is failed';
+          dataToBeSentToSnackBar.message ='Extraction Falied';
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
-
-      
-
-  }
-
-
-  getSaveData() {
-    if (this.data.actionName === 'edit-interview') {
-      return { ...this.entity, ...this.emailExtractForm.value }
-    }
-    return this.emailExtractForm.value;
   }
 
   onCancel() {
     this.dialogRef.close();
   }
+}
 
-  onRadioChange(event: MatRadioChange) {
-    this.isRadSelected = event.value
-  }
 
-  onModeRadioChange(event: MatRadioChange) {
-    this.isModeRadSelected = event.value
-  }
-
-  onStatusRadioChange(event: MatRadioChange) {
-    this.isStatusRadSelected = event.value
-  }
-
-  Closure(val: string) {
-    if (val == 'true')
-      this.closureFlag = true;
-    else
-      this.closureFlag = false;
-  }
+export class RequestVo {
+  fromDate: any;
+  toDate: any;
+  email: any;
+  password: any;
 }

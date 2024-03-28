@@ -1,5 +1,5 @@
 <ul class="breadcrumb">
-    <li><a routerLink = "/usit/dashboard">Home</a></li>
+    <li><a routerLink="/usit/dashboard">Home</a></li>
     <li class="last">Search</li>
 </ul>
 <mat-card>
@@ -26,7 +26,8 @@
             <button mat-raised-button class="search-button" (click)="searchBotton()">Search</button>
         </div>
         <div>
-            <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button" (click)="popUpImport()">Excel</button>
+            <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button"
+                (click)="popUpImport()">Excel</button>
         </div>
         <!-- style="    margin-top: 1.5rem; cursor: pointer;" -->
         <div>
@@ -34,14 +35,9 @@
         </div>
     </mat-card-content>
 </mat-card>
-
-
-
-<mat-card *ngIf="tableactive" mt-3 style="z-index: 1; overflow-y: auto;
-height: 650px">
+<mat-card *ngIf="tableactive" mt-3 style="z-index: 1; overflow-y: auto;height: 650px">
     <mat-card-content>
         <div class="row justify-content-center center" style="z-index: 1;">
-
             <div *ngIf="tableactive" class=" col-md-12">
                 <table class="table table-sm  table-light table-bordered table-responsive">
                     <thead class="thead-light sticky">
@@ -58,7 +54,6 @@ height: 650px">
                             <td scope="row">{{ i + 1 }}</td>
                             <td class="user-info narvee clickable"> <a
                                     (click)="navigateToJobSource(vendor.job_source)">{{ vendor.vendor }} </a> </td>
-
                             <td class="narvee">{{ vendor.job_title }}</td>
                             <td class="narvee">{{ vendor.job_location}}</td>
                             <!-- <td class="narvee"><a (click)="openEmail(vendor.email)" class="email-link">{{ vendor.email }}</a></td> -->
@@ -68,13 +63,135 @@ height: 650px">
                 <div class="pagination justify-content-end">
                     <!-- Add the following to your HTML template -->
                     <div class="pagination justify-content-end">
-                      
-             
                     </div>
-
                 </div>
             </div>
         </div>
 
+
+
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="tableactive === false">
+    <mat-card-content>
+        <div class="analysis-container">
+            <div class="analysis-left-div">
+                <div class="table-container table-wrapper">
+                    <div class="header-container-analysis">
+                        <span class="header-text">Category Analysis</span>
+                        <div class="vendor-actions">
+                            <div class="search-vendor">
+                                <input matInput type="text" class="search" placeholder="search category"
+                                    (keyup)="onCategoryFilter($event)">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <section class="table-style mat-elevation-z8" style="max-height: 600px; overflow-y: auto;">
+                        <table mat-table [dataSource]="dataSourceTech" class="responsive-table">
+
+                            <ng-container matColumnDef="SNo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by SNo"> S.No
+                                </th>
+                                <td mat-cell *matCellDef="let element">{{ element.serialNum }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Date">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Date">
+                                    Posted On
+                                </th>
+                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Category">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Category">
+                                    Category
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.job_title}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="VendorCount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by VendorCount"> Vendor
+                                    Count
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span class="count"
+                                        (click)="vendorCategoryPopup(element.category_skill,element.posted_on, 'vendor')">
+                                        {{element.vendorcount}}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="dataTableColumnsTechAnalysis; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: dataTableColumnsTechAnalysis;"></tr>
+                        </table>
+                    </section>
+                </div>
+            </div>
+            <div class="analysis-right-div">
+                <div class="table-container table-wrapper">
+                    <div class="header-container-analysis">
+                        <span class="header-text">Vendor Analysis</span>
+
+                        <div class="vendor-actions">
+                            <div class="search-vendor">
+                                <input matInput type="text" class="search" placeholder="search vendor"
+                                    (keyup)="onVendorFilter($event)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <section class="table-style mat-elevation-z8" style="max-height: 600px; overflow-y: auto;">
+                        <table mat-table [dataSource]="dataSourceVendor" class="responsive-table">
+
+                            <ng-container matColumnDef="SNo">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by SNo"> S.No
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.serialNum }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Date">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Date">
+                                    Posted On
+                                </th>
+                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Vendor">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by Vendor">
+                                    Vendor
+                                </th>
+                                <td mat-cell *matCellDef="let element"> {{element.vendor}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="CategoryCount">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                    sortActionDescription="Sort by CategoryCount">
+                                    Category Count
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span class="count"
+                                        (click)="vendorCategoryPopup(element.vendor, element.posted_on, 'category')">
+                                        {{element.category_count}}
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="dataTableColumnsVendorAnalysis; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: dataTableColumnsVendorAnalysis;"></tr>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
     </mat-card-content>
 </mat-card>

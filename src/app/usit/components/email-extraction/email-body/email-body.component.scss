@@ -99,3 +99,11 @@
   .static-label {
     font-weight: bold;
   }
+
+  .scrollable-container {
+    max-height: 600px; /* Adjust height as needed */
+    overflow-x: auto; /* Enable vertical scrolling */
+  }
+ 
+
+  

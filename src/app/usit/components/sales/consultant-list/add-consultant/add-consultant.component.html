@@ -8,7 +8,7 @@
 </div>
 <mat-card class="center-card">
 
-  <form [formGroup]="consultantForm" class="consultant-form" autocomplete="off" >
+  <form [formGroup]="consultantForm" class="consultant-form" autocomplete="off">
     <input type="hidden" formControlName="consultantid">
     <input type="hidden" formControlName="consultantno">
     <input type="hidden" formControlName="dommaxno">
@@ -141,7 +141,6 @@
             </mat-select>
             <button matSuffix mat-icon-button
               (click)="onAddCompany();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-
             <mat-error *ngIf="consultantForm.get('company')!.hasError('required')">Company is
               Required
             </mat-error>
@@ -164,7 +163,6 @@
               {{ option }}
             </mat-option>
           </mat-select>
-
           <mat-error *ngIf="consultantForm.get('status')!.hasError('required')">Status is
             Required
           </mat-error>
@@ -211,18 +209,20 @@
         </div> -->
 
         <div class="select-technology-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Select Technology</mat-label>
-              <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" >
-              <mat-autocomplete #techAutoCmp="matAutocomplete">
-                <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techskills(option)" [value]="option.technologyarea">
-                  {{ option.technologyarea }}
-                </mat-option>
-              </mat-autocomplete>
-              <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-              <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is Required</mat-error>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="fill">
+            <mat-label>Select Technology</mat-label>
+            <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp">
+            <mat-autocomplete #techAutoCmp="matAutocomplete">
+              <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techskills(option)"
+                [value]="option.technologyarea">
+                {{ option.technologyarea }}
+              </mat-option>
+            </mat-autocomplete>
+            <button matSuffix mat-icon-button
+              (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is Required</mat-error>
+          </mat-form-field>
+        </div>
         <!-- Skill Set -->
         <div class="form-details-textarea">
           <mat-form-field>

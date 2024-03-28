@@ -184,6 +184,11 @@
           "text": "LinkedIn Profiles",
           "icon": "business_center",
           "routerLink": "/usit/linkedinprofiles"
+        },
+        {
+          "text": "Email Extraction",
+          "icon": "business_center",
+          "routerLink": "/usit/email-extraction-list"
         }
       ]
     },
@@ -261,6 +266,16 @@
           "text": "Create PO",
           "icon": "note_add",
           "routerLink": "/usit/purchase-orders"
+        },
+        {
+          "text": "InVoices",
+          "icon": "note_add",
+          "routerLink": "/usit/invoices"
+        },
+        {
+          "text": "Receipts",
+          "icon": "note_add",
+          "routerLink": "/usit/receipts"
         }
       ]
     },

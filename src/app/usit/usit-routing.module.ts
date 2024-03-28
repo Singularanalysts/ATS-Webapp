@@ -37,6 +37,9 @@ import { TechSupportListComponent } from './components/tech-support-list/tech-su
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { OpenRequirementsReportsComponent } from './components/reports/open-requirements-reports/open-requirements-reports.component';
 import { MassMailingListComponent } from './components/vendor-management/mass-mailing-list/mass-mailing-list.component';
+import { EmailExtractionComponent } from './components/email-extraction/email-extraction.component';
+import { InvoiceListComponent } from './components/accounts&billing/invoice-list/invoice-list.component';
+import { ReceiptListComponent } from './components/accounts&billing/receipt-list/receipt-list.component';
 
 
 const routes: Routes = [
@@ -237,7 +240,19 @@ const routes: Routes = [
   },
   { 
     path: 'mass-mailing-list', component: MassMailingListComponent 
+  },
+
+  { 
+    path: 'email-extraction-list', component: EmailExtractionComponent 
+  },
+  
+  {
+    path: 'invoices', component: InvoiceListComponent,
+  },
+  {
+    path: 'receipts', component: ReceiptListComponent,
   }
+
 
 
 ];

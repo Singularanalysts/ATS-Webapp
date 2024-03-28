@@ -148,7 +148,7 @@ userid!:any;
 
     switch (companyStatus) {
       case '1':
-        backgroundColor = 'rgba(40, 160, 76, 0.945)';
+        backgroundColor = '#b9f5d2';
         break;
       default:
         backgroundColor = '';

@@ -6,10 +6,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { OpenreqService } from '../../services/openreq.service';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { CompanyService } from '../../services/company.service';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { EmailBodyComponent } from './email-body/email-body.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddEmailExtractionComponent } from './add-email-extraction/add-email-extraction.component';
-import { EmailBodyComponent } from './email-body/email-body.component';
+
 
 @Component({
   selector: 'app-email-extraction',
@@ -34,78 +38,110 @@ export class EmailExtractionComponent implements OnInit {
     'Date',
     'Body',
   ];
+  // pagination code  
+  private service = inject(OpenreqService);
+  // paginator
+  length = 50;
+  pageIndex = 0;
+  pageSize = 50; // items per page
+  currentPageIndex = 0;
+  pageSizeOptions = [50, 75, 100];
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
-  AssignedPageNum !: any;
-  totalItems: any;
-  field = "empty";
-  currentPageIndex = 0;
-  pageEvent!: PageEvent;
-  pageSize = 50;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  pageSizeOptions = [50, 75, 100];
-
+  totalItems: number = 0;
+  field = 'empty';
   private router = inject(Router);
-  private dialogServ = inject(DialogService);
-  // private service = inject(OpenreqService);
+  userid!: any;
 
-userid!:any;
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 1500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
-    // this.getAllData();
+    this.readAll();
   }
-  // empTag(id:number){
-  //   this.service.openReqsEmpTagging(id, this.userid).subscribe(
-  //     (response: any) => {
+  dataTobeSentToSnackBarService: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+  private dialogServ = inject(DialogService);
+  readAll(pagIdx = 1) {
 
-  //     })
-  // }
-  // getAllData(pagIdx = 1) {
-  //   this.service.getopenReqWithPaginationAndSource(pagIdx, this.itemsPerPage, this.field, this.source).subscribe(
-  //     (response: any) => {
-  //       this.dataSource.data = response.data.content;
-  //       this.isCompanyExist = response.data.content[0].isexist;
-  //       this.totalItems = response.data.totalElements;
-  //       // for serial-num {}
-  //       this.dataSource.data.map((x: any, i) => {
-  //         x.serialNum = this.generateSerialNumber(i);
-  //       });
-  //     }
-  //   )
-  // }
+    this.service.fetch(pagIdx, this.itemsPerPage, this.field).subscribe(
+      (response: any) => {
+        this.dataSource.data = response.data.content;
+        //console.log(response.data.content)
+        this.totalItems = response.data.totalElements;
+        // for serial-num {
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
+        });
+      }
+    )
+  }
 
-  // generateSerialNumber(index: number): number {
-  //   const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
-  //   const serialNumber = (pagIdx - 1) * 50 + index + 1;
-  //   return serialNumber;
-  // }
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    return serialNumber;
+  }
 
-  // applyFilter(event : any) {
-  //   const keyword = event.target.value;
-  //   if (keyword != '') {
-  //     return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
-  //       ((response: any) => {
-  //         this.dataSource.data  = response.data.content;
-  //          // for serial-num {}
-  //          this.dataSource.data.map((x: any, i) => {
-  //           x.serialNum = this.generateSerialNumber(i);
-  //         });
-  //         this.totalItems = response.data.totalElements;
+  onFilter(event: any){
+    this.dataSource.filter = event.target.value;
+  }
 
-  //       })
-  //     );
-  //   }
-  //   if (keyword == '') {
-  //     this.field = 'empty';
-  //   }
-  //   return  this.getAllData(this.currentPageIndex + 1);
-  // }
+  onSort(event: any) {
 
+  }
+
+  applyFilter(event : any) {
+    const keyword = event.target.value;
+    this.field = keyword;
+    if (keyword != '') {
+      return this.service.fetch(1, this.itemsPerPage, keyword).subscribe(
+        ((response: any) => {
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+
+        })
+      );
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return  this.readAll(this.currentPageIndex + 1);
+  }
+
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      this.currentPageIndex = event.pageIndex;
+      this.readAll(event.pageIndex + 1)
+    }
+    return;
+  }
   addEmail() {
     const actionData = {
-      title: 'Add Email',
+      title: 'Extract Email',
       emailData: null,
       actionName: 'add-email',
     };
@@ -114,22 +150,18 @@ userid!:any;
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'add-email';
     dialogConfig.data = actionData;
-
-
     const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailExtractionComponent, dialogConfig);
-
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-        //  this.getAll(this.currentPageIndex + 1);
+      if (dialogRef.componentInstance.submitted) {
+          this.readAll(this.currentPageIndex + 1);
       }
     })
   }
 
-  goToReqInfo(element: any){
+  goToReqInfo(element: any) {
     const actionData = {
-      title: `${element.reqnumber}`,
-      id: element.requirementid,
-      actionName: 'req-info',
+      title: "Mail Body",
+      data : element
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '62dvw';
@@ -137,39 +169,10 @@ userid!:any;
     dialogConfig.panelClass = 'req-info';
     dialogConfig.data = actionData;
 
-    this.dialogServ.openDialogWithComponent(EmailBodyComponent,dialogConfig);
+    this.dialogServ.openDialogWithComponent(EmailBodyComponent, dialogConfig);
   }
-
-  onSort(event: any) {
-
-  }
-
-  handlePageEvent(event: PageEvent) {
-    if (event) {
-      this.pageEvent = event;
-      this.currentPageIndex = event.pageIndex;
-      // this.getAllData(event.pageIndex + 1)
-    }
-    return;
-  }
-
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
 
-  getRowStyles(row: any): any {
-    const companyStatus = row.isexist;
-    let backgroundColor = '';
-
-    switch (companyStatus) {
-      case '1':
-        backgroundColor = 'rgba(40, 160, 76, 0.945)';
-        break;
-      default:
-        backgroundColor = '';
-        break;
-    }
-    
-    return { 'background-color': backgroundColor };
-  }
 }

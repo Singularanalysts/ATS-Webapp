@@ -1,14 +1,12 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit,  inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
-import { MatSort } from '@angular/material/sort';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
@@ -96,6 +94,7 @@ dataToBeSentToSnackBar: ISnackBarData = {
     this.service.linkedInPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
+        console.log(response.data.content)
         this.totalItems = response.data.totalElements;
         // for serial-num {
         this.dataSource.data.map((x: any, i) => {

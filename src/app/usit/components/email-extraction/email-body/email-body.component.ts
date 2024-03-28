@@ -20,25 +20,15 @@ import { MatButtonModule } from '@angular/material/button';
 })
 
 export class EmailBodyComponent implements OnInit {
-  
-  dataSource: any;
-  private requirementServ = inject(RequirementService);
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<EmailBodyComponent>);
-
+  body!:any;
   ngOnInit(): void {
     this.getReqInfo();
   }
 
   getReqInfo() {
-    this.requirementServ.getEntity(this.data.id).subscribe(
-      (resp: any) => {
-        if(resp.status === 'success'){
-          if(resp.data){
-            this.dataSource = resp.data;
-          }
-        }
-      }
-    )
+
+   this.body = this.data.data.body
   }
 }

@@ -110,6 +110,12 @@
           "icon": "business_center",
           "routerLink": "/usit/linkedinprofiles"
         }
+        ,
+        {
+          "text": "Email Extraction",
+          "icon": "business_center",
+          "routerLink": "/usit/email-extraction-list"
+        }
       ]
     }
     ,
