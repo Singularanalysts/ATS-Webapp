@@ -443,7 +443,7 @@ export class AddPurchaseOrderComponent {
       // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
-
+    if (this.poUpload != null || this.msaupload != null) {
     //upload
     this.fileService
       .poFilesUpload(formData, id)
@@ -457,6 +457,7 @@ export class AddPurchaseOrderComponent {
           );
         }
       });
+    }
   }
 
   onCancel() {

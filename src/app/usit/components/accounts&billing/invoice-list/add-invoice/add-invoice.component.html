@@ -19,16 +19,17 @@
                     <mat-error *ngIf="invoiceForm.get('potype')!.hasError('required')"> PO Type is
                         required</mat-error>
                 </mat-form-field>
+
                 <mat-form-field appearance="fill">
-                    <mat-label>Select Consultant</mat-label>
-                    <mat-select formControlName="consultant">
-                        <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
+                    <mat-label>Select Vendor</mat-label>
+                    <mat-select formControlName="vendor" (selectionChange)="onVendorSelect($event)">
+                        <mat-option *ngFor="let obj of poData" [value]="obj[0]">
                             {{ obj[1] }}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('consultant')!.hasError('required')"> Consultant is
-                        required</mat-error>
+                    <mat-error *ngIf="invoiceForm.get('vendor')!.hasError('required')"> Vendor is required</mat-error>
                 </mat-form-field>
+                
                 <mat-form-field>
                     <mat-label>Expenses</mat-label>
                     <mat-select formControlName="jobdescription">
@@ -48,6 +49,17 @@
 
             <div class="form-column-right">
                 <mat-form-field>
+                    <mat-label>Select PO</mat-label>
+                    <mat-select formControlName="company" (selectionChange)="onPoSelect($event)">
+                        <mat-option *ngFor="let option of poData" [value]="option[0]">
+                            {{ option[1] }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="invoiceForm.get('company')!.hasError('required')"> Company is
+                        required</mat-error>
+                </mat-form-field>
+                
+                <!-- <mat-form-field>
                     <mat-label>Select Company</mat-label>
                     <mat-select formControlName="company" (selectionChange)="onCompanySelect($event)">
                         <mat-option *ngFor="let option of company" [value]="option[0]">
@@ -56,7 +68,9 @@
                     </mat-select>
                     <mat-error *ngIf="invoiceForm.get('company')!.hasError('required')"> Company is
                         required</mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
+
+
                 <mat-form-field appearance="fill">
                     <mat-label>Select Net Term</mat-label>
                     <mat-select formControlName="netterm">
@@ -82,9 +96,13 @@
             </div>
             <div class="form-column-left11 ">
                 <mat-form-field appearance="fill">
-                    <mat-label>Invoice Number</mat-label>
-                    <input matInput formControlName="invoicenumber" maxlength="50" readonly>
-                    <mat-error *ngIf="invoiceForm.get('invoicenumber')!.hasError('required')"> Invoice Value is
+                    <mat-label>Select Consultant1111</mat-label>
+                    <mat-select formControlName="consultant">
+                        <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
+                            {{ obj[1] }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="invoiceForm.get('consultant')!.hasError('required')"> Consultant is
                         required</mat-error>
                 </mat-form-field>
 
@@ -112,13 +130,10 @@
 
             <div class="form-column-right11">
                 <mat-form-field appearance="fill">
-                    <mat-label>Select Vendor</mat-label>
-                    <mat-select formControlName="vendor" (selectionChange)="onVendorSelect($event)">
-                        <mat-option *ngFor="let obj of vendordata" [value]="obj[0]">
-                            {{ obj[1] }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('vendor')!.hasError('required')"> Vendor is required</mat-error>
+                    <mat-label>Invoice Number</mat-label>
+                    <input matInput formControlName="invoicenumber" maxlength="50" readonly>
+                    <mat-error *ngIf="invoiceForm.get('invoicenumber')!.hasError('required')"> Invoice Value is
+                        required</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>

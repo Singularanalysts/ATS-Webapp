@@ -126,7 +126,7 @@ export class AddInvoiceComponent implements OnInit {
       }
     )
   }
-
+poData:any[]=[];
   flg !: any;
   onPoTypeSelect(event: MatSelectChange) {
     if (event.value == "OutWard") {
@@ -138,10 +138,20 @@ export class AddInvoiceComponent implements OnInit {
       this.flg = "InWard"
       //this.recruitingFlag = false;
     }
+
+    this.purchaseOrderServ.getPoDropdown(this.flg).subscribe(
+      (response: any) => {
+        this.poData = response.data;
+        console.log(response.data)
+      }
+    )
     //this.resetFormFields();
     //this.getVendorcompanies();
   }
 
+  onPoSelect(event: MatSelectChange){
+
+  }
   private initializeInvoiceForm(invoiceData: any) {
     this.invoiceForm = this.formBuilder.group({
       company: [invoiceData ? invoiceData.company : '', [Validators.required]],

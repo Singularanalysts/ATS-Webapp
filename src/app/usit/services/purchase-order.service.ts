@@ -29,7 +29,11 @@ export class PurchaseOrderService {
   }
 
   public getCompanies() {
-    return this.apiServ.get("billpay/po/company/allcompanies");
+   return this.apiServ.get("billpay/po/company/allcompanies");
+  }
+
+  public getPoDropdown(potype: any) {
+    return this.apiServ.get("billpay/po/poDropdown/"+ potype);
   }
 
   public savePO(entity:any) {
