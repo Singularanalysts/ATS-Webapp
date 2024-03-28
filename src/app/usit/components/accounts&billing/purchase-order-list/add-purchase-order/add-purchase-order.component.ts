@@ -1,19 +1,13 @@
-import { Component, Inject, OnDestroy, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Inject, inject, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  ISnackBarData,
-  SnackBarService,
-} from 'src/app/services/snack-bar.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -23,30 +17,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { SearchPipe } from 'src/app/pipes/search.pipe';
-import { Vms } from 'src/app/usit/models/vms';
 import { MatCardModule } from '@angular/material/card';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
-import { Loader } from '@googlemaps/js-api-loader';
-import {
-  Observable,
-  debounceTime,
-  distinctUntilChanged,
-  tap,
-  switchMap,
-  of,
-  Subject,
-  takeUntil,
-  startWith,
-  map,
-} from 'rxjs';
-import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import { SubmissionService } from 'src/app/usit/services/submission.service';
-import { SubmissionInfo } from 'src/app/usit/models/submissioninfo';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
-
-
+import { Subject, takeUntil } from 'rxjs';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { FileManagementService } from 'src/app/usit/services/file-management.service';
 @Component({
   selector: 'app-add-purchase-order',
   standalone: true,
@@ -69,6 +48,7 @@ import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.servi
     MatRadioModule,
     MatCheckboxModule
   ],
+  providers: [DatePipe],
   templateUrl: './add-purchase-order.component.html',
   styleUrls: ['./add-purchase-order.component.scss']
 })
@@ -84,25 +64,65 @@ export class AddPurchaseOrderComponent {
   vendordata: any = [];
   consultantdata: any = [];
   consultantInfo: any;
+  company: any = [];
 
-  constructor(
+  private destroyed$ = new Subject<void>();
+  entity: any;
+  protected isFormSubmitted: boolean = false;
+  private snackBarServ = inject(SnackBarService);
+  private fileService = inject(FileManagementService);
+  constructor(private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddPurchaseOrderComponent>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.initializePurchaseOrderForm(null);
+    this.getCompanies();
+   // this.initializePurchaseOrderForm(null);
+
+    if (this.data.actionName === "edit-purchase-order") {
+      // console.log(this.data.purchaseOrderData)
+      this.initializePurchaseOrderForm(this.data.purchaseOrderData);
+      this.companySelected = this.data.purchaseOrderData.company
+      if (this.data.purchaseOrderData.potype == "InWard") {
+        this.poTypeSelected = "Sales"
+      } else {
+        this.poTypeSelected = "Recruiting"
+      }
+      this.purchaseOrderServ.getVendors(this.companySelected, this.poTypeSelected).subscribe(
+        (response: any) => {
+          // console.log(response.data)
+          this.vendordata = response.data
+        }
+      )
+
+      this.purchaseOrderServ.getSelectedOfVendor(this.data.purchaseOrderData.vendor).subscribe(
+        (response: any) => {
+          this.consultantdata = response.data
+        }
+      )
+
+    } else {
+      this.initializePurchaseOrderForm(null);
+    }
+  }
+
+  getCompanies() {
+    this.purchaseOrderServ.getCompanies().subscribe((response: any) => {
+      this.company = response.data;
+    });
   }
 
   private initializePurchaseOrderForm(purchaseOrderData: any) {
     this.purchaseOrderForm = this.formBuilder.group({
+      poid: [purchaseOrderData ? purchaseOrderData.poid : ''],
       vendor: [purchaseOrderData ? purchaseOrderData.vendor : '', [Validators.required]],
       company: [purchaseOrderData ? purchaseOrderData.company : '', [Validators.required]],
       potype: [purchaseOrderData ? purchaseOrderData.potype : '', [Validators.required]],
       consultant: [purchaseOrderData ? purchaseOrderData.consultant : '', [Validators.required]],
       endclient: [purchaseOrderData ? purchaseOrderData.endclient : '', [Validators.required]],
       implpartner: [purchaseOrderData ? purchaseOrderData.implpartner : ''],
-      hourlyrate: [purchaseOrderData ? purchaseOrderData.hourlyrate : '', [Validators.required]],
+
       projstartdate: [purchaseOrderData ? purchaseOrderData.projstartdate : '', [Validators.required]],
       projenddate: [purchaseOrderData ? purchaseOrderData.projenddate : ''],
       duration: [purchaseOrderData ? purchaseOrderData.duration : '', [Validators.required]],
@@ -111,26 +131,79 @@ export class AddPurchaseOrderComponent {
       recname: [purchaseOrderData ? purchaseOrderData.recname : ''],
       recemail: [purchaseOrderData ? purchaseOrderData.recemail : ''],
       recnumber: [purchaseOrderData ? purchaseOrderData.recnumber : ''],
-      acrname: [purchaseOrderData ? purchaseOrderData.acrname : ''],
+      ///addedby: [this.data.actionName === "edit-interview" ? interviewData?.users : localStorage.getItem('userid')],
+      updatedby: [this.data.actionName === "edit-purchase-order" ? localStorage.getItem('userid') : '0'],
+      addedby: [purchaseOrderData ? purchaseOrderData.addedby : localStorage.getItem('userid')],
+      acrname: [purchaseOrderData ? purchaseOrderData.acrname : '', [Validators.required]],
       acrmail: [purchaseOrderData ? purchaseOrderData.acrmail : '', [Validators.required]],
       acrno: [purchaseOrderData ? purchaseOrderData.acrno : '', [Validators.required]],
+      percentage: [purchaseOrderData ? purchaseOrderData.percentage : '', [Validators.required]],
+      payratetoconsultant: [purchaseOrderData ? purchaseOrderData.payratetoconsultant : '', [Validators.required]],
+      acpname: [purchaseOrderData ? purchaseOrderData.acpname : ''],
+      acpmail: [purchaseOrderData ? purchaseOrderData.acpmail : ''],
+      acpno: [purchaseOrderData ? purchaseOrderData.acpno : ''],
+
+
+      hourlyrate: [purchaseOrderData ? purchaseOrderData.hourlyrate : '', [Validators.required]],
+
+      // hourlyrate: this.flg === 'OutWard' ?
+      // this.formBuilder.control(purchaseOrderData && purchaseOrderData.billratevendor ? purchaseOrderData.billratevendor : '') :
+      // null,
 
     });
-  }
 
+    this.purchaseOrderForm.get('potype').valueChanges.subscribe((res: any) => {
+
+      const acpname = this.purchaseOrderForm.get('acpname');
+      const acpmail = this.purchaseOrderForm.get('acpmail');
+      const acpno = this.purchaseOrderForm.get('acpno');
+
+      if (res == "OutWard") {
+        acpname.setValidators(Validators.required);
+        acpmail.setValidators(Validators.required);
+        acpno.setValidators(Validators.required);
+      }
+      else {
+        acpname.clearValidators();
+        acpmail.clearValidators();
+        acpno.clearValidators();
+      }
+      acpname.updateValueAndValidity();
+      acpmail.updateValueAndValidity();
+      acpno.updateValueAndValidity();
+    })
+  }
+  flg !: any;
   onPoTypeSelect(event: MatSelectChange) {
-    if(event.value == "To"){
+    if (event.value == "OutWard") {
+      this.flg = "OutWard"
       this.poTypeSelected = 'Recruiting';
       this.recruitingFlag = true;
     } else {
       this.poTypeSelected = 'Sales';
       this.recruitingFlag = false;
     }
+    this.resetFormFields();
     this.getVendorcompanies();
   }
 
+  hourlyRate!: any;
+  percentage!: number;
+  consultantPercentage!: number;
+  consultantAmount!: number;
+  vendorAMount!: number;
+  calculateMargin(event: MatSelectChange) {
+    this.hourlyRate = parseFloat(this.purchaseOrderForm.get('hourlyrate').value);// this.purchaseOrderForm.get('hourlyrate');
+    this.percentage = event.value;
+    this.consultantPercentage = 100 - this.percentage;
+    this.consultantAmount = this.hourlyRate * this.consultantPercentage / 100;
+    this.vendorAMount = this.hourlyRate * this.percentage / 100;
+    // console.log(this.hourlyRate + " = " + this.percentage + " = " + this.consultantPercentage + " = " + this.consultantAmount + " = " + this.vendorAMount)
+    this.purchaseOrderForm.get('payratetoconsultant').setValue(this.consultantAmount)
+  }
+
   onCompanySelect(event: MatSelectChange) {
-    if(event.value !== ""){
+    if (event.value !== "") {
       this.companySelected = event.value;
     }
     this.resetFormFields();
@@ -155,6 +228,11 @@ export class AddPurchaseOrderComponent {
       acrname: '',
       acrmail: '',
       acrno: '',
+      acpname: '',
+      acpmail: '',
+      acpno: '',
+      percentage: '',
+      payratetoconsultant: '',
     });
   }
 
@@ -169,7 +247,7 @@ export class AddPurchaseOrderComponent {
   }
 
   onVendorSelect(event: MatSelectChange) {
-    if(event.value !== ""){
+    if (event.value !== "") {
       this.vendorSelected = event.value;
     }
     this.resetVendorFormFields();
@@ -197,11 +275,16 @@ export class AddPurchaseOrderComponent {
       acrname: '',
       acrmail: '',
       acrno: '',
+      acpname: '',
+      acpmail: '',
+      acpno: '',
+      percentage: '',
+      payratetoconsultant: '',
     });
   }
 
   onConsultantSelect(event: MatSelectChange) {
-    if(event.value !== ""){
+    if (event.value !== "") {
       this.consultantSelected = event.value;
     }
     this.purchaseOrderServ.getSelectedConsultantInfo(this.consultantSelected, this.vendorSelected).subscribe(
@@ -210,7 +293,7 @@ export class AddPurchaseOrderComponent {
         const paymentCycleValue = parseInt(response.data.paymentcycle, 10);
         this.purchaseOrderForm.get("endclient").setValue(response.data.endclient);
         this.purchaseOrderForm.get("implpartner").setValue(response.data.implpartner);
-        this.purchaseOrderForm.get("hourlyrate").setValue(response.data.submissionrate);
+        this.purchaseOrderForm.get("hourlyrate").setValue(response.data.billratevendor);
         this.purchaseOrderForm.get("projstartdate").setValue(response.data.projectstartdate);
         this.purchaseOrderForm.get("projenddate").setValue(response.data.projectendtdate);
         this.purchaseOrderForm.get("duration").setValue(response.data.projectduration);
@@ -223,7 +306,7 @@ export class AddPurchaseOrderComponent {
     )
   }
 
-  flg = true;
+  // flg = true;
   msaError: boolean = false;
   msaFileNameLength: boolean = false;
   poError: boolean = false;
@@ -251,6 +334,7 @@ export class AddPurchaseOrderComponent {
     }
   }
 
+
   @ViewChild('po') po: any = ElementRef;
   poUpload!: any;
   uploadPo(event: any) {
@@ -272,17 +356,129 @@ export class AddPurchaseOrderComponent {
       this.flg = true;
     }
   }
-
-
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+  getSaveData() {
+    if (this.data.actionName === 'edit-purchase-order') {
+      return { ...this.entity, ...this.purchaseOrderForm.value }
+    }
+    return this.purchaseOrderForm.value;
+  }
+  submitted = false;
   onSubmit() {
+    this.submitted = true;
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 2500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+
     if (this.purchaseOrderForm.invalid) {
       this.purchaseOrderForm.markAllAsTouched();
       return;
     }
+
+    const projstartdateDateFormControl = this.purchaseOrderForm.get('projstartdate');
+    const projenddateDateFormControl = this.purchaseOrderForm.get('projenddate');
+    if (projstartdateDateFormControl?.value) {
+      const formattedstartDate = this.datePipe.transform(projstartdateDateFormControl.value, 'yyyy-MM-dd');
+      const formattedendDate = this.datePipe.transform(projenddateDateFormControl?.value, 'yyyy-MM-dd');
+      projstartdateDateFormControl.setValue(formattedstartDate);
+      projenddateDateFormControl?.setValue(formattedendDate);
+    }
+
+    const saveReqObj = this.getSaveData();
+    this.purchaseOrderServ
+      .savePO(saveReqObj)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (resp: any) => {
+          if (resp.status == 'success') {
+            dataToBeSentToSnackBar.message =
+              this.data.actionName === 'add-po'
+                ? 'PO added successfully'
+                : 'PO updated successfully';
+            this.onFileSubmit(resp.data.poid);
+            this.dialogRef.close();
+          } else {
+            this.isFormSubmitted = false;
+            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Transaction Failed';
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          }
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+        error: (err: any) => {
+          this.isFormSubmitted = false;
+          dataToBeSentToSnackBar.message =
+            this.data.actionName === 'add-po'
+              ? 'PO addition is failed'
+              : 'PO updation is failed';
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
+
+
+  }
+
+  onFileSubmit(id: number) {
+    const formData = new FormData();
+
+    if (this.msaupload != null) {
+      formData.append('msa', this.msaupload, this.msaupload.name);
+      // formData.append("files",this.resumeupload,this.resumeupload.name);
+    }
+
+    if (this.poUpload != null) {
+      formData.append('po', this.poUpload, this.poUpload.name);
+      // formData.append("files",this.resumeupload,this.resumeupload.name);
+    }
+
+
+    //upload
+    this.fileService
+      .poFilesUpload(formData, id)
+      .subscribe((response: any) => {
+        if (response.status === 200) {
+        } else {
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.dataToBeSentToSnackBar.message = 'File upload failed';
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        }
+      });
   }
 
   onCancel() {
     this.dialogRef.close();
   }
+  selectOptionObj = {
+    margin: MARGIN,
+    netterm: NETTERM,
+  };
+
 
 }
+
+export const MARGIN = [
+  '20',
+  '30',
+]
+
+export const NETTERM = [
+  'Net 15',
+  'Net 30',
+  'Net 45',
+  'Net 60',
+  'Net 90',
+]

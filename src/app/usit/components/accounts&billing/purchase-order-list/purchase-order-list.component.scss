@@ -101,7 +101,9 @@
   .mat-column-AccountPersonName,
   .mat-column-AccountPersonEmail,
   .mat-column-AccountPersonContactNumber,
-  .mat-column-Status {
+  .mat-column-Implpartner,
+  .mat-column-POTYPE,
+  .mat-column-PayToconsultant {
     border-right: 1px solid lightgray;
   }
   
@@ -274,3 +276,7 @@
     cursor: pointer;
     color: #0275d8;
   }
+
+  .text-right {
+    text-align: right;
+}

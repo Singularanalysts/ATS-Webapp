@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,10 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddInvoiceComponent } from './add-invoice/add-invoice.component';
 import { DialogService } from 'src/app/services/dialog.service';
-import { ISnackBarData } from 'src/app/services/snack-bar.service';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
+import { Subject, takeUntil } from 'rxjs';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-invoice-list',
@@ -25,8 +28,8 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
   templateUrl: './invoice-list.component.html',
   styleUrls: ['./invoice-list.component.scss']
 })
-export class InvoiceListComponent {
-
+export class InvoiceListComponent implements OnInit{
+  private snackBarServ = inject(SnackBarService);
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -43,7 +46,48 @@ export class InvoiceListComponent {
   ];
   private router = inject(Router);
   private dialogServ = inject(DialogService);
+  private purchaseOrderServ = inject(PurchaseOrderService);
+  private destroyed$ = new Subject<void>();
 
+  page: number = 1;
+  itemsPerPage = 50;
+  AssignedPageNum !: any;
+  totalItems: any;
+  ser: number = 1;
+  userid!: any;
+  field = "empty";
+  currentPageIndex = 0;
+  pageEvent!: PageEvent;
+  pageSize = 50;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageSizeOptions = [5, 10, 25];
+
+
+  ngOnInit(): void {
+    this.getAll();
+  }
+  getAll() {
+    this.purchaseOrderServ.getAllIvoice()
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        (response: any) => {
+          // this.entity = response.data.content;
+          this.dataSource.data = response.data;
+          console.log(response.data)
+          this.totalItems = response.data.totalElements;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      )
+  }
+
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    return serialNumber;
+  }
   addInvoice() {
     const actionData = {
       title: 'Add Invoice',
@@ -65,7 +109,7 @@ export class InvoiceListComponent {
     })
   }
 
-  editRequirement(invoice: any){
+  editInvoice(invoice: any){
     const actionData = {
       title: 'Update Invoice',
       invoiceData: invoice,
@@ -84,59 +128,57 @@ export class InvoiceListComponent {
     })
   }
 
-  deleteInvoice(invoice: any) {
-    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
-      title: 'Confirmation',
-      message: 'Are you sure you want to delete?',
-      confirmText: 'Yes',
-      cancelText: 'No',
-      actionData: invoice,
-    };
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = 'fit-content';
-    dialogConfig.height = 'auto';
-    dialogConfig.disableClose = false;
-    dialogConfig.panelClass = 'delete-invoice';
-    dialogConfig.data = dataToBeSentToDailog;
-    const dialogRef = this.dialogServ.openDialogWithComponent(
-      ConfirmComponent,
-      dialogConfig
-    );
-
-    // call delete api after  clicked 'Yes' on dialog click
-
-    dialogRef.afterClosed().subscribe({
-      next: (resp) => {
-        if (dialogRef.componentInstance.allowAction) {
-          const dataToBeSentToSnackBar: ISnackBarData = {
-            message: '',
-            duration: 1500,
-            verticalPosition: 'top',
-            horizontalPosition: 'center',
-            direction: 'above',
-            panelClass: ['custom-snack-success'],
-          };
-
-          // this.invoiceServ.deleteEntity(invoice.id).pipe(takeUntil(this.destroyed$))
-          // .subscribe({next:(response: any) => {
-          //   if (response.status == 'success') {
-          //     this.getAllData(this.currentPageIndex + 1);
-          //     dataToBeSentToSnackBar.message = 'Invoice Deleted successfully';
-          //   } else {
-          //     dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          //     dataToBeSentToSnackBar.message = 'Record Deletion failed';
-          //   }
-          //   this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-          // }, error: err => {
-          //   dataToBeSentToSnackBar.message = err.message;
-          //   dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          //   this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-          // }});
+    deleteInvoice(invoice: any) {
+      const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
+        title: 'Confirmation',
+        message: 'Are you sure you want to delete?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+        actionData: invoice,
+      }
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "400px";
+      dialogConfig.height = "auto";
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = "delete-visa";
+      dialogConfig.data = dataToBeSentToDailog;
+      const dialogRef = this.dialogServ.openDialogWithComponent(ConfirmComponent, dialogConfig);
+  
+      dialogRef.afterClosed().subscribe({
+        next: () =>{
+          if (dialogRef.componentInstance.allowAction) {
+            const dataToBeSentToSnackBar: ISnackBarData = {
+              message: '',
+              duration: 1500,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+              direction: 'above',
+              panelClass: ['custom-snack-success'],
+            };
+            this.purchaseOrderServ.deleteInvoice(invoice.invoiceid).pipe(takeUntil(this.destroyed$)).subscribe
+              ({
+                next: (resp: any) => {
+                  if (resp.status == 'success') {
+                    dataToBeSentToSnackBar.message =
+                      'Invoice Deleted successfully';
+                    this.snackBarServ.openSnackBarFromComponent(
+                      dataToBeSentToSnackBar
+                    );
+                    // call get api after deleting a role
+                    this.getAll();
+                  } else {
+                    dataToBeSentToSnackBar.message = resp.message;
+                    this.snackBarServ.openSnackBarFromComponent(
+                      dataToBeSentToSnackBar
+                    );
+                  }
+  
+                }, error: (err) => console.log(`PO delete error: ${err}`)
+              });
+          }
         }
-      },
-    });
-  }
-
+      })
+    }
   applyFilter(event: any){
 
   }

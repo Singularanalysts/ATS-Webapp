@@ -7,15 +7,15 @@
     </button>
 </div>
 <mat-card class="center-card">
-    <form [formGroup]="purchaseOrderForm" (ngSubmit)="onSubmit()" class="purchase-order-form">
+    <form [formGroup]="purchaseOrderForm" class="purchase-order-form">
         <div class="form">
             <div class="form-column-left">
 
                 <mat-form-field>
                     <mat-label>Select PO Type</mat-label>
                     <mat-select formControlName="potype" (selectionChange)="onPoTypeSelect($event)">
-                        <mat-option value="From">From</mat-option>
-                        <mat-option value="To">To</mat-option>
+                        <mat-option value="InWard">InWard</mat-option>
+                        <mat-option value="OutWard">OutWard</mat-option>
                     </mat-select>
                     <mat-error *ngIf="purchaseOrderForm.get('potype')!.hasError('required')"> PO Type is
                         required</mat-error>
@@ -24,20 +24,19 @@
                 <mat-form-field>
                     <mat-label>Select Company</mat-label>
                     <mat-select formControlName="company" (selectionChange)="onCompanySelect($event)">
-                        <mat-option value="Narvee">Narvee</mat-option>
-                        <mat-option value="Singular">Singular</mat-option>
-                        <mat-option value="ProBPM">ProBPM</mat-option>
+                        <mat-option *ngFor="let option of company" [value]="option[0]">
+                            {{ option[1] }}
+                        </mat-option>
                     </mat-select>
                     <mat-error *ngIf="purchaseOrderForm.get('company')!.hasError('required')"> Company is
                         required</mat-error>
                 </mat-form-field>
 
-
                 <mat-form-field appearance="fill">
                     <mat-label>Select Vendor</mat-label>
                     <mat-select formControlName="vendor" (selectionChange)="onVendorSelect($event)">
-                        <mat-option *ngFor="let obj of vendordata" [value]="obj.id">
-                                  {{ obj.vendor }}
+                        <mat-option *ngFor="let obj of vendordata" [value]="obj[0]">
+                            {{ obj[1] }}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="purchaseOrderForm.get('vendor')!.hasError('required')">Vendor Company
@@ -78,24 +77,43 @@
                     </mat-error>
                 </mat-form-field>
 
+                <mat-form-field appearance="fill">
+                    <mat-label>Margin</mat-label>
+                    <mat-select formControlName="percentage" (selectionChange)="calculateMargin($event)">
+                        <mat-option *ngFor="let option of selectOptionObj.margin" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="fill">
+                    <mat-label>PayRate To Consultant</mat-label>
+                    <input matInput formControlName="payratetoconsultant" maxlength="60">
+                </mat-form-field>
+
+            </div>
+
+            <div class="form-column-right">
+
                 <mat-form-field class="example-form-field">
                     <mat-label>Project Start Date</mat-label>
                     <input matInput [matDatepicker]="datepicker" formControlName="projstartdate">
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker></mat-datepicker>
-                    <mat-error *ngIf="purchaseOrderForm.get('projstartdate')!.hasError('required')"> Project Start Date is
+                    <mat-error *ngIf="purchaseOrderForm.get('projstartdate')!.hasError('required')"> Project Start Date
+                        is
                         required</mat-error>
                 </mat-form-field>
-            </div>
 
-            <div class="form-column-right">
+
                 <mat-form-field class="example-form-field">
                     <mat-label>Project End Date</mat-label>
                     <input matInput [matDatepicker]="datepicker2" formControlName="projenddate">
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker2></mat-datepicker>
                 </mat-form-field>
-            
+
                 <mat-form-field>
                     <mat-label>Project Duration</mat-label>
                     <input type="text" matInput formControlName="duration">
@@ -114,11 +132,11 @@
                         required</mat-error>
                 </mat-form-field>
 
-                <mat-form-field>
+                <mat-form-field appearance="fill">
                     <mat-label>Select Net Term</mat-label>
                     <mat-select formControlName="netterm">
-                        <mat-option *ngFor="let item of [].constructor(100); let i = index" [value]="i + 1">
-                            Net {{ i + 1 }}
+                        <mat-option *ngFor="let option of selectOptionObj.netterm" [value]="option">
+                            {{ option }}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="purchaseOrderForm.get('netterm')!.hasError('required')"> Net Term is
@@ -132,7 +150,8 @@
                         <input matInput readonly name="poName" class="file-input"
                             [value]="msaupload ? msaupload.name : 'No file chosen'" />
                         <label for="po" class="browse-button-label">
-                            <button type="button" mat-icon-button (click)="msa.click()"><mat-icon>upload_file</mat-icon></button>
+                            <button type="button" mat-icon-button
+                                (click)="msa.click()"><mat-icon>upload_file</mat-icon></button>
                         </label>
                         <input type="file" #msa id="msa" (change)="uploadMsa($event)" name="msaUploadFile"
                             accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -140,10 +159,12 @@
                     </div>
                     <mat-hint *ngIf="msaError" style="color: #f44336; font-size: 12px;">MSA size should be less than 2
                         mb</mat-hint>
-                    <mat-hint *ngIf="msaFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                    <mat-hint *ngIf="msaFileNameLength" style="color: #f44336; font-size: 12px;">File name too long,
+                        rename to
                         15-20 characters before upload</mat-hint>
                 </mat-form-field>
-            
+
+
                 <!-- PO Upload -->
                 <mat-form-field class="upload">
                     <mat-label for="po">Upload PO</mat-label>
@@ -151,7 +172,8 @@
                         <input matInput readonly name="poName" class="file-input"
                             [value]="poUpload ? poUpload.name : 'No file chosen'" />
                         <label for="po" class="browse-button-label">
-                            <button type="button" mat-icon-button (click)="po.click()"><mat-icon>upload_file</mat-icon></button>
+                            <button type="button" mat-icon-button
+                                (click)="po.click()"><mat-icon>upload_file</mat-icon></button>
                         </label>
                         <input type="file" #po id="po" (change)="uploadPo($event)" name="aadharUploadFile"
                             accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -159,7 +181,8 @@
                     </div>
                     <mat-hint *ngIf="poError" style="color: #f44336; font-size: 12px;">PO size should be less than 2
                         mb</mat-hint>
-                    <mat-hint *ngIf="poFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+                    <mat-hint *ngIf="poFileNameLength" style="color: #f44336; font-size: 12px;">File name too long,
+                        rename to
                         15-20 characters before upload</mat-hint>
                 </mat-form-field>
             </div>
@@ -195,12 +218,16 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Account Person Name</mat-label>
                     <input matInput formControlName="acrname" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acrname')!.hasError('required')"> Account Person Name is
+                        required
+                    </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
                     <mat-label>Account Person Email</mat-label>
                     <input matInput formControlName="acrmail" maxlength="60">
-                    <mat-error *ngIf="purchaseOrderForm.get('acrmail')!.hasError('required')"> Account Person Email is required
+                    <mat-error *ngIf="purchaseOrderForm.get('acrmail')!.hasError('required')"> Account Person Email is
+                        required
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -243,21 +270,27 @@
             <div class="form-column-left">
                 <mat-form-field appearance="fill">
                     <mat-label>Account Person Name</mat-label>
-                    <input matInput formControlName="acrname" maxlength="60">
+                    <input matInput formControlName="acpname" maxlength="60">
+
+                    <mat-error *ngIf="purchaseOrderForm.get('acpname')!.hasError('required')"> Account Person Name is
+                        required
+                    </mat-error>
+
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
                     <mat-label>Account Person Email</mat-label>
-                    <input matInput formControlName="acrmail" maxlength="60">
-                    <mat-error *ngIf="purchaseOrderForm.get('acrmail')!.hasError('required')"> Account Person Email is required
+                    <input matInput formControlName="acpmail" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acpmail')!.hasError('required')"> Account Person Email is
+                        required
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="form-column-right">
                 <mat-form-field appearance="fill">
                     <mat-label>Account Person Contact Number</mat-label>
-                    <input matInput formControlName="acrno" maxlength="60">
-                    <mat-error *ngIf="purchaseOrderForm.get('acrno')!.hasError('required')"> Account Person Contact is
+                    <input matInput formControlName="acpno" maxlength="60">
+                    <mat-error *ngIf="purchaseOrderForm.get('acpno')!.hasError('required')"> Account Person Contact is
                         required</mat-error>
                 </mat-form-field>
             </div>

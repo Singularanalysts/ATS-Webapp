@@ -1,15 +1,18 @@
 import { Component, OnInit, inject, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-invoice',
@@ -26,46 +29,256 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepickerModule,
     MatNativeDateModule
   ],
+  providers: [DatePipe],
   templateUrl: './add-invoice.component.html',
   styleUrls: ['./add-invoice.component.scss']
 })
 export class AddInvoiceComponent implements OnInit {
-
+  company: any = [];
+  vendordata: any = [];
+  consultantdata: any = [];
   invoiceForm!: FormGroup;
+  poTypeSelected!: string;
+  companySelected!: string;
+  vendorSelected: any;
+  consultantSelected!: any;
   private formBuilder = inject(FormBuilder);
-
-  constructor(
+  private purchaseOrderServ = inject(PurchaseOrderService);
+  constructor(private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddInvoiceComponent>
-  ) {}
-
+  ) { }
+  // invoiceNumber = 
   ngOnInit(): void {
-    this.initializeInvoiceForm(null);
+    this.getCompanies();
+    if (this.data.actionName === "edit-invoice") {
+      this.initializeInvoiceForm(this.data.invoiceData);
+    }
+    else{
+      this.initializeInvoiceForm(null);
+    }
+  }
+
+  getCompanies() {
+    this.purchaseOrderServ.getCompanies().subscribe((response: any) => {
+      this.company = response.data;
+      console.log(response.data)
+    });
+  }
+
+  onCompanySelect(event: MatSelectChange) {
+    console.log(event)
+    if (event.value !== "") {
+      this.companySelected = event.value;
+      const selectedCompany = this.company.find((option: any[]) => option[0] === this.companySelected);
+      if (selectedCompany) {
+        const companyName = selectedCompany[1];
+        console.log("Selected Company Name:", companyName);
+        this.getInvoiceNumber(companyName);
+        // Now you have the selected company name
+      }
+    }
+    //this.resetFormFields();
+    this.getVendorcompanies();
+  }
+
+  getInvoiceNumber(company: any) {
+    this.purchaseOrderServ.getInvoiceNumber(company).subscribe((response: any) => {
+      console.log(response.data);
+      this.invoiceForm.get("invoicenumber")?.setValue(response.data[0]);
+
+      if(company == 'Narvee'){
+        this.invoiceForm.get("narveeMaxnumber")?.setValue(response.data[1]);
+      }
+      else if(company == 'Singular'){
+        this.invoiceForm.get("singMaxnumber")?.setValue(response.data[1]);
+      }
+
+      else if(company == 'ProBPM'){
+        this.invoiceForm.get("proMaxnumber")?.setValue(response.data[1]);
+      }
+      else{
+        this.invoiceForm.get("cloudMaxnumber")?.setValue(response.data[1]);
+      }
+    });
+
+  }
+
+  getVendorcompanies() {
+    if (this.poTypeSelected && this.companySelected) {
+      this.purchaseOrderServ.getPoVendors(this.companySelected, this.flg).subscribe(
+        (response: any) => {
+          this.vendordata = response.data
+        }
+      )
+    }
+  }
+
+  onVendorSelect(event: MatSelectChange) {
+    if (event.value !== "") {
+      this.vendorSelected = event.value;
+    }
+
+    // this.resetVendorFormFields();
+    this.purchaseOrderServ.poGeneratedProfiles(this.vendorSelected, this.companySelected, this.flg).subscribe(
+      (response: any) => {
+        this.consultantdata = response.data
+      }
+    )
+  }
+
+  flg !: any;
+  onPoTypeSelect(event: MatSelectChange) {
+    if (event.value == "OutWard") {
+      this.flg = "OutWard"
+      this.poTypeSelected = 'Recruiting';
+      // this.recruitingFlag = true;
+    } else {
+      this.poTypeSelected = 'Sales';
+      this.flg = "InWard"
+      //this.recruitingFlag = false;
+    }
+    //this.resetFormFields();
+    //this.getVendorcompanies();
   }
 
   private initializeInvoiceForm(invoiceData: any) {
     this.invoiceForm = this.formBuilder.group({
+      company: [invoiceData ? invoiceData.company : '', [Validators.required]],
+      potype: [invoiceData ? invoiceData.potype : '', [Validators.required]],
       invoicenumber: [invoiceData ? invoiceData.invoicenumber : '', [Validators.required]],
       vendor: [invoiceData ? invoiceData.vendor : '', [Validators.required]],
       consultant: [invoiceData ? invoiceData.consultant : '', [Validators.required]],
+      additionalcharges: [invoiceData ? invoiceData.additionalcharges : ''],
       netterm: [invoiceData ? invoiceData.netterm : '', [Validators.required]],
-      invoicedate: [invoiceData ? invoiceData.invoicedate : '', [Validators.required]],
+      invoicedate: [invoiceData ? invoiceData.invoicedate : new Date(), [Validators.required]],
       duedate: [invoiceData ? invoiceData.duedate : '', [Validators.required]],
       jobdescription: [invoiceData ? invoiceData.jobdescription : '', [Validators.required]],
       numberofhours: [invoiceData ? invoiceData.numberofhours : '', [Validators.required]],
       hourlyrate: [invoiceData ? invoiceData.hourlyrate : '', [Validators.required]],
-      tax: [0],
+      tax: [''],
       invoicevalue: [invoiceData ? invoiceData.invoicevalue : '', [Validators.required]],
-      pocemail: [invoiceData ? invoiceData.pocemail : ''],
       remarks: [invoiceData ? invoiceData.remarks : '', [Validators.required]],
+      cloudMaxnumber: [invoiceData ? invoiceData.cloudMaxnumber : ''],
+      proMaxnumber: [invoiceData ? invoiceData.proMaxnumber : ''],
+      singMaxnumber: [invoiceData ? invoiceData.singMaxnumber : ''],
+      narveeMaxnumber: [invoiceData ? invoiceData.narveeMaxnumber : ''],
+      maxnumber: [invoiceData ? invoiceData.maxnumber : ''],
+      updatedby: [this.data.actionName === "edit-purchase-order" ? localStorage.getItem('userid') : '0'],
+      addedby: [invoiceData ? invoiceData.addedby : localStorage.getItem('userid')],
+
     });
   }
 
+  // }
+  hourlyRate!: number;
+  numberOfHours!: number;
+  additionalCharges!: number;
+  tax!: number;
+  otherCharges!: number;
+  invoiceActualValue!: number;
+  totalValue!: number;
+  
+  calculateInvoice() {
+    this.hourlyRate = this.invoiceForm.get('hourlyrate')?.value;
+    this.numberOfHours = this.invoiceForm.get('numberofhours')?.value;
+   // this.additionalCharges = this.invoiceForm.get('additionalcharges')?.value;
+   // this.tax = this.invoiceForm.get('tax')?.value;
+
+    this.additionalCharges = parseFloat(this.invoiceForm.get('additionalcharges')?.value);
+    this.tax = parseFloat(this.invoiceForm.get('tax')?.value);
+
+
+    if (isNaN(this.additionalCharges)) {
+      this.additionalCharges = 0;
+    }
+    if (isNaN(this.tax)) {
+      this.tax = 0;
+    }
+    
+    // Calculate additional charges
+    this.otherCharges = this.additionalCharges + this.tax;
+    
+    // Calculate actual invoice value
+    this.invoiceActualValue = this.hourlyRate * this.numberOfHours;
+    
+    // Calculate total invoice value
+    this.totalValue = this.invoiceActualValue + this.otherCharges;
+    
+    // Set total value in form
+    this.invoiceForm.get('invoicevalue')?.setValue(this.totalValue);
+  }
+entity !: any;
+protected isFormSubmitted: boolean = false;
+private snackBarServ = inject(SnackBarService);
+  getSaveData() {
+    if (this.data.actionName === 'edit-purchase-order') {
+      return { ...this.entity, ...this.invoiceForm.value }
+    }
+    return this.invoiceForm.value;
+  }
+  private destroyed$ = new Subject<void>();
+  submitted = false;
   onSubmit() {
+    this.submitted = true;
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 2500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+
     if (this.invoiceForm.invalid) {
       this.invoiceForm.markAllAsTouched();
       return;
     }
+
+    if (this.invoiceForm.invalid) {
+      this.invoiceForm.markAllAsTouched();
+      return;
+    }
+    
+    const invoiceDateFormControl = this.invoiceForm.get('invoicedate');
+    const dueDateFormControl = this.invoiceForm.get('duedate');
+    if (invoiceDateFormControl?.value) {
+      const formattedinvDate = this.datePipe.transform(invoiceDateFormControl.value, 'yyyy-MM-dd');
+      const formatteddueDate = this.datePipe.transform(dueDateFormControl?.value, 'yyyy-MM-dd');
+      invoiceDateFormControl.setValue(formattedinvDate);
+      dueDateFormControl?.setValue(formatteddueDate);
+    }
+
+    const saveReqObj = this.getSaveData();
+    this.purchaseOrderServ
+      .saveInvoice(saveReqObj)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (resp: any) => {
+          if (resp.status == 'success') {
+            dataToBeSentToSnackBar.message =
+              this.data.actionName === 'add-po'
+                ? 'Invoice added successfully'
+                : 'Invoice updated successfully';
+                //this.onFileSubmit(resp.data.poid);
+            this.dialogRef.close();
+          } else {
+            this.isFormSubmitted = false;
+            dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Transaction Failed';
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          }
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+        error: (err: any) => {
+          this.isFormSubmitted = false;
+          dataToBeSentToSnackBar.message =
+            this.data.actionName === 'add-po'
+              ? 'Invoice addition is failed'
+              : 'Invoice updation is failed';
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
   }
 
   onFileChange(event: any) {
@@ -76,4 +289,21 @@ export class AddInvoiceComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  selectOptionObj = {
+    jobdescription: JOBDESCRIPTION,
+    netterm: NETTERM,
+  };
 }
+
+export const NETTERM = [
+  'Net 15',
+  'Net 30',
+  'Net 45',
+  'Net 60',
+  'Net 90',
+]
+
+export const JOBDESCRIPTION = [
+  'Consultation Charges For',
+  'Travelling Expenses from',
+]
