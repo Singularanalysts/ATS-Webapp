@@ -33,9 +33,9 @@ export class InvoiceListComponent implements OnInit{
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
+    'invoicenumber',
     'InvoiceDate',
     'DueDate',
-    'BillToVendor',
     'Consultant',
     'NetTerm',
     'NoOfHours',
@@ -104,6 +104,7 @@ export class InvoiceListComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(() => {
       if(dialogRef.componentInstance.submitted){
+        this.getAll();
         //  this.getAll(this.currentPageIndex + 1);
       }
     })
@@ -123,6 +124,7 @@ export class InvoiceListComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(() => {
       if(dialogRef.componentInstance.submitted){
+        this.getAll();
         // this.getAllData(this.currentPageIndex + 1);
       }
     })

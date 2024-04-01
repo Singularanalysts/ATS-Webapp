@@ -12,12 +12,26 @@ export class PurchaseOrderService {
     return this.apiServ.get("billpay/closure/OnboardedVendor/" + company + "/" + potype);
   }
 
-  getPoVendors(company: string, potype: string) {
-    return this.apiServ.get("billpay/invoice/poGeneratedVendor/" + company + "/" + potype);
+  // getPoVendors(company: string, potype: string) {
+  //   return this.apiServ.get("billpay/invoice/poGeneratedVendor/" + company + "/" + potype);
+  // }
+
+  getVendorsPO(cid: number, vid: number) {
+    return this.apiServ.get("billpay/invoice/getVendor/" + cid + "/" + vid);
   }
+
+
 
   public getInvoiceNumber(company:string) {
     return this.apiServ.get("billpay/invoice/getInvoice/"+company);
+  }
+
+  public getPoById(poid: any) {
+    return this.apiServ.get("billpay/po/getById/"+ poid);
+  }
+
+  public getInvoiceById(invoiceid: any) {
+    return this.apiServ.get("billpay/invoice/getById/"+ invoiceid);
   }
 
   public getAllPos() {
@@ -25,7 +39,7 @@ export class PurchaseOrderService {
   }
 
   public getAllIvoice() {
-    return this.apiServ.get("billpay/invoice/all");
+    return this.apiServ.get("billpay/invoice/getAll");
   }
 
   public getCompanies() {
@@ -48,10 +62,12 @@ export class PurchaseOrderService {
     return this.apiServ.get("billpay/closure/listProfiles/" + vid);
   }
 
-  poGeneratedProfiles(vid: number,company: string, potype: string) {
-    return this.apiServ.get("billpay/invoice/poGeneratedProfiles/" + vid+"/"+company+"/"+potype);
+  // poGeneratedProfiles(vid: number,company: string, potype: string) {
+  //   return this.apiServ.get("billpay/invoice/poGeneratedProfiles/" + vid+"/"+company+"/"+potype);
+  // }
+  getConsultantData(vid: number,cid: number,){
+    return this.apiServ.get("billpay/invoice/getConsultant/" + vid+"/"+cid);
   }
-
   deletePo(id: number) {
     return this.apiServ.delete("billpay/po/deletePo/" + id);
   }

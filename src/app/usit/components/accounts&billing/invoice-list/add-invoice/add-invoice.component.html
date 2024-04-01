@@ -19,17 +19,17 @@
                     <mat-error *ngIf="invoiceForm.get('potype')!.hasError('required')"> PO Type is
                         required</mat-error>
                 </mat-form-field>
-
+<!--(selectionChange)="onVendorSelect($event)"-->
                 <mat-form-field appearance="fill">
                     <mat-label>Select Vendor</mat-label>
-                    <mat-select formControlName="vendor" (selectionChange)="onVendorSelect($event)">
-                        <mat-option *ngFor="let obj of poData" [value]="obj[0]">
+                    <mat-select formControlName="vendor" >
+                        <mat-option *ngFor="let obj of vendordata" [value]="obj[0]">
                             {{ obj[1] }}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="invoiceForm.get('vendor')!.hasError('required')"> Vendor is required</mat-error>
                 </mat-form-field>
-                
+
                 <mat-form-field>
                     <mat-label>Expenses</mat-label>
                     <mat-select formControlName="jobdescription">
@@ -42,23 +42,23 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Tax</mat-label>
-                    <input matInput formControlName="tax"  (change)="calculateInvoice()">
+                    <input matInput formControlName="tax" (change)="calculateInvoice()">
                 </mat-form-field>
-              
+
             </div>
 
             <div class="form-column-right">
                 <mat-form-field>
                     <mat-label>Select PO</mat-label>
-                    <mat-select formControlName="company" (selectionChange)="onPoSelect($event)">
+                    <mat-select formControlName="poid" (selectionChange)="onPoSelect($event)">
                         <mat-option *ngFor="let option of poData" [value]="option[0]">
                             {{ option[1] }}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('company')!.hasError('required')"> Company is
+                    <mat-error *ngIf="invoiceForm.get('poid')!.hasError('required')"> PO is
                         required</mat-error>
                 </mat-form-field>
-                
+
                 <!-- <mat-form-field>
                     <mat-label>Select Company</mat-label>
                     <mat-select formControlName="company" (selectionChange)="onCompanySelect($event)">
@@ -83,7 +83,7 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>No Of Hours</mat-label>
-                    <input matInput formControlName="numberofhours">
+                    <input matInput formControlName="numberofhours" (change)="calculateInvoice()">
                     <mat-error *ngIf="invoiceForm.get('numberofhours')!.hasError('required')"> Hourly Rate is
                         required</mat-error>
                 </mat-form-field>
@@ -96,7 +96,7 @@
             </div>
             <div class="form-column-left11 ">
                 <mat-form-field appearance="fill">
-                    <mat-label>Select Consultant1111</mat-label>
+                    <mat-label>Select Consultant</mat-label>
                     <mat-select formControlName="consultant">
                         <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
                             {{ obj[1] }}
@@ -116,7 +116,7 @@
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Hourly Rate</mat-label>
-                    <input matInput formControlName="hourlyrate"  (change)="calculateInvoice()">
+                    <input matInput formControlName="hourlyrate" (change)="calculateInvoice()">
                     <mat-error *ngIf="invoiceForm.get('hourlyrate')!.hasError('required')"> Hourly Rate is
                         required</mat-error>
                 </mat-form-field>
@@ -163,7 +163,7 @@
                             style="display: none;" />
                     </div>
                 </mat-form-field>
-              
+
             </div>
         </div>
     </form>
