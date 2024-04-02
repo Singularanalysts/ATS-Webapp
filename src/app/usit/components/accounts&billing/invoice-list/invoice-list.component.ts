@@ -32,10 +32,12 @@ export class InvoiceListComponent implements OnInit{
   private snackBarServ = inject(SnackBarService);
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
+    //vendorname
     'SerialNum',
     'invoicenumber',
     'InvoiceDate',
     'DueDate',
+    'company',
     'Consultant',
     'NetTerm',
     'NoOfHours',
@@ -130,6 +132,25 @@ export class InvoiceListComponent implements OnInit{
     })
   }
 
+  download(invoice: any) {
+    this.purchaseOrderServ
+    .downloadInvoice(invoice.invoiceid)
+    .subscribe(blob => {
+     // if (items[1] == 'pdf' || items[1] == 'PDF') {
+        var fileURL: any = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = fileURL;
+        a.target = '_blank';
+        // Don't set download attribute
+        //a.download = filename;
+        a.click();
+      // }
+      // else {
+      //   saveAs(blob, filename)
+      // }
+    }
+    );
+  }
     deleteInvoice(invoice: any) {
       const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
         title: 'Confirmation',

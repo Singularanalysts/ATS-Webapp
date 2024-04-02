@@ -80,10 +80,7 @@ tbody {
 }
 
 .mat-column-Name {
-
   border-right: 1px solid lightgray;
-
-
 }
 
 .mat-column-SerialNum,
@@ -97,7 +94,8 @@ tbody {
   .mat-column-Rate,
   .mat-column-InvoiceValue,
   .mat-column-Status,
-  .mat-column-Action 
+  .mat-column-Action ,
+  .mat-column-company
 {
   border-right: 1px solid lightgray;
 }

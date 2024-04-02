@@ -268,7 +268,7 @@
           "routerLink": "/usit/purchase-orders"
         },
         {
-          "text": "InVoices",
+          "text": "Invoice",
           "icon": "note_add",
           "routerLink": "/usit/invoices"
         },

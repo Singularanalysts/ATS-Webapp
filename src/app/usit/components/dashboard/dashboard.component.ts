@@ -147,13 +147,17 @@ sourcingLead = true;
 
     this.userid = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
-    if(this.department == 'Bench Sales' || this.department == 'Recruiting'){
+
+    this.role = localStorage.getItem('role');
+    
+
+    if(this.department == 'Bench Sales' || this.department == 'Recruiting' || this.role=='Sales Executive' || this.role=='Recruiter'){
       this.sourcingLead = false;
     }
     else{
       this.sourcingLead = true;
     }
-    this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
+    //Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     this.getDiceReqs();
     this.getSourcingLeads();
     this.getReqVendorCount();
