@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 
 @Injectable({
@@ -8,6 +10,8 @@ export class PurchaseOrderService {
 
   constructor(private apiServ: ApiService) { }
 
+  private http = inject(HttpClient);
+  
   getVendors(company: string, potype: string) {
     return this.apiServ.get("billpay/closure/OnboardedVendor/" + company + "/" + potype);
   }
@@ -78,5 +82,11 @@ export class PurchaseOrderService {
 
   getSelectedConsultantInfo(cid: number, vid: number) {
     return this.apiServ.get("billpay/closure/consultantInfo/" + cid + "/" + vid);
+  }
+
+  downloadInvoice(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiServ.apiUrl}billpay/invoice/pdf/${id}`, {
+      responseType: 'blob',
+    });
   }
 }
