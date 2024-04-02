@@ -481,3 +481,12 @@ a {
   font-weight: bold;
   cursor: pointer;
 }
+.paginator-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.paginator {
+  flex: 1;
+  margin-right: 10px; /* Adjust margin as needed */
+}

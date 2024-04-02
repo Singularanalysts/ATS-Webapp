@@ -63,12 +63,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="pagination justify-content-end">
-                    <!-- Add the following to your HTML template -->
-                    <div class="pagination justify-content-end">
-                    </div>
                 </div>
-            </div>
         </div>
 
 
@@ -133,8 +128,10 @@
                             <tr mat-row *matRowDef="let row; columns: dataTableColumnsTechAnalysis;"></tr>
                         </table>
                     </section>
+                    
                 </div>
             </div>
+            
             <div class="analysis-right-div">
                 <div class="table-container table-wrapper">
                     <div class="header-container-analysis">
@@ -198,3 +195,16 @@
         </div>
     </mat-card-content>
 </mat-card>
+<div class="paginator-container">
+    <div class="paginator">
+        <mat-paginator [length]="totalItems"  [hidePageSize]="true"   [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page">
+        </mat-paginator>
+
+    </div>
+    <div class="paginator">
+        <mat-paginator [length]="totalItems"  [hidePageSize]="true"  [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page">
+        </mat-paginator>
+
+    </div>
+  </div>
+  

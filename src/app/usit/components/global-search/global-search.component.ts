@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MaterialModule } from 'src/app/material.module';
@@ -17,7 +17,9 @@ import { GlobalSearchService } from '../../services/global-search.service';
 import { OpenReqsAnalysisComponent } from '../dashboard/open-reqs-analysis/open-reqs-analysis.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { DashboardService } from '../../services/dashboard.service';
-
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-global-search',
   standalone: true,
@@ -34,11 +36,20 @@ import { DashboardService } from '../../services/dashboard.service';
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatSlideToggleModule,
+    MatPaginatorModule,
+  
   ],
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class GlobalSearchComponent {
+  
   isDialogOpen = false;
   inputValue = '';
   title = 'SearchUI';
@@ -65,7 +76,24 @@ export class GlobalSearchComponent {
   pagesize!: number;
   currentPage: any;
   totalRecords: any;
+  //lavanya
+  totalItems=500;
+  pageSize = 50; // items per page
+  currentPageIndex = 0;
+  //pageSizeOptions = [5, 10, 25, 50];
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
+  page: number = 1;
+  
+ // totalPages=50;
+  
+  //
+  
+  @ViewChild(MatSort) sort!: MatSort;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   highlightSpaces(value: string) {
     this.inputValue = value;
   }
@@ -130,6 +158,21 @@ export class GlobalSearchComponent {
       this.pagesize
     );
   }
+  
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      this.currentPageIndex = event.pageIndex;
+      
+    }
+    return;
+  }
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+    return serialNumber;
+  }
+  
 
   closeSuggestions(): void {
     this.showJobPositionSuggestions = false;
@@ -479,4 +522,5 @@ export class GlobalSearchComponent {
       }
     )
   }
+ 
 }

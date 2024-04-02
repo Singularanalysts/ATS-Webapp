@@ -51,7 +51,7 @@ export class AddInvoiceComponent implements OnInit {
     public dialogRef: MatDialogRef<AddInvoiceComponent>
   ) { }
   // invoiceNumber = 
-  invoiceData !: any;
+  invoiceData !:any;
   ngOnInit(): void {
     this.getCompanies();
     if (this.data.actionName === "edit-invoice") {
@@ -82,7 +82,6 @@ export class AddInvoiceComponent implements OnInit {
       invoicedate: [invoiceData ? invoiceData.invoicedate : new Date(), [Validators.required]],
       duedate: [invoiceData ? invoiceData.duedate : '', [Validators.required]],
       jobdescription: [invoiceData ? invoiceData.jobdescription : '', [Validators.required]],
-      expensesfor :  [invoiceData ? invoiceData.expensesfor : '', [Validators.required]],
       numberofhours: [invoiceData ? invoiceData.numberofhours : '', [Validators.required]],
       hourlyrate: [invoiceData ? invoiceData.hourlyrate : '', [Validators.required]],
       tax: [invoiceData ? invoiceData.tax : ''],
@@ -117,14 +116,7 @@ export class AddInvoiceComponent implements OnInit {
       }
     )
   }
-  onNettermChange(event: MatSelectChange) {
-    const str: string = event.value;
-    const num: number = parseInt(str.match(/\d+/)?.[0] || "0", 10);
-    const currentDate: Date = new Date();
-    const newDate: Date = new Date(currentDate.getTime() + num * 24 * 60 * 60 * 1000);
-    this.invoiceForm.get("duedate")?.setValue(newDate);
 
-  }
   onPoSelect(event: MatSelectChange) {
     this.purchaseOrderServ.getPoById(event.value).subscribe(
       (response: any) => {
@@ -139,7 +131,7 @@ export class AddInvoiceComponent implements OnInit {
   }
   getConsultant(data: any) {
     // this.resetVendorFormFields();
-    console.log(data.vendor + " = " + data.consultant)
+    console.log(data.vendor+" = "+data.consultant)
     this.purchaseOrderServ.getConsultantData(data.vendor, data.consultant).subscribe(
       (response: any) => {
         this.consultantdata = response.data;
@@ -167,7 +159,7 @@ export class AddInvoiceComponent implements OnInit {
   }
   getInvoiceNumber(company: any) {
     const selectedCompany = this.company.find((option: any[]) => option[0] === company);
-    const companyName = selectedCompany[1];
+      const companyName = selectedCompany[1];
     this.purchaseOrderServ.getInvoiceNumber(companyName).subscribe((response: any) => {
       console.log(response.data);
       this.invoiceForm.get("invoicenumber")?.setValue(response.data[0]);

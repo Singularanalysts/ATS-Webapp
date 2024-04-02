@@ -33,12 +33,10 @@ export class InvoiceListComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
-    //vendorname
     'SerialNum',
     'invoicenumber',
     'InvoiceDate',
     'DueDate',
-    'company',
     'Consultant',
     'NetTerm',
     'NoOfHours',
@@ -149,9 +147,21 @@ export class InvoiceListComponent implements OnInit {
         // else {
         //   saveAs(blob, filename)
         // }
-      }
-      );
-  }
+
+      })
+    }
+
+  //   deleteInvoice(invoice: any) {
+  //     const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
+  //       title: 'Confirmation',
+  //       message: 'Are you sure you want to delete?',
+  //       confirmText: 'Yes',
+  //       cancelText: 'No',
+  //       actionData: invoice,
+
+  //     }
+  //     );
+  // }
   deleteInvoice(invoice: any) {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',

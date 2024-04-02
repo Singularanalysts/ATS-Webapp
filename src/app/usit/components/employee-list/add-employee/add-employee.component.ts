@@ -162,7 +162,7 @@ export class AddEmployeeComponent {
             this.initilizeAddEmployeeForm(this.empObj);
             this.validateControls();
             const roleId = response.data.role.roleid;
-            if (roleId == 5 || roleId == 6) {
+            if ( roleId == 5 || roleId == 6 ) {
               this.managerflg = true;
               this.teamleadflg = false;
             } else if (roleId == 7 || roleId == 8) {
@@ -440,7 +440,7 @@ export class AddEmployeeComponent {
       this.isFormSubmitted = false
       return;
     }
-    else {
+    else{
       this.isFormSubmitted = true
     }
     // updates employee object form values
@@ -737,23 +737,24 @@ export class AddEmployeeComponent {
 
   downloadfile(id: number, filename: string, flg: string) {
     var items = filename.split(".");
-    this.fileService
-      .downloadresume(id, flg)
-      .subscribe(blob => {
-        if (items[1] == 'pdf' || items[1] == 'PDF') {
-          var fileURL: any = URL.createObjectURL(blob);
-          var a = document.createElement("a");
-          a.href = fileURL;
-          a.target = '_blank';
-          // Don't set download attribute
-          //a.download = filename;
-          a.click();
-        }
-        else {
-          saveAs(blob, filename)
-        }
-      }
-      );
+     this.fileService
+       .downloadresume(id, flg)
+       .subscribe(blob => {
+         if (items[1] == 'pdf' || items[1] == 'PDF') {
+           var fileURL: any = URL.createObjectURL(blob);
+           var a = document.createElement("a");
+           a.href = fileURL;
+           a.target = '_blank';
+           // Don't set download attribute
+           //a.download = filename;
+           a.click();
+         }
+         else {
+           saveAs(blob, filename)
+         }
+       }
+       );
+
   }
 
   deletefile(id: number, doctype: string) {
@@ -772,50 +773,50 @@ export class AddEmployeeComponent {
       }, function () { });
 
       */
-    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
-      title: 'Confirmation',
-      message: 'Are you sure you want to delete?',
-      confirmText: 'Yes',
-      cancelText: 'No',
-      actionData: id,
-      actionName: 'delete-employee'
-    };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
-    const dialogRef = this.dialogServ.openDialogWithComponent(
-      ConfirmComponent,
-      dialogConfig
-    );
-    // call delete api after  clicked 'Yes' on dialog click
-    dialogRef.afterClosed().subscribe({
-      next: (resp) => {
-        if (dialogRef.componentInstance.allowAction) {
-          // call delete api
-          this.fileService.removefile(id, doctype).pipe(takeUntil(this.destroyed$)).subscribe({
-            next: (response: any) => {
-              if (response.status == 'success') {
+      const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+        title: 'Confirmation',
+        message: 'Are you sure you want to delete?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+        actionData: id,
+        actionName: 'delete-employee'
+      };
+      const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: true, edit: false, add: false});
+      const dialogRef = this.dialogServ.openDialogWithComponent(
+        ConfirmComponent,
+        dialogConfig
+      );
+      // call delete api after  clicked 'Yes' on dialog click
+      dialogRef.afterClosed().subscribe({
+        next: (resp) => {
+          if (dialogRef.componentInstance.allowAction) {
+            // call delete api
+            this.fileService.removefile(id,doctype).pipe(takeUntil(this.destroyed$)).subscribe({
+              next: (response: any) => {
+                if (response.status == 'success') {
                 //  this.getAllEmployees();
-                this.dataTobeSentToSnackBarService.message =
-                  'File Deleted successfully';
-                this.dialogRef.close();
-              } else {
+                  this.dataTobeSentToSnackBarService.message =
+                    'File Deleted successfully';
+                    this.dialogRef.close();
+                } else {
+                  this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+                  this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
+                }
+                this.snackBarServ.openSnackBarFromComponent(
+                  this.dataTobeSentToSnackBarService
+                );
+              },
+              error: (err) => {
                 this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
-                this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
-              }
-              this.snackBarServ.openSnackBarFromComponent(
-                this.dataTobeSentToSnackBarService
-              );
-            },
-            error: (err) => {
-              this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
-              this.dataTobeSentToSnackBarService.message = err.message;
-              this.snackBarServ.openSnackBarFromComponent(
-                this.dataTobeSentToSnackBarService
-              );
-            },
-          });
-        }
-      },
-    });
+                this.dataTobeSentToSnackBarService.message = err.message;
+                this.snackBarServ.openSnackBarFromComponent(
+                  this.dataTobeSentToSnackBarService
+                );
+              },
+            });
+          }
+        },
+      });
   }
 
   deletemultiple(id: number) {
@@ -834,7 +835,7 @@ export class AddEmployeeComponent {
      }, function () { });
      */
 
-    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to delete?',
       confirmText: 'Yes',
@@ -842,7 +843,7 @@ export class AddEmployeeComponent {
       actionData: id,
       actionName: 'delete-employee'
     };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: true, edit: false, add: false});
     const dialogRef = this.dialogServ.openDialogWithComponent(
       ConfirmComponent,
       dialogConfig
@@ -855,10 +856,10 @@ export class AddEmployeeComponent {
           this.fileService.removefiles(id).pipe(takeUntil(this.destroyed$)).subscribe({
             next: (response: any) => {
               if (response.status == 'success') {
-                //  this.getAllEmployees();
+              //  this.getAllEmployees();
                 this.dataTobeSentToSnackBarService.message =
                   'File Deleted successfully';
-                this.dialogRef.close();
+                  this.dialogRef.close();
               } else {
                 this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
                 this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
@@ -883,25 +884,25 @@ export class AddEmployeeComponent {
   // fileList?: FileData[];
   type!: any;
   filedetails(fileData: FileData) {
-    this.type = fileData.filename;
-    var items = this.type.split(".");
-    this.fileService
-      .downloadfile(fileData.docid)
-      .subscribe(blob => {
-        if (items[1] == 'pdf' || items[1] == 'PDF') {
-          var fileURL: any = URL.createObjectURL(blob);
-          var a = document.createElement("a");
-          a.href = fileURL;
-          a.target = '_blank';
-          // a.download = filename;
-          a.click();
-        }
-        else {
-          saveAs(blob, fileData.filename)
-        }
-      }
-        // saveAs(blob, fileData.filename)
-      );
+  this.type = fileData.filename;
+     var items = this.type.split(".");
+     this.fileService
+       .downloadfile(fileData.docid)
+       .subscribe(blob => {
+         if (items[1] == 'pdf' || items[1] == 'PDF') {
+           var fileURL: any = URL.createObjectURL(blob);
+           var a = document.createElement("a");
+           a.href = fileURL;
+           a.target = '_blank';
+           // a.download = filename;
+           a.click();
+         }
+         else {
+           saveAs(blob, fileData.filename)
+         }
+       }
+         // saveAs(blob, fileData.filename)
+       );
 
   }
 
@@ -912,13 +913,13 @@ export class AddEmployeeComponent {
     const bankAccountNoControl = this.employeeForm.get('accno');
     const bankIfscControl = this.employeeForm.get('ifsc');
     const bankBranchNameControl = this.employeeForm.get('branch');
-
+    
     if (checked) {
       this.showOtherDetails = true;
       // Add validators when checkbox is checked
       aadharControl?.setValidators([Validators.required, Validators.pattern(/^\d{12}$/)]);
       panControl?.setValidators([Validators.required, Validators.pattern(/^[A-Z]{5}\d{4}[A-Z]{1}$/)],);
-      bankNameControl?.setValidators([Validators.required, Validators.maxLength(100)]);
+      bankNameControl?.setValidators( [Validators.required, Validators.maxLength(100)]);
       bankAccountNoControl?.setValidators([Validators.required, Validators.pattern(/^\d{1,15}$/)]);
       bankIfscControl?.setValidators([Validators.required, Validators.pattern(/^([A-Za-z]{4}\d{7})$/)]);
       bankBranchNameControl?.setValidators([Validators.required]);
@@ -937,16 +938,16 @@ export class AddEmployeeComponent {
     aadharControl?.updateValueAndValidity();
     panControl?.updateValueAndValidity();
     bankNameControl?.updateValueAndValidity();
-    bankAccountNoControl?.updateValueAndValidity();
-    bankIfscControl?.updateValueAndValidity();
-    bankBranchNameControl?.updateValueAndValidity();
+      bankAccountNoControl?.updateValueAndValidity();
+      bankIfscControl?.updateValueAndValidity();
+      bankBranchNameControl?.updateValueAndValidity();
   }
 
   camelCase(event: any) {
     const inputValue = event.target.value;
     event.target.value = this.capitalizeFirstLetter(inputValue);
   }
-
+  
   capitalizeFirstLetter(input: string): string {
     return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
       return char.toUpperCase();
