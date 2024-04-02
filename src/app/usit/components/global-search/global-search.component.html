@@ -27,7 +27,10 @@
         </div>
         <div>
             <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button"
-                (click)="popUpImport()">Excel</button>
+                (click)="reset()">Back</button>
+
+                <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button"
+                    (click)="popUpImport()">Excel</button>
         </div>
         <!-- style="    margin-top: 1.5rem; cursor: pointer;" -->
         <div>
@@ -97,7 +100,7 @@
                                     sortActionDescription="Sort by Date">
                                     Posted On
                                 </th>
-                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on}} </td>
+                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy'}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="Category">
@@ -160,7 +163,7 @@
                                     sortActionDescription="Sort by Date">
                                     Posted On
                                 </th>
-                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on}} </td>
+                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy'}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="Vendor">

@@ -423,6 +423,9 @@ export class GlobalSearchComponent {
     // Alternatively, you can use router.navigate(['/externalRedirect', { externalUrl: jobSourceUrl }], { skipLocationChange: true });
   }
 
+  reset(){
+    this.tableactive = false;
+  }
   excelName!: string;
 
   headings!: string[][];
