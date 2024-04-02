@@ -163,6 +163,26 @@
 
                 <mat-form-field class="upload">
                     <mat-label for="otherDocumentsUploadFile">Multiple Documents</mat-label>
+                    <div class="upload-inp-container">
+                      <input matInput multiple readonly name="otherDocumentsName" class="file-input" />
+                      <label for="otherDocumentsUploadFile" class="browse-button-label">
+                        <button type="button" mat-icon-button
+                          (click)="multifiles.click()"><mat-icon>upload_file</mat-icon></button>
+                      </label>
+                      <input type="file" id="otherDocumentsUploadFile" (change)="onFileChange($event)" multiple #multifiles
+                        name="otherDocumentsUploadFile" multiple="multiple"
+                        accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        style="display: none;" />
+                    </div>
+                    <mat-hint *ngIf="multifilesError" style="color: #f44336; font-size: 12px;">Other Documents size should be less
+                      than 4 mb</mat-hint>
+                    <mat-hint *ngIf="multifilesFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename
+                      to 15-20 characters before upload</mat-hint>
+                  </mat-form-field>
+
+<!--
+                <mat-form-field class="upload">
+                    <mat-label for="otherDocumentsUploadFile">Multiple Documents</mat-label>
                     <div class="upload-container">
                         <input matInput multiple readonly name="otherDocumentsName" class="file-input">
                         <label for="otherDocumentsUploadFile" class="browse-button-label">
@@ -175,6 +195,9 @@
                             style="display: none;" />
                     </div>
                 </mat-form-field>
+            -->
+
+
             </div>
         </div>
     </form>

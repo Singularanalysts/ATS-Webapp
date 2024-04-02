@@ -14,6 +14,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
 import { Subject, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
+import { ComposemailComponent } from './composemail/composemail.component';
 
 @Component({
   selector: 'app-invoice-list',
@@ -28,7 +29,7 @@ import { PageEvent } from '@angular/material/paginator';
   templateUrl: './invoice-list.component.html',
   styleUrls: ['./invoice-list.component.scss']
 })
-export class InvoiceListComponent implements OnInit{
+export class InvoiceListComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
@@ -105,14 +106,14 @@ export class InvoiceListComponent implements OnInit{
     const dialogRef = this.dialogServ.openDialogWithComponent(AddInvoiceComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
+      if (dialogRef.componentInstance.submitted) {
         this.getAll();
         //  this.getAll(this.currentPageIndex + 1);
       }
     })
   }
 
-  editInvoice(invoice: any){
+  editInvoice(invoice: any) {
     const actionData = {
       title: 'Update Invoice',
       invoiceData: invoice,
@@ -125,7 +126,7 @@ export class InvoiceListComponent implements OnInit{
     const dialogRef = this.dialogServ.openDialogWithComponent(AddInvoiceComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
+      if (dialogRef.componentInstance.submitted) {
         this.getAll();
         // this.getAllData(this.currentPageIndex + 1);
       }
@@ -134,9 +135,9 @@ export class InvoiceListComponent implements OnInit{
 
   download(invoice: any) {
     this.purchaseOrderServ
-    .downloadInvoice(invoice.invoiceid)
-    .subscribe(blob => {
-     // if (items[1] == 'pdf' || items[1] == 'PDF') {
+      .downloadInvoice(invoice.invoiceid)
+      .subscribe(blob => {
+        // if (items[1] == 'pdf' || items[1] == 'PDF') {
         var fileURL: any = URL.createObjectURL(blob);
         var a = document.createElement("a");
         a.href = fileURL;
@@ -144,66 +145,85 @@ export class InvoiceListComponent implements OnInit{
         // Don't set download attribute
         //a.download = filename;
         a.click();
-      // }
-      // else {
-      //   saveAs(blob, filename)
-      // }
-    }
-    );
-  }
-    deleteInvoice(invoice: any) {
-      const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
-        title: 'Confirmation',
-        message: 'Are you sure you want to delete?',
-        confirmText: 'Yes',
-        cancelText: 'No',
-        actionData: invoice,
+        // }
+        // else {
+        //   saveAs(blob, filename)
+        // }
       }
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = "400px";
-      dialogConfig.height = "auto";
-      dialogConfig.disableClose = false;
-      dialogConfig.panelClass = "delete-visa";
-      dialogConfig.data = dataToBeSentToDailog;
-      const dialogRef = this.dialogServ.openDialogWithComponent(ConfirmComponent, dialogConfig);
-  
-      dialogRef.afterClosed().subscribe({
-        next: () =>{
-          if (dialogRef.componentInstance.allowAction) {
-            const dataToBeSentToSnackBar: ISnackBarData = {
-              message: '',
-              duration: 1500,
-              verticalPosition: 'top',
-              horizontalPosition: 'center',
-              direction: 'above',
-              panelClass: ['custom-snack-success'],
-            };
-            this.purchaseOrderServ.deleteInvoice(invoice.invoiceid).pipe(takeUntil(this.destroyed$)).subscribe
-              ({
-                next: (resp: any) => {
-                  if (resp.status == 'success') {
-                    dataToBeSentToSnackBar.message =
-                      'Invoice Deleted successfully';
-                    this.snackBarServ.openSnackBarFromComponent(
-                      dataToBeSentToSnackBar
-                    );
-                    // call get api after deleting a role
-                    this.getAll();
-                  } else {
-                    dataToBeSentToSnackBar.message = resp.message;
-                    this.snackBarServ.openSnackBarFromComponent(
-                      dataToBeSentToSnackBar
-                    );
-                  }
-  
-                }, error: (err) => console.log(`PO delete error: ${err}`)
-              });
-          }
-        }
-      })
+      );
+  }
+  deleteInvoice(invoice: any) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: invoice,
     }
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "400px";
+    dialogConfig.height = "auto";
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = "delete-visa";
+    dialogConfig.data = dataToBeSentToDailog;
+    const dialogRef = this.dialogServ.openDialogWithComponent(ConfirmComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe({
+      next: () => {
+        if (dialogRef.componentInstance.allowAction) {
+          const dataToBeSentToSnackBar: ISnackBarData = {
+            message: '',
+            duration: 1500,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            direction: 'above',
+            panelClass: ['custom-snack-success'],
+          };
+          this.purchaseOrderServ.deleteInvoice(invoice.invoiceid).pipe(takeUntil(this.destroyed$)).subscribe
+            ({
+              next: (resp: any) => {
+                if (resp.status == 'success') {
+                  dataToBeSentToSnackBar.message =
+                    'Invoice Deleted successfully';
+                  this.snackBarServ.openSnackBarFromComponent(
+                    dataToBeSentToSnackBar
+                  );
+                  // call get api after deleting a role
+                  this.getAll();
+                } else {
+                  dataToBeSentToSnackBar.message = resp.message;
+                  this.snackBarServ.openSnackBarFromComponent(
+                    dataToBeSentToSnackBar
+                  );
+                }
+              }, error: (err) => console.log(`PO delete error: ${err}`)
+            });
+        }
+      }
+    })
+  }
   applyFilter(event: any){
 
+  }
+
+  sendEmail(invoice: any){
+    const actionData = {
+      title: 'Update Invoice',
+      invoiceData: invoice,
+      actionName: 'edit-invoice',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    dialogConfig.panelClass = 'edit-invoice';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(ComposemailComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
+        // this.getAllData(this.currentPageIndex + 1);
+      }
+    })
   }
 
   navigateToDashboard() {

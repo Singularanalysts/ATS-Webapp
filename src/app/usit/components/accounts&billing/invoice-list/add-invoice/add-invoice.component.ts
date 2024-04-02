@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Inject } from '@angular/core';
+import { Component, OnInit, inject, Inject, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { Subject, takeUntil } from 'rxjs';
+import { FileManagementService } from 'src/app/usit/services/file-management.service';
 
 @Component({
   selector: 'app-add-invoice',
@@ -34,6 +35,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrls: ['./add-invoice.component.scss']
 })
 export class AddInvoiceComponent implements OnInit {
+  private fileService = inject(FileManagementService);
   company: any = [];
   vendordata: any = [];
   consultantdata: any[] = [];
@@ -267,6 +269,7 @@ export class AddInvoiceComponent implements OnInit {
       .subscribe({
         next: (resp: any) => {
           if (resp.status == 'success') {
+            this.submit(resp.data.invoiceid);
             dataToBeSentToSnackBar.message =
               this.data.actionName === 'add-invoice'
                 ? 'Invoice added successfully'
@@ -291,11 +294,55 @@ export class AddInvoiceComponent implements OnInit {
         },
       });
   }
-
+  multifilesError: boolean = false;
+  uploadedFileNames: string[] = [];
+  uploadedfiles: string[] = []
+  multifilesFileNameLength: boolean = false;
+  @ViewChild('multifiles')
+  multifiles: any = ElementRef;
+  sum = 0;
   onFileChange(event: any) {
-
+    this.uploadedFileNames = [];
+    for (var i = 0; i < event.target.files.length; i++) {
+      const file = event.target.files[i];
+      var items = file.name.split(".");
+      const str = items[0];
+      const fileSizeInKB = Math.round(file.size / 1024);
+      this.sum = this.sum + fileSizeInKB;
+      if (str.length > 20) {
+        this.multifilesFileNameLength = true;
+      }
+      if (fileSizeInKB < 4048) {
+        this.uploadedfiles.push(event.target.files[i]);
+        this.uploadedFileNames.push(file.name);
+        this.multifilesError = false;
+      }
+      else {
+        this.multifiles.nativeElement.value = "";
+        this.uploadedfiles = [];
+        this.multifilesError = true;
+        this.multifilesFileNameLength = false;
+      }
+    }
   }
 
+
+  submit(id: number) {
+    const formData = new FormData();
+
+    for (var i = 0; i < this.uploadedfiles.length; i++) {
+      formData.append("files", this.uploadedfiles[i]);
+    }
+    
+    this.fileService.uploadFileBillPay(formData, id)
+      .subscribe((response: any) => {
+        if (response.status === 200) {
+
+        } else {
+        }
+      }
+      );
+  }
   onCancel() {
     this.dialogRef.close();
   }
@@ -304,6 +351,8 @@ export class AddInvoiceComponent implements OnInit {
     jobdescription: JOBDESCRIPTION,
     netterm: NETTERM,
   };
+
+ 
 }
 
 export const NETTERM = [
