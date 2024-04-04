@@ -196,15 +196,10 @@ export class DashboardComponent implements OnInit {
     this.countCallingHigherRole();
 
     this.myForm = this.formBuilder.group({
-      startDate: ['',Validators.required], // Set default value if needed
-      endDate: ['',Validators.required], // Set default value if needed
-      benchSalesEmployees: ['',Validators.required] // Set default value if needed
+      startDate: [''], // Set default value if needed
+      endDate: [''], // Set default value if needed
+      benchSalesEmployees: [''] // Set default value if needed
     });
-    this.startDate = this.myForm.get('startDate') as  FormControl;
-    this.endDate = this.myForm.get('endDate') as  FormControl;
-  }
-  hasError(control: FormControl): boolean {
-    return control.touched && control.errors == null;
   }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks

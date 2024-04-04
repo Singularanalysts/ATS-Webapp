@@ -10,6 +10,15 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { utils, writeFile } from 'xlsx';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { MatSort } from '@angular/material/sort';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ApiService } from 'src/app/core/services/api.service';
+import { AddconsultantComponent, IV_AVAILABILITY, PRIORITY, RADIO_OPTIONS, STATUS } from '../consultant-list/add-consultant/add-consultant.component';
+import { FormBuilder } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+
+//import { AddVisaComponent } from '../../masters/visa-list/add-visa/add-visa.component';
+
+
 @Component({
   selector: 'app-hot-list',
   standalone: true,
@@ -19,7 +28,9 @@ import { MatSort } from '@angular/material/sort';
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule, AddconsultantComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './hot-list.component.html',
   styleUrls: ['./hot-list.component.scss']
@@ -39,6 +50,52 @@ export class HotListComponent implements OnInit {
     'Phone',
     'Email',
   ];
+
+  //lavanya
+  priority: [string, string] = ['', ''];
+  h1bForm: any = FormGroup;
+  ///private h1bServ = inject(H1bImmigrantService);
+  private api = inject(ApiService);
+  visadata: any = [];
+  experiences: string[] = [];
+  experienceForm: FormGroup | undefined;
+  PRIORITY = [
+    { code: 'P1', desc: 'P1 - Our h1 w2 consultant not on the job' },
+    { code: 'P2', desc: 'P2 - our h1 consultant whose project is ending in 4 weeks' },
+    { code: 'P3', desc: 'P3 - new visa transfer consultant looking for a job' },
+    { code: 'P4', desc: 'P4 - our h1 consultant on a project looking for a high rate' },
+    { code: 'P5', desc: 'P5 - OPT /CPT visa looking for a job' },
+    { code: 'P6', desc: 'P6 - independent visa holder looking for a job' },
+    { code: 'P7', desc: 'P7 - independent visa holder project is ending in 4 weeks' },
+    { code: 'P8', desc: 'P8 - independent visa holder project looking for a high rate' },
+    { code: 'P9', desc: 'P9 - 3rd party consultant' },
+    { code: 'P10', desc: 'P10' },
+  ]
+  http: any;
+  filteredConsultants: any;
+  myForm: any;
+  filterValues: any;
+  filterRequest: any;
+  constructor(private formBuilder: FormBuilder) {
+    this.experienceForm = this.formBuilder.group({
+      experience: ['']
+    });
+
+  }
+  generateExperienceRanges() {
+    for (let i = 0; i <= 30; i += 5) {
+      const range = `${i}-${i + 5}`;
+      this.experiences.push(range);
+    }
+  }
+  selectOptionObj = {
+    interviewAvailability: IV_AVAILABILITY,
+    priority: PRIORITY,
+    statusType: STATUS,
+    radioOptions: RADIO_OPTIONS,
+
+  };
+
   // pagination code
   length = 50;
   pageIndex = 0;
@@ -65,6 +122,44 @@ export class HotListComponent implements OnInit {
       this.showReport = false;
     }
     this.getAllData();
+
+     //lavanya
+     this.getvisa();
+     this.generateExperienceRanges();
+     this.myForm = this.formBuilder.group({
+       visa: [null], // Set default value if needed
+       priority: [null], // Set default value if needed
+       experience: [null] // Set default value if needed
+     });
+    
+  }
+
+ 
+
+  filterData(request:any) {
+    // if (this.filterRequest()) {
+      // If any filter field is provided, filter the data
+      this.consultantServ.getFilteredConsultants(request)
+        .subscribe(
+          (response: any) => {
+            // Assign the response to the dataSource for displaying filtered data
+
+            this.dataSource.data = response.data;
+            // Reassign serial numbers after filtering
+            this.dataSource.data.map((item: any, index: number) => {
+              item.serialNum = index + 1;
+              return item;
+            });
+          },
+          (error: any) => {
+            // Handle errors here
+            console.error('An error occurred:', error);
+          }
+        );
+    // } else {
+    //   // If all filter fields are empty, fetch all data
+    //   this.getAllData();
+    // }
   }
 
   getAllData() {
@@ -78,6 +173,14 @@ export class HotListComponent implements OnInit {
       }
     )
   }
+
+   //lavanya
+   getvisa() {
+    this.consultantServ.getvisa().subscribe((response: any) => {
+      this.visadata = response.data;
+    });
+  }
+  //
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
@@ -148,4 +251,35 @@ export class HotListComponent implements OnInit {
     utils.book_append_sheet(wb, ws, 'data');
     writeFile(wb, 'HotList@' + chicagoDate + '.xlsx');
   }
+  //lavanya
+  request=new FilterRequest();
+  onExperienceChange(event: any): void {
+    const visa = this.myForm.get('visa').value;
+  const priority = this.myForm.get('priority').value;
+  const experience = this.myForm.get('experience').value;
+    this.request.visaStatus=visa;
+    this.request.priority=priority;
+    this.request.experience=experience;
+    
+    this.filterData(this.request);
+  }
+  refreshForm(): void {
+    this.myForm.reset(); // Reset all form controls
+    // Call getAllData() to fetch all data again
+    this.getAllData();
+  }
+
+  
+
+
+  
 }
+
+export class FilterRequest {
+  visaStatus: any;
+  priority: any;
+  experience: any;
+  
+}
+
+

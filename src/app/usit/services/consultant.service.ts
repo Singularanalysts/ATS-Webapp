@@ -184,4 +184,10 @@ export class ConsultantService {
   }
   
 
+  getFilteredConsultants(request:any) {
+    return this.http.post("consultant/consultantFilter/",request);
+  }
+
+  
+
 }

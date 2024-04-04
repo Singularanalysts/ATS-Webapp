@@ -460,7 +460,7 @@
       </div>
     </div>
   </div>
-
+<!-- 
   <div class="analysis-container">
     <div class="analysis-left-div">
       <div class="table-container table-wrapper">
@@ -568,6 +568,7 @@
       </div>
     </div>
   </div>
+-->
 <form [formGroup]="myForm">
   <div class="table-container-dice table-wrapper" style="margin-bottom: 120px;" *ngIf="sourcingLead">
     <div class="header-container-leading-resources" style="padding-right: 6px;">
@@ -596,9 +597,6 @@
         <mat-select formControlName="benchSalesEmployees" (selectionChange)="onEmployeeChange($event)">
           <mat-option *ngFor="let option of benchSalesEmployees" [value]="option[0]">{{ option[1] }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="hasError(startDate.errors) && hasError(endDate.errors) && myForm.get('benchSalesEmployees').touched">
-          Please select Start Date and End Date before selecting an Employee.
-        </mat-error>
         
       
       </mat-form-field>

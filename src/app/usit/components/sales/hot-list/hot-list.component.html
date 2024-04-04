@@ -4,7 +4,55 @@
         <li class="last">Sales</li>
         <li class="last">Hot List</li>
     </ul>
+
     <div class="header-container mat-elevation-z1">
+        <span class="header-text">
+            Hot List &nbsp;&nbsp;&nbsp;
+        </span>
+        <!--lavanya-->
+
+        <form [formGroup]="myForm">
+            <div class="hot-list-actions">
+                <div class="form-container">
+                    <mat-form-field appearance="fill" style="width: 16rem;">
+                        <mat-label class="bold-label">Immigration Status</mat-label>
+                        <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)">
+                            <mat-option *ngFor="let option of visadata" [value]="option[0]">
+                                {{ option[1] }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field appearance="fill" style="margin-top:1rem;margin-right: 1rem; ">
+                        <mat-label class="bold-label">Select Priority</mat-label>
+                        <!--<mat-select formControlName="priority"(selectionChange)="onPriority($event.value)">-->
+                        <mat-select formControlName="priority" (selectionChange)="onExperienceChange($event)">
+                            <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
+                                {{option.code}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right: 25rem;">
+                        <mat-label class="bold-label">Experience</mat-label>
+                        <mat-select formControlName="experience" (selectionChange)="onExperienceChange($event)">
+                            <mat-option *ngFor="let exp of experiences" [value]="exp">{{ exp }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <button type="button" mat-raised-button color="primary" (click)="refreshForm()">Refresh</button>
+                <button *ngIf="showReport" class="search" mat-raised-button color="primary"
+                    (click)="handleExport()">Excel
+                    Import</button>
+                <div class="search-hot-list">
+                    <input matInput type="text" class="search" placeholder="search Hot List" (keyup)="onFilter($event)">
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- <div class="header-container mat-elevation-z1">
         <span class="header-text">
             Hot List &nbsp;&nbsp;&nbsp;
         </span>
@@ -16,7 +64,7 @@
                 <input matInput type="text" class="search" placeholder="search Hot List" (keyup)="onFilter($event)">
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div id="table-container" class="table-wrapper">
         <section class="mat-elevation-z8 hot-list-table-style">
