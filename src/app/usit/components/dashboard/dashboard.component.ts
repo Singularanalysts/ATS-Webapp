@@ -19,21 +19,31 @@ import { interval, Subscription } from 'rxjs';
 import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count-list.component';
 import { OpenReqsAnalysisComponent } from './open-reqs-analysis/open-reqs-analysis.component';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { AbstractControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
+  imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
+  providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
   dataSourceTech = new MatTableDataSource([]);
   dataSourceVendor = new MatTableDataSource([]);
+  benchSalesEmployees: any = [];
+
   private dialogServ = inject(DialogService);
+
+
   dataTableColumns: string[] = [
     'Name',
     'Category',
@@ -46,11 +56,13 @@ export class DashboardComponent implements OnInit {
   dataTableColumnsDice: string[] = [
     'PostedDate',
     'JobTitle',
-    'Category',
     'JobLocation',
     'Vendor',
     'TaggedDate',
-    'TaggedBy'
+    'TaggedBy',
+    'TaggedCount',
+
+
   ];
   dataTableColumnsTechAnalysis: string[] = [
     'SNo',
@@ -64,6 +76,10 @@ export class DashboardComponent implements OnInit {
     'Vendor',
     'CategoryCount',
   ];
+  empty:any;
+  endDate: any;
+  startDate: any;
+  h1bForm: any = FormGroup;
   entity: any;
   datarr: any[] = [];
   private dashboardServ = inject(DashboardService);
@@ -115,7 +131,11 @@ export class DashboardComponent implements OnInit {
   private intervalSubscription!: Subscription;
 
   private ngZone = inject(NgZone);
+  myForm: any;
+  startDateControl:FormControl| undefined;
+  endDateControl: FormControl | undefined;
 
+  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
     //console.log('Dash Board Refreshed '+this.refreshFlg);
     // You can perform any actions or logic inside this method
@@ -133,10 +153,11 @@ export class DashboardComponent implements OnInit {
       })
     );
   }
-refreshFlg = 'executive';
-department!:any;
-sourcingLead = true;
+  refreshFlg = 'executive';
+  department!: any;
+  sourcingLead = true;
   ngOnInit(): void {
+    this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
       .subscribe(() => {
@@ -147,10 +168,10 @@ sourcingLead = true;
 
     this.userid = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
-    if(this.department == 'Bench Sales' || this.department == 'Recruiting'){
+    if (this.department == 'Bench Sales' || this.department == 'Recruiting') {
       this.sourcingLead = false;
     }
-    else{
+    else {
       this.sourcingLead = true;
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
@@ -173,14 +194,24 @@ sourcingLead = true;
     }
     this.countCallingExecutiveAndLead();
     this.countCallingHigherRole();
-  }
 
+    this.myForm = this.formBuilder.group({
+      startDate: ['',Validators.required], // Set default value if needed
+      endDate: ['',Validators.required], // Set default value if needed
+      benchSalesEmployees: ['',Validators.required] // Set default value if needed
+    });
+    this.startDate = this.myForm.get('startDate') as  FormControl;
+    this.endDate = this.myForm.get('endDate') as  FormControl;
+  }
+  hasError(control: FormControl): boolean {
+    return control.touched && control.errors == null;
+  }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
     }
-   console.log("destroyed")
+    console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
@@ -249,7 +280,7 @@ sourcingLead = true;
     this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountIndArr = response.data;
-       
+
         this.intCountIndArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcountIndividual = ent.salescount;
@@ -533,14 +564,11 @@ sourcingLead = true;
   getDiceReqs() {
     this.dashboardServ.getDiceRequirements().subscribe(
       (response: any) => {
-        //this.entity = response.data;
         this.dataSourceDice.data = response.data;
-        // this.dataSourceDice.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
       }
-    )
+    );
   }
+
 
   sourcingPop(element: any, condition: any) {
     const actionData = {
@@ -565,7 +593,7 @@ sourcingLead = true;
       dialogConfig
     );
   }
-  
+
   search = 'empty'
   getReqVendorCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'vendor', 'empty').subscribe(
@@ -577,7 +605,7 @@ sourcingLead = true;
       }
     )
   }
-  
+
   getReqCatergoryCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'category', 'empty').subscribe(
       (response: any) => {
@@ -611,16 +639,82 @@ sourcingLead = true;
     );
   }
 
-  onVendorFilter(event: any){
+  onVendorFilter(event: any) {
     this.dataSourceVendor.filter = event.target.value;
   }
 
-  onDiceFilter(event: any){
+  onDiceFilter(event: any) {
     this.dataSourceDice.filter = event.target.value;
   }
 
-  onCategoryFilter(event: any){
+  onCategoryFilter(event: any) {
     this.dataSourceTech.filter = event.target.value;
   }
+  //lavanya
+  getEmployeeNames() {
+    this.dashboardServ.getEmployeeName().subscribe(
+      (response: any) => {
+        // Assuming the API response contains an array of objects with 'name' property for each employee
+        this.benchSalesEmployees = response.data;
+      },
+      (error: any) => {
+        console.error('Error fetching employee names:', error);
+      }
+    );
+  }
+
+  onEmployeeChange(event: any): void {
+    const fromDate = this.myForm.get('startDate').value; // Assuming 'fromDate' is the form control for from date
+    const toDate = this.myForm.get('endDate').value; // Assuming 'toDate' is the form control for to date
+    const empId = event.value; // Assuming event.value contains the employee name
+    const formatedStartDate = this.formatDate(fromDate);
+    const formatedEndDate = this.formatDate(toDate);
+
+    this.filterData(formatedStartDate, formatedEndDate, empId);
+  }
+
+
+  formatDate(date: string): string {
+    const selectedDate = new Date(date);
+    const year = selectedDate.getFullYear();
+    const month = ("0" + (selectedDate.getMonth() + 1)).slice(-2);
+    const day = ("0" + selectedDate.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  filterData(startDate: any, endDate: any, empId: any) {
+
+    this.dashboardServ.getFilteredEmployee(startDate, endDate, empId)
+      .subscribe(
+        (response: any) => {
+          // Check if response contains data property
+          if (response && response.data) {
+            // Assign the response data to the dataSource for displaying filtered data
+            this.dataSourceDice.data = response.data;
+            // Reassign serial numbers after filtering
+            this.dataSourceDice.data.forEach((item: any, index: number) => {
+              item.serialNum = index + 1;
+            });
+          } else {
+            // Handle empty or invalid response
+            console.error('Invalid response:', response);
+          }
+        },
+        (error: any) => {
+          // Handle errors here
+          console.error('An error occurred:', error);
+        }
+      );
+  }
+  
+  refreshData() {
+    // Reset form fields
+    this.myForm.reset();
+    // Refresh data here. You may call your service methods to fetch new data.
+    this.getDiceReqs();
+  }
+//
 
 }
+
+
+

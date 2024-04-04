@@ -26,7 +26,7 @@ ul.breadcrumb li a {
 }
 
 ul.breadcrumb li a:hover {
-  color: #01447e;
+  color: #0f4d83;
   text-decoration: underline;
 }
 
@@ -395,3 +395,22 @@ b {
 
 
 }
+.date-picker-field {
+  display: flex;
+  align-items: center;
+}
+
+.date-picker-container {
+  position: relative;
+  flex: 1; /* Allow the input to expand */
+}
+
+/* Adjust the margin as needed */
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper {
+  margin-right: 8px;
+}
+.mat-form-field {
+  margin-bottom: 5px; /* Adjust as needed */
+}
+
+

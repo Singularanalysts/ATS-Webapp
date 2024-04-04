@@ -29,8 +29,11 @@ export class DashboardService {
   }
 
   public getDiceRequirements() {
-    return this.apiServ.get("dashboard/reqempTags");
-  }
+    return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
+   }
+    public getEmployeeName() {
+     return this.apiServ.get("dashboard/getBanchSalesEmps");
+    }
 
   public getSourcingLeads(id: any) {
     return this.apiServ.get("dashboard/all/" + id);
@@ -87,5 +90,7 @@ export class DashboardService {
   public getReqCounts(search: string,flag: string, type: string, date: any) {
     return this.apiServ.get("dashboard/reqCounts/" + search + "/" +flag + "/" + type + "/" + date);
   }
-
+  getFilteredEmployee(startDate:any ,endDate:any ,id:any){
+    return this.apiServ.get("dashboard/getTaggedcounts/"+startDate+"/"+endDate+"/"+id)
+   }
 }
