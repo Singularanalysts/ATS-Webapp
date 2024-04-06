@@ -100,7 +100,7 @@
                                     sortActionDescription="Sort by Date">
                                     Posted On
                                 </th>
-                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy'}} </td>
+                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_date | date:'MM-dd-yyyy'}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="Category">
@@ -108,7 +108,7 @@
                                     sortActionDescription="Sort by Category">
                                     Category
                                 </th>
-                                <td mat-cell *matCellDef="let element"> {{element.job_title}} </td>
+                                <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
                             </ng-container>
 
                             <ng-container matColumnDef="VendorCount">
@@ -118,7 +118,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <span class="count"
-                                        (click)="vendorCategoryPopup(element.job_title,element.posted_on, 'vendor')">
+                                        (click)="vendorCategoryPopup(element.category_skill,element.posted_date,'vendor')">
                                         {{element.vendorcount}}
                                     </span>
                                 </td>
@@ -195,7 +195,7 @@
         </div>
     </mat-card-content>
 </mat-card>
-<div class="paginator-container">
+<!-- <div class="paginator-container">
     <div class="paginator">
         <mat-paginator [length]="totalItems"  [hidePageSize]="true"   [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page">
         </mat-paginator>
@@ -206,5 +206,5 @@
         </mat-paginator>
 
     </div>
-  </div>
+  </div> -->
   
