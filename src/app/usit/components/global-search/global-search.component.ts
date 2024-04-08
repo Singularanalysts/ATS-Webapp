@@ -20,6 +20,8 @@ import { DashboardService } from '../../services/dashboard.service';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatSort } from '@angular/material/sort';
+import { MatTabsModule } from '@angular/material/tabs';
+
 @Component({
   selector: 'app-global-search',
   standalone: true,
@@ -41,7 +43,7 @@ import { MatSort } from '@angular/material/sort';
     FormsModule,
     MatSlideToggleModule,
     MatPaginatorModule,
-  
+    MatTabsModule
   ],
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss'],
@@ -86,6 +88,8 @@ export class GlobalSearchComponent {
   showFirstLastButtons = true;
   pageEvent!: PageEvent;
   page: number = 1;
+  pageSizeOptions = [5, 10, 25];
+  itemsPerPage = 50;
   
  // totalPages=50;
   
@@ -113,7 +117,7 @@ export class GlobalSearchComponent {
   ) {}
 
   filteredarray: any[] = [];
-  search(): void {
+  search(pagIdx=1): void {
     // this.showJobPositionSuggestions = this.jobposition.trim() !== '';
     this.showLocationSuggestions = this.location.trim() !== '';
 
@@ -127,7 +131,7 @@ export class GlobalSearchComponent {
     // Call the service method to fetch vendor suggestions by location
     if (trimmedLocation !== '') {
       this.globalSearchService
-        .getJobpostionAndCompany('empty', 'empty', this.location, 1, 50)
+        .getJobpostionAndCompany('empty', 'empty', this.location, pagIdx, this.itemsPerPage)
         .subscribe(
           (resp: any) => {
             this.locationSuggestions = resp.data.content;
@@ -163,10 +167,11 @@ export class GlobalSearchComponent {
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      
+      this.searchBotton(event.pageIndex + 1);
     }
     return;
   }
+
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
@@ -180,7 +185,7 @@ export class GlobalSearchComponent {
   }
   jobPositionAndCompany: string = '';
   jobpositioncross: any[] = [];
-  searchBotton() {
+  searchBotton(pagIdx=1) {
     if (
       this.jobPositionAndCompany !== '' &&
       !this.jobPositionAndCompany.includes(' And ')
@@ -191,12 +196,16 @@ export class GlobalSearchComponent {
             this.jobPositionAndCompany,
             'empty',
             'empty',
-            1,
-            50
+            pagIdx,
+            this.itemsPerPage
           )
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               if (this.filteredVendorList.length == 0) {
                 if (this.location == '') {
                   this.globalSearchService
@@ -204,12 +213,16 @@ export class GlobalSearchComponent {
                       'empty',
                       this.jobPositionAndCompany,
                       'empty',
-                      1,
-                      50
+                      pagIdx,
+                      this.itemsPerPage
                     )
                     .subscribe(
                       (resp: any) => {
                         this.filteredVendorList = resp.data.content;
+                        this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                          vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                          return vendor;
+                      });
                       //  console.log('companies', this.filteredVendorList);
                         this.suggestionList = Array.from(
                           new Set(
@@ -243,12 +256,16 @@ export class GlobalSearchComponent {
             this.jobPositionAndCompany,
             'empty',
             this.location,
-            1,
-            50
+            pagIdx,
+            this.itemsPerPage
           )
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               if (this.filteredVendorList.length == 0) {
                 if (this.location !== '') {
                   this.globalSearchService
@@ -256,12 +273,16 @@ export class GlobalSearchComponent {
                       'empty',
                       this.jobPositionAndCompany,
                       this.location,
-                      1,
-                      50
+                      pagIdx,
+                      this.itemsPerPage
                     )
                     .subscribe(
                       (resp: any) => {
                         this.filteredVendorList = resp.data.content;
+                        this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                          vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                          return vendor;
+                      });
                        // console.log('location ' + this.filteredVendorList);
                       },
                       (error: any) => {
@@ -295,10 +316,14 @@ export class GlobalSearchComponent {
       ) {
         // Call the API for both job position and company
         this.globalSearchService
-          .getJobpostionAndCompany(jobPosition, company, 'empty', 1, 50)
+          .getJobpostionAndCompany(jobPosition, company, 'empty', pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
              // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
@@ -320,10 +345,14 @@ export class GlobalSearchComponent {
       ) {
         // Call the API for both job position and company
         this.globalSearchService
-          .getJobpostionAndCompany(jobPosition, company, this.location, 1, 50)
+          .getJobpostionAndCompany(jobPosition, company, this.location, pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
              // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
@@ -341,10 +370,14 @@ export class GlobalSearchComponent {
         this.location !== ''
       ) {
         this.globalSearchService
-          .getJobpostionAndCompany(jobPosition, 'empty', this.location, 1, 50)
+          .getJobpostionAndCompany(jobPosition, 'empty', this.location, pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               // console.log(
               //   'filtered company not there',
               //   this.filteredVendorList
@@ -361,10 +394,14 @@ export class GlobalSearchComponent {
         this.location !== ''
       ) {
         this.globalSearchService
-          .getJobpostionAndCompany('empty', company, this.location, 1, 50)
+          .getJobpostionAndCompany('empty', company, this.location, pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
              // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
@@ -382,10 +419,14 @@ export class GlobalSearchComponent {
     }
     if (this.jobPositionAndCompany == '' && this.location !== '') {
       this.globalSearchService
-        .getJobpostionAndCompany('empty', 'empty', this.location, 1, 50)
+        .getJobpostionAndCompany('empty', 'empty', this.location, pagIdx, this.itemsPerPage)
         .subscribe(
           (resp: any) => {
             this.filteredVendorList = resp.data.content;
+            this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+              vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+              return vendor;
+          });
            // console.log('location ' + this.filteredVendorList);
           },
           (error: any) => {
