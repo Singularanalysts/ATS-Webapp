@@ -1,7 +1,7 @@
 .hot-list-container {
     display: flex;
     flex-direction: column;
-    height: 86vh;
+    height: 90vh;
   }
   
   ul {
@@ -38,12 +38,16 @@
   
   .table-wrapper {
     flex: 1;
-    overflow: auto;
+   overflow: auto;
+  width:100%
   }
+  
   
   table {
     width: 100%;
   }
+
+  
   
   .mat-mdc-header-row {
     background-color: rgb(213, 231, 231);
@@ -118,7 +122,7 @@
     padding: 0 2px;
     width: 100%;
     max-height: calc(100% - 3px);
-    overflow: auto;
+   // overflow: auto;
     display: block;
   }
   
@@ -152,6 +156,7 @@
     .mdc-data-table__cell,
     .mdc-data-table__header-cell {
       padding: 0px 2px;
+      padding-left:5rem;
     }
   }
   
@@ -167,16 +172,18 @@
     .hot-list-table-style {
       width: 100%;
       height: calc(100% - 8px);
-      overflow: auto;
+      //overflow: auto;
     }
   }
   
   .mat-mdc-header-row {
     height: 30px !important;
+    
   }
   
   .mat-mdc-row {
     height: 30px !important;
+    
   }
   
   .filter-button {

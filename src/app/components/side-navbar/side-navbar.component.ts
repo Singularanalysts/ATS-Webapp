@@ -32,7 +32,7 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
     else if (this.role=='Administrator'  || this.department=='SoftWare' || this.department=='Software'){
       this.getSideNavData('assets/side-navbar-Admin.json')
     }
-    else if(this.department=='DomRecruiting'){
+    else if(this.department=='Dom Recruiting'){
       this.getSideNavData('assets/side-navbar-dom-items.json')
     }
     else if(this.role=='Sales Manager'){

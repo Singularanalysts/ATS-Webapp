@@ -32,18 +32,16 @@ import { DatePipe } from '@angular/common';
   standalone: true,
   imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
-  providers: [DatePipe]
+providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
   dataSourceTech = new MatTableDataSource([]);
   dataSourceVendor = new MatTableDataSource([]);
-  benchSalesEmployees: any = [];
+benchSalesEmployees: any = [];
 
   private dialogServ = inject(DialogService);
-
-
   dataTableColumns: string[] = [
     'Name',
     'Category',
@@ -56,14 +54,19 @@ export class DashboardComponent implements OnInit {
   dataTableColumnsDice: string[] = [
     'PostedDate',
     'JobTitle',
+    // 'Category',
     'JobLocation',
     'Vendor',
     'TaggedDate',
     'TaggedBy',
-    'TaggedCount',
-
+    'TCount'
+   
+    
 
   ];
+
+ 
+
   dataTableColumnsTechAnalysis: string[] = [
     'SNo',
     'Date',
@@ -76,10 +79,6 @@ export class DashboardComponent implements OnInit {
     'Vendor',
     'CategoryCount',
   ];
-  empty:any;
-  endDate: any;
-  startDate: any;
-  h1bForm: any = FormGroup;
   entity: any;
   datarr: any[] = [];
   private dashboardServ = inject(DashboardService);
@@ -131,11 +130,11 @@ export class DashboardComponent implements OnInit {
   private intervalSubscription!: Subscription;
 
   private ngZone = inject(NgZone);
-  myForm: any;
+myForm: any;
   startDateControl:FormControl| undefined;
   endDateControl: FormControl | undefined;
 
-  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
+constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
     //console.log('Dash Board Refreshed '+this.refreshFlg);
     // You can perform any actions or logic inside this method
@@ -153,11 +152,11 @@ export class DashboardComponent implements OnInit {
       })
     );
   }
-  refreshFlg = 'executive';
-  department!: any;
-  sourcingLead = true;
+refreshFlg = 'executive';
+department!: any;
+sourcingLead = true;
   ngOnInit(): void {
-    this.getEmployeeNames();
+this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
       .subscribe(() => {
@@ -194,7 +193,7 @@ export class DashboardComponent implements OnInit {
     }
     this.countCallingExecutiveAndLead();
     this.countCallingHigherRole();
-
+  
     this.myForm = this.formBuilder.group({
       startDate: [''], // Set default value if needed
       endDate: [''], // Set default value if needed
@@ -212,7 +211,7 @@ export class DashboardComponent implements OnInit {
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
     }
-    console.log("destroyed")
+   console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
@@ -281,7 +280,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountIndArr = response.data;
-
+       
         this.intCountIndArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcountIndividual = ent.salescount;
@@ -565,7 +564,11 @@ export class DashboardComponent implements OnInit {
   getDiceReqs() {
     this.dashboardServ.getDiceRequirements().subscribe(
       (response: any) => {
+        //this.entity = response.data;
         this.dataSourceDice.data = response.data;
+        // this.dataSourceDice.data.map((x: any, i) => {
+        //   x.serialNum = i + 1;
+        // });
       }
     );
   }
@@ -594,7 +597,7 @@ export class DashboardComponent implements OnInit {
       dialogConfig
     );
   }
-
+  
   search = 'empty'
   getReqVendorCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'vendor', 'empty').subscribe(
@@ -606,7 +609,7 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
-
+  
   getReqCatergoryCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'category', 'empty').subscribe(
       (response: any) => {
@@ -640,18 +643,18 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  onVendorFilter(event: any) {
+  onVendorFilter(event: any){
     this.dataSourceVendor.filter = event.target.value;
   }
 
-  onDiceFilter(event: any) {
+  onDiceFilter(event: any){
     this.dataSourceDice.filter = event.target.value;
   }
 
-  onCategoryFilter(event: any) {
+  onCategoryFilter(event: any){
     this.dataSourceTech.filter = event.target.value;
   }
-  //lavanya
+//lavanya
   getEmployeeNames() {
     this.dashboardServ.getEmployeeName().subscribe(
       (response: any) => {

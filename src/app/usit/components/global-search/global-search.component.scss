@@ -433,6 +433,14 @@ a {
   padding-top: 10px;
 }
 
+.analysis-container .req-container {
+  width: 49%;
+}
+
+.analysis-container .tab-container {
+  width: 49%;
+}
+
 .analysis-container .analysis-left-div {
   width: 49%;
 }
@@ -489,4 +497,12 @@ a {
 .paginator {
   flex: 1;
   margin-right: 10px; /* Adjust margin as needed */
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+}
+
+.mat-mdc-row {
+  height: 30px !important;
 }
