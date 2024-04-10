@@ -587,7 +587,7 @@
       <mat-form-field style="margin-top:1rem;width:10rem;background-color:  #eae9e9;">
         <mat-label>End Date</mat-label>
         <input matInput [matDatepicker]="picker2" formControlName="endDate" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
         <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker #picker2 color="primary"></mat-datepicker>
       </mat-form-field> 
@@ -653,7 +653,7 @@
         <ng-container matColumnDef="TaggedDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Tagged Date
           </th>
-          <td mat-cell *matCellDef="let element" nowrap> {{element.taggedadate | date:'MM-dd-yyyy' }} </td>
+          <td mat-cell *matCellDef="let element" nowrap> {{element.taggeddate | date:'MM-dd-yyyy' }} </td>
         </ng-container>
 
         <!-- Track Column -->

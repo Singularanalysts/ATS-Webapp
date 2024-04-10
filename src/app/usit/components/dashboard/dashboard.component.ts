@@ -200,6 +200,12 @@ export class DashboardComponent implements OnInit {
       endDate: [''], // Set default value if needed
       benchSalesEmployees: [''] // Set default value if needed
     });
+    const endDateControl = this.myForm.get('endDate');
+    if (!endDateControl.value) {
+      const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      endDateControl.setValue(currentDate);
+    }
+   
   }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
@@ -659,17 +665,15 @@ export class DashboardComponent implements OnInit {
   }
 
   onEmployeeChange(event: any): void {
-    const fromDate = this.myForm.get('startDate').value; // Assuming 'fromDate' is the form control for from date
-    const toDate = this.myForm.get('endDate').value; // Assuming 'toDate' is the form control for to date
-    const empId = event.value; // Assuming event.value contains the employee name
+    const fromDate = this.myForm.get('startDate').value; 
+    const toDate = this.myForm.get('endDate').value; 
+    const empId = event.value; 
     const formatedStartDate = this.formatDate(fromDate);
     const formatedEndDate = this.formatDate(toDate);
-
     this.filterData(formatedStartDate, formatedEndDate, empId);
+
   }
-
-
-  formatDate(date: string): string {
+ formatDate(date: string): string {
     const selectedDate = new Date(date);
     const year = selectedDate.getFullYear();
     const month = ("0" + (selectedDate.getMonth() + 1)).slice(-2);
@@ -704,8 +708,13 @@ export class DashboardComponent implements OnInit {
   refreshData() {
     // Reset form fields
     this.myForm.reset();
-    // Refresh data here. You may call your service methods to fetch new data.
     this.getDiceReqs();
+    const endDateControl = this.myForm.get('endDate');
+    if (!endDateControl.value) {
+      const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      endDateControl.setValue(currentDate);
+    }
+   
   }
 //
 

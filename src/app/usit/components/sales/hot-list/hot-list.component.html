@@ -14,8 +14,8 @@
         <form [formGroup]="myForm">
             <div class="hot-list-actions">
                 <div class="form-container">
-                    <mat-form-field appearance="fill" style="width: 16rem;">
-                        <mat-label class="bold-label">Immigration Status</mat-label>
+                    <mat-form-field appearance="fill" style="width: 8rem;margin-left:6rem;">
+                        <mat-label class="bold-label">Visa</mat-label>
                         <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)">
                             <mat-option *ngFor="let option of visadata" [value]="option[0]">
                                 {{ option[1] }}
@@ -24,8 +24,8 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <mat-form-field appearance="fill" style="margin-top:1rem;margin-right: 1rem; ">
-                        <mat-label class="bold-label">Select Priority</mat-label>
+                    <mat-form-field appearance="fill" style="margin-top:1rem;margin-right: 3rem; width:8rem;">
+                        <mat-label class="bold-label">Priority</mat-label>
                         <!--<mat-select formControlName="priority"(selectionChange)="onPriority($event.value)">-->
                         <mat-select formControlName="priority" (selectionChange)="onExperienceChange($event)">
                             <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
@@ -35,7 +35,7 @@
                     </mat-form-field>
                 </div>
                 <div>
-                    <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right: 25rem;">
+                    <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right:25rem;width: 12rem;">
                         <mat-label class="bold-label">Experience</mat-label>
                         <mat-select formControlName="experience" (selectionChange)="onExperienceChange($event)">
                             <mat-option *ngFor="let exp of experiences" [value]="exp">{{ exp }}</mat-option>
