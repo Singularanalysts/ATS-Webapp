@@ -54,7 +54,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let vendor of filteredVendorList; let i = index">
-                            <td scope="row">{{ i + 1 }}</td>
+                            <td scope="row">{{ vendor.serialNumber }}</td>
                             <td class="user-info narvee clickable"> <a
                                     (click)="navigateToJobSource(vendor.job_source)">{{ vendor.vendor }} </a> </td>
                             <td class="narvee">{{ vendor.job_title }}</td>
@@ -73,138 +73,143 @@
 <mat-card *ngIf="tableactive === false">
     <mat-card-content>
         <div class="analysis-container">
-            <div class="analysis-left-div">
-                <div class="table-container table-wrapper">
-                    <div class="header-container-analysis">
-                        <span class="header-text">Category Analysis</span>
-                        <div class="vendor-actions">
-                            <div class="search-vendor">
-                                <input matInput type="text" class="search" placeholder="search category"
-                                    (keyup)="onCategoryFilter($event)">
+        <div class="req-container">
+
+        </div>
+        <div class="tab-container">
+            <mat-tab-group>
+                <mat-tab label="Category Analysis">
+                    <div class="table-container table-wrapper">
+                        <div class="header-container-analysis">
+                            <span class="header-text">Category Analysis</span>
+                            <div class="vendor-actions">
+                                <div class="search-vendor">
+                                    <input matInput type="text" class="search" placeholder="search category"
+                                        (keyup)="onCategoryFilter($event)">
+                                </div>
                             </div>
                         </div>
+                        <hr>
+                        <section class="table-style mat-elevation-z8" style="max-height: 550px; overflow-y: auto;">
+                            <table mat-table [dataSource]="dataSourceTech" class="responsive-table">
+    
+                                <ng-container matColumnDef="SNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by SNo"> S.No
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">{{ element.serialNum }}</td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="Date">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by Date">
+                                        Posted On
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_date | date:'MM-dd-yyyy'}} </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="Category">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by Category">
+                                        Category
+                                    </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="VendorCount">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by VendorCount"> Vendor
+                                        Count
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <span class="count"
+                                            (click)="vendorCategoryPopup(element.category_skill,element.posted_date,'vendor')">
+                                            {{element.vendorcount}}
+                                        </span>
+                                    </td>
+                                </ng-container>
+    
+                                <tr mat-header-row *matHeaderRowDef="dataTableColumnsTechAnalysis; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: dataTableColumnsTechAnalysis;"></tr>
+                            </table>
+                        </section>
+                        
                     </div>
-                    <hr>
-                    <section class="table-style mat-elevation-z8" style="max-height: 600px; overflow-y: auto;">
-                        <table mat-table [dataSource]="dataSourceTech" class="responsive-table">
-
-                            <ng-container matColumnDef="SNo">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by SNo"> S.No
-                                </th>
-                                <td mat-cell *matCellDef="let element">{{ element.serialNum }}</td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="Date">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by Date">
-                                    Posted On
-                                </th>
-                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy'}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="Category">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by Category">
-                                    Category
-                                </th>
-                                <td mat-cell *matCellDef="let element"> {{element.job_title}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="VendorCount">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by VendorCount"> Vendor
-                                    Count
-                                </th>
-                                <td mat-cell *matCellDef="let element">
-                                    <span class="count"
-                                        (click)="vendorCategoryPopup(element.job_title,element.posted_on, 'vendor')">
-                                        {{element.vendorcount}}
-                                    </span>
-                                </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="dataTableColumnsTechAnalysis; sticky: true"></tr>
-                            <tr mat-row *matRowDef="let row; columns: dataTableColumnsTechAnalysis;"></tr>
-                        </table>
-                    </section>
-                    
-                </div>
-            </div>
-            
-            <div class="analysis-right-div">
-                <div class="table-container table-wrapper">
-                    <div class="header-container-analysis">
-                        <span class="header-text">Vendor Analysis</span>
-
-                        <div class="vendor-actions">
-                            <div class="search-vendor">
-                                <input matInput type="text" class="search" placeholder="search vendor"
-                                    (keyup)="onVendorFilter($event)">
+                </mat-tab>
+                <mat-tab label="Vendor Analysis">
+                    <div class="table-container table-wrapper">
+                        <div class="header-container-analysis">
+                            <span class="header-text">Vendor Analysis</span>
+    
+                            <div class="vendor-actions">
+                                <div class="search-vendor">
+                                    <input matInput type="text" class="search" placeholder="search vendor"
+                                        (keyup)="onVendorFilter($event)">
+                                </div>
                             </div>
                         </div>
+    
+                        <hr>
+                        <section class="table-style mat-elevation-z8" style="max-height: 550px; overflow-y: auto;">
+                            <table mat-table [dataSource]="dataSourceVendor" class="responsive-table">
+    
+                                <ng-container matColumnDef="SNo">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by SNo"> S.No
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ element.serialNum }}
+                                    </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="Date">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by Date">
+                                        Posted On
+                                    </th>
+                                    <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy'}} </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="Vendor">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by Vendor">
+                                        Vendor
+                                    </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.vendor}} </td>
+                                </ng-container>
+    
+                                <ng-container matColumnDef="CategoryCount">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                        sortActionDescription="Sort by CategoryCount">
+                                        Category Count
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <span class="count"
+                                            (click)="vendorCategoryPopup(element.vendor, element.posted_on, 'category')">
+                                            {{element.category_count}}
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="dataTableColumnsVendorAnalysis; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: dataTableColumnsVendorAnalysis;"></tr>
+                            </table>
+                        </section>
                     </div>
-
-                    <hr>
-                    <section class="table-style mat-elevation-z8" style="max-height: 600px; overflow-y: auto;">
-                        <table mat-table [dataSource]="dataSourceVendor" class="responsive-table">
-
-                            <ng-container matColumnDef="SNo">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by SNo"> S.No
-                                </th>
-                                <td mat-cell *matCellDef="let element">
-                                    {{ element.serialNum }}
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="Date">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by Date">
-                                    Posted On
-                                </th>
-                                <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy'}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="Vendor">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by Vendor">
-                                    Vendor
-                                </th>
-                                <td mat-cell *matCellDef="let element"> {{element.vendor}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="CategoryCount">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    sortActionDescription="Sort by CategoryCount">
-                                    Category Count
-                                </th>
-                                <td mat-cell *matCellDef="let element">
-                                    <span class="count"
-                                        (click)="vendorCategoryPopup(element.vendor, element.posted_on, 'category')">
-                                        {{element.category_count}}
-                                    </span>
-                                </td>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="dataTableColumnsVendorAnalysis; sticky: true"></tr>
-                            <tr mat-row *matRowDef="let row; columns: dataTableColumnsVendorAnalysis;"></tr>
-                        </table>
-                    </section>
-                </div>
-            </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
         </div>
     </mat-card-content>
 </mat-card>
-<div class="paginator-container">
-    <div class="paginator">
-        <mat-paginator [length]="totalItems"  [hidePageSize]="true"   [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page">
-        </mat-paginator>
 
-    </div>
-    <div class="paginator">
-        <mat-paginator [length]="totalItems"  [hidePageSize]="true"  [showFirstLastButtons]="showFirstLastButtons" aria-label="Select page">
-        </mat-paginator>
-
-    </div>
+  <div class="paginator" *ngIf="tableactive">
+    <!-- paginator -->
+    <mat-paginator   (page)="handlePageEvent($event)"
+      [length]="totalItems" [pageSize]="pageSize"
+      [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
+      [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+      [hidePageSize]="true"
+      [pageIndex]="currentPageIndex" aria-label="Select page">
+    </mat-paginator>
   </div>
   
