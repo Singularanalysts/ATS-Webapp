@@ -282,7 +282,7 @@ export class TaskListComponent implements OnInit {
     let color = '';
     switch (intStatus) {
       case 'OnBoarded':
-        backgroundColor = 'rgba(185	,245	,210)';
+        backgroundColor = 'rgb(185, 245, 210)';
         color = 'black';
         break;
       case 'Selected':

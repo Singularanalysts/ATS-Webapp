@@ -337,7 +337,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
     switch (subStatus) {
       case 'Schedule':
-        backgroundColor = 'rgba(185	,245	,210)';
+        backgroundColor = 'rgb(185, 245, 210)';
         color = 'black';
         break;
       case 'Rejected':

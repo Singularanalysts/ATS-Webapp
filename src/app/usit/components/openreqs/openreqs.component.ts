@@ -182,7 +182,7 @@ export class OpenreqsComponent implements OnInit {
 
     switch (companyStatus) {
       case '1':
-        backgroundColor = 'rgba(40, 160, 76, 0.945)';
+        backgroundColor = 'rgba(185	,245	,210)';
         break;
       default:
         backgroundColor = '';
