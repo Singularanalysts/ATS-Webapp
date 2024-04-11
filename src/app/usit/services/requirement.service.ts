@@ -75,4 +75,9 @@ export class RequirementService {
   getVendorById(id: number) {
     return this.apiServ.get("vms/vendor/vendor/" + id);
   }
+
+  getRecruiters(vendor:string){
+    return this.apiServ.get("openreqs/dice/recruiterpopup/"+vendor);
+  }
+
 }
