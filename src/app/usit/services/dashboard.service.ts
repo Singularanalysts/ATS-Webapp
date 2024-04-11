@@ -90,7 +90,13 @@ export class DashboardService {
   public getReqCounts(search: string,flag: string, type: string, date: any) {
     return this.apiServ.get("dashboard/reqCounts/" + search + "/" +flag + "/" + type + "/" + date);
   }
+  
   getFilteredEmployee(startDate:any ,endDate:any ,id:any){
     return this.apiServ.get("dashboard/getTaggedcounts/"+startDate+"/"+endDate+"/"+id)
-   }
+  }
+
+  getVendorAndCategoryAnalysisCountByDate(date: any, type: any) {
+    return this.apiServ.get("dashboard/reqCountsWithDate/" + date + "/" + type);
+  }
+
 }

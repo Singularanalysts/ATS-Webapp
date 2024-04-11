@@ -427,10 +427,10 @@ a {
 }
 
 .analysis-container {
-  display: flex;
+  // display: flex;
   height: auto;
-  justify-content: space-between;
-  padding-top: 10px;
+  // justify-content: space-between;
+  // padding-top: 10px;
 }
 
 .analysis-container .req-container {
@@ -505,4 +505,38 @@ a {
 
 .mat-mdc-row {
   height: 30px !important;
+}
+
+::ng-deep {
+  .date-form-field .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.analysis-card {
+  height: calc(100vh - 215px);
+}
+
+.analysis-card-content {
+  height: calc(100vh - 42px);
+}
+
+.requirements-card {
+  height: calc(100vh - 263px);
+}
+
+.requirements-card-content {
+  height: calc(100vh - 72px);
+}
+
+.mat-datepicker-input {
+  width: 85%;
+}
+
+.clear {
+  position: relative;
+  float: right;
+  top: -3px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.54);
 }

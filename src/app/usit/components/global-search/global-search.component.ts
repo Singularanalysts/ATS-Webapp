@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,6 +21,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-global-search',
@@ -43,7 +45,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     FormsModule,
     MatSlideToggleModule,
     MatPaginatorModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss'],
@@ -92,9 +96,6 @@ export class GlobalSearchComponent {
   itemsPerPage = 50;
   
  // totalPages=50;
-  
-  //
-  
   @ViewChild(MatSort) sort!: MatSort;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -562,6 +563,48 @@ export class GlobalSearchComponent {
         });
       }
     )
+  }
+
+  handleCategoryDateSelection(event: any) {
+    const selectedDate = formatDate(event.value, 'yyyy-MM-dd', 'en-US');
+    this.dashboardServ.getVendorAndCategoryAnalysisCountByDate(selectedDate, 'vendor').subscribe(
+      (response: any) => {
+        console.log(response.data);
+        this.dataSourceTech.data = response.data;
+        this.dataSourceTech.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  handleVendorDateSelection(event: any) {
+    const selectedDate = formatDate(event.value, 'yyyy-MM-dd', 'en-US');
+    this.dashboardServ.getVendorAndCategoryAnalysisCountByDate(selectedDate, 'category').subscribe(
+      (response: any) => {
+        console.log(response.data);
+        this.dataSourceVendor.data = response.data;
+        this.dataSourceVendor.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  public skillSetDate!: any;
+
+  clearSkillSetDate(event: any) {
+    event.stopPropagation();
+    this.skillSetDate = null;
+    this.getReqVendorCount();
+  }
+
+  public vendorDate!: any;
+
+  clearVendorDate(event: any) {
+    event.stopPropagation();
+    this.vendorDate = null;
+    this.getReqCatergoryCount();
   }
  
 }
