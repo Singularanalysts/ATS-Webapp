@@ -13,8 +13,11 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { EmailBodyComponent } from './email-body/email-body.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddEmailExtractionComponent } from './add-email-extraction/add-email-extraction.component';
-
-
+import { PrivilegesService } from 'src/app/services/privileges.service';
+import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
+import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
+import { Subject, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-email-extraction',
   standalone: true,
@@ -37,8 +40,11 @@ export class EmailExtractionComponent implements OnInit {
     'Sender',
     'Date',
     'Body',
+    'Action'
   ];
   // pagination code  
+  
+  private destroyed$ = new Subject<void>();
   private service = inject(OpenreqService);
   // paginator
   length = 50;
@@ -66,6 +72,7 @@ export class EmailExtractionComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+  private snackBarServ = inject(SnackBarService);
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
@@ -80,6 +87,7 @@ export class EmailExtractionComponent implements OnInit {
     panelClass: ['custom-snack-success'],
   };
   private dialogServ = inject(DialogService);
+  protected privilegeServ = inject(PrivilegesService);
   readAll(pagIdx = 1) {
 
     this.service.fetch(pagIdx, this.itemsPerPage, this.field).subscribe(
@@ -173,6 +181,71 @@ export class EmailExtractionComponent implements OnInit {
   }
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
-  }
+  
+}
+delete(element: any) {
+  console.log(element);
+  
+  const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+    title: 'Confirmation',
+    message: 'Are you sure you want to delete?',
+    confirmText: 'Yes',
+    cancelText: 'No',
+    actionData: element,
+  };
+  const dialogConfig = new MatDialogConfig();
+  dialogConfig.width = 'fit-content';
+  dialogConfig.height = 'auto';
+  dialogConfig.disableClose = false;
+  dialogConfig.panelClass = 'delete-email';
+  dialogConfig.data = dataToBeSentToDailog;
+  const dialogRef = this.dialogServ.openDialogWithComponent(
+    ConfirmComponent,
+    dialogConfig
+  );
+
+  // call delete api after  clicked 'Yes' on dialog click
+
+  dialogRef.afterClosed().subscribe({
+    next: (resp) => {
+      if (dialogRef.componentInstance.allowAction) {
+        const dataToBeSentToSnackBar: ISnackBarData = {
+          message: '',
+          duration: 1500,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+          direction: 'above',
+          panelClass: ['custom-snack-success'],
+        };
+
+        this.service
+          .deleteSender(element.id)
+          .pipe(takeUntil(this.destroyed$))
+          .subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
+                this.readAll(this.currentPageIndex + 1);
+                dataToBeSentToSnackBar.message =
+                  'Email Deleted successfully';
+              } else {
+                dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+                dataToBeSentToSnackBar.message = response.message;
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                dataToBeSentToSnackBar
+              );
+            },
+            error: (err: { message: string; }) => {
+              dataToBeSentToSnackBar.message = err.message;
+              dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.snackBarServ.openSnackBarFromComponent(
+                dataToBeSentToSnackBar
+              );
+            },
+          });
+      }
+    },
+  });
+}
 
 }

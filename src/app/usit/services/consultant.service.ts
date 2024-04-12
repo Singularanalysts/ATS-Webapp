@@ -185,9 +185,11 @@ export class ConsultantService {
   
 
   getFilteredConsultants(request:any) {
-    return this.http.post("consultant/consultantFilter/",request);
+    return this.http.post("consultant/consultantFilter",request);
   }
-
-  
+  //both
+  getFilteredConsults(request:any, pageno: any, pagesize: any) {
+    return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
+  }
 
 }

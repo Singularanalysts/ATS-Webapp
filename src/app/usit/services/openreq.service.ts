@@ -54,4 +54,7 @@ export class OpenreqService {
   getLeadById(id:number) {
     return this.http.get("openreqs/linked/getById/"+id);
   }
+  deleteSender(id: number) {
+    return this.http.delete("mail/delete/" + id);
+  }
 }

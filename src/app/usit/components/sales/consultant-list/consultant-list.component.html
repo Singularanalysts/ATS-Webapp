@@ -8,21 +8,57 @@
     <span class="header-text">
       Consultants
     </span>
-
-    <div class="consultant-actions">
-      <!-- <button mat-icon-button class="add-user" (click)="uploadVendor()">
+    <form [formGroup]="myForm">
+      <div class="consultant-actions">
+        <!-- <button mat-icon-button class="add-user" (click)="uploadVendor()">
         <mat-icon class="item-icon">upload</mat-icon>
       </button> -->
-      <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT')" mat-icon-button class="add-user"
-        (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
-        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT')}">add_circle</mat-icon>
-      </button>
+        <div class="form-container">
+          <ng-container *ngIf="flag !== 'presales'">
+            <mat-form-field appearance="fill" style="width:8rem;margin-left:6rem;">
+              <mat-label class="bold-label">Visa</mat-label>
+              <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)">
+                <mat-option *ngFor="let option of visadata" [value]="option[0]">
+                  {{ option[1] }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </div>
+        <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting'">
+          <mat-form-field appearance="fill" style="margin-top:1rem;margin-right:3rem;width:8rem;">
+            <mat-label class="bold-label">Priority</mat-label>
+            <!--<mat-select formControlName="priority"(selectionChange)="onPriority($event.value)">-->
+            <mat-select formControlName="priority" (selectionChange)="onExperienceChange($event)">
+              <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
+                {{option.code}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+        <div>
+          <ng-container *ngIf="flag !== 'presales'">
+            <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right:25rem;width: 10rem;">
+              <mat-label class="bold-label">Experience</mat-label>
+              <mat-select formControlName="experience" (selectionChange)="onExperienceChange($event)">
+                <mat-option *ngFor="let exp of experiences" [value]="exp">{{ exp }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
+        </div>
+        <button type="button" mat-raised-button color="primary" (click)="refreshForm()"
+          *ngIf="flag !== 'presales'">Refresh</button>
+        <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT')" mat-icon-button class="add-user"
+          (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
+          <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT')}">add_circle</mat-icon>
+        </button>
 
-      <div class="search-consultant">
-        <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
-        <input matInput type="text" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
+        <div class="search-consultant">
+          <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
+          <input matInput type="text" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
+        </div>
       </div>
-    </div>
+    </form>
   </div>
   <div id="table-container" class="table-wrapper">
     <section class="mat-elevation-z8"
@@ -238,10 +274,10 @@
       </table>
       <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
     </section>
-    <hr>
+  
   </div>
 
-  <div class="paginator">
+  <div class="paginator" >
     <!-- paginator -->
     <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
       [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"

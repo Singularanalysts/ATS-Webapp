@@ -1,7 +1,7 @@
 .hot-list-container {
     display: flex;
     flex-direction: column;
-    height: 90vh;
+    height: 91vh;
   }
   
   ul {
@@ -205,3 +205,10 @@
     cursor: pointer;
     color:blue
    }
+   .paginator{
+    margin-top:10px;
+   }
+   /* Add this CSS in your component's stylesheet or global styles */
+.action-button-ed {
+  color: red; /* Set the color of the button to red */
+}
