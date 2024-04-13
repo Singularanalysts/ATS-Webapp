@@ -1,7 +1,7 @@
 .h1b-container {
     display: flex;
     flex-direction: column;
-    height: 86vh;
+    height: calc(100vh - 90px);
   }
   
   ul {
@@ -117,9 +117,9 @@
   }
   
   .h1b-table-style {
-    padding: 0 2px;
+    // padding: 0 2px;
     width: 100%;
-    max-height: calc(100% - 3px);
+    // max-height: calc(100% - 3px);
     overflow: auto;
     display: block;
   }
@@ -187,13 +187,13 @@
     top: 10px;
   }
   
-  @media screen and (min-width: 2000px) {
-    .h1b-table-style {
-      width: 100%;
-      height: calc(100% - 8px);
-      overflow: auto;
-    }
-  }
+  // @media screen and (min-width: 2000px) {
+  //   .h1b-table-style {
+  //     width: 100%;
+  //     height: calc(100% - 8px);
+  //     overflow: auto;
+  //   }
+  // }
   
   .edit-icon,
   .delete-icon {
@@ -215,8 +215,8 @@
     height: 30px !important;
   }
 
-  @media screen and (min-width: 1920px) {
-    .h1b-container {
-      height: 90vh;
-    }
-  }
+  // @media screen and (min-width: 1920px) {
+  //   .h1b-container {
+  //     height: 90vh;
+  //   }
+  // }

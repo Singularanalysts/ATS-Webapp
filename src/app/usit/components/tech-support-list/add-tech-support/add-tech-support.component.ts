@@ -138,7 +138,7 @@ export class AddTechSupportComponent implements OnInit {
   private initializeRequirementForm(requirementData: any) {
     this.registerForm = this.formBuilder.group({
       name: [requirementData ? requirementData.name : '', Validators.required],
-      pseudoname: [requirementData ? requirementData.pseudoname : '', Validators.required],
+      // pseudoname: [requirementData ? requirementData.pseudoname : '', Validators.required],
       location: [requirementData ? requirementData.location : '', Validators.required, this.registerForm.location],
       email: [
         requirementData ? requirementData.email : '',
@@ -149,7 +149,7 @@ export class AddTechSupportComponent implements OnInit {
         ],
       ],
       mobile: [requirementData ? requirementData.mobile : '', Validators.required],
-      secmobile: [requirementData ? requirementData.secmobile : '', Validators.required],
+      // secmobile: [requirementData ? requirementData.secmobile : '', Validators.required],
       experience: [requirementData ? requirementData.experience : '', [Validators.required, Validators.pattern("^[0-9]*$")]],
       technology: [requirementData ? requirementData.technology : '', Validators.required],
       skills: [requirementData ? requirementData.skills : '', Validators.required],

@@ -10,7 +10,7 @@
       </span>
       <div class="emp-actions">
         <button [disabled]="!privilegeServ.hasPrivilege('ADD_TECH_SUPPORT')" mat-icon-button disableRipple
-          class="add-user" (click)="addTechnology()" matTooltip="ADD_TECH_SUPPORT" matTooltipPosition="left">
+          class="add-user" (click)="addTechnology()" matTooltip="Add Tech Support" matTooltipPosition="left">
           <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_TECH_SUPPORT')}">add_circle</mat-icon>
         </button>
   
@@ -113,7 +113,10 @@
         <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
       </section>
       <hr>
-  
+    </div>
+
+    <div class="paginator">
+      <!-- paginator -->
       <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
         [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
         [hidePageSize]="hidePageSize" [pageIndex]="currentPageIndex" aria-label="Select page">

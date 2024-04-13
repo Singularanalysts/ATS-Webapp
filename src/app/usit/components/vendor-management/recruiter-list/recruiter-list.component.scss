@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 90px);;
 }
 
 ul {
@@ -141,7 +141,7 @@ tbody {
 .recruiter-table-style {
   //width: max-content;
   width: 100%;
-  max-height: calc(100% - 2px);
+  // max-height: calc(100% - 2px);
   overflow-y: auto;
   //display: block;
 }
@@ -238,37 +238,37 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   color: black;
 }
 
-@media screen and (min-width: 1600px) {
-  .recruiter-table-style {
-    width: 100%;
-    height: calc(100% - 0px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 1600px) {
+//   .recruiter-table-style {
+//     width: 100%;
+//     height: calc(100% - 0px);
+//     overflow: auto;
+//   }
+// }
 
-@media only screen and (min-width: 900px) and (max-width: 1228px) {
-  .container {
-    display: flex;
-    flex-direction: column;
-    height: 83vh;
-  }
-}
+// @media only screen and (min-width: 900px) and (max-width: 1228px) {
+//   .container {
+//     display: flex;
+//     flex-direction: column;
+//     height: 83vh;
+//   }
+// }
 
-@media only screen and (min-width: 1228px) and (max-width: 1440px) {
-  .container {
-    display: flex;
-    flex-direction: column;
-    height: 85vh;
-  }
-}
+// @media only screen and (min-width: 1228px) and (max-width: 1440px) {
+//   .container {
+//     display: flex;
+//     flex-direction: column;
+//     height: 85vh;
+//   }
+// }
 
-@media only screen and (min-width: 1440px) {
-  .container {
-    display: flex;
-    flex-direction: column;
-    height: 87.5vh;
-  }
-}
+// @media only screen and (min-width: 1440px) {
+//   .container {
+//     display: flex;
+//     flex-direction: column;
+//     height: 87.5vh;
+//   }
+// }
 
 .mat-mdc-header-row {
   height: 30px !important;
@@ -294,8 +294,8 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   color: #0275d8;
 }
 
-@media screen and (min-width: 1920px) {
-  .container {
-    height: 90vh;
-  }
-}
+// @media screen and (min-width: 1920px) {
+//   .container {
+//     height: 90vh;
+//   }
+// }

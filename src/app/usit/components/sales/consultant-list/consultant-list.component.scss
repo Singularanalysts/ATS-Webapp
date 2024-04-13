@@ -1,7 +1,7 @@
 .consultant-container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 90px);
 }
 
 ul{
@@ -146,9 +146,9 @@ tbody{
 }
 
 .consultant-table-style {
-  padding: 0 2px;
+  // padding: 0 2px;
   width: 100%;
-  max-height: calc(100% - 4px);
+  // max-height: calc(100% - 4px);
   overflow: auto;
   display: block;
 }
@@ -224,13 +224,13 @@ tbody{
   column-gap: 5px;
 }
 
-@media screen and (min-width: 2700px) {
-  .consultant-table-style {
-    width: 100%;
-    height: calc(100% - 8px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 2700px) {
+//   .consultant-table-style {
+//     width: 100%;
+//     height: calc(100% - 8px);
+//     overflow: auto;
+//   }
+// }
 
 .recruiting-companies {
   color: #f44336;
@@ -274,31 +274,31 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 }
 
 .dom-consultant-table-style {
-  padding: 0 2px;
+  // padding: 0 2px;
   width: 100%;
-  max-height: calc(100% - 4px);
+  // max-height: calc(100% - 4px);
   overflow: auto;
   display: block;
 }
 
-@media screen and (min-width: 2000px) {
-  .consultant-table-style {
-    width: 100%;
-    height: calc(100% - 8px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 2000px) {
+//   .consultant-table-style {
+//     width: 100%;
+//     height: calc(100% - 8px);
+//     overflow: auto;
+//   }
+// }
 
 .consultant-id{
   cursor: pointer;
   color:#0275d8
 }
 
-@media screen and (min-width: 1920px) {
-  .consultant-container {
-    height: 90vh;
-  }
-}
+// @media screen and (min-width: 1920px) {
+//   .consultant-container {
+//     height: 90vh;
+//   }
+// }
 
 .status-button {
   height: max-content;
@@ -307,4 +307,14 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 
 .text-align{
   text-align : right;
+}
+
+.form-container {
+  margin-right: 7rem;
+  margin-top: 1rem;
+  width: 10rem;
+}
+
+.bold-label {
+  font-weight: bold;
 }

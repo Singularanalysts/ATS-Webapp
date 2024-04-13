@@ -1,7 +1,7 @@
 .container {
-  // display: flex;
-  // flex-direction: column;
-  height: 86vh;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 90px);
 }
 
 .table-wrapper {
@@ -88,7 +88,7 @@ thead {
  // max-height: calc(100% - 52px);
  // padding: 0 2px;
   overflow: auto;
- // display: block;
+ display: block;
 }
 
 .no-data-found {
@@ -167,10 +167,10 @@ ul.breadcrumb li a:hover {
 
 
 .kpt-table-style {
-  padding: 0 2px;
+  // padding: 0 2px;
   width: 100%;
   // max-height: calc(100% - 2px);
-  height: 61vh;
+  // height: 61vh;
   overflow: auto;
   display: block;
 }

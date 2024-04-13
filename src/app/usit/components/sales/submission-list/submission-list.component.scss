@@ -1,7 +1,7 @@
 .submission-container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 90px);
 }
 
 ul {
@@ -141,9 +141,9 @@ tbody {
 }
 
 .submission-table-style {
-  padding: 0 2px;
+  // padding: 0 2px;
   width: 100%;
-  max-height: calc(100% - 2px);
+  // max-height: calc(100% - 2px);
   overflow: auto;
   display: block;
 }
@@ -220,19 +220,19 @@ tbody {
   column-gap: 5px;
 }
 
-@media screen and (min-width: 2100px) {
-  .submission-table-style {
-    width: 100%;
-    height: calc(100% - 8px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 2100px) {
+//   .submission-table-style {
+//     width: 100%;
+//     height: calc(100% - 8px);
+//     overflow: auto;
+//   }
+// }
 
-@media screen and (min-width: 1500px) and (max-width: 2100px) {
-  .submission-table-style {
-    height: calc(100% - 4px);
-  }
-}
+// @media screen and (min-width: 1500px) and (max-width: 2100px) {
+//   .submission-table-style {
+//     height: calc(100% - 4px);
+//   }
+// }
 
 .recruiting-companies {
   color: #f44336;
@@ -298,20 +298,20 @@ ul.breadcrumb li:last-child {
 }
 
 .dom-submission-table-style {
-  padding: 0 2px;
+  // padding: 0 2px;
   width: 100%;
-  max-height: calc(100% - 2px);
+  // max-height: calc(100% - 2px);
   overflow: auto;
   display: block;
 }
 
-@media screen and (min-width: 1900px) {
-  .dom-submission-table-style {
-    width: 100%;
-    height: calc(100% - 8px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 1900px) {
+//   .dom-submission-table-style {
+//     width: 100%;
+//     height: calc(100% - 8px);
+//     overflow: auto;
+//   }
+// }
 
 .consultant-id{
   cursor: pointer;

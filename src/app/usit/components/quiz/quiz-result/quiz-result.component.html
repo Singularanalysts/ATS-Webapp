@@ -76,24 +76,23 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
-    <hr>
     <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+    <hr>
   </section>
-    <!-- paginator -->
+</div>
 
-    <div class="paginator" *ngIf="dataSource.filteredData.length">
-      <mat-paginator
-                  (page)="handlePageEvent($event)"
-                  [pageSize]="pageSize"
-                  [length]="totalItems"
-                  [disabled]="false"
-                  [showFirstLastButtons]="showFirstLastButtons"
-                  [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
-                  [hidePageSize]="true"
-                  [pageIndex]="currentPageIndex"
-                  aria-label="Select page">
-          </mat-paginator>
-    </div>
-
+<!-- paginator -->
+<div class="paginator" *ngIf="dataSource.filteredData.length">
+  <mat-paginator
+              (page)="handlePageEvent($event)"
+              [pageSize]="pageSize"
+              [length]="totalItems"
+              [disabled]="false"
+              [showFirstLastButtons]="showFirstLastButtons"
+              [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+              [hidePageSize]="true"
+              [pageIndex]="currentPageIndex"
+              aria-label="Select page">
+      </mat-paginator>
 </div>
 </div>

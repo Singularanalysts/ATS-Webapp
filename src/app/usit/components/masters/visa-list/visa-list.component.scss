@@ -1,12 +1,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 90px);
 }
 
 .table-wrapper {
+  flex: 1;
   overflow: auto;
-  padding:  0px 4px 4px 4px;
+  // padding:  0px 4px 4px 4px;
 }
 
 table {
@@ -162,4 +163,10 @@ ul.breadcrumb li a:hover {
 .edit-icon,
 .delete-icon {
   color: rgb(99, 98, 98);
+}
+
+.table-style {
+  width: 100%;
+  overflow: auto;
+  display: block;
 }

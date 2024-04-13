@@ -1,7 +1,7 @@
 .closure-container {
     display: flex;
     flex-direction: column;
-    height: 86vh;
+    height: calc(100vh - 90px);
   }
   
   ul {
@@ -135,9 +135,9 @@
   }
   
   .closure-table-style {
-    padding: 0 2px;
+    // padding: 0 2px;
     width: max-content;
-    max-height: calc(100% - 3px);
+    // max-height: calc(100% - 3px);
     overflow: auto;
     display: block;
   }
@@ -215,7 +215,7 @@
   @media screen and (min-width: 2445px) {
     .closure-table-style {
       width: 100%;
-      height: calc(100% - 8px);
+      // height: calc(100% - 8px);
       overflow: auto;
     }
   }
@@ -270,12 +270,4 @@
   .consultant-name, .employeer-name {
     cursor: pointer;
     color: #0275d8;
-  }
-
-  .dom-interview-table-style{
-    padding: 0 2px;
-    width: 100%;
-    max-height: calc(100% - 3px);
-    overflow: auto;
-    display: block;
   }

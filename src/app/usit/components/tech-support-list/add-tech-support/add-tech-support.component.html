@@ -23,11 +23,11 @@
                 characters</mat-error>
             </mat-form-field>
             <!-- Psuedo Name -->
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
               <mat-label>Psuedo Name</mat-label>
               <input matInput formControlName="pseudoname" maxlength="15"  (input)="camelCase($event)"/>
               <mat-error *ngIf="registerForm.get('pseudoname').hasError('required')">Psuedo Name is Required</mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
   
             <mat-form-field appearance="fill">
               <mat-label> Email</mat-label>
@@ -41,12 +41,12 @@
               <mat-error *ngIf="registerForm.get('mobile')!.hasError('required')">primary Phone Number</mat-error>
               <mat-error *ngIf="registerForm.get('mobile')!.hasError('mobile')">Invalid primary Phone Number </mat-error>
             </mat-form-field>
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
               <mat-label>Secondary Phone Number</mat-label>
               <input matInput formControlName="secmobile" maxlength="25" />
               <mat-error *ngIf="registerForm.get('secmobile')!.hasError('required')">Secondary Phone Number</mat-error>
               <mat-error *ngIf="registerForm.get('secmobile')!.hasError('mobile')">Invalid Secondary Phone Number </mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
             <mat-form-field appearance="fill">
               <mat-label>Experience</mat-label>
               <input matInput formControlName="experience" maxlength="25" />

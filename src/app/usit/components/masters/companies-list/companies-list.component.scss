@@ -1,12 +1,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 90px);
 }
 
 .table-wrapper {
+  flex: 1;
   overflow: auto;
-  padding: 4px;
+  // padding:  0px 4px 4px 4px;
 }
 
 table {
