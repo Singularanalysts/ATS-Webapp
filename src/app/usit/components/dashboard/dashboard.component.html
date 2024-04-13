@@ -577,7 +577,7 @@
 <form [formGroup]="myForm" >
   <div class="table-container-dice table-wrapper" style="margin-bottom: 120px;" *ngIf="sourcingLead">
     <div class="header-container-leading-resources" style="padding-right: 6px;">
-      <span class="header-text">Daily Requirements Tags</span>
+      <span class="header-text">Daily Requirements(Tagged Count)</span>
 
 <mat-form-field style=" margin-top:1rem;width:10rem;background-color: #eae9e9;font-size: 0px;  ">
         <mat-label>Start Date</mat-label>
@@ -606,8 +606,9 @@
       
       </mat-form-field>
       <div class="btn">
-      <button mat-raised-button color="primary" style="width:2rem;" (click)="refreshData()">Refresh</button>
+      <button mat-raised-button color="primary" style="width:2rem;height:30px;" (click)="refreshData()">Refresh</button>
     </div>
+    <button  *ngIf="showReport"  class="search" mat-raised-button color="primary"  (click)="handleExport()">Excel Import</button>
       <!-- </form> -->
       <div class="vendor-actions">
         <div class="search-vendor">

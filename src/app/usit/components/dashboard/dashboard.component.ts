@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { AbstractControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { PrivilegesService } from 'src/app/services/privileges.service';
+import { utils, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-dashboard',
@@ -79,6 +81,7 @@ benchSalesEmployees: any = [];
     'Vendor',
     'CategoryCount',
   ];
+  showReport: boolean = false;
   entity: any;
   datarr: any[] = [];
   private dashboardServ = inject(DashboardService);
@@ -128,7 +131,7 @@ benchSalesEmployees: any = [];
   individualCounts = true;
 
   private intervalSubscription!: Subscription;
-
+  protected privilegeServ = inject(PrivilegesService);
   private ngZone = inject(NgZone);
 myForm: any;
   startDateControl:FormControl| undefined;
@@ -156,6 +159,12 @@ refreshFlg = 'executive';
 department!: any;
 sourcingLead = true;
   ngOnInit(): void {
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
 this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
@@ -552,6 +561,46 @@ this.getEmployeeNames();
       dialogConfig
     );
   }
+  handleExport() {
+    const currentDate = new Date();
+    const chicagoDate = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Chicago',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }).format(currentDate);
+
+    const headings = [[
+        'Posted Date',
+        'Job Title',
+        'Job Location',
+        'Vendor',
+        'Tagged Date',
+        'Tagged Count',
+        'Tagged Name'
+    ]];
+    const excelData = this.dataSourceDice.data.map((c: any) => [
+        c.posted_on,
+        c.job_title,
+        c.category_skill,
+        c.job_location,
+        c.vendor,
+        c.taggeddate,
+        c.pseudoname,
+        c.taggedcount,
+    ]);
+
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, excelData, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'data');
+    writeFile(wb, 'daily-requirement-tagged@' + chicagoDate + '.xlsx');
+}
 
   goToConsultantInfo(id: any) {
     this.router.navigate(['usit/consultant-info', 'dashboard', 'consultant', id])
