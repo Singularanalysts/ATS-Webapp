@@ -110,7 +110,7 @@
     "icon": "work",
     "children": [
       {
-        "text": "Portal Reqs",
+        "text": "Portal Requirements",
         "icon": "group",
         "routerLink": "/usit/portalreqs"
       },

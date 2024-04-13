@@ -22,10 +22,29 @@
           "text": "Recruiters",
           "icon": "business_center",
           "routerLink": "/usit/recruiters"
+        },
+        {
+          "text": "Blacklisted Companies",
+          "icon": "block",
+          "routerLink": "/usit/blacklisted-companies"
+        },
+        {
+          "text": "Current Primary Vendor",
+          "icon": "group",
+          "routerLink": "/usit/current-primary-vendor"
+        },
+        {
+          "text": "Future Primary Vendor",
+          "icon": "group",
+          "routerLink": "/usit/future-primary-vendor"
         }
       ]
     },
-
+    {
+      "text": "Mass Mailing",
+      "icon": "mail",
+      "routerLink": "/usit/mass-mailing"
+    },
     {
       "text": "Technology Tags",
       "icon": "build",
@@ -50,6 +69,16 @@
           "text": "Future OPT/CPT",
           "icon": "school",
           "routerLink": "/usit/future-opt-cpt"
+        },
+        {
+          "text": "E-Verify",
+          "icon": "school",
+          "routerLink": "/usit/e-verify"
+        },
+        {
+          "text": "I9",
+          "icon": "school",
+          "routerLink": "/usit/i9"
         }
       ]
     },
@@ -163,7 +192,7 @@
       "icon": "work",
       "children": [
         {
-          "text": "Portal Reqs",
+          "text": "Portal Requirements",
           "icon": "group",
           "routerLink": "/usit/portalreqs"
         },
