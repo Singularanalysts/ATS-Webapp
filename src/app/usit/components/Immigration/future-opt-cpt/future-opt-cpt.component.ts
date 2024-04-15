@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { AddconsultantComponent } from '../../sales/consultant-list/add-consultant/add-consultant.component';
 import { Router } from '@angular/router';
 import { DialogService } from 'src/app/services/dialog.service';
@@ -19,7 +19,8 @@ import { MatDialogConfig } from '@angular/material/dialog';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   templateUrl: './future-opt-cpt.component.html',
   styleUrls: ['./future-opt-cpt.component.scss']
@@ -111,5 +112,14 @@ export class FutureOptCptComponent implements OnInit{
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
+  }
+
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      this.currentPageIndex = event.pageIndex;
+      this.getAll(event.pageIndex + 1)
+    }
+    return;
   }
 }

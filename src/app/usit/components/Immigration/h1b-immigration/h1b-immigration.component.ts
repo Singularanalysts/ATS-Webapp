@@ -1,15 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddH1bImmigrantComponent } from './add-h1b-immigrant/add-h1b-immigrant.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-h1b-immigration',
@@ -19,7 +20,8 @@ import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ],
   templateUrl: './h1b-immigration.component.html',
   styleUrls: ['./h1b-immigration.component.scss']
@@ -37,6 +39,17 @@ export class H1bImmigrationComponent implements OnInit {
     'LastI9',
     'Action',
   ];
+  // paginator
+  length = 50;
+  pageSize = 50;
+  pageIndex = 0;
+  pageSizeOptions = [50, 75, 100];
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
@@ -44,11 +57,6 @@ export class H1bImmigrationComponent implements OnInit {
   totalItems: any;
   field = "empty";
   currentPageIndex = 0;
-  pageEvent!: PageEvent;
-  pageSize = 50;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  pageSizeOptions = [50, 75, 100];
 
   private router = inject(Router);
   private dialogServ = inject(DialogService);
@@ -57,6 +65,11 @@ export class H1bImmigrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAll();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   getAll() {
@@ -122,6 +135,13 @@ export class H1bImmigrationComponent implements OnInit {
 
   onSort(event : any) {
 
+  }
+
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
   }
 
   navigateToDashboard() {
