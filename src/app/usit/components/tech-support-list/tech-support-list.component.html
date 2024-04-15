@@ -37,15 +37,15 @@
             <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Name"> Name </th>
             <td mat-cell *matCellDef="let element">
               <span class="user-info" (click)="goToUserInfo(element.userid)">
-                {{element.name}}
+                {{element.name | titlecase}}
               </span>
               <ng-container *ngIf="element.locked; then updateStatTemplate else elseTemplate"></ng-container>
               <ng-template #updateStatTemplate>
-                <span [style.cursor]="'pointer'" (click)="onStatusUpdate(element)">{{element.pseudoname}}
+                <span [style.cursor]="'pointer'" (click)="onStatusUpdate(element)">{{element.pseudoname | titlecase}}
                 </span>
               </ng-template>
               <ng-template #elseTemplate>
-                {{element.pseudoname}}
+                {{element.pseudoname | titlecase}}
               </ng-template>
   
             </td>
@@ -62,14 +62,14 @@
           <ng-container matColumnDef="Technology">
             <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Technology">
               Technology </th>
-            <td mat-cell *matCellDef="let element"> {{element.technology}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.technology|titlecase}} </td>
           </ng-container>
   
           <!-- Designation Column -->
           <ng-container matColumnDef="Skills">
             <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Skills">Skills
             </th>
-            <td mat-cell *matCellDef="let element"> {{element.skills}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.skills | titlecase}} </td>
           </ng-container>
   
           <!-- Department Column -->

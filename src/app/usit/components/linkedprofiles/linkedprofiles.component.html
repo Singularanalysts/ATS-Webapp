@@ -46,7 +46,7 @@
                     <td mat-cell *matCellDef="let element" >
                         <div class="cell-container">
                         <span class="consultant-name">
-                            <a href="{{element?.profile_url}}" target="_blank">{{element?.candidate_name}} </a>
+                            <a href="{{element?.profile_url}}" target="_blank">{{element?.candidate_name|titlecase}} </a>
                         </span>
                         <span class="right-align profile" matTooltip="Lock Profile">
                             <mat-icon class="privileges item-icon" (click)="lockProfile(element.c_id)">lock_person</mat-icon>
@@ -68,7 +68,7 @@
                     <th mat-header-cell *matHeaderCellDef>
                         Category </th>
                     <td mat-cell *matCellDef="let element">
-                        {{element?.category}} </td>
+                        {{element?.category|titlecase}} </td>
                 </ng-container>
                 <!-- Experience Column-->
                 <!-- <ng-container matColumnDef="profile_url">

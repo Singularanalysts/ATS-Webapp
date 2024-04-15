@@ -31,14 +31,14 @@
                 <!-- Name Column-->
                 <ng-container matColumnDef="Name">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name">Name</th>
-                    <td mat-cell *matCellDef="let element"> {{element?.consultantname}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element?.consultantname|titlecase}} </td>
                 </ng-container>
 
                 <!-- Technology Column-->
                 <ng-container matColumnDef="Technology">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Technology">
                         Technology </th>
-                    <td mat-cell *matCellDef="let element"><span class="consultant-name">{{element?.technologyarea}}
+                    <td mat-cell *matCellDef="let element"><span class="consultant-name">{{element?.technologyarea|titlecase}}
                         </span> </td>
                 </ng-container>
 

@@ -59,7 +59,7 @@
                         Consultant </th>
                     <td mat-cell *matCellDef="let element">
                         <span class="consultant-id"
-                        (click)="goToConsultantInfo(element, flag)">{{element?.consultantname}}
+                        (click)="goToConsultantInfo(element, flag)">{{element?.consultantname|titlecase}}
                       </span>
                         <!-- <span class="consultant-name" (click)="goToSubmissionInfo(element, 'name')"> 
                             {{element?.consultantname}}
@@ -88,15 +88,15 @@
                         <ng-container *ngIf="this.flag == 'Recruiting'; then trueCondition else elseTemplate"></ng-container>
                         <ng-container *ngIf="this.flag === 'Domrecruiting'; then anotherCondition"></ng-container>
                         <ng-template #trueCondition>
-                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber }}
+                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber |titlecase}}
                             </span>
                         </ng-template>
                         <ng-template #anotherCondition>
-                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber }}
+                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber|titlecase }}
                             </span>
                         </ng-template>
                         <ng-template #elseTemplate>
-                            {{ element?.position }}
+                            {{ element?.position | titlecase}}
                         </ng-template>
                     </td>
                 </ng-container>
@@ -105,21 +105,21 @@
                 <ng-container matColumnDef="ImplementationPartner">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ImplementationPartner" mat-sort-header>
                         IP / Vendor </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.implpartner}}
+                    <td mat-cell *matCellDef="let element"> {{element?.implpartner | titlecase}}
                     </td>
                 </ng-container>
                 <!-- End Client-->
                 <ng-container matColumnDef="EndClient">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by EndClient" mat-sort-header> End
                         Client </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.endclient}}
+                    <td mat-cell *matCellDef="let element"> {{element?.endclient | titlecase}}
                     </td>
                 </ng-container>
                 <!-- Vendor Location -->
                 <ng-container matColumnDef="Vendor">
                     <th mat-header-cell *matHeaderCellDef 
                         sortActionDescription="Sort by Current Vendor" mat-sort-header> Third Party Vendor </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.vendor}}
+                    <td mat-cell *matCellDef="let element"> {{element?.vendor|titlecase}}
                     </td>
                 </ng-container>
                 <!-- Sub Rate Column -->
@@ -133,7 +133,7 @@
                 <ng-container matColumnDef="ProjectLocation">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ProjectLocation" mat-sort-header>
                         Project Location</th>
-                    <td mat-cell *matCellDef="let element"> {{element.projectlocation}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.projectlocation | titlecase}} </td>
                 </ng-container>
 
                 <!-- Submitted By Column -->
@@ -142,15 +142,15 @@
                         Submitted By
                     </th>
                     <td mat-cell *matCellDef="let element"> 
-                        <span class="navlink" (click)="goToUserInfo(element.userid)">{{element.pseudoname}}</span>
+                        <span class="navlink" (click)="goToUserInfo(element.userid)">{{element.pseudoname | titlecase}}</span>
                      </td>
                     <td mat-cell *matCellDef="let element">
                         <ng-container *ngIf="this.flag === 'Sales'; then trueCondition1 else elseTemplate1"></ng-container>
                         <ng-template #trueCondition1>
-                            <span class="navlink" (click)="goToUserInfo(element.userid)"> {{ element?.pseudoname }} </span>
+                            <span class="navlink" (click)="goToUserInfo(element.userid)"> {{ element?.pseudoname | titlecase }} </span>
                         </ng-template>
                         <ng-template #elseTemplate1>
-                            <span class="navlink" (click)="goToUserInfo(element.userid)">{{ element?.fullname }}</span>
+                            <span class="navlink" (click)="goToUserInfo(element.userid)">{{ element?.fullname | titlecase }}</span>
                         </ng-template>
                     </td>
                 </ng-container>
@@ -161,7 +161,7 @@
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubStatus" mat-sort-header>
                         Sub Status
                     </th>
-                    <td mat-cell *matCellDef="let element"> {{element.substatus}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.substatus | titlecase}} </td>
                 </ng-container>
 
                 <!-- Action Column -->

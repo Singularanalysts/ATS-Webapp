@@ -36,7 +36,7 @@
                 <!-- Consultant Name Column -->
                 <ng-container matColumnDef="ConsultantName">
                     <th mat-header-cell *matHeaderCellDef> Consultant Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.consultantname}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element?.consultantname|titlecase}} </td>
                 </ng-container>
     
                 <!-- Consultant Email Column -->

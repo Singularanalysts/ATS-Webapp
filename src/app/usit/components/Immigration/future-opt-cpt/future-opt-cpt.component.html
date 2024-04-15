@@ -43,7 +43,7 @@
                 <!-- Technology Column-->
                 <ng-container matColumnDef="Technology">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Technology"> Technology </th>
-                    <td mat-cell *matCellDef="let element">{{element?.technologyarea}}</td>
+                    <td mat-cell *matCellDef="let element">{{element?.technologyarea|titlecase}}</td>
                 </ng-container>
 
                 <!-- University Column-->

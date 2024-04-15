@@ -47,7 +47,7 @@
         <ng-container matColumnDef="Company">
           <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 16%"> Company</th>
           <td mat-cell *matCellDef="let element" style="width: 16%">
-            <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company}}</span>
+            <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company| titlecase}}</span>
           </td>
         </ng-container>
 
@@ -55,7 +55,7 @@
         <ng-container matColumnDef="HeadQuarter">
           <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by headquerter" style="width: 20%"> Head
             Quarter </th>
-          <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.headquerter}} </td>
+          <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.headquerter | titlecase}} </td>
         </ng-container>
 
         <!-- Fed-Id Column -->
@@ -82,7 +82,7 @@
         <ng-container matColumnDef="AddedBy">
           <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname" style="width: 8%"> Added By </th>
           <td mat-cell *matCellDef="let element">
-            <span class="user-info" (click)="goToUserInfo(element.addedby)" style="width: 8%"> {{element.pseudoname}}  </span>
+            <span class="user-info" (click)="goToUserInfo(element.addedby)" style="width: 8%"> {{element.pseudoname  | titlecase}}  </span>
           </td>
         </ng-container>
 

@@ -81,7 +81,7 @@
           >
             Job Title
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 30%">{{ element?.jobtitle }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 30%">{{ element?.jobtitle | titlecase }}</td>
         </ng-container>
         <!-- Location-->
         <ng-container matColumnDef="Location">
@@ -107,7 +107,7 @@
           >
             IP/Vendor
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 17%">{{ element?.vendor }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 17%">{{ element?.vendor | titlecase }}</td>
         </ng-container>
         <!-- Contact Number-->
         <ng-container matColumnDef="EmployementType">
@@ -121,7 +121,7 @@
             Employement Type
           </th>
           <td mat-cell *matCellDef="let element" style="width: 5%">
-            {{ element?.employmenttype }}
+            {{ element?.employmenttype | titlecase}}
           </td>
         </ng-container>
 

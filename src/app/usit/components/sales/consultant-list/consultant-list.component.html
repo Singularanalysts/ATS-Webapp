@@ -93,7 +93,7 @@
         <ng-container matColumnDef="Name">
           <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort byName" mat-sort-header>Name </th>
           <td mat-cell *matCellDef="let element">
-            <span class="consultant-id" (click)="goToConsultantInfo(element, flag)">{{element?.consultantname}}
+            <span class="consultant-id" (click)="goToConsultantInfo(element, flag)">{{element?.consultantname|titlecase}}
             </span>
           </td>
         </ng-container>
@@ -145,7 +145,7 @@
         <!-- Position Column -->
         <ng-container matColumnDef="Position">
           <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Position" mat-sort-header> Position</th>
-          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.position|titlecase}} </td>
         </ng-container>
 
         <!-- Exp Column -->

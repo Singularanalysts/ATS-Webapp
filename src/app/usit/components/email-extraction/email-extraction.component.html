@@ -37,7 +37,7 @@
                 <ng-container matColumnDef="Subject">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Subject" style=" width: 30% !important;" >
                         Subject</th>
-                    <td mat-cell *matCellDef="let element" style=" width: 30% !important;" >{{element?.subject}} </td>
+                    <td mat-cell *matCellDef="let element" style=" width: 30% !important;" >{{element?.subject|titlecase}} </td>
                 </ng-container>
                 <!-- Sender Column-->
                 <ng-container matColumnDef="Sender">
