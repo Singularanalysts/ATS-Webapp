@@ -85,4 +85,34 @@ export class VendorService {
   getAllVendorByType(access: string, userid: number,page: any, size: any, companytype: any, field:any) {
     return this.apiServ.get("vms/vendor/getAll/" + access + "/" + userid+"/"+page+"/"+size+"/"+ companytype + "/" +field);
   }
+
+  getAllBlacklistedByPagination(page: any, size: any, field: any, sortField:string, sortOrder:string ) {
+    return this.apiServ.get("vms/vendor/allBlacklisted/" + page + "/" + size + "/" + field + "/" +sortField + "/" + sortOrder);
+  }
+
+  //save hotlist provider
+  public saveHotlistProvider(entity: any) {
+    return this.apiServ.post("vms/htProviders/save", entity);
+  }
+
+  addORHotlistProvider(entity: any, action: 'edit-hot-list-provider' | 'add-hot-list-provider'){
+    return action === 'edit-hot-list-provider' ? this.updateEntity(entity): this.saveHotlistProvider(entity);
+  }
+
+  //used for get the resource
+  getAllHotlistProviders() {
+    return this.apiServ.get("vms/htProviders/getAllHotListProviders");
+  }
+
+  getHotlistProviderById(id: number) {
+    return this.apiServ.get(`vms/htProviders/getById/${id}`);
+  }
+
+  deleteHotlistProvider(id: number) {
+    return this.apiServ.delete("vms/htProviders/delete/" + id);
+  }
+
+  getAllHotListProvidersByPagination(page: any, size: any, field: any, sortField:string, sortOrder:string ) {
+    return this.apiServ.get("vms/htProviders/getAllHotListProviders/" + page + "/" + size + "/" + field + "/" +sortField + "/" + sortOrder);
+  }
 }
