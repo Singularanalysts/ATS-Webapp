@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 90px);
+  height: calc(100vh - 68px);
 }
 
 .table-wrapper {
@@ -121,8 +121,8 @@ thead {
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8px;
+  // height: 2rem;
+  padding-top: 2px;
   top: 0;
 }
 

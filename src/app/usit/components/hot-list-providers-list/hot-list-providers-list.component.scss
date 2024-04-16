@@ -1,4 +1,4 @@
-.receipt-container {
+.container {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 68px);
@@ -7,8 +7,8 @@
   ul {
     padding-inline-start: 10px;
     background-color: rgb(228, 231, 234);
-    height: 2rem;
-    padding-top: 8PX;
+    // height: 2rem;
+    padding-top: 2px;
     top: 0;
   }
   
@@ -38,7 +38,10 @@
   
   .table-wrapper {
     flex: 1;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    // padding: 4px;
+    margin: 4px;
   }
   
   table {
@@ -65,6 +68,9 @@
     color: #1a1717;
   }
   
+  // .mat-mdc-row  {
+  //   height: 48px !important;
+  // }
   .mat-mdc-column {
     border-right: 1px solid currentColor;
   }
@@ -73,25 +79,50 @@
     width: 32px;
     border-right: 1px solid lightgray;
     padding-right: 24px;
+  
   }
+  
+  
+  // .mat-column-HeadQuarter {
+  //   width: 62px !important;
+  // }
+  
+  // .mat-column-Company {
+  //   width: 72px !important;
+  //   
+  // }
   
   .mat-column-Name {
     border-right: 1px solid lightgray;
+  
+  }
+  
+  .mat-column-ApproveOrReject {
+    width: fit-content !important;
   }
   
   .mat-column-SerialNum,
-  .mat-column-InterviewId,
-  .mat-column-ConsultantName,
-  .mat-column-DateAndToI,
-  .mat-column-Round,
-  .mat-column-Mode,
-  .mat-column-Vendor,
-  .mat-column-ImplementationPartner,
-  .mat-column-Client,
-  .mat-column-DateOfSubmission,
-  .mat-column-EmployeerName,
-  .mat-column-InterviewStatus {
-    border-right: 1px solid lightgray;
+  .mat-column-Company,
+  .mat-column-RecruiterName,
+  .mat-column-Email,
+  .mat-column-contactNumber,
+  .mat-column-AddedBy,
+  .mat-column-AddedOn,
+  .mat-column-LastUpdated,
+  .mat-column-Action {
+  
+    border-right: 1px solid lightgray !important;
+  }
+  
+  .company-recruiter-info {
+    cursor: pointer !important;
+    color: #4154f1;
+  }
+  
+  .action-btns {
+    display: flex;
+    flex-direction: row;
+  
   }
   
   .header-container {
@@ -99,8 +130,12 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+  
     height: 48px;
+  
     background-color: white;
+    // position: sticky;
+    // z-index: 9999999;
     top: 0;
     overflow: hidden;
     margin: 4px;
@@ -112,23 +147,30 @@
     font-weight: 600;
   }
   
-  .add-receipt {
+  .add-vendor {
     cursor: pointer;
   }
   
-  .receipt-actions {
+  .vendor-actions {
     display: flex;
     align-items: center;
+  
+    input:focus {
+      border: solid 2px #3f51b5 !important;
+      outline: none;
+    }
   
     .search {
       height: 32px;
       padding: 0px 8px;
+  
     }
   }
   
-  .submission-table-style {
-    // padding: 0 2px;
-    width: max-content;
+  .vendor-table-style {
+    padding: 0 2px;
+    // width: max-content;
+    width: 100%;
     // max-height: calc(100% - 2px);
     overflow: auto;
     display: block;
@@ -154,6 +196,7 @@
   
   .responsive-table {
     width: 100%;
+    // table-layout: fixed;
   }
   
   @media screen and (max-width: 768px) {
@@ -177,6 +220,7 @@
   
   .action-buttons {
     display: flex;
+    //justify-content: space-between;
     align-items: center;
     height: 43px;
   }
@@ -207,7 +251,7 @@
   // @media screen and (min-width: 1400px) {
   //   .vendor-table-style {
   //     width: 100%;
-  //     height: calc(100% - 0px);
+  //     height: calc(100% - 8px);
   //     overflow: auto;
   //   }
   // }
@@ -258,8 +302,14 @@
     color: black;
     pointer-events: none;
   }
-
-  .consultant-name, .employeer-name {
-    cursor: pointer;
-    color: #0275d8;
+  
+  .user-info {
+    cursor: pointer !important;
+    color: #4154f1;
   }
+  
+  // @media screen and (min-width: 1920px) {
+  //   .container {
+  //     height: 90vh;
+  //   }
+  // }

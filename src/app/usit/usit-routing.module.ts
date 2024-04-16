@@ -40,6 +40,7 @@ import { MassMailingListComponent } from './components/vendor-management/mass-ma
 import { EmailExtractionComponent } from './components/email-extraction/email-extraction.component';
 import { InvoiceListComponent } from './components/accounts&billing/invoice-list/invoice-list.component';
 import { ReceiptListComponent } from './components/accounts&billing/receipt-list/receipt-list.component';
+import { HotListProvidersListComponent } from './components/hot-list-providers-list/hot-list-providers-list.component';
 
 
 const routes: Routes = [
@@ -251,9 +252,11 @@ const routes: Routes = [
   },
   {
     path: 'receipts', component: ReceiptListComponent,
+  },
+  
+  {
+    path: 'hot-list-providers', component: HotListProvidersListComponent,
   }
-
-
 
 ];
 

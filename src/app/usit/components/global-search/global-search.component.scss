@@ -1,8 +1,8 @@
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8px;
+  // height: 2rem;
+  padding-top: 2px;
   margin-top: 0px !important;
 }
 
@@ -514,7 +514,7 @@ a {
 }
 
 .analysis-card {
-  height: calc(100vh - 215px);
+  height: calc(100vh - 155px);
 }
 
 .analysis-card-content {
@@ -539,4 +539,21 @@ a {
   top: -3px;
   cursor: pointer;
   color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-mdc-card-content:first-child {
+  padding-top: 4px !important;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 4px !important;
+}
+
+.table-style {
+  height: calc(100vh - 260px) !important;
+  overflow-y: auto;
+}
+
+.overall-container {
+  height: calc(100vh - 68px);
 }
