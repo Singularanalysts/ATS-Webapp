@@ -72,8 +72,18 @@
         "routerLink": "/usit/linkedinprofiles"
       }
     ]
-  }
-  ,
+  },
+  {
+    "text": "Talent Acquisition",
+    "icon": "person_search",
+    "children": [
+      {
+        "text": "Hot List Providers",
+        "icon": "groups",
+        "routerLink": "/usit/hot-list-providers"
+      }
+    ]
+  },
   {
     "text": "Reports",
     "icon": "reports",

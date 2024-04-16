@@ -47,7 +47,7 @@ import {
 } from "@angular-magic/ngx-gp-autocomplete";
 
 @Component({
-  selector: 'app-add-vendor',
+  selector: 'app-add-current-primary-vendor',
   standalone: true,
   imports: [
     CommonModule,
@@ -65,8 +65,7 @@ import {
     MatCardModule,
     NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
-  ],
-  providers: [
+  ],providers: [
     {
       provide: Loader,
       useValue: new Loader({
@@ -75,10 +74,10 @@ import {
       }),
     },
   ],
-  templateUrl: './add-vendor.component.html',
-  styleUrls: ['./add-vendor.component.scss'],
+  templateUrl: './add-current-primary-vendor.component.html',
+  styleUrls: ['./add-current-primary-vendor.component.scss']
 })
-export class AddVendorComponent implements OnInit, OnDestroy {
+export class AddCurrentPrimaryVendorComponent implements OnInit, OnDestroy {
   vendorObj = new Vms();
   vendorForm: any = FormGroup;
   submitted = false;
@@ -101,7 +100,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
     statusType: STATUS_TYPE,
   };
   data = inject(MAT_DIALOG_DATA);
-  dialogRef = inject(MatDialogRef<AddVendorComponent>);
+  dialogRef = inject(MatDialogRef<AddCurrentPrimaryVendorComponent>);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
 
@@ -127,7 +126,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         this.getCompanyOptionsForAutoComplete(resp);
       }
     }));
-    if (this.data.actionName === "edit-vendor") {
+    if (this.data.actionName === "edit-current-primary-vendor") {
       this.bindFormControlValueOnEdit();
     }
     this.iniVendorForm(new Vms());
@@ -173,13 +172,13 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       ],
       //  fedid: [this.data.vendorData ? this.data.vendorData.fedid : ''],
       vendortype: [
-        vendorData ? vendorData.vendortype : '',
+        'Current Primary Vendor',
         Validators.required,
       ],
       companytype: [
         vendorData ? vendorData.companytype : '', Validators.required,
       ],
-      tyretype: [vendorData ? vendorData.tyretype : ''],
+      tyretype: ['Primary Vendor'],
       client: [vendorData ? vendorData.client : ''],
       addedby: [this.vendorObj.addedby],
       updatedby: [this.vendorObj.updatedby],
@@ -202,7 +201,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         [Validators.required, this.atLeastTwoNumbers]
       ],
     });
-    if (this.data.actionName === 'edit-vendor') {
+    if (this.data.actionName === 'edit-current-primary-vendor') {
       this.vendorForm.addControl(
         'status',
         this.formBuilder.control(
@@ -236,8 +235,8 @@ export class AddVendorComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  validateControls(action = 'add-vendor') {
-    if (action === 'edit-vendor') {
+  validateControls(action = 'add-current-primary-vendor') {
+    if (action === 'edit-current-primary-vendor') {
       this.vendorForm.get('status').valueChanges.subscribe((res: any) => {
         const remarks = this.vendorForm.get('remarks');
         if (res === 'Rejected') {
@@ -369,7 +368,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         next: (resp: any) => {
           if (resp.status == 'success') {
             dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-vendor'
+              this.data.actionName === 'add-current-primary-vendor'
                 ? 'Vendor added successfully'
                 : 'Vendor updated successfully';
             this.dialogRef.close();
@@ -382,7 +381,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
-            this.data.actionName === 'add-vendor'
+            this.data.actionName === 'add-current-primary-vendor'
               ? 'Vendor addition is failed'
               : 'Vendor updation is failed';
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -404,7 +403,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   getSaveData() {
     this.trimSpacesFromFormValues();
     // updates employee object form values
-    if (this.data.actionName === "edit-vendor") {
+    if (this.data.actionName === "edit-current-primary-vendor") {
       [this.vendorForm.value].forEach((formVal, idx) => {
         this.vendorObj.company = formVal.company;
         this.vendorObj.vendortype = formVal.vendortype;

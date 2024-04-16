@@ -41,7 +41,9 @@ import { EmailExtractionComponent } from './components/email-extraction/email-ex
 import { InvoiceListComponent } from './components/accounts&billing/invoice-list/invoice-list.component';
 import { ReceiptListComponent } from './components/accounts&billing/receipt-list/receipt-list.component';
 import { HotListProvidersListComponent } from './components/hot-list-providers-list/hot-list-providers-list.component';
-
+import { BlacklistedCompaniesListComponent } from './components/vendor-management/blacklisted-companies-list/blacklisted-companies-list.component';
+import { CurrentPrimaryVendorListComponent } from './components/vendor-management/current-primary-vendor-list/current-primary-vendor-list.component';
+import { FuturePrimaryVendorListComponent } from './components/vendor-management/future-primary-vendor-list/future-primary-vendor-list.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -256,7 +258,16 @@ const routes: Routes = [
   
   {
     path: 'hot-list-providers', component: HotListProvidersListComponent,
-  }
+  },
+  {
+    path: 'blacklisted-companies', component: BlacklistedCompaniesListComponent,
+  },
+  {
+    path: 'current-primary-vendor', component: CurrentPrimaryVendorListComponent,
+  },
+  {
+    path: 'future-primary-vendor', component: FuturePrimaryVendorListComponent,
+  },
 
 ];
 

@@ -19,9 +19,9 @@
         <!-- <button mat-icon-button (click)="uploadVmsExcelData()" matTooltip="Upload VMS Excel Data" matTooltipPosition="above">
           <mat-icon class="item-icon">upload</mat-icon>
         </button> -->
-        <button [disabled]="!privilegeServ.hasPrivilege('ADD_VENDOR')" mat-icon-button class="add-user"
+        <button mat-icon-button class="add-user"
           (click)="addHotlistProvider()" matTooltip="Add Hotlist Provider" matTooltipPosition="above">
-          <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_VENDOR')}">add_circle</mat-icon>
+          <mat-icon class="item-icon">add_circle</mat-icon>
         </button>
   
         <div class="search-vendor">
@@ -100,13 +100,13 @@
             <th mat-header-cell *matHeaderCellDef style="width: 5%"> Action </th>
             <td mat-cell *matCellDef="let vendor" style="width: 5%">
               <span class="action-buttons">
-                <button [disabled]="!privilegeServ.hasPrivilege('EDIT_VENDOR')" mat-icon-button
+                <button mat-icon-button
                   (click)="editHotlistProvider(vendor)" class="action-button-ed">
-                  <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_VENDOR')}">edit</mat-icon>
+                  <mat-icon class="edit-icon">edit</mat-icon>
                 </button>
-                <button [disabled]="!privilegeServ.hasPrivilege('DELETE_VENDOR')" mat-icon-button
+                <button mat-icon-button
                   (click)="deleteHotlistProvider(vendor)" class="action-button-ed">
-                  <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_VENDOR')}">delete</mat-icon>
+                  <mat-icon class="delete-icon">delete</mat-icon>
                 </button>
               </span>
             </td>

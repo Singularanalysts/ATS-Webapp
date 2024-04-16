@@ -1,8 +1,8 @@
 <div class="container">
-  <ul class="breadcrumb">
+  <!-- <ul class="breadcrumb">
     <li><a (click)="navigateToDashboard()">Home</a></li>
     <li class="last">Vendors</li>
-  </ul>
+  </ul> -->
   <div class="header-container mat-elevation-z1">
     <span class="header-text">
       Vendors
@@ -148,27 +148,34 @@
               </button>
             </ng-container>
             <ng-template #ifNotApproved>
-                <!-- Initiated BUTTON -->
-                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
-                  *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button
-                  class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor)" [ngStyle]="{ color: 'white' }"
-                  style="width: 75px; height: 25px;" [ngClass]="'mat-primary'"> {{vendor.vms_stat}}
-                </button>
-
-                &nbsp;
-
-                <!-- Reject BUTTON -->
-
-                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
-                  *ngIf="vendor.vms_stat !== 'Approved'&&vendor.vms_stat !== 'Rejected'" mat-raised-button
-                  class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor ,true)"
-                  [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
-                </button>
-
-                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Rejected'"
-                  mat-raised-button class="approve-reject-buttons" [ngStyle]="{ color: 'white' }"
-                  style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{vendor.vms_stat}}
-                </button>
+              <!-- Initiated BUTTON -->
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
+                *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button class="approve-reject-buttons"
+                (click)="onApproveOrRejectVMS(vendor)" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
+                [ngClass]="'mat-primary'"> {{vendor.vms_stat}}
+              </button>
+            
+              &nbsp;
+            
+              <!-- Reject BUTTON -->
+            
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
+                *ngIf="vendor.vms_stat !== 'Approved' && vendor.vms_stat !== 'Rejected' && vendor.vms_stat !== 'blacklisted'"
+                mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor ,true)"
+                [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
+              </button>
+            
+              <!-- Blacklisted BUTTON -->
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'blacklisted'"
+                mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor, true)"
+                [ngStyle]="{ color: 'white' }" style="width: 80px; height: 25px;" [ngClass]="'mat-warn'">
+                {{'Blacklisted'}} <!-- Added button for Blacklisted status -->
+              </button>
+            
+              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Rejected'"
+                mat-raised-button class="approve-reject-buttons" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
+                [ngClass]="'mat-warn'"> {{vendor.vms_stat}}
+              </button>
             </ng-template>
           </td>
         </ng-container>

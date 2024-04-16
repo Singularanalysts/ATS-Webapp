@@ -47,7 +47,7 @@ import {
 } from "@angular-magic/ngx-gp-autocomplete";
 
 @Component({
-  selector: 'app-add-vendor',
+  selector: 'app-add-future-primary-vendor',
   standalone: true,
   imports: [
     CommonModule,
@@ -75,10 +75,10 @@ import {
       }),
     },
   ],
-  templateUrl: './add-vendor.component.html',
-  styleUrls: ['./add-vendor.component.scss'],
+  templateUrl: './add-future-primary-vendor.component.html',
+  styleUrls: ['./add-future-primary-vendor.component.scss']
 })
-export class AddVendorComponent implements OnInit, OnDestroy {
+export class AddFuturePrimaryVendorComponent implements OnInit, OnDestroy {
   vendorObj = new Vms();
   vendorForm: any = FormGroup;
   submitted = false;
@@ -101,7 +101,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
     statusType: STATUS_TYPE,
   };
   data = inject(MAT_DIALOG_DATA);
-  dialogRef = inject(MatDialogRef<AddVendorComponent>);
+  dialogRef = inject(MatDialogRef<AddFuturePrimaryVendorComponent>);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
 
@@ -127,7 +127,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         this.getCompanyOptionsForAutoComplete(resp);
       }
     }));
-    if (this.data.actionName === "edit-vendor") {
+    if (this.data.actionName === "edit-future-primary-vendor") {
       this.bindFormControlValueOnEdit();
     }
     this.iniVendorForm(new Vms());
@@ -173,13 +173,13 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       ],
       //  fedid: [this.data.vendorData ? this.data.vendorData.fedid : ''],
       vendortype: [
-        vendorData ? vendorData.vendortype : '',
+        'Future Primary Vendor',
         Validators.required,
       ],
       companytype: [
         vendorData ? vendorData.companytype : '', Validators.required,
       ],
-      tyretype: [vendorData ? vendorData.tyretype : ''],
+      tyretype: ['Primary Vendor'],
       client: [vendorData ? vendorData.client : ''],
       addedby: [this.vendorObj.addedby],
       updatedby: [this.vendorObj.updatedby],
@@ -202,7 +202,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         [Validators.required, this.atLeastTwoNumbers]
       ],
     });
-    if (this.data.actionName === 'edit-vendor') {
+    if (this.data.actionName === 'edit-future-primary-vendor') {
       this.vendorForm.addControl(
         'status',
         this.formBuilder.control(
@@ -369,7 +369,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         next: (resp: any) => {
           if (resp.status == 'success') {
             dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-vendor'
+              this.data.actionName === 'add-future-primary-vendor'
                 ? 'Vendor added successfully'
                 : 'Vendor updated successfully';
             this.dialogRef.close();
@@ -404,7 +404,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   getSaveData() {
     this.trimSpacesFromFormValues();
     // updates employee object form values
-    if (this.data.actionName === "edit-vendor") {
+    if (this.data.actionName === "edit-future-primary-vendor") {
       [this.vendorForm.value].forEach((formVal, idx) => {
         this.vendorObj.company = formVal.company;
         this.vendorObj.vendortype = formVal.vendortype;

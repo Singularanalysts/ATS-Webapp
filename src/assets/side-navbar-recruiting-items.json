@@ -22,6 +22,21 @@
         "text": "Recruiters",
         "icon": "business_center",
         "routerLink": "/usit/recruiters"
+      },
+      {
+        "text": "Blacklisted Companies",
+        "icon": "block",
+        "routerLink": "/usit/blacklisted-companies"
+      },
+      {
+        "text": "Current Primary Vendor",
+        "icon": "group",
+        "routerLink": "/usit/current-primary-vendor"
+      },
+      {
+        "text": "Future Primary Vendor",
+        "icon": "group",
+        "routerLink": "/usit/future-primary-vendor"
       }
     ]
   },
@@ -123,6 +138,17 @@
         "text": "LinkedIn Profiles",
         "icon": "business_center",
         "routerLink": "/usit/linkedinprofiles"
+      }
+    ]
+  },
+  {
+    "text": "Talent Acquisition",
+    "icon": "person_search",
+    "children": [
+      {
+        "text": "Hot List Providers",
+        "icon": "groups",
+        "routerLink": "/usit/hot-list-providers"
       }
     ]
   },
