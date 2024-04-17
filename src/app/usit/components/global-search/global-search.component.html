@@ -120,7 +120,7 @@
                                             sortActionDescription="Sort by Category">
                                             Skill Set
                                         </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
+                                        <td mat-cell *matCellDef="let element"> {{element.category_skill|titlecase}} </td>
                                     </ng-container>
         
                                     <ng-container matColumnDef="VendorCount">
@@ -190,7 +190,7 @@
                                             sortActionDescription="Sort by Vendor">
                                             Vendor
                                         </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.vendor}} </td>
+                                        <td mat-cell *matCellDef="let element"> {{element.vendor|titlecase}} </td>
                                     </ng-container>
         
                                     <ng-container matColumnDef="CategoryCount">

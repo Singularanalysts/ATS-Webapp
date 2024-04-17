@@ -46,6 +46,7 @@ ul.breadcrumb li a:hover {
 .header-text {
   padding-left: 8px;
   font-weight: 600;
+ 
 }
 
 .header-container-leading-resources {
@@ -386,11 +387,13 @@ b {
   .search {
     height: 32px;
     padding: 0px 8px;
-
+    overflow-wrap: normal;
   }
 
   .dice {
-    width: 350px;
+    width: 150px;
+    display: flex;
+    align-items: center;
   }
 
 
@@ -398,6 +401,7 @@ b {
 .date-picker-field {
   display: flex;
   align-items: center;
+  
 }
 
 .date-picker-container {
@@ -411,9 +415,34 @@ b {
 }
 .mat-form-field {
   margin-bottom: 5px; /* Adjust as needed */
+  
 }
 
+
 .search {
-  height: 30px;
+  height: 35px;
   padding: 0px 8px;
+   
 }
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  background-color: white;
+  top: 0;
+  overflow: hidden;
+  margin: 4px;
+  background-color: white;
+  margin-bottom: -8.5px;
+  margin-left: 0;
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+
+
