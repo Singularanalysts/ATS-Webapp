@@ -40,6 +40,7 @@ import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { MatTabsModule, MatTabChangeEvent  } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-employee-list',
@@ -57,7 +58,8 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
     MatPaginatorModule,
     CommonModule,
     MatTooltipModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTabsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -114,8 +116,14 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
   protected privilegeServ = inject(PrivilegesService);
   // for subscrition clean up
   private destroyed$ = new Subject<void>();
+  status!: string;
+
   ngOnInit(): void {
     this.getAllEmployees();
+  }
+
+  onTabChanged(event: MatTabChangeEvent) {
+    this.getAllEmployees(event.tab.textLabel.toLowerCase());
   }
 
   ngAfterViewInit() {
@@ -127,8 +135,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
    * get all employee data
    * @returns employee data
    */
-  getAllEmployees() {
-    return this.empManagementServ.getAllEmployees().pipe(takeUntil(this.destroyed$)).subscribe({
+  getAllEmployees(status: string = 'all') {
+    return this.empManagementServ.getAllEmployees(status).pipe(takeUntil(this.destroyed$)).subscribe({
       next: (response: any) => {
         if (response.data) {
           this.dataSource.data = response.data;

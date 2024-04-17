@@ -79,6 +79,21 @@
           "text": "I9",
           "icon": "school",
           "routerLink": "/usit/i9"
+        },
+        {
+          "text": "PWD",
+          "icon": "business_center",
+          "routerLink": "/usit/pwd"
+        },
+        {
+          "text": "PERM",
+          "icon": "business_center",
+          "routerLink": "/usit/perm"
+        },
+        {
+          "text": "I140",
+          "icon": "business_center",
+          "routerLink": "/usit/i140"
         }
       ]
     },
