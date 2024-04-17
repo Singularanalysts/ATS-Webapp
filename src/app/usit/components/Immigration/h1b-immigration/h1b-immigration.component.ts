@@ -129,6 +129,10 @@ export class H1bImmigrationComponent implements OnInit {
     })
   }
 
+  onFilter(event: any) {
+    this.dataSource.filter = event.target.value;
+  }
+
   applyFilter(event : any) {
 
   }
