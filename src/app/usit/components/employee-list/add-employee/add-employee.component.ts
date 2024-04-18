@@ -76,12 +76,13 @@ export class AddEmployeeComponent {
   departmentOptions: string[] = [
     'Administration',
     'Recruiting',
-    'SoftWare',
+    'Software',
     'Bench Sales',
     'Sourcing',
     'Dom Recruiting',
     'Accounts',
     'Guest',
+    'HR Team'
   ];
 
   roleOptions: any[] = [

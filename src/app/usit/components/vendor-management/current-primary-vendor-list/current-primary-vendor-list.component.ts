@@ -40,6 +40,8 @@ import { VendorService } from 'src/app/usit/services/vendor.service';
 import { UploadVmsExcelComponent } from '../recruiter-list/upload-vms-excel/upload-vms-excel.component';
 import { AddVendorComponent } from '../vendor-list/add-vendor/add-vendor.component';
 import { AddCurrentPrimaryVendorComponent } from './add-current-primary-vendor/add-current-primary-vendor.component';
+import { ConfirmWithRadioButtonComponent } from 'src/app/dialogs/confirm-with-radio-button/confirm-with-radio-button.component';
+import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-with-radio-data';
 
 
 @Component({
@@ -111,6 +113,15 @@ export class CurrentPrimaryVendorListComponent implements OnInit {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   companyType: string = '';
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 1500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
@@ -666,5 +677,58 @@ export class CurrentPrimaryVendorListComponent implements OnInit {
     dialogConfig.data = actionData;
 
     this.dialogServ.openDialogWithComponent(UploadVmsExcelComponent, dialogConfig);
+  }
+
+  moveVendorToVendorOrFpv(vendor: any) {
+    const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to move Vendor to Vendor/FPV ?',
+      radioButtons: ['Future Primary Vendor', 'Primary Vendor', 'Implementation Partner', 'Client', 'Tier'],
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: vendor,
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = 'fit-content';
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.data = dataToBeSentToDailog;
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmWithRadioButtonComponent,
+      dialogConfig
+    );
+    // call moveToSales api after  clicked 'Yes' on dialog click
+
+    dialogRef.afterClosed().subscribe({
+      next: (selectedOption: string) => {
+        if (dialogRef.componentInstance.allowAction) {
+          this.vendorServ
+            .moveToCPVOrFPV(
+              selectedOption,
+              vendor.id,
+            )
+            .subscribe((resp: any) => {
+              if (resp.status == 'success') {
+                this.dataToBeSentToSnackBar.panelClass = [
+                  'custom-snack-success',
+                ];
+                this.dataToBeSentToSnackBar.message = resp.message ;
+
+              } else {
+                this.dataToBeSentToSnackBar.panelClass = [
+                  'custom-snack-failure',
+                ];
+                this.dataToBeSentToSnackBar.message = resp.message;
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+              this.getAllData(this.currentPageIndex + 1);
+            });
+        }
+      },
+    });
+
   }
 }

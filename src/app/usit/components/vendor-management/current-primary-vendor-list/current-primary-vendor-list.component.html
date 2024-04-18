@@ -126,6 +126,9 @@
                   (click)="editVendor(vendor)" class="action-button-ed">
                   <mat-icon class="edit-icon">edit</mat-icon>
                 </button>
+                <button mat-icon-button [style.cursor]="'pointer'" matTooltip="Move to Vendor or FPV" matTooltipPosition="above" (click)="moveVendorToVendorOrFpv(vendor)">
+                  <mat-icon class="edit-icon">arrow_forward</mat-icon>
+                </button>
                 <button mat-icon-button
                   (click)="deleteVendor(vendor)" class="action-button-ed">
                   <mat-icon class="delete-icon">delete</mat-icon>
