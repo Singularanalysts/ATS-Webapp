@@ -119,4 +119,9 @@ export class VendorService {
   getAllCurrentOrFuturePrimaryVendorByPagination(vendorType: any, page: any, size: any, field: any, sortField:string, sortOrder:string ) {
     return this.apiServ.get(`vms/vendor/getAllFPVendors/${vendorType}/${page}/${size}/${field}/${sortField}/${sortOrder}`);
   }
+
+  moveToCPVOrFPV(vendorType: any, id: any) {
+    return this.apiServ.get(`vms/vendor/move/${vendorType}/${id}`);
+  }
+
 }
