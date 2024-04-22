@@ -10,8 +10,8 @@ import { DialogService } from 'src/app/services/dialog.service';
 import { AddH1bImmigrantComponent } from './add-h1b-immigrant/add-h1b-immigrant.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
-import { MatSort } from '@angular/material/sort';
-
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 @Component({
   selector: 'app-h1b-immigration',
   standalone: true,
@@ -21,7 +21,7 @@ import { MatSort } from '@angular/material/sort';
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule, MatSortModule
   ],
   templateUrl: './h1b-immigration.component.html',
   styleUrls: ['./h1b-immigration.component.scss']
@@ -104,8 +104,8 @@ export class H1bImmigrationComponent implements OnInit {
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddH1bImmigrantComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-         this.getAll();
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
     })
   }
@@ -123,8 +123,8 @@ export class H1bImmigrationComponent implements OnInit {
     const dialogRef = this.dialogServ.openDialogWithComponent(AddH1bImmigrantComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-         this.getAll();
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
     })
   }
@@ -133,13 +133,11 @@ export class H1bImmigrationComponent implements OnInit {
     this.dataSource.filter = event.target.value;
   }
 
-  applyFilter(event : any) {
+  applyFilter(event: any) {
 
   }
 
-  onSort(event : any) {
 
-  }
 
   handlePageEvent(e: PageEvent) {
     this.pageEvent = e;
@@ -151,4 +149,53 @@ export class H1bImmigrationComponent implements OnInit {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+  onSort(event: Sort) {
+    const sortDirection = event.direction;
+    const activeSortHeader = event.active;
+
+    if (sortDirection === '') {
+      this.dataSource.data = this.dataSource.data;
+      this.dataSource.sort = this.sort;
+      return;
+    }
+   const isAsc = sortDirection === 'asc';
+    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
+      switch (activeSortHeader) {
+        case 'Name':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.employeename || '').localeCompare(b.employeename || '')
+          );
+        case 'Company':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.companyname || '').localeCompare(b.companyname || '')
+          );
+        case 'ValidFrom':
+          const h1validfromA = new Date(a.h1validfrom);
+          const h1validfromeB = new Date(b.h1validfrom);
+          return isAsc ? h1validfromA.getTime() - h1validfromeB.getTime() : h1validfromeB.getTime() - h1validfromA.getTime();
+        case 'ValidTill':
+          const h1validtoA = new Date(a.h1validto);
+          const h1validtoB = new Date(b.h1validto)
+          return isAsc ? h1validtoA.getTime() - h1validtoB.getTime() : h1validtoB.getTime() - h1validtoA.getTime();
+        case 'E-Verify':
+          const everifydateA = new Date(a.everifydate);
+          const everifydateB = new Date(b.everifydate)
+          return isAsc ? everifydateA.getTime() - everifydateB.getTime() : everifydateB.getTime() - everifydateA.getTime();
+        case 'LastI9':
+          const lasti9dateA = new Date(a.lasti9date);
+          const lasti9dateB = new Date(b.lasti9date)
+          return isAsc ? lasti9dateA.getTime() - lasti9dateB.getTime() : lasti9dateB.getTime() - lasti9dateA.getTime();
+          case 'SerialNum':
+            // Assuming 'serialNum' is the property representing the serial number
+            const serialNumA = parseInt(a.serialNum) || 0;
+            const serialNumB = parseInt(b.serialNum) || 0;
+            return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
+        default:
+          return 0;
+      }
+    });
+  }
+
 }

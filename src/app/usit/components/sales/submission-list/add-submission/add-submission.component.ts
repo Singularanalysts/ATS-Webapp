@@ -581,7 +581,14 @@ export class AddSubmissionComponent implements OnInit {
       }
     });
   }
-
+  onlyNumberKey(evt: any) {
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if ((ASCIICode >= 48 && ASCIICode <= 57) || // Numbers 0-9
+     (ASCIICode >= 65 && ASCIICode <= 90) || // Uppercase letters A-Z
+     (ASCIICode >= 97 && ASCIICode <= 122)) 
+        return true;
+        return false;
+  }
 
   addRecruiter() {
     const actionData = {

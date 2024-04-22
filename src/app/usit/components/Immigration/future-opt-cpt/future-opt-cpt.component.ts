@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,8 @@ import { AddconsultantComponent } from '../../sales/consultant-list/add-consulta
 import { Router } from '@angular/router';
 import { DialogService } from 'src/app/services/dialog.service';
 import { MatDialogConfig } from '@angular/material/dialog';
-
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 @Component({
   selector: 'app-future-opt-cpt',
   standalone: true,
@@ -20,12 +21,13 @@ import { MatDialogConfig } from '@angular/material/dialog';
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   ],
   templateUrl: './future-opt-cpt.component.html',
   styleUrls: ['./future-opt-cpt.component.scss']
 })
-export class FutureOptCptComponent implements OnInit{
+export class FutureOptCptComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
@@ -41,7 +43,7 @@ export class FutureOptCptComponent implements OnInit{
     'Gender',
     'Action',
   ];
-
+  @ViewChild(MatSort) sort!: MatSort;
   private consultantServ = inject(ConsultantService);
   private dialogServ = inject(DialogService);
   private router = inject(Router);
@@ -63,7 +65,7 @@ export class FutureOptCptComponent implements OnInit{
     this.getAll()
   }
 
-  getAll(pagIdx=1) {
+  getAll(pagIdx = 1) {
     this.consultantServ.getOptCptList(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
@@ -96,19 +98,84 @@ export class FutureOptCptComponent implements OnInit{
     const dialogRef = this.dialogServ.openDialogWithComponent(AddconsultantComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-         this.getAll(this.currentPageIndex + 1);
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll(this.currentPageIndex + 1);
       }
     })
   }
 
-  applyFilter(event : any) {
+  applyFilter(event: any) {
     this.dataSource.filter = event.target.value;
   }
+  //lavanya
+  onSort(event: Sort) {
+    const sortDirection = event.direction;
+    const activeSortHeader = event.active;
 
-  onSort(event: any) {
+    if (sortDirection === '') {
+      this.dataSource.data = this.dataSource.data;
+      this.dataSource.sort = this.sort;
+      return;
+    }
 
+    const isAsc = sortDirection === 'asc';
+    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
+      switch (activeSortHeader) {
+        case 'SerialNum':
+          // Assuming 'serialNum' is the property representing the serial number
+          const serialNumA = parseInt(a.serialNum) || 0;
+          const serialNumB = parseInt(b.serialNum) || 0;
+          return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
+        case 'Email':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.consultantemail || '').localeCompare(b.consultantemail || '')
+          );
+        case 'Number':
+            const NumberA = this.extractNumericValue(a.contactnumber);
+            const NumberB = this.extractNumericValue(b.contactnumber);
+            return (isAsc ? 1 : -1) * (NumberA - NumberB);
+        case 'Technology':
+          return (
+            (isAsc ? 1 : -1) * (a.technologyarea || '').localeCompare(b.technologyarea || '')
+          );
+
+        case 'University':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.university || '').localeCompare(b.university || '')
+          );
+        case 'BeneficiaryFirstName':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.h1validto || '').localeCompare(b.h1validto || '')
+          );
+        case 'BeneficiaryMiddleName':
+          return (
+            (isAsc ? 1 : -1) * (a.everifydate || '').localeCompare(b.everifydate || '')
+          );
+        case 'BeneficiaryLastName':
+          return (
+            (isAsc ? 1 : -1) * (a.lasti9date || '').localeCompare(b.lasti9date || '')
+          );
+        case 'CurrentLocation':
+          return (
+            (isAsc ? 1 : -1) * (a.currentlocation || '').localeCompare(b.currentlocation || '')
+          );
+        case 'Gender':
+          return (
+            (isAsc ? 1 : -1) * (a.gender || '').localeCompare(b.gender || '')
+          );
+        default:
+          return 0;
+      }
+    });
   }
+  extractNumericValue(phoneNumber: string): number {
+    // Remove non-numeric characters and parse as integer
+    return parseInt(phoneNumber.replace(/\D/g, ''));
+  }
+  //
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
@@ -122,4 +189,10 @@ export class FutureOptCptComponent implements OnInit{
     }
     return;
   }
+  //lavanya
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+
+  }
+  //
 }

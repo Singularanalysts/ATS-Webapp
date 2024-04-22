@@ -54,7 +54,7 @@
 
                 <!-- ValidTill Column-->
                 <ng-container matColumnDef="ValidTill">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by ValidTill"> Valid Till </th>
+                    <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by ValidTill"> Valid Till </th>
                     <td mat-cell *matCellDef="let element">{{element?.h1validto | date:'MM-dd-yyyy'}} </td>
                 </ng-container>
 

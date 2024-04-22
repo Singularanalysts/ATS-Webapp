@@ -390,4 +390,10 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
       dialogConfig
     );
   }
+  NumericValue(value: string): string {
+    if (!value) return ''; // Return empty string if value is falsy
+    // Use regular expression to replace non-numeric characters with an empty string
+    return value.replace(/[^0-9]/g, '');
+  }
+  
 }

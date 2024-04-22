@@ -39,7 +39,7 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by Serial Number"
-            style="width: 2%"
+            style="width:2%"
           >
             S.No
           </th>
@@ -51,11 +51,11 @@
             mat-header-cell
             *matHeaderCellDef
             sortActionDescription="Sort by RequirementNumber"
-            style="width: 5%"
+            style="width: 12%"
           >
             Requirement Number
           </th>
-          <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)" style="width: 5%">{{ element?.reqnumber }}</td>
+          <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)" style="width: 12%">{{ element?.reqnumber }}</td>
         </ng-container>
         <!-- Date  mat-sort-header-->
         <ng-container matColumnDef="Date">
@@ -77,11 +77,11 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by JobTitle"
-            style="width: 30%"
+            style="width: 20%"
           >
             Job Title
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 30%">{{ element?.jobtitle | titlecase }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 20%">{{ element?.jobtitle | titlecase }}</td>
         </ng-container>
         <!-- Location-->
         <ng-container matColumnDef="Location">
@@ -90,11 +90,11 @@
             *matHeaderCellDef
             sortActionDescription="Sort by Location"
             mat-sort-header
-            style="width: 23%"
+            style="width: 15%"
           >
             Location
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 23%">{{ element?.location.replace(', USA', '') }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 15%">{{ element?.location.replace(', USA', '') }}</td>
         </ng-container>
         <!-- Email-->
         <ng-container matColumnDef="IPVendor">
@@ -103,11 +103,11 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by IPVendor"
-            style="width: 17%"
+            style="width: 22%"
           >
             IP/Vendor
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 17%">{{ element?.vendor | titlecase }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 22%">{{ element?.vendor | titlecase }}</td>
         </ng-container>
         <!-- Contact Number-->
         <ng-container matColumnDef="EmployementType">
@@ -116,11 +116,11 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by EmployementType"
-            style="width: 5%"
+            style="width: 11.5%"
           >
             Employement Type
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 5%">
+          <td mat-cell *matCellDef="let element" style="width: 11.5%">
             {{ element?.employmenttype | titlecase}}
           </td>
         </ng-container>
@@ -147,12 +147,12 @@
 
         <!-- Action Column -->
         <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef>Action</th>
-          <td mat-cell *matCellDef="let requirement" class="action-buttons">
+          <th mat-header-cell *matHeaderCellDef >Action</th>
+          <td mat-cell *matCellDef="let requirement" class="action-buttons" >
             <button [disabled]="!privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')"
               mat-icon-button
               (click)="editRequirement(requirement)"
-              class="action-button-ed"
+              class="action-button-ed"  
             >
               <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')}">edit</mat-icon>
             </button>
@@ -173,7 +173,7 @@
             mat-header-cell
             *matHeaderCellDef
             
-            sortActionDescription="Sort by Approve/Reject"
+            sortActionDescription="Sort by Approve/Reject" 
           >
             Approve/Reject
           </th>

@@ -104,15 +104,15 @@
 
                 <!-- Experience Column-->
                 <ng-container matColumnDef="Experience">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"> Experience </th>
-                    <td mat-cell *matCellDef="let element">{{element?.experience}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Experience" style="width:4rem"> Experience </th>
+                    <td mat-cell *matCellDef="let element" style="width:4rem">{{element?.experience}} </td>
                 </ng-container>
 
                 <!-- Rate Column-->
                 <ng-container matColumnDef="Rate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Rate">
                         Rate </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.hourlyrate}}
+                    <td mat-cell *matCellDef="let element">  {{ NumericValue(element.hourlyrate) }}
                     </td>
                 </ng-container>
 

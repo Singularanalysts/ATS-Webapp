@@ -99,7 +99,7 @@
 
                 <mat-form-field appearance="fill">
                     <mat-label>Submission Rate</mat-label>
-                    <input matInput  formControlName="submissionrate" maxlength="5">
+                    <input matInput  formControlName="submissionrate" maxlength="5" (keypress)="onlyNumberKey($event)">
                     <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('required')">Submission Rate is Required</mat-error>
                 </mat-form-field>
             </div>
