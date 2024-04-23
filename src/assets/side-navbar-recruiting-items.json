@@ -39,9 +39,9 @@
         "routerLink": "/usit/future-primary-vendor"
       },
       {
-        "text": "Preferred Vendor Contacts",
+        "text": "Known Contacts",
         "icon": "group",
-        "routerLink": "/usit/prefered-vendor-contacts"
+        "routerLink": "/usit/known-contacts"
       }
     ]
   },

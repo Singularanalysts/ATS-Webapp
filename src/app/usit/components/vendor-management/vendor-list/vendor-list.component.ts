@@ -689,8 +689,8 @@ export class VendorListComponent implements OnInit {
     
     const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
       title: 'Confirmation',
-      message: 'Are you sure you want to move Vendor to CPV/FPV ?',
-      radioButtons: ['Current Primary Vendor', 'Future Primary Vendor'],
+      message: 'Are you sure you want to move Vendor to CPV/FPV/Blacklisted ?',
+      radioButtons: ['Current Primary Vendor', 'Future Primary Vendor', 'Blacklisted'],
       confirmText: 'Yes',
       cancelText: 'No',
       actionData: vendor,
@@ -710,10 +710,12 @@ export class VendorListComponent implements OnInit {
     dialogRef.afterClosed().subscribe({
       next: (selectedOption: string) => {
         if (dialogRef.componentInstance.allowAction) {
-          this.vendorServ
-            .moveToCPVOrFPV(
+          if(selectedOption == 'Blacklisted') {
+            this.vendorServ
+            .moveToBlacklistedOrBack(
               selectedOption,
               vendor.id,
+              this.loginId
             )
             .subscribe((resp: any) => {
               if (resp.status == 'success') {
@@ -733,6 +735,32 @@ export class VendorListComponent implements OnInit {
               );
               this.getAllData(this.currentPageIndex + 1);
             });
+          } else {
+            this.vendorServ
+            .moveToCPVOrFPV(
+              selectedOption,
+              vendor.id,
+              this.loginId
+            )
+            .subscribe((resp: any) => {
+              if (resp.status == 'success') {
+                this.dataToBeSentToSnackBar.panelClass = [
+                  'custom-snack-success',
+                ];
+                this.dataToBeSentToSnackBar.message = resp.message ;
+
+              } else {
+                this.dataToBeSentToSnackBar.panelClass = [
+                  'custom-snack-failure',
+                ];
+                this.dataToBeSentToSnackBar.message = resp.message;
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+              this.getAllData(this.currentPageIndex + 1);
+            });
+          }
         }
       },
     });

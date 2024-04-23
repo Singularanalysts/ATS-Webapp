@@ -41,6 +41,7 @@ import { UploadVmsExcelComponent } from '../recruiter-list/upload-vms-excel/uplo
 import { AddFuturePrimaryVendorComponent } from './add-future-primary-vendor/add-future-primary-vendor.component';
 import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-with-radio-data';
 import { ConfirmWithRadioButtonComponent } from 'src/app/dialogs/confirm-with-radio-button/confirm-with-radio-button.component';
+import { VendorCompanyRecInfoComponent } from '../vendor-list/vendor-company-rec-info/vendor-company-rec-info.component';
 
 
 @Component({
@@ -266,23 +267,23 @@ export class FuturePrimaryVendorListComponent implements OnInit {
   /**
    * go to company-info
    */
-  // goToCompanyRecInfo(element: any) {
-  //   const actionData = {
-  //     title: `${element.company} Recruiter's`,
-  //     id: element.id,
-  //     actionName: 'vendor-rec-company-info',
-  //   };
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.width = '62dvw';
-  //   dialogConfig.disableClose = false;
-  //   dialogConfig.panelClass = 'vendor-rec-company-info';
-  //   dialogConfig.data = actionData;
+  goToCompanyRecInfo(element: any) {
+    const actionData = {
+      title: `${element.company} Recruiter's`,
+      id: element.id,
+      actionName: 'vendor-rec-company-info',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'vendor-rec-company-info';
+    dialogConfig.data = actionData;
 
-  //   this.dialogServ.openDialogWithComponent(
-  //     VendorCompanyRecInfoComponent,
-  //     dialogConfig
-  //   );
-  // }
+    this.dialogServ.openDialogWithComponent(
+      VendorCompanyRecInfoComponent,
+      dialogConfig
+    );
+  }
 
   /**
    * add
@@ -699,6 +700,7 @@ export class FuturePrimaryVendorListComponent implements OnInit {
             .moveToCPVOrFPV(
               selectedOption,
               vendor.id,
+              this.loginId
             )
             .subscribe((resp: any) => {
               if (resp.status == 'success') {

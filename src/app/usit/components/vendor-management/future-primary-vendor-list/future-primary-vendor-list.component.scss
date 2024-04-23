@@ -317,3 +317,20 @@
   //     height: 90vh;
   //   }
   // }
+
+  .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 24px;
+    width: var(--mdc-icon-button-state-layer-size);
+    height: var(--mdc-icon-button-state-layer-size);
+    padding: 0px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+    width: 24px !important;
+    height: 24px !important;
+  }

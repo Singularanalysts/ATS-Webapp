@@ -234,7 +234,7 @@
               <ng-template #sales><!--[disabled]="!privilegeServ.hasPrivilege('MOVETOPRESALES')"-->
                 <button mat-icon-button [style.cursor]="'pointer'"
                   *ngIf="move2sales == true && consultant.status=='Active' && flag=='sales'"
-                  (click)="moveProfileToSales(consultant,'Pre-Sales')">
+                  (click)="moveProfileToSales(consultant,'Pre-Sales')" class="action-button-ed">
                   <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOPRESALES')}">
                     arrow_backward</mat-icon>
                 </button>
@@ -243,7 +243,7 @@
               <ng-template #anotherCondition><!--[disabled]="!privilegeServ.hasPrivilege('MOVETOPRESALES')"-->
                 <button mat-icon-button [style.cursor]="'pointer'"
                   *ngIf="move2sales == true && consultant.status=='Initiated' && flag.toLocaleLowerCase() === 'recruiting'"
-                  (click)="moveProfileToSales(consultant,'Pre-Sales')">
+                  (click)="moveProfileToSales(consultant,'Pre-Sales')" class="action-button-ed">
                   <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOPRESALES')}">
                     arrow_backward</mat-icon>
                 </button>
@@ -253,7 +253,7 @@
               <ng-template #presales>
                 <button mat-icon-button [disabled]="!privilegeServ.hasPrivilege('MOVETOSALES')"
                   [style.cursor]="'pointer'" *ngIf="consultant.status=='Verified' && flag!='Recruiting'"
-                  (click)="moveProfileToSales(consultant,'Sales')">
+                  (click)="moveProfileToSales(consultant,'Sales')" class="action-button-ed">
                   <mat-icon
                     [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('MOVETOSALES')}">arrow_forward</mat-icon>
                 </button>

@@ -38,6 +38,10 @@ import { VendorService } from 'src/app/usit/services/vendor.service';
 // import { AddVendorComponent } from './add-vendor/add-vendor.component';
 // import { VendorCompanyRecInfoComponent } from './vendor-company-rec-info/vendor-company-rec-info.component';
 import { UploadVmsExcelComponent } from '../recruiter-list/upload-vms-excel/upload-vms-excel.component';
+import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-with-radio-data';
+import { ConfirmWithRadioButtonComponent } from 'src/app/dialogs/confirm-with-radio-button/confirm-with-radio-button.component';
+import { AddVendorComponent } from '../vendor-list/add-vendor/add-vendor.component';
+import { VendorCompanyRecInfoComponent } from '../vendor-list/vendor-company-rec-info/vendor-company-rec-info.component';
 
 
 @Component({
@@ -71,7 +75,7 @@ export class BlacklistedCompaniesListComponent implements OnInit {
     'AddedOn',
     'LastUpdated',
     // 'Status',
-    // 'Action',
+    'Action',
     'ApproveOrReject',
   ];
   dataSource = new MatTableDataSource<any>([]);
@@ -110,6 +114,15 @@ export class BlacklistedCompaniesListComponent implements OnInit {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   companyType: string = '';
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 1500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
@@ -261,23 +274,23 @@ export class BlacklistedCompaniesListComponent implements OnInit {
   /**
    * go to company-info
    */
-  // goToCompanyRecInfo(element: any) {
-  //   const actionData = {
-  //     title: `${element.company} Recruiter's`,
-  //     id: element.id,
-  //     actionName: 'vendor-rec-company-info',
-  //   };
-  //   const dialogConfig = new MatDialogConfig();
-  //   dialogConfig.width = '62dvw';
-  //   dialogConfig.disableClose = false;
-  //   dialogConfig.panelClass = 'vendor-rec-company-info';
-  //   dialogConfig.data = actionData;
+  goToCompanyRecInfo(element: any) {
+    const actionData = {
+      title: `${element.company} Recruiter's`,
+      id: element.id,
+      actionName: 'vendor-rec-company-info',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'vendor-rec-company-info';
+    dialogConfig.data = actionData;
 
-  //   this.dialogServ.openDialogWithComponent(
-  //     VendorCompanyRecInfoComponent,
-  //     dialogConfig
-  //   );
-  // }
+    this.dialogServ.openDialogWithComponent(
+      VendorCompanyRecInfoComponent,
+      dialogConfig
+    );
+  }
 
   /**
    * add
@@ -313,26 +326,26 @@ export class BlacklistedCompaniesListComponent implements OnInit {
    * @param endor
    */
   editVendor(vendor: any) {
-    // const actionData = {
-    //   title: 'Update Vendor',
-    //   vendorData: vendor,
-    //   actionName: 'edit-vendor',
-    // };
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.width = '65vw';
-    // //dialogConfig.height = '100vh';
-    // dialogConfig.panelClass = 'edit-vendor';
-    // dialogConfig.data = actionData;
-    // const dialogRef = this.dialogServ.openDialogWithComponent(
-    //   AddVendorComponent,
-    //   dialogConfig
-    // );
+    const actionData = {
+      title: 'Update Vendor',
+      vendorData: vendor,
+      actionName: 'edit-vendor',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    //dialogConfig.height = '100vh';
+    dialogConfig.panelClass = 'edit-vendor';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      AddVendorComponent,
+      dialogConfig
+    );
 
-    // dialogRef.afterClosed().subscribe(() => {
-    //   if (dialogRef.componentInstance.submitted) {
-    //     this.getAllData(this.currentPageIndex + 1);
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAllData(this.currentPageIndex + 1);
+      }
+    });
   }
   /**
    * delete
@@ -667,5 +680,58 @@ export class BlacklistedCompaniesListComponent implements OnInit {
     dialogConfig.data = actionData;
 
     this.dialogServ.openDialogWithComponent(UploadVmsExcelComponent, dialogConfig);
+  }
+
+  moveVendorToVendorOrFpv(vendor: any) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to move Blacklisted Vendor to Vendor ?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: vendor,
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = 'fit-content';
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.data = dataToBeSentToDailog;
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+    // call moveToSales api after  clicked 'Yes' on dialog click
+
+    dialogRef.afterClosed().subscribe({
+      next: () => {
+        if (dialogRef.componentInstance.allowAction) {
+          this.vendorServ
+            .moveToBlacklistedOrBack(
+              'Active',
+              vendor.id,
+              this.loginId
+            )
+            .subscribe((resp: any) => {
+              if (resp.status == 'success') {
+                this.dataToBeSentToSnackBar.panelClass = [
+                  'custom-snack-success',
+                ];
+                this.dataToBeSentToSnackBar.message = resp.message ;
+
+              } else {
+                this.dataToBeSentToSnackBar.panelClass = [
+                  'custom-snack-failure',
+                ];
+                this.dataToBeSentToSnackBar.message = resp.message;
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+              this.getAllData(this.currentPageIndex + 1);
+            });
+        }
+      },
+    });
+
   }
 }

@@ -217,3 +217,41 @@ ul.breadcrumb li:last-child {
     text-decoration: none;
   }
 }
+
+::ng-deep .mat-mdc-paginator {
+  display: block;
+  line-height: var(--mat-paginator-container-text-line-height);
+  font-size: var(--mat-paginator-container-text-size);
+  font-weight: var(--mat-paginator-container-text-weight);
+  letter-spacing: var(--mat-paginator-container-text-tracking);
+}
+
+:host ::ng-deep.mat-paginator .mat-paginator-container{
+  height: 36px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-focus-indicator {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-mdc-tooltip-trigger mat-mdc-paginator-navigation-first mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base mat-mdc-tooltip-disabled ng-star-inserted {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-base {
+  padding: 0px !important;
+  height: 24px;
+  width: 24px;
+}

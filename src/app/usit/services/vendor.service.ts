@@ -120,8 +120,12 @@ export class VendorService {
     return this.apiServ.get(`vms/vendor/getAllFPVendors/${vendorType}/${page}/${size}/${field}/${sortField}/${sortOrder}`);
   }
 
-  moveToCPVOrFPV(vendorType: any, id: any) {
-    return this.apiServ.get(`vms/vendor/move/${vendorType}/${id}`);
+  moveToCPVOrFPV(vendorType: any, id: any, userid: any) {
+    return this.apiServ.get(`vms/vendor/move/${vendorType}/${id}/${userid}`);
+  }
+  
+  moveToBlacklistedOrBack(status: any, id: any, userid: any) {
+    return this.apiServ.get(`vms/vendor/blacklisted/${status}/${id}/${userid}`);
   }
 
 }

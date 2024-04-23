@@ -34,14 +34,14 @@ import { utils, writeFile } from 'xlsx';
   standalone: true,
   imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
-providers: [DatePipe]
+  providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
   dataSourceTech = new MatTableDataSource([]);
   dataSourceVendor = new MatTableDataSource([]);
-benchSalesEmployees: any = [];
+  benchSalesEmployees: any = [];
 
   private dialogServ = inject(DialogService);
   dataTableColumns: string[] = [
@@ -133,12 +133,38 @@ benchSalesEmployees: any = [];
   private intervalSubscription!: Subscription;
   protected privilegeServ = inject(PrivilegesService);
   private ngZone = inject(NgZone);
-myForm: any;
-  startDateControl:FormControl| undefined;
+  myForm: any;
+  startDateControl: FormControl | undefined;
   endDateControl: FormControl | undefined;
 
-constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
+  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
+    this.closureFlag = 'Monthly';
+    this.interviewFlag = 'daily';
+    this.submissionFlag = 'daily';
+    this.sourcingFlag = 'daily';
+
+    this.closureFlagInd = 'Monthly';
+    this.interviewFlagInd = 'daily';
+    this.submissionFlagInd = 'daily';
+
+    this.sclosecount = 0;
+    this.rclosecount = 0;
+    this.sintcount = 0;
+    this.rintcount = 0;
+    this.subcount = 0;
+    this.reccount = 0;
+    this.sourcingVerifiedcount = 0;
+    this.sourcingMoveToSalescount = 0;
+    this.sourcingInitiatedcount = 0;
+    this.sourcingCompletedcount = 0;
+    this.sclosecountIndividual = 0;
+    this.rclosecountIndividual = 0;
+    this.sintcountIndividual = 0;
+    this.rintcountIndividual = 0;
+    this.subcountIndividual = 0;
+    this.reccountIndividual = 0;
+
     //console.log('Dash Board Refreshed '+this.refreshFlg);
     // You can perform any actions or logic inside this method
     if (this.refreshFlg == 'executive') {
@@ -155,9 +181,9 @@ constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
       })
     );
   }
-refreshFlg = 'executive';
-department!: any;
-sourcingLead = true;
+  refreshFlg = 'executive';
+  department!: any;
+  sourcingLead = true;
   ngOnInit(): void {
     const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
     if (shoWresult) {
@@ -165,7 +191,7 @@ sourcingLead = true;
     } else {
       this.showReport = false;
     }
-this.getEmployeeNames();
+    this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
       .subscribe(() => {
@@ -202,7 +228,7 @@ this.getEmployeeNames();
     }
     this.countCallingExecutiveAndLead();
     this.countCallingHigherRole();
-  
+
     this.myForm = this.formBuilder.group({
       startDate: [''], // Set default value if needed
       endDate: [''], // Set default value if needed
@@ -213,14 +239,14 @@ this.getEmployeeNames();
       const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
       endDateControl.setValue(currentDate);
     }
-   
+
   }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
     }
-   console.log("destroyed")
+    console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
@@ -289,7 +315,7 @@ this.getEmployeeNames();
     this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountIndArr = response.data;
-       
+
         this.intCountIndArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcountIndividual = ent.salescount;
@@ -564,34 +590,34 @@ this.getEmployeeNames();
   handleExport() {
     const currentDate = new Date();
     const chicagoDate = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'America/Chicago',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
     }).format(currentDate);
 
     const headings = [[
-        'Posted Date',
-        'Job Title',
-        'Job Location',
-        'Vendor',
-        'Tagged Date',
-        'Tagged Count',
-        'Tagged Name'
+      'Posted Date',
+      'Job Title',
+      'Job Location',
+      'Vendor',
+      'Tagged Date',
+      'Tagged Count',
+      'Tagged Name'
     ]];
     const excelData = this.dataSourceDice.data.map((c: any) => [
-        c.posted_on,
-        c.job_title,
-        c.category_skill,
-        c.job_location,
-        c.vendor,
-        c.taggeddate,
-        c.pseudoname,
-        c.taggedcount,
+      c.posted_on,
+      c.job_title,
+      c.category_skill,
+      c.job_location,
+      c.vendor,
+      c.taggeddate,
+      c.pseudoname,
+      c.taggedcount,
     ]);
 
     const wb = utils.book_new();
@@ -600,7 +626,7 @@ this.getEmployeeNames();
     utils.sheet_add_json(ws, excelData, { origin: 'A2', skipHeader: true });
     utils.book_append_sheet(wb, ws, 'data');
     writeFile(wb, 'daily-requirement-tagged@' + chicagoDate + '.xlsx');
-}
+  }
 
   goToConsultantInfo(id: any) {
     this.router.navigate(['usit/consultant-info', 'dashboard', 'consultant', id])
@@ -646,7 +672,7 @@ this.getEmployeeNames();
       dialogConfig
     );
   }
-  
+
   search = 'empty'
   getReqVendorCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'vendor', 'empty').subscribe(
@@ -658,7 +684,7 @@ this.getEmployeeNames();
       }
     )
   }
-  
+
   getReqCatergoryCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'category', 'empty').subscribe(
       (response: any) => {
@@ -692,18 +718,18 @@ this.getEmployeeNames();
     );
   }
 
-  onVendorFilter(event: any){
+  onVendorFilter(event: any) {
     this.dataSourceVendor.filter = event.target.value;
   }
 
-  onDiceFilter(event: any){
+  onDiceFilter(event: any) {
     this.dataSourceDice.filter = event.target.value;
   }
 
-  onCategoryFilter(event: any){
+  onCategoryFilter(event: any) {
     this.dataSourceTech.filter = event.target.value;
   }
-//lavanya
+  //lavanya
   getEmployeeNames() {
     this.dashboardServ.getEmployeeName().subscribe(
       (response: any) => {
@@ -717,15 +743,15 @@ this.getEmployeeNames();
   }
 
   onEmployeeChange(event: any): void {
-    const fromDate = this.myForm.get('startDate').value; 
-    const toDate = this.myForm.get('endDate').value; 
-    const empId = event.value; 
+    const fromDate = this.myForm.get('startDate').value;
+    const toDate = this.myForm.get('endDate').value;
+    const empId = event.value;
     const formatedStartDate = this.formatDate(fromDate);
     const formatedEndDate = this.formatDate(toDate);
     this.filterData(formatedStartDate, formatedEndDate, empId);
 
   }
- formatDate(date: string): string {
+  formatDate(date: string): string {
     const selectedDate = new Date(date);
     const year = selectedDate.getFullYear();
     const month = ("0" + (selectedDate.getMonth() + 1)).slice(-2);
@@ -756,7 +782,7 @@ this.getEmployeeNames();
         }
       );
   }
-  
+
   refreshData() {
     // Reset form fields
     this.myForm.reset();
@@ -766,9 +792,9 @@ this.getEmployeeNames();
       const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
       endDateControl.setValue(currentDate);
     }
-   
+
   }
-//
+  //
 
 }
 

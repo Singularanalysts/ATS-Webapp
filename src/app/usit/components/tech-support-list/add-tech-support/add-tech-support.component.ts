@@ -143,7 +143,6 @@ export class AddTechSupportComponent implements OnInit {
       email: [
         requirementData ? requirementData.email : '',
         [
-          Validators.required,
           Validators.email,
           Validators.pattern("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
         ],

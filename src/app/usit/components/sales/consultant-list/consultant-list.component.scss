@@ -198,26 +198,26 @@ tbody{
   display: flex;
   //justify-content: space-between;
   align-items: center;
-  height: 43px;
+  // height: 43px;
 }
 
-.action-buttons button {
-  margin: 0;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-}
+// .action-buttons button {
+//   margin: 0;
+//   padding: 0;
+//   width: 30px;
+//   height: 30px;
+// }
 
-::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-  width: 30px !important;
-  height: 30px !important;
-}
+// ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+//   width: 30px !important;
+//   height: 30px !important;
+// }
 
-::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-  width: 30px !important;
-  height: 30px !important;
-  top: 10px;
-}
+// ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+//   width: 30px !important;
+//   height: 30px !important;
+//   top: 10px;
+// }
 
 .filter-vendors{
   display: flex;
@@ -317,4 +317,21 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 
 .bold-label {
   font-weight: bold;
+}
+
+.action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 24px;
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 0px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  width: 24px !important;
+  height: 24px !important;
 }

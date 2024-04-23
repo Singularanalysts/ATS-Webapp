@@ -66,7 +66,10 @@ export class EmployeeManagementService {
 
   addOrUpdateEmployee(entity: any, action: string){
    return action === "edit-employee" ? this.updateEmployee(entity) : this.registerEmployee(entity);
+  }
 
+  emailDuplicateCheck(email: any) {
+    return this.apiServ.get(`auth/users/validate/${email}`);
   }
 
   /** EMPLOYEE SERVICES - END */

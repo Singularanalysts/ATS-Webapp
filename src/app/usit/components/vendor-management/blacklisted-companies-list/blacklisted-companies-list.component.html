@@ -47,7 +47,7 @@
           <ng-container matColumnDef="Company">
             <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 16%"> Company</th>
             <td mat-cell *matCellDef="let element" style="width: 16%">
-              <span class="company-recruiter-info"> {{element.company}}</span>
+              <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company}}</span>
             </td>
           </ng-container>
   
@@ -133,6 +133,26 @@
               </span>
             </td>
           </ng-container> -->
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef style="width: 5%"> Action </th>
+            <td mat-cell *matCellDef="let vendor" style="width: 5%">
+              <span class="action-buttons">
+                <button mat-icon-button
+                  (click)="editVendor(vendor)" class="action-button-ed">
+                  <mat-icon class="edit-icon">edit</mat-icon>
+                </button>
+                <button mat-icon-button [style.cursor]="'pointer'" matTooltip="Move to Blacklisted Vendor or Vendor" class="action-button-ed" matTooltipPosition="above" (click)="moveVendorToVendorOrFpv(vendor)">
+                  <mat-icon class="edit-icon">arrow_forward</mat-icon>
+                </button>
+                <button mat-icon-button
+                  (click)="deleteVendor(vendor)" class="action-button-ed">
+                  <mat-icon class="delete-icon">delete</mat-icon>
+                </button>
+              </span>
+            </td>
+          </ng-container>
   
           <!-- Approve/Reject Column -->
           <ng-container matColumnDef="ApproveOrReject">
@@ -160,14 +180,14 @@
                 <!-- Reject BUTTON -->
               
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
-                  *ngIf="vendor.vms_stat !== 'Approved' && vendor.vms_stat !== 'Rejected' && vendor.vms_stat !== 'blacklisted'"
+                  *ngIf="vendor.vms_stat !== 'Approved' && vendor.vms_stat !== 'Rejected' && vendor.vms_stat !== 'Blacklisted'"
                   mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor ,true)"
                   [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
                 </button>
               
                 <!-- Blacklisted BUTTON -->
-                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'blacklisted'"
-                  mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor, true)"
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Blacklisted'"
+                  mat-raised-button class="approve-reject-buttons"
                   [ngStyle]="{ color: 'white' }" style="width: 80px; height: 25px;" [ngClass]="'mat-warn'">
                   {{'Blacklisted'}} <!-- Added button for Blacklisted status -->
                 </button>

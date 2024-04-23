@@ -47,7 +47,7 @@
           <ng-container matColumnDef="Company">
             <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 16%"> Company</th>
             <td mat-cell *matCellDef="let element" style="width: 16%">
-              <span class="company-recruiter-info"> {{element.company}}</span>
+              <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company}}</span>
             </td>
           </ng-container>
   
@@ -126,7 +126,7 @@
                   (click)="editVendor(vendor)" class="action-button-ed">
                   <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_VENDOR')}">edit</mat-icon>
                 </button>
-                <button mat-icon-button [style.cursor]="'pointer'" matTooltip="Move to Vendor or CPV" matTooltipPosition="above" (click)="moveVendorToVendorOrFpv(vendor)">
+                <button mat-icon-button [style.cursor]="'pointer'" matTooltip="Move to Vendor or CPV"class="action-button-ed" matTooltipPosition="above" class="action-button-ed" (click)="moveVendorToVendorOrFpv(vendor)">
                   <mat-icon class="edit-icon">arrow_forward</mat-icon>
                 </button>
                 <button [disabled]="!privilegeServ.hasPrivilege('DELETE_VENDOR')" mat-icon-button
