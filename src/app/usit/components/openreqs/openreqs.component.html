@@ -95,6 +95,12 @@
                         </td>
                 </ng-container>
 
+                <!-- Body Column-->
+                <ng-container matColumnDef="JobDescription">
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by JobDescription" style=" width: 3% "> Job Description </th>
+                    <td mat-cell *matCellDef="let element" class="jd-info" (click)="goToJobDescription(element)"  style=" width: 3% ">VIEW </td>
+                </ng-container>
+
                 <!-- Source Column-->
                 <ng-container matColumnDef="source">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Source"

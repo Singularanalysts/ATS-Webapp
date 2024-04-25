@@ -53,7 +53,7 @@
   
           <!-- Email Column -->
           <ng-container matColumnDef="Experience">
-            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Experience"> Experience
+            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Experience"> Exp
             </th>
             <td mat-cell *matCellDef="let element"> {{element.experience}} </td>
           </ng-container>
@@ -67,9 +67,11 @@
   
           <!-- Designation Column -->
           <ng-container matColumnDef="Skills">
-            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Skills">Skills
+            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Skills" style="width: 35%;">Skills
             </th>
-            <td mat-cell *matCellDef="let element"> {{element.skills | titlecase}} </td>
+            <td mat-cell *matCellDef="let element"  style="width: 35%;"> 
+              <div class="truncate-multiline" [matTooltip]="element.skills | titlecase" matTooltipClass="custom-tooltip">{{element.skills | titlecase}}</div>
+            </td>
           </ng-container>
   
           <!-- Department Column -->

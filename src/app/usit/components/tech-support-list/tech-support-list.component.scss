@@ -265,3 +265,18 @@
     width: 24px !important;
     height: 24px !important;
   }
+
+  .truncate-multiline {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Number of lines to show */
+    max-height: 3.6em; /* Two lines + some extra space for ellipsis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .custom-tooltip {
+    max-width: none !important;
+    white-space: normal !important;
+  }
+  

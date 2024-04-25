@@ -60,7 +60,8 @@ import { VendorCompanyRecInfoComponent } from '../vendor-list/vendor-company-rec
     MatTooltipModule,
   ],
   templateUrl: './future-primary-vendor-list.component.html',
-  styleUrls: ['./future-primary-vendor-list.component.scss']
+  styleUrls: ['./future-primary-vendor-list.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class FuturePrimaryVendorListComponent implements OnInit {
   dataTableColumns: string[] = [

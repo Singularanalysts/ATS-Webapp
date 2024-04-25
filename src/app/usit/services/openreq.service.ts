@@ -57,4 +57,8 @@ export class OpenreqService {
   deleteSender(id: number) {
     return this.http.delete("mail/delete/" + id);
   }
+
+  getOpenReqsById(id:number) {
+    return this.http.get("openreqs/dice/getByReqId/"+id);
+  }
 }

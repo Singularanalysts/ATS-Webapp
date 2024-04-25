@@ -60,7 +60,8 @@ import { VendorCompanyRecInfoComponent } from '../vendor-list/vendor-company-rec
     MatTooltipModule,
   ],
   templateUrl: './blacklisted-companies-list.component.html',
-  styleUrls: ['./blacklisted-companies-list.component.scss']
+  styleUrls: ['./blacklisted-companies-list.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 
 export class BlacklistedCompaniesListComponent implements OnInit {

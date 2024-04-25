@@ -14,6 +14,7 @@ import { RecruInfoComponent } from './recru-info/recru-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RequirementInfoComponent } from '../recruitment/requirement-list/requirement-info/requirement-info.component';
 import { DialogService } from 'src/app/services/dialog.service';
+import { JobDescriptionComponent } from './job-description/job-description.component';
 @Component({
   selector: 'app-openreqs',
   standalone: true,
@@ -42,6 +43,7 @@ export class OpenreqsComponent implements OnInit {
     'employment_type',
     'job_location',
     'vendor',
+    'JobDescription',
     'source',
     // 'end_client',
   ];
@@ -190,6 +192,27 @@ export class OpenreqsComponent implements OnInit {
     }
 
     return { 'background-color': backgroundColor };
+  }
+
+  goToJobDescription(element: any) {
+    console.log(element);
+    
+    const actionData = {
+      title: `${element.job_title}`,
+      id: element.id,
+      actionName: 'job-description',
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'job-description';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      JobDescriptionComponent,
+      dialogConfig
+    );
   }
 
 }

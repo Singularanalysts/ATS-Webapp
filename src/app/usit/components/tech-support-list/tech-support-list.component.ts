@@ -110,6 +110,7 @@ export class TechSupportListComponent {
   }
 
   dataTableColumns: string[] = [
+    'SerialNum',
     'Name',
     'Experience',
     'Technology',

@@ -10,7 +10,7 @@
       </button>
     </section>
     <mat-card class="card" id="empCard">
-      <form [formGroup]="registerForm" autocomplete="off">
+      <form [formGroup]="registerForm" class="add-tech-form" autocomplete="off">
         <section class="form-container">
           <div class="form-column-left" *ngIf="registerForm.controls">
             <mat-form-field appearance="fill">
@@ -32,7 +32,6 @@
             <mat-form-field appearance="fill">
               <mat-label> Email</mat-label>
               <input matInput formControlName="email" maxlength="40" (input)="convertToLowerCase($event)" />
-              <mat-error *ngIf="registerForm.get('email')!.hasError('required')">Email is Required</mat-error>
               <mat-error *ngIf="registerForm.get('email')!.hasError('email')">Invalid email address</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">

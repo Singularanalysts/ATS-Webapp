@@ -82,7 +82,8 @@ tbody {
 .mat-column-employment_type,
 .mat-column-job_location,
 .mat-column-vendor,
-.mat-column-end_client {
+.mat-column-end_client,
+.mat-column-JobDescription {
   border-right: 1px solid lightgray;
 }
 
@@ -214,6 +215,12 @@ ul.breadcrumb li:last-child {
   .req-info {
     cursor: pointer;
     color: #4154f1;
+    text-decoration: none;
+  }
+
+  .jd-info {
+    cursor: pointer;
+    color: red;
     text-decoration: none;
   }
 }
