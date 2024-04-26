@@ -29,4 +29,5 @@ export class Recruiter {
     contactnumber!:any;
     extension!:string;
     autoInput!:string;
+    alternatecontactnumber!:any;
 }
