@@ -376,11 +376,7 @@ export class HotListProvidersListComponent implements OnInit {
       this.pageEvent = event;
       const currentPageIndex = event.pageIndex;
       this.currentPageIndex = currentPageIndex;
-      if (this.companyType) {
-        this.getAllVendorByType(this.companyType, event.pageIndex + 1)
-        return
-      }
-      // this.getAllData(event.pageIndex + 1);
+      this.getAllData(event.pageIndex + 1);
     }
     return;
   }
@@ -441,7 +437,7 @@ export class HotListProvidersListComponent implements OnInit {
     this.router.navigate(['usit/user-info', 'vendor', id])
   }
 
-  uploadVmsExcelData() {
+  uploadHlProvidersExcelData() {
     const actionData = {
       title: 'VMS Data Upload',
       vendorData: null,
