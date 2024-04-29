@@ -24,7 +24,7 @@
   .card {
     margin: 0 auto;
   
-    //height: 80vh;
+    height: 80vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -98,4 +98,10 @@
   
   .static-label {
     font-weight: bold;
+  }
+
+  .dynamic-value {
+    display: flex;
+    height: 75vh;
+    overflow: auto;
   }

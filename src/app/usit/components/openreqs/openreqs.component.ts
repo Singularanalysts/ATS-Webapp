@@ -195,8 +195,6 @@ export class OpenreqsComponent implements OnInit {
   }
 
   goToJobDescription(element: any) {
-    console.log(element);
-    
     const actionData = {
       title: `${element.job_title}`,
       id: element.id,
