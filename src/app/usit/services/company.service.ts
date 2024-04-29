@@ -40,4 +40,8 @@ export class CompanyService {
     return action === "update-company" ? this.updateCompany(entity) : this.addCompany(entity);
   }
 
+  getCompanyListwithPaginationSortAndFilter(pagObj: any) {
+    return this.apiServ.post("auth/company/allCompaniesWithSortandFilter", pagObj);
+  }
+
 }
