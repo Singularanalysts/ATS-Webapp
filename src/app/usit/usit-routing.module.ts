@@ -44,6 +44,7 @@ import { HotListProvidersListComponent } from './components/hot-list-providers-l
 import { BlacklistedCompaniesListComponent } from './components/vendor-management/blacklisted-companies-list/blacklisted-companies-list.component';
 import { CurrentPrimaryVendorListComponent } from './components/vendor-management/current-primary-vendor-list/current-primary-vendor-list.component';
 import { FuturePrimaryVendorListComponent } from './components/vendor-management/future-primary-vendor-list/future-primary-vendor-list.component';
+import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -268,6 +269,9 @@ const routes: Routes = [
   {
     path: 'future-primary-vendor', component: FuturePrimaryVendorListComponent,
   },
+  {
+    path: 'e-verify', component: EVerifyComponent,
+  }
 
 ];
 

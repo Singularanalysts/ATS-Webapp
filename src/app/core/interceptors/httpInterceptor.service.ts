@@ -61,7 +61,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         })
       );
     }
-    else if ((this.router.url === '/' || this.router.url === '/logout' || this.router.url === '/forgot-password')) {
+    else if ((this.router.url === '/' || this.router.url === '/logout' || this.router.url === '/forgot-password' || this.router.url === '/consultant-register')) {
       //  this.router.navigate(['/']);
     }
     else {

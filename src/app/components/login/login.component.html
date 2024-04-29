@@ -3,42 +3,77 @@
       <div class="logo">
           <img src="assets/images/singular-logo.png" alt="Logo">
       </div>
-      <mat-card-header class="header-no-padding">
+      <!-- <mat-card-header class="header-no-padding">
           <mat-card-title>Login to Your Account</mat-card-title>
-      </mat-card-header>
+      </mat-card-header> -->
 
-      <mat-card-content class="no-padding">
-          <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin()">
-              <mat-form-field class="full-width"  >
-                  <mat-label>Email</mat-label>
-                  <input matInput  type="email" formControlName="email" maxlength="50">
-                  <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
-                  <!-- errors -->
-                  <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email is required</mat-error>
-                  <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid email address</mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="full-width"  >
-                  <mat-label>Password</mat-label>
-                  <input matInput type="{{ hidePassword ? 'password' : 'text' }}"
-                      formControlName="password" maxlength="25">
-                      <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-                  <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
-                      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                  </button>
-                  <!-- error section -->
-                  <mat-error *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password is required</mat-error>
-              </mat-form-field>
-
-              <div class="forgot-password">
-                  <a routerLink="/forgot-password">Forgot Password?</a>
-              </div>
-
-              <button mat-raised-button color="primary" class="login-button">Login</button>
-              <div class="create-account">
-                  No account? <a href="#">Create one!</a>
-              </div>
-          </form>
-      </mat-card-content>
+      <mat-tab-group class="custom-tabs">
+        <mat-tab label="Employee Login">
+            <mat-card-content class="no-padding">
+                <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Employee')">
+                    <mat-form-field class="full-width"  >
+                        <mat-label>Email</mat-label>
+                        <input matInput  type="email" formControlName="email" maxlength="50">
+                        <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
+                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email is required</mat-error>
+                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid email address</mat-error>
+                    </mat-form-field>
+      
+                    <mat-form-field class="full-width"  >
+                        <mat-label>Password</mat-label>
+                        <input matInput type="{{ hidePassword ? 'password' : 'text' }}"
+                            formControlName="password" maxlength="25">
+                            <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+                        <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
+                            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password is required</mat-error>
+                    </mat-form-field>
+      
+                    <div class="forgot-password">
+                        <a routerLink="/forgot-password">Forgot Password?</a>
+                    </div>
+      
+                    <button mat-raised-button color="primary" class="login-button">Login</button>
+                    <div class="create-account">
+                        <!-- No account? <a href="#">Create one!</a> -->
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-tab>
+        <mat-tab label="Consultant Login">
+            <mat-card-content class="no-padding">
+                <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Consultant')">
+                    <mat-form-field class="full-width"  >
+                        <mat-label>Email</mat-label>
+                        <input matInput  type="email" formControlName="email" maxlength="50">
+                        <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
+                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email is required</mat-error>
+                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid email address</mat-error>
+                    </mat-form-field>
+      
+                    <mat-form-field class="full-width"  >
+                        <mat-label>Password</mat-label>
+                        <input matInput type="{{ hidePassword ? 'password' : 'text' }}"
+                            formControlName="password" maxlength="25">
+                            <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+                        <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
+                            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password is required</mat-error>
+                    </mat-form-field>
+      
+                    <div class="forgot-password">
+                        <!-- <a routerLink="/forgot-password">Forgot Password?</a> -->
+                    </div>
+      
+                    <button mat-raised-button color="primary" class="login-button">Login</button>
+                    <div class="create-account">
+                        No account? <a routerLink="/consultant-register">Create one!</a>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-tab>
+      </mat-tab-group>
   </mat-card>
 </div>

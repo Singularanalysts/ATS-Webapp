@@ -8,6 +8,7 @@ import { SidebarV2Component } from './components/sidebar-v2/sidebar-v2.component
 import { CanLoadGuard } from './core/guards/can-load.guard';
 import { PasswordChangeComponent } from './components/password-change/password-change.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
 
 const routes: Routes = [
   {
@@ -31,8 +32,10 @@ const routes: Routes = [
     path: 'sign-up',
     component: SignUpComponent
   },
-
-  // 
+  {
+    path: 'consultant-register',
+    component: RegisterConsultantComponent
+  },
   {
     path: 'usit',
     loadChildren: () => import('./usit/usit.module').then(m => m.UsitModule),

@@ -1,0 +1,166 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('../../../assets/images/login-background.jpg') center no-repeat;
+    background-size: cover;
+  
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+    padding: 16px;
+  }
+  
+  .login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .center-text {
+    text-align: center;
+    margin-bottom: 16px; 
+  }
+  
+  .center-logo {
+    text-align: center;
+    margin-bottom: 16px; 
+  }
+  
+  .header-no-padding {
+    padding: 0 0 12px 0;
+    margin: 0 16px;
+  }
+  
+  .no-padding {
+    padding: 0 0;
+  }
+  
+  .mat-mdc-card-content:last-child {
+    padding-bottom: 0px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .forgot-password {
+    text-align: right;
+    margin-top: 16px;
+  }
+  
+  .login-button {
+    margin-top: 16px;
+  }
+  
+  img{
+    width: 200px;
+    height: auto;
+  }
+  
+  mat-card-header{
+    display: block;
+    // margin-bottom: 30px;
+  }
+  
+  .create-account{
+    margin-top: 20px;
+  }
+  
+  a{
+    text-decoration: none;
+  }
+  
+  ::ng-deep .green-snackbar .mat-snack-bar-container {
+    background-color: green;
+    color: white;
+  }
+  
+  ::ng-deep .red-snackbar .mat-snack-bar-container {
+    background-color: red;
+    color: white;
+  }
+  
+  .mat-form-field{
+    margin-bottom: 5px;
+  }
+  
+  mat-error{
+    font-size: 12px;
+  }
+  
+  // .mat-form-field-appearance-outline .mat-form-field-outline {
+  //   color: rgba(0, 0, 0, 1);
+  // }
+  
+  .custom-tabs .mat-tab-header {
+    background-color: red; /* Set your desired background color */
+  }
+  
+  .custom-tabs .mat-tab-label {
+    color: white; /* Set your desired text color */
+  }
+
+  /**** TEL INPUT   - STARTS ****/
+.country-selector {
+  opacity: 1 !important;
+  bottom: 8px !important;
+}
+
+input:not(.country-search) {
+  bottom: 3px;
+  left: 10px;
+}
+
+::ng-deep input .country-search {
+  width: 90%;
+  /* height: 34px; */
+  border: none;
+  border-bottom: 1px solid #f2f0f0;
+  font-size: 14px;
+  padding: 10px 10px !important;
+}
+
+.country-list-button {
+  font-size: 0.8rem !important;
+}
+
+.mat-mdc-menu-content:not(:empty) {
+  max-height: 250px !important;
+}
+
+mat-mdc-menu-content {
+  max-height: 250px !important;
+}
+
+::ng-deep .custom-intl-input .mat-mdc-menu-panel .ngx-mat-tel-input-mat-menu-panel {
+  max-height: 250px !important;
+}
+
+::ng-deep .intl-input .mdc-button .mdc-button__label {
+  margin-top: 15px;
+}
+
+::ng-deep .ngx-mat-tel-input-mat-menu-panel {
+  max-height: 280px !important;
+}
+
+::ng-deep .country-search {
+  width: calc(100% - 10px) !important;
+  padding: 4px !important;
+}
+
+::ng-deep .country-list-button {
+  padding: 0px 4px !important;
+}
+/**** TEL INPUT   - ENDS ****/

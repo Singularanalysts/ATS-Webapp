@@ -1,0 +1,17 @@
+[
+  {
+    "text": "Search",
+    "icon": "search",
+    "routerLink": "/usit/search"
+  },
+  {
+    "text": "Portal Requirements",
+    "icon": "group",
+    "routerLink": "/usit/portalreqs"
+  },
+  {
+    "text": "RSS",
+    "icon": "business_center",
+    "routerLink": "/usit/rssfeed"
+  }
+]

@@ -137,4 +137,17 @@ export class PermissionsService {
   changePassword(value: any) {
     return this.http.post(this.apiServ.apiUrl + "auth/login/change_password", value);
   }
+
+  consultantSendOtp(email: any) {
+    return this.http.get(this.apiServ.apiUrl + "auth/conLogin/emailVerification/" + email);
+  }
+
+  consultantValidateOtp(userId: any, otp: any) {
+    return this.http.get(this.apiServ.apiUrl + "auth/conLogin/validateOtp/" + userId + "/"+ otp);
+  }
+
+  consultantRegistration(consultantdata: any) {
+    return this.http.post(this.apiServ.apiUrl + "auth/conLogin/consultantRegistration", consultantdata);
+  }
+
 }

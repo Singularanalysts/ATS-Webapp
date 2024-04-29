@@ -10,7 +10,7 @@
 
 .login-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   text-align: center;
   background-color: rgb(255, 255, 255);
   padding: 16px;
@@ -65,7 +65,7 @@
 
 img{
   width: 200px;
-  height:51.25px;
+  height: auto;
 }
 
 mat-card-header{
@@ -102,3 +102,11 @@ mat-error{
 // .mat-form-field-appearance-outline .mat-form-field-outline {
 //   color: rgba(0, 0, 0, 1);
 // }
+
+.custom-tabs .mat-tab-header {
+  background-color: red; /* Set your desired background color */
+}
+
+.custom-tabs .mat-tab-label {
+  color: white; /* Set your desired text color */
+}

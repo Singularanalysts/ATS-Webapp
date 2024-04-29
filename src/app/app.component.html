@@ -3,10 +3,10 @@
       [color]="color" *ngIf="isLoading$ | async"
       mode="indeterminate">
 </mat-progress-bar> -->
-<app-sidebar *ngIf="!( _router.url === '' ||   _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password')" ></app-sidebar>
+<app-sidebar *ngIf="!( _router.url === '' ||   _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password' || _router.url === '/consultant-register')" ></app-sidebar>
 
 <!-- <app-sidebar *ngIf="!['/login'].includes(currentURL)"></app-sidebar> -->
 <router-outlet></router-outlet>
-<router-outlet *ngIf="(  _router.url === '' ||  _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password')" ></router-outlet>
+<router-outlet *ngIf="(  _router.url === '' ||  _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password' || _router.url === '/consultant-register')" ></router-outlet>
 <!-- <app-footer *ngIf="!['/login'].includes(currentURL)"></app-footer> -->
-<app-footer *ngIf="!(  _router.url === '' ||  _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password')" ></app-footer>
+<app-footer *ngIf="!(  _router.url === '' ||  _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password' || _router.url === '/consultant-register')" ></app-footer>

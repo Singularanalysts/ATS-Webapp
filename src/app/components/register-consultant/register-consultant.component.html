@@ -1,0 +1,97 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <div class="logo">
+      <img src="assets/images/singular-logo.png" alt="Logo">
+    </div>
+    <mat-card-header class="header-no-padding">
+      <mat-card-title>Consultant Registration</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="no-padding">
+      <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin()">
+        <div class="email-div">
+          <div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Enter Email</mat-label>
+              <input matInput formControlName="email" />
+              <mat-error *ngIf="form.get('email')!.hasError('required')">Email is required</mat-error>
+              <mat-error *ngIf="form.get('email')!.hasError('email')">Invalid email address</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="forgot-buttons" *ngIf="requestOtp">
+            <button mat-raised-button color="primary" class="full-width" type="button" (click)="sendOTP()"
+              [disabled]="form.controls['email'].invalid">
+              Request OTP
+            </button>
+          </div>
+        </div>
+
+        <div class="email-div" *ngIf="isOTPSent">
+          <div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Enter Your OTP</mat-label>
+              <input matInput formControlName="otp" maxlength="8" />
+              <mat-error *ngIf="form.get('otp')!.hasError('required')">OTP is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="forgot-buttons" *ngIf="validateOtp">
+            <button mat-raised-button color="primary" type="button" class="full-width" (click)="validateOTP()"
+              [disabled]="form.controls['otp'].invalid">
+              Validate
+            </button>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="details">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstname" maxlength="8" />
+          <mat-error *ngIf="form.get('firstname')!.hasError('required')">First Name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="details">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastname" maxlength="8" />
+          <mat-error *ngIf="form.get('lastname')!.hasError('required')">Last Name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="details">
+          <mat-label>Personal Contact Number </mat-label>
+          <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']"
+            formControlName="personalcontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
+            name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb
+            (keypress)="onlyNumberKey($event)">
+          </ngx-mat-intl-tel-input>
+          <mat-error *ngIf="form.get('personalcontactnumber').hasError('required')">Personal Contact Number is
+            required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="details">
+          <mat-label> Create Password</mat-label>
+          <input matInput formControlName="password" maxlength="15" type="{{ hidePassword ? 'password' : 'text' }}"/>
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+          <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button> 
+          <mat-error *ngIf="form.get('password')!.hasError('required')">Create Password is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="details">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput formControlName="confirmpassword" maxlength="15" type="{{ hidePassword ? 'password' : 'text' }}"/>
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+          <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('confirmpassword')!.hasError('required')">Confirm Password is required</mat-error>
+        </mat-form-field>
+
+        <div class="forgot-buttons" *ngIf="details">
+          <button mat-raised-button color="primary" class="full-width" type="submit"
+            >Register</button>
+        </div>
+
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
