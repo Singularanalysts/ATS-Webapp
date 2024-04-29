@@ -38,4 +38,8 @@ export class VisaService {
   addOrUpdateVisa(entity: any, action: string) {
     return action === "update-visa" ? this.updateVisa(entity) : this.addVisa(entity);
   }
+
+  getVisawithPaginationSortAndFilter(pagObj: any) {
+    return this.apiServ.post("auth/visa/allVisaWithSorting", pagObj);
+  }
 }

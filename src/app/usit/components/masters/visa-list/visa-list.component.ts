@@ -6,8 +6,8 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
@@ -20,6 +20,7 @@ import { Visa } from 'src/app/usit/models/visa';
 import { VisaService } from 'src/app/usit/services/visa.service';
 import { AddVisaComponent } from './add-visa/add-visa.component';
 import { Subject, takeUntil } from 'rxjs';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-visa-list',
@@ -36,6 +37,7 @@ import { Subject, takeUntil } from 'rxjs';
     CommonModule,
     MatTooltipModule
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
   templateUrl: './visa-list.component.html',
   styleUrls: ['./visa-list.component.scss']
 })
@@ -62,12 +64,14 @@ export class VisaListComponent implements OnInit, AfterViewInit, OnDestroy{
   totalItems: number = 0;
   page: number = 1;
   itemsPerPage = 50;
+  field = "empty";
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   visaList: Visa[]= [];
 // to clear subscriptions
 private destroyed$ = new Subject<void>();
+  entity: any;
 
   ngOnInit(): void {
     this.getAllVisa()
@@ -91,6 +95,69 @@ private destroyed$ = new Subject<void>();
         error: (err)=> console.log(err)
       }
     );
+  }
+
+  getAll(pagIdx = 1) {
+    const pagObj = {
+      pageNumber: pagIdx,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    }
+    this.visaServ.getVisawithPaginationSortAndFilter(pagObj)
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        (response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data = response.data.content;
+          this.totalItems = response.data.totalElements;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      )
+  }
+
+
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+      }
+
+      return this.visaServ.getVisawithPaginationSortAndFilter(pagObj).subscribe(
+        ((response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
+      );
+    }
+    return  this.getAll(this.currentPageIndex + 1)
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
   }
 
   addVisa() {
@@ -194,16 +261,16 @@ private destroyed$ = new Subject<void>();
   }
 
   // sort
-  onSort(event: any) {
-    const sortDirection = event.direction;
-    const sortColumn = event.active;
+  // onSort(event: any) {
+  //   const sortDirection = event.direction;
+  //   const sortColumn = event.active;
 
-    if (sortDirection !== null && sortDirection !== undefined) {
-      this.dataSource.data = this.sortData(this.dataSource.data, sortColumn, sortDirection);
-    } else {
-      this.dataSource.data = [...this.visaList];
-    }
-  }
+  //   if (sortDirection !== null && sortDirection !== undefined) {
+  //     this.dataSource.data = this.sortData(this.dataSource.data, sortColumn, sortDirection);
+  //   } else {
+  //     this.dataSource.data = [...this.visaList];
+  //   }
+  // }
 
   private sortData(data: Visa[], sortColumn: string, sortDirection: string): Visa[] {
     return data.sort((a, b) => {
@@ -247,6 +314,12 @@ private destroyed$ = new Subject<void>();
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
+  }
+
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+    return serialNumber;
   }
 
 }
