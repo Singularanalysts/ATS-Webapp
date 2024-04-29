@@ -37,4 +37,8 @@ export class QualificationService {
   addOrUpdateQualification(entity: any, action: string) {
     return action === "update-qualification" ? this.updateQualification(entity) : this.addQualification(entity);
   }
+
+  getQualificationListwithPaginationSortAndFilter(pagObj: any) {
+    return this.apiServ.post("auth/qualification/allWithFilterAndSorting", pagObj);
+  }
 }
