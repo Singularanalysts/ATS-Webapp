@@ -6,7 +6,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -21,6 +21,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { AddTechSupportComponent } from './add-tech-support/add-tech-support.component';
 import { Techsupport } from '../../models/TechSupport';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-tech-support-list',
@@ -38,10 +39,8 @@ import { Techsupport } from '../../models/TechSupport';
     MatTooltipModule,
     RouterModule,
     FormsModule,
-
-
   ],
-
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
   templateUrl: './tech-support-list.component.html',
   styleUrls: ['./tech-support-list.component.scss']
 })
@@ -49,48 +48,8 @@ import { Techsupport } from '../../models/TechSupport';
 export class TechSupportListComponent {
   flag: any;
   consultant: any;
-  onSort(event: Sort) {
-    const sortDirection = event.direction;
-    const activeSortHeader = event.active;
-
-    if (sortDirection === '' || !activeSortHeader) {
-      return;
-    }
-
-    const isAsc = sortDirection === 'asc';
-    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
-      switch (activeSortHeader) {
-        case 'SerialNum':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.serialNum || '').localeCompare(b.serialNum || '')
-          );
-        case 'Name':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.name || '').localeCompare(b.name || '')
-          );
-        case 'Experience':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.experience || '').localeCompare(b.experience || '')
-          );
-        case 'Email':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.email || '').localeCompare(b.email || '')
-          );
-
-        case 'Technology':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.technology || '').localeCompare(b.technology || '')
-          );
-        default:
-          return 0;
-      }
-    });
-  }
+  entity: any;
+  
 
   onStatusUpdate(_t44: any) {
     throw new Error('Method not implemented.');
@@ -135,18 +94,26 @@ export class TechSupportListComponent {
 
   // pagination code
   page: number = 1;
-  count: number = 0;
-  tableSize: number = 50;
-  tableSizes: any = [3, 6, 9, 12];
-
+  itemsPerPage = 50;
+  AssignedPageNum !: any;
+  totalItems: any;
+  ser: number = 1;
+  userid!: any;
+  field = "empty";
+  currentPageIndex = 0;
+  pageEvent!: PageEvent;
+  pageSize = 50;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageSizeOptions = [5, 10, 25];
 
   constructor(private service: TechsupportService, private router: Router) { }
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
-    this.getlist();
+    this.getAll();
 
   }
-  getlist() {
+  getAllDataList() {
     this.service.getTechSupportList().subscribe(
       (response: any) => {
         if (response.data) {
@@ -159,10 +126,74 @@ export class TechSupportListComponent {
 
     )
   }
+
+  getAll(pagIdx = 1) {
+    const pagObj = {
+      pageNumber: pagIdx,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    }
+    this.service.getTechSupportListwithPaginationSortAndFilter(pagObj)
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        (response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data = response.data.content;
+          this.totalItems = response.data.totalElements;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      )
+  }
+
+
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+      }
+
+      return this.service.getTechSupportListwithPaginationSortAndFilter(pagObj).subscribe(
+        ((response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
+      );
+    }
+    return  this.getAll(this.currentPageIndex + 1)
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
+  }
+
   search() {
     this.submitted = true;
     if (this.query == '') {
-      this.getlist();
+      this.getAll();
     }
     else {
       this.tech = this.tech.filter((res: Techsupport) => {
@@ -173,8 +204,6 @@ export class TechSupportListComponent {
       })
     }
   }
-
-
 
   edit(consultant: any) {
     const actionData = {
@@ -199,14 +228,10 @@ export class TechSupportListComponent {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getlist();
+        this.getAll();
       }
     });
   }
-
-
-
-
 
   addTechnology() {
     const actionData = {
@@ -221,7 +246,7 @@ export class TechSupportListComponent {
     const dialogRef = this.dialogServ.openDialogWithComponent(AddTechSupportComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getlist()
+        this.getAll()
       }
     })
 
@@ -245,7 +270,7 @@ export class TechSupportListComponent {
     this.service.changeTechSupportStatus(this.techent).subscribe(
       (response: any) => {
         // alertify.success("Status Updated successfully");
-        this.getlist();
+        this.getAll();
       })
   }
 
@@ -253,12 +278,12 @@ export class TechSupportListComponent {
 
   onTableDataChange(event: any) {
     this.page = event;
-    this.getlist();
+    this.getAll();
   }
   onTableSizeChange(event: any): void {
-    this.tableSize = event.target.value;
+    // this.tableSize = event.target.value;
     this.page = 1;
-    this.getlist();
+    this.getAll();
   }
 
   navigateToDashboard() {
@@ -303,7 +328,7 @@ export class TechSupportListComponent {
             .subscribe({
               next: (response: any) => {
                 if (response.status == 'success') {
-                  this.getlist();
+                  this.getAll();
                   dataToBeSentToSnackBar.message = 'Requirement Deleted successfully';
                 } else {
                   dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -320,19 +345,13 @@ export class TechSupportListComponent {
       },
     });
   }
-  totalItems = 0;
-  pageSize = 50;
-  currentPageIndex = 0;
-  pageSizeOptions = [5, 10, 25];
-  hidePageSize = true;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  pageEvent!: PageEvent;
+  
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
     return serialNumber;
   }
+
   getAllData(pageIndex = 1) {
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
@@ -372,5 +391,48 @@ export class TechSupportListComponent {
       this.getAllData(event.pageIndex + 1);
     }
     return;
+  }
+
+  onSortF(event: Sort) {
+    const sortDirection = event.direction;
+    const activeSortHeader = event.active;
+
+    if (sortDirection === '' || !activeSortHeader) {
+      return;
+    }
+
+    const isAsc = sortDirection === 'asc';
+    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
+      switch (activeSortHeader) {
+        case 'SerialNum':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.serialNum || '').localeCompare(b.serialNum || '')
+          );
+        case 'Name':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.name || '').localeCompare(b.name || '')
+          );
+        case 'Experience':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.experience || '').localeCompare(b.experience || '')
+          );
+        case 'Email':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.email || '').localeCompare(b.email || '')
+          );
+
+        case 'Technology':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.technology || '').localeCompare(b.technology || '')
+          );
+        default:
+          return 0;
+      }
+    });
   }
 }

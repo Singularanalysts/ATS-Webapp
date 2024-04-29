@@ -50,4 +50,8 @@ export class TechsupportService {
       ? this.updateTechSupport(entity)
       : this.registerTechSupport(entity);
   }
+
+  getTechSupportListwithPaginationSortAndFilter(pagObj: any) {
+    return this.apiServ.post("auth/techsupp/allTechWithSorting", pagObj);
+  }
 }
