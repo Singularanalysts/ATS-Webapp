@@ -53,8 +53,8 @@ export class RegisterConsultantComponent implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       personalcontactnumber: ['', [Validators.required]],
-      password: ['', Validators.required],
-      confirmpassword: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
+      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
     }, { validator: this.confirmPasswordValidator });
 
     this.form.get('password').valueChanges.subscribe(() => {
@@ -117,7 +117,9 @@ export class RegisterConsultantComponent implements OnInit {
         this.details = true;
       } else {
         this.showErrorNotification(response.message, 'failure');
-        this.form.get('otp')!.vcalue = '';
+        this.form.get('otp')!.value = '';
+        this.form.get('otp')!.clearValidators;
+        this.form.get('otp')!.updateValueAndValidity;
         this.validateOtp = true;
         this.isOTPSent = false;
         this.requestOtp = true;
@@ -140,6 +142,7 @@ export class RegisterConsultantComponent implements OnInit {
       (response: any) => {
         if(response.status = "success") {
           this.showErrorNotification(response.message, 'success');
+          this.router.navigate(['/login']);
         }
       }
     )

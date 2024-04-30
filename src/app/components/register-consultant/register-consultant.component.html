@@ -30,7 +30,7 @@
           <div>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Enter Your OTP</mat-label>
-              <input matInput formControlName="otp" maxlength="8" />
+              <input matInput formControlName="otp" maxlength="15" />
               <mat-error *ngIf="form.get('otp')!.hasError('required')">OTP is required</mat-error>
             </mat-form-field>
           </div>
@@ -44,7 +44,7 @@
 
         <mat-form-field appearance="outline" class="full-width" *ngIf="details">
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstname" maxlength="8" />
+          <input matInput formControlName="firstname" maxlength="15" />
           <mat-error *ngIf="form.get('firstname')!.hasError('required')">First Name is required</mat-error>
         </mat-form-field>
 
@@ -73,6 +73,9 @@
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button> 
           <mat-error *ngIf="form.get('password')!.hasError('required')">Create Password is required</mat-error>
+          <mat-error *ngIf="form.get('password')!.hasError('pattern')">
+            password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width" *ngIf="details">
@@ -83,10 +86,21 @@
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           <mat-error *ngIf="form.get('confirmpassword')!.hasError('required')">Confirm Password is required</mat-error>
+          <mat-error *ngIf="form.get('confirmpassword')!.hasError('pattern')">
+            password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
+          </mat-error>
+          <mat-error *ngIf="form.hasError('confirmPasswordMismatch') && !form.get('confirmpassword')!.hasError('required')">
+            Passwords do not match
+          </mat-error>
         </mat-form-field>
 
         <div class="forgot-buttons" *ngIf="details">
           <button mat-raised-button color="primary" class="full-width" type="submit"
+          [disabled]="
+                form.controls['password'].invalid ||
+                form.controls['confirmpassword'].invalid ||
+                form.controls['password'].value !==
+                form.controls['confirmpassword'].value"
             >Register</button>
         </div>
 
