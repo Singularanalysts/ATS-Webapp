@@ -1,0 +1,84 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<div class="uploadexcel">
+   <div class="upload-excel">
+    <div>
+        <mat-form-field class="upload">
+            <mat-label for="vmsUpload">VMS Upload</mat-label>
+            <div class="upload-inp-container">
+                <input matInput readonly name="resumeName" class="file-input"
+                [value]="excelFileName" />
+                <label for="vmsUpload" class="browse-button-label">
+                    <button type="button" mat-icon-button
+                        (click)="excelupload.click()"><mat-icon>upload_file</mat-icon></button>
+                </label>
+                <input type="file" #excelupload id="excelupload" (change)="uploadResume($event)"
+                    accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none;" />
+            </div>
+        </mat-form-field>
+    </div>
+    <div class="upload-button">
+        <button mat-raised-button color="primary" (click)= submit(data.userId) [disabled]="upload">
+            <span *ngIf="loading">Uploading...</span>
+            <span *ngIf="!loading">Upload Excel</span>
+        </button>
+    </div>
+   </div>
+    <!-- <div class="download-excel">
+        <button mat-icon-button matTooltip="Sample VMS Excel Data" matTooltipPosition="left" style="background-color: green; color: white;" (click)="handleExport()">
+            <mat-icon>download</mat-icon>
+        </button>
+    </div> -->
+</div>
+
+<div id="table-container" class="table-wrapper">
+    <section class="mat-elevation-z8 vms-table-style">
+        <table mat-table [dataSource]="excel" oncopy="return false">
+
+            <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Serial Number -->
+            <ng-container matColumnDef="SNo">
+                <th mat-header-cell *matHeaderCellDef>S.No</th>
+                <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+            </ng-container>
+
+            <!-- Company -->
+            <ng-container matColumnDef="Company">
+                <th mat-header-cell *matHeaderCellDef>Company</th>
+                <td mat-cell *matCellDef="let element"> {{element?.Company}} </td>
+            </ng-container>
+            <!-- Name -->
+            <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef> Recruiter Name</th>
+                <td mat-cell *matCellDef="let element"> {{element?.Recruiter}} </td>
+            </ng-container>
+            <!-- Email -->
+            <ng-container matColumnDef="Email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let element"><span class="consultant-id">{{element?.Email}} </span></td>
+            </ng-container>
+            <!-- Contact -->
+            <ng-container matColumnDef="Contact">
+                <th mat-header-cell *matHeaderCellDef>Contact Number</th>
+                <td mat-cell *matCellDef="let element"> {{element?.Contact}}
+                </td>
+            </ng-container>
+            
+            <!-- table columns ends  -->
+            <!-- table ROW -->
+            <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: dataTableColumns;" ></tr>
+        </table>
+        <p class="no-data-found" *ngIf="!excel.length">{{'No matching data found'}}</p>
+    </section>
+    <!-- <hr> -->
+</div>

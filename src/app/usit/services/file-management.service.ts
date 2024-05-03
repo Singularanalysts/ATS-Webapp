@@ -85,4 +85,8 @@ export class FileManagementService {
     return this.http.post(this.apiServ.apiUrl + `vms/vendor/excelUpload/${id}`, formData, {observe: "response"});
   }
 
+  uploadHotListProvidersExcel(formData:any, id: number) {
+    return this.http.post(this.apiServ.apiUrl +`vms/htProviders/excelUpload/${id}`, formData, {observe: "response"});
+  }
+
 }

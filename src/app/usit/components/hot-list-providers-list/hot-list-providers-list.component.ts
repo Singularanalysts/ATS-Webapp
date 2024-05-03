@@ -36,6 +36,7 @@ import {
 import { Recruiter } from 'src/app/usit/models/recruiter';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import { AddHotListProviderComponent } from './add-hot-list-provider/add-hot-list-provider.component';
+import { HotListProvidersExcelComponent } from './hot-list-providers-excel/hot-list-providers-excel.component';
 
 @Component({
   selector: 'app-hot-list-providers-list',
@@ -439,18 +440,17 @@ export class HotListProvidersListComponent implements OnInit {
 
   uploadHlProvidersExcelData() {
     const actionData = {
-      title: 'VMS Data Upload',
-      vendorData: null,
+      title: '  Hot List Providers Excel Upload',
       userId: this.loginId,
-      actionName: 'upload-vendor-and-recruiter',
+      actionName: 'upload-hot-list-providers',
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '85vw';
     dialogConfig.height = '80vh';
     dialogConfig.disableClose = false;
-    dialogConfig.panelClass = 'upload-recruiter';
+    dialogConfig.panelClass = 'upload-hot-list-providers';
     dialogConfig.data = actionData;
 
-    // this.dialogServ.openDialogWithComponent(UploadVmsExcelComponent, dialogConfig);
+    this.dialogServ.openDialogWithComponent(HotListProvidersExcelComponent, dialogConfig);
   }
 }

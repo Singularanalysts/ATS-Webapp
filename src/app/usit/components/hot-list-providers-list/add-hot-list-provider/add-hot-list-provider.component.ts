@@ -144,6 +144,7 @@ export class AddHotListProviderComponent implements OnInit, OnDestroy {
       recruiterName: [hotlistProviderData ? hotlistProviderData.recruiterName : '', [Validators.required]],
       email: [hotlistProviderData ? hotlistProviderData.email : '', [Validators.required]],
       contactNumber: [hotlistProviderData ? hotlistProviderData.contactNumber : '', [Validators.required]],
+      website: [hotlistProviderData ? hotlistProviderData.website : '', [Validators.required]],
       addedby: [this.hotlistObj.addedby],
       updatedby: [this.hotlistObj.updatedby],
       user: localStorage.getItem('userid'),
@@ -285,6 +286,7 @@ export class Hlp {
   recruiterName!: string;
   contactNumber!: string;
   email!: string;
+  website!: any;
   createddate!: string;
   addedby = localStorage.getItem('userid');
   updatedby !:  any;

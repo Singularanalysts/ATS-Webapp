@@ -30,6 +30,13 @@
                         is Required
                     </mat-error>
                 </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Website</mat-label>
+                    <input matInput formControlName="website" maxlength="50" (input)="camelCase($event)" />
+                    <mat-error *ngIf="hotlistForm.get('website')!.hasError('required')"> Company website is required
+                    </mat-error>
+                </mat-form-field>
             </div>
 
             <!-- form - right controls -->
