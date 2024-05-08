@@ -74,8 +74,8 @@ export class RegisterConsultantComponent implements OnInit {
       skills: ['', Validators.required],
     }, { validator: this.confirmPasswordValidator });
 
-    this.form.get('password').valueChanges.subscribe(() => {
-      this.form.get('confirmPassword').updateValueAndValidity();
+    this.form.get('password')!.valueChanges.subscribe(() => {
+      this.form.get('confirmPassword')!.updateValueAndValidity();
     });
   }
   
@@ -103,7 +103,6 @@ export class RegisterConsultantComponent implements OnInit {
     };
     this.permissionServ.consultantSendOtp(emailValue).subscribe((response: any) => {
       if (response.status == "success") {
-        console.log(response);
         
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
@@ -153,11 +152,7 @@ export class RegisterConsultantComponent implements OnInit {
 
   regObj = {}
   userLogin() {
-    console.log(this.form.value);
-    if(this.form.invalid) {
-      this.form.markAllAsTouched();
-    } else {
-      this.form.get('technology').setValue(this.techid);
+    this.form.get('technology').setValue(this.techid);
     this.regObj = { ...this.emailObject, ...this.form.value}
     this.permissionServ.consultantRegistration(this.regObj).subscribe(
       (response: any) => {
@@ -167,7 +162,20 @@ export class RegisterConsultantComponent implements OnInit {
         }
       }
     )
-    }
+    // if(this.form.invalid) {
+    //   this.form.markAllAsTouched();
+    // } else {
+    // this.form.get('technology').setValue(this.techid);
+    // this.regObj = { ...this.emailObject, ...this.form.value}
+    // this.permissionServ.consultantRegistration(this.regObj).subscribe(
+    //   (response: any) => {
+    //     if(response.status = "success") {
+    //       this.showErrorNotification(response.message, 'success');
+    //       this.router.navigate(['/login']);
+    //     }
+    //   }
+    // )
+    // }
   }
   
   private showErrorNotification(message: string, errorType = 'failure'): void {
@@ -209,7 +217,6 @@ export class RegisterConsultantComponent implements OnInit {
 
   confirmPasswordValidator: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
     const password = control.root.get('password');
-    console.log(control);
     
     const confirmPassword = control.value;
   
@@ -228,7 +235,6 @@ export class RegisterConsultantComponent implements OnInit {
 
   getTechOptionsForAutoComplete(data: any) {
     this.technologyOptions = data;
-    console.log(data);
     this.searchTechOptions$ =
       this.form.controls.technology.valueChanges.pipe(
         startWith(''),
@@ -250,7 +256,6 @@ export class RegisterConsultantComponent implements OnInit {
   }
 
   techskills(option: any) {
-    // console.log(option);
     const newVal = option.id;
     this.techid = option.id;
     this.consultantServ.getregskills(newVal).subscribe((response: any) => {
