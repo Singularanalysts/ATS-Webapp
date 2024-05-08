@@ -6,11 +6,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { utils, writeFile } from 'xlsx';
 import { MatSort, Sort } from '@angular/material/sort';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { MatSortModule } from '@angular/material/sort';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 @Component({
   selector: 'app-h1transfer',
   standalone: true,
@@ -23,7 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatPaginatorModule,MatSortModule
   ],
   templateUrl: './h1transfer.component.html',
-  styleUrls: ['./h1transfer.component.scss']
+  styleUrls: ['./h1transfer.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class H1transferComponent implements OnInit{
   dataSource = new MatTableDataSource<any>([]);
@@ -68,7 +70,7 @@ export class H1transferComponent implements OnInit{
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
-  onSort(event: Sort) {
+  onSort1(event: Sort) {
     const sortDirection = event.direction;
     const activeSortHeader = event.active;
 
@@ -145,7 +147,7 @@ export class H1transferComponent implements OnInit{
   }
 
   getAllData(pagIdx = 1) {
-    this.consultantServ.getH1TransferList(pagIdx, this.pageSize, this.field).subscribe(
+    this.consultantServ.getH1TransferList(pagIdx, this.pageSize, this.field, this.sortField, this.sortOrder).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -166,7 +168,7 @@ export class H1transferComponent implements OnInit{
   applyFilter(event : any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.consultantServ.getH1TransferList(1, this.pageSize, keyword).subscribe(
+      return this.consultantServ.getH1TransferList(1, this.pageSize, keyword, this.sortField, this.sortOrder).subscribe(
         ((response: any) => {
           this.dataSource.data  = response.data.content;
            // for serial-num {}
@@ -192,6 +194,21 @@ export class H1transferComponent implements OnInit{
       this.getAllData(event.pageIndex + 1)
     }
     return;
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAllData();
+    }
   }
 
   navigateToDashboard() {

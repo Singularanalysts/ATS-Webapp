@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddH1bImmigrantComponent } from './add-h1b-immigrant/add-h1b-immigrant.component';
@@ -12,6 +12,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatSortModule } from '@angular/material/sort';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 @Component({
   selector: 'app-h1b-immigration',
   standalone: true,
@@ -24,7 +25,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatPaginatorModule, MatSortModule
   ],
   templateUrl: './h1b-immigration.component.html',
-  styleUrls: ['./h1b-immigration.component.scss']
+  styleUrls: ['./h1b-immigration.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class H1bImmigrationComponent implements OnInit {
 
@@ -44,7 +46,7 @@ export class H1bImmigrationComponent implements OnInit {
   pageSize = 50;
   pageIndex = 0;
   pageSizeOptions = [50, 75, 100];
-  hidePageSize = false;
+  hidePageSize = true;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageEvent!: PageEvent;
@@ -72,10 +74,10 @@ export class H1bImmigrationComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  getAll() {
-    return this.h1bServ.getAll().subscribe(
+  getAll(pagIdx = 1) {
+    return this.h1bServ.getAllH1bApplicants(pagIdx, this.pageSize, this.field, this.sortField, this.sortOrder).subscribe(
       ((response: any) => {
-        this.dataSource.data = response.data;
+        this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
@@ -133,8 +135,24 @@ export class H1bImmigrationComponent implements OnInit {
     this.dataSource.filter = event.target.value;
   }
 
-  applyFilter(event: any) {
-
+  applyFilter(event : any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      return this.h1bServ.getAllH1bApplicants(1, this.pageSize, keyword, this.sortField, this.sortOrder).subscribe(
+        ((response: any) => {
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
+      );
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return  this.getAll(this.currentPageIndex + 1);
   }
 
 
@@ -149,7 +167,7 @@ export class H1bImmigrationComponent implements OnInit {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
-  onSort(event: Sort) {
+  onSort1(event: Sort) {
     const sortDirection = event.direction;
     const activeSortHeader = event.active;
 
@@ -196,6 +214,21 @@ export class H1bImmigrationComponent implements OnInit {
           return 0;
       }
     });
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
   }
 
 }

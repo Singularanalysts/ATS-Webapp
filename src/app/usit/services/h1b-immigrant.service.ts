@@ -40,4 +40,8 @@ export class H1bImmigrantService {
   getH1bById(id: any) {
     return this.apiServ.get("img/H1BApplicants/getH1BApplicant/"+ id)
   }
+
+  getAllH1bApplicants(page: any, size: any, field: any, sortField: any, sortOrder: any) {
+    return this.apiServ.get(`img/H1BApplicants/all/${page}/${size}/${field}/${sortField}/${sortOrder}`);
+  }
 }

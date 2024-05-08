@@ -66,7 +66,7 @@ export class FutureOptCptComponent implements OnInit {
   }
 
   getAll(pagIdx = 1) {
-    this.consultantServ.getOptCptList(pagIdx, this.itemsPerPage, this.field).subscribe(
+    this.consultantServ.getOptCptList(pagIdx, this.itemsPerPage, this.field, this.sortField, this.sortOrder).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -104,78 +104,121 @@ export class FutureOptCptComponent implements OnInit {
     })
   }
 
-  applyFilter(event: any) {
+  applyFilter1(event: any) {
     this.dataSource.filter = event.target.value;
   }
-  //lavanya
-  onSort(event: Sort) {
-    const sortDirection = event.direction;
-    const activeSortHeader = event.active;
 
-    if (sortDirection === '') {
-      this.dataSource.data = this.dataSource.data;
-      this.dataSource.sort = this.sort;
-      return;
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    this.field = keyword;
+    if (keyword != '') {
+      return this.consultantServ
+        .getOptCptList(
+          1,
+          this.pageSize,
+          keyword,
+          this.sortField,
+          this.sortOrder
+        )
+        .subscribe((response: any) => {
+          // this.datarr = response.data.content;
+          this.dataSource.data = response.data.content;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        });
     }
-
-    const isAsc = sortDirection === 'asc';
-    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
-      switch (activeSortHeader) {
-        case 'SerialNum':
-          // Assuming 'serialNum' is the property representing the serial number
-          const serialNumA = parseInt(a.serialNum) || 0;
-          const serialNumB = parseInt(b.serialNum) || 0;
-          return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
-        case 'Email':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.consultantemail || '').localeCompare(b.consultantemail || '')
-          );
-        case 'Number':
-            const NumberA = this.extractNumericValue(a.contactnumber);
-            const NumberB = this.extractNumericValue(b.contactnumber);
-            return (isAsc ? 1 : -1) * (NumberA - NumberB);
-        case 'Technology':
-          return (
-            (isAsc ? 1 : -1) * (a.technologyarea || '').localeCompare(b.technologyarea || '')
-          );
-
-        case 'University':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.university || '').localeCompare(b.university || '')
-          );
-        case 'BeneficiaryFirstName':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.h1validto || '').localeCompare(b.h1validto || '')
-          );
-        case 'BeneficiaryMiddleName':
-          return (
-            (isAsc ? 1 : -1) * (a.everifydate || '').localeCompare(b.everifydate || '')
-          );
-        case 'BeneficiaryLastName':
-          return (
-            (isAsc ? 1 : -1) * (a.lasti9date || '').localeCompare(b.lasti9date || '')
-          );
-        case 'CurrentLocation':
-          return (
-            (isAsc ? 1 : -1) * (a.currentlocation || '').localeCompare(b.currentlocation || '')
-          );
-        case 'Gender':
-          return (
-            (isAsc ? 1 : -1) * (a.gender || '').localeCompare(b.gender || '')
-          );
-        default:
-          return 0;
-      }
-    });
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return this.getAll(this.currentPageIndex + 1);
   }
+
+  //lavanya
+  // onSort(event: Sort) {
+  //   const sortDirection = event.direction;
+  //   const activeSortHeader = event.active;
+
+  //   if (sortDirection === '') {
+  //     this.dataSource.data = this.dataSource.data;
+  //     this.dataSource.sort = this.sort;
+  //     return;
+  //   }
+
+  //   const isAsc = sortDirection === 'asc';
+  //   this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
+  //     switch (activeSortHeader) {
+  //       case 'SerialNum':
+  //         const serialNumA = parseInt(a.serialNum) || 0;
+  //         const serialNumB = parseInt(b.serialNum) || 0;
+  //         return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
+  //       case 'Email':
+  //         return (
+  //           (isAsc ? 1 : -1) *
+  //           (a.consultantemail || '').localeCompare(b.consultantemail || '')
+  //         );
+  //       case 'Number':
+  //           const NumberA = this.extractNumericValue(a.contactnumber);
+  //           const NumberB = this.extractNumericValue(b.contactnumber);
+  //           return (isAsc ? 1 : -1) * (NumberA - NumberB);
+  //       case 'Technology':
+  //         return (
+  //           (isAsc ? 1 : -1) * (a.technologyarea || '').localeCompare(b.technologyarea || '')
+  //         );
+
+  //       case 'University':
+  //         return (
+  //           (isAsc ? 1 : -1) *
+  //           (a.university || '').localeCompare(b.university || '')
+  //         );
+  //       case 'BeneficiaryFirstName':
+  //         return (
+  //           (isAsc ? 1 : -1) *
+  //           (a.h1validto || '').localeCompare(b.h1validto || '')
+  //         );
+  //       case 'BeneficiaryMiddleName':
+  //         return (
+  //           (isAsc ? 1 : -1) * (a.everifydate || '').localeCompare(b.everifydate || '')
+  //         );
+  //       case 'BeneficiaryLastName':
+  //         return (
+  //           (isAsc ? 1 : -1) * (a.lasti9date || '').localeCompare(b.lasti9date || '')
+  //         );
+  //       case 'CurrentLocation':
+  //         return (
+  //           (isAsc ? 1 : -1) * (a.currentlocation || '').localeCompare(b.currentlocation || '')
+  //         );
+  //       case 'Gender':
+  //         return (
+  //           (isAsc ? 1 : -1) * (a.gender || '').localeCompare(b.gender || '')
+  //         );
+  //       default:
+  //         return 0;
+  //     }
+  //   });
+  // }
+
   extractNumericValue(phoneNumber: string): number {
-    // Remove non-numeric characters and parse as integer
     return parseInt(phoneNumber.replace(/\D/g, ''));
   }
-  //
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    console.log(event);
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
+  }
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
