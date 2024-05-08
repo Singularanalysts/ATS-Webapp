@@ -4,14 +4,14 @@
             <img src="../../../../assets/images/file.png" alt="profile avatar" width="150px" height="150px">
         </div>
         <div class="profile-name">
-            {{ profiledata.consultantname }}
+            {{ profiledata?.consultantname }}
         </div>
         <div class="job-title">
-            {{ profiledata.position }}
+            {{ profiledata?.position }}
         </div>
         <div class="skills">
             <h3 style="text-align: left; font-weight: bold;">Skills:</h3>
-            <p>{{ profiledata.skills }}</p>
+            <p>{{ profiledata?.skills }}</p>
         </div>
     </div>
     <div class="item2" style="text-align: left;">
@@ -19,16 +19,16 @@
         <div style="display: flex; width: 100; align-items: center; justify-content: space-between;" class="basic">
             <div>
                 <p style="color: grey">Email</p>
-                <p style="font-weight: bold;">{{ profiledata.consultantemail ? profiledata.consultantemail : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.consultantemail ? profiledata?.consultantemail : '-' }}</p>
             </div>
 
             <div>
                 <p style="color: grey">Contact Number</p>
-                <p style="font-weight: bold;">{{ profiledata.contactnumber ? profiledata.contactnumber : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.contactnumber ? profiledata?.contactnumber : '-' }}</p>
             </div>
             <div>
                 <p style="color: grey">Location</p>
-                <p style="font-weight: bold;"> {{ profiledata.currentlocation ? profiledata.currentlocation : '-' }}</p>
+                <p style="font-weight: bold;"> {{ profiledata?.currentlocation ? profiledata?.currentlocation : '-' }}</p>
             </div>
 
         </div>
@@ -38,12 +38,12 @@
         <div style="display: flex; width: 100; align-items: center; justify-content: space-between;" class="work">
             <div>
                 <p style="color: grey">Experience (In Years)</p>
-                <p style="font-weight: bold;">{{ profiledata.experience ? profiledata.experience : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.experience ? profiledata?.experience : '-' }}</p>
             </div>
 
             <div>
                 <p style="color: grey">Preferred Location</p>
-                <p style="font-weight: bold;">{{ profiledata.relocation ? profiledata.relocation : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.relocation ? profiledata?.relocation : '-' }}</p>
             </div>
             <div>
                 <!-- <p>Location</p>
@@ -57,16 +57,16 @@
         <div style="display: flex; width: 100; align-items: center; justify-content: space-between;" class="qualifiactions">
             <div>
                 <p style="color: grey">Degree</p>
-                <p style="font-weight: bold;">{{ profiledata.qualification ? profiledata.qualification : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.qualification ? profiledata?.qualification : '-' }}</p>
             </div>
 
             <div>
                 <p style="color: grey">University</p>
-                <p style="font-weight: bold;">{{ profiledata.university ? profiledata.university : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.university ? profiledata?.university : '-' }}</p>
             </div>
             <div>
                 <p style="color: grey">Year of Passing</p>
-                <p style="font-weight: bold;">{{ profiledata.yop ? profiledata.yop : '-' }}</p>
+                <p style="font-weight: bold;">{{ profiledata?.yop ? profiledata?.yop : '-' }}</p>
             </div>
 
         </div>
