@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable, map, startWith, tap } from 'rxjs';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import {
   ISnackBarData,
@@ -15,6 +16,7 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { UserManagementService } from 'src/app/services/user-management.service';
 import { Employee } from 'src/app/usit/models/employee';
+import { ConsultantService } from 'src/app/usit/services/consultant.service';
 
 
 @Component({
@@ -29,6 +31,7 @@ export class RegisterConsultantComponent implements OnInit {
   private router = inject(Router);
   private snackBarServ = inject(SnackBarService);
   private permissionServ = inject(PermissionsService);
+  private consultantServ = inject(ConsultantService);
 
   form: any = FormGroup;
   protected isFormSubmitted = false;
@@ -41,8 +44,16 @@ export class RegisterConsultantComponent implements OnInit {
   clock: string = '';
   interval!: any;
   timeLeft: number = 0;
+  searchTechOptions$!: Observable<any>;
+  technologyOptions!: any;
+  isTechnologyDataAvailable: boolean = false;
+  step1 = true;
+  step2 = false;
+
+
 
   ngOnInit(): void {
+    this.gettech();
     this.initializeLoginForm();
   }
 
@@ -55,6 +66,12 @@ export class RegisterConsultantComponent implements OnInit {
       personalcontactnumber: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
       confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
+      currentlocation: ['', Validators.required],
+      immigrationstatus: ['', Validators.required],
+      position: ['', Validators.required],
+      experience: ['', Validators.required],
+      technology: ['', Validators.required],
+      skills: ['', Validators.required],
     }, { validator: this.confirmPasswordValidator });
 
     this.form.get('password').valueChanges.subscribe(() => {
@@ -137,6 +154,7 @@ export class RegisterConsultantComponent implements OnInit {
   regObj = {}
   userLogin() {
     console.log(this.form.value);
+    this.form.get('technology').setValue(this.techid);
     this.regObj = { ...this.emailObject, ...this.form.value}
     this.permissionServ.consultantRegistration(this.regObj).subscribe(
       (response: any) => {
@@ -195,4 +213,77 @@ export class RegisterConsultantComponent implements OnInit {
       ? { confirmPasswordMismatch: true }
       : null;
   };
+
+  gettech() {
+    this.searchTechOptions$ = this.consultantServ.getregtech().pipe(map((x: any) => x.data), tap(resp => {
+      if (resp && resp.length) {
+        this.getTechOptionsForAutoComplete(resp);
+      }
+    }));
+  }
+
+  getTechOptionsForAutoComplete(data: any) {
+    this.technologyOptions = data;
+    console.log(data);
+    this.searchTechOptions$ =
+      this.form.controls.technology.valueChanges.pipe(
+        startWith(''),
+        map((value: any) =>
+          this._filterOptions(value, this.technologyOptions)
+        )
+      );
+  }
+  techid!: any;
+  private _filterOptions(value: any, options: any[]): any[] {
+    const filterValue = (value ? value.toString() : '').toLowerCase();
+    const filteredTechnologies = options.filter((option: any) =>
+      option.technologyarea.toLowerCase().includes(filterValue)
+    );
+    if (filteredTechnologies.length === 1) {
+      this.techid = filteredTechnologies[0].id;
+    }
+    return filteredTechnologies;
+  }
+
+  techskills(option: any) {
+    // console.log(option);
+    const newVal = option.id;
+    this.techid = option.id;
+    this.consultantServ.getregskills(newVal).subscribe((response: any) => {
+      this.form.get('skills').setValue(response.data);
+    });
+  }
+
+  proceedToStep2() {
+    this.step1 = false;
+    this.step2 = true;
+  }
+
+  flg = true;
+  resumeError: boolean = false;
+  resumeFileNameLength: boolean = false;
+
+  @ViewChild('resume')
+  resume: any = ElementRef;
+  resumeupload!: any;
+  uploadResume(event: any) {
+    this.resumeError = false;
+    this.resumeFileNameLength = false;
+    this.resumeupload = event.target.files[0];
+    const file = event.target.files[0];
+    const fileSizeInKB = Math.round(file.size / 1024);
+    var items = file.name.split(".");
+    const str = items[0];
+    if (str.length > 20) {
+      this.resumeFileNameLength = true;
+    }
+    if (fileSizeInKB > 2048) {
+      this.flg = false;
+      this.resumeError = true;
+    }
+    else {
+      this.resumeError = false;
+      this.flg = true;
+    }
+  }
 }

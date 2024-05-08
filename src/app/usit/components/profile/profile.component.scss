@@ -1,0 +1,40 @@
+.profile {
+    height: calc(100vh - 68px);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 10px;
+}
+
+.profile>div {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.item1 {
+    grid-row-start: 1;
+    grid-row-end: 4;
+}
+.profile-name {
+    font-weight: bold;
+}
+.skills {
+    padding-top: 30px;
+}
+
+
+.basic div {
+    width: 33%;
+    gap: 5px;
+}
+
+.basic div {
+    width: 50%;
+    gap: 5px;
+}
+
+.qualifiactions div {
+    width: 33%;
+    gap: 5px;
+}

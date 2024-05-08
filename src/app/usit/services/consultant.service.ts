@@ -175,21 +175,32 @@ export class ConsultantService {
     return this.http.get("consultant/hotlist/empty");
   }
 
-  getOptCptList(page: any, size: any, field: any) {
-    return this.http.get(`consultant/all/${page}/${size}/${field}/p5`);
+  getOptCptList(page: any, size: any, field: any, sortField: any, sortOrder: any) {
+    return this.http.get(`consultant/all/${page}/${size}/${field}/p5/${sortField}/${sortOrder}`);
   }
 
-  getH1TransferList(page: any, size: any, field: any) {
-    return this.http.get(`consultant/all/${page}/${size}/${field}/p3`);
+  getH1TransferList(page: any, size: any, field: any, sortField: any, sortOrder: any) {
+    return this.http.get(`consultant/all/${page}/${size}/${field}/p3/${sortField}/${sortOrder}`);
   }
   
-
   getFilteredConsultants(request:any) {
     return this.http.post("consultant/consultantFilter",request);
   }
   //both
   getFilteredConsults(request:any, pageno: any, pagesize: any) {
     return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
+  }
+
+  public getregtech() {
+    return this.http.get("consultant/technology");
+  }
+
+  public getregskills(techid: any) {
+    return this.http.get(`auth/technology/getskillsbyid/${techid}`);
+  }
+
+  public getProfile(userid: any) {
+    return this.http.get(`consultant/getByAddedby/${userid}`);
   }
 
 }
