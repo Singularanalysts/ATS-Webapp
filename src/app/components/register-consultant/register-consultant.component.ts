@@ -154,7 +154,10 @@ export class RegisterConsultantComponent implements OnInit {
   regObj = {}
   userLogin() {
     console.log(this.form.value);
-    this.form.get('technology').setValue(this.techid);
+    if(this.form.invalid) {
+      this.form.markAllAsTouched();
+    } else {
+      this.form.get('technology').setValue(this.techid);
     this.regObj = { ...this.emailObject, ...this.form.value}
     this.permissionServ.consultantRegistration(this.regObj).subscribe(
       (response: any) => {
@@ -164,6 +167,7 @@ export class RegisterConsultantComponent implements OnInit {
         }
       }
     )
+    }
   }
   
   private showErrorNotification(message: string, errorType = 'failure'): void {
