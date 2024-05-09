@@ -123,7 +123,7 @@ export class LoginComponent implements OnInit {
           this.department = result.data.department;
           this.permissionServ.login(loggedInUserData).subscribe((data) => {
             if (this.department == 'Consultant') {
-              this.router.navigate(['usit/profile']);
+              this.router.navigate(['usit/search']);
             } else {
               this.router.navigate(['usit/dashboard']);
             }

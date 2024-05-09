@@ -1,5 +1,10 @@
 [
   {
+    "text": "Search",
+    "icon": "search",
+    "routerLink": "/usit/search"
+  },
+  {
     "text": "View Profile",
     "icon": "person",
     "routerLink": "/usit/profile"
