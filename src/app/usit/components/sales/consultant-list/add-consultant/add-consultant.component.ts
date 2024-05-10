@@ -487,7 +487,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.position = formVal.position.trim();
         this.entity.status = formVal.status;
         this.entity.contactnumber = formVal.contactnumber;
-        this.entity.hourlyrate = formVal.hourlyrate.trim();
+        this.entity.hourlyrate = formVal.hourlyrate;
         this.entity.skills = formVal.skills;
         this.entity.experience = formVal.experience;
         this.entity.ratetype = formVal.ratetype;
