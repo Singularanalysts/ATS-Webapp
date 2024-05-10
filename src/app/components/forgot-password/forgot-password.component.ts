@@ -80,7 +80,7 @@ export class ForgotPasswordComponent implements OnInit {
       if (response.status == "success") {
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
-        this.onTimeout();
+        // this.onTimeout();
         this.form.get('email')!.disable();
         this.requestOtp = false;
         this.isOTPSent = true;

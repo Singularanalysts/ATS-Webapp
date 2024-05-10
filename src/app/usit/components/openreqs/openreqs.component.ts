@@ -96,6 +96,7 @@ export class OpenreqsComponent implements OnInit {
     const actionData = {
       title: `${element.vendor}`,
       id: element.vendor,
+      isExist: element.isexist,
       actionName: 'req-info',
 
     };

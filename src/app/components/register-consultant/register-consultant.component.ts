@@ -26,6 +26,7 @@ import { ConsultantService } from 'src/app/usit/services/consultant.service';
 })
 export class RegisterConsultantComponent implements OnInit {
   hidePassword = true;
+  hideConPassword = true;
   private userManagementServ = inject(UserManagementService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
@@ -64,10 +65,9 @@ export class RegisterConsultantComponent implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       personalcontactnumber: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
-      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
+      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])(?=.*#)[A-Za-zd$@$!%*?&].{8,15}')]],
+      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])(?=.*#)[A-Za-zd$@$!%*?&].{8,15}')]],
       currentlocation: ['', Validators.required],
-      immigrationstatus: ['', Validators.required],
       position: ['', Validators.required],
       experience: ['', Validators.required],
       technology: ['', Validators.required],
@@ -107,14 +107,14 @@ export class RegisterConsultantComponent implements OnInit {
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
         // this.onTimeout();
-        this.form.get('email')!.disable();
+        this.form.get('email')!.readonly = true;
         this.requestOtp = false;
         this.isOTPSent = true;
       } else {
         this.showErrorNotification(response.message);
         this.isOTPSent = false;
         this.requestOtp = true;
-        this.form.get('email')!.enable();
+        this.form.get('email')!.readonly = false;
       }
     });
   }
@@ -127,7 +127,7 @@ export class RegisterConsultantComponent implements OnInit {
     this.permissionServ.consultantValidateOtp(this.id, otpValue).subscribe((response: any) => {
       if (response.status == "success") {
         this.showErrorNotification(response.message, 'success');
-        this.form.get('otp')!.disable();
+        this.form.get('otp')!.readonly = true;
         this.validateOtp = false; 
         this.showPasswordFields = true;
         this.details = true;
@@ -139,7 +139,7 @@ export class RegisterConsultantComponent implements OnInit {
         this.validateOtp = true;
         this.isOTPSent = false;
         this.requestOtp = true;
-        this.form.get('email')!.enable();
+        this.form.get('email')!.readonly = false;
       }
     });
   }
@@ -153,29 +153,19 @@ export class RegisterConsultantComponent implements OnInit {
   regObj = {}
   userLogin() {
     this.form.get('technology').setValue(this.techid);
-    this.regObj = { ...this.emailObject, ...this.form.value}
-    this.permissionServ.consultantRegistration(this.regObj).subscribe(
-      (response: any) => {
-        if(response.status = "success") {
-          this.showErrorNotification(response.message, 'success');
-          this.router.navigate(['/login']);
+    if(this.form.invalid) {
+      this.form.markAllAsTouched();
+    } else {
+      this.permissionServ.consultantRegistration(this.form.value).subscribe(
+        (response: any) => {
+          if(response.status = "success") {
+            this.showErrorNotification(response.message, 'success');
+            this.router.navigate(['/login']);
+          }
         }
-      }
-    )
-    // if(this.form.invalid) {
-    //   this.form.markAllAsTouched();
-    // } else {
-    // this.form.get('technology').setValue(this.techid);
-    // this.regObj = { ...this.emailObject, ...this.form.value}
-    // this.permissionServ.consultantRegistration(this.regObj).subscribe(
-    //   (response: any) => {
-    //     if(response.status = "success") {
-    //       this.showErrorNotification(response.message, 'success');
-    //       this.router.navigate(['/login']);
-    //     }
-    //   }
-    // )
-    // }
+      )
+    }
+    
   }
   
   private showErrorNotification(message: string, errorType = 'failure'): void {
