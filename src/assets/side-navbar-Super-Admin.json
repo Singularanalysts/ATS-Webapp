@@ -62,43 +62,23 @@
       "routerLink": "/usit/list-techsupport"
     },
     {
-      "text": "Immigration",
-      "icon": "label",
+      "text": "People",
+      "icon": "groups",
       "children": [
         {
-          "text": "H1B Immigration",
-          "icon": "flight_land",
-          "routerLink": "/usit/h1b-immigartion"
+          "text": "Active",
+          "icon": "check_circle",
+          "routerLink": "/usit/active"
         },
         {
-          "text": "Future OPT/CPT",
-          "icon": "school",
-          "routerLink": "/usit/future-opt-cpt"
+          "text": "Leave of Absence",
+          "icon": "event_busy",
+          "routerLink": "/usit/leave-of-absence"
         },
         {
-          "text": "E-Verify",
-          "icon": "verified_user",
-          "routerLink": "/usit/e-verify"
-        },
-        {
-          "text": "I9",
-          "icon": "school",
-          "routerLink": "/usit/i9"
-        },
-        {
-          "text": "PWD",
-          "icon": "business_center",
-          "routerLink": "/usit/pwd"
-        },
-        {
-          "text": "PERM",
-          "icon": "business_center",
-          "routerLink": "/usit/perm"
-        },
-        {
-          "text": "I140",
-          "icon": "business_center",
-          "routerLink": "/usit/i140"
+          "text": "Terminated",
+          "icon": "cancel",
+          "routerLink": "/usit/terminated"
         }
       ]
     },

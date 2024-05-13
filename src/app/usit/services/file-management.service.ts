@@ -29,7 +29,7 @@ export class FileManagementService {
   }
 
   h1bUploadFile(formData:any, id: number) {
-    return this.http.post(this.apiServ.apiUrl + `img/H1BApplicants/h1docs/${id}`, formData, {observe: "response"});
+    return this.http.post(this.apiServ.apiUrl + `img/people/h1docs/${id}`, formData, {observe: "response"});
   }
 
   removefile(id: number, flg: string) {
@@ -65,7 +65,7 @@ export class FileManagementService {
   }
 
   downloadH1bFile(id: number, flg: string): Observable<Blob> {
-    return this.http.get(`${this.apiServ.apiUrl}img/H1BApplicants/download/${id}/${flg}`, {
+    return this.http.get(`${this.apiServ.apiUrl}img/people/download/${id}/${flg}`, {
       responseType: 'blob',
     });
   }

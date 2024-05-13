@@ -44,8 +44,10 @@ import { HotListProvidersListComponent } from './components/hot-list-providers-l
 import { BlacklistedCompaniesListComponent } from './components/vendor-management/blacklisted-companies-list/blacklisted-companies-list.component';
 import { CurrentPrimaryVendorListComponent } from './components/vendor-management/current-primary-vendor-list/current-primary-vendor-list.component';
 import { FuturePrimaryVendorListComponent } from './components/vendor-management/future-primary-vendor-list/future-primary-vendor-list.component';
-// import { ActiveComponent } from './components/people/active/active.component';
+import { ActiveComponent } from './components/people/active/active.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { LeaveOfAbsenceComponent } from './components/people/leave-of-absence/leave-of-absence.component';
+import { TerminatedComponent } from './components/people/terminated/terminated.component';
 // import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
 
 const routes: Routes = [
@@ -271,9 +273,15 @@ const routes: Routes = [
   {
     path: 'future-primary-vendor', component: FuturePrimaryVendorListComponent,
   },
-  // {
-  //   path: 'active', component: ActiveComponent,
-  // },
+  {
+    path: 'active', component: ActiveComponent,
+  },
+  {
+    path: 'leave-of-absence', component: LeaveOfAbsenceComponent,
+  },
+  {
+    path: 'terminated', component: TerminatedComponent,
+  },
   {
     path: 'profile', component: ProfileComponent,
   },
