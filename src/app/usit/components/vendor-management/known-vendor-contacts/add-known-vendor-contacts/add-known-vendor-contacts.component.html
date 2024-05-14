@@ -1,0 +1,75 @@
+<!-- top header container -->
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()" class="btn-close" id="btnClose">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<!-- mat-card starts -->
+<mat-card class="card" id="empCard">
+    <!-- form- starts -->
+    <form [formGroup]="hotlistForm" class="hotlist-form">
+        <section class=form-container>
+            <!-- form - left controls -->
+            <div class="form-column-left">
+                <mat-form-field appearance="fill">
+                    <mat-label>Employee Name</mat-label>
+                    <input matInput formControlName="employeeName" maxlength="30"  />
+                    <mat-error *ngIf="hotlistForm.get('employeeName')!.hasError('required')">Employee Name
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Vendor -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Vendor</mat-label>
+                    <input matInput formControlName="vendor" maxlength="75">
+                    <mat-error *ngIf="hotlistForm.get('vendor')!.hasError('required')">Company Name
+                        is Required
+                    </mat-error>
+                </mat-form-field>
+
+                
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Client</mat-label>
+                    <input matInput formControlName="client" maxlength="50" (input)="camelCase($event)" />
+                    <mat-error *ngIf="hotlistForm.get('client')!.hasError('required')"> Client Name is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- form - right controls -->
+            <div class="form-column-right">
+
+                <!-- Email -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" (change)="emailDuplicate($event)"
+                        (input)="convertToLowerCase($event)" maxlength="50" />
+                    <mat-error *ngIf="hotlistForm.get('email')!.hasError('required')">Email is Required</mat-error>
+                    <mat-error *ngIf="hotlistForm.get('email')!.hasError('pattern')">Invalid Email Address</mat-error>
+                </mat-form-field>
+
+                <!-- Contact Number -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Contact Number </mat-label>
+                    <ngx-mat-intl-tel-input [preferredCountries]="['in','us']" matInput class="intl-input"
+                        formControlName="referenceContactNumber" [enablePlaceholder]="true" [enableSearch]="true"
+                        name="contactnumber" id="intlInput" #personalcontactnumber #pNumb>
+                    </ngx-mat-intl-tel-input>
+                    <mat-error *ngIf="hotlistForm.get('referenceContactNumber')!.hasError('required')">Contact Number is Required</mat-error>
+                </mat-form-field>
+            </div>
+        </section>
+    </form>
+    <!-- form-ends -->
+    <!-- form-bottom action buttons -->
+    <div class="form-action-buttons">
+        <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>
+<!-- mat-card-ends -->

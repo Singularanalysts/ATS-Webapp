@@ -128,4 +128,28 @@ export class VendorService {
     return this.apiServ.get(`vms/vendor/blacklisted/${status}/${id}/${userid}`);
   }
 
+  public saveKnownVendorContact(entity: any) {
+    return this.apiServ.post("vms/knownContact/saveContact", entity);
+  }
+
+  public updateKnownVendorContact(entity: any) {
+    return this.apiServ.put("vms/knownContact/updateContact", entity);
+  }
+
+  SaveOrUpdateKnownUpdateContact (entity: any, action: 'edit-known-vendor-contact' | 'add-known-vendor-contact'){
+    return action === 'edit-known-vendor-contact' ? this.updateKnownVendorContact(entity): this.saveKnownVendorContact(entity);
+  }
+
+  getAllKnownVendorContacts(entity: any) {
+    return this.apiServ.post("vms/knownContact/all", entity);
+  }
+
+  getKnownVendorContactById(id: number) {
+    return this.apiServ.get(`vms/knownContact/getById/${id}`);
+  }
+
+  deleteKnownVendorContact(id: number) {
+    return this.apiServ.delete(`vms/knownContact/deleteById/${id}`);
+  }
+
 }

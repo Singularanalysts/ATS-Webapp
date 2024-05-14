@@ -48,6 +48,7 @@ import { ActiveComponent } from './components/people/active/active.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LeaveOfAbsenceComponent } from './components/people/leave-of-absence/leave-of-absence.component';
 import { TerminatedComponent } from './components/people/terminated/terminated.component';
+import { KnownVendorContactsComponent } from './components/vendor-management/known-vendor-contacts/known-vendor-contacts.component';
 // import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
 
 const routes: Routes = [
@@ -288,6 +289,9 @@ const routes: Routes = [
   // {
   //   path: 'e-verify', component: EVerifyComponent,
   // }
+  {
+    path: 'known-vendor-contacts', component: KnownVendorContactsComponent,
+  },
 
 ];
 
