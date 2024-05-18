@@ -1,96 +1,104 @@
 <ul class="breadcrumb">
-    <li><a (click)="navigateToDashboard()">Home</a></li>
-    <li class="last">Sourcing Report</li>
-  </ul>
-  <form [formGroup]="sourcingreport" (ngSubmit)="onSubmit()">
-    <mat-card mt-3 style="z-index: 1">
-      <mat-card-content>
-        <mat-form-field color="accent">
-          <mat-label>Choose Starting Date</mat-label>
-          <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-          <mat-datepicker #picker1></mat-datepicker>
-        </mat-form-field>
-        &nbsp;&nbsp;
-  
-        <mat-form-field color="accent">
-          <mat-label>Choose Ending Date</mat-label>
-          <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-          <mat-datepicker #picker2 color="primary"></mat-datepicker> </mat-form-field>&nbsp;&nbsp;
-
-          <mat-form-field>
-            <mat-label>Select Employee</mat-label>
-            <mat-select>
-                <mat-option value="option1">Option 1</mat-option>
-                <mat-option value="option2">Option 2</mat-option>
-                <mat-option value="option3">Option 3</mat-option>
-              </mat-select>
+  <li><a (click)="navigateToDashboard()">Home</a></li>
+  <li class="last">Open Requirements Report</li>
+</ul>
+<div style="display: block;">
+  <div>
+    <form [formGroup]="sourcingreport" (ngSubmit)="onSubmit()">
+      <mat-card>
+        <mat-card-content style="display: flex; align-items: center; justify-content: center;">
+          <mat-form-field color="accent">
+            <mat-label>Choose Starting Date</mat-label>
+            <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="sourcingreport.get('startDate')!.hasError('required')">Starting Date is required</mat-error>
           </mat-form-field>
-  
-        <button (click)="onSubmit()" mat-raised-button color="primary">Submit</button>&nbsp;
-        <button mat-raised-button color="warn" (click)="reset()">Reset</button>&nbsp;
+          &nbsp;&nbsp;
+    
+          <mat-form-field color="accent">
+            <mat-label>Choose Ending Date</mat-label>
+            <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 color="primary"></mat-datepicker>
+            <mat-error *ngIf="sourcingreport.get('endDate')!.hasError('required')">Ending Date is required</mat-error>
+          </mat-form-field>
+          &nbsp;&nbsp;
+    
+          <mat-form-field>
+            <mat-label>Select Skillset</mat-label>
+            <mat-select formControlName="groupby" multiple>
+              <mat-option *ngFor="let option of allOptions" [value]="option">{{option}}</mat-option>
+        
+            </mat-select>
+            <mat-error *ngIf="sourcingreport.get('groupby')!.hasError('required')">Skillset is required</mat-error>
+          </mat-form-field>
+            
+          
+    
+          <button (click)="onSubmit()" mat-raised-button color="primary">Submit</button>&nbsp;
+          <button mat-raised-button color="warn" (click)="reset()">Reset</button>&nbsp;
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </div>
+
+  <div>
+    <mat-card class="matcards ">
+      <mat-card-content>
+        <div id="table-container" class="table-wrapper">
+          <section class="vendor-table-style">
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
+      
+              <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+      
+              <!-- ID Column mat-sort-header sortActionDescription="Sort by Serial Number"-->
+              <ng-container matColumnDef="SerialNum">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" style="width: 2%"> S.No </th>
+                <td mat-cell *matCellDef="let element" style="width: 2%"> {{element?.serialNum}} </td>
+              </ng-container>
+      
+              
+      
+              <!-- Recruiter Name -->
+              <ng-container matColumnDef="skillset">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by skillset" style="width: 20%"> Skill Set  </th>
+                <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.category_skill }} </td>
+              </ng-container>
+      
+              <!-- Recruiter Email -->
+              <ng-container matColumnDef="vendorcount">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendorcount"  mat-sort-header style="width: 10%">  Vendor Count
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: 10%">
+                  <span class="count"
+                  (click)="vendorCategoryPopup(element)">
+                  {{element.vendorcount}}
+                </span>
+                </td>
+              </ng-container>
+      
+              <!-- table columns ends  -->
+      
+              <!-- table ROW -->
+              <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngStyle]="{'background-color': row.isexist ? 'rgba(185	,245	,210)' : ''}"></tr>
+            </table>
+            <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+          </section>
+          <!-- <hr> -->
+        </div>
+        <!-- paginator -->
+        <div class="paginator" *ngIf="dataSource.filteredData.length">
+          <mat-paginator (page)="pageChanged($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+          </mat-paginator>
+        </div>
       </mat-card-content>
     </mat-card>
-  </form>
-  <mat-card class="matcards ">
-    <mat-card-content>
-      <section class="section">
-        <!-- <div class="show">
-                  Report From {{stdate}} To {{eddate}}
-              </div> -->
-        <div class="row">
-          <table class="table table-sm  table-light table-bordered table-responsive">
-            <thead class="thead-light">
-              <tr>
-                <th>S.No</th>
-                <th>Vendor</th>
-                <th>consultant name</th>
-                <th>Psuedo Name</th>
-                <th>Posted date</th>
-                <th>Submitted date</th>
-                <th>Sub Status</th>
-                <th>Source</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of c_data">
-  
-                <td style="font-weight: bold;">
-                  {{data.pseudoname}}
-                </td>
-  
-                <td class="narvee">
-                  <a  data-bs-toggle="modal"
-                    data-bs-target="#consultantInfo">{{data.initiated}}</a>
-                </td>
-                <td class="narvee">
-                  <a data-bs-toggle="modal"
-                    data-bs-target="#consultantInfo">{{data.completed}}</a>
-                </td>
-                <td class="narvee">
-                  <a data-bs-toggle="modal"
-                    data-bs-target="#consultantInfo">{{data.verified}}</a>
-                </td>
-                <td class="narvee">
-                  <a data-bs-toggle="modal"
-                    data-bs-target="#consultantInfo">{{data.rejected}}</a>
-                </td>
-                <td class="narvee">
-                  <a data-bs-toggle="modal"
-                    data-bs-target="#consultantInfo">{{data.sales}}</a>
-                </td>
-              </tr>
-              
-            </tbody>
-          </table>
-          <!-- <div class="pagination justify-content-end">
-                      <pagination-controls previousLabel="Prev" nextLabel="Next" (pageChange)="onTableDataChange($event)">
-                      </pagination-controls>
-                  </div> -->
-        </div>
-      </section>
-    </mat-card-content>
-  </mat-card>
+  </div>
+</div>

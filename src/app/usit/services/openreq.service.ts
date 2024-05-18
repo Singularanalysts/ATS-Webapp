@@ -40,6 +40,10 @@ export class OpenreqService {
     return this.http.get("openreqs/rssfeed/read");
   }
 
+  public sendRssLink(rssLink: any) {
+    return this.http.post("openreqs/rssfeed/save", rssLink);
+  }
+
   public rssfeedData() {
     return this.http.get("openreqs/rssfeed/getalldata");
   }
@@ -60,5 +64,9 @@ export class OpenreqService {
 
   getOpenReqsById(id:number) {
     return this.http.get("openreqs/dice/getByReqId/"+id);
+  }
+
+  emailEXtractionByPaginationSortandFilter(data: any) {
+    return this.http.post("mail/read", data);
   }
 }

@@ -151,6 +151,11 @@
         "text": "Sourcing Reports",
         "icon": "dynamic_feed",
         "routerLink": "/usit/sourcing-report"
+      },
+      {
+        "text": "Open Reqs Reports",
+        "icon": "dynamic_feed",
+        "routerLink": "/usit/open-reqs-report"
       }
     ]
   },

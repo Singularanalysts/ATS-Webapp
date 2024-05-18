@@ -20,7 +20,6 @@ export class ReportsService {
 
   public sourcing_DrillDown_report(vo: any) {
     return this.apiServ.post("report/sourceleads", vo);
-
   }
 
   public consultant_DrillDown_report(vo: any) {
@@ -41,5 +40,11 @@ export class ReportsService {
     }
   }
 
+  public getCategories() {
+    return this.apiServ.get("report/getCategorys");
+  }
 
+  public getOpenReqsReport(entity: any) {
+    return this.apiServ.post("report/getReqReport", entity);
+  }
 }
