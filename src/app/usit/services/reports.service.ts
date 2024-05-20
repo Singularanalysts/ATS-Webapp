@@ -47,4 +47,8 @@ export class ReportsService {
   public getOpenReqsReport(entity: any) {
     return this.apiServ.post("report/getReqReport", entity);
   }
+
+  public getBanterReport(entity: any) {
+    return this.apiServ.post("report/banterreport", entity);
+  }
 }

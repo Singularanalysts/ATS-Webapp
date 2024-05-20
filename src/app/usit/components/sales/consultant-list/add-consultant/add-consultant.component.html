@@ -267,8 +267,8 @@
           <mat-label>Relocation Type</mat-label>
           <mat-radio-group aria-label="Select an option" formControlName="relocation">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.relocation" [value]="opt.value"
-              (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
-            <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required')">Relocation is
+              (change)="onRelocationRadioChange($event)">{{opt.value}}</mat-radio-button>
+            <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required') && isRelocationRadSelected">Relocation is
               Required
             </mat-error>
           </mat-radio-group>

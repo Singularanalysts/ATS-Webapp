@@ -41,7 +41,7 @@ export class FileManagementService {
   }
 
   h1bRemoveFile(id: number, flg: string) {
-    return this.apiServ.get(`img/H1BApplicants/removefile/${id}/${flg}`);
+    return this.apiServ.get(`img/people/removefile/${id}/${flg}`);
   }
 
   removefiles(id: number) {

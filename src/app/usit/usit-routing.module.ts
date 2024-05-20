@@ -49,6 +49,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { LeaveOfAbsenceComponent } from './components/people/leave-of-absence/leave-of-absence.component';
 import { TerminatedComponent } from './components/people/terminated/terminated.component';
 import { KnownVendorContactsComponent } from './components/vendor-management/known-vendor-contacts/known-vendor-contacts.component';
+import { BanterReportComponent } from './components/reports/banter-report/banter-report.component';
 // import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
 
 const routes: Routes = [
@@ -291,6 +292,9 @@ const routes: Routes = [
   // }
   {
     path: 'known-vendor-contacts', component: KnownVendorContactsComponent,
+  },
+  { 
+    path: 'banter-report', component: BanterReportComponent,
   },
 
 ];

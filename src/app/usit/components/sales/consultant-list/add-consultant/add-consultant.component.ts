@@ -126,6 +126,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   isRadSelected: any;
+  isRelocationRadSelected: any;
   submitted: boolean = false;
   dailCode: string = "";
   searchTechOptions$!: Observable<any>;
@@ -195,6 +196,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
       resume: [consultantData ? consultantData.resume : ''],
       dlcopy: [consultantData ? consultantData.dlcopy : ''],
+      // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
       firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
       lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
       consultantemail: [
@@ -403,6 +405,44 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
       relocatOther.updateValueAndValidity();
     });
+    
+    // this.consultantForm.get('consultanttype').valueChanges.subscribe((res: any) => {
+    //   if (res == "Future") {
+    //     this.consultantForm.get('projectavailabity').clearValidators();
+    //     this.consultantForm.get('visa').clearValidators();
+    //     this.consultantForm.get('availabilityforinterviews').clearValidators();
+    //     this.consultantForm.get('priority').clearValidators();
+    //     this.consultantForm.get('company').clearValidators();
+    //     this.consultantForm.get('position').clearValidators();
+    //     this.consultantForm.get('hourlyrate').clearValidators();
+    //     this.consultantForm.get('currentlocation').clearValidators();
+    //     this.consultantForm.get('qualification').clearValidators();
+    //     this.consultantForm.get('relocation').clearValidators();
+    //     this.consultantForm.get('experience').clearValidators();
+    //   } else {
+    //     this.consultantForm.get('projectavailabity').setValidators([Validators.required]);
+    //     this.consultantForm.get('visa').setValidators([Validators.required]);
+    //     this.consultantForm.get('availabilityforinterviews').setValidators([Validators.required]);
+    //     this.consultantForm.get('priority').setValidators([Validators.required]);
+    //     this.consultantForm.get('company').setValidators([Validators.required]);
+    //     this.consultantForm.get('position').setValidators([Validators.required]);
+    //     this.consultantForm.get('hourlyrate').setValidators([Validators.required]);
+    //     this.consultantForm.get('currentlocation').setValidators([Validators.required]);
+    //     this.consultantForm.get('qualification').setValidators([Validators.required]);
+    //     this.consultantForm.get('relocation').setValidators([Validators.required]);
+    //   }
+    //   this.consultantForm.get('projectavailabity').updateValueAndValidity();
+    //   this.consultantForm.get('visa').updateValueAndValidity();
+    //   this.consultantForm.get('availabilityforinterviews').updateValueAndValidity();
+    //   this.consultantForm.get('priority').updateValueAndValidity();
+    //   this.consultantForm.get('company').updateValueAndValidity();
+    //   this.consultantForm.get('position').updateValueAndValidity();
+    //   this.consultantForm.get('hourlyrate').updateValueAndValidity();
+    //   this.consultantForm.get('currentlocation').updateValueAndValidity();
+    //   this.consultantForm.get('qualification').updateValueAndValidity();
+    //   this.consultantForm.get('relocation').updateValueAndValidity();
+    //   this.consultantForm.get('experience').updateValueAndValidity();
+    // });
 
     const priority = this.consultantForm.get('priority');
     if (this.flag == 'sales' || this.flag == 'presales') {
@@ -461,6 +501,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (this.consultantForm.invalid) {
       this.isFormSubmitted = false
       this.isRadSelected = true;
+      this.isRelocationRadSelected = true;
       this.displayFormErrors();
       return;
     }
@@ -884,6 +925,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
   onRadioChange(event: MatRadioChange) {
     this.isRadSelected = event.value
+  }
+
+  onRelocationRadioChange(event: MatRadioChange) {
+    this.isRelocationRadSelected = event.value
   }
   // fileList?: FileData[];
   type!: any;
