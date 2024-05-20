@@ -198,13 +198,15 @@ ul.breadcrumb li a:hover {
 
 .table-wrapper {
   flex: 1;
+  max-height: calc(100% - 45px);
   // padding: 4px;
   overflow-y: auto;
   overflow-x: hidden;
-  margin: 4px;
+  // margin: 4px;
 }
 table {
   width: 100%;
+  max-height: calc(100% - 48px);
 }
 .mat-mdc-header-row {
   background-color: rgb(213, 231, 231);
@@ -405,4 +407,32 @@ ul.breadcrumb li:last-child {
   color: #4154f1;
   font-weight: bold;
   cursor: pointer;
+}
+
+.open-req-report-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 68px);
+}
+
+.banter-inner-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 0px);
+}
+
+.banter-table{
+  height: calc(100% - 110px);
+}
+
+.banter-table mat-card{
+  height: 100%;
+}
+
+.banter-table mat-card-content{
+  height: 100%;
+}
+
+.vendor-table-style {
+  max-height: calc(100% - 48px);
 }
