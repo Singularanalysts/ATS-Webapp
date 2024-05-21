@@ -21,6 +21,8 @@ import {
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { Recruiter } from 'src/app/usit/models/recruiter';
+import { utils, writeFile } from 'xlsx';
+
 @Component({
   selector: 'app-banter-report',
   standalone: true,
@@ -201,5 +203,43 @@ export class BanterReportComponent {
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
+  }
+
+  headings: any[] = [];
+  excelData: any[] = [];
+  excelImport() {
+    this.headings = [[
+    'BanterNo',
+    'EmployeeName',
+    'PsuedoName',
+    'Department',
+    'DailedCalls',
+    'DailedInMinutes',
+    'AnsweredCalls',
+    'AnsweredInMinutes',
+    'MissedCalls',
+    'TotalMinutes',
+    'Percentage',
+    ]];
+
+    this.excelData = this.c_data.map(c => [
+      c.banter_No,
+      c.emp_Name,
+      c.pseudo_Name,
+      c.department,
+      c.dialled,
+      c.minutes_Dialled,
+      c.answered,
+      c.minutes_answered,
+      c.missed,
+      c.total_Min,
+      c.percentage,
+    ]);
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, this.headings);
+    utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'data');
+    writeFile(wb, 'BanterReport@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
   }
 }
