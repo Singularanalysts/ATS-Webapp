@@ -209,16 +209,16 @@ export class BanterReportComponent {
   excelData: any[] = [];
   excelImport() {
     this.headings = [[
-    'BanterNo',
-    'EmployeeName',
-    'PsuedoName',
+    'Banter No.',
+    'Employee Name',
+    'Psuedo Name',
     'Department',
-    'DailedCalls',
-    'DailedInMinutes',
-    'AnsweredCalls',
-    'AnsweredInMinutes',
-    'MissedCalls',
-    'TotalMinutes',
+    'Dailed Calls',
+    'Dailed In Minutes',
+    'Answered Calls',
+    'Answered In Minutes',
+    'Missed Calls',
+    'Total Minutes',
     'Percentage',
     ]];
 
@@ -240,6 +240,6 @@ export class BanterReportComponent {
     utils.sheet_add_aoa(ws, this.headings);
     utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
     utils.book_append_sheet(wb, ws, 'data');
-    writeFile(wb, 'BanterReport@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
+    writeFile(wb, 'Banter-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
   }
 }
