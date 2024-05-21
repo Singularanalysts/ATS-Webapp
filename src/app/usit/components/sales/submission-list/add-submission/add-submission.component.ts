@@ -200,7 +200,7 @@ export class AddSubmissionComponent implements OnInit {
       // user: [submissionData ? submissionData.user: ''],
       submissionid: [submissionData ? submissionData.submissionid : ''],
       updatedby: [this.data.actionName === "edit-submission" ? localStorage.getItem('userid') : '0'],
-      status: [this.data.actionName === "edit-submission" ? submissionData.status : 'Active'],
+      status: [ submissionData ? submissionData.status : '', [Validators.required]],
       remarks: [submissionData ? submissionData.remarks : ''],
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],

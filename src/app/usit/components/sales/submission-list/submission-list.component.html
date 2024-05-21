@@ -166,13 +166,20 @@
                     </td>
                 </ng-container>
 
+                 <!-- Status Column -->
+                 <ng-container matColumnDef="Status">
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Status" mat-sort-header>
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.substatus | titlecase}} </td>
+                </ng-container>
 
                 <!-- Sub Status Column -->
                 <ng-container matColumnDef="SubStatus">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubStatus" mat-sort-header>
                         Sub Status
                     </th>
-                    <td mat-cell *matCellDef="let element"> {{element.substatus | titlecase}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.status | titlecase}} </td>
                 </ng-container>
 
                 <!-- Action Column -->

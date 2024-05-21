@@ -49,6 +49,6 @@ export class ReportsService {
   }
 
   public getBanterReport(entity: any) {
-    return this.apiServ.post("report/banterreport", entity);
+    return this.apiServ.post("report/callRecords/banterReport", entity);
   }
 }

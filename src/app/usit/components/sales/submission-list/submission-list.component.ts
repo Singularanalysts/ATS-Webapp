@@ -65,6 +65,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     'SubRate',
     'ProjectLocation',
     'SubmittedBy',
+    'Status',
     'SubStatus',
     'Action',
   ];
