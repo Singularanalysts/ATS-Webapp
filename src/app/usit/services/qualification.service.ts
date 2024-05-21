@@ -17,7 +17,7 @@ export class QualificationService {
 
   //used for get one resource
   getQualificationById(id: number) {
-    return this.apiServ.get("auth/qualification/getqualification/" + id);
+    return this.apiServ.get("auth/qualification/getQualificationById/" + id);
   }
 
   // get all qualifications
