@@ -3,6 +3,8 @@
   <span class="header-text" mat-dialog-title id="mainHeaderTitle">
     {{ data.category_skill | titlecase }}
   </span>
+  <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
+  (click)="excelImport()">Excel Export</button>
   <button mat-icon-button (click)="onCancel()" class="btn-close" id="btnClose">
     <mat-icon>close</mat-icon>
   </button>

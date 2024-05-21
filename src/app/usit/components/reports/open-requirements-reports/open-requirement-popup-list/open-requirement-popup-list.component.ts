@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { utils, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-open-requirement-popup-list',
@@ -71,6 +72,8 @@ export class OpenRequirementPopupListComponent implements OnInit {
   cdr = inject(PaginatorIntlService);
   payload: any;
   totalItems: number = 0;
+  c_data: any[] = [];
+  showReport = false;
 
   ngOnInit() {
     console.log(this.data);
@@ -91,6 +94,8 @@ export class OpenRequirementPopupListComponent implements OnInit {
     }
     this.repServ.getOpenReqsReport(this.payload).subscribe((res: any) => {
       console.log(res);
+      this.showReport = true;
+      this.c_data = res.data.content;
       this.dataSource.data = res.data.content;
       this.dataSource.data = res.data.content;
         this.dataSource.data.map((x: any, i) => {
@@ -128,6 +133,39 @@ export class OpenRequirementPopupListComponent implements OnInit {
   }
 
   onSort(event: any) {
+
+  }
+
+  headings: any[] = [];
+  excelData: any[] = [];
+  excelImport() {
+    this.headings = [[
+      'Posted On',
+      'Job Title',
+      'Category Skill',
+      'Employment Type',
+      'Job Location',
+      'Vendor',
+      'Job Description',
+      'Source',
+    ]];
+
+    this.excelData = this.c_data.map(c => [
+      c.posted_on,
+      c.job_title,
+      c.category_skill,
+      c.employment_type,
+      c.job_location,
+      c.vendor,
+      'View',
+      c.source,
+    ]);
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, this.headings);
+    utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'data');
+    writeFile(wb, 'Open-Requirements-List-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
 
   }
 
