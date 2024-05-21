@@ -28,6 +28,7 @@ import { Recruiter } from 'src/app/usit/models/recruiter';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import { OpenRequirementPopupListComponent } from './open-requirement-popup-list/open-requirement-popup-list.component';
 
+
 @Component({
   selector: 'app-open-requirements-reports',
   standalone: true,
@@ -291,6 +292,27 @@ export class OpenRequirementsReportsComponent {
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
+  }
+
+  headings: any[] = [];
+  excelData: any[] = [];
+  excelImport() {
+    this.headings = [[
+      'Skill Set',
+      'Vendor Count'
+    ]];
+
+    this.excelData = this.c_data.map(c => [
+      c.category_skill,
+      c.vendorcount,
+    ]);
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, this.headings);
+    utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'data');
+    writeFile(wb, 'Open-Requirements-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
+
   }
 
 }

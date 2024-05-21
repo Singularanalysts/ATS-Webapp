@@ -41,6 +41,10 @@
       
             <button mat-raised-button color="primary">Submit</button>&nbsp;
             <button mat-raised-button color="warn" (click)="reset()">Reset</button>&nbsp;
+
+            <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
+            (click)="excelImport()">Excel Export</button>
+            &nbsp;&nbsp;
           </mat-card-content>
         </mat-card>
       </form>
