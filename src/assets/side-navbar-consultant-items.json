@@ -1,5 +1,10 @@
 [
   {
+    "text": "Dashboard",
+    "icon": "dashboard",
+    "routerLink": "/usit/dashboard"
+  },
+  {
     "text": "Search",
     "icon": "search",
     "routerLink": "/usit/search"

@@ -57,14 +57,18 @@
 
           <mat-form-field appearance="outline" *ngIf="details" style="width: 100%;">
             <mat-label>Personal Contact Number </mat-label>
-            <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']"
-              formControlName="personalcontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
-              name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb
-              (keypress)="onlyNumberKey($event)">
-            </ngx-mat-intl-tel-input>
-            <mat-error *ngIf="form.get('personalcontactnumber').hasError('required')">Personal Contact Number is
-              required</mat-error>
-          </mat-form-field>
+            <ngx-mat-input-tel 
+                [onlyCountries]="['in','us']" matInput class="intl-input"
+                formControlName="personalcontactnumber" enablePlaceholder
+                enableSearch
+                enableSearchplaceholder="Search..."
+                describedBy="phoneInput" required
+                #phone
+                name="contactnumber" id="intlInput" (keypress)="onlyNumberKey($event)"> 
+            </ngx-mat-input-tel>
+            <mat-error *ngIf="form.get('personalcontactnumber').errors?.required && !form.get('personalcontactnumber').errors?.validatePhoneNumber">Required Field</mat-error>
+            <mat-error *ngIf="form.get('personalcontactnumber').errors?.required && form.get('personalcontactnumber').errors?.validatePhoneNumber">Invalid Number</mat-error>
+          </mat-form-field>	
 
           <!-- <mat-form-field appearance="outline" class="full-width">
             <mat-label>Immigration Status</mat-label>
@@ -152,7 +156,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Experience (in years)</mat-label>
-            <input matInput formControlName="experience" maxlength="2"/>
+            <input matInput formControlName="experience" maxlength="2" (keypress)="onlyNumberKey($event)"/>
             <mat-error *ngIf="form.get('experience')!.hasError('required')">Experience is required</mat-error>
           </mat-form-field>
 

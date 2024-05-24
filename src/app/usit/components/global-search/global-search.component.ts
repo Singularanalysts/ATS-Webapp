@@ -569,7 +569,6 @@ export class GlobalSearchComponent {
     const selectedDate = formatDate(event.value, 'yyyy-MM-dd', 'en-US');
     this.dashboardServ.getVendorAndCategoryAnalysisCountByDate(selectedDate, 'vendor').subscribe(
       (response: any) => {
-        console.log(response.data);
         this.dataSourceTech.data = response.data;
         this.dataSourceTech.data.map((x: any, i) => {
           x.serialNum = i + 1;
@@ -582,7 +581,6 @@ export class GlobalSearchComponent {
     const selectedDate = formatDate(event.value, 'yyyy-MM-dd', 'en-US');
     this.dashboardServ.getVendorAndCategoryAnalysisCountByDate(selectedDate, 'category').subscribe(
       (response: any) => {
-        console.log(response.data);
         this.dataSourceVendor.data = response.data;
         this.dataSourceVendor.data.map((x: any, i) => {
           x.serialNum = i + 1;

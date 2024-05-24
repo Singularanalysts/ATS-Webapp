@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
+import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 
 @NgModule({
   declarations: [
@@ -41,8 +42,8 @@ import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
     ReactiveFormsModule,
     CoreModule,
     HttpClientModule,
-    NgxMatIntlTelInputComponent
-
+    NgxMatIntlTelInputComponent,
+    NgxMatInputTelComponent
   ],
   providers: [
     {

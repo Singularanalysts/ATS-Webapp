@@ -156,7 +156,7 @@
         </mat-form-field>
 
         <!-- status -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="this.role !== 'Employee'">
           <mat-label>Select Status</mat-label>
           <mat-select formControlName="status">
             <mat-option *ngFor="let option of selectOptionObj.statusType" [value]="option">

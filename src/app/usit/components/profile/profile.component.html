@@ -14,13 +14,24 @@
         <div class="job-title">
             {{ profiledata?.position }}
         </div>
+        
         <div class="skills">
-            <h3 style="text-align: left; font-weight: bold;">Skills:</h3>
+            <h3 style="text-align: left; font-weight: bold;">Skills</h3>
             <p>{{ profiledata?.skills }}</p>
         </div>
     </div>
     <div class="item2" style="text-align: left;">
-        <h3 style="text-align: left; font-weight: bold;">Basic Details:</h3>
+        <div style="display: flex; align-items: center;">
+            <div>
+                <span style="font-weight: bold; align-items: center;">Basic Details</span>
+            </div>
+            <div>
+                <button mat-icon-button (click)="editDetails(profiledata, 'Basic Details', 'Basic')">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+            
         <div style="display: flex; width: 100; align-items: center; justify-content: space-between;" class="basic">
             <div>
                 <p style="color: grey">Email</p>
@@ -39,7 +50,17 @@
         </div>
     </div>
     <div class="item3" style="text-align: left;">
-        <h3 style="text-align: left; font-weight: bold;">Work Experience:</h3>
+        <div style="display: flex; align-items: center;">
+            <div>
+                <span style="font-weight: bold; align-items: center;">Work Experience</span>
+            </div>
+            <div>
+                <button mat-icon-button (click)="editDetails(profiledata, 'Work Experience','Work')">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+
         <div style="display: flex; width: 100; align-items: center; justify-content: space-between;" class="work">
             <div>
                 <p style="color: grey">Experience (In Years)</p>
@@ -51,14 +72,25 @@
                 <p style="font-weight: bold;">{{ profiledata?.relocation ? profiledata?.relocation : '-' }}</p>
             </div>
             <div>
-                <!-- <p>Location</p>
+                <!-- <p style="color: grey">Location</p>
                 <p>Karampudi, Macharla, Guntur</p> -->
             </div>
 
         </div>
     </div>
     <div class="item4" style="text-align: left;">
-        <h3 style="text-align: left; font-weight: bold;">Education Qualifications:</h3>
+
+        <div style="display: flex; align-items: center;">
+            <div>
+                <span style="font-weight: bold; align-items: center;">Education Qualifications</span>
+            </div>
+            <div>
+                <button mat-icon-button (click)="editDetails(profiledata, 'Education Qualifications', 'Education')">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+
         <div style="display: flex; width: 100; align-items: center; justify-content: space-between;" class="qualifiactions">
             <div>
                 <p style="color: grey">Degree</p>

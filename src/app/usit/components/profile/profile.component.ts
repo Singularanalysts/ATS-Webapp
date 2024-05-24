@@ -7,6 +7,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { AddconsultantComponent } from '../sales/consultant-list/add-consultant/add-consultant.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { QualificationService } from '../../services/qualification.service';
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-profile',
@@ -52,6 +53,40 @@ export class ProfileComponent implements OnInit {
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(
       AddconsultantComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe(() => {
+      const userid = localStorage.getItem('userid');
+      if (dialogRef.componentInstance.submitted) {
+        this.consultantServ.getProfile(userid).subscribe((res: any) => {
+          this.profiledata = res.data;
+          this.qualificationId = res.data.qualification
+          this.qualificationServ.getQualificationById(this.qualificationId).subscribe((res: any) => {
+            this.profiledata.qualification = res.data.name;
+          })
+
+        })
+      }
+    });
+  }
+
+  editDetails(consultant: any, section: any, type: any) {
+    const actionData = {
+      title: `${section}`,
+      consultantData: consultant,
+      actionName: 'edit-consultant',
+      type: `${type}`,
+      flag: this.profiledata.consultantflg
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '500px';
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'edit-consultant';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      EditProfileComponent,
       dialogConfig
     );
 

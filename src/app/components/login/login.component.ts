@@ -117,7 +117,6 @@ export class LoginComponent implements OnInit {
     }
     loginObservable.subscribe({
       next: (result: any) => {
-        console.log("result", result)
         if (result.status == 'success') {
           const loggedInUserData = result.data;
           this.department = result.data.department;

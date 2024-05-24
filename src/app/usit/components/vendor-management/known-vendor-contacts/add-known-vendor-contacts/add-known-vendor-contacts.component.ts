@@ -29,6 +29,7 @@ import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import { Loader } from '@googlemaps/js-api-loader';
 import { Observable, Subject, takeUntil } from 'rxjs';
+import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 
 @Component({
   selector: 'app-add-known-vendor-contacts',
@@ -49,6 +50,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
     MatCardModule,
     NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
+    NgxMatInputTelComponent
   ],
   providers: [
     {

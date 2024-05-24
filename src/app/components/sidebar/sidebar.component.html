@@ -23,15 +23,15 @@
     <button mat-menu-item class="user-name">
       {{ userManagementServ.getRoleName() }} 
     </button>
-    <button mat-menu-item  routerLink="password" *ngIf="role != 'Consultant'">
+    <button mat-menu-item  routerLink="password" *ngIf="role != 'Employee'">
       My Profile
       <mat-icon class="icon">person</mat-icon>
     </button>
-    <button mat-menu-item *ngIf="role != 'Consultant'">
+    <button mat-menu-item *ngIf="role != 'Employee'">
       <mat-icon class="icon">settings</mat-icon>
       Account Settings
     </button>
-    <button mat-menu-item *ngIf="role != 'Consultant'">
+    <button mat-menu-item *ngIf="role != 'Employee'">
       <mat-icon class="icon">help</mat-icon>
       Need Help?
     </button>
@@ -57,10 +57,10 @@
         [value]="value">
       </mat-progress-spinner> -->
       <!-- progress-bar -->
-      <mat-progress-bar class="progress-bar"
+      <!-- <mat-progress-bar class="progress-bar"
         [color]="color" *ngIf="isLoading$ | async"
         [mode]="progressBarMode">
-      </mat-progress-bar>
+      </mat-progress-bar> -->
       <router-outlet></router-outlet>
     </mat-sidenav-content>
 

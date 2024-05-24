@@ -56,11 +56,17 @@
                 <!-- Contact Number -->
                 <mat-form-field appearance="fill">
                     <mat-label>Contact Number </mat-label>
-                    <ngx-mat-intl-tel-input [preferredCountries]="['in','us']" matInput class="intl-input"
-                        formControlName="referenceContactNumber" [enablePlaceholder]="true" [enableSearch]="true"
-                        name="contactnumber" id="intlInput" #personalcontactnumber #pNumb>
-                    </ngx-mat-intl-tel-input>
-                    <mat-error *ngIf="hotlistForm.get('referenceContactNumber')!.hasError('required')">Contact Number is Required</mat-error>
+                    <ngx-mat-input-tel 
+                        [onlyCountries]="['in','us']" matInput class="intl-input"
+                        formControlName="referenceContactNumber" enablePlaceholder
+                        enableSearch
+                        enableSearchplaceholder="Enter Number"
+                        describedBy="phoneInput" required
+                        #phone
+                        name="contactnumber" id="intlInput"> 
+                    </ngx-mat-input-tel>
+                    <mat-error *ngIf="hotlistForm.get('referenceContactNumber').errors?.required && !hotlistForm.get('referenceContactNumber').errors?.validatePhoneNumber"> Contact Number is Required </mat-error>
+                    <mat-error *ngIf="hotlistForm.get('referenceContactNumber').errors?.required && hotlistForm.get('referenceContactNumber').errors?.validatePhoneNumber">Invalid Contact Number</mat-error>
                 </mat-form-field>
             </div>
         </section>

@@ -15,9 +15,8 @@ import {
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
 import { UserManagementService } from 'src/app/services/user-management.service';
-import { Employee } from 'src/app/usit/models/employee';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
-
+import { FileManagementService } from 'src/app/usit/services/file-management.service';
 
 @Component({
   selector: 'app-register-consultant',
@@ -33,6 +32,7 @@ export class RegisterConsultantComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
   private permissionServ = inject(PermissionsService);
   private consultantServ = inject(ConsultantService);
+  private fileService = inject(FileManagementService);
 
   form: any = FormGroup;
   protected isFormSubmitted = false;
@@ -50,8 +50,15 @@ export class RegisterConsultantComponent implements OnInit {
   isTechnologyDataAvailable: boolean = false;
   step1 = true;
   step2 = false;
-
-
+  uploadedfiles: string[] = [];
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
 
   ngOnInit(): void {
     this.gettech();
@@ -65,18 +72,19 @@ export class RegisterConsultantComponent implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       personalcontactnumber: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])(?=.*#)[A-Za-zd$@$!%*?&].{8,15}')]],
-      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])(?=.*#)[A-Za-zd$@$!%*?&].{8,15}')]],
+      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
+      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
       currentlocation: ['', Validators.required],
       position: ['', Validators.required],
       experience: ['', Validators.required],
       technology: ['', Validators.required],
       skills: ['', Validators.required],
-    }, { validator: this.confirmPasswordValidator });
-
-    this.form.get('password')!.valueChanges.subscribe(() => {
-      this.form.get('confirmPassword')!.updateValueAndValidity();
     });
+    // , { validator: this.confirmPasswordValidator });
+
+    // this.form.get('password')!.valueChanges.subscribe(() => {
+    //   this.form.get('confirmPassword')!.updateValueAndValidity();
+    // }
   }
   
   emailValidator(control: AbstractControl) {
@@ -284,5 +292,29 @@ export class RegisterConsultantComponent implements OnInit {
       this.resumeError = false;
       this.flg = true;
     }
+  }
+
+  onFileSubmit(id: number) {
+    const formData = new FormData();
+    for (var i = 0; i < this.uploadedfiles.length; i++) {
+      formData.append('files', this.uploadedfiles[i]);
+    }
+
+    if (this.resumeupload != null) {
+      formData.append('resume', this.resumeupload, this.resumeupload.name);
+    }
+
+    this.fileService
+      .ConUploadFile(formData, id)
+      .subscribe((response: any) => {
+        if (response.status === 200) {
+        } else {
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.dataToBeSentToSnackBar.message = 'File upload failed';
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        }
+      });
   }
 }

@@ -3,6 +3,13 @@
       [color]="color" *ngIf="isLoading$ | async"
       mode="indeterminate">
 </mat-progress-bar> -->
+
+<ng-container *ngIf="isLoading$ | async">
+      <div class="overlay">
+            <mat-spinner diameter="50" value="50" strokeWidth="8"></mat-spinner>
+      </div>
+</ng-container>
+
 <app-sidebar *ngIf="!( _router.url === '' ||   _router.url === '/' ||  _router.url === '/login' || _router.url === '/forgot-password' || _router.url === '/consultant-register')" ></app-sidebar>
 
 <!-- <app-sidebar *ngIf="!['/login'].includes(currentURL)"></app-sidebar> -->
