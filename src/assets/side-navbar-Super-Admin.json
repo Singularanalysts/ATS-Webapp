@@ -201,27 +201,22 @@
         {
           "text": "Employement Contract",
           "icon": "assignment_turned_in",
-          "routerLink": "/usit/dom-requirements"
+          "routerLink": "/usit/employement-contract"
         },
         {
           "text": "Tax Documents",
           "icon": "person_search",
-          "routerLink": "/usit/dom-consultants"
+          "routerLink": "/usit/tax-documents"
         },
         {
           "text": "Offer Benefits Package",
           "icon": "assignment",
-          "routerLink": "/usit/dom-submission"
+          "routerLink": "/usit/offer-benefits-package"
         },
         {
           "text": "Set Up Payroll",
           "icon": "chat_bubble_outline",
-          "routerLink": "/usit/dom-interview"
-        },
-        {
-          "text": "Closures",
-          "icon": "check_circle",
-          "routerLink": "/usit/dom-closures"
+          "routerLink": "/usit/set-up-payroll"
         }
       ]
     },
