@@ -202,16 +202,16 @@
           "routerLink": "/usit/rssfeed"
         },
         {
-          "text": "LinkedIn Profiles",
-          "icon": "business_center",
-          "routerLink": "/usit/linkedinprofiles"
-        },
-        {
           "text": "Email Extraction",
           "icon": "business_center",
           "routerLink": "/usit/email-extraction-list"
         }
       ]
+    },
+    {
+      "text": "Talent Pool",
+      "icon": "business_center",
+      "routerLink": "/usit/linkedinprofiles"
     },
     {
       "text": "Talent Acquisition",

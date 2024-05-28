@@ -50,6 +50,9 @@ import { LeaveOfAbsenceComponent } from './components/people/leave-of-absence/le
 import { TerminatedComponent } from './components/people/terminated/terminated.component';
 import { KnownVendorContactsComponent } from './components/vendor-management/known-vendor-contacts/known-vendor-contacts.component';
 import { BanterReportComponent } from './components/reports/banter-report/banter-report.component';
+import { ConsultantSubmissionsComponent } from './components/consultant-components/consultant-submissions/consultant-submissions.component';
+import { ConsultantInterviewsComponent } from './components/consultant-components/consultant-interviews/consultant-interviews.component';
+import { ConsultantOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-openreqs.component';
 // import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
 
 const routes: Routes = [
@@ -296,6 +299,15 @@ const routes: Routes = [
   { 
     path: 'banter-report', component: BanterReportComponent,
   },
+  { 
+    path: 'submissions', component: ConsultantSubmissionsComponent,
+  },
+  { 
+    path: 'interviews', component: ConsultantInterviewsComponent,
+  },
+  { 
+    path: 'open-requirements', component: ConsultantOpenreqsComponent,
+  }
 
 ];
 

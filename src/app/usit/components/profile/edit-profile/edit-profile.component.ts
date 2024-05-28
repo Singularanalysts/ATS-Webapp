@@ -204,7 +204,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
           Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
         ],
       ],
-      contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
+      contactnumber: [consultantData ? consultantData.contactnumber : ''],
       linkedin: [consultantData ? consultantData.linkedin : ''],
       projectavailabity: [
         consultantData ? consultantData.projectavailabity : '',
@@ -249,6 +249,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
        */
       addedby: localStorage.getItem('userid'),
     });
+
+    if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
+      this.clrValidators();
+    }
 
     if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
       // console.log(consultantData.technology);
@@ -442,9 +446,16 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     // });
 
     const priority = this.consultantForm.get('priority');
-    if (this.flag == 'sales' || this.flag == 'presales') {
+    console.log(this.role);
+    
+    if (this.flag == 'sales') {
       priority.setValidators(Validators.required);
       this.consultantForm.get('requirements')?.patchValue(null);
+    } else if(this.flag=='presales' && this.role !== 'Employee') {
+      priority.setValidators(Validators.required);
+      this.consultantForm.get('requirements')?.patchValue(null);
+    }else if(this.flag=='presales' && this.role === 'Employee') {
+      priority.clearValidators();
     } else {
       priority.clearValidators();
     }
@@ -457,6 +468,18 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   //     this.autoskills = response.data;
   //   });
   // }
+
+  clrValidators() {
+    // Loop through all controls in the form
+    Object.keys(this.consultantForm.controls).forEach(key => {
+      const control = this.consultantForm.get(key);
+      // Clear validators for each control
+      control.clearValidators();
+      // Update value and validity
+      control.updateValueAndValidity();
+    });
+  }
+
   techskills(option: any) {
     // console.log(option);
     const newVal = option.id;

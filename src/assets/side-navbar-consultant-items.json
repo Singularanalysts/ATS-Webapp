@@ -15,8 +15,29 @@
     "routerLink": "/usit/profile"
   },
   {
-    "text": "Portal Requirements",
+    "text": "Job Requirements",
     "icon": "group",
-    "routerLink": "/usit/portalreqs"
+    "children": [
+      {
+        "text": "Contract",
+        "icon": "groups",
+        "routerLink": "/usit/open-requirements"
+      },
+      {
+        "text": "Full Time",
+        "icon": "groups",
+        "routerLink": "/usit/full-time-requirements"
+      }
+    ]
+  },
+  {
+    "text": "Submissions",
+    "icon": "assignment",
+    "routerLink": "/usit/submissions"
+  },
+  {
+    "text": "Interviews",
+    "icon": "chat_bubble_outline",
+    "routerLink": "/usit/interviews"
   }
 ]

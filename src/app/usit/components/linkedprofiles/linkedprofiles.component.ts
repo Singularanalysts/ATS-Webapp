@@ -8,6 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-linkedprofiles',
@@ -18,7 +19,8 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTabsModule
   ],
   templateUrl: './linkedprofiles.component.html',
   styleUrls: ['./linkedprofiles.component.scss']

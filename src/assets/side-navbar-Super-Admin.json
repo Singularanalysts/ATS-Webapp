@@ -195,6 +195,37 @@
       ]
     },
     {
+      "text": "OnBoarding",
+      "icon": "business",
+      "children": [
+        {
+          "text": "Employement Contract",
+          "icon": "assignment_turned_in",
+          "routerLink": "/usit/dom-requirements"
+        },
+        {
+          "text": "Tax Documents",
+          "icon": "person_search",
+          "routerLink": "/usit/dom-consultants"
+        },
+        {
+          "text": "Offer Benefits Package",
+          "icon": "assignment",
+          "routerLink": "/usit/dom-submission"
+        },
+        {
+          "text": "Set Up Payroll",
+          "icon": "chat_bubble_outline",
+          "routerLink": "/usit/dom-interview"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/dom-closures"
+        }
+      ]
+    },
+    {
       "text": "Open Requirements",
       "icon": "work",
       "children": [
@@ -209,16 +240,16 @@
           "routerLink": "/usit/rssfeed"
         },
         {
-          "text": "LinkedIn Profiles",
-          "icon": "business_center",
-          "routerLink": "/usit/linkedinprofiles"
-        },
-        {
           "text": "Email Extraction",
           "icon": "business_center",
           "routerLink": "/usit/email-extraction-list"
         }
       ]
+    },
+    {
+      "text": "Talent Pool",
+      "icon": "business_center",
+      "routerLink": "/usit/linkedinprofiles"
     },
     {
       "text": "Talent Acquisition",

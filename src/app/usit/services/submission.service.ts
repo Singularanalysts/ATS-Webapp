@@ -68,4 +68,8 @@ export class SubmissionService {
   getVendorById(id: number) {
     return this.apiServ.get("vms/vendor/vendor/" + id);
   }
+
+  public getConsultantSubmissionDataPagination(data: any) {
+    return this.apiServ.post("submission/getEmployeeSubmissions", data);
+  }
 }

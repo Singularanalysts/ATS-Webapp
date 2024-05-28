@@ -69,4 +69,8 @@ export class OpenreqService {
   emailEXtractionByPaginationSortandFilter(data: any) {
     return this.http.post("mail/read", data);
   }
+
+  getConsultantOpenReqsByPaginationSortandFilter(data: any) {
+    return this.http.post("openreqs/dice/allEmpAllReqs", data);
+  }
 }

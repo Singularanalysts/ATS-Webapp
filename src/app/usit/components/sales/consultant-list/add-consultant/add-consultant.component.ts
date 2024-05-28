@@ -253,6 +253,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       addedby: localStorage.getItem('userid'),
     });
 
+    if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
+      this.clrValidators();
+    }
+
     if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
       // console.log(consultantData.technology);
 
@@ -443,15 +447,31 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     //   this.consultantForm.get('relocation').updateValueAndValidity();
     //   this.consultantForm.get('experience').updateValueAndValidity();
     // });
-
     const priority = this.consultantForm.get('priority');
-    if (this.flag == 'sales' || this.flag == 'presales') {
+
+    if (this.flag == 'sales') {
       priority.setValidators(Validators.required);
       this.consultantForm.get('requirements')?.patchValue(null);
+    } else if(this.flag=='presales' && this.role !== 'Employee') {
+      priority.setValidators(Validators.required);
+      this.consultantForm.get('requirements')?.patchValue(null);
+    }else if(this.flag=='presales' && this.role === 'Employee') {
+      priority.clearValidators();
     } else {
       priority.clearValidators();
     }
     priority.updateValueAndValidity();
+  }
+
+  clrValidators() {
+    // Loop through all controls in the form
+    Object.keys(this.consultantForm.controls).forEach(key => {
+      const control = this.consultantForm.get(key);
+      // Clear validators for each control
+      control.clearValidators();
+      // Update value and validity
+      control.updateValueAndValidity();
+    });
   }
 
   // techskills(event: any) {
