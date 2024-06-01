@@ -8,6 +8,8 @@ import { AddconsultantComponent } from '../sales/consultant-list/add-consultant/
 import { DialogService } from 'src/app/services/dialog.service';
 import { QualificationService } from '../../services/qualification.service';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { FileManagementService } from '../../services/file-management.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +26,8 @@ export class ProfileComponent implements OnInit {
 
   private consultantServ = inject(ConsultantService);
   private dialogServ = inject(DialogService);
-  private qualificationServ = inject(QualificationService)
+  private qualificationServ = inject(QualificationService);
+  private fileService = inject(FileManagementService);
   profiledata: any;
   qualificationId: any;
 
@@ -33,9 +36,9 @@ export class ProfileComponent implements OnInit {
     this.consultantServ.getProfile(userid).subscribe((res: any) => {
     this.profiledata = res.data;
     this.qualificationId = res.data.qualification
-    this.qualificationServ.getQualificationById(this.qualificationId).subscribe((res: any) => {
-      this.profiledata.qualification = res.data.name;
-    })
+    // this.qualificationServ.getQualificationById(this.qualificationId).subscribe((res: any) => {
+    //   this.profiledata.qualification = res.data.name;
+    // })
     })
   }
 
@@ -80,7 +83,7 @@ export class ProfileComponent implements OnInit {
       flag: this.profiledata.consultantflg
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '500px';
+    dialogConfig.width = '700px';
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'edit-consultant';
@@ -103,6 +106,29 @@ export class ProfileComponent implements OnInit {
         })
       }
     });
+  }
+
+  downloadfile(id: number, filename: string, flg: string) {
+
+    var items = filename.split(".");
+    this.fileService
+      .downloadconresume(id, flg)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          // Don't set download attribute
+          //a.download = filename;
+          a.click();
+        }
+        else {
+          saveAs(blob, filename)
+        }
+      }
+      );
+
   }
 
 }

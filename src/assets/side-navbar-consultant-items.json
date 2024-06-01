@@ -1,4 +1,9 @@
-[
+[  
+  {
+    "text": "View Profile",
+    "icon": "person",
+    "routerLink": "/usit/profile"
+  },
   {
     "text": "Dashboard",
     "icon": "dashboard",
@@ -10,22 +15,17 @@
     "routerLink": "/usit/search"
   },
   {
-    "text": "View Profile",
-    "icon": "person",
-    "routerLink": "/usit/profile"
-  },
-  {
     "text": "Job Requirements",
-    "icon": "group",
+    "icon": "business_center",
     "children": [
       {
         "text": "Contract",
-        "icon": "groups",
+        "icon": "library_books",
         "routerLink": "/usit/open-requirements"
       },
       {
         "text": "Full Time",
-        "icon": "groups",
+        "icon": "library_books",
         "routerLink": "/usit/full-time-requirements"
       }
     ]

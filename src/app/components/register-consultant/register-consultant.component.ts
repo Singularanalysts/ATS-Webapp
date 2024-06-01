@@ -14,7 +14,6 @@ import {
   ISnackBarData,
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
-import { UserManagementService } from 'src/app/services/user-management.service';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { FileManagementService } from 'src/app/usit/services/file-management.service';
 
@@ -26,7 +25,6 @@ import { FileManagementService } from 'src/app/usit/services/file-management.ser
 export class RegisterConsultantComponent implements OnInit {
   hidePassword = true;
   hideConPassword = true;
-  private userManagementServ = inject(UserManagementService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private snackBarServ = inject(SnackBarService);
@@ -71,7 +69,7 @@ export class RegisterConsultantComponent implements OnInit {
       otp: ['', Validators.required],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      personalcontactnumber: ['', [Validators.required]],
+      contactnumber: ['', [Validators.required]],
       password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
       confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
       currentlocation: ['', Validators.required],
@@ -80,11 +78,6 @@ export class RegisterConsultantComponent implements OnInit {
       technology: ['', Validators.required],
       skills: ['', Validators.required],
     });
-    // , { validator: this.confirmPasswordValidator });
-
-    // this.form.get('password')!.valueChanges.subscribe(() => {
-    //   this.form.get('confirmPassword')!.updateValueAndValidity();
-    // }
   }
   
   emailValidator(control: AbstractControl) {
@@ -168,6 +161,7 @@ export class RegisterConsultantComponent implements OnInit {
         (response: any) => {
           if(response.status = "success") {
             this.showErrorNotification(response.message, 'success');
+            this.onFileSubmit(response.data);
             this.router.navigate(['/login']);
           }
         }
@@ -204,7 +198,6 @@ export class RegisterConsultantComponent implements OnInit {
       const hasSpecialCharacter = /[!@#$%^&*]/.test(value);
 
       if (!hasUppercase || !hasNumber || !hasSpecialCharacter) {
-        //return { pattern: true };
         control.setErrors({ pattern: true })
         return { pattern: true };
       }
@@ -253,14 +246,6 @@ export class RegisterConsultantComponent implements OnInit {
     return filteredTechnologies;
   }
 
-  techskills(option: any) {
-    const newVal = option.id;
-    this.techid = option.id;
-    this.consultantServ.getregskills(newVal).subscribe((response: any) => {
-      this.form.get('skills').setValue(response.data);
-    });
-  }
-
   proceedToStep2() {
     this.step1 = false;
     this.step2 = true;
@@ -279,6 +264,17 @@ export class RegisterConsultantComponent implements OnInit {
     this.resumeupload = event.target.files[0];
     const file = event.target.files[0];
     const fileSizeInKB = Math.round(file.size / 1024);
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (fileExtension === 'doc') {
+      this.flg = false;
+      this.resume.nativeElement.value = '';
+      this.dataToBeSentToSnackBar.message = 'DOC files are not allowed. Please upload a PDF or DOCX file.';
+      this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      this.resumeupload = null;
+      return;
+    }
     var items = file.name.split(".");
     const str = items[0];
     if (str.length > 20) {
@@ -290,15 +286,22 @@ export class RegisterConsultantComponent implements OnInit {
     }
     else {
       this.resumeError = false;
+      const resumeData = new FormData();
+      resumeData.append('resume', file, file.name);
+      this.fileService.parseResume(resumeData).subscribe({
+        next: (response: any) => {
+          this.form.get('skills')!.setValue(response.body.data);
+        },
+        error: (error: any) => {
+          console.error('Error parsing resume', error);
+        }
+      });      
       this.flg = true;
     }
   }
 
   onFileSubmit(id: number) {
     const formData = new FormData();
-    for (var i = 0; i < this.uploadedfiles.length; i++) {
-      formData.append('files', this.uploadedfiles[i]);
-    }
 
     if (this.resumeupload != null) {
       formData.append('resume', this.resumeupload, this.resumeupload.name);

@@ -4,7 +4,7 @@
       <img src="assets/images/singular-logo.png" alt="Logo">
     </div>
     <mat-card-header class="header-no-padding">
-      <mat-card-title>Consultant Registration</mat-card-title>
+      <mat-card-title>Employee Registration</mat-card-title>
     </mat-card-header>
 
     <mat-card-content class="no-padding">
@@ -59,23 +59,16 @@
             <mat-label>Personal Contact Number </mat-label>
             <ngx-mat-input-tel 
                 [onlyCountries]="['in','us']" matInput class="intl-input"
-                formControlName="personalcontactnumber" enablePlaceholder
+                formControlName="contactnumber" enablePlaceholder
                 enableSearch
                 enableSearchplaceholder="Search..."
                 describedBy="phoneInput" required
                 #phone
                 name="contactnumber" id="intlInput" (keypress)="onlyNumberKey($event)"> 
             </ngx-mat-input-tel>
-            <mat-error *ngIf="form.get('personalcontactnumber').errors?.required && !form.get('personalcontactnumber').errors?.validatePhoneNumber">Required Field</mat-error>
-            <mat-error *ngIf="form.get('personalcontactnumber').errors?.required && form.get('personalcontactnumber').errors?.validatePhoneNumber">Invalid Number</mat-error>
+            <mat-error *ngIf="form.get('contactnumber').errors?.required && !form.get('contactnumber').errors?.validatePhoneNumber">Required Field</mat-error>
+            <mat-error *ngIf="form.get('contactnumber').errors?.required && form.get('contactnumber').errors?.validatePhoneNumber">Invalid Number</mat-error>
           </mat-form-field>	
-
-          <!-- <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Immigration Status</mat-label>
-            <input matInput formControlName="immigrationstatus" />
-            <mat-error *ngIf="form.get('immigrationstatus')!.hasError('required')">Immigration Status is
-              required</mat-error>
-          </mat-form-field> -->
 
           <mat-form-field appearance="outline" class="full-width" *ngIf="details">
             <mat-label> Create Password</mat-label>
@@ -120,8 +113,6 @@
         </div>
 
         <div *ngIf="step2">
-
-          <!-- Resume Upload -->
           <mat-form-field appearance="outline" class="upload">
             <mat-label for="resume">Resume</mat-label>
             <div class="upload-inp-container">
@@ -160,31 +151,22 @@
             <mat-error *ngIf="form.get('experience')!.hasError('required')">Experience is required</mat-error>
           </mat-form-field>
 
-          <!-- <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Technology</mat-label>
-            <input matInput formControlName="experience" />
-            <mat-error *ngIf="form.get('experience')!.hasError('required')">Technology is required</mat-error>
-          </mat-form-field> -->
-
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Select Technology</mat-label>
             <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp">
             <mat-autocomplete #techAutoCmp="matAutocomplete">
-              <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techskills(option)"
+              <mat-option *ngFor="let option of (searchTechOptions$ | async)"
                 [value]="option.technologyarea">
                 {{ option.technologyarea }}
               </mat-option>
             </mat-autocomplete>
-            <!-- <button matSuffix mat-icon-button
-                (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button> -->
             <mat-error *ngIf="form.get('technology').hasError('required')">Technology is Required</mat-error>
           </mat-form-field>
 
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Skills</mat-label>
-            <input matInput formControlName="skills" />
+            <textarea matInput formControlName="skills" rows="5" placeholder="Skill Set"></textarea>
             <mat-error *ngIf="form.get('skills')!.hasError('required')">Skills is required</mat-error>
           </mat-form-field>
 

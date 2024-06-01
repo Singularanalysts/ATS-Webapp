@@ -89,4 +89,7 @@ export class FileManagementService {
     return this.http.post(this.apiServ.apiUrl +`vms/htProviders/excelUpload/${id}`, formData, {observe: "response"});
   }
 
+  parseResume(formData:any) {
+    return this.http.post(this.apiServ.apiUrl +`auth/resume/parse`, formData, {observe: "response"});
+  }
 }

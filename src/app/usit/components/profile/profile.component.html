@@ -14,6 +14,14 @@
         <div class="job-title">
             {{ profiledata?.position }}
         </div>
+        <div style="display: flex;  align-items: center; justify-content: center; padding: 0;">
+            <div style="font-weight: bold; color: rgb(3, 67, 204);" [ngStyle]="{'cursor': profiledata?.resume ? 'pointer' : 'default'}" (click)="downloadfile(profiledata.consultantid,profiledata.resume,'resume')"> {{ profiledata?.resume ? profiledata?.resume : 'Upload Resume' }}</div>
+            <div>
+                <button mat-icon-button (click)="editDetails(profiledata, 'Upload Resume', 'Resume')">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
         
         <div class="skills">
             <h3 style="text-align: left; font-weight: bold;">Skills</h3>

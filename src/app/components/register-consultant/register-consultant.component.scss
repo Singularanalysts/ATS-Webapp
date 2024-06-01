@@ -70,7 +70,6 @@
   
   mat-card-header{
     display: block;
-    // margin-bottom: 30px;
   }
   
   .create-account{
@@ -99,16 +98,12 @@
     font-size: 12px;
   }
   
-  // .mat-form-field-appearance-outline .mat-form-field-outline {
-  //   color: rgba(0, 0, 0, 1);
-  // }
-  
   .custom-tabs .mat-tab-header {
-    background-color: red; /* Set your desired background color */
+    background-color: red;
   }
   
   .custom-tabs .mat-tab-label {
-    color: white; /* Set your desired text color */
+    color: white;
   }
 
   /**** TEL INPUT   - STARTS ****/
@@ -124,7 +119,6 @@ input:not(.country-search) {
 
 ::ng-deep input .country-search {
   width: 90%;
-  /* height: 34px; */
   border: none;
   border-bottom: 1px solid #f2f0f0;
   font-size: 14px;

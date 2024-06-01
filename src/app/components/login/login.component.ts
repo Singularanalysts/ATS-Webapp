@@ -121,11 +121,7 @@ export class LoginComponent implements OnInit {
           const loggedInUserData = result.data;
           this.department = result.data.department;
           this.permissionServ.login(loggedInUserData).subscribe((data) => {
-            if (this.department == 'Consultant') {
-              this.router.navigate(['usit/search']);
-            } else {
-              this.router.navigate(['usit/dashboard']);
-            }
+            this.router.navigate(['usit/dashboard']);
             const message = 'You have logged in successfully!';
             this.showErroNotification(message, 'success');
           });

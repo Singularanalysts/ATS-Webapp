@@ -103,6 +103,27 @@
         <input matInput formControlName="yop" maxlength="4" (keypress)="onlyNumberKey($event)">
       </mat-form-field>
 
+      <mat-form-field class="upload" *ngIf = "this.data.type === 'Resume'">
+        <mat-label for="resume">Resume</mat-label>
+        <div class="upload-container">
+          <input matInput readonly name="resumeName" class="file-input"
+            [value]="resumeupload ? resumeupload.name : 'No file chosen'" />
+          <label for="resume" class="browse-button-label">
+            <button type="button" mat-icon-button (click)="resume.click()"><mat-icon>upload_file</mat-icon></button>
+          </label>
+          <input type="file" #resume id="resume" (change)="uploaddoc($event)" name="resumeUploadFile"
+            accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            style="display: none;" />
+        </div>
+      </mat-form-field>
+
+      <!-- Skill Set -->
+      <mat-form-field>
+        <mat-label>Skills</mat-label>
+        <textarea matInput formControlName="skills" rows="10" placeholder="Skill Set"></textarea>
+        <!-- <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint> -->
+      </mat-form-field>
+
     </form>
     <div class="actions">
       <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>

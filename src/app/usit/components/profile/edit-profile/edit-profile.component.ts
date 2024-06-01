@@ -255,13 +255,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     }
 
     if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
-      // console.log(consultantData.technology);
-
       this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
         (technology: any) => {
           if (technology && technology.data) {
             this.techid = technology.data[0].id;
-            console.log(technology.data[0].technologyarea);
             this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
           }
         },
@@ -446,7 +443,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     // });
 
     const priority = this.consultantForm.get('priority');
-    console.log(this.role);
     
     if (this.flag == 'sales') {
       priority.setValidators(Validators.required);
@@ -481,7 +477,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   }
 
   techskills(option: any) {
-    // console.log(option);
     const newVal = option.id;
     this.techid = option.id;
     this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
@@ -532,7 +527,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     // if (this.flag != 'presales') {
     //   this.consultantForm.get("status").setValue("Active");
     // }
-   // console.log(this.techid);
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
     if (this.data.actionName === "edit-consultant") {
@@ -631,7 +625,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   }
   gettech() {
     // this.consultantServ.gettechDropDown().subscribe((response: any) => {
-    //   console.log(response.data);
     // });
     // this.consultantServ.gettech().subscribe((response: any) => {
     //   this.techdata = response.data;
@@ -639,7 +632,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     this.searchTechOptions$ = this.consultantServ.gettechDropDown(0).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getTechOptionsForAutoComplete(resp);
-        // console.log(resp);
       }
     }));
     //this.searchTechOptions$.subscribe()
@@ -647,7 +639,6 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
   getTechOptionsForAutoComplete(data: any) {
     this.technologyOptions = data;
-    // console.log(data);
     this.searchTechOptions$ =
       this.consultantForm.controls.technology.valueChanges.pipe(
         startWith(''),
@@ -658,17 +649,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   }
   techid!: any;
   private _filterOptions(value: any, options: any[]): any[] {
-    ///console.log(options);
     const filterValue = (value ? value.toString() : '').toLowerCase();
-    // console.log(filterValue);
     const filteredTechnologies = options.filter((option: any) =>
       option.technologyarea.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredTechnologies);
     // this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
     if (filteredTechnologies.length === 1) {
       this.techid = filteredTechnologies[0].id;
-     // console.log(this.techid);
     }
     return filteredTechnologies;
   }
@@ -759,23 +746,76 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   @ViewChild('resume')
   resume: any = ElementRef;
   resumeupload!: any;
+  // uploaddoc(event: any) {
+  //   this.resumeupload = event.target.files[0];
+  //   const file = event.target.files[0];
+  //   const fileSizeInKB = Math.round(file.size / 1024);
+  //   if (fileSizeInKB > 4300) {
+  //     this.flg = false;
+  //     this.resume.nativeElement.value = '';
+  //     this.dataToBeSentToSnackBar.message = 'Resume size should be less than 2 mb';
+  //     this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+  //     this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+
+  //     return;
+  //   } else {
+  //     const resumeData = new FormData();
+
+  //     if (this.resumeupload != null) {
+  //       resumeData.append('file', this.resumeupload, this.resumeupload.name);
+  //       // formData.append("files",this.resumeupload,this.resumeupload.name);
+  //     }
+
+  //     this.fileService.parseResume(resumeData).subscribe((response: any) => {
+  //       this.consultantForm.get('skills')!.setValue(response.body.data);
+  //     })
+  //     this.message = '';
+  //     this.flg = true;
+  //   }
+  // }
+
   uploaddoc(event: any) {
     this.resumeupload = event.target.files[0];
-    const file = event.target.files[0];
+    const file = this.resumeupload;
+    if (!file) return;
+
     const fileSizeInKB = Math.round(file.size / 1024);
-    if (fileSizeInKB > 4300) {
+
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (fileExtension === 'doc') {
       this.flg = false;
       this.resume.nativeElement.value = '';
-      this.dataToBeSentToSnackBar.message = 'Resume size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'DOC files are not allowed. Please upload a PDF or DOCX file.';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-
+      this.resumeupload = null;
       return;
+    }
+
+    if (fileSizeInKB > 1024) {
+      this.flg = false;
+      this.resume.nativeElement.value = '';
+      this.dataToBeSentToSnackBar.message = 'Resume size should be less than 1 MB';
+      this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
     } else {
-      this.message = '';
+      const resumeData = new FormData();
+      resumeData.append('resume', file, file.name);
+
+      this.fileService.parseResume(resumeData).subscribe(
+          (response: any) => {
+            this.consultantForm.get('skills')!.setValue(response.body.data);
+          },
+          (error: any) => {
+            // Handle error here if needed
+            console.error('Error parsing resume', error);
+          }
+      );
       this.flg = true;
     }
   }
+  
   @ViewChild('h1b') h1b: any = ElementRef;
   h1bupload!: any;
   uploadH1B(event: any) {

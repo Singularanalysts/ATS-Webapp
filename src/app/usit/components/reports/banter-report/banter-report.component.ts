@@ -57,6 +57,7 @@ export class BanterReportComponent {
   eddate!: any;
   hiddenflg = 'main';
   router: any;
+  employees: any;
   constructor(
     private formBuilder: FormBuilder,
     private service: ReportsService,
@@ -112,6 +113,7 @@ export class BanterReportComponent {
   field = 'empty';
   isRejected: boolean = false;
   payload: any;
+  departmentSelected: boolean = false;
 
   ngOnInit() {
     this.department = localStorage.getItem('department');
@@ -119,7 +121,23 @@ export class BanterReportComponent {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       groupby: ['', Validators.required],
+      employee: [],
     });
+  }
+
+  onDepartmentChange(department: any): void {
+    console.log(department.value);
+    
+    this.departmentSelected = true;
+    this.sourcingreport.get('employee')?.reset();
+    this.sourcingreport.get('employee')?.enable();
+    
+    if (department) {
+      this.service.getEmployeeByDeparment(department.value).subscribe((res: any) => {
+        console.log(res.data);
+        this.employees = res.data;
+      })
+    }
   }
 
   generateSerialNumber(index: number): number {
@@ -150,11 +168,13 @@ export class BanterReportComponent {
     relievingDateFormControl?.setValue(formattedRelievingDate);
 
     const flag = this.sourcingreport.get('groupby')!.value;
+    const empid = this.sourcingreport.get('employee')!.value;
 
     this.payload = {
       endDate: formattedRelievingDate,
       startDate: formattedJoiningDate,
       flg: flag,
+      id: empid
     };
 
     this.service.getBanterReport(this.payload).subscribe((res: any) => {

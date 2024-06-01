@@ -8,7 +8,7 @@
       <form [formGroup]="sourcingreport" (ngSubmit)="onSubmit()">
         <mat-card>
           <mat-card-content
-            style="display: flex; align-items: center; justify-content: center"
+            style="display: flex; align-items: center; justify-content: center; gap: 10px"
           >
             <mat-form-field color="accent">
               <mat-label>Choose Starting Date</mat-label>
@@ -28,7 +28,6 @@
                 >Starting Date is required</mat-error
               >
             </mat-form-field>
-            &nbsp;&nbsp;
   
             <mat-form-field color="accent">
               <mat-label>Choose Ending Date</mat-label>
@@ -48,11 +47,10 @@
                 >Ending Date is required</mat-error
               >
             </mat-form-field>
-            &nbsp;&nbsp;
   
             <mat-form-field>
               <mat-label>Select Department</mat-label>
-              <mat-select formControlName="groupby">
+              <mat-select formControlName="groupby" (selectionChange)="onDepartmentChange($event)">
                 <mat-option value="Bench sales">Bench Sales</mat-option>
                 <mat-option value="Recruiting">Recruiting</mat-option>
               </mat-select>
@@ -62,13 +60,21 @@
               >
             </mat-form-field>
 
-            <button mat-raised-button color="primary">Submit</button>&nbsp;
+            <mat-form-field appearance="fill">
+              <mat-label>Select Employee</mat-label>
+              <mat-select formControlName="employee">
+                <mat-option *ngFor="let employee of employees" [value]="employee[0]">
+                  {{ employee[1] }}
+                </mat-option>
+              </mat-select> 
+            </mat-form-field>
+
+            <button mat-raised-button color="primary">Submit</button>
             <button mat-raised-button color="warn" (click)="reset()">Reset</button
-            >&nbsp;
+            >
 
             <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
             (click)="excelImport()">Excel Export</button>
-            &nbsp;&nbsp;
           </mat-card-content>
         </mat-card>
       </form>
