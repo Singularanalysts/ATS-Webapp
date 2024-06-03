@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { CompanyService } from '../../services/company.service';
@@ -18,6 +18,9 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { Subject, takeUntil } from 'rxjs';
 import { Observable } from 'rxjs';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+
 @Component({
   selector: 'app-email-extraction',
   standalone: true,
@@ -27,8 +30,10 @@ import { Observable } from 'rxjs';
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSortModule
   ],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
   templateUrl: './email-extraction.component.html',
   styleUrls: ['./email-extraction.component.scss']
 })
@@ -73,10 +78,11 @@ export class EmailExtractionComponent implements OnInit {
     panelClass: ['custom-snack-success'],
   };
   private snackBarServ = inject(SnackBarService);
+  entity: any;
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
-    this.readAll();
+    this.getAll();
   }
   dataTobeSentToSnackBarService: ISnackBarData = {
     message: '',
@@ -88,6 +94,7 @@ export class EmailExtractionComponent implements OnInit {
   };
   private dialogServ = inject(DialogService);
   protected privilegeServ = inject(PrivilegesService);
+  
   readAll(pagIdx = 1) {
 
     this.service.fetch(pagIdx, this.itemsPerPage, this.field).subscribe(
@@ -103,6 +110,69 @@ export class EmailExtractionComponent implements OnInit {
     )
   }
 
+  getAll(pagIdx = 1) {
+    const pagObj = {
+      pageNumber: pagIdx,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    }
+    this.service.emailEXtractionByPaginationSortandFilter(pagObj)
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        (response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data = response.data.content;
+          this.totalItems = response.data.totalElements;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      )
+  }
+
+
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+      }
+
+      return this.service.emailEXtractionByPaginationSortandFilter(pagObj).subscribe(
+        ((response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
+      );
+    }
+    return  this.getAll(this.currentPageIndex + 1)
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
+  }
+
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
@@ -113,11 +183,8 @@ export class EmailExtractionComponent implements OnInit {
     this.dataSource.filter = event.target.value;
   }
 
-  onSort(event: any) {
 
-  }
-
-  applyFilter(event : any) {
+  applyFilter1(event : any) {
     const keyword = event.target.value;
     this.field = keyword;
     if (keyword != '') {
@@ -143,7 +210,7 @@ export class EmailExtractionComponent implements OnInit {
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      this.readAll(event.pageIndex + 1)
+      this.getAll(event.pageIndex + 1);
     }
     return;
   }
