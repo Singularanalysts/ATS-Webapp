@@ -238,7 +238,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         } else {
-          this.dataToBeSentToSnackBar.message = 'You have Already applied fot this job';
+          this.dataToBeSentToSnackBar.message = 'You have Already applied for this job';
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
