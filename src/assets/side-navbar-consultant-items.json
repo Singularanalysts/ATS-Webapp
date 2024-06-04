@@ -31,6 +31,11 @@
     ]
   },
   {
+    "text": "Applied Jobs",
+    "icon": "bookmark_border",
+    "routerLink": "/usit/applied-jobs"
+  },
+  {
     "text": "Submissions",
     "icon": "assignment",
     "routerLink": "/usit/submissions"

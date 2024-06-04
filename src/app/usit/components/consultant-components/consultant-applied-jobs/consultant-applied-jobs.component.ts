@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
@@ -15,10 +15,10 @@ import { RecruInfoComponent } from '../../openreqs/recru-info/recru-info.compone
 import { JobDescriptionComponent } from '../../openreqs/job-description/job-description.component';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
-import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
-  selector: 'app-consultant-openreqs',
+  selector: 'app-consultant-applied-jobs',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,10 +33,11 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
     MatSortModule,
     MatTabsModule
   ],
-  templateUrl: './consultant-openreqs.component.html',
-  styleUrls: ['./consultant-openreqs.component.scss'],
+  templateUrl: './consultant-applied-jobs.component.html',
+  styleUrls: ['./consultant-applied-jobs.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
-export class ConsultantOpenreqsComponent implements OnInit {
+export class ConsultantAppliedJobsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -45,8 +46,8 @@ export class ConsultantOpenreqsComponent implements OnInit {
     'category_skill',
     'employment_type',
     'job_location',
-    // 'source',
-    'Action'
+    'source',
+    // 'Status'
   ];
   // pagination code
   page: number = 1;
@@ -68,55 +69,11 @@ export class ConsultantOpenreqsComponent implements OnInit {
   dialog: any;
   private dialogServ = inject(DialogService);
   @ViewChild(MatSort) sort!: MatSort;
-  private snackBarServ = inject(SnackBarService);
-  dataToBeSentToSnackBar: ISnackBarData = {
-    message: '',
-    duration: 2500,
-    verticalPosition: 'top',
-    horizontalPosition: 'center',
-    direction: 'above',
-    panelClass: ['custom-snack-success'],
-  };
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getAllData();
   }
-
-  onTabChanged(event: MatTabChangeEvent) {
-    console.log(event);
-    
-    // this.getAllData(event.tab.textLabel.toLowerCase());
-  }
-
-  onSelectionChange(event: MatSelectChange) {
-    this.source = event.value;
-    this.getAllData();
-  }
-
-  openVendorPopup(vendor: string): void {
-    this.dialog.open({
-      data: { vendor: vendor },
-    });
-  }
-
-  goToReqInfo(element: any) {
-    const actionData = {
-      title: `${element.vendor}`,
-      id: element.vendor,
-      isExist: element.isexist,
-      actionName: 'req-info',
-    };
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '62dvw';
-    dialogConfig.disableClose = false;
-    dialogConfig.panelClass = 'req-info';
-    dialogConfig.data = actionData;
-
-    this.dialogServ.openDialogWithComponent(RecruInfoComponent, dialogConfig);
-  }
-  
 
   getAllData(pagIdx = 1) {
     const pagObj = {
@@ -124,21 +81,24 @@ export class ConsultantOpenreqsComponent implements OnInit {
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      userid: this.userid,
+      applied_by: this.userid,
       keyword: this.field
     }
     this.openServ
-      .getConsultantOpenReqsByPaginationSortandFilter(
+      .appliedJobs(
         pagObj
       )
-      .subscribe((response: any) => {
-        this.dataSource.data = response.data.content;
-        // this.isCompanyExist = response.data.content[0].isexist;
-        this.totalItems = response.data.totalElements;
-        // for serial-num {}
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = this.generateSerialNumber(i);
-        });
+      .subscribe({
+        next: (response: any) => {
+          this.dataSource.data = response.data.content;
+          this.totalItems = response.data.totalElements;
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        },
+        error: (err: any) => {
+          
+        }
       });
   }
 
@@ -156,12 +116,12 @@ export class ConsultantOpenreqsComponent implements OnInit {
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      userid: this.userid,
+      applied_by: this.userid,
       keyword: this.field
     }
     if (keyword != '') {
       return this.openServ
-        .getConsultantOpenReqsByPaginationSortandFilter(
+        .appliedJobs(
           pagObj
         )
         .subscribe((response: any) => {
@@ -223,32 +183,5 @@ export class ConsultantOpenreqsComponent implements OnInit {
       JobDescriptionComponent,
       dialogConfig
     );
-  }
-
-  apply(data: any) {
-    const applyObj = {
-      ...data,
-      applied_by: this.userid,
-      jobid: data.id
-    }
-    this.openServ.applyJob(applyObj).subscribe({
-      next: (response: any) => {
-        if(response.status === 'success') {
-          this.dataToBeSentToSnackBar.message = 'You have successfully applied to the job';
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        } else {
-          this.dataToBeSentToSnackBar.message = 'You have Already applied fot this job';
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        }
-      },
-      error: (err: any) => {
-        this.dataToBeSentToSnackBar.message = err?.message;
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-      }
-    })
-
   }
 }

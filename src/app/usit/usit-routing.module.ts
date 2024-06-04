@@ -53,6 +53,8 @@ import { BanterReportComponent } from './components/reports/banter-report/banter
 import { ConsultantSubmissionsComponent } from './components/consultant-components/consultant-submissions/consultant-submissions.component';
 import { ConsultantInterviewsComponent } from './components/consultant-components/consultant-interviews/consultant-interviews.component';
 import { ConsultantOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-openreqs.component';
+import { ConsultantAppliedJobsComponent } from './components/consultant-components/consultant-applied-jobs/consultant-applied-jobs.component';
+import { OpenreqsJobApplicationsComponent } from './components/openreqs-job-applications/openreqs-job-applications.component';
 // import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
 
 const routes: Routes = [
@@ -307,6 +309,12 @@ const routes: Routes = [
   },
   { 
     path: 'open-requirements', component: ConsultantOpenreqsComponent,
+  },
+  { 
+    path: 'applied-jobs', component: ConsultantAppliedJobsComponent,
+  },
+  { 
+    path: 'openreqs-job-applications', component: OpenreqsJobApplicationsComponent,
   }
 
 ];

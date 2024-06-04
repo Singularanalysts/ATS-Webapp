@@ -58,6 +58,7 @@ export class OpenreqService {
   getLeadById(id:number) {
     return this.http.get("openreqs/linked/getById/"+id);
   }
+
   deleteSender(id: number) {
     return this.http.delete("mail/delete/" + id);
   }
@@ -72,5 +73,17 @@ export class OpenreqService {
 
   getConsultantOpenReqsByPaginationSortandFilter(data: any) {
     return this.http.post("openreqs/dice/allEmpAllReqs", data);
+  }
+
+  applyJob(data: any) {
+    return this.http.post("openreqs/apply/applyJob", data);
+  }
+
+  appliedJobs(data: any) {
+    return this.http.post("openreqs/apply/appliedJobListEmp", data);
+  }
+
+  showAppliedJobToEmployer(data: any) {
+    return this.http.post("openreqs/apply/appliedJobListTeamleads", data);
   }
 }

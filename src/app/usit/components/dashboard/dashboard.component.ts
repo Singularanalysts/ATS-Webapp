@@ -246,7 +246,6 @@ export class DashboardComponent implements OnInit {
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
     }
-    console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(

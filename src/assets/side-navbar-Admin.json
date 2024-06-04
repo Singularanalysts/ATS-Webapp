@@ -209,6 +209,11 @@
       ]
     },
     {
+      "text": "Openreqs Job Applications",
+      "icon": "view_carousel",
+      "routerLink": "/usit/openreqs-job-applications"
+    },
+    {
       "text": "Talent Pool",
       "icon": "business_center",
       "routerLink": "/usit/linkedinprofiles"
