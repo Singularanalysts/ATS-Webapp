@@ -258,13 +258,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     }
 
     if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
-      // console.log(consultantData.technology);
-
       this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
         (technology: any) => {
           if (technology && technology.data) {
             this.techid = technology.data[0].id;
-            console.log(technology.data[0].technologyarea);
             this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
           }
         },
@@ -481,7 +478,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   //   });
   // }
   techskills(option: any) {
-    // console.log(option);
     const newVal = option.id;
     this.techid = option.id;
     this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
@@ -528,11 +524,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     else {
       this.isFormSubmitted = true
     }
-    // commented by kiran
-    // if (this.flag != 'presales') {
-    //   this.consultantForm.get("status").setValue("Active");
-    // }
-   // console.log(this.techid);
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
     if (this.data.actionName === "edit-consultant") {
@@ -630,24 +621,15 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
   }
   gettech() {
-    // this.consultantServ.gettechDropDown().subscribe((response: any) => {
-    //   console.log(response.data);
-    // });
-    // this.consultantServ.gettech().subscribe((response: any) => {
-    //   this.techdata = response.data;
-    // });
     this.searchTechOptions$ = this.consultantServ.gettechDropDown(0).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getTechOptionsForAutoComplete(resp);
-        // console.log(resp);
       }
     }));
-    //this.searchTechOptions$.subscribe()
   }
 
   getTechOptionsForAutoComplete(data: any) {
     this.technologyOptions = data;
-    // console.log(data);
     this.searchTechOptions$ =
       this.consultantForm.controls.technology.valueChanges.pipe(
         startWith(''),
@@ -658,17 +640,12 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
   techid!: any;
   private _filterOptions(value: any, options: any[]): any[] {
-    ///console.log(options);
     const filterValue = (value ? value.toString() : '').toLowerCase();
-    // console.log(filterValue);
     const filteredTechnologies = options.filter((option: any) =>
       option.technologyarea.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredTechnologies);
-    // this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
     if (filteredTechnologies.length === 1) {
       this.techid = filteredTechnologies[0].id;
-     // console.log(this.techid);
     }
     return filteredTechnologies;
   }

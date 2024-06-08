@@ -81,7 +81,6 @@ export class AddPurchaseOrderComponent {
    // this.initializePurchaseOrderForm(null);
 
     if (this.data.actionName === "edit-purchase-order") {
-      // console.log(this.data.purchaseOrderData)
       this.initializePurchaseOrderForm(this.data.purchaseOrderData);
       this.companySelected = this.data.purchaseOrderData.company
       if (this.data.purchaseOrderData.potype == "InWard") {
@@ -91,7 +90,6 @@ export class AddPurchaseOrderComponent {
       }
       this.purchaseOrderServ.getVendors(this.companySelected, this.poTypeSelected).subscribe(
         (response: any) => {
-          // console.log(response.data)
           this.vendordata = response.data
         }
       )
@@ -198,7 +196,6 @@ export class AddPurchaseOrderComponent {
     this.consultantPercentage = 100 - this.percentage;
     this.consultantAmount = this.hourlyRate * this.consultantPercentage / 100;
     this.vendorAMount = this.hourlyRate * this.percentage / 100;
-    // console.log(this.hourlyRate + " = " + this.percentage + " = " + this.consultantPercentage + " = " + this.consultantAmount + " = " + this.vendorAMount)
     this.purchaseOrderForm.get('payratetoconsultant').setValue(this.consultantAmount)
   }
 

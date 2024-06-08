@@ -38,7 +38,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this.getCurrentURL();
      this.currentURL = window.location.pathname;
-     //console.log(this.currentURL+" vvvv  Kiran Testing ");
     this.isUserSignedIn = this.permServ.isUserSignedin()
   }
 

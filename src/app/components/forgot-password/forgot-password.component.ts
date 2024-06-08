@@ -176,7 +176,6 @@ export class ForgotPasswordComponent implements OnInit {
         this.timeLeft--;
       }
       this.clock = transform(this.timeLeft);
-      console.log(this.clock);
     }, 1000);
   }
 

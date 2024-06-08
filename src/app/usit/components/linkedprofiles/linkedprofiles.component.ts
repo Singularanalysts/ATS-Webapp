@@ -96,7 +96,6 @@ dataToBeSentToSnackBar: ISnackBarData = {
     this.service.linkedInPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
-        console.log(response.data.content)
         this.totalItems = response.data.totalElements;
         // for serial-num {
         this.dataSource.data.map((x: any, i) => {

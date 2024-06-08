@@ -82,8 +82,6 @@ export class HotListProvidersExcelComponent implements OnInit {
           this.upload = false;
           const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
           this.excel = rows;
-          console.log(this.excel);
-          
           this.excel.map((x: any, i) => {
             x.serialNum = i + 1;
           });

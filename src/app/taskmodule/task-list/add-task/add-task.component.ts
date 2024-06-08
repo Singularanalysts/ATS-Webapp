@@ -96,7 +96,6 @@ export class AddTaskComponent {
   ) { }
 
   ngOnInit(): void {
-   // console.log(this.data.actionName)
     this.getEmployee();
     this.initializeTaskForm(null);
     if (this.data.actionName === 'edit-task') {

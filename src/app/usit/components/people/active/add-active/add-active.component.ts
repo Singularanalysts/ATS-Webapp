@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -22,6 +22,7 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
+import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 
 @Component({
   selector: 'app-add-active',
@@ -39,6 +40,7 @@ import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
     MatSelectModule,
     MatInputModule,
     NgxMatIntlTelInputComponent,
+    NgxMatInputTelComponent
   ],
   providers: [
     {
@@ -86,6 +88,9 @@ export class AddActiveComponent implements OnInit {
     panelClass: ['custom-snack-success'],
   };
   submitted = false;
+  showPermField: boolean = false;
+  showI140Field: boolean = false;
+  filesArr!: any;
 
   ngOnInit(): void {
     this.getVisas();
@@ -95,6 +100,7 @@ export class AddActiveComponent implements OnInit {
       this.h1bServ.getH1bById(this.data.activeData.applicantid).subscribe(
         (response: any) => {
           this.entity = response.data;
+          this.filesArr = response.data.i797doc;
           this.initializeH1bForm(response.data);
         }
       );
@@ -104,6 +110,15 @@ export class AddActiveComponent implements OnInit {
   }
 
   private initializeH1bForm(h1bData: any) {
+    const dateRangeValidator: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
+      const validFrom = control.get('h1validfrom')?.value;
+      const validTo = control.get('h1validto')?.value;
+      if (validFrom && validTo && new Date(validFrom) >= new Date(validTo)) {
+        return { 'invalidDateRange': true };
+      }
+      return null;
+    };
+
     this.h1bForm = this.formBuilder.group({
       employeename: [h1bData ? h1bData.employeename : '', Validators.required],
       email: [h1bData ? h1bData.email : '', Validators.required],
@@ -112,23 +127,46 @@ export class AddActiveComponent implements OnInit {
       // noticetype: [h1bData ? h1bData.noticetype : '', Validators.required],
       location: [h1bData ? h1bData.location : '', Validators.required],
       petitioner: [h1bData ? h1bData.petitioner : '', Validators.required],
-      receiptnumber: [h1bData ? h1bData.receiptnumber : '', Validators.required],
+      receiptnumber: [h1bData ? h1bData.receiptnumber : '', [Validators.required, Validators.pattern(/^[A-Z]{3}\d{10}$/)]],
       servicecenter: [h1bData ? h1bData.servicecenter : ''],
       consulatepoe: [h1bData ? h1bData.consulatepoe :''],
       lcanumber:[h1bData ? h1bData.lcanumber : ''],
       company: [h1bData ? h1bData.company :'', Validators.required],
       h1validfrom: [h1bData ? h1bData.h1validfrom :'', Validators.required],
-      h1validto: [h1bData ? h1bData.h1validto :'', Validators.required],
+      h1validto: [h1bData ? h1bData.h1validto :'', [Validators.required, this.toDateValidator]],
       everifydate: [h1bData ? h1bData.everifydate :'', Validators.required],
       lasti9date: [h1bData ? h1bData.lasti9date :'', Validators.required],
       gcstatus: [h1bData ? h1bData.gcstatus :'', Validators.required],
       stateofworking: [h1bData ? h1bData.stateofworking :'', Validators.required],
       doj: [h1bData ? h1bData.doj : '', Validators.required],
       paytype: [h1bData ? h1bData.paytype : '', Validators.required],
-      status: [h1bData ? h1bData.status : 'Active', Validators.required],
+      status: [this.data.actionName === "edit-active" ? h1bData.status : 'Active'],
+      reason: [this.data.actionName === "edit-active" ? h1bData.reason : ''],
       employeementype: [h1bData ? h1bData.employeementype : '', Validators.required],
+      permReferenceNumber: [''],
+      i140ReceiptNumber: [''],
       user: localStorage.getItem('userid'),
     });
+
+    this.h1bForm.get('status').valueChanges.subscribe((status: string) => {
+      if (status === 'Leave of Absence' || status === 'Terminated') {
+        this.h1bForm.get('reason').setValidators(Validators.required);
+      } else {
+        this.h1bForm.get('reason').clearValidators();
+      }
+      this.h1bForm.get('reason').updateValueAndValidity();
+    });
+  }
+
+  toDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const joiningDate = control.root.get('h1validfrom')?.value;
+    const relievingDate = control.value;
+
+    if (joiningDate && relievingDate && new Date(relievingDate) < new Date(joiningDate)) {
+      return { 'toBeforeFrom': true };
+    }
+
+    return null;
   }
 
   getVisas() {
@@ -160,15 +198,17 @@ export class AddActiveComponent implements OnInit {
    passportError: boolean = false;
    everifyError: boolean = false;
    i9Error: boolean = false;
-   i797Error: boolean = false;
+  //  i797Error: boolean = false;
    i94Error: boolean = false;
    ssnError: boolean = false;
+   w2Error: boolean = false;
    passportFileNameLength: boolean = false;
    everifyFileNameLength: boolean = false;
    i9FileNameLength: boolean = false;
-   i797FileNameLength: boolean = false;
+  //  i797FileNameLength: boolean = false;
    i94FileNameLength: boolean = false;
    ssnFileNameLength: boolean = false;
+   w2FileNameLength: boolean = false;
  
  
    @ViewChild('passportdoc')
@@ -244,33 +284,90 @@ export class AddActiveComponent implements OnInit {
        this.i9Error = false;
      }
    }
+
+   @ViewChild('w2Doc')
+   w2doc: any = ElementRef;
+   w2docUpload!: any;
+   uploadW2(event: any) {
+    this.w2docUpload = event.target.files[0];
+    const file = event.target.files[0];
+    const fileSizeInKB = Math.round(file.size / 1024);
+    var items = file.name.split(".");
+    const str = items[0];
+    this.w2Error = false;
+    this.w2FileNameLength = false;
+    if (str.length > 20) {
+      this.w2FileNameLength = true;
+    }
+
+    if (fileSizeInKB > 2048) {
+      this.flg = false;
+      this.w2Error = true;
+      return;
+    } else {
+      this.w2Error = false;
+    }
+  }
  
-   @ViewChild('I797doc')
-   I797doc: any = ElementRef;
-   I797docUpload!: any;
-   uploadI797(event: any) {
-     this.I797docUpload = event.target.files[0];
-     const file = event.target.files[0];
-     const fileSizeInKB = Math.round(file.size / 1024);
-     var items = file.name.split(".");
-     const str = items[0];
-     this.i797Error = false;
-     this.i797FileNameLength = false;
-     if (str.length > 20) {
-       this.i797FileNameLength = true;
-     }
+  //  @ViewChild('I797doc')
+  //  I797doc: any = ElementRef;
+  //  I797docUpload!: any;
+  //  uploadI797(event: any) {
+  //    this.I797docUpload = event.target.files[0];
+  //    const file = event.target.files[0];
+  //    const fileSizeInKB = Math.round(file.size / 1024);
+  //    var items = file.name.split(".");
+  //    const str = items[0];
+  //    this.i797Error = false;
+  //    this.i797FileNameLength = false;
+  //    if (str.length > 20) {
+  //      this.i797FileNameLength = true;
+  //    }
  
-     if (fileSizeInKB > 2048) {
-       this.flg = false;
-       this.i797Error = true;
-       return;
-     }
-     else {
-       this.i797Error = false;
-       this.flg = true;
-     }
-   }
- 
+  //    if (fileSizeInKB > 2048) {
+  //      this.flg = false;
+  //      this.i797Error = true;
+  //      return;
+  //    }
+  //    else {
+  //      this.i797Error = false;
+  //      this.flg = true;
+  //    }
+  //  }
+
+  @ViewChild('i797doc')
+  I797doc!: ElementRef;
+  I797UploadedFiles: File[] = [];
+  I797UploadedFileNames: string[] = [];
+  i797Error: boolean = false;
+  i797FileNameLength: boolean = false;
+
+  uploadI797(event: any) {
+    this.I797UploadedFileNames = [];
+    this.i797Error = false;
+    this.i797FileNameLength = false;
+
+    for (var i = 0; i < event.target.files.length; i++) {
+      const file = event.target.files[i];
+      const fileSizeInKB = Math.round(file.size / 1024);
+      var items = file.name.split(".");
+      const str = items[0];
+
+      if (str.length > 20) {
+        this.i797FileNameLength = true;
+        continue;
+      }
+
+      if (fileSizeInKB > 2048) {
+        this.i797Error = true;
+        continue;
+      }
+
+      this.I797UploadedFiles.push(file);
+      this.I797UploadedFileNames.push(file.name);
+    }
+  }
+
    @ViewChild('i94doc')
    i94doc: any = ElementRef;
    i94docUpload!: any;
@@ -324,14 +421,12 @@ export class AddActiveComponent implements OnInit {
    }
 
   onSubmit() {
-    console.log(this.h1bForm.value);
     this.submitted = true;
     if (this.h1bForm.invalid) {
       this.h1bForm.markAllAsTouched();
       Object.keys(this.h1bForm.controls).forEach(key => {
         const control = this.h1bForm.get(key);
         if (control && control.invalid) {
-          console.log('Invalid control:', key);
         }
       });
   
@@ -361,9 +456,6 @@ export class AddActiveComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const saveReqObj = this.getSaveData();
-    console.log(saveReqObj);
-    
-    // this.submit(1);
     this.h1bServ
       .addORUpdateH1bImmigrant(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -402,8 +494,8 @@ export class AddActiveComponent implements OnInit {
 
   submit(id: number) {
     const formData = new FormData();
-    for (var i = 0; i < this.uploadedfiles.length; i++) {
-      formData.append('files', this.uploadedfiles[i]);
+    for (var i = 0; i < this.I797UploadedFiles.length; i++) {
+      formData.append("i797doc", this.I797UploadedFiles[i]);
     }
 
     if (this.passportdocupload != null) {
@@ -416,9 +508,9 @@ export class AddActiveComponent implements OnInit {
       formData.append('i9doc', this.i9docUpload, this.i9docUpload.name);
     }
 
-    if (this.I797docUpload != null) {
-      formData.append('I797doc', this.I797docUpload, this.I797docUpload.name);
-    }
+    // if (this.I797docUpload != null) {
+    //   formData.append('I797doc', this.I797docUpload, this.I797docUpload.name);
+    // }
 
     if (this.i94docUpload != null) {
       formData.append('i94doc', this.i94docUpload, this.i94docUpload.name);
@@ -426,6 +518,9 @@ export class AddActiveComponent implements OnInit {
 
     if (this.ssndocUpload != null) {
       formData.append('ssndoc', this.ssndocUpload, this.ssndocUpload.name);
+    }
+    if (this.w2docUpload != null) {
+      formData.append('w2Doc', this.w2docUpload, this.w2docUpload.name);
     }
     this.fileService.h1bUploadFile(formData, id)
       .subscribe((response: any) => {
@@ -444,10 +539,11 @@ export class AddActiveComponent implements OnInit {
 
   downloadfile(id: number, filename: string, flg: string) {
     var items = filename.split(".");
+    console.log(items, items.length);
      this.fileService
        .downloadH1bFile(id, flg)
        .subscribe(blob => {
-         if (items[1] == 'pdf' || items[1] == 'PDF') {
+         if (items[items.length - 1] == 'pdf' || items[items.length - 1] == 'PDF') {
            var fileURL: any = URL.createObjectURL(blob);
            var a = document.createElement("a");
            a.href = fileURL;
@@ -522,6 +618,37 @@ export class AddActiveComponent implements OnInit {
     if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
       return false;
     return true;
+  }
+
+  onlyCapitalAlphanumericKey(evt: any) {
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode;
+    if (!((ASCIICode >= 48 && ASCIICode <= 57) || (ASCIICode >= 65 && ASCIICode <= 90))) {
+      return false;
+    }
+    return true;
+  }
+
+  onGCStatusChange() {
+    const gcStatus = this.h1bForm.get('gcstatus')?.value;
+    this.showPermField = gcStatus === 'PERM';
+    this.showI140Field = gcStatus === 'I140';
+
+    // Update validators for additional fields
+    if (this.showPermField) {
+      this.h1bForm.get('permReferenceNumber')?.setValidators([Validators.required]);
+    } else {
+      this.h1bForm.get('permReferenceNumber')?.clearValidators();
+    }
+
+    if (this.showI140Field) {
+      this.h1bForm.get('i140ReceiptNumber')?.setValidators([Validators.required, Validators.pattern(/^[A-Z]{3}\d{10}$/)]);
+    } else {
+      this.h1bForm.get('i140ReceiptNumber')?.clearValidators();
+    }
+
+    // Trigger validation update
+    this.h1bForm.get('permReferenceNumber')?.updateValueAndValidity();
+    this.h1bForm.get('i140ReceiptNumber')?.updateValueAndValidity();
   }
 
 }

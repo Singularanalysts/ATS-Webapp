@@ -254,8 +254,6 @@ export class VendorListComponent implements OnInit {
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    //console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -264,7 +262,6 @@ export class VendorListComponent implements OnInit {
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    ///this.sortOrder = event.direction;
     this.getAllData();
     }
   }
@@ -685,8 +682,6 @@ export class VendorListComponent implements OnInit {
   }
 
   moveVendorToCpvOrFpv(vendor: any) {
-    console.log(vendor);
-    
     const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to move Vendor to CPV/FPV/Blacklisted ?',

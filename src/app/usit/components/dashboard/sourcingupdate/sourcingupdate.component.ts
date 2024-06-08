@@ -74,11 +74,9 @@ export class SourcingupdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   // console.log(this.data);
     this.initializeInterviewForm(this.data.souringData);
     this.service.getLeadById(this.data.souringData.c_id).subscribe(
       (response: any) => {
-      //  console.log(response.data)
         this.dataArr = response.data
       });
   }
@@ -149,7 +147,6 @@ export class SourcingupdateComponent implements OnInit {
       return;
     }
     // const saveReqObj = this.getSaveData();
-   // console.log(JSON.stringify(this.sourcingForm.value));
     // updateSourcingLead
     this.service.updateSourcingLead(this.sourcingForm.value).subscribe(
       {

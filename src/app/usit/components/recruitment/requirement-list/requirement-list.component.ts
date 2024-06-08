@@ -310,8 +310,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
   sortField = 'postedon';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    //console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'postedon'
     else
@@ -320,7 +318,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    ///this.sortOrder = event.direction;
     this.getAllData();
     }
   }

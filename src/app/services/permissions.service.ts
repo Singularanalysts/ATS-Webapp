@@ -38,7 +38,6 @@ export class PermissionsService {
   }
 
   login(user: any) {
-    // console.log("authentication " + JSON.stringify(user))
     this.isUserLoggedIn = true;
     localStorage.setItem('userName', user.fullname);
     //localStorage.setItem('token', 'HTTP_TOKEN ' + user.token);
@@ -57,7 +56,6 @@ export class PermissionsService {
     return of(this.isUserLoggedIn).pipe(
       delay(1000),
       tap(val => {
-        //console.log("Is User Authentication is successful: " + val);
       })
     );
   }

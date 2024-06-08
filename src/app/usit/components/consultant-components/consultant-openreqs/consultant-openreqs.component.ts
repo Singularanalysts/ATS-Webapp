@@ -84,8 +84,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
   }
 
   onTabChanged(event: MatTabChangeEvent) {
-    console.log(event);
-    
     // this.getAllData(event.tab.textLabel.toLowerCase());
   }
 

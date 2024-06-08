@@ -165,7 +165,6 @@ export class DashboardComponent implements OnInit {
     this.subcountIndividual = 0;
     this.reccountIndividual = 0;
 
-    //console.log('Dash Board Refreshed '+this.refreshFlg);
     // You can perform any actions or logic inside this method
     if (this.refreshFlg == 'executive') {
       this.countCallingExecutiveAndLead();

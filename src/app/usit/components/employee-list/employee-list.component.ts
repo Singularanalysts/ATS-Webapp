@@ -374,7 +374,6 @@ onFilter(event: any) {
   }
 
   unlock(emp: Employee) {
-    console.log(emp)
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to UnLock '+emp.pseudoname+' ?',

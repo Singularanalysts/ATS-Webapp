@@ -193,8 +193,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-   // console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -203,7 +201,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    ///this.sortOrder = event.direction;
     this.getAllData();
     }
   }
@@ -374,7 +371,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
 
   goToReqInfo(element: any) {
-   // console.log(element);
     const actionData = {
       title: `${element.reqnumber}`,
       id: element.reqid,

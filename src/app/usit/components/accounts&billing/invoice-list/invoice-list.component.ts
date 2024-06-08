@@ -74,7 +74,6 @@ export class InvoiceListComponent implements OnInit {
         (response: any) => {
           // this.entity = response.data.content;
           this.dataSource.data = response.data;
-          console.log(response.data)
           this.totalItems = response.data.totalElements;
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {

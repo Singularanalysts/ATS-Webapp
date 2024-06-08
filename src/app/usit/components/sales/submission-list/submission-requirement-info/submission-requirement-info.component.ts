@@ -26,7 +26,6 @@ export class SubmissionRequirementInfoComponent implements OnInit {
   dialogRef = inject(MatDialogRef<SubmissionRequirementInfoComponent>);
 
   ngOnInit(): void {
-    //console.log(this.data);
     this.submissionServ.getSubReqInfo(this.data.id).subscribe(
       (resp: any) => {
         if(resp.status === 'success'){

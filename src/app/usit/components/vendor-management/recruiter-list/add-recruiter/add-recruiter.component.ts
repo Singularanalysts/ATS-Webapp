@@ -186,12 +186,6 @@ export class AddRecruiterComponent implements OnInit {
         }
       }
       ),
-      // Uncomment below to verify the searched result
-      // tap((res) => {
-      //   console.log({res})
-
-      // }),
-
     );
   }
   emailValue: string = ''; // declare emailValue property
@@ -222,7 +216,6 @@ export class AddRecruiterComponent implements OnInit {
     }
     this.submitted = true;
     const saveReqObj = this.getSaveData();
-    console.log(saveReqObj)
     this.recruiterServ.addOrUpdateRecruiter(saveReqObj, this.data.actionName)
       .subscribe({
          next: (data: any) => {

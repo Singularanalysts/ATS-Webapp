@@ -225,8 +225,6 @@ export class HotListProvidersListComponent implements OnInit {
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -235,7 +233,6 @@ export class HotListProvidersListComponent implements OnInit {
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    ///this.sortOrder = event.direction;
     this.getAllData();
     }
   }
@@ -302,8 +299,6 @@ export class HotListProvidersListComponent implements OnInit {
    * @param vendor
    */
   deleteHotlistProvider(vendor: any) {
-    console.log(vendor);
-    
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to delete?',

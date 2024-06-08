@@ -214,7 +214,6 @@ export class TechSupportListComponent {
 
 
     };
-    //console.log(consultant);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
     dialogConfig.disableClose = false;

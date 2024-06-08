@@ -65,11 +65,9 @@ export class InterviewCountListComponent {
   private dashboardServ = inject(DashboardService);
   ngOnInit(): void {
     const userid = localStorage.getItem('userid');
-    //console.log(this.data.duration)
     if (this.data.condition == 'admin') {
     this.dashboardServ.getInterviewCountPopup(this.data.flag, this.data.duration).subscribe(
       ((response: any) => {
-        // console.log(response.data)
         this.dataSource.data = response.data;
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = i + 1;
@@ -79,7 +77,6 @@ export class InterviewCountListComponent {
     else{
       this.dashboardServ.getInterviewCountPopupEmp(this.data.flag, this.data.duration,userid).subscribe(
         ((response: any) => {
-          // console.log(response.data)
           this.dataSource.data = response.data;
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = i + 1;
@@ -95,7 +92,6 @@ export class InterviewCountListComponent {
     // this.submissionFlag
     this.dashboardServ.getsubmissionCountPopup(flag, this.submissionFlag).subscribe(
       ((response: any) => {
-        console.log(response.data)
       }));
   }
   */

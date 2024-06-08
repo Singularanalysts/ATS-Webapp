@@ -100,7 +100,6 @@ export class EmailExtractionComponent implements OnInit {
     this.service.fetch(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
-        //console.log(response.data.content)
         this.totalItems = response.data.totalElements;
         // for serial-num {
         this.dataSource.data.map((x: any, i) => {
@@ -251,8 +250,6 @@ export class EmailExtractionComponent implements OnInit {
   
 }
 delete(element: any) {
-  console.log(element);
-  
   const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
     title: 'Confirmation',
     message: 'Are you sure you want to delete?',

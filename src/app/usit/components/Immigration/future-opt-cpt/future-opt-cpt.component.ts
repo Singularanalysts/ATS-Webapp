@@ -207,7 +207,6 @@ export class FutureOptCptComponent implements OnInit {
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    console.log(event);
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else

@@ -132,7 +132,6 @@ export class AddTechSupportComponent implements OnInit {
 
     this.service.gettechnicalskills().subscribe((response: any) => {
       this.techdata = response;
-      // console.log("techdata",this.techdata)
     });
   }
   private initializeRequirementForm(requirementData: any) {
@@ -253,7 +252,6 @@ export class AddTechSupportComponent implements OnInit {
   gettech() {
     this.service.gettechnicalskills().subscribe((response: any) => {
       this.techdata = response;
-      //console.log(this.techdata, "dsdsh");
     });
   }
   skilldata: any;
@@ -262,7 +260,6 @@ export class AddTechSupportComponent implements OnInit {
     const newVal = event.value;
     this.service.getTechsupportById(newVal).subscribe((response: any) => {
       this.registerForm.get('skills').setValue(response.data);
-      // console.log(response.data)
     })
   }
   address = '';

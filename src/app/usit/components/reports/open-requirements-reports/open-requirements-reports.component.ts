@@ -136,8 +136,6 @@ export class OpenRequirementsReportsComponent {
   }
 
   onSubmit() {
-    console.log(this.sourcingreport.value);
-
     this.submitted = true;
     if (this.sourcingreport.invalid) {
       this.showReport = false;
@@ -166,25 +164,13 @@ export class OpenRequirementsReportsComponent {
       "flag": "count",
       "keyword": "empty",
     }
-
-    console.log(this.payload);
-
-
-
-    // Make an API call using the service to fetch data
     this.service.getOpenReqsReport(this.payload).subscribe((res: any) => {
-        console.log(res);
-
-        // Process the data received from the API
         this.c_data = res.data.content;
         this.dataSource.data = res.data.content;
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = this.generateSerialNumber(i);
         });
         this.totalItems = res.data.totalElements;
-        console.log(this.c_data);
-        
-
       });
   }
 
@@ -223,8 +209,6 @@ export class OpenRequirementsReportsComponent {
   sortField = 'skillset';
   sortOrder = 'asc';
   onSort(event: Sort) {
-    console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'skillset'
     else
@@ -255,15 +239,12 @@ export class OpenRequirementsReportsComponent {
 
     // Make API call with updated payload
     this.service.getOpenReqsReport(this.payload).subscribe((res: any) => {
-        console.log(res);
-
         // Process the data received from the API
         this.c_data = res.data.content;
         this.dataSource.data = res.data.content;
         this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
         });
-        console.log(this.c_data);
     });
   }
 

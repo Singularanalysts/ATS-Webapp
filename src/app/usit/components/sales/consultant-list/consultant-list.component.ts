@@ -208,7 +208,6 @@ export class ConsultantListComponent
     this.consultantServ.getFilteredConsults(request,1,this.pageSize )
       .subscribe(
         (response: any) => {
-          console.log(response.data.content);
           
           this.dataSource.data = response.data.content;
           // Reassign serial numbers after filtering
@@ -281,7 +280,6 @@ export class ConsultantListComponent
       this.flag.toLocaleLowerCase() === 'domrecruiting'
     ) {
       const priorityIndex = this.dataTableColumns.indexOf('Priority');
-      //console.log(priorityIndex);
       if (priorityIndex !== -1) {
         this.dataTableColumns.splice(priorityIndex, 1);
       }
@@ -375,8 +373,6 @@ export class ConsultantListComponent
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    //console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -385,7 +381,6 @@ export class ConsultantListComponent
     this.sortOrder = event.direction;
 
     if (event.direction != '') {
-      ///this.sortOrder = event.direction;
       this.getAllData();
     }
   }

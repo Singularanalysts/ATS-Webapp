@@ -24,7 +24,6 @@ export class AssignedUserComponent {
     this.service.popup(this.vo.id).subscribe(
       ((response: any) => {
         this.taskDatarr = response.data;
-        // console.log(this.taskDatarr)
       })
     );
   }

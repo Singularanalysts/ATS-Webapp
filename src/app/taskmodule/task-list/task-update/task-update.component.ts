@@ -140,7 +140,6 @@ export class TaskUpdateComponent implements OnInit {
     this.taskService.trackByUser(this.userid).subscribe(
       ((response: any) => {
         this.dataArr= response.data;
-        // console.log(JSON.stringify(response.data) + " ===");
       })
     );
   }

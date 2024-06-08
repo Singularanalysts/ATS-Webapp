@@ -155,8 +155,6 @@ export class AddInterviewComponent implements OnInit {
   }
 
   private initializeInterviewForm(interviewData: any) {
-    // alert(interviewData.closure.vendorApPhoneNumber)
-    console.log(interviewData)
     this.interviewForm = this.formBuilder.group({
       submission: [interviewData ? interviewData.submission : '', [Validators.required]],
       flg: [this.data.flag ? this.data.flag.toLocaleLowerCase() : ''],
@@ -262,23 +260,10 @@ export class AddInterviewComponent implements OnInit {
   getsubdetails(flg: string) {
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');
-
-    // this.interviewServ.getsubmissions(flg, this.userid, this.role).subscribe(
-    //   (response: any) => {
-    //     this.submissiondata = response.data;
-    //     console.log( this.submissiondata);
-    //   });
-
-    // this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role).subscribe(
-    //   (response: any) => {
-    //     this.submissiondata = response.data;
-    //     console.log( this.submissiondata);
-    //   });
     this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
-         // console.log(resp);
           this.getSubmissionOptionsForAutoComplete(resp);
         }
       })
@@ -287,7 +272,6 @@ export class AddInterviewComponent implements OnInit {
 
   getSubmissionOptionsForAutoComplete(data: any) {
     this.submissionOptions = data;
-   // console.log(data);
     this.searchSubmissionOptions$ = this.interviewForm.controls.submission.valueChanges.pipe(
       startWith(''),
       map(value => this._filterSubmissionOptions(value, this.submissionOptions))
@@ -300,10 +284,8 @@ export class AddInterviewComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.subdetails.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredOptions);
     if (filteredOptions.length === 1) {
       this.submissionid = filteredOptions[0].subid;
-      //console.log(this.submissionid);
     }
     // this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;
@@ -348,9 +330,6 @@ export class AddInterviewComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const saveReqObj = this.getSaveData();
-    console.log(saveReqObj)
-
-    
     this.interviewServ
       .addORUpdateInterview(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))

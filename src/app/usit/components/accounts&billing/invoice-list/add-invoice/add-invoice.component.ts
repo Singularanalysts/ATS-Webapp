@@ -131,12 +131,10 @@ export class AddInvoiceComponent implements OnInit {
   }
   getConsultant(data: any) {
     // this.resetVendorFormFields();
-    console.log(data.vendor+" = "+data.consultant)
     this.purchaseOrderServ.getConsultantData(data.vendor, data.consultant).subscribe(
       (response: any) => {
         this.consultantdata = response.data;
         this.invoiceForm.get("consultant")?.setValue(data.consultant)
-        console.log(response.data)
       }
     )
   }
@@ -154,14 +152,12 @@ export class AddInvoiceComponent implements OnInit {
   getCompanies() {
     this.purchaseOrderServ.getCompanies().subscribe((response: any) => {
       this.company = response.data;
-      console.log(response.data)
     });
   }
   getInvoiceNumber(company: any) {
     const selectedCompany = this.company.find((option: any[]) => option[0] === company);
       const companyName = selectedCompany[1];
     this.purchaseOrderServ.getInvoiceNumber(companyName).subscribe((response: any) => {
-      console.log(response.data);
       this.invoiceForm.get("invoicenumber")?.setValue(response.data[0]);
 
       if (companyName == 'Narvee') {

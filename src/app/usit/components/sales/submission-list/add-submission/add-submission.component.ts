@@ -348,7 +348,6 @@ export class AddSubmissionComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.consultantname.toLowerCase().includes(filterValue)
     );
-    //console.log(filteredOptions);
 
     if (filteredOptions.length === 1) {
       this.obj = filteredOptions[0].consultantid;
@@ -401,12 +400,6 @@ export class AddSubmissionComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.company.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredOptions)
-    // if (filteredOptions.length > 1) {
-    //   this.companyid = filteredOptions[0].vmsid;
-    // }
-    // console.log(this.companyid)
-    // this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;
   }
 

@@ -128,8 +128,6 @@ export class AddEmailExtractionComponent implements OnInit {
     this.vo.email = this.emailExtractForm.get('email')?.value;
     this.vo.password = this.emailExtractForm.get('password')?.value;
 
-    // console.log(this.emailExtractForm.value + " = " + this.vo)
-
     this.service
       .readmail(this.vo)
       .pipe(takeUntil(this.destroyed$))

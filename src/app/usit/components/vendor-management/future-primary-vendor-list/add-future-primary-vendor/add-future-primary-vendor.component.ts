@@ -457,11 +457,6 @@ export class AddFuturePrimaryVendorComponent implements OnInit, OnDestroy {
           return of<any>([]);
         }
       })
-      // Uncomment below to verify the searched result
-      // tap((res) => {
-      //   console.log({res})
-
-      // }),
     );
   }
   /**

@@ -34,6 +34,7 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
 import { AddActiveComponent } from './add-active/add-active.component';
 import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { ImmigrantInfoComponent } from '../immigrant-info/immigrant-info.component';
 
 @Component({
   selector: 'app-active',
@@ -59,11 +60,12 @@ export class ActiveComponent implements OnInit, OnDestroy{
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
+    'EmpId',
     'Name',
     'Employer',
     'Visa',
     'DOJ',
-    'PayType',
+    // 'PayType',
     'EmployementType',
     'StateofEmp',
     'Status',
@@ -386,5 +388,26 @@ export class ActiveComponent implements OnInit, OnDestroy{
 
   goToConsultantInfo(element: any, flag: string) {
     this.router.navigate(['usit/consultant-info',flag, 'interview',element.consid])
+  }
+
+  /**
+   * go to immigrant-info
+   */
+  goToImgInfo(element: any){
+    const actionData = {
+      title: `${element.employeename}`,
+      id: element.applicantid,
+      actionName: 'img-info',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'img-info';
+    dialogConfig.data = actionData;
+
+   this.dialogServ.openDialogWithComponent(
+      ImmigrantInfoComponent,
+      dialogConfig
+    );
   }
 }

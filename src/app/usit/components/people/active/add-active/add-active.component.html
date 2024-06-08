@@ -30,15 +30,30 @@
         </mat-form-field>
 
         <!-- Personal Contact Number-->
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>Personal Contact Number </mat-label>
           <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']" formControlName="contactnumber"
             [enablePlaceholder]="true" [enableSearch]="true" name="contactnumber" id="intlInput" #personalcontactnumber
             #pNumb (keypress)="onlyNumberKey($event)">
           </ngx-mat-intl-tel-input>
           <mat-error *ngIf="h1bForm.get('contactnumber').hasError('required')">Personal
-            Contact
-            Number is required</mat-error>
+            Contact Number is required</mat-error>
+        </mat-form-field> -->
+
+        <!-- Personal Contact Number-->
+        <mat-form-field appearance="fill">
+          <mat-label>Contact Number </mat-label>
+          <ngx-mat-input-tel 
+              [onlyCountries]="['in','us']" matInput class="intl-input"
+              formControlName="contactnumber" enablePlaceholder
+              enableSearch
+              enableSearchplaceholder="Search..."
+              describedBy="phoneInput" required
+              #phone
+              name="contactnumber" id="intlInput" (keypress)="onlyNumberKey($event)"> 
+          </ngx-mat-input-tel>
+          <mat-error *ngIf="h1bForm.get('contactnumber').errors?.required && !h1bForm.get('contactnumber').errors?.validatePhoneNumber">Contact Number is required</mat-error>
+          <mat-error *ngIf="h1bForm.get('contactnumber').errors?.required && h1bForm.get('contactnumber').errors?.validatePhoneNumber">Invalid Contact Number</mat-error>
         </mat-form-field>
 
         <!--  Immigration Status -->
@@ -95,7 +110,7 @@
             <mat-option value="Contract">Contract</mat-option>
             <mat-option value="1099">1099</mat-option>
           </mat-select>
-          <mat-error *ngIf="h1bForm.get('employeementype')?.hasError('required')"> GC Staus is
+          <mat-error *ngIf="h1bForm.get('employeementype')?.hasError('required')"> Employement Type is
             required</mat-error>
         </mat-form-field>
 
@@ -113,6 +128,7 @@
           <mat-select formControlName="paytype">
             <mat-option value="Hourly">Hourly</mat-option>
             <mat-option value="Monthly">Monthly</mat-option>
+            <mat-option value="Yearly">Yearly</mat-option>
           </mat-select>
           <mat-error *ngIf="h1bForm.get('paytype')?.hasError('required')"> Pay Type is
             required</mat-error>
@@ -129,7 +145,7 @@
           <mat-error *ngIf="h1bForm.get('stateofworking')?.hasError('required')"> State of Working is
             required</mat-error>
         </mat-form-field>
-        
+
         <!-- Petitioner -->
         <mat-form-field appearance="fill">
           <mat-label>Petitioner</mat-label>
@@ -141,9 +157,10 @@
         <!-- Receipt Number -->
         <mat-form-field appearance="fill">
           <mat-label>Receipt Number</mat-label>
-          <input matInput formControlName="receiptnumber" maxlength="10">
-          <mat-error *ngIf="h1bForm.get('receiptnumber')?.hasError('required')"> Receipt Number is
-            required</mat-error>
+          <input matInput formControlName="receiptnumber" placeholder="Ex: ABC1234567890" maxlength="13"
+            (keypress)="onlyCapitalAlphanumericKey($event)">
+          <mat-error *ngIf="h1bForm.get('receiptnumber')?.hasError('required')"> Receipt Number is required</mat-error>
+          <mat-error *ngIf="h1bForm.get('receiptnumber').hasError('pattern')">Invalid Receipt Number</mat-error>
         </mat-form-field>
 
         <!-- Service Center -->
@@ -182,16 +199,33 @@
 
         <mat-form-field>
           <mat-label>GC Staus</mat-label>
-          <mat-select formControlName="gcstatus">
+          <mat-select formControlName="gcstatus" (selectionChange)="onGCStatusChange()">
             <mat-option value="PWD">PWD</mat-option>
             <mat-option value="PERM">PERM</mat-option>
             <mat-option value="I140">I140</mat-option>
+            <mat-option value="None">None</mat-option>
           </mat-select>
           <mat-error *ngIf="h1bForm.get('gcstatus')?.hasError('required')"> GC Staus is
             required</mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngIf = "data.actionName === 'edit-active'">
+        <!-- Additional fields for PERM -->
+        <mat-form-field *ngIf="showPermField">
+          <mat-label>Reference Number</mat-label>
+          <input matInput formControlName="permReferenceNumber" maxlength="18">
+          <mat-error *ngIf="h1bForm.get('permReferenceNumber')?.hasError('required')"> Reference Number is
+            required</mat-error>
+        </mat-form-field>
+
+        <!-- Additional fields for I140 -->
+        <mat-form-field *ngIf="showI140Field">
+          <mat-label>Receipt Number</mat-label>
+          <input matInput formControlName="i140ReceiptNumber" placeholder="Ex: ABC1234567890" maxlength="13">
+          <mat-error *ngIf="h1bForm.get('i140ReceiptNumber')?.hasError('required')"> Reference Number is required</mat-error>
+          <mat-error *ngIf="h1bForm.get('i140ReceiptNumber')?.hasError('pattern')"> Invalid Reference Number</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="data.actionName === 'edit-active'">
           <mat-label>Status</mat-label>
           <mat-select formControlName="status">
             <mat-option value="Active">Active</mat-option>
@@ -200,6 +234,13 @@
           </mat-select>
           <mat-error *ngIf="h1bForm.get('status')?.hasError('required')"> Status is
             required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="(h1bForm.get('status').value === 'Leave of Absence' || h1bForm.get('status').value === 'Terminated') && data.actionName === 'edit-active'">
+          <mat-label>{{ h1bForm.get('status').value === 'Leave of Absence' ? 'Reason for Leave of Absence' : 'Reason for
+            Termination' }}</mat-label>
+          <textarea matInput formControlName="reason" maxlength="255"></textarea>
+          <mat-error *ngIf="h1bForm.get('reason')?.hasError('required')"> Reason is required</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -224,6 +265,7 @@
           <mat-error *ngIf="h1bForm.get('h1validto')!.hasError('required')"> Valid Till Date
             is Required
           </mat-error>
+          <mat-error *ngIf="h1bForm.get('h1validto').hasError('toBeforeFrom')">Valid Till Date must be After Valid From Date</mat-error>
         </mat-form-field>
       </div>
       <div class="form-column-right">
@@ -262,11 +304,9 @@
             <input matInput readonly name="passportdocName" class="file-input"
               [value]="passportdocupload ? passportdocupload.name : 'No file chosen'" />
             <label for="passportdoc" class="browse-button-label">
-              <button type="button" mat-icon-button
-                (click)="passportdoc.click()"><mat-icon>upload_file</mat-icon></button>
+              <button type="button" mat-icon-button (click)="passportdoc.click()"><mat-icon>upload_file</mat-icon></button>
             </label>
-            <input type="file" #passportdoc id="passportdoc" (change)="uploadPassport($event)"
-              name="passportdocUploadFile"
+            <input type="file" #passportdoc id="passportdoc" (change)="uploadPassport($event)" name="passportdocUploadFile"
               accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               style="display: none;" />
           </div>
@@ -276,8 +316,8 @@
             to
             15-20 characters before upload</mat-hint>
         </mat-form-field>
-
-
+      
+      
         <!-- EVerify Upload -->
         <mat-form-field class="upload">
           <mat-label for="everify">EVerify</mat-label>
@@ -285,8 +325,7 @@
             <input matInput readonly name="everifydocName" class="file-input"
               [value]="everifydocUpload ? everifydocUpload.name : 'No file chosen'" />
             <label for="everifydoc" class="browse-button-label">
-              <button type="button" mat-icon-button
-                (click)="everifydoc.click()"><mat-icon>upload_file</mat-icon></button>
+              <button type="button" mat-icon-button (click)="everifydoc.click()"><mat-icon>upload_file</mat-icon></button>
             </label>
             <input type="file" #everifydoc id="everifydoc" (change)="uploadEverify($event)" name="everifydocUploadFile"
               accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -297,7 +336,7 @@
           <mat-hint *ngIf="everifyFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
             15-20 characters before upload</mat-hint>
         </mat-form-field>
-
+      
         <!-- I9 Upload -->
         <mat-form-field class="upload">
           <mat-label for="i9">I9</mat-label>
@@ -316,11 +355,29 @@
           <mat-hint *ngIf="i9FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
             15-20 characters before upload</mat-hint>
         </mat-form-field>
+      
+        <!-- W2 Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="w2">W2</mat-label>
+          <div class="upload-inp-container">
+            <input matInput readonly name="w2doc" class="file-input"
+              [value]="w2docUpload ? w2docUpload.name : 'No file chosen'" />
+            <label for="w2doc" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="w2doc.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" #w2doc id="w2doc" (change)="uploadW2($event)" name="w2docUploadFile"
+              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="w2Error" style="color: #f44336; font-size: 12px;">W2 size should be less than 2 mb</mat-hint>
+          <mat-hint *ngIf="w2FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20
+            characters before upload</mat-hint>
+        </mat-form-field>
       </div>
 
       <div class="form-column-right">
         <!-- I797 Upload -->
-        <mat-form-field class="upload">
+        <!-- <mat-form-field class="upload">
           <mat-label for="i797">I797</mat-label>
           <div class="upload-inp-container">
             <input matInput readonly name="I797doc" class="file-input"
@@ -336,7 +393,23 @@
             mb</mat-hint>
           <mat-hint *ngIf="i797FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
             15-20 characters before upload</mat-hint>
+        </mat-form-field> -->
+
+        <mat-form-field class="upload">
+          <mat-label for="i797">I797</mat-label>
+          <div class="upload-inp-container">
+            <input matInput multiple readonly name="I797doc" class="file-input" [value]="I797UploadedFileNames.join(', ') || 'No file chosen'" />
+            <label for="I797doc" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="I797doc.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" id="I797docUploadFile" (change)="uploadI797($event)" multiple #I797doc
+              name="I797docUploadFile" accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="i797Error" style="color: #f44336; font-size: 12px;">I797 size should be less than 2 mb</mat-hint>
+          <mat-hint *ngIf="i797FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to 15-20 characters before upload</mat-hint>
         </mat-form-field>
+        
 
         <!-- I94 Upload -->
         <mat-form-field class="upload">
@@ -423,13 +496,23 @@
           </td>
         </tr>
 
-        <tr>
+        <!-- <tr>
           <td *ngIf="entity && entity.i797doc !== null "><a class="download-file"
               (click)="downloadfile(entity.applicantid,entity.i797doc,'i797doc')">{{entity.i797doc}}</a>
           </td>
           <td *ngIf="entity && entity.i797doc !== null ">
             <button mat-icon-button type="button" class="action-button-ed"
               (click)="deletefile(entity.applicantid,'i797doc')">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr> -->
+
+        <tr *ngFor="let data of filesArr">
+          <td *ngIf="entity && entity.i797doc !== null">
+            <a class="download-file" (click)="downloadfile(entity.applicantid,entity.i797doc,'i797doc')">{{data.filename}}</a></td>
+          <td *ngIf="entity && entity.i797doc !== null">
+            <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'i797doc')">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -454,6 +537,18 @@
           <td *ngIf="entity && entity.ssndoc !==null ">
             <button mat-icon-button type="button" class="action-button-ed"
               (click)="deletefile(entity.applicantid,'ssndoc')">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+
+        <tr>
+          <td *ngIf="entity && entity.w2Doc !==null "><a class="download-file"
+              (click)="downloadfile(entity.applicantid,entity.ssndoc,'w2Doc')">{{entity.w2Doc}}</a>
+          </td>
+          <td *ngIf="entity && entity.w2Doc !==null ">
+            <button mat-icon-button type="button" class="action-button-ed"
+              (click)="deletefile(entity.applicantid,'w2Doc')">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

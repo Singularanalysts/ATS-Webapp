@@ -68,8 +68,6 @@ export class SourcingCountListComponent implements OnInit {
     const userid = localStorage.getItem('userid');
     this.dashboardServ.getSourcingCountPopup(this.data.duration, this.data.flag).subscribe(
       ((response: any) => {
-        // alert()
-       // console.log(response.data)
         this.dataSource.data = response.data;
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = i + 1;

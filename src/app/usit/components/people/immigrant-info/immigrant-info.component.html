@@ -1,0 +1,103 @@
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+        {{data.title | titlecase}}
+    </span>
+    <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<mat-card class="card mat-elevation-z8">
+    <mat-card-content class="card-content">
+        <div class="info-container">
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Contact Number: </span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.contactnumber}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Email :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.email}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Location :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.location}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Date of Joining :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.doj}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Employment Type :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.employeementype}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">State of Working :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.stateofworking}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Pay Type :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.paytype}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey">Visa :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.visa}}</span>
+            </div>
+           
+            <div class="info-item">
+                <span class="static-label" style="color: grey">H1 Valid From :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.h1validfrom}}</span>
+            </div>
+            <div class="info-item">
+                <span class="static-label" style="color: grey"> H1 Valid To :</span>
+                <span class="dynamic-value" style="font-weight: bold;">{{dataSource.h1validto}}</span>
+            </div>
+
+            <div class="header-container-upload-documents">
+                <span class="header-text">List Documents</span>
+              </div>
+              <div class="list-documents-table-container">
+                <table>
+                  <tr>
+                    <th>Document Name</th>
+                    
+                  </tr>
+          
+                  <tr>
+                    <td *ngIf="dataSource && dataSource.passportdoc !== null "><a class="download-file"
+                        (click)="downloadfile(dataSource.applicantid,dataSource.passportdoc,'passportdoc')">{{dataSource.passportdoc}}</a>
+                    </td>
+                  </tr>
+          
+                  <tr>
+                    <td *ngIf="dataSource && dataSource.everifydoc !== null "><a class="download-file"
+                        (click)="downloadfile(dataSource.applicantid,dataSource.everifydoc,'everifydoc')">{{dataSource.everifydoc}}</a>
+                    </td>
+                  </tr>
+          
+                  <tr>
+                    <td *ngIf="dataSource && dataSource.i9doc !== null "><a class="download-file"
+                        (click)="downloadfile(dataSource.applicantid,dataSource.i9doc,'i9doc')">{{dataSource.i9doc}}</a>
+                    </td>
+                  </tr>
+          
+                  <tr>
+                    <td *ngIf="dataSource && dataSource.i797doc !== null "><a class="download-file"
+                        (click)="downloadfile(dataSource.applicantid,dataSource.i797doc,'i797doc')">{{dataSource.i797doc}}</a>
+                    </td>
+                  </tr>
+          
+                  <tr>
+                    <td *ngIf="dataSource && dataSource.i94doc !==null "><a class="download-file"
+                        (click)="downloadfile(dataSource.applicantid,dataSource.i94doc,'i94doc')">{{dataSource.i94doc}}</a>
+                    </td>
+                  </tr>
+          
+                  <tr>
+                    <td *ngIf="dataSource && dataSource.ssndoc !==null "><a class="download-file"
+                        (click)="downloadfile(dataSource.applicantid,dataSource.ssndoc,'ssndoc')">{{dataSource.ssndoc}}</a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+        </div>
+    </mat-card-content>
+</mat-card>

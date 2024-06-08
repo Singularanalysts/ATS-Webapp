@@ -121,8 +121,7 @@ export class TaskListComponent implements OnInit {
             x.serialNum = i + 1;
           });
         },
-        error: (err) => 
-        console.log(err)
+        error: (err) => {}
       }
     );
     /*this.userid = localStorage.getItem('userid');

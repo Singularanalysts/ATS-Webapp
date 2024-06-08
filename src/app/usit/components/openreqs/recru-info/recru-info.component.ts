@@ -43,8 +43,6 @@ export class RecruInfoComponent {
 
   ngOnInit(): void {
     this.getRecruiters();
-    console.log(this.data.title);
-    
   }
 
   onClick(): void {

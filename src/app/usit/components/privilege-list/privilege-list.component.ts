@@ -102,13 +102,11 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.kpt =  response.data.kpt;
         this.role =  response.data.role;
         this.company =  response.data.company;
-       // console.log(this.company)
         this.taskmanagement = response.data.taskmanagement;
         this.technology_tags = response.data.technology_tag;
         this.immigration = response.data.immigration;
         this.users = response.data.user;
         this.submission = response.data.submission;
-        //console.log(this.submission)
         this.interview = response.data.interview;
         //reports privilages
         this.sourcing_reports = response.data.sourcing_reports;
@@ -620,7 +618,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
    * save
    */
   savePrivileges() {
-    //console.log("Save Privileges Object", this.entity)
     this.privilegServ.addPrevilegeToRole(this.entity).pipe(takeUntil(this.destroyed$)).subscribe(
       (result) => {
         this.dataToBeSentToSnackBar.message =  'Previleges added successfully!';

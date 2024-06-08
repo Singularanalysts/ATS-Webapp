@@ -68,7 +68,6 @@ export class HttpInterceptorService implements HttpInterceptor {
         }),
         catchError((error: HttpErrorResponse) => {
           this.handleServerSideError(error);
-         // console.log("error-message", error)
           return throwError(() => error);
         })
       );

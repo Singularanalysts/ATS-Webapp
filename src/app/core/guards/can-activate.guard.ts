@@ -55,7 +55,6 @@ export class CanActivateGuard implements CanActivate {
         this.isLoggedIn = resp;
       }
     );
-    //console.log('in- can activate guard,', this.isLoggedIn)
     return this.isLoggedIn;
   }
 }

@@ -115,7 +115,6 @@ export class TechnologyTagListComponent implements OnInit {
   sortField = 'technologyarea';
   sortOrder = 'asc';
   onSort(event: Sort) {
-    //console.log(event);
     if (event.active == 'SerialNum')
       this.sortField = 'technologyarea'
     else

@@ -80,9 +80,7 @@ export class OpenreqsComponent implements OnInit {
 
 
   onSelectionChange(event: MatSelectChange) {
-    // console.log('Selected value:', event.value);
     this.source = event.value;
-    ///console.log(this.source);
     this.getAllreqsData()
   }
   openVendorPopup(vendor: string): void {

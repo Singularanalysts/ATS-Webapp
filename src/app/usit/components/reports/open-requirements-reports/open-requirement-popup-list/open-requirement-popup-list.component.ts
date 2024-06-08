@@ -76,7 +76,6 @@ export class OpenRequirementPopupListComponent implements OnInit {
   showReport = false;
 
   ngOnInit() {
-    console.log(this.data);
     this.getAll();
   }
 
@@ -93,7 +92,6 @@ export class OpenRequirementPopupListComponent implements OnInit {
       "keyword": this.data.category_skill,
     }
     this.repServ.getOpenReqsReport(this.payload).subscribe((res: any) => {
-      console.log(res);
       this.showReport = true;
       this.c_data = res.data.content;
       this.dataSource.data = res.data.content;
@@ -106,8 +104,6 @@ export class OpenRequirementPopupListComponent implements OnInit {
   }
 
   generateSerialNumber(index: number): number {
-    console.log(this.currentPageIndex);
-    
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
@@ -117,8 +113,6 @@ export class OpenRequirementPopupListComponent implements OnInit {
     this.payload.pageNumber = event.pageIndex + 1; 
     this.payload.pageSize = event.pageSize;
     this.currentPageIndex = event.pageIndex;
-    // console.log(this.payload);
-    
     // this.repServ.getOpenReqsReport(this.payload).subscribe((res: any) => {
     //     this.dataSource.data = res.data.content;
     //     this.dataSource.data.map((x: any, i) => {

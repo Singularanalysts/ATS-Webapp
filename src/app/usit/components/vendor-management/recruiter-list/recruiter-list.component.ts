@@ -124,7 +124,6 @@ export class RecruiterListComponent implements OnInit {
     return this.recruiterServ
       .getemph()
       .subscribe((response: any) => {
-        //  console.log(JSON.stringify(response.data));
       });
   }
 

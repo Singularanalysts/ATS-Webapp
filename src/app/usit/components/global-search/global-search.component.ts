@@ -136,8 +136,6 @@ export class GlobalSearchComponent {
         .subscribe(
           (resp: any) => {
             this.locationSuggestions = resp.data.content;
-          //  console.log('location suggestion' + this.locationSuggestions);
-
             // Remove duplicates from the locationSuggestions array
             const uniqueLocations = Array.from(
               new Set(this.locationSuggestions.map((item) => item.job_location))
@@ -224,7 +222,6 @@ export class GlobalSearchComponent {
                           vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
                           return vendor;
                       });
-                      //  console.log('companies', this.filteredVendorList);
                         this.suggestionList = Array.from(
                           new Set(
                             this.filteredVendorList.map((item) => item.company)
@@ -239,11 +236,9 @@ export class GlobalSearchComponent {
                 }
               }
               this.jobpositioncross = resp.data.content;
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-             // console.log('filtered data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -284,7 +279,6 @@ export class GlobalSearchComponent {
                           vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
                           return vendor;
                       });
-                       // console.log('location ' + this.filteredVendorList);
                       },
                       (error: any) => {
                         console.error(
@@ -296,7 +290,6 @@ export class GlobalSearchComponent {
                     );
                 }
               }
-             // console.log('location ' + this.filteredVendorList);
             },
             (error: any) => {
               console.error('Error fetching location suggestions:', error);
@@ -325,11 +318,9 @@ export class GlobalSearchComponent {
                 vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
                 return vendor;
             });
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              //console.log('filtered new data', this.filteredVendorList);
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -354,11 +345,9 @@ export class GlobalSearchComponent {
                 vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
                 return vendor;
             });
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              //console.log('filtered data 3 data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -379,10 +368,6 @@ export class GlobalSearchComponent {
                 vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
                 return vendor;
             });
-              // console.log(
-              //   'filtered company not there',
-              //   this.filteredVendorList
-              // );
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -403,11 +388,9 @@ export class GlobalSearchComponent {
                 vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
                 return vendor;
             });
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-             // console.log('filtered data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -428,10 +411,8 @@ export class GlobalSearchComponent {
               vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
               return vendor;
           });
-           // console.log('location ' + this.filteredVendorList);
           },
           (error: any) => {
-           // console.error('Error fetching location suggestions:', error);
             this.filteredVendorList = [];
           }
         );
@@ -446,7 +427,6 @@ export class GlobalSearchComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      //console.log('The dialog was closed');
     });
   }
 

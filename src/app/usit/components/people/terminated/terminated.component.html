@@ -31,11 +31,11 @@
                 <ng-container matColumnDef="Name">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Name" mat-sort-header> Name
                     </th>
-                    <td mat-cell *matCellDef="let element"> 
-                        <!-- <span class="consultant-id"(click)="goToConsultantInfo(element, flag)">
-                            {{element?.employeename}}
+                    <td mat-cell *matCellDef="let element">
+                        {{element?.employeename}}
+                        <!-- (click)="goToImgInfo(element)" <span class="consultant-id">
+                         {{element?.employeename}}
                         </span> -->
-                        {{element?.employeename}} 
                     </td>
                 </ng-container>
                 <!-- ID-->

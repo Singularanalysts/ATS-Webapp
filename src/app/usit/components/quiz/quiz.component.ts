@@ -246,9 +246,7 @@ export class QuizComponent implements OnInit,OnDestroy{ // add quiz component
    */
   onSubmit() {
     this.isFormSubmitted = true;
-    //console.log('form.value for save:', JSON.stringify(this.quizForm.value));
     if (this.quizForm.invalid || !this.areAllQuestionsAnswered()) {
-      // show errors
       this.displayFormErrors();
       return;
     }
@@ -265,7 +263,6 @@ export class QuizComponent implements OnInit,OnDestroy{ // add quiz component
         this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
         this.dialogRef.close();
       }, error: (err : any) =>{
-        console.log(err.message);
         this.dataTobeSentToSnackBarService.message = err.message;
         this.dataTobeSentToSnackBarService.panelClass = ["custom-snack-failure"];
         this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);

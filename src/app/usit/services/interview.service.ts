@@ -52,7 +52,6 @@ export class InterviewService {
   }
 
   addClosure(entity: any) {
-   // console.log(entity);
     return this.apiServ.post("billpay/saveClosure", entity);
   }
   getClosureByIntId(id: number) {

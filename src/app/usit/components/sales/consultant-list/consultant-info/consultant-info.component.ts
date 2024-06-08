@@ -234,11 +234,9 @@ export class ConsultantInfoComponent implements OnInit {
       this.id = this.activatedRoute.snapshot.params['id'];
       this.flag = this.activatedRoute.snapshot.params['flg'];
       this.subFlag = this.activatedRoute.snapshot.params['subFlag'];
-      // alert(this.flag);
       this.consultantServ.consultantInfoByconId(this.id).subscribe((response: any) => {
         this.entity = response.data;
         this.dataSource.data = response.data;
-        //console.log(response.data)
       });
     }
   

@@ -126,15 +126,12 @@ export class BanterReportComponent {
   }
 
   onDepartmentChange(department: any): void {
-    console.log(department.value);
-    
     this.departmentSelected = true;
     this.sourcingreport.get('employee')?.reset();
     this.sourcingreport.get('employee')?.enable();
     
     if (department) {
       this.service.getEmployeeByDeparment(department.value).subscribe((res: any) => {
-        console.log(res.data);
         this.employees = res.data;
       })
     }
