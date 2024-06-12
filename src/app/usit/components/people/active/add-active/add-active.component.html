@@ -510,9 +510,9 @@
 
         <tr *ngFor="let data of filesArr">
           <td *ngIf="entity && entity.i797doc !== null">
-            <a class="download-file" (click)="downloadfile(entity.applicantid,entity.i797doc,'i797doc')">{{data.filename}}</a></td>
+            <a class="download-file" (click)="downloadMultiplefiles(data)">{{data.filename}}</a></td>
           <td *ngIf="entity && entity.i797doc !== null">
-            <button mat-icon-button type="button" class="action-button-ed" (click)="deletefile(entity.applicantid,'i797doc')">
+            <button mat-icon-button type="button" class="action-button-ed" (click)="deleteMultiplefile(data.docid)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -544,7 +544,7 @@
 
         <tr>
           <td *ngIf="entity && entity.w2Doc !==null "><a class="download-file"
-              (click)="downloadfile(entity.applicantid,entity.ssndoc,'w2Doc')">{{entity.w2Doc}}</a>
+              (click)="downloadfile(entity.applicantid,entity.w2Doc,'w2Doc')">{{entity.w2Doc}}</a>
           </td>
           <td *ngIf="entity && entity.w2Doc !==null ">
             <button mat-icon-button type="button" class="action-button-ed"

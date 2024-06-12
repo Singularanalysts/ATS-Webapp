@@ -560,6 +560,27 @@ export class AddActiveComponent implements OnInit {
 
   }
 
+  type:any
+  downloadMultiplefiles(fileData: FileData) {
+    this.type = fileData.filename;
+    var items = this.type.split(".");
+    this.fileService
+      .downloadMultipleFiles(fileData.docid)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          a.click();
+        }
+        else {
+          saveAs(blob, fileData.filename)
+        }
+      }
+      );
+  }
+
   deletefile(id: number, doctype: string) {
       const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
         title: 'Confirmation',
@@ -580,11 +601,9 @@ export class AddActiveComponent implements OnInit {
       dialogRef.afterClosed().subscribe({
         next: (resp: any) => {
           if (dialogRef.componentInstance.allowAction) {
-            // call delete api
             this.fileService.h1bRemoveFile(id,doctype).pipe(takeUntil(this.destroyed$)).subscribe({
               next: (response: any) => {
                 if (response.status == 'success') {
-                //  this.getAllEmployees();
                   this.dataToBeSentToSnackBar.message =
                     'File Deleted successfully';
                     this.dialogRef.close();
@@ -608,6 +627,54 @@ export class AddActiveComponent implements OnInit {
         },
       });
   }
+
+
+  deleteMultiplefile(id: number) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: id,
+      actionName: 'delete-file'
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = dataToBeSentToDailog;
+    dialogConfig.width = "fit-content";
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+    // call delete api after  clicked 'Yes' on dialog click
+    dialogRef.afterClosed().subscribe({
+      next: (resp: any) => {
+        if (dialogRef.componentInstance.allowAction) {
+          this.fileService.h1bRemoveFilesMultiple(id).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
+                this.dataToBeSentToSnackBar.message =
+                  'File Deleted successfully';
+                  this.dialogRef.close();
+              } else {
+                this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+                this.dataToBeSentToSnackBar.message = 'Record Deletion failed';
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+            },
+            error: (err) => {
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.dataToBeSentToSnackBar.message = err.message;
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataToBeSentToSnackBar
+              );
+            },
+          });
+        }
+      },
+    });
+}
 
   onCancel() {
     this.dialogRef.close();
@@ -653,4 +720,13 @@ export class AddActiveComponent implements OnInit {
 
 }
 
+
+export class FileData {
+  docid!: number;
+  applicantid!: number;
+  filename?: string;
+  contentType?: string;
+  size?: number;
+  eid!: number;
+}
 export const NOTICE_TYPE = ['LCA-Requested', 'Filling with USCIS', 'Notice Received', 'RFE/Approved', 'Approved'] as const;

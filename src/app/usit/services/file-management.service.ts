@@ -44,6 +44,10 @@ export class FileManagementService {
     return this.apiServ.get(`img/people/removefile/${id}/${flg}`);
   }
 
+  h1bRemoveFilesMultiple(id: number) {
+    return this.apiServ.get(`img/people/deleteDoc/${id}`);
+  }
+
   removefiles(id: number) {
     return this.apiServ.get(`auth/users/removefiles/${id}`);
   }
@@ -66,6 +70,12 @@ export class FileManagementService {
 
   downloadH1bFile(id: number, flg: string): Observable<Blob> {
     return this.http.get(`${this.apiServ.apiUrl}img/people/download/${id}/${flg}`, {
+      responseType: 'blob',
+    });
+  }
+
+  downloadMultipleFiles(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiServ.apiUrl}img/people/downloadMultipleFiles/${id}`, {
       responseType: 'blob',
     });
   }
