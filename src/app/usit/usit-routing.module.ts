@@ -55,7 +55,7 @@ import { ConsultantInterviewsComponent } from './components/consultant-component
 import { ConsultantOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-openreqs.component';
 import { ConsultantAppliedJobsComponent } from './components/consultant-components/consultant-applied-jobs/consultant-applied-jobs.component';
 import { OpenreqsJobApplicationsComponent } from './components/openreqs-job-applications/openreqs-job-applications.component';
-// import { EVerifyComponent } from './components/Immigration/e-verify/e-verify.component';
+import { CpvFpvOpenRequirementsComponent } from './components/openreqs/cpv-fpv-open-requirements/cpv-fpv-open-requirements.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -216,14 +216,18 @@ const routes: Routes = [
   },
   {
     path: 'hot-list', component: HotListComponent,
-  }
-  ,
+  },
   {
     path: 'h1transfer', component: H1transferComponent,
-  }
-  ,
+  },
   {
     path: 'portalreqs', component: OpenreqsComponent,
+  },
+  {
+    path: 'cpv-portal-requirements', component: CpvFpvOpenRequirementsComponent,
+  },
+  {
+    path: 'fpv-portal-requirements', component: CpvFpvOpenRequirementsComponent,
   },
   {
     path: 'rssfeed', component: RssfedComponentimplements,
