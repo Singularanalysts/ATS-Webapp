@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 
@@ -7,12 +6,9 @@ import { ApiService } from 'src/app/core/services/api.service';
 })
 export class OpenreqService {
 
-  constructor(private http: ApiService, private http2: HttpClient) { }
+  constructor(private http: ApiService) { }
 
-  // readonly apiUrl = 'http://69.216.19.140:1122/';
-  //API_BASE_URL = "http://69.216.19.140:8080/extract/"
   readmail(entity: any) {
-    //return this.http.post(this.API_BASE_URL + "mail/extractEmail", entity);
      return this.http.post("mail/extractEmail", entity);
   }
 
@@ -85,5 +81,9 @@ export class OpenreqService {
 
   showAppliedJobToEmployer(data: any) {
     return this.http.post("openreqs/apply/appliedJobListTeamleads", data);
+  }
+
+  getCpvFpvOpenRequirements(data: any) {
+    return this.http.post("openreqs/dice/getCpvFpvReq", data);
   }
 }

@@ -60,6 +60,7 @@ export class TerminatedComponent implements OnInit, OnDestroy{
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
+    'EmpId',
     'Name',
     'Employer',
     'Visa',

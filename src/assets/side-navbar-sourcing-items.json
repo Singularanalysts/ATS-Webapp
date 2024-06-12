@@ -62,6 +62,16 @@
         "routerLink": "/usit/portalreqs"
       },
       {
+        "text": "CPV Portal Requirements",
+        "icon": "group",
+        "routerLink": "/usit/cpv-portal-requirements"
+      },
+      {
+        "text": "FPV Portal Requirements",
+        "icon": "group",
+        "routerLink": "/usit/fpv-portal-requirements"
+      },
+      {
         "text": "RSS",
         "icon": "business_center",
         "routerLink": "/usit/rssfeed"

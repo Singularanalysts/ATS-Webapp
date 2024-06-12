@@ -60,6 +60,7 @@ export class LeaveOfAbsenceComponent implements OnInit, OnDestroy{
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
+    'EmpId',
     'Name',
     'Employer',
     'Visa',
