@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule, MatSelectChange } from '@angular/material/select';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -14,6 +14,7 @@ import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { JobDescriptionComponent } from '../job-description/job-description.component';
 import { RecruInfoComponent } from '../recru-info/recru-info.component';
 import { MatSortModule, Sort } from '@angular/material/sort';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-cpv-fpv-open-requirements',
@@ -31,7 +32,8 @@ import { MatSortModule, Sort } from '@angular/material/sort';
     MatSortModule
   ],
   templateUrl: './cpv-fpv-open-requirements.component.html',
-  styleUrls: ['./cpv-fpv-open-requirements.component.scss']
+  styleUrls: ['./cpv-fpv-open-requirements.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class CpvFpvOpenRequirementsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);

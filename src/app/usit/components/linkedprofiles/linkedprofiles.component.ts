@@ -5,10 +5,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-linkedprofiles',
@@ -23,7 +24,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTabsModule
   ],
   templateUrl: './linkedprofiles.component.html',
-  styleUrls: ['./linkedprofiles.component.scss']
+  styleUrls: ['./linkedprofiles.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class LinkedprofilesComponent  implements OnInit {
   dataSource = new MatTableDataSource<any>([]);

@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
  
+  MatPaginatorIntl,
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
@@ -31,6 +32,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InterviewService } from 'src/app/usit/services/interview.service';
 import { AddInterviewComponent } from './add-interview/add-interview.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-interview-list',
@@ -46,7 +48,8 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
     CommonModule,
     MatTooltipModule],
   templateUrl: './interview-list.component.html',
-  styleUrls: ['./interview-list.component.scss']
+  styleUrls: ['./interview-list.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class InterviewListComponent implements OnInit, OnDestroy{
 

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RequirementInfoComponent } from '../recruitment/requirement-list/requirement-info/requirement-info.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { JobDescriptionComponent } from './job-description/job-description.component';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 @Component({
   selector: 'app-openreqs',
   standalone: true,
@@ -31,7 +32,8 @@ import { JobDescriptionComponent } from './job-description/job-description.compo
 
   ],
   templateUrl: './openreqs.component.html',
-  styleUrls: ['./openreqs.component.scss']
+  styleUrls: ['./openreqs.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class OpenreqsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
