@@ -731,7 +731,7 @@ addTechnology() {
 }
 }
 
-export const STATUS_TYPE = ['Active', 'on hold', 'closed', 'InActive'] as const;
+export const STATUS_TYPE = ['Active', 'on hold', 'closed', 'InActive', 'Priority'] as const;
 
 class ConstactInfo {
   company!: string;

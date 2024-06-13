@@ -63,6 +63,8 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     'Location',
     'IPVendor',
     'EmployementType',
+    // 'SubmittedBy',
+    'Submitted',
     'Status',
     'Action',
   ];
@@ -92,16 +94,13 @@ export class RequirementListComponent implements OnInit, OnDestroy {
   userid: any;
   page: number = 1;
   @ViewChild(MatSort) sort!: MatSort;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   private dialogServ = inject(DialogService);
   private snackBarServ = inject(SnackBarService);
   private requirementServ = inject(RequirementService);
   private activatedRoute =  inject(ActivatedRoute);
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
-  // to clear subscriptions
   private destroyed$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -114,9 +113,9 @@ export class RequirementListComponent implements OnInit, OnDestroy {
 
   getFlag(){
     const routeData = this.activatedRoute.snapshot.data;
-    if (routeData['isRecRequirement']) { // sales consultant
+    if (routeData['isRecRequirement']) {
       this.flag = "Recruiting";
-    } else { // presales
+    } else {
       this.flag = "Domrecruiting";
     }
   }
@@ -130,16 +129,17 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
+    const pagObj = {
+      flg: this.flag,
+      pageNumber: currentPageIndex,
+      pageSize: this.pageSize,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    }
 
     return this.requirementServ
-      .getAllRequirementData(
-        this.flag,
-        currentPageIndex,
-        this.pageSize,
-        this.field,
-        this.sortField,
-        this.sortOrder
-      )
+      .getAllRequirementData(pagObj)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (response: any) => {
@@ -169,17 +169,17 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       panelClass: ['custom-snack-success'],
     };
     const keyword = event.target.value;
-    this.field = keyword;
     if (keyword != '') {
+      const pagObj = {
+        flg: this.flag,
+        pageNumber: 1,
+        pageSize: this.pageSize,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+      }
       return this.requirementServ
-      .getAllRequirementData(
-        this.flag,
-        1,
-        this.pageSize,
-        this.field,
-        this.sortField,
-        this.sortOrder
-      )
+      .getAllRequirementData(pagObj)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (response: any) => {
@@ -198,9 +198,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
         },
       });
     }
-    if (keyword == '') {
-      this.field = 'empty';
-    }
     return this.getAllData(this.currentPageIndex + 1);
   }
 
@@ -213,7 +210,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
-    // dialogConfig.height = "100vh";
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'add-requirement';
     dialogConfig.data = actionData;
@@ -236,7 +232,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
-    //dialogConfig.height = '100vh';
     dialogConfig.panelClass = 'edit-requirement';
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddRequirementComponent, dialogConfig);
@@ -266,9 +261,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       ConfirmComponent,
       dialogConfig
     );
-
-    // call delete api after  clicked 'Yes' on dialog click
-
     dialogRef.afterClosed().subscribe({
       next: (resp) => {
         if (dialogRef.componentInstance.allowAction) {
@@ -300,12 +292,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       },
     });
   }
-
-  onFilter(event: any) {
-    this.dataSource.filter = event.target.value;
-  }
-
-
 
   sortField = 'postedon';
   sortOrder = 'desc';
@@ -341,9 +327,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/usit/dashboard');
   }
 
-  /**
-   * go to requirement-info
-   */
   goToReqInfo(element: any){
     const actionData = {
       title: `${element.reqnumber}`,
@@ -362,9 +345,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * clean up
-   */
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();
