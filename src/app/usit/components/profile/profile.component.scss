@@ -2,39 +2,105 @@
     height: calc(100vh - 68px);
     display: grid;
     grid-template-columns: 50% 50%;
-    gap: 10px;
+    background-color: lightgrey;
 }
 
-.profile>div {
+.profile > div {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     font-size: 30px;
     text-align: center;
 }
 
-.item1 {
-    grid-row-start: 1;
-    grid-row-end: 4;
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
 }
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+}
+
 .profile-name {
     font-weight: bold;
 }
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.resume {
+    font-weight: bold;
+    color: rgb(3, 67, 204);
+}
+
 .skills {
     padding-top: 30px;
 }
 
-
-.basic div {
-    width: 33%;
-    gap: 5px;
+.skills-header {
+    text-align: left;
+    font-weight: bold;
+    display: flex;
 }
 
-.basic div {
-    width: 50%;
-    gap: 5px;
+.skill-info {
+    cursor: pointer;
 }
 
-.qualifiactions div {
+.section-title {
+    font-weight: bold;
+}
+
+.basic, .work, .qualifications {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.basic div, .work div, .qualifications div {
     width: 33%;
+    gap: 5px;
+    text-align: start;
+}
+
+.label {
+    color: grey;
+}
+
+.value {
+    font-weight: bold;
+}
+
+.item1, .item2, .item3, .item4 {
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.item1 {
+    grid-row: span 3;
+    margin: 20px 10px 20px 20px;
+}
+
+.item2 {
+    margin: 20px 20px 10px 10px;
+}
+
+.item3 {
+    margin: 10px 20px 10px 10px;
+}
+
+.item4 {
+    margin: 10px 20px 20px 10px;
+}
+
+.text-left {
+    justify-content: flex-start;
     gap: 5px;
 }

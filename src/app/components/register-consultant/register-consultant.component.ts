@@ -7,6 +7,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Observable, map, startWith, tap } from 'rxjs';
 import { PermissionsService } from 'src/app/services/permissions.service';
@@ -14,6 +15,7 @@ import {
   ISnackBarData,
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
+import { SkillsInfoComponent } from 'src/app/usit/components/profile/skills-info/skills-info.component';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { FileManagementService } from 'src/app/usit/services/file-management.service';
 
@@ -57,6 +59,10 @@ export class RegisterConsultantComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+  resumeUploaded: boolean = false;
+  private dialog= inject(MatDialog);
+  emailReadOnly: boolean = false;
+  otpReadOnly: boolean = false;
 
   ngOnInit(): void {
     this.gettech();
@@ -107,15 +113,14 @@ export class RegisterConsultantComponent implements OnInit {
         
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
-        // this.onTimeout();
-        this.form.get('email')!.readonly = true;
+        this.emailReadOnly = true;
         this.requestOtp = false;
         this.isOTPSent = true;
       } else {
         this.showErrorNotification(response.message);
         this.isOTPSent = false;
         this.requestOtp = true;
-        this.form.get('email')!.readonly = false;
+        this.emailReadOnly = false;
       }
     });
   }
@@ -128,19 +133,14 @@ export class RegisterConsultantComponent implements OnInit {
     this.permissionServ.consultantValidateOtp(this.id, otpValue).subscribe((response: any) => {
       if (response.status == "success") {
         this.showErrorNotification(response.message, 'success');
-        this.form.get('otp')!.readonly = true;
+        this.otpReadOnly = true;
         this.validateOtp = false; 
         this.showPasswordFields = true;
         this.details = true;
       } else {
         this.showErrorNotification(response.message, 'failure');
-        this.form.get('otp')!.value = '';
-        this.form.get('otp')!.clearValidators;
-        this.form.get('otp')!.updateValueAndValidity;
         this.validateOtp = true;
-        this.isOTPSent = false;
-        this.requestOtp = true;
-        this.form.get('email')!.readonly = false;
+        this.otpReadOnly = false;
       }
     });
   }
@@ -153,8 +153,10 @@ export class RegisterConsultantComponent implements OnInit {
 
   regObj = {}
   userLogin() {
+    this.isFormSubmitted = true;
     this.form.get('technology').setValue(this.techid);
-    if(this.form.invalid) {
+    if(this.form.invalid || !this.resumeUploaded) {
+      this.resumeUploaded = false
       this.form.markAllAsTouched();
     } else {
       this.permissionServ.consultantRegistration(this.form.value).subscribe(
@@ -234,6 +236,7 @@ export class RegisterConsultantComponent implements OnInit {
         )
       );
   }
+
   techid!: any;
   private _filterOptions(value: any, options: any[]): any[] {
     const filterValue = (value ? value.toString() : '').toLowerCase();
@@ -291,12 +294,14 @@ export class RegisterConsultantComponent implements OnInit {
       this.fileService.parseResume(resumeData).subscribe({
         next: (response: any) => {
           this.form.get('skills')!.setValue(response.body.data);
+          this.dialog.open(SkillsInfoComponent, { width: '500px'});
         },
         error: (error: any) => {
           console.error('Error parsing resume', error);
         }
       });      
       this.flg = true;
+      this.resumeUploaded = true;
     }
   }
 

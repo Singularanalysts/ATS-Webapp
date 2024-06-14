@@ -83,10 +83,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
     this.getAllData();
   }
 
-  onTabChanged(event: MatTabChangeEvent) {
-    // this.getAllData(event.tab.textLabel.toLowerCase());
-  }
-
   onSelectionChange(event: MatSelectChange) {
     this.source = event.value;
     this.getAllData();
@@ -240,6 +236,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
+        this.getAllData();
       },
       error: (err: any) => {
         this.dataToBeSentToSnackBar.message = err?.message;

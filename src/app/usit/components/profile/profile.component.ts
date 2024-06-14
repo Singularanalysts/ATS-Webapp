@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ConsultantService } from '../../services/consultant.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AddconsultantComponent } from '../sales/consultant-list/add-consultant/add-consultant.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { QualificationService } from '../../services/qualification.service';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { FileManagementService } from '../../services/file-management.service';
 import { saveAs } from 'file-saver';
+import { SkillsInfoComponent } from './skills-info/skills-info.component';
 
 @Component({
   selector: 'app-profile',
@@ -28,6 +29,7 @@ export class ProfileComponent implements OnInit {
   private dialogServ = inject(DialogService);
   private qualificationServ = inject(QualificationService);
   private fileService = inject(FileManagementService);
+  private dialog= inject(MatDialog);
   profiledata: any;
   qualificationId: any;
 
@@ -35,10 +37,7 @@ export class ProfileComponent implements OnInit {
     const userid = localStorage.getItem('userid');
     this.consultantServ.getProfile(userid).subscribe((res: any) => {
     this.profiledata = res.data;
-    this.qualificationId = res.data.qualification
-    // this.qualificationServ.getQualificationById(this.qualificationId).subscribe((res: any) => {
-    //   this.profiledata.qualification = res.data.name;
-    // })
+    this.qualificationId = res.data.qualification;
     })
   }
 
@@ -109,7 +108,6 @@ export class ProfileComponent implements OnInit {
   }
 
   downloadfile(id: number, filename: string, flg: string) {
-
     var items = filename.split(".");
     this.fileService
       .downloadconresume(id, flg)
@@ -131,4 +129,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  skillsInfo() {
+    this.dialog.open(SkillsInfoComponent, { width: '500px'});
+  }
 }

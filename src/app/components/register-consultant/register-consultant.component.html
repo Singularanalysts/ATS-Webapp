@@ -14,7 +14,7 @@
             <div>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Enter Email</mat-label>
-                <input matInput formControlName="email" maxlength="40" />
+                <input matInput formControlName="email" maxlength="40" [readonly]="emailReadOnly"/>
                 <mat-error *ngIf="form.get('email')!.hasError('required')">Email is required</mat-error>
                 <mat-error *ngIf="form.get('email')!.hasError('email')">Invalid email address</mat-error>
               </mat-form-field>
@@ -31,7 +31,7 @@
             <div>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Enter Your OTP</mat-label>
-                <input matInput formControlName="otp" maxlength="6" />
+                <input matInput formControlName="otp" maxlength="6" [readonly]="otpReadOnly"/>
                 <mat-error *ngIf="form.get('otp')!.hasError('required')">OTP is required</mat-error>
               </mat-form-field>
             </div>
@@ -108,7 +108,7 @@
                   form.controls['password'].invalid ||
                   form.controls['confirmpassword'].invalid ||
                   form.controls['password'].value !==
-                  form.controls['confirmpassword'].value"> Proceed Register</button>
+                  form.controls['confirmpassword'].value"> Proceed to Register</button>
           </div>
         </div>
 
@@ -125,6 +125,9 @@
                 accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 style="display: none;" />
             </div>
+            <mat-hint *ngIf="!resumeUploaded && isFormSubmitted" style="color: #f44336; font-size: 12px;">
+              Resume is required
+            </mat-hint>
             <mat-hint *ngIf="resumeError" style="color: #f44336; font-size: 12px;">Resume size should be less than 2
               mb</mat-hint>
             <mat-hint *ngIf="resumeFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename

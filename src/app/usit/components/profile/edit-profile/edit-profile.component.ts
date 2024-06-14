@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject, map, startWith, takeUntil, tap } from 'rxjs';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -35,6 +35,7 @@ import { FileManagementService } from 'src/app/usit/services/file-management.ser
 import { ApiService } from 'src/app/core/services/api.service';
 import { FileData } from '../../employee-list/add-employee/add-employee.component';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
+import { SkillsInfoComponent } from '../skills-info/skills-info.component';
 
 @Component({
   selector: 'app-edit-profile',
@@ -129,6 +130,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   searchTechOptions$!: Observable<any>;
   technologyOptions!: any;
   isTechnologyDataAvailable: boolean = false;
+  public dialog= inject(MatDialog);
 
   constructor(
 
@@ -803,15 +805,15 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       const resumeData = new FormData();
       resumeData.append('resume', file, file.name);
 
-      this.fileService.parseResume(resumeData).subscribe(
-          (response: any) => {
-            this.consultantForm.get('skills')!.setValue(response.body.data);
-          },
-          (error: any) => {
-            // Handle error here if needed
-            console.error('Error parsing resume', error);
-          }
-      );
+      this.fileService.parseResume(resumeData).subscribe({
+        next: (response: any) => {
+          this.consultantForm.get('skills')!.setValue(response.body.data);
+          this.dialog.open(SkillsInfoComponent, { width: '500px'});
+        },
+        error: (error: any) => {
+          console.error('Error parsing resume', error);
+        }
+      });
       this.flg = true;
     }
   }

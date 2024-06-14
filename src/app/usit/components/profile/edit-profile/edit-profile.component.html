@@ -118,10 +118,9 @@
       </mat-form-field>
 
       <!-- Skill Set -->
-      <mat-form-field>
+      <mat-form-field *ngIf = "this.data.type === 'Resume'">
         <mat-label>Skills</mat-label>
         <textarea matInput formControlName="skills" rows="10" placeholder="Skill Set"></textarea>
-        <!-- <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint> -->
       </mat-form-field>
 
     </form>
