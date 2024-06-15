@@ -55,8 +55,11 @@
           >
             Requirement Number
           </th>
-          <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)" style="width: 10%">{{ element?.reqnumber }} 
-            <mat-icon *ngIf = "element?.submission_count === null" [ngClass]="{  'red-icon': element?.submission_count === null }">flag</mat-icon>
+          <td mat-cell *matCellDef="let element" (click)="goToReqInfo(element)" style="width: 10%; text-wrap: nowrap;">
+            <div style="display: flex; gap: 5px;">
+              <span class="req-info">{{ element?.reqnumber }}</span> 
+            <mat-icon *ngIf = "element?.submission_count === 0" [ngClass]="{  'red-icon': element?.submission_count === 0 }">assignment_late</mat-icon>
+            </div>
           </td>
         </ng-container>
         <!-- Date  mat-sort-header-->
@@ -135,8 +138,8 @@
           >
           Submitted CVs
           </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element?.submission_count === null ? 0 : element?.submission_count}}
+          <td mat-cell *matCellDef="let element" class="submission-count" (click)="submissionCount(element)" >
+            {{ element?.submission_count}}
           </td>
         </ng-container>
 
@@ -178,8 +181,9 @@
         <!-- Action Column -->
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef >Action</th>
-          <td mat-cell *matCellDef="let requirement" class="action-buttons" >
-            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')"
+          <td mat-cell *matCellDef="let requirement" style="white-space: nowrap;">
+            <span class="action-buttons">
+              <button [disabled]="!privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')"
               mat-icon-button
               (click)="editRequirement(requirement)"
               class="action-button-ed"  
@@ -194,6 +198,7 @@
             >
               <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_REQUIREMENTS')}">delete</mat-icon>
             </button>
+            </span>
           </td>
         </ng-container>
 

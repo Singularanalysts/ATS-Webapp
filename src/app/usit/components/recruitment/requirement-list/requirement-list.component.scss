@@ -181,23 +181,6 @@ tbody {
   align-items: center;
 }
 
-.filter-vendors {
-  display: flex;
-  column-gap: 5px;
-}
-
-.recruiting-companies {
-  color: #f44336;
-}
-
-.bench-sales-recruiter {
-  color: #3f51b5;
-}
-
-.both {
-  color: black;
-}
-
 .edit-icon,
 .delete-icon {
   color: rgb(99, 98, 98);
@@ -218,20 +201,11 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   height: 30px !important;
 }
 
-.filter-button {
-  width: fit-content;
-  height: 25px;
-}
-
-.approve-reject-buttons {
-  width: fit-content;
-  height: auto;
-}
-
-.req-info {
+.req-info, .submission-count {
   cursor: pointer;
   color: #4154f1;
   text-decoration: none;
+  font-weight: bold;
 }
 
 ::ng-deep
@@ -298,9 +272,11 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 .red-icon {
   color: red;
 }
+
 .orange-icon {
   color: orange;
 }
+
 .green-icon {
   color: green;
 }

@@ -70,7 +70,7 @@
             <mat-error *ngIf="form.get('contactnumber').errors?.required && form.get('contactnumber').errors?.validatePhoneNumber">Invalid Number</mat-error>
           </mat-form-field>	
 
-          <mat-form-field appearance="outline" class="full-width" *ngIf="details">
+          <mat-form-field appearance="outline" class="full-width password" *ngIf="details">
             <mat-label> Create Password</mat-label>
             <input matInput formControlName="password" maxlength="15" type="{{ hidePassword ? 'password' : 'text' }}" />
             <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
@@ -83,7 +83,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width" *ngIf="details">
+          <mat-form-field appearance="outline" class="full-width password" *ngIf="details">
             <mat-label>Confirm Password</mat-label>
             <input matInput formControlName="confirmpassword" maxlength="15"
               type="{{ hideConPassword ? 'password' : 'text' }}" />
@@ -103,12 +103,14 @@
           </mat-form-field>
 
           <div class="forgot-buttons" *ngIf="details">
-            <button mat-raised-button color="primary" class="full-width" type="submit" (click)="proceedToStep2()"
-              [disabled]="
-                  form.controls['password'].invalid ||
-                  form.controls['confirmpassword'].invalid ||
-                  form.controls['password'].value !==
-                  form.controls['confirmpassword'].value"> Proceed to Register</button>
+            <button mat-raised-button color="primary" class="full-width" type="submit" (click)="proceedToStep2()" [disabled]="
+                            form.controls['firstname'].invalid ||
+                            form.controls['lastname'].invalid ||
+                            form.controls['contactnumber'].invalid ||
+                            form.controls['password'].invalid ||
+                            form.controls['confirmpassword'].invalid ||
+                            form.controls['password'].value !==
+                            form.controls['confirmpassword'].value"> Proceed to Register</button>
           </div>
         </div>
 
@@ -125,7 +127,7 @@
                 accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 style="display: none;" />
             </div>
-            <mat-hint *ngIf="!resumeUploaded && isFormSubmitted" style="color: #f44336; font-size: 12px;">
+            <mat-hint *ngIf="isFormSubmitted && !resumeUploaded" style="color: #f44336; font-size: 12px;">
               Resume is required
             </mat-hint>
             <mat-hint *ngIf="resumeError" style="color: #f44336; font-size: 12px;">Resume size should be less than 2

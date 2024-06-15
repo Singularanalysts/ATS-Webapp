@@ -1,0 +1,75 @@
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+        {{ data.subCountData.reqnumber }} Submissions
+    </span>
+    <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+
+<div id="table-container" class="table-wrapper">
+    <section class="mat-elevation-z8 hot-list-table-style">
+      <table mat-table [dataSource]="dataSource"  matSort (matSortChange)="onSort($event)" oncopy="return false">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <!-- SNo Column -->
+        <ng-container matColumnDef="SerialNum">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number">
+            S.No </th>
+          <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+        </ng-container>
+
+        <!-- Submission Date Column-->
+        <ng-container matColumnDef="createddate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by createddate"> Submission Date
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.createddate }} </td>
+        </ng-container>
+
+        <!-- Submission ID Column-->
+        <ng-container matColumnDef="subno">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by subno"> Submission ID
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.subno }} </td>
+        </ng-container>
+
+        <!-- Consultant Column-->
+        <ng-container matColumnDef="Consultant">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Consultant"> Consultant
+          </th>
+          <td mat-cell *matCellDef="let element"> {{ element.consultantname | titlecase }} </td>
+        </ng-container>
+
+        <!-- Submitted By Column-->
+        <ng-container matColumnDef="pseudoname">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by pseudoname" > Submitted By </th>
+          <td mat-cell *matCellDef="let element"> {{ element.psname }} </td>
+        </ng-container>
+
+        <!-- Status Column-->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status" > Status </th>
+          <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+        </ng-container>
+
+        <!-- Sub Status Column-->
+        <ng-container matColumnDef="substatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by substatus" > Sub Status </th>
+          <td mat-cell *matCellDef="let element"> {{ element.substatus }} </td>
+        </ng-container>
+
+        <!-- Resume Column-->
+        <ng-container matColumnDef="resume">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by resume" > Resume </th>
+          <td mat-cell *matCellDef="let element" class="resume-download" (click)="downloadfile(element.consultantid,element.resume,'resume')"> {{ element.resume }} </td>
+        </ng-container>
+
+        <!-- table ROW -->
+        <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+      </table>
+      <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+    </section>
+  </div>

@@ -80,4 +80,7 @@ export class RequirementService {
     return this.apiServ.get("openreqs/dice/recruiterpopup/"+vendor);
   }
 
+  getReqSubmisiionPopupRecords(data: any){
+    return this.apiServ.post("requirement/submissionPopUp", data);
+  }
 }

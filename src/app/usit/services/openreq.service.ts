@@ -86,4 +86,8 @@ export class OpenreqService {
   getCpvFpvOpenRequirements(data: any) {
     return this.http.post("openreqs/dice/getCpvFpvReq", data);
   }
+
+  getCfoAndVp(data: any) {
+    return this.http.post("openreqs/linked/LinkedInPofilesRequest", data);
+  }
 }

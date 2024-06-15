@@ -262,6 +262,11 @@
       "routerLink": "/usit/linkedinprofiles"
     },
     {
+      "text": "VC-CX Profiles",
+      "icon": "badge",
+      "routerLink": "/usit/vc-cx-profiles"
+    },
+    {
       "text": "Talent Acquisition",
       "icon": "person_search",
       "children": [

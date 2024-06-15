@@ -155,19 +155,21 @@ export class RegisterConsultantComponent implements OnInit {
   userLogin() {
     this.isFormSubmitted = true;
     this.form.get('technology').setValue(this.techid);
-    if(this.form.invalid || !this.resumeUploaded) {
-      this.resumeUploaded = false
+    if (!this.resumeUploaded) {
+      this.resumeUploaded = false;
+      this.form.markAllAsTouched();
+    } else if (this.form.invalid) {
       this.form.markAllAsTouched();
     } else {
       this.permissionServ.consultantRegistration(this.form.value).subscribe(
         (response: any) => {
-          if(response.status = "success") {
+          if (response.status === "success") {
             this.showErrorNotification(response.message, 'success');
             this.onFileSubmit(response.data);
             this.router.navigate(['/login']);
           }
         }
-      )
+      );
     }
     
   }

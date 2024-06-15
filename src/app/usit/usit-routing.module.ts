@@ -56,6 +56,7 @@ import { ConsultantOpenreqsComponent } from './components/consultant-components/
 import { ConsultantAppliedJobsComponent } from './components/consultant-components/consultant-applied-jobs/consultant-applied-jobs.component';
 import { OpenreqsJobApplicationsComponent } from './components/openreqs-job-applications/openreqs-job-applications.component';
 import { CpvFpvOpenRequirementsComponent } from './components/openreqs/cpv-fpv-open-requirements/cpv-fpv-open-requirements.component';
+import { CxComponent } from './components/cx/cx.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -319,6 +320,9 @@ const routes: Routes = [
   },
   { 
     path: 'openreqs-job-applications', component: OpenreqsJobApplicationsComponent,
+  },
+  { 
+    path: 'vc-cx-profiles', component: CxComponent,
   }
 
 ];

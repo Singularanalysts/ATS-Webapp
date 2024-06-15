@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -33,6 +33,7 @@ import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
 import { RequirementService } from 'src/app/usit/services/requirement.service';
 import { AddRequirementComponent } from './add-requirement/add-requirement.component';
 import { RequirementInfoComponent } from './requirement-info/requirement-info.component';
+import { RequirementSubmissionCountComponent } from './requirement-submission-count/requirement-submission-count.component';
 
 @Component({
   selector: 'app-requirement-list',
@@ -341,6 +342,23 @@ export class RequirementListComponent implements OnInit, OnDestroy {
 
    this.dialogServ.openDialogWithComponent(
       RequirementInfoComponent,
+      dialogConfig
+    );
+  }
+
+  submissionCount(data: any) {
+    const actionData = {
+      subCountData: data,
+      actionName: 'req-submission-count',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'req-submission-count';
+    dialogConfig.data = actionData;
+
+   this.dialogServ.openDialogWithComponent(
+      RequirementSubmissionCountComponent,
       dialogConfig
     );
   }

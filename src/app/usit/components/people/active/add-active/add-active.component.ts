@@ -539,7 +539,6 @@ export class AddActiveComponent implements OnInit {
 
   downloadfile(id: number, filename: string, flg: string) {
     var items = filename.split(".");
-    console.log(items, items.length);
      this.fileService
        .downloadH1bFile(id, flg)
        .subscribe(blob => {
