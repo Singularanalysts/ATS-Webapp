@@ -1,8 +1,8 @@
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8px;
+  // height: 2rem;
+  padding-top: 2px;
   margin-top: 0px !important;
 }
 
@@ -424,4 +424,136 @@ a {
   .location-form-field .mat-mdc-form-field-subscript-wrapper {
     display: none;
   }
+}
+
+.analysis-container {
+  // display: flex;
+  height: auto;
+  // justify-content: space-between;
+  // padding-top: 10px;
+}
+
+.analysis-container .req-container {
+  width: 49%;
+}
+
+.analysis-container .tab-container {
+  width: 49%;
+}
+
+.analysis-container .analysis-left-div {
+  width: 49%;
+}
+
+.analysis-container .analysis-right-div {
+  width: 49%;
+}
+
+.header-container-analysis {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0px 6px 0px 0px;
+  z-index: 99999;
+  top: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+.vendor-actions {
+  display: flex;
+  align-items: center;
+
+  input:focus {
+    border: solid 2px #3f51b5 !important;
+    outline: none;
+  }
+  .search {
+    height: 32px;
+    padding: 0px 8px;
+  }
+  .dice {
+    width: 350px;
+  }
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.count {
+  color: #4154f1;
+  font-weight: bold;
+  cursor: pointer;
+}
+.paginator-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.paginator {
+  flex: 1;
+  margin-right: 10px; /* Adjust margin as needed */
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+}
+
+.mat-mdc-row {
+  height: 30px !important;
+}
+
+::ng-deep {
+  .date-form-field .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.analysis-card {
+  height: calc(100vh - 155px);
+}
+
+.analysis-card-content {
+  height: calc(100vh - 42px);
+}
+
+.requirements-card {
+  height: calc(100vh - 263px);
+}
+
+.requirements-card-content {
+  height: calc(100vh - 72px);
+}
+
+.mat-datepicker-input {
+  width: 85%;
+}
+
+.clear {
+  position: relative;
+  float: right;
+  top: -3px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-mdc-card-content:first-child {
+  padding-top: 4px !important;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 4px !important;
+}
+
+.table-style {
+  height: calc(100vh - 260px) !important;
+  overflow-y: auto;
+}
+
+.overall-container {
+  height: calc(100vh - 68px);
 }

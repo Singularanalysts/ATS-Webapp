@@ -19,6 +19,10 @@ import { Router } from '@angular/router';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
+
+  totalRequests = 0;
+  completedRequests = 0;
+
   constructor(
     private authService: PermissionsService,
     private loaderServ: LoaderService,
@@ -39,8 +43,10 @@ export class HttpInterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+
     
-    this.loaderServ.showLoader()
+    this.loaderServ.showLoader();
+    this.totalRequests++;
   
     if (this.authService.getToken() && this.authService.isUserSignedin()) {
       const request = req.clone({
@@ -52,16 +58,39 @@ export class HttpInterceptorService implements HttpInterceptor {
       return next.handle(request).pipe(
         retry(1),
         finalize(() => {
-          this.loaderServ.hideLoader();
+          this.completedRequests++;
+
+          if(this.completedRequests === this.totalRequests) {
+            this.loaderServ.hideLoader();
+            this.totalRequests = 0;
+            this.completedRequests = 0;
+          }
         }),
         catchError((error: HttpErrorResponse) => {
           this.handleServerSideError(error);
-         // console.log("error-message", error)
           return throwError(() => error);
         })
       );
     }
-    else if ((this.router.url === '/' || this.router.url === '/logout' || this.router.url === '/forgot-password')) {
+    else if (!this.authService.getToken() && !this.authService.isUserSignedin()) {
+      // Allow requests to certain URLs without a token
+    return next.handle(req).pipe(
+      finalize(() => {
+        this.completedRequests++;
+
+        if (this.completedRequests === this.totalRequests) {
+          this.loaderServ.hideLoader();
+          this.totalRequests = 0;
+          this.completedRequests = 0;
+        }
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.handleServerSideError(error);
+        return throwError(() => error);
+      })
+    );
+    }
+    else if ((this.router.url === '/' || this.router.url === '/logout' || this.router.url === '/forgot-password' || this.router.url === '/consultant-register')) {
       //  this.router.navigate(['/']);
     }
     else {

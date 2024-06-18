@@ -24,10 +24,15 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
     if(this.role=='Super Administrator' || this.role=='HR Manager'){
       this.getSideNavData('assets/side-navbar-Super-Admin.json')
     }
+
+    else if (this.department=='Accounts'){
+      this.getSideNavData('assets/side-navbar-accounts-items.json')
+    }
+    
     else if (this.role=='Administrator'  || this.department=='SoftWare' || this.department=='Software'){
       this.getSideNavData('assets/side-navbar-Admin.json')
     }
-    else if(this.department=='DomRecruiting'){
+    else if(this.department=='Dom Recruiting'){
       this.getSideNavData('assets/side-navbar-dom-items.json')
     }
     else if(this.role=='Sales Manager'){
@@ -47,6 +52,9 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
 
     else if (this.department=='Sourcing'){
       this.getSideNavData('assets/side-navbar-sourcing-items.json')
+    }
+    else if (this.department=='Consultant'){
+      this.getSideNavData('assets/side-navbar-consultant-items.json')
     }
     else{
       this.getSideNavData('assets/side-navbar-Super-Admin.json')

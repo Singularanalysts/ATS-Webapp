@@ -79,6 +79,7 @@ export class AddInterviewComponent implements OnInit {
   selectOptionObj = {
     timeZone: TIME_ZONE,
     radioOptions: RADIO_OPTIONS,
+    netterm: NETTERM,
   };
   entity: any;
   // to clear subscriptions
@@ -178,7 +179,7 @@ export class AddInterviewComponent implements OnInit {
         projectendtdate: [interviewData && interviewData.closure ? interviewData.closure.projectendtdate : ''],
         projectStartDate: [interviewData && interviewData.closure ? interviewData.closure.projectStartDate : ''],
         payRateConsultant: [interviewData && interviewData.closure ? interviewData.closure.payRateConsultant : ''],
-        vendorArPhoneNumber: [interviewData && interviewData.closure ? interviewData.closure.vendorArPhoneNumber : ''],
+      //Comment by Kiran  vendorArPhoneNumber: [interviewData && interviewData.closure ? interviewData.closure.vendorArPhoneNumber : ''],
         paymentCycle: [interviewData && interviewData.closure ? parseInt(interviewData.closure.paymentCycle, 10) : ''],
         vendorApPhoneNumber: this.flag === 'Recruiting' ?
           this.formBuilder.control(interviewData && interviewData.closure ? interviewData.closure.vendorApPhoneNumber : '') :
@@ -209,7 +210,7 @@ export class AddInterviewComponent implements OnInit {
       const projectDuration = this.interviewForm.get('closure.projectDuration');
       const payRateConsultant = this.interviewForm.get('closure.payRateConsultant');
       const billRateVendor = this.interviewForm.get('closure.billRateVendor');
-      const vendorArPhoneNumber = this.interviewForm.get('closure.vendorArPhoneNumber');
+      // comment by Chary const vendorArPhoneNumber = this.interviewForm.get('closure.vendorArPhoneNumber');
       const billingCycle = this.interviewForm.get('closure.billingCycle');
       const paymentCycle = this.interviewForm.get('closure.paymentCycle');
       const projectendtdate = this.interviewForm.get('closure.projectendtdate');
@@ -220,7 +221,7 @@ export class AddInterviewComponent implements OnInit {
         projectDuration.setValidators(Validators.required);
         payRateConsultant.setValidators(Validators.required);
         billRateVendor.setValidators(Validators.required);
-        vendorArPhoneNumber.setValidators(Validators.required);
+       // vendorArPhoneNumber.setValidators(Validators.required);
         billingCycle.setValidators(Validators.required);
         paymentCycle.setValidators(Validators.required);
         // projectendtdate.setValidators(Validators.required);
@@ -236,7 +237,7 @@ export class AddInterviewComponent implements OnInit {
         projectDuration.clearValidators();
         payRateConsultant.clearValidators();
         billRateVendor.clearValidators();
-        vendorArPhoneNumber.clearValidators();
+       // vendorArPhoneNumber.clearValidators();
         billingCycle.clearValidators();
         paymentCycle.clearValidators();
         // projectendtdate.clearValidators();
@@ -247,7 +248,7 @@ export class AddInterviewComponent implements OnInit {
       projectDuration.updateValueAndValidity();
       payRateConsultant.updateValueAndValidity();
       billRateVendor.updateValueAndValidity();
-      vendorArPhoneNumber.updateValueAndValidity();
+      //vendorArPhoneNumber.updateValueAndValidity();
       billingCycle.updateValueAndValidity();
       paymentCycle.updateValueAndValidity();
       // projectendtdate.updateValueAndValidity();
@@ -259,23 +260,10 @@ export class AddInterviewComponent implements OnInit {
   getsubdetails(flg: string) {
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');
-
-    // this.interviewServ.getsubmissions(flg, this.userid, this.role).subscribe(
-    //   (response: any) => {
-    //     this.submissiondata = response.data;
-    //     console.log( this.submissiondata);
-    //   });
-
-    // this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role).subscribe(
-    //   (response: any) => {
-    //     this.submissiondata = response.data;
-    //     console.log( this.submissiondata);
-    //   });
     this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
-         // console.log(resp);
           this.getSubmissionOptionsForAutoComplete(resp);
         }
       })
@@ -284,7 +272,6 @@ export class AddInterviewComponent implements OnInit {
 
   getSubmissionOptionsForAutoComplete(data: any) {
     this.submissionOptions = data;
-   // console.log(data);
     this.searchSubmissionOptions$ = this.interviewForm.controls.submission.valueChanges.pipe(
       startWith(''),
       map(value => this._filterSubmissionOptions(value, this.submissionOptions))
@@ -297,10 +284,8 @@ export class AddInterviewComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.subdetails.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredOptions);
     if (filteredOptions.length === 1) {
       this.submissionid = filteredOptions[0].subid;
-      //console.log(this.submissionid);
     }
     // this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;
@@ -345,7 +330,6 @@ export class AddInterviewComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const saveReqObj = this.getSaveData();
-    console.log(saveReqObj)
     this.interviewServ
       .addORUpdateInterview(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -374,9 +358,7 @@ export class AddInterviewComponent implements OnInit {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
-
       
-
   }
 
   /** to display form validation messages */
@@ -421,9 +403,17 @@ export class AddInterviewComponent implements OnInit {
 }
 
 export const TIME_ZONE = [
-  'AST', 'EST', 'EDT', 'CST', 'CDT', 'MST', 'MDT', 'PST', 'PDT', 'AKST', 'AKDT', 'HST', 'HAST', 'HADT', 'SST', 'SDT', 'CHST'
+  'AST', 'EST', 'EDT', 'CST', 'CDT', 'MST', 'MDT', 'PST', 'PDT', 'AKST', 'AKDT', 'HST', 'HAST', 'HADT', 'SST', 'SDT', 'CHST','IST'
 ] as const;
 
+
+export const NETTERM = [
+  'Net 15',
+  'Net 30',
+  'Net 45',
+  'Net 60',
+  'Net 90',
+]
 export const RADIO_OPTIONS = {
   interviewround: [
     { value: 'First', id: 1, selected: true },

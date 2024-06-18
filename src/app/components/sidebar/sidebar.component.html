@@ -6,7 +6,10 @@
     (click)="sidenav.toggle()" >
       <mat-icon [@rotate]="sidenav.opened ? 'close' : 'menu'">{{sidenav.opened ? 'close' : 'menu'}}</mat-icon>
     </button>
-    <img src="assets/images/singular-logo.png" alt="logo" width="150" height="150" loading="lazy">
+    <!-- <img src="assets/images/singular-logo.png" alt="logo" width="150" height="150" loading="lazy"> -->
+    <a routerLink="/usit/dashboard" style="height: inherit;">
+      <img src="assets/images/singular-logo.png" alt="logo" loading="lazy">
+    </a>
     <span class="button-divider"></span>
     <!-- <button mat-icon-button class="login-icon" aria-label="login-icon" (click)="login()">
       <mat-icon>login</mat-icon>
@@ -20,15 +23,15 @@
     <button mat-menu-item class="user-name">
       {{ userManagementServ.getRoleName() }} 
     </button>
-    <button mat-menu-item  routerLink="password">
+    <button mat-menu-item  routerLink="password" *ngIf="role != 'Employee'">
       My Profile
       <mat-icon class="icon">person</mat-icon>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item *ngIf="role != 'Employee'">
       <mat-icon class="icon">settings</mat-icon>
       Account Settings
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item *ngIf="role != 'Employee'">
       <mat-icon class="icon">help</mat-icon>
       Need Help?
     </button>
@@ -54,10 +57,10 @@
         [value]="value">
       </mat-progress-spinner> -->
       <!-- progress-bar -->
-      <mat-progress-bar class="progress-bar"
+      <!-- <mat-progress-bar class="progress-bar"
         [color]="color" *ngIf="isLoading$ | async"
         [mode]="progressBarMode">
-      </mat-progress-bar>
+      </mat-progress-bar> -->
       <router-outlet></router-outlet>
     </mat-sidenav-content>
 

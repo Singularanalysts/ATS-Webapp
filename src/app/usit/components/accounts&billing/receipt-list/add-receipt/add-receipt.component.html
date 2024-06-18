@@ -1,0 +1,98 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+    <form [formGroup]="receiptForm" (ngSubmit)="onSubmit()" class="receipt-form">
+        <div class="form">
+            <div class="form-column-left">
+                <!-- Invoice Number -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Serial Number</mat-label>
+                    <input matInput formControlName="serialno" maxlength="12" readonly>
+                </mat-form-field>
+
+                <!-- Invoice Number -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Date</mat-label>
+                    <input matInput formControlName="serialno" maxlength="12" readonly>
+                </mat-form-field>
+
+                <!-- Select Vendor -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Vendor</mat-label>
+                    <mat-select formControlName="vendor">
+                        <!-- <mat-option *ngFor="let option of  vendorCompanyArr" [value]="option.id">{{ option.company.trim() }}</mat-option> -->
+                    </mat-select>
+                    <mat-error *ngIf="receiptForm.get('vendor')!.hasError('required')"> Vendor is required</mat-error>
+                </mat-form-field>
+
+                <!-- Amount -->
+                <mat-form-field>
+                    <mat-label>Amount</mat-label>
+                    <input matInput formControlName="amount">
+                    <mat-error *ngIf="receiptForm.get('amount')!.hasError('required')"> Amount is required</mat-error>
+                </mat-form-field>
+
+                <!-- Select Transaction Type -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Transaction Type</mat-label>
+                    <mat-select formControlName="transactiontype">
+                        <mat-option value="Cheque">Cheque</mat-option>
+                        <mat-option value="Online Transfer">Online Transfer</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="receiptForm.get('transactiontype')!.hasError('required')"> Transaction Type is required</mat-error>
+                </mat-form-field>
+
+            </div>
+            <div class="form-column-right">
+                <!-- Remarks -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Remarks</mat-label>
+                    <input matInput formControlName="remarks">
+                    <mat-error *ngIf="receiptForm.get('remarks')!.hasError('required')"> Remarks is required</mat-error>
+                </mat-form-field>
+            
+            
+                <!-- Cheque Number -->
+                <mat-form-field appearance="fill" *ngIf="receiptForm.get('transactiontype')?.value === 'Cheque'">
+                    <mat-label>Cheque Number</mat-label>
+                    <input matInput formControlName="chequeno">
+                    <mat-error *ngIf="receiptForm.get('chequeno')!.hasError('required')"> Check Number is required</mat-error>
+                </mat-form-field>
+            
+                <!-- Cheque Date -->
+                <mat-form-field appearance="fill" *ngIf="receiptForm.get('transactiontype')?.value === 'Cheque'">
+                    <mat-label>Cheque Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="chequedate">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="receiptForm.get('chequedate')!.hasError('required')"> Check Date is required</mat-error>
+                </mat-form-field>
+            
+                <!-- Bank Name -->
+                <mat-form-field appearance="fill" *ngIf="receiptForm.get('transactiontype')?.value === 'Cheque'">
+                    <mat-label>Bank Name</mat-label>
+                    <input matInput formControlName="bankname">
+                    <mat-error *ngIf="receiptForm.get('bankname')!.hasError('required')"> Bank Name is required</mat-error>
+                </mat-form-field>
+            
+                <!-- Online Id -->
+                <mat-form-field appearance="fill" *ngIf="receiptForm.get('transactiontype')?.value === 'Cheque'">
+                    <mat-label>Online Id</mat-label>
+                    <input matInput formControlName="onlineid">
+                    <mat-error *ngIf="receiptForm.get('onlineid')!.hasError('required')"> Online Id is required</mat-error>
+                </mat-form-field>
+            
+            </div>
+        </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

@@ -1,0 +1,65 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{ data.title }}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+    <form [formGroup]="emailExtractForm" class="vendor-form">
+        <div class="form">
+            <div class="form-column-left">
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Enter Email</mat-label>
+                    <input matInput formControlName="email" />
+                    <mat-error *ngIf="emailExtractForm.get('email')!.hasError('required')">Email is required</mat-error>
+                    <mat-error *ngIf="emailExtractForm.get('email')!.hasError('email')">Invalid email
+                        address</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker" formControlName="fromDate" placeholder="DD-MM-YYYY" />
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker></mat-datepicker>
+                    <!-- <mat-error *ngIf="isFormSubmitted && loginFrom.fromDate.errors && loginFrom.fromDate.errors.required">From Date is required</mat-error> -->
+
+                  <!-- <mat-error *ngIf="emailExtractForm.get('fromDate')!.hasError('required')">
+                        From Date is required</mat-error> -->
+                        <mat-error *ngIf="emailExtractForm.get('fromDate')!.hasError('required')">From Date is required
+                          </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter Password</mat-label>
+                    <input matInput formControlName="password" type="password" />
+                    <mat-error *ngIf="emailExtractForm.get('password')!.hasError('required')">Password is
+                        required</mat-error>
+                    <!-- <mat-error *ngIf="emailExtractForm.get('password')!.hasError('pattern')">
+                        password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1
+                        num]
+                    </mat-error> -->
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="datepicker1" formControlName="toDate" placeholder="DD-MM-YYYY" />
+                    <mat-datepicker-toggle matIconSuffix [for]="datepicker1"></mat-datepicker-toggle>
+                    <mat-datepicker #datepicker1></mat-datepicker>
+                    <mat-error *ngIf="emailExtractForm.get('toDate')!.hasError('required')">
+                        To Date is required</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">
+            Submit
+        </button>
+    </div>
+</mat-card>

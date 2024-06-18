@@ -62,7 +62,6 @@ export class OpenReqsAnalysisComponent {
 
   ngOnInit(): void {
     const userid = localStorage.getItem('userid');
-    console.log(this.data);
     this.getReqVendorPopup();
     
   }
@@ -70,7 +69,6 @@ export class OpenReqsAnalysisComponent {
   getReqVendorPopup() {
     this.dashboardServ.getReqCounts(this.data.vendorOrCategory, 'popup', this.data.type, this.data.date).subscribe(
       (response: any) => {
-        console.log(response);
         this.dataSource.data = response.data;
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = i + 1;

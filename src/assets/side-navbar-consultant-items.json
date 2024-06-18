@@ -1,0 +1,48 @@
+[  
+  {
+    "text": "View Profile",
+    "icon": "person",
+    "routerLink": "/usit/profile"
+  },
+  {
+    "text": "Dashboard",
+    "icon": "dashboard",
+    "routerLink": "/usit/dashboard"
+  },
+  {
+    "text": "Search",
+    "icon": "search",
+    "routerLink": "/usit/search"
+  },
+  {
+    "text": "Job Requirements",
+    "icon": "business_center",
+    "children": [
+      {
+        "text": "Contract",
+        "icon": "library_books",
+        "routerLink": "/usit/open-requirements"
+      },
+      {
+        "text": "Full Time",
+        "icon": "library_books",
+        "routerLink": "/usit/full-time-requirements"
+      }
+    ]
+  },
+  {
+    "text": "Applied Jobs",
+    "icon": "bookmark_border",
+    "routerLink": "/usit/applied-jobs"
+  },
+  {
+    "text": "Submissions",
+    "icon": "assignment",
+    "routerLink": "/usit/submissions"
+  },
+  {
+    "text": "Interviews",
+    "icon": "chat_bubble_outline",
+    "routerLink": "/usit/interviews"
+  }
+]

@@ -22,6 +22,26 @@
         "text": "Recruiters",
         "icon": "business_center",
         "routerLink": "/usit/recruiters"
+      },
+      {
+        "text": "Blacklisted Companies",
+        "icon": "block",
+        "routerLink": "/usit/blacklisted-companies"
+      },
+      {
+        "text": "Current Primary Vendor",
+        "icon": "group",
+        "routerLink": "/usit/current-primary-vendor"
+      },
+      {
+        "text": "Future Primary Vendor",
+        "icon": "group",
+        "routerLink": "/usit/future-primary-vendor"
+      },
+      {
+        "text": "Known Vendor Contacts",
+        "icon": "group",
+        "routerLink": "/usit/known-vendor-contacts"
       }
     ]
   },
@@ -110,19 +130,45 @@
     "icon": "work",
     "children": [
       {
-        "text": "Portal Reqs",
+        "text": "Portal Requirements",
         "icon": "group",
         "routerLink": "/usit/portalreqs"
+      },
+      {
+        "text": "CPV Portal Requirements",
+        "icon": "group",
+        "routerLink": "/usit/cpv-portal-requirements"
+      },
+      {
+        "text": "FPV Portal Requirements",
+        "icon": "group",
+        "routerLink": "/usit/fpv-portal-requirements"
       },
       {
         "text": "RSS",
         "icon": "business_center",
         "routerLink": "/usit/rssfeed"
-      },
+      }
+    ]
+  },
+  {
+    "text": "Openreqs Job Applications",
+    "icon": "view_carousel",
+    "routerLink": "/usit/openreqs-job-applications"
+  },
+  {
+    "text": "Talent Pool",
+    "icon": "business_center",
+    "routerLink": "/usit/linkedinprofiles"
+  },
+  {
+    "text": "Talent Acquisition",
+    "icon": "person_search",
+    "children": [
       {
-        "text": "LinkedIn Profiles",
-        "icon": "business_center",
-        "routerLink": "/usit/linkedinprofiles"
+        "text": "Hot List Providers",
+        "icon": "groups",
+        "routerLink": "/usit/hot-list-providers"
       }
     ]
   },
@@ -139,6 +185,16 @@
         "text": "Sourcing Reports",
         "icon": "dynamic_feed",
         "routerLink": "/usit/sourcing-report"
+      },
+      {
+        "text": "Open Reqs Reports",
+        "icon": "dynamic_feed",
+        "routerLink": "/usit/open-reqs-report"
+      },
+      {
+        "text": "Banter Reports",
+        "icon": "fax",
+        "routerLink": "/usit/banter-report"
       }
     ]
   },

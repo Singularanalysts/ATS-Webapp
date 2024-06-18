@@ -457,11 +457,6 @@ export class AddVendorComponent implements OnInit, OnDestroy {
           return of<any>([]);
         }
       })
-      // Uncomment below to verify the searched result
-      // tap((res) => {
-      //   console.log({res})
-
-      // }),
     );
   }
   /**
@@ -525,4 +520,4 @@ export const TIER_TYPE = [
 
 export const COMPANY_TYPE = ['Recruiting', 'Bench Sales', 'Both'] as const;
 
-export const STATUS_TYPE = ['Active', 'Approved', 'Rejected'] as const;
+export const STATUS_TYPE = ['Active', 'Approved', 'Rejected', 'Blacklisted'] as const;

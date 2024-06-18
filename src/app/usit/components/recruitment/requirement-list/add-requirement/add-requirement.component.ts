@@ -152,7 +152,6 @@ export class AddRequirementComponent {
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
-          console.log(resp);
           this.getCompanyOptionsForAutoComplete(resp);
         }
       })
@@ -196,8 +195,6 @@ export class AddRequirementComponent {
 
   getCompanyOptionsForAutoComplete(data: any) {
     this.companyOptions = data;
-    // console.log(data);
-
     this.searchCompanyOptions$ = this.requirementForm.controls['vendorimpl'].valueChanges.pipe(
       startWith(''),
       map(value => this._filterCompanyOptions(value, this.companyOptions))
@@ -206,8 +203,6 @@ export class AddRequirementComponent {
 
   companyid: any;
   private _filterCompanyOptions(value: any, options: any[]): any[] {
-    // console.log(options);
-
     const filterValue = (value ? value.toString() : '').toLowerCase();
     const filteredOptions = options.filter(option =>
       option.company.toLowerCase().includes(filterValue)
@@ -281,7 +276,6 @@ export class AddRequirementComponent {
       this.requirementServ.getVendorById(requirementData.vendorimpl).subscribe(
         (vendor: any) => {
           if (vendor && vendor.data) {
-            console.log(JSON.stringify(vendor.data));
             this.companyid = vendor.data.vmsid;
             this.requirementForm.get('vendorimpl')!.setValue(vendor.data.company);
           }
@@ -329,11 +323,6 @@ export class AddRequirementComponent {
     const filteredTechnologies = options.filter((option: any) =>
       option.technologyarea.toLowerCase().includes(filterValue)
     );
-    // this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
-    // if (filteredTechnologies.length > 1) {
-    //   this.techid = filteredTechnologies[0].id;
-    //   console.log(this.techid);
-    // }
     return filteredTechnologies;
   }
 
@@ -354,19 +343,12 @@ export class AddRequirementComponent {
 
   recruiterArr: any[] = [];
   recruiterList(option: any) {
-   // console.log(option);
     const newVal = option.id;
     this.companyid = option.id;
-   // console.log(newVal);
 
     this.requirementServ.getRecruiterOfTheVendor(newVal, 'Recruiter').subscribe(
       (response: any) => {
         this.recruiterArr = response.data;
-      //  console.log(response.data)
-        // this.requirementForm.get("pocphonenumber")!.patchValue('');
-        // this.requirementForm.get("pocemail")!.patchValue('');
-        // this.requirementForm.get("recruiter")!.patchValue(response.data[0].recruiter);
-        // this.requirementForm.get("pocposition")!.patchValue('');
       }
     );
   }
@@ -374,8 +356,6 @@ export class AddRequirementComponent {
   techSkills(option: any) {
     const newVal = option.id;
     this.techid = option.id;
-    console.log(newVal);
-
     if (newVal == '') {
       this.autoskills = '';
     }
@@ -751,7 +731,7 @@ addTechnology() {
 }
 }
 
-export const STATUS_TYPE = ['Active', 'on hold', 'closed', 'InActive'] as const;
+export const STATUS_TYPE = ['Active', 'on hold', 'closed', 'InActive', 'Priority'] as const;
 
 class ConstactInfo {
   company!: string;

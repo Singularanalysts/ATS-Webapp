@@ -35,7 +35,7 @@
         <!-- Official Email -->
         <mat-form-field appearance="fill">
           <mat-label>Official Email</mat-label>
-          <input matInput formControlName="email" maxlength="50" (input)="convertToLowerCase($event)">
+          <input matInput formControlName="email" maxlength="50" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)">
           <mat-error *ngIf="employeeForm.get('email')!.hasError('required')">Email is
             required</mat-error>
           <mat-error *ngIf="employeeForm.get('email')!.hasError('email')">Invalid email

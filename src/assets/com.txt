@@ -1,0 +1,17 @@
+
+  ,
+        {
+          "text": "Mass Mailing List",
+          "icon": "mail",
+          "routerLink": "/usit/mass-mailing-list"
+        }
+
+
+
+
+        ,
+        {
+          "text": "Open Reqs Reports",
+          "icon": "dynamic_feed",
+          "routerLink": "/usit/open-reqs-report"
+        }

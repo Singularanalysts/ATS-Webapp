@@ -1,12 +1,13 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 68px);
 }
 
 .table-wrapper {
+  flex: 1;
   overflow: auto;
-  padding: 4px;
+  // padding:  0px 4px 4px 4px;
 }
 
 table {
@@ -122,8 +123,8 @@ thead {
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8px;
+  // height: 2rem;
+  padding-top: 2px;
   top: 0;
 }
 

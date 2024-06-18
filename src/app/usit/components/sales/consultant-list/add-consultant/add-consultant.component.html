@@ -8,7 +8,7 @@
 </div>
 <mat-card class="center-card">
 
-  <form [formGroup]="consultantForm" class="consultant-form" autocomplete="off" >
+  <form [formGroup]="consultantForm" class="consultant-form" autocomplete="off">
     <input type="hidden" formControlName="consultantid">
     <input type="hidden" formControlName="consultantno">
     <input type="hidden" formControlName="dommaxno">
@@ -141,7 +141,6 @@
             </mat-select>
             <button matSuffix mat-icon-button
               (click)="onAddCompany();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-
             <mat-error *ngIf="consultantForm.get('company')!.hasError('required')">Company is
               Required
             </mat-error>
@@ -157,14 +156,13 @@
         </mat-form-field>
 
         <!-- status -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="this.role !== 'Employee'">
           <mat-label>Select Status</mat-label>
           <mat-select formControlName="status">
             <mat-option *ngFor="let option of selectOptionObj.statusType" [value]="option">
               {{ option }}
             </mat-option>
           </mat-select>
-
           <mat-error *ngIf="consultantForm.get('status')!.hasError('required')">Status is
             Required
           </mat-error>
@@ -211,18 +209,20 @@
         </div> -->
 
         <div class="select-technology-field">
-            <mat-form-field appearance="fill">
-              <mat-label>Select Technology</mat-label>
-              <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" >
-              <mat-autocomplete #techAutoCmp="matAutocomplete">
-                <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techskills(option)" [value]="option.technologyarea">
-                  {{ option.technologyarea }}
-                </mat-option>
-              </mat-autocomplete>
-              <button matSuffix mat-icon-button (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-              <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is Required</mat-error>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="fill">
+            <mat-label>Select Technology</mat-label>
+            <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp">
+            <mat-autocomplete #techAutoCmp="matAutocomplete">
+              <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techskills(option)"
+                [value]="option.technologyarea">
+                {{ option.technologyarea }}
+              </mat-option>
+            </mat-autocomplete>
+            <button matSuffix mat-icon-button
+              (click)="onAddTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <mat-error *ngIf="consultantForm.get('technology').hasError('required')">Technology is Required</mat-error>
+          </mat-form-field>
+        </div>
         <!-- Skill Set -->
         <div class="form-details-textarea">
           <mat-form-field>
@@ -246,7 +246,7 @@
         <mat-form-field appearance="fill">
           <mat-label *ngIf="flag=='DomRecruiting'">Monthly Salary</mat-label>
           <mat-label *ngIf="flag!='DomRecruiting'">Hourly Rate</mat-label>
-          <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="10">
+          <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="10"   (keypress)="onlyNumberKey($event)">
           <mat-error *ngIf="consultantForm.get('hourlyrate').hasError('required')">Hourly Rate is Required</mat-error>
         </mat-form-field>
 
@@ -267,8 +267,8 @@
           <mat-label>Relocation Type</mat-label>
           <mat-radio-group aria-label="Select an option" formControlName="relocation">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.relocation" [value]="opt.value"
-              (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
-            <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required')">Relocation is
+              (change)="onRelocationRadioChange($event)">{{opt.value}}</mat-radio-button>
+            <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required') && isRelocationRadSelected">Relocation is
               Required
             </mat-error>
           </mat-radio-group>

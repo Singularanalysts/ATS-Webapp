@@ -8,6 +8,14 @@ export class OpenreqService {
 
   constructor(private http: ApiService) { }
 
+  readmail(entity: any) {
+     return this.http.post("mail/extractEmail", entity);
+  }
+
+  fetch( page: any, size: any,searchQuery:string) {
+    return this.http.get("mail/read/"+page + "/" + size+"/"+searchQuery);
+  }
+
   public openReqsEmpTagging(reqid: number, empid: number) {
     return this.http.get("openreqs/dice/empTagging/" + reqid + "/" + empid);
   }
@@ -20,8 +28,16 @@ export class OpenreqService {
     return this.http.get("openreqs/linked/all");
   }
 
+  public linkedInPagination(pageNo: any, pageSize: any, field: any) {
+    return this.http.get("openreqs/linked/LinkedInPofiles/" + pageNo + "/" + pageSize + "/" + field );
+  }
+
   public readrss() {
     return this.http.get("openreqs/rssfeed/read");
+  }
+
+  public sendRssLink(rssLink: any) {
+    return this.http.post("openreqs/rssfeed/save", rssLink);
   }
 
   public rssfeedData() {
@@ -37,5 +53,41 @@ export class OpenreqService {
 
   getLeadById(id:number) {
     return this.http.get("openreqs/linked/getById/"+id);
+  }
+
+  deleteSender(id: number) {
+    return this.http.delete("mail/delete/" + id);
+  }
+
+  getOpenReqsById(id:number) {
+    return this.http.get("openreqs/dice/getByReqId/"+id);
+  }
+
+  emailEXtractionByPaginationSortandFilter(data: any) {
+    return this.http.post("mail/read", data);
+  }
+
+  getConsultantOpenReqsByPaginationSortandFilter(data: any) {
+    return this.http.post("openreqs/dice/allEmpAllReqs", data);
+  }
+
+  applyJob(data: any) {
+    return this.http.post("openreqs/apply/applyJob", data);
+  }
+
+  appliedJobs(data: any) {
+    return this.http.post("openreqs/apply/appliedJobListEmp", data);
+  }
+
+  showAppliedJobToEmployer(data: any) {
+    return this.http.post("openreqs/apply/appliedJobListTeamleads", data);
+  }
+
+  getCpvFpvOpenRequirements(data: any) {
+    return this.http.post("openreqs/dice/getCpvFpvReq", data);
+  }
+
+  getCfoAndVp(data: any) {
+    return this.http.post("openreqs/linked/LinkedInPofilesRequest", data);
   }
 }

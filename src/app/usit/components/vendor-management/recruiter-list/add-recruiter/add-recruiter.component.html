@@ -35,14 +35,14 @@
         <!-- Email -->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)"  maxlength="30" />
+          <input matInput formControlName="email" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)"  maxlength="50" />
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('required')">Email is Required</mat-error>
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('pattern')">Invalid Email Address</mat-error>
         </mat-form-field>
 
         <!-- Company Contact Number -->
         <mat-form-field appearance="fill">
-          <mat-label>Company Contact Number </mat-label>
+          <mat-label>Contact Number </mat-label>
           <ngx-mat-intl-tel-input  [preferredCountries]="['in','us']" matInput class="intl-input" formControlName="contactnumber" [enablePlaceholder]="true"
             [enableSearch]="true" name="contactnumber" id="intlInput" #personalcontactnumber #pNumb>
           </ngx-mat-intl-tel-input>
@@ -56,12 +56,24 @@
 
       <div class="form-column-right">
         <!-- OTHER DETAILS SECTION -->
+
+        <!-- Company Contact Number -->
+        <mat-form-field appearance="fill">
+          <mat-label>Alternate Contact Number</mat-label>
+          <ngx-mat-intl-tel-input  [preferredCountries]="['in','us']" matInput class="intl-input" formControlName="alternatecontactnumber" [enablePlaceholder]="true"
+            [enableSearch]="true" name="contactnumber" id="intlInput">
+          </ngx-mat-intl-tel-input>
+          <!-- <mat-error
+              *ngIf="vendorForm.get('personalcontactnumber')!.hasError('required')">Personal
+              Contact
+              Number is required</mat-error> -->
+        </mat-form-field>
         
         <!-- website -->
-        <mat-form-field appearance="fill">
-          <mat-label>Extension(Numbers only)</mat-label>
-          <input matInput formControlName="extension" maxlength="5"  (keypress)="onlyNumberKey($event)" />
-        </mat-form-field>
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Alternate Contact Number</mat-label>
+          <input matInput formControlName="secondarycontactnumber" maxlength="10"  (keypress)="onlyNumberKey($event)" />
+        </mat-form-field> -->
 
         <mat-form-field appearance="fill" *ngIf="data.actionName === 'edit-recruiter'">
           <mat-label>Select Status</mat-label>

@@ -68,7 +68,6 @@ export class SubmissionCountListComponent implements OnInit {
     if (this.data.condition == 'admin') {
       this.dashboardServ.getsubmissionCountPopup(this.data.flag, this.data.duration).subscribe(
         ((response: any) => {
-          // console.log(response.data)
           this.dataSource.data = response.data;
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = i + 1;
@@ -78,7 +77,6 @@ export class SubmissionCountListComponent implements OnInit {
     else {
       this.dashboardServ.getsubmissionCountPopupemp(this.data.flag, this.data.userduration, userid).subscribe(
         ((response: any) => {
-          // console.log(response.data)
           this.dataSource.data = response.data;
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = i + 1;
@@ -92,7 +90,6 @@ export class SubmissionCountListComponent implements OnInit {
     // this.submissionFlag
     this.dashboardServ.getsubmissionCountPopup(flag, this.submissionFlag).subscribe(
       ((response: any) => {
-        console.log(response.data)
       }));
   }
   */

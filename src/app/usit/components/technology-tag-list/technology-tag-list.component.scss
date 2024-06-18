@@ -1,14 +1,14 @@
 .hot-list-container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 68px);
 }
 
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8PX;
+  // height: 2rem;
+  padding-top: 2px;
   top: 0;
 }
 
@@ -114,9 +114,9 @@ tbody {
 }
 
 .hot-list-table-style {
-  padding: 0 2px;
+  // padding: 0 2px;
   width: 100%;
-  max-height: calc(100% - 3px);
+  // max-height: calc(100% - 3px);
   overflow: auto;
   display: block;
 }
@@ -162,21 +162,21 @@ tbody {
   }
 }
 
-@media screen and (min-width: 1850px) {
-  .hot-list-table-style {
-    width: 100%;
-    height: calc(100% - 8px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 1850px) {
+//   .hot-list-table-style {
+//     width: 100%;
+//     height: calc(100% - 8px);
+//     overflow: auto;
+//   }
+// }
 
 .mat-mdc-header-row {
   height: 30px !important;
 }
 
-.mat-mdc-row {
-  height: 30px !important;
-}
+// .mat-mdc-row {
+//   height: 30px !important;
+// }
 
 .filter-button {
   width: fit-content;
@@ -191,4 +191,21 @@ ul.breadcrumb li:last-child {
 .consultant-name a {
   text-decoration: none;
   color: #0d6efd;
+}
+
+.action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 24px;
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 0px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  width: 24px !important;
+  height: 24px !important;
 }

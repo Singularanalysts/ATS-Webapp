@@ -34,8 +34,8 @@ export class RequirementService {
     return this.apiServ.get("requirement/recruiterlist");
   }
 
-  getAllRequirementData(flg: string, page: number,  size: any, field: any, sortField:string,sortOrder:string) {
-    return this.apiServ.get( "requirement/all/" + flg  + "/" + page  + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+  getAllRequirementData(data: any) {
+    return this.apiServ.post( "requirement/allRequirements" , data);
   }
 
   getRecruiterOfTheVendor(id:number, flg:string) {
@@ -74,5 +74,13 @@ export class RequirementService {
 
   getVendorById(id: number) {
     return this.apiServ.get("vms/vendor/vendor/" + id);
+  }
+
+  getRecruiters(vendor:string){
+    return this.apiServ.get("openreqs/dice/recruiterpopup/"+vendor);
+  }
+
+  getReqSubmisiionPopupRecords(data: any){
+    return this.apiServ.post("requirement/submissionPopUp", data);
   }
 }

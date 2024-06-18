@@ -39,4 +39,5 @@ export class Employee {
   bpassbook!: any;
   aadhar!: any;
   alternatenumber!: any;
+  loginAs!: any;
 }

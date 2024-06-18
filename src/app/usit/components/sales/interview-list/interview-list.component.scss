@@ -1,14 +1,14 @@
 .submission-container {
     display: flex;
     flex-direction: column;
-    height: 86vh;
+    height: calc(100vh - 68px);
   }
   
   ul {
     padding-inline-start: 10px;
     background-color: rgb(228, 231, 234);
-    height: 2rem;
-    padding-top: 8PX;
+    // height: 2rem;
+    padding-top: 2px;
     top: 0;
   }
   
@@ -127,9 +127,9 @@
   }
   
   .interview-table-style {
-    padding: 0 2px;
+    // padding: 0 2px;
     width: 100%;
-    max-height: calc(100% - 3px);
+    // max-height: calc(100% - 3px);
     overflow: auto;
     display: block;
   }
@@ -178,39 +178,39 @@
   .action-buttons {
     display: flex;
     align-items: center;
-    height: 43px;
+    // height: 43px;
   }
   
-  .action-buttons button {
-    margin: 0;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-  }
+  // .action-buttons button {
+  //   margin: 0;
+  //   padding: 0;
+  //   width: 30px;
+  //   height: 30px;
+  // }
   
-  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-    width: 30px !important;
-    height: 30px !important;
-  }
+  // ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  //   width: 30px !important;
+  //   height: 30px !important;
+  // }
   
-  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-    width: 30px !important;
-    height: 30px !important;
-    top: 10px;
-  }
+  // ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  //   width: 30px !important;
+  //   height: 30px !important;
+  //   top: 10px;
+  // }
   
   .filter-vendors {
     display: flex;
     column-gap: 5px;
   }
   
-  @media screen and (min-width: 2000px) {
-    .interview-table-style {
-      width: 100%;
-      height: calc(100% - 8px);
-      overflow: auto;
-    }
-  }
+  // @media screen and (min-width: 2000px) {
+  //   .interview-table-style {
+  //     width: 100%;
+  //     height: calc(100% - 8px);
+  //     overflow: auto;
+  //   }
+  // }
   
   .recruiting-companies {
     color: #f44336;
@@ -267,6 +267,23 @@
   .consultant-id{
     cursor: pointer;
     color:#0275d8
+  }
+
+  .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 24px;
+    width: var(--mdc-icon-button-state-layer-size);
+    height: var(--mdc-icon-button-state-layer-size);
+    padding: 0px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+    width: 24px !important;
+    height: 24px !important;
   }
 
   

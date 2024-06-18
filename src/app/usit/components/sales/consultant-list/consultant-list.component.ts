@@ -35,14 +35,20 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { AddconsultantComponent } from './add-consultant/add-consultant.component';
+import { AddconsultantComponent, IV_AVAILABILITY, PRIORITY, RADIO_OPTIONS, STATUS } from './add-consultant/add-consultant.component';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { ConsultantTrackComponent } from './consultant-track/consultant-track.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ApiService } from 'src/app/core/services/api.service';
+import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-consultant-list',
   standalone: true,
   imports: [
+    MatSelectModule,
     MatTableModule,
     MatIconModule,
     MatButtonModule,
@@ -53,6 +59,8 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
     MatPaginatorModule,
     CommonModule,
     MatTooltipModule,
+    ReactiveFormsModule,
+
   ],
   templateUrl: './consultant-list.component.html',
   styleUrls: ['./consultant-list.component.scss'],
@@ -61,8 +69,7 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class ConsultantListComponent
-  implements OnInit, OnDestroy, AfterViewInit
-{
+  implements OnInit, OnDestroy, AfterViewInit {
   hasAcces!: any;
   consultant: Consultantinfo[] = [];
   consultant2 = new Consultantinfo();
@@ -75,7 +82,7 @@ export class ConsultantListComponent
   ttitle1!: string;
   tclass!: string;
   dept!: any;
-  subFlag!:any;
+  subFlag!: any;
   consultant_track: any[] = [];
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
@@ -126,13 +133,58 @@ export class ConsultantListComponent
   protected privilegeServ = inject(PrivilegesService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
+  //lavanya
+  priority: [string, string] = ['', ''];
+  h1bForm: any = FormGroup;
+  ///private h1bServ = inject(H1bImmigrantService);
+  private api = inject(ApiService);
+  visadata: any = [];
+  experiences: string[] = [];
+  experienceForm: FormGroup | undefined;
+  PRIORITY = [
+    { code: 'P1', desc: 'P1 - Our h1 w2 consultant not on the job' },
+    { code: 'P2', desc: 'P2 - our h1 consultant whose project is ending in 4 weeks' },
+    { code: 'P3', desc: 'P3 - new visa transfer consultant looking for a job' },
+    { code: 'P4', desc: 'P4 - our h1 consultant on a project looking for a high rate' },
+    { code: 'P5', desc: 'P5 - OPT /CPT visa looking for a job' },
+    { code: 'P6', desc: 'P6 - independent visa holder looking for a job' },
+    { code: 'P7', desc: 'P7 - independent visa holder project is ending in 4 weeks' },
+    { code: 'P8', desc: 'P8 - independent visa holder project looking for a high rate' },
+    { code: 'P9', desc: 'P9 - 3rd party consultant' },
+    { code: 'P10', desc: 'P10' },
+  ]
+  http: any;
+  filteredConsultants: any;
+  myForm: any;
+  filterValues: any;
+  filterRequest: any;
+  size: any;
+  constructor(private formBuilder: FormBuilder) {
+    this.experienceForm = this.formBuilder.group({
+      experience: ['']
+    });
+
+  }
+  generateExperienceRanges() {
+    for (let i = 0; i <= 30; i += 5) {
+      const range = `${i}-${i + 5}`;
+      this.experiences.push(range);
+    }
+  }
+  selectOptionObj = {
+    interviewAvailability: IV_AVAILABILITY,
+    priority: PRIORITY,
+    statusType: STATUS,
+    radioOptions: RADIO_OPTIONS,
+
+  };
 
   userid: any;
   page: number = 1;
   move2sales = false;
   ngOnInit(): void {
-    const mvt= this.privilegeServ.hasPrivilege('MOVETOPRESALES');
-    if(mvt){
+    const mvt = this.privilegeServ.hasPrivilege('MOVETOPRESALES');
+    if (mvt) {
       this.move2sales = true;
     }
     this.hasAcces = localStorage.getItem('role');
@@ -140,9 +192,45 @@ export class ConsultantListComponent
     this.dept = localStorage.getItem('department');
     this.getFlag();
     // alert(this.flag)
-
+    
     this.getAllData();
+    //lavanya
+    this.getvisa();
+    this.generateExperienceRanges();
+    this.myForm = this.formBuilder.group({
+      visa: [null], // Set default value if needed
+      priority: [null], // Set default value if needed
+      experience: [null] // Set default value if needed
+    });
+
   }
+  filterData(request: any) {
+    this.consultantServ.getFilteredConsults(request,1,this.pageSize )
+      .subscribe(
+        (response: any) => {
+          
+          this.dataSource.data = response.data.content;
+          // Reassign serial numbers after filtering
+          this.dataSource.data.map((item: any, index: number) => {
+            item.serialNum = index + 1;
+            return item;
+          });
+          
+        },
+        (error: any) => {
+          // Handle errors here
+          console.error('An error occurred:', error);
+        }
+      );
+   
+  }
+  //lavanya
+  getvisa() {
+    this.consultantServ.getvisa().subscribe((response: any) => {
+      this.visadata = response.data;
+    });
+  }
+  //
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     //this.dataSource.paginator = this.paginator;
@@ -192,7 +280,6 @@ export class ConsultantListComponent
       this.flag.toLocaleLowerCase() === 'domrecruiting'
     ) {
       const priorityIndex = this.dataTableColumns.indexOf('Priority');
-      //console.log(priorityIndex);
       if (priorityIndex !== -1) {
         this.dataTableColumns.splice(priorityIndex, 1);
       }
@@ -253,7 +340,7 @@ export class ConsultantListComponent
    * @param event
    */
   onFilter(event: any) {
-   // this.dataSource.filter = event.target.value;
+    // this.dataSource.filter = event.target.value;
   }
   applyFilter(event: any) {
     const keyword = event.target.value;
@@ -262,16 +349,16 @@ export class ConsultantListComponent
       return this.consultantServ.getAllConsultantData(this.flag, this.hasAcces, this.userid, 1, this.pageSize, keyword,
         this.sortField,
         this.sortOrder).subscribe(
-        ((response: any) => {
-          this.consultant = response.data.content;
-          this.dataSource.data  = response.data.content;
-          // for serial-num {}
-          this.dataSource.data.map((x: any, i) => {
-           x.serialNum = this.generateSerialNumber(i);
-         });
-         this.totalItems = response.data.totalElements;
-        })
-      );
+          ((response: any) => {
+            this.consultant = response.data.content;
+            this.dataSource.data = response.data.content;
+            // for serial-num {}
+            this.dataSource.data.map((x: any, i) => {
+              x.serialNum = this.generateSerialNumber(i);
+            });
+            this.totalItems = response.data.totalElements;
+          })
+        );
     }
     if (keyword == '') {
       this.field = 'empty';
@@ -286,22 +373,19 @@ export class ConsultantListComponent
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    //console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
       this.sortField = event.active;
-    
-      this.sortOrder = event.direction;
-    
-    if (event.direction != ''){
-    ///this.sortOrder = event.direction;
-   this.getAllData();
+
+    this.sortOrder = event.direction;
+
+    if (event.direction != '') {
+      this.getAllData();
     }
   }
 
- 
+
 
   navTo(to: string, id: any) {
     this.router.navigate([
@@ -314,7 +398,7 @@ export class ConsultantListComponent
    * @param type
    */
   goToConsultantInfo(element: any, flag: string) {
-    this.router.navigate(['usit/consultant-info',flag, 'consultant',element.consultantid])
+    this.router.navigate(['usit/consultant-info', flag, 'consultant', element.consultantid])
   }
   /**
    * on track
@@ -346,11 +430,11 @@ export class ConsultantListComponent
    *
    * @param consultant
    */
-  moveProfileToSales(consultant: Consultantinfo,cond:string) {
+  moveProfileToSales(consultant: Consultantinfo, cond: string) {
     //alertify.confirm("Move Profile", "Are you sure you want to move Profile to Sales ? ", () => {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
-      message: 'Are you sure you want to Move Profiles to '+cond+' ?',
+      message: 'Are you sure you want to Move Profiles to ' + cond + ' ?',
       confirmText: 'Yes',
       cancelText: 'No',
       actionData: consultant,
@@ -380,8 +464,8 @@ export class ConsultantListComponent
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-success',
                 ];
-                this.dataToBeSentToSnackBar.message =resp.message=='presales'? 'Profile moved to Pre-Sales successfully' : 'Profile moved to Sales successfully';
-                  
+                this.dataToBeSentToSnackBar.message = resp.message == 'presales' ? 'Profile moved to Pre-Sales successfully' : 'Profile moved to Sales successfully';
+
               } else {
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-failure',
@@ -566,8 +650,8 @@ export class ConsultantListComponent
       action.edit || action.add
         ? '65vw'
         : action.delete
-        ? 'fit-content'
-        : '400px';
+          ? 'fit-content'
+          : '400px';
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = dataToBeSentToDailog.actionName;
@@ -619,10 +703,48 @@ export class ConsultantListComponent
     this.router.navigateByUrl('/usit/dashboard');
   }
 
-  goToUserInfo(id: number){
-    this.router.navigate(['usit/user-info',this.subFlag,id])
+  goToUserInfo(id: number) {
+    this.router.navigate(['usit/user-info', this.subFlag, id])
   }
+  //lavanya
+  request = new FilterRequest();
+  onExperienceChange(event: any): void {
+    const visa = this.myForm.get('visa').value;
+    const priority = this.myForm.get('priority').value;
+    const experience = this.myForm.get('experience').value;
+    this.request.visaStatus = visa;
+    this.request.priority = priority;
+    this.request.experience = experience;
+
+    this.filterData(this.request);
+  }
+  
+  refreshForm(): void {
+    this.myForm.reset(); // Reset all form controls
+    // Call getAllData() to fetch all data again
+    this.getAllData();
+  }
+
+
+  NumericValue(value: string): string {
+    if (!value) return ''; // Return empty string if value is falsy
+    // Use regular expression to replace non-numeric characters with an empty string
+    return value.replace(/[^0-9]/g, '');
+  }
+
+
 }
+
+export class FilterRequest {
+  visaStatus: any;
+  priority: any;
+  experience: any;
+
+}
+
+
+
+
 
 export interface ReportVo {
   startDate: any;

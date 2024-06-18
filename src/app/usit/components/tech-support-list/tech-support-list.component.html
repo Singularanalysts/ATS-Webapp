@@ -10,13 +10,13 @@
       </span>
       <div class="emp-actions">
         <button [disabled]="!privilegeServ.hasPrivilege('ADD_TECH_SUPPORT')" mat-icon-button disableRipple
-          class="add-user" (click)="addTechnology()" matTooltip="ADD_TECH_SUPPORT" matTooltipPosition="left">
+          class="add-user" (click)="addTechnology()" matTooltip="Add Tech Support" matTooltipPosition="left">
           <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_TECH_SUPPORT')}">add_circle</mat-icon>
         </button>
   
         <div class="search-employee">
   
-          <input matInput type="search" class="search" placeholder="search " (keyup)="onFilter($event)">
+          <input matInput type="search" class="search" placeholder="search " (keyup)="applyFilter($event)">
         </div>
       </div>
     </div>
@@ -34,18 +34,18 @@
   
           <!-- Name Column -->
           <ng-container matColumnDef="Name">
-            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Name"> Name </th>
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by Name"> Name </th>
             <td mat-cell *matCellDef="let element">
               <span class="user-info" (click)="goToUserInfo(element.userid)">
-                {{element.name}}
+                {{element.name | titlecase}}
               </span>
               <ng-container *ngIf="element.locked; then updateStatTemplate else elseTemplate"></ng-container>
               <ng-template #updateStatTemplate>
-                <span [style.cursor]="'pointer'" (click)="onStatusUpdate(element)">{{element.pseudoname}}
+                <span [style.cursor]="'pointer'" (click)="onStatusUpdate(element)">{{element.pseudoname | titlecase}}
                 </span>
               </ng-template>
               <ng-template #elseTemplate>
-                {{element.pseudoname}}
+                {{element.pseudoname | titlecase}}
               </ng-template>
   
             </td>
@@ -53,35 +53,37 @@
   
           <!-- Email Column -->
           <ng-container matColumnDef="Experience">
-            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Experience"> Experience
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by Experience"> Exp
             </th>
             <td mat-cell *matCellDef="let element"> {{element.experience}} </td>
           </ng-container>
   
           <!-- Personal/Comp Number Column -->
           <ng-container matColumnDef="Technology">
-            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Technology">
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by Technology">
               Technology </th>
-            <td mat-cell *matCellDef="let element"> {{element.technology}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.technology|titlecase}} </td>
           </ng-container>
   
           <!-- Designation Column -->
           <ng-container matColumnDef="Skills">
-            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Skills">Skills
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by Skills" style="width: 35%;">Skills
             </th>
-            <td mat-cell *matCellDef="let element"> {{element.skills}} </td>
+            <td mat-cell *matCellDef="let element"  style="width: 35%;"> 
+              <div class="truncate-multiline" [matTooltip]="element.skills | titlecase" matTooltipClass="custom-tooltip">{{element.skills | titlecase}}</div>
+            </td>
           </ng-container>
   
           <!-- Department Column -->
           <ng-container matColumnDef="Email">
-            <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Department"> Email
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Department"> Email
             </th>
             <td mat-cell *matCellDef="let element"> {{element.email}} </td>
           </ng-container>
   
           <ng-container matColumnDef="ContactNumber">
-            <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by ContactNumber">
-              ContactNumber </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ContactNumber">
+              Contact Number </th>
             <td mat-cell *matCellDef="let element">
               <span *ngIf="element.mobile != null">{{element.mobile}}</span>
               <br>
@@ -113,10 +115,12 @@
         <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
       </section>
       <hr>
-  
-      <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
-        [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
-        [hidePageSize]="hidePageSize" [pageIndex]="currentPageIndex" aria-label="Select page">
+    </div>
+
+    <div class="paginator">
+      <!-- paginator -->
+      <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
       </mat-paginator>
     </div>
   

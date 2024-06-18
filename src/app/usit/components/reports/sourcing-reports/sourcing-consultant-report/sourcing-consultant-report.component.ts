@@ -22,7 +22,6 @@ export class SourcingConsultantReportComponent {
     consultant:any[]=[];
 exname: any;
 popUpImport(){
-  //console.log(this.vo+" = "+this.vo.status)
     this.headings = [[
     'Date',
     'Name',
@@ -72,9 +71,7 @@ writeFile(wb, this.excelName);
         this.reportservice.sourcing_DrillDown_report(this.vo.vo).subscribe(
          (response: any) => {
            this.consultant = response.data;
-           this.exname = this.vo.additionalValue1
-         //  console.log(this.exname);
-           
+           this.exname = this.vo.additionalValue1;
          },
          (error) => {
            console.error('Error fetching consultant data:', error);

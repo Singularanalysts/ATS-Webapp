@@ -14,7 +14,7 @@
                 <input type="hidden" formControlName="user">
                 <input name="submissionid" type="hidden" formControlName="submissionid">
                 <input name="updatedby" type="hidden" formControlName="updatedby">
-                <input name="status" type="hidden" formControlName="status" >
+                <!-- <input name="status" type="hidden" formControlName="status" > -->
                 <input name="remarks" type="hidden" formControlName="remarks" >
                 <input name="substatus" type="hidden" formControlName="substatus" >
 
@@ -99,12 +99,10 @@
 
                 <mat-form-field appearance="fill">
                     <mat-label>Submission Rate</mat-label>
-                    <input matInput  formControlName="submissionrate" maxlength="5">
+                    <input matInput  formControlName="submissionrate" maxlength="5" (keypress)="onlyNumberKey($event)">
                     <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('required')">Submission Rate is Required</mat-error>
                 </mat-form-field>
-            </div>
 
-            <div class="form-column-right">
                 <mat-form-field appearance="fill">
                     <mat-label>End Client</mat-label>
                     <input matInput formControlName="endclient" maxlength="60" (input)="camelCase($event)">
@@ -114,6 +112,9 @@
                     <mat-label>Implementation Partner</mat-label>
                     <input matInput formControlName="implpartner" maxlength="120" (input)="camelCase($event)">
                 </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
 
                 <!-- <div class="fg-div">
                     <mat-form-field appearance="fill">
@@ -186,6 +187,16 @@
                     </mat-select>
                     <mat-error *ngIf="submissionForm.get('source')!.hasError('required')">Choose Source
                     </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Submitted to</mat-label>
+                    <mat-select formControlName="status">
+                        <mat-option value="Vendor">Vendor</mat-option>
+                        <mat-option value="Account Manager">Account Manager</mat-option>
+                        <mat-option value="Client">Client</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="submissionForm.get('status')!.hasError('required')">Submitted to is Required</mat-error>
                 </mat-form-field>
 
             </div>

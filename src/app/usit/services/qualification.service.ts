@@ -17,7 +17,7 @@ export class QualificationService {
 
   //used for get one resource
   getQualificationById(id: number) {
-    return this.apiServ.get("auth/qualification/getqualification/" + id);
+    return this.apiServ.get("auth/qualification/getQualificationById/" + id);
   }
 
   // get all qualifications
@@ -36,5 +36,9 @@ export class QualificationService {
 
   addOrUpdateQualification(entity: any, action: string) {
     return action === "update-qualification" ? this.updateQualification(entity) : this.addQualification(entity);
+  }
+
+  getQualificationListwithPaginationSortAndFilter(pagObj: any) {
+    return this.apiServ.post("auth/qualification/allWithFilterAndSorting", pagObj);
   }
 }

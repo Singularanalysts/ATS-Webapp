@@ -18,6 +18,9 @@ import { HttpInterceptorService } from './core/interceptors/httpInterceptor.serv
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
+import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
+import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     PageNotFoundComponent,
     FooterComponent,
     SidebarComponent,
-     SideNavbarComponent
+     SideNavbarComponent,
+     RegisterConsultantComponent
   ],
   imports: [
     BrowserModule,
@@ -37,8 +41,9 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
-    HttpClientModule
-
+    HttpClientModule,
+    NgxMatIntlTelInputComponent,
+    NgxMatInputTelComponent
   ],
   providers: [
     {

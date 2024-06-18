@@ -7,6 +7,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { PermissionsService } from './services/permissions.service';
+import { LoaderService } from './services/loader.service';
 // import { LoaderService } from './services/loader.service';
 // import { ThemePalette } from '@angular/material/core';
 // import { ProgressBarMode } from '@angular/material/progress-bar';
@@ -25,6 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
   protected permServ = inject(PermissionsService);
 
   public  _router= inject(Router);
+  loaderServ = inject(LoaderService);
+  isLoading$ = this.loaderServ.isLoading$;
 //   loaderServ = inject(LoaderService);
 //   isLoading$ = this.loaderServ.isLoading$;
 //   color: ThemePalette = 'warn';
@@ -35,7 +38,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // this.getCurrentURL();
      this.currentURL = window.location.pathname;
-     //console.log(this.currentURL+" vvvv  Kiran Testing ");
     this.isUserSignedIn = this.permServ.isUserSignedin()
   }
 

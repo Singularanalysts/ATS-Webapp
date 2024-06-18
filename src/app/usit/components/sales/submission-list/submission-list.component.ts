@@ -65,6 +65,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     'SubRate',
     'ProjectLocation',
     'SubmittedBy',
+    'Status',
     'SubStatus',
     'Action',
   ];
@@ -192,8 +193,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
-   // console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -202,7 +201,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    ///this.sortOrder = event.direction;
     this.getAllData();
     }
   }
@@ -337,8 +335,8 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
     switch (subStatus) {
       case 'Schedule':
-        backgroundColor = 'rgba(40, 160, 76, 0.945)';
-        color = 'white';
+        backgroundColor = 'rgb(185, 245, 210)';
+        color = 'black';
         break;
       case 'Rejected':
         backgroundColor = '';
@@ -373,7 +371,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
 
   goToReqInfo(element: any) {
-   // console.log(element);
     const actionData = {
       title: `${element.reqnumber}`,
       id: element.reqid,
@@ -390,4 +387,10 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
       dialogConfig
     );
   }
+  NumericValue(value: string): string {
+    if (!value) return ''; // Return empty string if value is falsy
+    // Use regular expression to replace non-numeric characters with an empty string
+    return value.replace(/[^0-9]/g, '');
+  }
+  
 }

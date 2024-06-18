@@ -1,14 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 86vh;
+  height: calc(100vh - 68px);
 }
 
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8PX;
+  // height: 2rem;
+  padding-top: 2px;
   top: 0;
 }
 
@@ -175,7 +175,7 @@ tbody {
   padding: 0 2px;
   // width: max-content;
   width: 100%;
-  max-height: calc(100% - 2px);
+  // max-height: calc(100% - 2px);
   overflow: auto;
   display: block;
 }
@@ -226,39 +226,40 @@ tbody {
   display: flex;
   //justify-content: space-between;
   align-items: center;
-  height: 43px;
+
+  // height: 43px;
 }
 
-.action-buttons button {
-  margin: 0;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-}
+// .action-buttons button {
+//   margin: 0;
+//   padding: 0;
+//   width: 30px;
+//   height: 30px;
+// }
 
-::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-  width: 30px !important;
-  height: 30px !important;
-}
+// ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+//   width: 30px !important;
+//   height: 30px !important;
+// }
 
-::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-  width: 30px !important;
-  height: 30px !important;
-  top: 10px;
-}
+// ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+//   width: 30px !important;
+//   height: 30px !important;
+//   top: 10px;
+// }
 
 .filter-vendors {
   display: flex;
   column-gap: 5px;
 }
 
-@media screen and (min-width: 1400px) {
-  .vendor-table-style {
-    width: 100%;
-    height: calc(100% - 8px);
-    overflow: auto;
-  }
-}
+// @media screen and (min-width: 1400px) {
+//   .vendor-table-style {
+//     width: 100%;
+//     height: calc(100% - 8px);
+//     overflow: auto;
+//   }
+// }
 
 .recruiting-companies {
   color: #f44336;
@@ -312,8 +313,69 @@ ul.breadcrumb li:last-child {
   color: #4154f1;
 }
 
-@media screen and (min-width: 1920px) {
-  .container {
-    height: 90vh;
-  }
+// @media screen and (min-width: 1920px) {
+//   .container {
+//     height: 90vh;
+//   }
+// }
+
+::ng-deep .mat-mdc-paginator {
+  display: block;
+  line-height: var(--mat-paginator-container-text-line-height);
+  font-size: var(--mat-paginator-container-text-size);
+  font-weight: var(--mat-paginator-container-text-weight);
+  letter-spacing: var(--mat-paginator-container-text-tracking);
+}
+
+:host ::ng-deep.mat-paginator .mat-paginator-container{
+  height: 36px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-focus-indicator {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-mdc-tooltip-trigger mat-mdc-paginator-navigation-first mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base mat-mdc-tooltip-disabled ng-star-inserted {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-base {
+  padding: 0px !important;
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
+  padding: 0px !important;
+  height: 24px;
+  width: 24px;
+}
+
+.action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 24px;
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 0px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  width: 24px !important;
+  height: 24px !important;
 }

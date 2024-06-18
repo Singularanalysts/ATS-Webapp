@@ -1,19 +1,28 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild, inject } from '@angular/core';
+import { CommonModule, formatDate } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MaterialModule } from 'src/app/material.module';
 import { debounceTime } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { utils, writeFile } from 'xlsx';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { InfoSearchComponent } from './info-search/info-search.component';
 import { GlobalSearchService } from '../../services/global-search.service';
+import { OpenReqsAnalysisComponent } from '../dashboard/open-reqs-analysis/open-reqs-analysis.component';
+import { DialogService } from 'src/app/services/dialog.service';
+import { DashboardService } from '../../services/dashboard.service';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { MatSort } from '@angular/material/sort';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-global-search',
@@ -31,11 +40,22 @@ import { GlobalSearchService } from '../../services/global-search.service';
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatSlideToggleModule,
+    MatPaginatorModule,
+    MatTabsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './global-search.component.html',
   styleUrls: ['./global-search.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class GlobalSearchComponent {
+  
   isDialogOpen = false;
   inputValue = '';
   title = 'SearchUI';
@@ -62,11 +82,31 @@ export class GlobalSearchComponent {
   pagesize!: number;
   currentPage: any;
   totalRecords: any;
+  //lavanya
+  totalItems=500;
+  pageSize = 50; // items per page
+  currentPageIndex = 0;
+  //pageSizeOptions = [5, 10, 25, 50];
+  hidePageSize = false;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
+  page: number = 1;
+  pageSizeOptions = [5, 10, 25];
+  itemsPerPage = 50;
+  
+ // totalPages=50;
+  @ViewChild(MatSort) sort!: MatSort;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   highlightSpaces(value: string) {
     this.inputValue = value;
   }
   ngOnInit() {
+
+    this.getReqVendorCount();
+    this.getReqCatergoryCount();
+
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
       this.search();
     });
@@ -78,7 +118,7 @@ export class GlobalSearchComponent {
   ) {}
 
   filteredarray: any[] = [];
-  search(): void {
+  search(pagIdx=1): void {
     // this.showJobPositionSuggestions = this.jobposition.trim() !== '';
     this.showLocationSuggestions = this.location.trim() !== '';
 
@@ -92,12 +132,10 @@ export class GlobalSearchComponent {
     // Call the service method to fetch vendor suggestions by location
     if (trimmedLocation !== '') {
       this.globalSearchService
-        .getJobpostionAndCompany('empty', 'empty', this.location, 1, 50)
+        .getJobpostionAndCompany('empty', 'empty', this.location, pagIdx, this.itemsPerPage)
         .subscribe(
           (resp: any) => {
             this.locationSuggestions = resp.data.content;
-          //  console.log('location suggestion' + this.locationSuggestions);
-
             // Remove duplicates from the locationSuggestions array
             const uniqueLocations = Array.from(
               new Set(this.locationSuggestions.map((item) => item.job_location))
@@ -123,6 +161,22 @@ export class GlobalSearchComponent {
       this.pagesize
     );
   }
+  
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      this.currentPageIndex = event.pageIndex;
+      this.searchBotton(event.pageIndex + 1);
+    }
+    return;
+  }
+
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+    return serialNumber;
+  }
+  
 
   closeSuggestions(): void {
     this.showJobPositionSuggestions = false;
@@ -130,7 +184,7 @@ export class GlobalSearchComponent {
   }
   jobPositionAndCompany: string = '';
   jobpositioncross: any[] = [];
-  searchBotton() {
+  searchBotton(pagIdx=1) {
     if (
       this.jobPositionAndCompany !== '' &&
       !this.jobPositionAndCompany.includes(' And ')
@@ -141,12 +195,16 @@ export class GlobalSearchComponent {
             this.jobPositionAndCompany,
             'empty',
             'empty',
-            1,
-            50
+            pagIdx,
+            this.itemsPerPage
           )
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               if (this.filteredVendorList.length == 0) {
                 if (this.location == '') {
                   this.globalSearchService
@@ -154,13 +212,16 @@ export class GlobalSearchComponent {
                       'empty',
                       this.jobPositionAndCompany,
                       'empty',
-                      1,
-                      50
+                      pagIdx,
+                      this.itemsPerPage
                     )
                     .subscribe(
                       (resp: any) => {
                         this.filteredVendorList = resp.data.content;
-                      //  console.log('companies', this.filteredVendorList);
+                        this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                          vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                          return vendor;
+                      });
                         this.suggestionList = Array.from(
                           new Set(
                             this.filteredVendorList.map((item) => item.company)
@@ -175,11 +236,9 @@ export class GlobalSearchComponent {
                 }
               }
               this.jobpositioncross = resp.data.content;
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-             // console.log('filtered data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -193,12 +252,16 @@ export class GlobalSearchComponent {
             this.jobPositionAndCompany,
             'empty',
             this.location,
-            1,
-            50
+            pagIdx,
+            this.itemsPerPage
           )
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               if (this.filteredVendorList.length == 0) {
                 if (this.location !== '') {
                   this.globalSearchService
@@ -206,13 +269,16 @@ export class GlobalSearchComponent {
                       'empty',
                       this.jobPositionAndCompany,
                       this.location,
-                      1,
-                      50
+                      pagIdx,
+                      this.itemsPerPage
                     )
                     .subscribe(
                       (resp: any) => {
                         this.filteredVendorList = resp.data.content;
-                       // console.log('location ' + this.filteredVendorList);
+                        this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                          vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                          return vendor;
+                      });
                       },
                       (error: any) => {
                         console.error(
@@ -224,7 +290,6 @@ export class GlobalSearchComponent {
                     );
                 }
               }
-             // console.log('location ' + this.filteredVendorList);
             },
             (error: any) => {
               console.error('Error fetching location suggestions:', error);
@@ -245,15 +310,17 @@ export class GlobalSearchComponent {
       ) {
         // Call the API for both job position and company
         this.globalSearchService
-          .getJobpostionAndCompany(jobPosition, company, 'empty', 1, 50)
+          .getJobpostionAndCompany(jobPosition, company, 'empty', pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              //console.log('filtered new data', this.filteredVendorList);
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -270,15 +337,17 @@ export class GlobalSearchComponent {
       ) {
         // Call the API for both job position and company
         this.globalSearchService
-          .getJobpostionAndCompany(jobPosition, company, this.location, 1, 50)
+          .getJobpostionAndCompany(jobPosition, company, this.location, pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-              //console.log('filtered data 3 data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -291,14 +360,14 @@ export class GlobalSearchComponent {
         this.location !== ''
       ) {
         this.globalSearchService
-          .getJobpostionAndCompany(jobPosition, 'empty', this.location, 1, 50)
+          .getJobpostionAndCompany(jobPosition, 'empty', this.location, pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-              // console.log(
-              //   'filtered company not there',
-              //   this.filteredVendorList
-              // );
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -311,15 +380,17 @@ export class GlobalSearchComponent {
         this.location !== ''
       ) {
         this.globalSearchService
-          .getJobpostionAndCompany('empty', company, this.location, 1, 50)
+          .getJobpostionAndCompany('empty', company, this.location, pagIdx, this.itemsPerPage)
           .subscribe(
             (resp: any) => {
               this.filteredVendorList = resp.data.content;
-             // console.log('getJobpostionAndCompany', this.filteredVendorList);
+              this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+                vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+                return vendor;
+            });
               this.suggestionList = Array.from(
                 new Set(this.filteredVendorList.map((item) => item.company))
               );
-             // console.log('filtered data');
             },
             (error: any) => {
               console.error('Error fetching vendors:', error);
@@ -332,14 +403,16 @@ export class GlobalSearchComponent {
     }
     if (this.jobPositionAndCompany == '' && this.location !== '') {
       this.globalSearchService
-        .getJobpostionAndCompany('empty', 'empty', this.location, 1, 50)
+        .getJobpostionAndCompany('empty', 'empty', this.location, pagIdx, this.itemsPerPage)
         .subscribe(
           (resp: any) => {
             this.filteredVendorList = resp.data.content;
-           // console.log('location ' + this.filteredVendorList);
+            this.filteredVendorList = resp.data.content.map((vendor: any, index: any) => {
+              vendor.serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
+              return vendor;
+          });
           },
           (error: any) => {
-           // console.error('Error fetching location suggestions:', error);
             this.filteredVendorList = [];
           }
         );
@@ -354,7 +427,6 @@ export class GlobalSearchComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
     });
   }
 
@@ -373,6 +445,9 @@ export class GlobalSearchComponent {
     // Alternatively, you can use router.navigate(['/externalRedirect', { externalUrl: jobSourceUrl }], { skipLocationChange: true });
   }
 
+  reset(){
+    this.tableactive = false;
+  }
   excelName!: string;
 
   headings!: string[][];
@@ -399,4 +474,115 @@ export class GlobalSearchComponent {
     this.excelName = 'Report @' + 'Search Results' + '.xlsx';
     writeFile(wb, this.excelName);
   }
+
+  dataSource = new MatTableDataSource([]);
+  dataSourceTech = new MatTableDataSource([]);
+  dataSourceVendor = new MatTableDataSource([]);
+
+  dataTableColumnsTechAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Category',
+    'VendorCount',
+  ];
+  dataTableColumnsVendorAnalysis: string[] = [
+    'SNo',
+    'Date',
+    'Vendor',
+    'CategoryCount',
+  ];
+  private dialogServ = inject(DialogService);
+  vendorCategoryPopup(vendorOrCategory: any, date: any, type: any) {
+    const actionData = {
+      title: vendorOrCategory,
+      vendorOrCategory: vendorOrCategory,
+      date: date,
+      type: type,
+      buttonCancelText: 'Cancel',
+      buttonSubmitText: 'Submit',
+      actionName: 'vendor-category-count',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '90dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'vendor-category-count';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      OpenReqsAnalysisComponent,
+      dialogConfig
+    );
+  }
+
+  onVendorFilter(event: any){
+    this.dataSourceVendor.filter = event.target.value;
+  }
+
+  onCategoryFilter(event: any){
+    this.dataSourceTech.filter = event.target.value;
+  }
+  private dashboardServ = inject(DashboardService);
+  search1 = 'empty'
+  getReqVendorCount() {
+    this.dashboardServ.getReqCounts(this.search1, 'count', 'vendor', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceTech.data = response.data;
+        this.dataSourceTech.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+  
+  getReqCatergoryCount() {
+    this.dashboardServ.getReqCounts(this.search1, 'count', 'category', 'empty').subscribe(
+      (response: any) => {
+        this.dataSourceVendor.data = response.data;
+        this.dataSourceVendor.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  handleCategoryDateSelection(event: any) {
+    const selectedDate = formatDate(event.value, 'yyyy-MM-dd', 'en-US');
+    this.dashboardServ.getVendorAndCategoryAnalysisCountByDate(selectedDate, 'vendor').subscribe(
+      (response: any) => {
+        this.dataSourceTech.data = response.data;
+        this.dataSourceTech.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  handleVendorDateSelection(event: any) {
+    const selectedDate = formatDate(event.value, 'yyyy-MM-dd', 'en-US');
+    this.dashboardServ.getVendorAndCategoryAnalysisCountByDate(selectedDate, 'category').subscribe(
+      (response: any) => {
+        this.dataSourceVendor.data = response.data;
+        this.dataSourceVendor.data.map((x: any, i) => {
+          x.serialNum = i + 1;
+        });
+      }
+    )
+  }
+
+  public skillSetDate!: any;
+
+  clearSkillSetDate(event: any) {
+    event.stopPropagation();
+    this.skillSetDate = null;
+    this.getReqVendorCount();
+  }
+
+  public vendorDate!: any;
+
+  clearVendorDate(event: any) {
+    event.stopPropagation();
+    this.vendorDate = null;
+    this.getReqCatergoryCount();
+  }
+ 
 }

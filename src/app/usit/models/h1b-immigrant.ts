@@ -19,4 +19,7 @@ export class H1bImmigrantInfo {
     updateddate!: number;
     location!: string;
     user !: number;
+    gcstatus!: string;
+    doj!: string;
+    employeetype!: string
 }

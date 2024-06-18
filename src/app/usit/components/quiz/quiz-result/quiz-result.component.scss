@@ -1,13 +1,12 @@
 .container {
-  // display: flex;
-  // flex-direction: column;
-  height: 86vh;
-  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 68px);
 }
 
 .table-wrapper {
   flex: 1;
-  overflow: hidden;
+  overflow: auto;
   padding: 0 4px 4px 4px;
 }
 
@@ -131,8 +130,8 @@ thead {
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8px;
+  // height: 2rem;
+  padding-top: 2px;
   top: 0;
 }
 

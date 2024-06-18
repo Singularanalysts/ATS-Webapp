@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -33,6 +33,7 @@ import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
 import { RequirementService } from 'src/app/usit/services/requirement.service';
 import { AddRequirementComponent } from './add-requirement/add-requirement.component';
 import { RequirementInfoComponent } from './requirement-info/requirement-info.component';
+import { RequirementSubmissionCountComponent } from './requirement-submission-count/requirement-submission-count.component';
 
 @Component({
   selector: 'app-requirement-list',
@@ -63,6 +64,8 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     'Location',
     'IPVendor',
     'EmployementType',
+    // 'SubmittedBy',
+    'Submitted',
     'Status',
     'Action',
   ];
@@ -92,16 +95,13 @@ export class RequirementListComponent implements OnInit, OnDestroy {
   userid: any;
   page: number = 1;
   @ViewChild(MatSort) sort!: MatSort;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   private dialogServ = inject(DialogService);
   private snackBarServ = inject(SnackBarService);
   private requirementServ = inject(RequirementService);
   private activatedRoute =  inject(ActivatedRoute);
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
-  // to clear subscriptions
   private destroyed$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -114,9 +114,9 @@ export class RequirementListComponent implements OnInit, OnDestroy {
 
   getFlag(){
     const routeData = this.activatedRoute.snapshot.data;
-    if (routeData['isRecRequirement']) { // sales consultant
+    if (routeData['isRecRequirement']) {
       this.flag = "Recruiting";
-    } else { // presales
+    } else {
       this.flag = "Domrecruiting";
     }
   }
@@ -130,16 +130,17 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
+    const pagObj = {
+      flg: this.flag,
+      pageNumber: currentPageIndex,
+      pageSize: this.pageSize,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    }
 
     return this.requirementServ
-      .getAllRequirementData(
-        this.flag,
-        currentPageIndex,
-        this.pageSize,
-        this.field,
-        this.sortField,
-        this.sortOrder
-      )
+      .getAllRequirementData(pagObj)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (response: any) => {
@@ -169,17 +170,17 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       panelClass: ['custom-snack-success'],
     };
     const keyword = event.target.value;
-    this.field = keyword;
     if (keyword != '') {
+      const pagObj = {
+        flg: this.flag,
+        pageNumber: 1,
+        pageSize: this.pageSize,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+      }
       return this.requirementServ
-      .getAllRequirementData(
-        this.flag,
-        1,
-        this.pageSize,
-        this.field,
-        this.sortField,
-        this.sortOrder
-      )
+      .getAllRequirementData(pagObj)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (response: any) => {
@@ -198,9 +199,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
         },
       });
     }
-    if (keyword == '') {
-      this.field = 'empty';
-    }
     return this.getAllData(this.currentPageIndex + 1);
   }
 
@@ -213,7 +211,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
-    // dialogConfig.height = "100vh";
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'add-requirement';
     dialogConfig.data = actionData;
@@ -236,7 +233,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
-    //dialogConfig.height = '100vh';
     dialogConfig.panelClass = 'edit-requirement';
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddRequirementComponent, dialogConfig);
@@ -266,9 +262,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       ConfirmComponent,
       dialogConfig
     );
-
-    // call delete api after  clicked 'Yes' on dialog click
-
     dialogRef.afterClosed().subscribe({
       next: (resp) => {
         if (dialogRef.componentInstance.allowAction) {
@@ -301,17 +294,9 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     });
   }
 
-  onFilter(event: any) {
-    this.dataSource.filter = event.target.value;
-  }
-
-
-
   sortField = 'postedon';
   sortOrder = 'desc';
   onSort(event: Sort) {
-    //console.log(event);
-    //this.sortField = event.active;
     if (event.active == 'SerialNum')
       this.sortField = 'postedon'
     else
@@ -320,7 +305,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    ///this.sortOrder = event.direction;
     this.getAllData();
     }
   }
@@ -344,9 +328,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl('/usit/dashboard');
   }
 
-  /**
-   * go to requirement-info
-   */
   goToReqInfo(element: any){
     const actionData = {
       title: `${element.reqnumber}`,
@@ -365,9 +346,23 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * clean up
-   */
+  submissionCount(data: any) {
+    const actionData = {
+      subCountData: data,
+      actionName: 'req-submission-count',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'req-submission-count';
+    dialogConfig.data = actionData;
+
+   this.dialogServ.openDialogWithComponent(
+      RequirementSubmissionCountComponent,
+      dialogConfig
+    );
+  }
+
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();

@@ -200,7 +200,7 @@ export class AddSubmissionComponent implements OnInit {
       // user: [submissionData ? submissionData.user: ''],
       submissionid: [submissionData ? submissionData.submissionid : ''],
       updatedby: [this.data.actionName === "edit-submission" ? localStorage.getItem('userid') : '0'],
-      status: [this.data.actionName === "edit-submission" ? submissionData.status : 'Active'],
+      status: [ submissionData ? submissionData.status : '', [Validators.required]],
       remarks: [submissionData ? submissionData.remarks : ''],
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
@@ -348,7 +348,6 @@ export class AddSubmissionComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.consultantname.toLowerCase().includes(filterValue)
     );
-    //console.log(filteredOptions);
 
     if (filteredOptions.length === 1) {
       this.obj = filteredOptions[0].consultantid;
@@ -401,12 +400,6 @@ export class AddSubmissionComponent implements OnInit {
     const filteredOptions = options.filter(option =>
       option.company.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredOptions)
-    // if (filteredOptions.length > 1) {
-    //   this.companyid = filteredOptions[0].vmsid;
-    // }
-    // console.log(this.companyid)
-    // this.isConsultantDataAvailable = filteredOptions.length === 0;
     return filteredOptions;
   }
 
@@ -581,7 +574,14 @@ export class AddSubmissionComponent implements OnInit {
       }
     });
   }
-
+  onlyNumberKey(evt: any) {
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if ((ASCIICode >= 48 && ASCIICode <= 57) || // Numbers 0-9
+     (ASCIICode >= 65 && ASCIICode <= 90) || // Uppercase letters A-Z
+     (ASCIICode >= 97 && ASCIICode <= 122)) 
+        return true;
+        return false;
+  }
 
   addRecruiter() {
     const actionData = {

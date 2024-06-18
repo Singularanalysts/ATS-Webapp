@@ -40,6 +40,8 @@ import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { MatTabsModule, MatTabChangeEvent  } from '@angular/material/tabs';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-employee-list',
@@ -57,7 +59,8 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
     MatPaginatorModule,
     CommonModule,
     MatTooltipModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTabsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -104,9 +107,12 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+  announceSortChange: any;
   // datalog-config data
 
   // services
+  constructor(private _liveAnnouncer: LiveAnnouncer) {}
+  
   private dialogServ = inject(DialogService);
   private snackBarServ = inject(SnackBarService);
   private empManagementServ = inject(EmployeeManagementService);
@@ -114,8 +120,15 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
   protected privilegeServ = inject(PrivilegesService);
   // for subscrition clean up
   private destroyed$ = new Subject<void>();
+  status!: string;
+
   ngOnInit(): void {
+    this.dataSource.sort = this.sort;
     this.getAllEmployees();
+  }
+
+  onTabChanged(event: MatTabChangeEvent) {
+    this.getAllEmployees(event.tab.textLabel.toLowerCase());
   }
 
   ngAfterViewInit() {
@@ -127,8 +140,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
    * get all employee data
    * @returns employee data
    */
-  getAllEmployees() {
-    return this.empManagementServ.getAllEmployees().pipe(takeUntil(this.destroyed$)).subscribe({
+  getAllEmployees(status: string = 'all') {
+    return this.empManagementServ.getAllEmployees(status).pipe(takeUntil(this.destroyed$)).subscribe({
       next: (response: any) => {
         if (response.data) {
           this.dataSource.data = response.data;
@@ -145,23 +158,32 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  onSort(event: Sort) {
+ /* onSort(event: Sort) {
     const sortDirection = event.direction;
     const activeSortHeader = event.active;
 
     if (sortDirection === '') {
       this.dataSource.data = this.dataSource.data;
-      return;
+      this.dataSource.sort = this.sort;
+      this._liveAnnouncer.announce(`Sorted ${event.direction}ending`);
+       }
+    else {
+      this._liveAnnouncer.announce('Sorting cleared');
     }
-
     const isAsc = sortDirection === 'asc';
     this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
       switch (activeSortHeader) {
+        case 'SerialNum':
+          // Assuming 'serialNum' is the property representing the serial number
+          const serialNumA = parseInt(a.serialNum) || 0;
+          const serialNumB = parseInt(b.serialNum) || 0;
+          return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
         case 'Name':
           return (
             (isAsc ? 1 : -1) *
             (a.fullname || '').localeCompare(b.fullname || '')
           );
+          
         case 'Email':
           return (
             (isAsc ? 1 : -1) * (a.email || '').localeCompare(b.email || '')
@@ -196,8 +218,70 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+  
+*/
+onSort(event: Sort) {
+  const sortDirection = event.direction;
+  const activeSortHeader = event.active;
 
-  onFilter(event: any) {
+  if (sortDirection === '') {
+    // If no sorting direction is specified, reset the sorting to the default state
+    this.dataSource.sort = this.sort;
+    this.announceSortChange(event); // Announce sorting cleared
+    return; // Exit the method
+  }
+
+  // Announce the sorting direction
+  if (event.direction) {
+    this._liveAnnouncer.announce(`Sorted ${event.direction}ending`);
+  } else {
+    this._liveAnnouncer.announce('Sorting cleared');
+  }
+
+  const isAsc = sortDirection === 'asc';
+  this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
+    switch (activeSortHeader) {
+      case 'SerialNum':
+        const serialNumA = parseInt(a.serialNum) || 0;
+        const serialNumB = parseInt(b.serialNum) || 0;
+        return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
+      case 'Name':
+        return (
+          (isAsc ? 1 : -1) *
+          (a.fullname || '').localeCompare(b.fullname || '')
+        );
+      case 'Email':
+        return (
+          (isAsc ? 1 : -1) * (a.email || '').localeCompare(b.email || '')
+        );
+      case 'PersonalOrCompanyNumber':
+        const personalOrCompanyNumberA = a.personalcontactnumber || a.companycontactnumber || '';
+        const personalOrCompanyNumberB = b.personalcontactnumber || b.companycontactnumber || '';
+        return (isAsc ? 1 : -1) * personalOrCompanyNumberA.localeCompare(personalOrCompanyNumberB);
+      case 'Designation':
+        return (
+          (isAsc ? 1 : -1) *
+          (a.designation || '').localeCompare(b.designation || '')
+        );
+      case 'Department':
+        return (
+          (isAsc ? 1 : -1) *
+          (a.department || '').localeCompare(b.department || '')
+        );
+      case 'Status':
+        return (
+          (isAsc ? 1 : -1) * (a.status || '').localeCompare(b.status || '')
+        );
+      default:
+        return 0;
+    }
+  });
+}
+
+extractNumericValue(phoneNumber: string): number {
+  return parseInt(phoneNumber.replace(/\D/g, ''));
+}
+onFilter(event: any) {
     this.dataSource.filter = event.target.value;
   }
 
@@ -290,7 +374,6 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   unlock(emp: Employee) {
-    console.log(emp)
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to UnLock '+emp.pseudoname+' ?',
@@ -412,6 +495,8 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+  //lavanya
+  
 }
 
 

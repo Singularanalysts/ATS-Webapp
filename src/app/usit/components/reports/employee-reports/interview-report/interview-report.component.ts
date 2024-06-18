@@ -196,7 +196,6 @@ export class InterviewReportComponent {
         (response: any) => {
           this.consultant = response.data;
           this.executive = this.vo.additionalValue1;
-          //console.log(this.executive);
         },
         (error) => {
           console.error('Error fetching consultant data:', error);

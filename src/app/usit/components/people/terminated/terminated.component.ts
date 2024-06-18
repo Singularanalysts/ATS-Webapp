@@ -1,0 +1,413 @@
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import {
+ 
+  MatPaginatorIntl,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
+import {  MatSortModule, Sort} from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { DialogService } from 'src/app/services/dialog.service';
+import {
+  ISnackBarData,
+  SnackBarService,
+} from 'src/app/services/snack-bar.service';
+import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
+import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
+import { Subject, takeUntil } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InterviewService } from 'src/app/usit/services/interview.service';
+import { PrivilegesService } from 'src/app/services/privileges.service';
+import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { AddActiveComponent } from '../active/add-active/add-active.component';
+import { ImmigrantInfoComponent } from '../immigrant-info/immigrant-info.component';
+
+@Component({
+  selector: 'app-terminated',
+  standalone: true,
+  imports: [
+    MatTableModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSortModule,
+    MatPaginatorModule,
+    CommonModule,
+    MatTooltipModule
+  ],
+  templateUrl: './terminated.component.html',
+  styleUrls: ['./terminated.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
+})
+export class TerminatedComponent implements OnInit, OnDestroy{
+
+  dataSource = new MatTableDataSource<any>([]);
+  dataTableColumns: string[] = [
+    'SerialNum',
+    'EmpId',
+    'Name',
+    'Employer',
+    'Visa',
+    'DOJ',
+    'PayType',
+    'EmployementType',
+    'StateofEmp',
+    'Status',
+    'Action',
+  ];
+  hasAcces!: any;
+  // intentity = new SalesInterview();
+  entity: any[] = [];
+  submitted = false;
+  // registerForm: any = FormGroup;
+  showAlert = false;
+  flag!: string;
+  searchstring!: any;
+  // pagination code
+  page: number = 1;
+  itemsPerPage = 50;
+  AssignedPageNum !: any;
+  totalItems: any;
+  ser: number = 1;
+  userid!: any;
+  field = "empty";
+  currentPageIndex = 0;
+  pageEvent!: PageEvent;
+  pageSize = 50;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageSizeOptions = [5, 10, 25];
+  // services
+  private activatedRoute = inject(ActivatedRoute);
+  private interviewServ = inject(InterviewService);
+  private dialogServ = inject(DialogService);
+  private router = inject(Router);
+  protected privilegeServ = inject(PrivilegesService);
+  private snackBarServ = inject(SnackBarService);
+   // to clear subscriptions
+   private destroyed$ = new Subject<void>();
+   private h1bServ = inject(H1bImmigrantService);
+   status: any = 'terminated';
+   
+  ngOnInit(): void {
+    this.hasAcces = localStorage.getItem('role');
+    this.userid = localStorage.getItem('userid');
+    this.getAll();
+  }
+  
+
+  getAllWP(pagIdx=1 ) {
+    this.userid = localStorage.getItem('userid');
+    // this.h1bServ.getAllActiveApplicants(pagIdx, this.itemsPerPage, this.field,
+    //   this.sortField,
+    //   this.sortOrder)
+    // .pipe(takeUntil(this.destroyed$)).subscribe(
+    //   (response: any) => {
+    //     this.entity = response.data.content;
+    //     this.dataSource.data = response.data.content;
+    //     this.totalItems = response.data.totalElements;
+    //     // for serial-num {}
+    //     this.dataSource.data.map((x: any, i) => {
+    //       x.serialNum = this.generateSerialNumber(i);
+    //     });
+    //   }
+    // )
+  }
+
+  getAll(pagIdx = 1) {
+    const pagObj = {
+      pageNumber: pagIdx,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+      status: this.status,
+    }
+    this.h1bServ.getAllActiveApplicants(pagObj)
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        (response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data = response.data.content;
+          this.totalItems = response.data.totalElements;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      )
+  }
+
+  addActive() {
+    const actionData = {
+      title: 'Add Active',
+      activeData: null,
+      actionName: 'add-active',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'add-active';
+    dialogConfig.data = actionData;
+    // const dialogRef = this.dialogServ.openDialogWithComponent(AddActiveComponent, dialogConfig);
+    // dialogRef.afterClosed().subscribe(() => {
+    //   if (dialogRef.componentInstance.submitted) {
+    //     this.getAll(this.currentPageIndex + 1);
+    //   }
+    // })
+  }
+
+  editActive(active: any) {
+    const actionData = {
+      title: 'Update Terminated',
+      activeData: active,
+      actionName: 'edit-active',
+      flag: this.flag,
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '65vw';
+    dialogConfig.panelClass = 'edit-active';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddActiveComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(() => {
+      if(dialogRef.componentInstance.submitted){
+         this.getAll(this.currentPageIndex + 1);
+      }
+    })
+  }
+
+  deleteInterview(interview: any) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: interview,
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = 'fit-content';
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'delete-terminated';
+    dialogConfig.data = dataToBeSentToDailog;
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+
+    // call delete api after  clicked 'Yes' on dialog click
+
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+        if (dialogRef.componentInstance.allowAction) {
+          const dataToBeSentToSnackBar: ISnackBarData = {
+            message: '',
+            duration: 1500,
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+            direction: 'above',
+            panelClass: ['custom-snack-success'],
+          };
+
+          this.h1bServ.deleteEntity(interview.applicantid).pipe(takeUntil(this.destroyed$))
+          .subscribe({next:(response: any) => {
+            if (response.status == 'success') {
+              this.getAll();
+              dataToBeSentToSnackBar.message = 'Terminated Immigrant Deleted successfully';
+            } else {
+              dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              dataToBeSentToSnackBar.message = 'Record Deletion failed';
+            }
+            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+          }, error: (err: any) => {
+            dataToBeSentToSnackBar.message = err.message;
+            dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+          }});
+        }
+      },
+    });
+  }
+
+  onFilter(event: any) {
+
+  }
+
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+        status: this.status
+      }
+
+      return this.h1bServ.getAllActiveApplicants(pagObj).subscribe(
+        ((response: any) => {
+          this.entity = response.data.content;
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
+      );
+    }
+    return  this.getAll(this.currentPageIndex + 1)
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
+  }
+  
+  // applyFilter(event: any) {
+  //   const keyword = event.target.value;
+  //   if (keyword != '') {
+  //     return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
+  //       this.sortField,
+  //       this.sortOrder).subscribe(
+  //       ((response: any) => {
+  //         this.entity = response.data.content;
+  //         this.dataSource.data  = response.data.content;
+  //          // for serial-num {}
+  //          this.dataSource.data.map((x: any, i) => {
+  //           x.serialNum = this.generateSerialNumber(i);
+  //         });
+  //         this.totalItems = response.data.totalElements;
+  //       })
+  //     );
+  //   }
+  //   return  this.getAll(this.currentPageIndex + 1)
+  // }
+
+  // sortField = 'updateddate';
+  // sortOrder = 'desc';
+  // onSort(event: Sort) {
+  //   //this.sortField = event.active;
+  //   if (event.active == 'SerialNum')
+  //     this.sortField = 'updateddate'
+  //   else
+  //     this.sortField = event.active;
+    
+  //     this.sortOrder = event.direction;
+    
+  //   if (event.direction != ''){
+  //   ///this.sortOrder = event.direction;
+  //   this.getAll();
+  //   }
+  // }
+
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    return serialNumber;
+  }
+
+  getRowStyles(row: any): any {
+    const intStatus = row.interview_status;
+    let backgroundColor = '';
+    let color = '';
+
+    switch (intStatus) {
+      case 'OnBoarded':
+        backgroundColor = 'rgb(185, 245, 210)';
+        color = 'black';
+        break;
+      case 'Selected':
+        backgroundColor = 'rgba(243, 208, 9, 0.945)';
+        color = '';
+        break;
+      case 'Hold':
+        backgroundColor = 'rgba(243, 208, 9, 0.945)';
+        color = '';
+        break;
+      case 'Rejected':
+        backgroundColor = '';
+        color = 'rgba(177, 19, 19, 0.945)';
+        break;
+      default:
+        backgroundColor = '';
+        color = '';
+        break;
+    }
+
+    return { 'background-color': backgroundColor, 'color': color };
+  }
+
+  handlePageEvent(event: PageEvent) {
+     if (event) {
+       this.pageEvent = event;
+       this.currentPageIndex = event.pageIndex;
+       this.getAll(event.pageIndex + 1)
+     }
+     return;
+   }
+
+  navigateToDashboard() {
+    this.router.navigateByUrl('/usit/dashboard');
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(undefined);
+    this.destroyed$.complete()
+  }
+
+  // goToUserInfo(id: number){
+  //   this.router.navigate(['usit/user-info',this.subFlag,id])
+  // }
+
+  goToConsultantInfo(element: any, flag: string) {
+    this.router.navigate(['usit/consultant-info',flag, 'interview',element.consid])
+  }
+
+  /**
+   * go to requirement-info
+   */
+  goToImgInfo(element: any){
+    const actionData = {
+      title: `${element.employeename}`,
+      id: element.applicantid,
+      actionName: 'img-info',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'img-info';
+    dialogConfig.data = actionData;
+
+   this.dialogServ.openDialogWithComponent(
+      ImmigrantInfoComponent,
+      dialogConfig
+    );
+  }
+}

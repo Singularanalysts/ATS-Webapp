@@ -37,7 +37,26 @@ import { TechSupportListComponent } from './components/tech-support-list/tech-su
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { OpenRequirementsReportsComponent } from './components/reports/open-requirements-reports/open-requirements-reports.component';
 import { MassMailingListComponent } from './components/vendor-management/mass-mailing-list/mass-mailing-list.component';
-
+import { EmailExtractionComponent } from './components/email-extraction/email-extraction.component';
+import { InvoiceListComponent } from './components/accounts&billing/invoice-list/invoice-list.component';
+import { ReceiptListComponent } from './components/accounts&billing/receipt-list/receipt-list.component';
+import { HotListProvidersListComponent } from './components/hot-list-providers-list/hot-list-providers-list.component';
+import { BlacklistedCompaniesListComponent } from './components/vendor-management/blacklisted-companies-list/blacklisted-companies-list.component';
+import { CurrentPrimaryVendorListComponent } from './components/vendor-management/current-primary-vendor-list/current-primary-vendor-list.component';
+import { FuturePrimaryVendorListComponent } from './components/vendor-management/future-primary-vendor-list/future-primary-vendor-list.component';
+import { ActiveComponent } from './components/people/active/active.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { LeaveOfAbsenceComponent } from './components/people/leave-of-absence/leave-of-absence.component';
+import { TerminatedComponent } from './components/people/terminated/terminated.component';
+import { KnownVendorContactsComponent } from './components/vendor-management/known-vendor-contacts/known-vendor-contacts.component';
+import { BanterReportComponent } from './components/reports/banter-report/banter-report.component';
+import { ConsultantSubmissionsComponent } from './components/consultant-components/consultant-submissions/consultant-submissions.component';
+import { ConsultantInterviewsComponent } from './components/consultant-components/consultant-interviews/consultant-interviews.component';
+import { ConsultantOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-openreqs.component';
+import { ConsultantAppliedJobsComponent } from './components/consultant-components/consultant-applied-jobs/consultant-applied-jobs.component';
+import { OpenreqsJobApplicationsComponent } from './components/openreqs-job-applications/openreqs-job-applications.component';
+import { CpvFpvOpenRequirementsComponent } from './components/openreqs/cpv-fpv-open-requirements/cpv-fpv-open-requirements.component';
+import { CxComponent } from './components/cx/cx.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -198,14 +217,18 @@ const routes: Routes = [
   },
   {
     path: 'hot-list', component: HotListComponent,
-  }
-  ,
+  },
   {
     path: 'h1transfer', component: H1transferComponent,
-  }
-  ,
+  },
   {
     path: 'portalreqs', component: OpenreqsComponent,
+  },
+  {
+    path: 'cpv-portal-requirements', component: CpvFpvOpenRequirementsComponent,
+  },
+  {
+    path: 'fpv-portal-requirements', component: CpvFpvOpenRequirementsComponent,
   },
   {
     path: 'rssfeed', component: RssfedComponentimplements,
@@ -237,8 +260,70 @@ const routes: Routes = [
   },
   { 
     path: 'mass-mailing-list', component: MassMailingListComponent 
-  }
+  },
 
+  { 
+    path: 'email-extraction-list', component: EmailExtractionComponent 
+  },
+  
+  {
+    path: 'invoices', component: InvoiceListComponent,
+  },
+  {
+    path: 'receipts', component: ReceiptListComponent,
+  },
+  
+  {
+    path: 'hot-list-providers', component: HotListProvidersListComponent,
+  },
+  {
+    path: 'blacklisted-companies', component: BlacklistedCompaniesListComponent,
+  },
+  {
+    path: 'current-primary-vendor', component: CurrentPrimaryVendorListComponent,
+  },
+  {
+    path: 'future-primary-vendor', component: FuturePrimaryVendorListComponent,
+  },
+  {
+    path: 'active', component: ActiveComponent,
+  },
+  {
+    path: 'leave-of-absence', component: LeaveOfAbsenceComponent,
+  },
+  {
+    path: 'terminated', component: TerminatedComponent,
+  },
+  {
+    path: 'profile', component: ProfileComponent,
+  },
+  // {
+  //   path: 'e-verify', component: EVerifyComponent,
+  // }
+  {
+    path: 'known-vendor-contacts', component: KnownVendorContactsComponent,
+  },
+  { 
+    path: 'banter-report', component: BanterReportComponent,
+  },
+  { 
+    path: 'submissions', component: ConsultantSubmissionsComponent,
+  },
+  { 
+    path: 'interviews', component: ConsultantInterviewsComponent,
+  },
+  { 
+    path: 'open-requirements', component: ConsultantOpenreqsComponent,
+  },
+  { 
+    path: 'applied-jobs', component: ConsultantAppliedJobsComponent,
+  },
+  { 
+    path: 'openreqs-job-applications', component: OpenreqsJobApplicationsComponent,
+  },
+  { 
+    path: 'vc-cx-profiles', component: CxComponent,
+  }
 
 ];
 

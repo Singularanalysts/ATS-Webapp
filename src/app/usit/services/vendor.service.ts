@@ -85,4 +85,71 @@ export class VendorService {
   getAllVendorByType(access: string, userid: number,page: any, size: any, companytype: any, field:any) {
     return this.apiServ.get("vms/vendor/getAll/" + access + "/" + userid+"/"+page+"/"+size+"/"+ companytype + "/" +field);
   }
+
+  getAllBlacklistedByPagination(page: any, size: any, field: any, sortField:string, sortOrder:string ) {
+    return this.apiServ.get("vms/vendor/allBlacklisted/" + page + "/" + size + "/" + field + "/" +sortField + "/" + sortOrder);
+  }
+
+  //save hotlist provider
+  public saveHotlistProvider(entity: any) {
+    return this.apiServ.post("vms/htProviders/save", entity);
+  }
+
+  addORHotlistProvider(entity: any, action: 'edit-hot-list-provider' | 'add-hot-list-provider'){
+    return action === 'edit-hot-list-provider' ? this.updateEntity(entity): this.saveHotlistProvider(entity);
+  }
+
+  //used for get the resource
+  getAllHotlistProviders() {
+    return this.apiServ.get("vms/htProviders/getAllHotListProviders");
+  }
+
+  getHotlistProviderById(id: number) {
+    return this.apiServ.get(`vms/htProviders/getById/${id}`);
+  }
+
+  deleteHotlistProvider(id: number) {
+    return this.apiServ.delete("vms/htProviders/delete/" + id);
+  }
+
+  getAllHotListProvidersByPagination(page: any, size: any, field: any, sortField:string, sortOrder:string ) {
+    return this.apiServ.get("vms/htProviders/getAllHotListProviders/" + page + "/" + size + "/" + field + "/" +sortField + "/" + sortOrder);
+  }
+
+  getAllCurrentOrFuturePrimaryVendorByPagination(vendorType: any, page: any, size: any, field: any, sortField:string, sortOrder:string ) {
+    return this.apiServ.get(`vms/vendor/getAllFPVendors/${vendorType}/${page}/${size}/${field}/${sortField}/${sortOrder}`);
+  }
+
+  moveToCPVOrFPV(vendorType: any, id: any, userid: any) {
+    return this.apiServ.get(`vms/vendor/move/${vendorType}/${id}/${userid}`);
+  }
+  
+  moveToBlacklistedOrBack(status: any, id: any, userid: any) {
+    return this.apiServ.get(`vms/vendor/blacklisted/${status}/${id}/${userid}`);
+  }
+
+  public saveKnownVendorContact(entity: any) {
+    return this.apiServ.post("vms/knownContact/saveContact", entity);
+  }
+
+  public updateKnownVendorContact(entity: any) {
+    return this.apiServ.put("vms/knownContact/updateContact", entity);
+  }
+
+  SaveOrUpdateKnownUpdateContact (entity: any, action: 'edit-known-vendor-contact' | 'add-known-vendor-contact'){
+    return action === 'edit-known-vendor-contact' ? this.updateKnownVendorContact(entity): this.saveKnownVendorContact(entity);
+  }
+
+  getAllKnownVendorContacts(entity: any) {
+    return this.apiServ.post("vms/knownContact/all", entity);
+  }
+
+  getKnownVendorContactById(id: number) {
+    return this.apiServ.get(`vms/knownContact/getById/${id}`);
+  }
+
+  deleteKnownVendorContact(id: number) {
+    return this.apiServ.delete(`vms/knownContact/deleteById/${id}`);
+  }
+
 }

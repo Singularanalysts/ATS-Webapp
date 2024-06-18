@@ -13,7 +13,7 @@
       <div class="form-column-left">
         <input type="hidden" formControlName="intrid" name="intrid">
         <!-- Submission -->
-        
+
         <!-- <div class="fg-div">
           <mat-form-field appearance="fill">
             <mat-label>Select Submission</mat-label>
@@ -24,28 +24,24 @@
               <mat-option *ngFor="let obj of submissiondata" [value]="obj.subid">
                 {{obj.subdetails}}
               </mat-option>
-
             </mat-select>
             <mat-error *ngIf="interviewForm.get('submission')?.hasError('required')"> Submission is Required</mat-error>
           </mat-form-field>
         </div> -->
-        
-
-        <div class="fg-div" >
+        <div class="fg-div">
           <mat-form-field appearance="fill">
-              <mat-label>Select Submission</mat-label>
-              <input matInput formControlName="submission" [matAutocomplete]="submissionAutoCmp" >
-              <mat-autocomplete #submissionAutoCmp="matAutocomplete">
-                  <mat-option *ngFor="let option of (searchSubmissionOptions$ | async)"
-                      [value]="option.subdetails">
-                      {{option.subdetails}}
-                  </mat-option>
-              </mat-autocomplete>
-              <!-- <mat-hint *ngIf="isConsultantDataAvailable" style="color: red;">Please Select Available Consultant</mat-hint> -->
-              <mat-error *ngIf="interviewForm.get('submission')!.hasError('required')">Submission is Required
-              </mat-error>
+            <mat-label>Select Submission</mat-label>
+            <input matInput formControlName="submission" [matAutocomplete]="submissionAutoCmp">
+            <mat-autocomplete #submissionAutoCmp="matAutocomplete">
+              <mat-option *ngFor="let option of (searchSubmissionOptions$ | async)" [value]="option.subdetails">
+                {{option.subdetails}}
+              </mat-option>
+            </mat-autocomplete>
+            <!-- <mat-hint *ngIf="isConsultantDataAvailable" style="color: red;">Please Select Available Consultant</mat-hint> -->
+            <mat-error *ngIf="interviewForm.get('submission')!.hasError('required')">Submission is Required
+            </mat-error>
           </mat-form-field>
-      </div>
+        </div>
 
         <!-- Interview Date -->
         <mat-form-field appearance="fill" *ngIf="false">
@@ -210,12 +206,12 @@
               payrateFromVendor }} is Required</mat-error>
           </mat-form-field>
 
-          <mat-form-field>
+          <!-- commented by Kiran <mat-form-field>
             <mat-label>Vendor AR Contact</mat-label>
             <input type="text" matInput formControlName="vendorArPhoneNumber">
             <mat-error *ngIf="interviewForm.get('closure.vendorArPhoneNumber')!.hasError('required')"> Vendor AR Contact
               is Required</mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
 
           <mat-form-field *ngIf="flag === 'Recruiting'">
             <mat-label>Vendor Ap Contact</mat-label>
@@ -229,7 +225,10 @@
             <mat-select formControlName="paymentCycle">
               <mat-option *ngFor="let item of [].constructor(100); let i = index" [value]="i + 1">
                 Net {{ i + 1 }}
-              </mat-option>
+              </mat-option> 
+              <!-- <mat-option *ngFor="let option of selectOptionObj.netterm" [value]="option">
+                {{ option }}
+            </mat-option> -->
             </mat-select>
             <mat-error *ngIf="interviewForm.get('closure.paymentCycle')!.hasError('required')"> Payment Cycle is
               Required</mat-error>

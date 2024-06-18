@@ -1,0 +1,132 @@
+<div class="update-technology-dialog-container">
+  <div class="header">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <hr>
+    <!-- (click)="onAction('SAFE_CLOSE')" -->
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="content" mat-dialog-content>
+    <form class="add-technology-form" [formGroup]="consultantForm" name="technology-form">
+      <input type="hidden" formControlName="consultantid">
+      <input type="hidden" formControlName="consultantno">
+      <input type="hidden" formControlName="dommaxno">
+      <input type="hidden" formControlName="salesmaxno">
+      <input type="hidden" formControlName="recmaxno">
+      <input type="hidden" formControlName="h1bcopy">
+      <input type="hidden" formControlName="resume">
+      <input type="hidden" formControlName="dlcopy">
+
+      <!-- consultant Email -->
+      <mat-form-field appearance="fill" *ngIf = "this.data.type === 'Basic'">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)"
+          (input)="convertToLowerCase($event)">
+        <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('required')">Email
+          is
+          Required</mat-error>
+        <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('email')">Invalid
+          email
+          address</mat-error>
+      </mat-form-field>
+
+      <!-- Contact Number -->
+      <mat-form-field appearance="fill" *ngIf = "this.data.type === 'Basic'">
+        <mat-label>Contact Number </mat-label>
+        <ngx-mat-input-tel [onlyCountries]="['us', 'in']" matInput class="intl-input" formControlName="contactnumber"
+          enablePlaceholder format="default" enableSearch enableSearchplaceholder="Enter Number"
+          describedBy="phoneInput" required #phone name="contactnumber" id="intlInput">
+        </ngx-mat-input-tel>
+        <mat-error
+          *ngIf="consultantForm.get('contactnumber').errors?.required && !consultantForm.get('contactnumber').errors?.validatePhoneNumber">
+          Contact Number is Required </mat-error>
+        <mat-error
+          *ngIf="consultantForm.get('contactnumber').errors?.required && consultantForm.get('contactnumber').errors?.validatePhoneNumber">Invalid
+          Contact Number</mat-error>
+      </mat-form-field>
+
+      <!-- Location -->
+      <mat-form-field appearance="fill" *ngIf = "this.data.type === 'Basic'">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="currentlocation" maxlength="250" ngx-gp-autocomplete [options]='options'
+          (onAddressChange)="handleAddressChange($event)">
+        <mat-error *ngIf="consultantForm.get('currentlocation')!.hasError('required')">Location
+          Name is Required</mat-error>
+      </mat-form-field>
+
+       <!-- Experience -->
+      <mat-form-field appearance="fill" *ngIf = "this.data.type === 'Work'">
+        <mat-label>Total Experience</mat-label>
+        <input matInput formControlName="experience" placeholder="Total Experience" maxlength="2"
+          (keypress)="onlyNumberKey($event)">
+        <mat-error *ngIf="consultantForm.get('experience')!.hasError('required')">Experience
+          is Required</mat-error>
+        <mat-error *ngIf="consultantForm.get('experience')!.hasError('pattern')">Enter only number</mat-error>
+      </mat-form-field>
+
+       <!-- Preffered Location-->
+       <div class="radio-group" *ngIf = "this.data.type === 'Work'">
+        <mat-label>Preffered Location</mat-label>
+        <mat-radio-group aria-label="Select an option" formControlName="relocation">
+          <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.relocation" [value]="opt.value"
+            (change)="onRelocationRadioChange($event)">{{opt.value}}</mat-radio-button>
+          <mat-error *ngIf="consultantForm.get('relocation')!.hasError('required') && isRelocationRadSelected">Relocation is
+            Required
+          </mat-error>
+        </mat-radio-group>
+      </div>
+
+      <!-- Qualification-->
+      <mat-form-field appearance="fill"  *ngIf = "this.data.type === 'Education'">
+        <mat-label>Select Qualification</mat-label>
+        <mat-select formControlName="qualification">
+          <mat-option *ngFor="let option of QualArr" [value]="option.id">
+            {{ option.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="consultantForm.get('qualification')!.hasError('required')">Qualification is
+          Required
+        </mat-error>
+      </mat-form-field>
+
+       <!-- University -->
+       <mat-form-field appearance="fill" *ngIf = "this.data.type === 'Education'">
+        <mat-label>University</mat-label>
+        <input matInput formControlName="university" maxlength="80">
+      </mat-form-field>
+
+      <!-- Year of Passing -->
+      <mat-form-field appearance="fill" *ngIf = "this.data.type === 'Education'">
+        <mat-label>Year of Passing</mat-label>
+        <input matInput formControlName="yop" maxlength="4" (keypress)="onlyNumberKey($event)">
+      </mat-form-field>
+
+      <mat-form-field class="upload" *ngIf = "this.data.type === 'Resume'">
+        <mat-label for="resume">Resume</mat-label>
+        <div class="upload-container">
+          <input matInput readonly name="resumeName" class="file-input"
+            [value]="resumeupload ? resumeupload.name : 'No file chosen'" />
+          <label for="resume" class="browse-button-label">
+            <button type="button" mat-icon-button (click)="resume.click()"><mat-icon>upload_file</mat-icon></button>
+          </label>
+          <input type="file" #resume id="resume" (change)="uploaddoc($event)" name="resumeUploadFile"
+            accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            style="display: none;" />
+        </div>
+      </mat-form-field>
+
+      <!-- Skill Set -->
+      <mat-form-field *ngIf = "this.data.type === 'Resume'">
+        <mat-label>Skills</mat-label>
+        <textarea matInput formControlName="skills" rows="10" placeholder="Skill Set"></textarea>
+      </mat-form-field>
+
+    </form>
+    <div class="actions">
+      <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+      <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+  </div>
+</div>

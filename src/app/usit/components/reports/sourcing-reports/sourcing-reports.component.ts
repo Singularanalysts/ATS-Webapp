@@ -211,7 +211,6 @@ export class SourcingReportsComponent {
   }
   excelName !: string;
   popUpImport() {
-    //console.log(this.vo+" = "+this.vo.status)
     this.headings = [[
       'Date',
       'Name',

@@ -1,0 +1,174 @@
+
+<!-- top header container -->
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+      {{data.title}}
+    </span>
+    <button mat-icon-button  (click)="onCancel()" class="btn-close" id="btnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+  </section>
+  <!-- mat-card starts -->
+    <mat-card  class="card" id="empCard">
+      <!-- form- starts -->
+      <form [formGroup]="vendorForm"  class="vendor-form" >
+        <section class=form-container>
+          <!-- form - left controls -->
+          <div class="form-column-left">
+            <!-- Company -->
+            <mat-form-field appearance="fill">
+              <mat-label>Company</mat-label>
+             <input matInput formControlName="company" [matAutocomplete]="companyAutoCmp" maxlength="75">
+              <mat-autocomplete #companyAutoCmp="matAutocomplete">
+                  <mat-option *ngFor="let option of (searchCompanyOptions$ | async)"
+                    [value]="option.company.trim()">
+                    {{ option.company.trim() }}
+                  </mat-option>
+              </mat-autocomplete>
+                <mat-hint *ngIf="isCompanyDataAvailable">Proceed to Add Vendor</mat-hint>
+                <mat-error *ngIf="vendorForm.get('company')!.hasError('required')">Company Name
+                  is Required
+                </mat-error>
+            </mat-form-field>
+  
+              <!-- Location - HeadQuarters -->
+              <mat-form-field appearance="fill">
+                <mat-label>Location</mat-label>
+                <input matInput formControlName="headquerter" ngx-gp-autocomplete (onAddressChange)="handleAddressChange($event)">
+                <mat-hint>Please search with company name</mat-hint>
+                <mat-error
+                  *ngIf="vendorForm.get('headquerter')!.hasError('required') && vendorForm.get('headquerter')!.touched">Location
+                   is Required</mat-error>
+                <mat-error
+                  *ngIf="vendorForm.get('headquerter')!.hasError('atLeastTwoNumbers') && vendorForm.get('headquerter')!.value">Please
+                  Enter the full address of the company</mat-error>
+              </mat-form-field>
+             <!-- Fedid -->
+             <!-- <mat-form-field appearance="fill">
+              <mat-label>Fed-Id</mat-label>
+              <input matInput formControlName="fedid">
+              <mat-error *ngIf="vendorForm.get('fedid')!.hasError('required')">Fed-Id
+                is required</mat-error>
+            </mat-form-field> -->
+            <!-- VendorType -->
+            <!-- <mat-form-field appearance="fill" *ngIf="data.actionName === 'add-current-primary-vendor' ">
+              <mat-label>Select Vendor Type</mat-label>
+                <mat-select formControlName="vendortype">
+                  <mat-option *ngFor="let option of selectOptionObj.vendorType"
+                    [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="vendorForm.get('vendortype')!.hasError('required')">Vendor Type
+                  is Required
+                </mat-error>
+            </mat-form-field> -->
+  
+             <!-- Tier Type -->
+             <!-- <mat-form-field appearance="fill">
+              <mat-label>Select Tier Type</mat-label>
+                 <mat-select formControlName="tyretype">
+                  <mat-option *ngFor="let option of selectOptionObj.tierType"
+                    [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="vendorForm.get('tyretype')!.hasError('required')">Tier Type
+                  is Required
+                </mat-error>
+            </mat-form-field> -->
+  
+           <!-- companytype   -->
+           <mat-form-field appearance="fill">
+            <mat-label>Select Company Type</mat-label>
+           <!-- <input matInput formControlName="companytype" [matAutocomplete]="companyTypeAutoCmp" > -->
+            <!-- <mat-autocomplete #companyTypeAutoCmp="matAutocomplete"> -->
+              <mat-select formControlName="companytype">
+                <mat-option *ngFor="let option of selectOptionObj.companyType"
+                    [value]="option">
+                    {{ option }}
+                  </mat-option>
+              </mat-select>
+            <!-- </mat-autocomplete> -->
+              <mat-error *ngIf="vendorForm.get('companytype')!.hasError('required')">Company Type
+                is Required
+              </mat-error>
+          </mat-form-field>
+  
+           <!-- client   -->
+           <mat-form-field appearance="fill">
+            <mat-label>Client Details</mat-label>
+            <input matInput formControlName="client" maxlength="200">
+            <!-- <mat-error *ngIf="vendorForm.get('client')!.hasError('required')">Client
+              is required</mat-error> -->
+          </mat-form-field>
+  
+          <!-- select status -->
+          <mat-form-field appearance="fill" *ngIf="data.actionName === 'edit-vendor'">
+            <mat-label>Select Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let option of selectOptionObj.statusType"
+                [value]="option" [disabled]="(option === 'Approved' || option === 'Rejected') && designation == 'Executive'" >
+                {{ option }}
+              </mat-option>
+              </mat-select>
+              <mat-error *ngIf="vendorForm.get('status')!.hasError('required')">Status
+              is Required</mat-error>
+          </mat-form-field>
+           <!-- details   -->
+           <mat-form-field appearance="fill">
+            <mat-label>Other Details</mat-label>
+            <input matInput formControlName="details" maxlength="250">
+          </mat-form-field>
+          </div>
+  
+          <!-- form - right controls -->
+          <div class="form-column-right">
+           <!-- OTHER DETAILS SECTION -->
+            <!-- staff   -->
+            <mat-form-field appearance="fill">
+              <mat-label>Company Staff</mat-label>
+              <input matInput formControlName="staff" maxlength="7">
+            </mat-form-field>
+            <!-- website -->
+            <mat-form-field appearance="fill">
+              <mat-label>Website</mat-label>
+              <input matInput formControlName="website" maxlength="150">
+            </mat-form-field>
+            <!-- facebook -->
+            <mat-form-field appearance="fill">
+              <mat-label>Facebook</mat-label>
+              <input matInput formControlName="facebook" maxlength="100">
+            </mat-form-field>
+             <!-- industrytype -->
+             <mat-form-field appearance="fill">
+              <mat-label>Industry</mat-label>
+              <input matInput formControlName="industrytype" maxlength="155">
+            </mat-form-field>
+             <!-- twitterid -->
+             <mat-form-field appearance="fill">
+              <mat-label>Twitter Id</mat-label>
+              <input matInput formControlName="twitterid" maxlength="150">
+            </mat-form-field>
+            <!-- revinue -->
+            <mat-form-field appearance="fill">
+              <mat-label>Revenue</mat-label >
+              <input matInput formControlName="revenue" maxlength="20">
+            </mat-form-field>
+            <!-- linkedinid -->
+            <mat-form-field appearance="fill">
+              <mat-label>LinkedIn Id</mat-label>
+              <input matInput formControlName="linkedinid" maxlength="150">
+            </mat-form-field>
+          </div>
+        </section>
+      </form>
+      <!-- form-ends -->
+      <!-- form-bottom action buttons -->
+      <div class="form-action-buttons">
+        <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+      </div>
+    </mat-card>
+    <!-- mat-card-ends -->
+  

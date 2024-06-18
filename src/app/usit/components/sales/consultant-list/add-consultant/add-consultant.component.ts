@@ -126,6 +126,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   isRadSelected: any;
+  isRelocationRadSelected: any;
   submitted: boolean = false;
   dailCode: string = "";
   searchTechOptions$!: Observable<any>;
@@ -138,6 +139,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   get frm() {
     return this.consultantForm.controls;
   }
+
+  kiran!:any;
   ngOnInit(): void {
     this.role = localStorage.getItem('role');
     // below apis are common for add / update consultant
@@ -146,7 +149,9 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.getQualification();
     this.getCompanies();
     this.getFlag(this.data.flag.toLocaleLowerCase());
+   
     if (this.data.actionName === "edit-consultant") {
+      this.kiran = 'edit'
       this.initConsultantForm(new Consultantinfo());
       this.consultantServ.getConsultantById(this.data.consultantData.consultantid)
         .subscribe(
@@ -191,6 +196,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
       resume: [consultantData ? consultantData.resume : ''],
       dlcopy: [consultantData ? consultantData.dlcopy : ''],
+      // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
       firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
       lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
       consultantemail: [
@@ -213,6 +219,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       company: [consultantData ? consultantData.company : '', Validators.required],
       position: [consultantData ? consultantData.position : '', Validators.required],
       status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
+      // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
       experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
       hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
       skills: [consultantData ? consultantData.skills : ''],
@@ -246,14 +253,15 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       addedby: localStorage.getItem('userid'),
     });
 
-    if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
-      // console.log(consultantData.technology);
+    if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
+      this.clrValidators();
+    }
 
+    if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
       this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
         (technology: any) => {
           if (technology && technology.data) {
             this.techid = technology.data[0].id;
-            console.log(technology.data[0].technologyarea);
             this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
           }
         },
@@ -266,9 +274,11 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.validateControls();
   }
   private validateControls() {
-    if (this.flag == 'Recruiting' || this.flag == 'sales') {
+    if (this.kiran !== "edit" && (this.flag === 'Recruiting' || this.flag === 'sales')) {
+      // alert()
       this.consultantForm.get('status').setValue('Active');
-    }
+  }
+  
 
 
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
@@ -396,15 +406,69 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
       relocatOther.updateValueAndValidity();
     });
-
+    
+    // this.consultantForm.get('consultanttype').valueChanges.subscribe((res: any) => {
+    //   if (res == "Future") {
+    //     this.consultantForm.get('projectavailabity').clearValidators();
+    //     this.consultantForm.get('visa').clearValidators();
+    //     this.consultantForm.get('availabilityforinterviews').clearValidators();
+    //     this.consultantForm.get('priority').clearValidators();
+    //     this.consultantForm.get('company').clearValidators();
+    //     this.consultantForm.get('position').clearValidators();
+    //     this.consultantForm.get('hourlyrate').clearValidators();
+    //     this.consultantForm.get('currentlocation').clearValidators();
+    //     this.consultantForm.get('qualification').clearValidators();
+    //     this.consultantForm.get('relocation').clearValidators();
+    //     this.consultantForm.get('experience').clearValidators();
+    //   } else {
+    //     this.consultantForm.get('projectavailabity').setValidators([Validators.required]);
+    //     this.consultantForm.get('visa').setValidators([Validators.required]);
+    //     this.consultantForm.get('availabilityforinterviews').setValidators([Validators.required]);
+    //     this.consultantForm.get('priority').setValidators([Validators.required]);
+    //     this.consultantForm.get('company').setValidators([Validators.required]);
+    //     this.consultantForm.get('position').setValidators([Validators.required]);
+    //     this.consultantForm.get('hourlyrate').setValidators([Validators.required]);
+    //     this.consultantForm.get('currentlocation').setValidators([Validators.required]);
+    //     this.consultantForm.get('qualification').setValidators([Validators.required]);
+    //     this.consultantForm.get('relocation').setValidators([Validators.required]);
+    //   }
+    //   this.consultantForm.get('projectavailabity').updateValueAndValidity();
+    //   this.consultantForm.get('visa').updateValueAndValidity();
+    //   this.consultantForm.get('availabilityforinterviews').updateValueAndValidity();
+    //   this.consultantForm.get('priority').updateValueAndValidity();
+    //   this.consultantForm.get('company').updateValueAndValidity();
+    //   this.consultantForm.get('position').updateValueAndValidity();
+    //   this.consultantForm.get('hourlyrate').updateValueAndValidity();
+    //   this.consultantForm.get('currentlocation').updateValueAndValidity();
+    //   this.consultantForm.get('qualification').updateValueAndValidity();
+    //   this.consultantForm.get('relocation').updateValueAndValidity();
+    //   this.consultantForm.get('experience').updateValueAndValidity();
+    // });
     const priority = this.consultantForm.get('priority');
-    if (this.flag == 'sales' || this.flag == 'presales') {
+
+    if (this.flag == 'sales') {
       priority.setValidators(Validators.required);
       this.consultantForm.get('requirements')?.patchValue(null);
+    } else if(this.flag=='presales' && this.role !== 'Employee') {
+      priority.setValidators(Validators.required);
+      this.consultantForm.get('requirements')?.patchValue(null);
+    }else if(this.flag=='presales' && this.role === 'Employee') {
+      priority.clearValidators();
     } else {
       priority.clearValidators();
     }
     priority.updateValueAndValidity();
+  }
+
+  clrValidators() {
+    // Loop through all controls in the form
+    Object.keys(this.consultantForm.controls).forEach(key => {
+      const control = this.consultantForm.get(key);
+      // Clear validators for each control
+      control.clearValidators();
+      // Update value and validity
+      control.updateValueAndValidity();
+    });
   }
 
   // techskills(event: any) {
@@ -414,7 +478,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   //   });
   // }
   techskills(option: any) {
-    // console.log(option);
     const newVal = option.id;
     this.techid = option.id;
     this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
@@ -432,8 +495,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   getCompanies() {
-    //getCompanies
-    //  alert()
     this.consultantServ.getCompanies().subscribe((response: any) => {
       this.company = response.data;
     });
@@ -456,16 +517,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (this.consultantForm.invalid) {
       this.isFormSubmitted = false
       this.isRadSelected = true;
+      this.isRelocationRadSelected = true;
       this.displayFormErrors();
       return;
     }
     else {
       this.isFormSubmitted = true
     }
-    if (this.flag != 'presales') {
-      this.consultantForm.get("status").setValue("Active");
-    }
-   // console.log(this.techid);
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
     if (this.data.actionName === "edit-consultant") {
@@ -481,7 +539,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.position = formVal.position.trim();
         this.entity.status = formVal.status;
         this.entity.contactnumber = formVal.contactnumber;
-        this.entity.hourlyrate = formVal.hourlyrate.trim();
+        this.entity.hourlyrate = formVal.hourlyrate;
         this.entity.skills = formVal.skills;
         this.entity.experience = formVal.experience;
         this.entity.ratetype = formVal.ratetype;
@@ -563,24 +621,15 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
   }
   gettech() {
-    // this.consultantServ.gettechDropDown().subscribe((response: any) => {
-    //   console.log(response.data);
-    // });
-    // this.consultantServ.gettech().subscribe((response: any) => {
-    //   this.techdata = response.data;
-    // });
     this.searchTechOptions$ = this.consultantServ.gettechDropDown(0).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getTechOptionsForAutoComplete(resp);
-        // console.log(resp);
       }
     }));
-    //this.searchTechOptions$.subscribe()
   }
 
   getTechOptionsForAutoComplete(data: any) {
     this.technologyOptions = data;
-    // console.log(data);
     this.searchTechOptions$ =
       this.consultantForm.controls.technology.valueChanges.pipe(
         startWith(''),
@@ -591,17 +640,12 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
   techid!: any;
   private _filterOptions(value: any, options: any[]): any[] {
-    ///console.log(options);
     const filterValue = (value ? value.toString() : '').toLowerCase();
-    // console.log(filterValue);
     const filteredTechnologies = options.filter((option: any) =>
       option.technologyarea.toLowerCase().includes(filterValue)
     );
-    // console.log(filteredTechnologies);
-    // this.isTechnologyDataAvailable = filteredTechnologies.length === 0;
     if (filteredTechnologies.length === 1) {
       this.techid = filteredTechnologies[0].id;
-     // console.log(this.techid);
     }
     return filteredTechnologies;
   }
@@ -879,6 +923,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   onRadioChange(event: MatRadioChange) {
     this.isRadSelected = event.value
   }
+
+  onRelocationRadioChange(event: MatRadioChange) {
+    this.isRelocationRadSelected = event.value
+  }
   // fileList?: FileData[];
   type!: any;
   filedetails(fileData: FileData) {
@@ -1084,7 +1132,6 @@ export const PRIORITY = [
 ]
 
 export const STATUS = [
-
   'Completed',
   'Verified',
   'Tagged',

@@ -19,20 +19,30 @@ import { interval, Subscription } from 'rxjs';
 import { SourcingCountListComponent } from './sourcing-count-list/sourcing-count-list.component';
 import { OpenReqsAnalysisComponent } from './open-reqs-analysis/open-reqs-analysis.component';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { AbstractControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { PrivilegesService } from 'src/app/services/privileges.service';
+import { utils, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
+  imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
+  providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
   dataSourceTech = new MatTableDataSource([]);
   dataSourceVendor = new MatTableDataSource([]);
+  benchSalesEmployees: any = [];
+
   private dialogServ = inject(DialogService);
   dataTableColumns: string[] = [
     'Name',
@@ -46,12 +56,19 @@ export class DashboardComponent implements OnInit {
   dataTableColumnsDice: string[] = [
     'PostedDate',
     'JobTitle',
-    'Category',
+    // 'Category',
     'JobLocation',
     'Vendor',
     'TaggedDate',
-    'TaggedBy'
+    'TaggedBy',
+    'TCount'
+   
+    
+
   ];
+
+ 
+
   dataTableColumnsTechAnalysis: string[] = [
     'SNo',
     'Date',
@@ -64,6 +81,7 @@ export class DashboardComponent implements OnInit {
     'Vendor',
     'CategoryCount',
   ];
+  showReport: boolean = false;
   entity: any;
   datarr: any[] = [];
   private dashboardServ = inject(DashboardService);
@@ -113,11 +131,40 @@ export class DashboardComponent implements OnInit {
   individualCounts = true;
 
   private intervalSubscription!: Subscription;
-
+  protected privilegeServ = inject(PrivilegesService);
   private ngZone = inject(NgZone);
+  myForm: any;
+  startDateControl: FormControl | undefined;
+  endDateControl: FormControl | undefined;
 
+  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
-    console.log('Dash Board Refreshed '+this.refreshFlg);
+    this.closureFlag = 'Monthly';
+    this.interviewFlag = 'daily';
+    this.submissionFlag = 'daily';
+    this.sourcingFlag = 'daily';
+
+    this.closureFlagInd = 'Monthly';
+    this.interviewFlagInd = 'daily';
+    this.submissionFlagInd = 'daily';
+
+    this.sclosecount = 0;
+    this.rclosecount = 0;
+    this.sintcount = 0;
+    this.rintcount = 0;
+    this.subcount = 0;
+    this.reccount = 0;
+    this.sourcingVerifiedcount = 0;
+    this.sourcingMoveToSalescount = 0;
+    this.sourcingInitiatedcount = 0;
+    this.sourcingCompletedcount = 0;
+    this.sclosecountIndividual = 0;
+    this.rclosecountIndividual = 0;
+    this.sintcountIndividual = 0;
+    this.rintcountIndividual = 0;
+    this.subcountIndividual = 0;
+    this.reccountIndividual = 0;
+
     // You can perform any actions or logic inside this method
     if (this.refreshFlg == 'executive') {
       this.countCallingExecutiveAndLead();
@@ -133,10 +180,17 @@ export class DashboardComponent implements OnInit {
       })
     );
   }
-refreshFlg = 'executive';
-department!:any;
-sourcingLead = true;
+  refreshFlg = 'executive';
+  department!: any;
+  sourcingLead = true;
   ngOnInit(): void {
+    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    if (shoWresult) {
+      this.showReport = true;
+    } else {
+      this.showReport = false;
+    }
+    this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
       .subscribe(() => {
@@ -147,10 +201,10 @@ sourcingLead = true;
 
     this.userid = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
-    if(this.department == 'Bench Sales' || this.department == 'Recruiting'){
+    if (this.department == 'Bench Sales' || this.department == 'Recruiting') {
       this.sourcingLead = false;
     }
-    else{
+    else {
       this.sourcingLead = true;
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
@@ -173,14 +227,24 @@ sourcingLead = true;
     }
     this.countCallingExecutiveAndLead();
     this.countCallingHigherRole();
-  }
 
+    this.myForm = this.formBuilder.group({
+      startDate: [''], // Set default value if needed
+      endDate: [''], // Set default value if needed
+      benchSalesEmployees: [''] // Set default value if needed
+    });
+    const endDateControl = this.myForm.get('endDate');
+    if (!endDateControl.value) {
+      const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      endDateControl.setValue(currentDate);
+    }
+
+  }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
     if (this.intervalSubscription) {
       this.intervalSubscription.unsubscribe();
     }
-   console.log("destroyed")
   }
   countCallingHigherRole() {
     this.dashboardServ.getClosureCount('monthly').subscribe(
@@ -249,7 +313,7 @@ sourcingLead = true;
     this.dashboardServ.getInterviewCountForExAndLead('daily', this.userid).subscribe(
       ((response: any) => {
         this.intCountIndArr = response.data;
-       
+
         this.intCountIndArr.forEach((ent: any) => {
           if (ent.salescount != null) {
             this.sintcountIndividual = ent.salescount;
@@ -521,6 +585,46 @@ sourcingLead = true;
       dialogConfig
     );
   }
+  handleExport() {
+    const currentDate = new Date();
+    const chicagoDate = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).format(currentDate);
+
+    const headings = [[
+      'Posted Date',
+      'Job Title',
+      'Job Location',
+      'Vendor',
+      'Tagged Date',
+      'Tagged Count',
+      'Tagged Name'
+    ]];
+    const excelData = this.dataSourceDice.data.map((c: any) => [
+      c.posted_on,
+      c.job_title,
+      c.category_skill,
+      c.job_location,
+      c.vendor,
+      c.taggeddate,
+      c.pseudoname,
+      c.taggedcount,
+    ]);
+
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, headings);
+    utils.sheet_add_json(ws, excelData, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'data');
+    writeFile(wb, 'daily-requirement-tagged@' + chicagoDate + '.xlsx');
+  }
 
   goToConsultantInfo(id: any) {
     this.router.navigate(['usit/consultant-info', 'dashboard', 'consultant', id])
@@ -539,8 +643,9 @@ sourcingLead = true;
         //   x.serialNum = i + 1;
         // });
       }
-    )
+    );
   }
+
 
   sourcingPop(element: any, condition: any) {
     const actionData = {
@@ -565,7 +670,7 @@ sourcingLead = true;
       dialogConfig
     );
   }
-  
+
   search = 'empty'
   getReqVendorCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'vendor', 'empty').subscribe(
@@ -577,7 +682,7 @@ sourcingLead = true;
       }
     )
   }
-  
+
   getReqCatergoryCount() {
     this.dashboardServ.getReqCounts(this.search, 'count', 'category', 'empty').subscribe(
       (response: any) => {
@@ -611,12 +716,85 @@ sourcingLead = true;
     );
   }
 
-  onVendorFilter(event: any){
+  onVendorFilter(event: any) {
     this.dataSourceVendor.filter = event.target.value;
   }
 
-  onCategoryFilter(event: any){
-    this.dataSourceTech.filter = event.target.value;
+  onDiceFilter(event: any) {
+    this.dataSourceDice.filter = event.target.value;
   }
 
+  onCategoryFilter(event: any) {
+    this.dataSourceTech.filter = event.target.value;
+  }
+  //lavanya
+  getEmployeeNames() {
+    this.dashboardServ.getEmployeeName().subscribe(
+      (response: any) => {
+        // Assuming the API response contains an array of objects with 'name' property for each employee
+        this.benchSalesEmployees = response.data;
+      },
+      (error: any) => {
+        console.error('Error fetching employee names:', error);
+      }
+    );
+  }
+
+  onEmployeeChange(event: any): void {
+    const fromDate = this.myForm.get('startDate').value;
+    const toDate = this.myForm.get('endDate').value;
+    const empId = event.value;
+    const formatedStartDate = this.formatDate(fromDate);
+    const formatedEndDate = this.formatDate(toDate);
+    this.filterData(formatedStartDate, formatedEndDate, empId);
+
+  }
+  formatDate(date: string): string {
+    const selectedDate = new Date(date);
+    const year = selectedDate.getFullYear();
+    const month = ("0" + (selectedDate.getMonth() + 1)).slice(-2);
+    const day = ("0" + selectedDate.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+  filterData(startDate: any, endDate: any, empId: any) {
+
+    this.dashboardServ.getFilteredEmployee(startDate, endDate, empId)
+      .subscribe(
+        (response: any) => {
+          // Check if response contains data property
+          if (response && response.data) {
+            // Assign the response data to the dataSource for displaying filtered data
+            this.dataSourceDice.data = response.data;
+            // Reassign serial numbers after filtering
+            this.dataSourceDice.data.forEach((item: any, index: number) => {
+              item.serialNum = index + 1;
+            });
+          } else {
+            // Handle empty or invalid response
+            console.error('Invalid response:', response);
+          }
+        },
+        (error: any) => {
+          // Handle errors here
+          console.error('An error occurred:', error);
+        }
+      );
+  }
+
+  refreshData() {
+    // Reset form fields
+    this.myForm.reset();
+    this.getDiceReqs();
+    const endDateControl = this.myForm.get('endDate');
+    if (!endDateControl.value) {
+      const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      endDateControl.setValue(currentDate);
+    }
+
+  }
+  //
+
 }
+
+
+

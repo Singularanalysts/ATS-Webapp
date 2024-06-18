@@ -16,12 +16,20 @@ export class FileManagementService {
     return this.http.post(this.apiServ.apiUrl + `auth/users/uploadMultiple/${id}`, formData, {observe: "response"});
   }
 
+  uploadFileBillPay(formData:any, id: number) {
+    return this.http.post(this.apiServ.apiUrl + `billpay/invoice/uploadMultiple/${id}`, formData, {observe: "response"});
+  }
+
   ConUploadFile(formData:any, id: number) {
     return this.http.post(this.apiServ.apiUrl + `consultant/uploadMultiple/${id}`, formData, {observe: "response"});
   }
 
+  poFilesUpload(formData:any, id: number) {
+    return this.http.post(this.apiServ.apiUrl + `billpay/po/fileupload/${id}`, formData, {observe: "response"});
+  }
+
   h1bUploadFile(formData:any, id: number) {
-    return this.http.post(this.apiServ.apiUrl + `img/H1BApplicants/h1docs/${id}`, formData, {observe: "response"});
+    return this.http.post(this.apiServ.apiUrl + `img/people/h1docs/${id}`, formData, {observe: "response"});
   }
 
   removefile(id: number, flg: string) {
@@ -33,7 +41,11 @@ export class FileManagementService {
   }
 
   h1bRemoveFile(id: number, flg: string) {
-    return this.apiServ.get(`img/H1BApplicants/removefile/${id}/${flg}`);
+    return this.apiServ.get(`img/people/removefile/${id}/${flg}`);
+  }
+
+  h1bRemoveFilesMultiple(id: number) {
+    return this.apiServ.get(`img/people/deleteDoc/${id}`);
   }
 
   removefiles(id: number) {
@@ -57,7 +69,13 @@ export class FileManagementService {
   }
 
   downloadH1bFile(id: number, flg: string): Observable<Blob> {
-    return this.http.get(`${this.apiServ.apiUrl}img/H1BApplicants/download/${id}/${flg}`, {
+    return this.http.get(`${this.apiServ.apiUrl}img/people/download/${id}/${flg}`, {
+      responseType: 'blob',
+    });
+  }
+
+  downloadMultipleFiles(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiServ.apiUrl}img/people/downloadMultipleFiles/${id}`, {
       responseType: 'blob',
     });
   }
@@ -77,4 +95,11 @@ export class FileManagementService {
     return this.http.post(this.apiServ.apiUrl + `vms/vendor/excelUpload/${id}`, formData, {observe: "response"});
   }
 
+  uploadHotListProvidersExcel(formData:any, id: number) {
+    return this.http.post(this.apiServ.apiUrl +`vms/htProviders/excelUpload/${id}`, formData, {observe: "response"});
+  }
+
+  parseResume(formData:any) {
+    return this.http.post(this.apiServ.apiUrl +`auth/resume/parse`, formData, {observe: "response"});
+  }
 }

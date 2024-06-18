@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 
 const modules = [
     MatProgressSpinnerModule,
@@ -39,6 +40,7 @@ const modules = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressBarModule,
+    MatTabsModule
 ];
 @NgModule({
   declarations: [],

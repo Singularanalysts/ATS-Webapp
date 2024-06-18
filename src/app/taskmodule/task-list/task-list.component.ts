@@ -121,8 +121,7 @@ export class TaskListComponent implements OnInit {
             x.serialNum = i + 1;
           });
         },
-        error: (err) => 
-        console.log(err)
+        error: (err) => {}
       }
     );
     /*this.userid = localStorage.getItem('userid');
@@ -282,8 +281,8 @@ export class TaskListComponent implements OnInit {
     let color = '';
     switch (intStatus) {
       case 'OnBoarded':
-        backgroundColor = 'rgba(40, 160, 76, 0.945)';
-        color = 'white';
+        backgroundColor = 'rgb(185, 245, 210)';
+        color = 'black';
         break;
       case 'Selected':
         backgroundColor = 'rgba(243, 208, 9, 0.945)';

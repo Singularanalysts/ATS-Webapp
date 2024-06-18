@@ -57,23 +57,48 @@
     "icon": "work",
     "children": [
       {
-        "text": "Portal Reqs",
+        "text": "Portal Requirements",
         "icon": "group",
         "routerLink": "/usit/portalreqs"
+      },
+      {
+        "text": "CPV Portal Requirements",
+        "icon": "group",
+        "routerLink": "/usit/cpv-portal-requirements"
+      },
+      {
+        "text": "FPV Portal Requirements",
+        "icon": "group",
+        "routerLink": "/usit/fpv-portal-requirements"
       },
       {
         "text": "RSS",
         "icon": "business_center",
         "routerLink": "/usit/rssfeed"
-      },
-      {
-        "text": "LinkedIn Profiles",
-        "icon": "business_center",
-        "routerLink": "/usit/linkedinprofiles"
       }
     ]
-  }
-  ,
+  },
+  {
+    "text": "Openreqs Job Applications",
+    "icon": "view_carousel",
+    "routerLink": "/usit/openreqs-job-applications"
+  },
+  {
+    "text": "Talent Pool",
+    "icon": "business_center",
+    "routerLink": "/usit/linkedinprofiles"
+  },
+  {
+    "text": "Talent Acquisition",
+    "icon": "person_search",
+    "children": [
+      {
+        "text": "Hot List Providers",
+        "icon": "groups",
+        "routerLink": "/usit/hot-list-providers"
+      }
+    ]
+  },
   {
     "text": "Reports",
     "icon": "reports",
@@ -87,6 +112,16 @@
         "text": "Sourcing Reports",
         "icon": "dynamic_feed",
         "routerLink": "/usit/sourcing-report"
+      },
+      {
+        "text": "Open Reqs Reports",
+        "icon": "dynamic_feed",
+        "routerLink": "/usit/open-reqs-report"
+      },
+      {
+        "text": "Banter Reports",
+        "icon": "fax",
+        "routerLink": "/usit/banter-report"
       }
     ]
   },

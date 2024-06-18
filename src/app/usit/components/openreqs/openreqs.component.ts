@@ -5,11 +5,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-
+import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { RecruInfoComponent } from './recru-info/recru-info.component';
+import { MatDialog } from '@angular/material/dialog';
+import { RequirementInfoComponent } from '../recruitment/requirement-list/requirement-info/requirement-info.component';
+import { DialogService } from 'src/app/services/dialog.service';
+import { JobDescriptionComponent } from './job-description/job-description.component';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 @Component({
   selector: 'app-openreqs',
   standalone: true,
@@ -21,10 +27,13 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
+
   ],
   templateUrl: './openreqs.component.html',
-  styleUrls: ['./openreqs.component.scss']
+  styleUrls: ['./openreqs.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class OpenreqsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
@@ -36,8 +45,9 @@ export class OpenreqsComponent implements OnInit {
     'employment_type',
     'job_location',
     'vendor',
+    'JobDescription',
     'source',
-   // 'end_client',
+    // 'end_client',
   ];
   // pagination code
   page: number = 1;
@@ -56,25 +66,52 @@ export class OpenreqsComponent implements OnInit {
 
   private router = inject(Router);
   private service = inject(OpenreqService);
-userid!:any;
+  userid!: any;
+  dialog: any;
+  private dialogServ = inject(DialogService);
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getAllreqsData();
   }
-  empTag(id:number){
+  empTag(id: number) {
     this.service.openReqsEmpTagging(id, this.userid).subscribe(
       (response: any) => {
 
       })
   }
 
+
   onSelectionChange(event: MatSelectChange) {
-    console.log('Selected value:', event.value);
     this.source = event.value;
-    console.log(this.source);
     this.getAllreqsData()
   }
+  openVendorPopup(vendor: string): void {
+    this.dialog.open({
+      data: { vendor: vendor }
+    });
+  }
 
+  goToReqInfo(element: any) {
+
+    const actionData = {
+      title: `${element.vendor}`,
+      id: element.vendor,
+      isExist: element.isexist,
+      actionName: 'req-info',
+
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'req-info';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      RecruInfoComponent,
+      dialogConfig
+    );
+  }
   getAllreqsData() {
     if (this.source && this.source !== 'empty') {
       this.getAllData(1); // Call API with source
@@ -103,15 +140,15 @@ userid!:any;
     return serialNumber;
   }
 
-  applyFilter(event : any) {
+  applyFilter(event: any) {
     const keyword = event.target.value;
     this.field = keyword;
     if (keyword != '') {
       return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
         ((response: any) => {
-          this.dataSource.data  = response.data.content;
-           // for serial-num {}
-           this.dataSource.data.map((x: any, i) => {
+          this.dataSource.data = response.data.content;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
           });
           this.totalItems = response.data.totalElements;
@@ -122,7 +159,7 @@ userid!:any;
     if (keyword == '') {
       this.field = 'empty';
     }
-    return  this.getAllData(this.currentPageIndex + 1);
+    return this.getAllData(this.currentPageIndex + 1);
   }
 
   onSort(event: any) {
@@ -148,13 +185,33 @@ userid!:any;
 
     switch (companyStatus) {
       case '1':
-        backgroundColor = 'rgba(40, 160, 76, 0.945)';
+        backgroundColor = 'rgba(185	,245	,210)';
         break;
       default:
         backgroundColor = '';
         break;
     }
-    
+
     return { 'background-color': backgroundColor };
   }
+
+  goToJobDescription(element: any) {
+    const actionData = {
+      title: `${element.job_title}`,
+      id: element.id,
+      actionName: 'job-description',
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '62dvw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'job-description';
+    dialogConfig.data = actionData;
+
+    this.dialogServ.openDialogWithComponent(
+      JobDescriptionComponent,
+      dialogConfig
+    );
+  }
+
 }

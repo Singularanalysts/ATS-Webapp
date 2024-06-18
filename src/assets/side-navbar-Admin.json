@@ -24,13 +24,32 @@
           "routerLink": "/usit/recruiters"
         },
         {
-          "text": "Mass Mailing List",
-          "icon": "mail",
-          "routerLink": "/usit/mass-mailing-list"
+          "text": "Blacklisted Companies",
+          "icon": "block",
+          "routerLink": "/usit/blacklisted-companies"
+        },
+        {
+          "text": "Current Primary Vendor",
+          "icon": "group",
+          "routerLink": "/usit/current-primary-vendor"
+        },
+        {
+          "text": "Future Primary Vendor",
+          "icon": "group",
+          "routerLink": "/usit/future-primary-vendor"
+        },
+        {
+          "text": "Known Vendor Contacts",
+          "icon": "group",
+          "routerLink": "/usit/known-vendor-contacts"
         }
       ]
     },
-
+    {
+      "text": "Mass Mailing",
+      "icon": "mail",
+      "routerLink": "/usit/mass-mailing"
+    },
     {
       "text": "Technology Tags",
       "icon": "build",
@@ -43,18 +62,23 @@
       "routerLink": "/usit/list-techsupport"
     },
     {
-      "text": "Immigration",
-      "icon": "label",
+      "text": "People",
+      "icon": "groups",
       "children": [
         {
-          "text": "H1B Immigration",
-          "icon": "flight_land",
-          "routerLink": "/usit/h1b-immigartion"
+          "text": "Active",
+          "icon": "check_circle",
+          "routerLink": "/usit/active"
         },
         {
-          "text": "Future OPT/CPT",
-          "icon": "school",
-          "routerLink": "/usit/future-opt-cpt"
+          "text": "Leave of Absence",
+          "icon": "event_busy",
+          "routerLink": "/usit/leave-of-absence"
+        },
+        {
+          "text": "Terminated",
+          "icon": "cancel",
+          "routerLink": "/usit/terminated"
         }
       ]
     },
@@ -168,9 +192,19 @@
       "icon": "work",
       "children": [
         {
-          "text": "Portal Reqs",
+          "text": "Portal Requirements",
           "icon": "group",
           "routerLink": "/usit/portalreqs"
+        },
+        {
+          "text": "CPV Portal Requirements",
+          "icon": "group",
+          "routerLink": "/usit/cpv-portal-requirements"
+        },
+        {
+          "text": "FPV Portal Requirements",
+          "icon": "group",
+          "routerLink": "/usit/fpv-portal-requirements"
         },
         {
           "text": "RSS",
@@ -178,9 +212,30 @@
           "routerLink": "/usit/rssfeed"
         },
         {
-          "text": "LinkedIn Profiles",
+          "text": "Email Extraction",
           "icon": "business_center",
-          "routerLink": "/usit/linkedinprofiles"
+          "routerLink": "/usit/email-extraction-list"
+        }
+      ]
+    },
+    {
+      "text": "Openreqs Job Applications",
+      "icon": "view_carousel",
+      "routerLink": "/usit/openreqs-job-applications"
+    },
+    {
+      "text": "Talent Pool",
+      "icon": "business_center",
+      "routerLink": "/usit/linkedinprofiles"
+    },
+    {
+      "text": "Talent Acquisition",
+      "icon": "person_search",
+      "children": [
+        {
+          "text": "Hot List Providers",
+          "icon": "groups",
+          "routerLink": "/usit/hot-list-providers"
         }
       ]
     },
@@ -197,6 +252,16 @@
           "text": "Sourcing Reports",
           "icon": "dynamic_feed",
           "routerLink": "/usit/sourcing-report"
+        },
+        {
+          "text": "Open Reqs Reports",
+          "icon": "dynamic_feed",
+          "routerLink": "/usit/open-reqs-report"
+        },
+        {
+          "text": "Banter Reports",
+          "icon": "fax",
+          "routerLink": "/usit/banter-report"
         }
       ]
     },

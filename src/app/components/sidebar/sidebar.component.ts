@@ -40,8 +40,10 @@ export class SidebarComponent implements OnInit {
   progressBarMode: ProgressBarMode = 'indeterminate';
   progressSpinnerMode: ProgressSpinnerMode = 'indeterminate';
   value = 50;
+  role!: string | null;
+  
   ngOnInit() {
-
+    this.role  = localStorage.getItem('role');
   }
 
   onSignOut(){

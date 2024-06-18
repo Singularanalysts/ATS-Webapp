@@ -38,7 +38,6 @@ export class PermissionsService {
   }
 
   login(user: any) {
-    // console.log("authentication " + JSON.stringify(user))
     this.isUserLoggedIn = true;
     localStorage.setItem('userName', user.fullname);
     //localStorage.setItem('token', 'HTTP_TOKEN ' + user.token);
@@ -57,7 +56,6 @@ export class PermissionsService {
     return of(this.isUserLoggedIn).pipe(
       delay(1000),
       tap(val => {
-        //console.log("Is User Authentication is successful: " + val);
       })
     );
   }
@@ -137,4 +135,17 @@ export class PermissionsService {
   changePassword(value: any) {
     return this.http.post(this.apiServ.apiUrl + "auth/login/change_password", value);
   }
+
+  consultantSendOtp(email: any) {
+    return this.http.get(this.apiServ.apiUrl + "auth/conLogin/emailVerification/" + email);
+  }
+
+  consultantValidateOtp(userId: any, otp: any) {
+    return this.http.get(this.apiServ.apiUrl + "auth/conLogin/validateOtp/" + userId + "/"+ otp);
+  }
+
+  consultantRegistration(consultantdata: any) {
+    return this.http.post(this.apiServ.apiUrl + "auth/conLogin/consultantRegistration", consultantdata);
+  }
+
 }

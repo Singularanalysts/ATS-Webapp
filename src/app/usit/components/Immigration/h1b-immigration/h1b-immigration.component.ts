@@ -1,16 +1,18 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddH1bImmigrantComponent } from './add-h1b-immigrant/add-h1b-immigrant.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
-
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 @Component({
   selector: 'app-h1b-immigration',
   standalone: true,
@@ -19,10 +21,12 @@ import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule, MatSortModule
   ],
   templateUrl: './h1b-immigration.component.html',
-  styleUrls: ['./h1b-immigration.component.scss']
+  styleUrls: ['./h1b-immigration.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
 })
 export class H1bImmigrationComponent implements OnInit {
 
@@ -37,6 +41,17 @@ export class H1bImmigrationComponent implements OnInit {
     'LastI9',
     'Action',
   ];
+  // paginator
+  length = 50;
+  pageSize = 50;
+  pageIndex = 0;
+  pageSizeOptions = [50, 75, 100];
+  hidePageSize = true;
+  showPageSizeOptions = true;
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
@@ -44,11 +59,6 @@ export class H1bImmigrationComponent implements OnInit {
   totalItems: any;
   field = "empty";
   currentPageIndex = 0;
-  pageEvent!: PageEvent;
-  pageSize = 50;
-  showPageSizeOptions = true;
-  showFirstLastButtons = true;
-  pageSizeOptions = [50, 75, 100];
 
   private router = inject(Router);
   private dialogServ = inject(DialogService);
@@ -59,10 +69,15 @@ export class H1bImmigrationComponent implements OnInit {
     this.getAll();
   }
 
-  getAll() {
-    return this.h1bServ.getAll().subscribe(
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
+  getAll(pagIdx = 1) {
+    return this.h1bServ.getAllH1bApplicants(pagIdx, this.pageSize, this.field, this.sortField, this.sortOrder).subscribe(
       ((response: any) => {
-        this.dataSource.data = response.data;
+        this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
@@ -91,8 +106,8 @@ export class H1bImmigrationComponent implements OnInit {
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddH1bImmigrantComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-         this.getAll();
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
     })
   }
@@ -110,21 +125,110 @@ export class H1bImmigrationComponent implements OnInit {
     const dialogRef = this.dialogServ.openDialogWithComponent(AddH1bImmigrantComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-         this.getAll();
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
     })
   }
 
-  applyFilter(event : any) {
-
+  onFilter(event: any) {
+    this.dataSource.filter = event.target.value;
   }
 
-  onSort(event : any) {
+  applyFilter(event : any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      return this.h1bServ.getAllH1bApplicants(1, this.pageSize, keyword, this.sortField, this.sortOrder).subscribe(
+        ((response: any) => {
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        })
+      );
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return  this.getAll(this.currentPageIndex + 1);
+  }
 
+
+
+  handlePageEvent(e: PageEvent) {
+    this.pageEvent = e;
+    this.length = e.length;
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
   }
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+  onSort1(event: Sort) {
+    const sortDirection = event.direction;
+    const activeSortHeader = event.active;
+
+    if (sortDirection === '') {
+      this.dataSource.data = this.dataSource.data;
+      this.dataSource.sort = this.sort;
+      return;
+    }
+   const isAsc = sortDirection === 'asc';
+    this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
+      switch (activeSortHeader) {
+        case 'Name':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.employeename || '').localeCompare(b.employeename || '')
+          );
+        case 'Company':
+          return (
+            (isAsc ? 1 : -1) *
+            (a.companyname || '').localeCompare(b.companyname || '')
+          );
+        case 'ValidFrom':
+          const h1validfromA = new Date(a.h1validfrom);
+          const h1validfromeB = new Date(b.h1validfrom);
+          return isAsc ? h1validfromA.getTime() - h1validfromeB.getTime() : h1validfromeB.getTime() - h1validfromA.getTime();
+        case 'ValidTill':
+          const h1validtoA = new Date(a.h1validto);
+          const h1validtoB = new Date(b.h1validto)
+          return isAsc ? h1validtoA.getTime() - h1validtoB.getTime() : h1validtoB.getTime() - h1validtoA.getTime();
+        case 'E-Verify':
+          const everifydateA = new Date(a.everifydate);
+          const everifydateB = new Date(b.everifydate)
+          return isAsc ? everifydateA.getTime() - everifydateB.getTime() : everifydateB.getTime() - everifydateA.getTime();
+        case 'LastI9':
+          const lasti9dateA = new Date(a.lasti9date);
+          const lasti9dateB = new Date(b.lasti9date)
+          return isAsc ? lasti9dateA.getTime() - lasti9dateB.getTime() : lasti9dateB.getTime() - lasti9dateA.getTime();
+          case 'SerialNum':
+            // Assuming 'serialNum' is the property representing the serial number
+            const serialNumA = parseInt(a.serialNum) || 0;
+            const serialNumB = parseInt(b.serialNum) || 0;
+            return (isAsc ? 1 : -1) * (serialNumA - serialNumB);
+        default:
+          return 0;
+      }
+    });
+  }
+
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+  onSort(event: Sort) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'updateddate'
+    else
+      this.sortField = event.active;
+    
+      this.sortOrder = event.direction;
+    
+    if (event.direction != ''){
+    this.getAll();
+    }
+  }
+
 }

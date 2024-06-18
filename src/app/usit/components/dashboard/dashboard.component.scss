@@ -1,8 +1,8 @@
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8PX;
+  // height: 2rem;
+  padding-top: 2px;
   top: 0;
 }
 
@@ -26,7 +26,7 @@ ul.breadcrumb li a {
 }
 
 ul.breadcrumb li a:hover {
-  color: #01447e;
+  color: #0f4d83;
   text-decoration: underline;
 }
 
@@ -46,6 +46,7 @@ ul.breadcrumb li a:hover {
 .header-text {
   padding-left: 8px;
   font-weight: 600;
+ 
 }
 
 .header-container-leading-resources {
@@ -98,7 +99,7 @@ ul.breadcrumb li a:hover {
   // overflow: auto;
 }
 
-.left-div  {
+.left-div {
   display: flex;
 }
 
@@ -145,7 +146,7 @@ ul.breadcrumb li a:hover {
   height: 30px !important;
 }
 
-.no-data-found{
+.no-data-found {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,7 +201,8 @@ ul.breadcrumb li a:hover {
   justify-content: space-between;
 }
 
-.mat-mdc-card-title, .mat-mdc-card-subtitle {
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle {
   font-size: 14px;
   margin: 0;
   font-weight: 700;
@@ -212,7 +214,7 @@ mat-typography p {
 
 .dashboard {
   font-size: .875em;
-  font-weight: 700!important;
+  font-weight: 700 !important;
   margin-bottom: 0px !important;
 }
 
@@ -236,32 +238,40 @@ mat-typography p {
   min-height: 30px !important;
 }
 
-.mat-mdc-fab.mat-accent.submission-icon, 
+.mat-mdc-fab.mat-accent.submission-icon,
 .mat-mdc-mini-fab.mat-accent.submission-icon .submission-icon {
-  --mdc-fab-container-color: #ffffcc; /* icon background color */
+  --mdc-fab-container-color: #ffffcc;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #ffcc00; /* icon color */
+  --mat-mdc-fab-color: #ffcc00;
+  /* icon color */
 }
 
-.mat-mdc-fab.mat-accent.interview-icon, 
+.mat-mdc-fab.mat-accent.interview-icon,
 .mat-mdc-mini-fab.mat-accent.interview-icon .interview-icon {
-  --mdc-fab-container-color: #ffecdf; /* icon background color */
+  --mdc-fab-container-color: #ffecdf;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #ff771d; /* icon color */
+  --mat-mdc-fab-color: #ff771d;
+  /* icon color */
 }
 
-.mat-mdc-fab.mat-accent.closure-icon, 
+.mat-mdc-fab.mat-accent.closure-icon,
 .mat-mdc-mini-fab.mat-accent.closure-icon .closure-icon {
-  --mdc-fab-container-color: #e0f8e9; /* icon background color */
+  --mdc-fab-container-color: #e0f8e9;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #2eca6a; /* icon color */
+  --mat-mdc-fab-color: #2eca6a;
+  /* icon color */
 }
 
-.mat-mdc-fab.mat-accent.sourcing-icon, 
+.mat-mdc-fab.mat-accent.sourcing-icon,
 .mat-mdc-mini-fab.mat-accent.sourcing-icon .sourcing-icon {
-  --mdc-fab-container-color: #d6d8e9; /* icon background color */
+  --mdc-fab-container-color: #d6d8e9;
+  /* icon background color */
   --mdc-fab-icon-color: white;
-  --mat-mdc-fab-color: #3f51b5; /* icon color */
+  --mat-mdc-fab-color: #3f51b5;
+  /* icon color */
 }
 
 .mat-mdc-card.activity-card-individual {
@@ -294,11 +304,11 @@ a .name {
   justify-content: space-between;
 }
 
-.activity .activity-content{
+.activity .activity-content {
   width: 79%;
 }
 
-.activity .time{
+.activity .time {
   margin: 0px auto;
   width: 19%;
 }
@@ -314,16 +324,16 @@ a .name {
 }
 
 .added {
-  color:#29abd3;
+  color: #29abd3;
   font-size: 12px;
 }
 
-.submssion{
-  color:#db1aab;
+.submssion {
+  color: #db1aab;
   font-size: 12px;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
@@ -339,9 +349,9 @@ b {
   padding: 0px 0px 16px 0px;
 }
 
-.consultant-id{
+.consultant-id {
   cursor: pointer;
-  color:#0275d8
+  color: #0275d8
 }
 
 .analysis-container {
@@ -377,6 +387,62 @@ b {
   .search {
     height: 32px;
     padding: 0px 8px;
-
+    overflow-wrap: normal;
   }
+
+  .dice {
+    width: 150px;
+    display: flex;
+    align-items: center;
+  }
+
+
 }
+.date-picker-field {
+  display: flex;
+  align-items: center;
+  
+}
+
+.date-picker-container {
+  position: relative;
+  flex: 1; /* Allow the input to expand */
+}
+
+/* Adjust the margin as needed */
+.mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper {
+  margin-right: 8px;
+}
+.mat-form-field {
+  margin-bottom: 5px; /* Adjust as needed */
+  
+}
+
+
+.search {
+  height: 35px;
+  padding: 0px 8px;
+   
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  background-color: white;
+  top: 0;
+  overflow: hidden;
+  margin: 4px;
+  background-color: white;
+  margin-bottom: -8.5px;
+  margin-left: 0;
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+
+

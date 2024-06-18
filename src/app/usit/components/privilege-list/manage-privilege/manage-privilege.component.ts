@@ -58,10 +58,8 @@ export class ManagePrivilegeComponent implements OnInit{
       this.displayFormErrors()
       return;
     }
-    //console.log("form-val", JSON.stringify(this.form.value))
     this.privilegeServ.registerprevilage(this.form.value)
       .subscribe((data: any) => {
-        //console.log(data.status)
         if (data.status == 'Success') {
           this.dataToBeSentToSnackBar.message =  this.data.actionName === 'add-privilege' ?
           'Previlege added successfully!' : 'Previlege updated successfully!';

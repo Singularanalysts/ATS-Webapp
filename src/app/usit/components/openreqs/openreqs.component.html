@@ -1,28 +1,30 @@
 <div class="hot-list-container">
     <ul class="breadcrumb">
         <li><a (click)="navigateToDashboard()">Home</a></li>
-        <li class="last">Daily Requirements</li>
+        <li class="last">Portal Requirements</li>
     </ul>
     <div class="header-container mat-elevation-z1">
         <span class="header-text">
-            Daily Requirements
+            Portal Requirements
         </span>
         <div>
             <mat-form-field class="portal-form-field">
                 <mat-label>Select a Portal</mat-label>
                 <mat-select (selectionChange)="onSelectionChange($event)">
                     <mat-option value="all">All</mat-option>
-                    <mat-option value="adzuna">Adzuna</mat-option>
+                    <!-- <mat-option value="adzuna">Adzuna</mat-option> -->
                     <mat-option value="dice">Dice</mat-option>
+                    <mat-option value="glassdoor">Glassdoor</mat-option>
                     <mat-option value="indeed">Indeed</mat-option>
-                    <mat-option value="jobcube">Job Cube</mat-option>
-                    <mat-option value="joblift">Job Lift</mat-option>
-                    <mat-option value="juju">Juju</mat-option>
+                    <mat-option value="insight global">Insight Global</mat-option>
+                    <mat-option value="jobdiva">Jobdiva</mat-option>
+                    <!-- <mat-option value="juju">Juju</mat-option> -->
                     <mat-option value="linkedin">LinkedIn</mat-option>
-                    <mat-option value="post job free">Post Job Free</mat-option>
+                    <!-- <mat-option value="post job free">Post Job Free</mat-option> -->
                     <mat-option value="recruit.net">Recruit</mat-option>
                     <mat-option value="Simplyhired">Simply Hired</mat-option>
-                    <mat-option value="snaprecruit">Snaprecruit</mat-option>
+                    <mat-option value="techfetch">Tech Fetch</mat-option>   
+                    <!-- <mat-option value="snaprecruit">Snaprecruit</mat-option> -->
                 </mat-select>
             </mat-form-field>
         </div>
@@ -42,17 +44,17 @@
 
                 <!-- SNo Column -->
                 <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" style="width: 1%">
                         S.No </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+                    <td mat-cell *matCellDef="let element" style="width: 1%"> {{element?.serialNum}}</td>
                 </ng-container>
 
                 <!-- Name Column-->
                 <ng-container matColumnDef="posted_on">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name"
-                        style="width: 7%">Posted On</th>
-                    <td mat-cell *matCellDef="let element" nowrap style="width: 7%"> {{element?.posted_on |
-                        date:'MM-dd-yyyy'}} </td>
+                        style="width: 2%">Posted On</th>
+                    <td mat-cell *matCellDef="let element" nowrap style="width: 2%"> {{element?.posted_on |
+                        date:'MM-dd-yyyy HH:mm'  }} </td>
                 </ng-container>
 
 
@@ -60,46 +62,52 @@
                 <!-- Technology Column-->
                 <ng-container matColumnDef="job_title">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Technology"
-                        style="width: 15%">
+                        style="width: 20%">
                         Title </th>
                     <td mat-cell *matCellDef="let element" style="width: 20%"><span class="consultant-name"><a
                                 href="{{element?.job_source}}" target="_blank"
-                                (click)="empTag(element.id)">{{element?.job_title}}</a>
+                                (click)="empTag(element.id)">{{element?.job_title|titlecase}}</a>
                         </span> </td>
                 </ng-container>
 
                 <!-- Visa Column-->
                 <ng-container matColumnDef="category_skill">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Visa">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Visa" style="width: 13%">
                         Category </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element?.category_skill}} </td>
+                    <td mat-cell *matCellDef="let element"style="width: 13%">
+                        {{ element?.category_skill | titlecase }} </td>
                 </ng-container>
 
                 <!-- Experience Column-->
                 <ng-container matColumnDef="employment_type">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"> Emp Type </th>
-                    <td mat-cell *matCellDef="let element">{{element?.employment_type}} </td>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"style="width: 3%"> Emp Type </th>
+                    <td mat-cell *matCellDef="let element" style="width: 3%">{{element?.employment_type | titlecase}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="job_location">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"> Location </th>
-                    <td mat-cell *matCellDef="let element">{{element?.job_location}} </td>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience"style="width: 10%"> Location </th>
+                    <td mat-cell *matCellDef="let element"style="width: 10%">{{element?.job_location | titlecase}} </td>
                 </ng-container>
 
                 <!-- Rate Column-->
                 <ng-container matColumnDef="vendor">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Rate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Rate"style="width: 12%">
                         Vendor</th>
-                    <td mat-cell *matCellDef="let element"> {{element?.vendor}}
-                    </td>
+                        <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)" style="width: 12%"> {{element?.vendor | titlecase}}
+                        </td>
+                </ng-container>
+
+                <!-- Body Column-->
+                <ng-container matColumnDef="JobDescription">
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by JobDescription" style=" width: 3% "> Job Description </th>
+                    <td mat-cell *matCellDef="let element" class="jd-info" (click)="goToJobDescription(element)"  style=" width: 3% ">VIEW </td>
                 </ng-container>
 
                 <!-- Source Column-->
                 <ng-container matColumnDef="source">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Source"
-                        style="width: 7%">Source</th>
-                    <td mat-cell *matCellDef="let element" nowrap style="width: 7%"> {{ element?.source }} </td>
+                        style="width: 3%">Source</th>
+                    <td mat-cell *matCellDef="let element" nowrap style="width: 3%"> {{ element?.source | titlecase}} </td>
                 </ng-container>
 
                 <!-- Priority Column-->

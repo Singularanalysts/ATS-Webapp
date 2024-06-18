@@ -1,14 +1,14 @@
 .future-opt-cpt-container {
     display: flex;
     flex-direction: column;
-    height: 86vh;
+    height: calc(100vh - 68px);
   }
   
   ul {
     padding-inline-start: 10px;
     background-color: rgb(228, 231, 234);
-    height: 2rem;
-    padding-top: 8PX;
+    // height: 2rem;
+    padding-top: 2px;
     top: 0;
   }
   
@@ -125,9 +125,9 @@
   }
   
   .future-opt-cpt-table-style {
-    padding: 0 2px;
+    // padding: 0 2px;
     width: 100%;
-    max-height: calc(100% - 3px);
+    // max-height: calc(100% - 3px);
     overflow: auto;
     display: block;
   }
@@ -176,26 +176,26 @@
   .action-buttons {
     display: flex;
     align-items: center;
-    height: 43px;
+    // height: 43px;
   }
   
-  .action-buttons button {
-    margin: 0;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-  }
+  // .action-buttons button {
+  //   margin: 0;
+  //   padding: 0;
+  //   width: 30px;
+  //   height: 30px;
+  // }
   
-  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-    width: 30px !important;
-    height: 30px !important;
-  }
+  // ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  //   width: 30px !important;
+  //   height: 30px !important;
+  // }
   
-  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-    width: 30px !important;
-    height: 30px !important;
-    top: 10px;
-  }
+  // ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  //   width: 30px !important;
+  //   height: 30px !important;
+  //   top: 10px;
+  // }
   
   .filter-vendors {
     display: flex;
@@ -215,12 +215,12 @@
     color: rgb(99, 98, 98);
   }
   
-  td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
-    display: flex;
-    column-gap: 5px;
-    height: 49px;
-    align-items: center;
-  }
+  // td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
+  //   display: flex;
+  //   column-gap: 5px;
+  //   height: 49px;
+  //   align-items: center;
+  // }
   
   .mat-mdc-header-row {
     height: 30px !important;
@@ -239,4 +239,65 @@
   .employeer-name {
     cursor: pointer;
     color: #0275d8;
+  }
+
+  ::ng-deep .mat-mdc-paginator {
+    display: block;
+    line-height: var(--mat-paginator-container-text-line-height);
+    font-size: var(--mat-paginator-container-text-size);
+    font-weight: var(--mat-paginator-container-text-weight);
+    letter-spacing: var(--mat-paginator-container-text-tracking);
+  }
+  
+  :host ::ng-deep.mat-paginator .mat-paginator-container{
+    height: 36px;
+  }
+  
+  ::ng-deep .mat-mdc-paginator .mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
+    height: 24px;
+    width: 24px;
+  }
+  
+  ::ng-deep .mat-mdc-paginator .mat-mdc-focus-indicator {
+    height: 24px;
+    width: 24px;
+  }
+  
+  ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target {
+    height: 24px;
+    width: 24px;
+  }
+  
+  ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-mdc-tooltip-trigger mat-mdc-paginator-navigation-first mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base mat-mdc-tooltip-disabled ng-star-inserted {
+    height: 24px;
+    width: 24px;
+  }
+  
+  ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-base {
+    padding: 0px !important;
+    height: 24px;
+    width: 24px;
+  }
+  
+  ::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
+    padding: 0px !important;
+    height: 24px;
+    width: 24px;
+  }
+  
+  .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 24px;
+    width: var(--mdc-icon-button-state-layer-size);
+    height: var(--mdc-icon-button-state-layer-size);
+    padding: 0px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+    width: 24px !important;
+    height: 24px !important;
   }

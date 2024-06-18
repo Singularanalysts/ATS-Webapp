@@ -1,0 +1,100 @@
+<div class="profile">
+    <div class="item1">
+        <div class="flex-end">
+            <button mat-icon-button (click)="editConsultant(profiledata)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+        <div>
+            <img src="assets/images/file.png" alt="profile avatar" class="profile-avatar">
+        </div>
+        <div class="profile-name">
+            {{ profiledata?.consultantname }}
+        </div>
+        <div class="job-title">
+            {{ profiledata?.position }}
+        </div>
+        <div class="flex-center">
+            <div class="resume" [ngStyle]="{'cursor': profiledata?.resume ? 'pointer' : 'default'}" (click)="downloadfile(profiledata.consultantid,profiledata.resume,'resume')">
+                {{ profiledata?.resume ? profiledata?.resume : 'Upload Resume' }}
+            </div>
+            <div>
+                <button mat-icon-button (click)="editDetails(profiledata, 'Upload Resume', 'Resume')">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="skills">
+            <h3 class="skills-header">
+                Skills
+                <mat-icon (click)="skillsInfo()" class="skill-info">info</mat-icon>
+            </h3>
+            <p>{{ profiledata?.skills }}</p>
+        </div>
+    </div>
+
+    <div class="item2">
+        <div class="flex-center text-left">
+            <span class="section-title">Basic Details</span>
+            <button mat-icon-button (click)="editDetails(profiledata, 'Basic Details', 'Basic')">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+        <div class="basic">
+            <div>
+                <p class="label">Email</p>
+                <p class="value">{{ profiledata?.consultantemail ? profiledata?.consultantemail : '-' }}</p>
+            </div>
+            <div>
+                <p class="label">Contact Number</p>
+                <p class="value">{{ profiledata?.contactnumber ? profiledata?.contactnumber : '-' }}</p>
+            </div>
+            <div>
+                <p class="label">Location</p>
+                <p class="value">{{ profiledata?.currentlocation ? profiledata?.currentlocation : '-' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="item3">
+        <div class="flex-center text-left">
+            <span class="section-title">Work Experience</span>
+            <button mat-icon-button (click)="editDetails(profiledata, 'Work Experience','Work')">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+        <div class="work">
+            <div>
+                <p class="label">Experience (In Years)</p>
+                <p class="value">{{ profiledata?.experience ? profiledata?.experience : '-' }}</p>
+            </div>
+            <div>
+                <p class="label">Preferred Location</p>
+                <p class="value">{{ profiledata?.relocation ? profiledata?.relocation : '-' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="item4">
+        <div class="flex-center text-left">
+            <span class="section-title">Education Qualifications</span>
+            <button mat-icon-button (click)="editDetails(profiledata, 'Education Qualifications', 'Education')">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </div>
+        <div class="qualifications">
+            <div>
+                <p class="label">Degree</p>
+                <p class="value">{{ profiledata?.qualification ? profiledata?.qualification : '-' }}</p>
+            </div>
+            <div>
+                <p class="label">University</p>
+                <p class="value">{{ profiledata?.university ? profiledata?.university : '-' }}</p>
+            </div>
+            <div>
+                <p class="label">Year of Passing</p>
+                <p class="value">{{ profiledata?.yop ? profiledata?.yop : '-' }}</p>
+            </div>
+        </div>
+    </div>
+</div>

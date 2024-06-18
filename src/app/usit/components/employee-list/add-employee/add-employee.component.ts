@@ -76,12 +76,13 @@ export class AddEmployeeComponent {
   departmentOptions: string[] = [
     'Administration',
     'Recruiting',
-    'SoftWare',
+    'Software',
     'Bench Sales',
     'Sourcing',
     'Dom Recruiting',
     'Accounts',
     'Guest',
+    'HR Team'
   ];
 
   roleOptions: any[] = [
@@ -957,6 +958,35 @@ export class AddEmployeeComponent {
   convertToLowerCase(event: any) {
     const inputValue = event.target.value;
     event.target.value = inputValue.toLowerCase();
+  }
+
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+
+  emailDuplicate(event: any) {
+    const email = event.target.value;
+    this.empManagementServ.emailDuplicateCheck(email).subscribe((response: any) => {
+      if (response.status == 'success') {
+        this.message = '';
+      } else if (response.status == 'fail') {
+        const cn = this.employeeForm.get('email');
+        cn.setValue('');
+        this.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      } else {
+        this.dataToBeSentToSnackBar.message = 'Internal Server Error';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      }
+    });
   }
 }
 

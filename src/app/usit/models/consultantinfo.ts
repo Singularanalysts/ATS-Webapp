@@ -21,7 +21,7 @@ export class Consultantinfo {
     qualification!:string;
     experience!:number;
     ratetype!:string;
-    hourlyrate!:number;
+    hourlyrate!:any;
     relocation!:string;
     relocatOther!:string;
     skills!:string;
@@ -64,7 +64,7 @@ export class Consultantinfo {
     dommaxno!:number;
     salesmaxno!:number;
     recmaxno!:number;
-    
+    consultanttype!: string;
 }
 
 

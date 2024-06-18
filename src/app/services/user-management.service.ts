@@ -21,6 +21,14 @@ export class UserManagementService {
         return resp;
       }));
   }
+
+  conLogin(user: Partial<Employee>): Observable<any> {
+    return this.http.post<any>(this.apiServ.apiUrl + 'auth/conLogin/signin', user,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }).pipe(map((resp) => {
+        return resp;
+      }));
+  }
+
   getUserName(): string {
     const userName = localStorage.getItem('userName');
     return userName !== null ? userName : ''

@@ -423,11 +423,9 @@ export class EmployeeReportsComponent {
     else {
       this.flag2 = false;
     }
-    // console.log(JSON.stringify(this.vo) + "   ==  " + JSON.stringify(this.employeeReport.value))
     this.reportservice.consultant_report(this.employeeReport.value)
       .subscribe((data: any) => {
         this.c_data = data.data;
-        //  console.log(JSON.stringify(this.c_data))
         this.subTotal = this.c_data.reduce((a, b) => a + b.submission, 0);
         this.intTotal = this.c_data.reduce((a, b) => a + b.interview, 0);
         this.scheduleTotal = this.c_data.reduce((a, b) => a + b.schedule, 0);
@@ -471,7 +469,6 @@ export class EmployeeReportsComponent {
   }
 
   excelImport() {
-    //console.log(this.vo)
     if (this.vo.groupby == 'employee' && this.vo.flg == 'sales') {
       this.headings = [[
         'Employee Name',

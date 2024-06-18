@@ -1,0 +1,19 @@
+<section class="header-container" id="mainHeader">
+  <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+    {{data.title}}
+  </span>
+  <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
+    <mat-icon>close</mat-icon>
+  </button>
+</section>
+<mat-card class="card mat-elevation-z8">
+  <mat-card-content class="card-content">
+    <div class="scrollable-container"> <!-- Container for scrolling -->
+      <div class="info-container">
+        <div class="info-item">
+          <div [innerHTML]="body"></div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

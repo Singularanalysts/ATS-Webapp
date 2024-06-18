@@ -132,24 +132,22 @@ export class AddTechSupportComponent implements OnInit {
 
     this.service.gettechnicalskills().subscribe((response: any) => {
       this.techdata = response;
-      // console.log("techdata",this.techdata)
     });
   }
   private initializeRequirementForm(requirementData: any) {
     this.registerForm = this.formBuilder.group({
       name: [requirementData ? requirementData.name : '', Validators.required],
-      pseudoname: [requirementData ? requirementData.pseudoname : '', Validators.required],
+      // pseudoname: [requirementData ? requirementData.pseudoname : '', Validators.required],
       location: [requirementData ? requirementData.location : '', Validators.required, this.registerForm.location],
       email: [
         requirementData ? requirementData.email : '',
         [
-          Validators.required,
           Validators.email,
           Validators.pattern("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
         ],
       ],
       mobile: [requirementData ? requirementData.mobile : '', Validators.required],
-      secmobile: [requirementData ? requirementData.secmobile : '', Validators.required],
+      // secmobile: [requirementData ? requirementData.secmobile : '', Validators.required],
       experience: [requirementData ? requirementData.experience : '', [Validators.required, Validators.pattern("^[0-9]*$")]],
       technology: [requirementData ? requirementData.technology : '', Validators.required],
       skills: [requirementData ? requirementData.skills : '', Validators.required],
@@ -254,7 +252,6 @@ export class AddTechSupportComponent implements OnInit {
   gettech() {
     this.service.gettechnicalskills().subscribe((response: any) => {
       this.techdata = response;
-      //console.log(this.techdata, "dsdsh");
     });
   }
   skilldata: any;
@@ -263,7 +260,6 @@ export class AddTechSupportComponent implements OnInit {
     const newVal = event.value;
     this.service.getTechsupportById(newVal).subscribe((response: any) => {
       this.registerForm.get('skills').setValue(response.data);
-      // console.log(response.data)
     })
   }
   address = '';

@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import {
   ISnackBarData,
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
 
   form: any = FormGroup;
   protected isFormSubmitted = false;
+  department!: string | null;
   ngOnInit(): void {
     this.initializeLoginForm();
   }
@@ -87,11 +89,11 @@ export class LoginComponent implements OnInit {
     };
   }
 
-  // get all controls
   get loginFrom() {
     return this.form.controls;
   }
-  userLogin() {
+
+  userLogin(userType: any) {
     // if form is valid, call login api
     this.isFormSubmitted = true;
     if (this.form.invalid) {
@@ -100,36 +102,52 @@ export class LoginComponent implements OnInit {
     const userObj: Partial<Employee> = {
       email: this.form.controls.email.value,
       password: this.form.controls.password.value,
+      loginAs: userType
     };
-    this.userManagementServ.login(userObj).subscribe({
-     next: (result: any) => {
-      console.log("result", result)
+
+    let loginObservable: Observable<any>;
+
+    if (userType === 'Employee') {
+      loginObservable = this.userManagementServ.login(userObj);
+    } else if (userType === 'Consultant') {
+      loginObservable = this.userManagementServ.conLogin(userObj);
+    } else {
+      console.error('Invalid user type');
+      return;
+    }
+    loginObservable.subscribe({
+      next: (result: any) => {
         if (result.status == 'success') {
           const loggedInUserData = result.data;
-         // console.log(result.data);
+          this.department = result.data.department;
           this.permissionServ.login(loggedInUserData).subscribe((data) => {
-             this.router.navigate(['usit/dashboard']);
+            this.router.navigate(['usit/dashboard']);
             const message = 'You have logged in successfully!';
             this.showErroNotification(message, 'success');
           });
         }
+        if (result.status == 'fail') {
+          // const message = "You're Account locked due to InActive for More Than 4 days";
+          this.showErroNotification(result.message);
+        }
 
         if (result.status == 'locked') {
-          const message ="You're Account locked due to InActive for More Than 4 days";
+          const message = "You're Account locked due to InActive for More Than 4 days";
           this.showErroNotification(message);
         }
+
 
       },
       error: err => {
         if (err.status == 401) {
           const message = 'Invalid Credentials, Please try with valid credentials';
           this.showErroNotification(message);
-        } 
+        }
         else if (err.error.status == 'locked') {
-          const message =err.error.message;
+          const message = err.error.message;
           this.showErroNotification(message);
         } else if (err.error.status == 'inactive') {
-          const message =err.error.message;
+          const message = err.error.message;
           this.showErroNotification(message);
         }
         // else {
@@ -142,7 +160,7 @@ export class LoginComponent implements OnInit {
         }
       }
 
-  });
+    });
 
   }
 

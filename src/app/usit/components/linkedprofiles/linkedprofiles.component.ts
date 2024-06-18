@@ -1,27 +1,31 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit,  inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
-import { MatSort } from '@angular/material/sort';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-linkedprofiles',
   standalone: true,
-  imports: [ CommonModule,
+  imports: [ 
+    CommonModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
     MatTableModule,
-    MatPaginatorModule],
+    MatPaginatorModule,
+    MatTabsModule
+  ],
   templateUrl: './linkedprofiles.component.html',
-  styleUrls: ['./linkedprofiles.component.scss']
+  styleUrls: ['./linkedprofiles.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class LinkedprofilesComponent  implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
@@ -30,7 +34,7 @@ export class LinkedprofilesComponent  implements OnInit {
     'candidate_name',
     'address',
     'category',
-    'profile_url',
+    'experience_summary',
     'job_title'
   ];
 
@@ -44,8 +48,6 @@ export class LinkedprofilesComponent  implements OnInit {
    showPageSizeOptions = true;
    showFirstLastButtons = true;
    pageEvent!: PageEvent;
-   @ViewChild(MatPaginator) paginator!: MatPaginator;
-   @ViewChild(MatSort) sort!: MatSort;
    // pagination code
    page: number = 1;
    itemsPerPage = 50;
@@ -74,16 +76,32 @@ dataToBeSentToSnackBar: ISnackBarData = {
 
       })
   }
-  getAllData() {
-    this.service.linkedinProfiles().subscribe(
+  // getAllData() {
+  //   this.service.linkedinProfiles().subscribe(
+  //     (response: any) => {
+  //       this.dataSource.data = response.data;
+  //       this.totalItems = response.data.totalElements;
+  //        // for serial-num {}
+  //        this.dataSource.data.map((x: any, i) => {
+  //         x.serialNum = i + 1;
+  //       });
+  //     }
+  //   )
+
+
+  //   linkedInPagination
+
+
+  // }
+
+  getAllData(pagIdx = 1) {
+    this.service.linkedInPagination(pagIdx, this.itemsPerPage, this.field).subscribe(
       (response: any) => {
-        //console.log(response.data)
-        this.dataSource.data = response.data;
-       // console.log(response.data)
+        this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
-         // for serial-num {}
-         this.dataSource.data.map((x: any, i) => {
-          x.serialNum = i + 1;
+        // for serial-num {
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
         });
       }
     )
@@ -103,16 +121,33 @@ dataToBeSentToSnackBar: ISnackBarData = {
 
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  applyFilter(event : any) {
+    const keyword = event.target.value;
+    this.field = keyword;
+    if (keyword != '') {
+      return this.service.linkedInPagination(1, this.itemsPerPage, keyword).subscribe(
+        ((response: any) => {
+          this.dataSource.data  = response.data.content;
+           // for serial-num {}
+           this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+
+        })
+      );
+    }
+    if (keyword == '') {
+      this.field = 'empty';
+    }
+    return  this.getAllData(this.currentPageIndex + 1);
   }
 
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      this.getAllData()
+      this.getAllData(event.pageIndex + 1)
     }
     return;
   }

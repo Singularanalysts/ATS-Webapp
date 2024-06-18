@@ -132,5 +132,10 @@ export class ClosureListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {}
+  
+  NumericValue(value: string): string {
+    if (!value) return ''; 
+    return value.replace(/[^0-9]/g, '');
+  }
 
 }

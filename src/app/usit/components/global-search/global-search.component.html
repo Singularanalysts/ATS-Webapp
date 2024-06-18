@@ -1,80 +1,230 @@
-<ul class="breadcrumb">
-    <li><a routerLink = "/usit/dashboard">Home</a></li>
-    <li class="last">Search</li>
-</ul>
-<mat-card>
-    <mat-card-content class="card-content">
-        <mat-form-field appearance="fill" class="job-postion-form-field">
-            <mat-label>Job Position And Company</mat-label>
-            <input matInput [(ngModel)]="jobPositionAndCompany" maxlength="140">
-            <mat-error>Location is required</mat-error>
-        </mat-form-field>
-
-
-        <mat-form-field appearance="fill" class="location-form-field">
-            <mat-label>Location</mat-label>
-            <input matInput [(ngModel)]="location" [matAutocomplete]="auto" maxlength="140" (input)="search()">
-            <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let option of locationSuggestions" [value]="option.job_location">
-                    {{ option.job_location }}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-error>Location is required</mat-error>
-        </mat-form-field>
-
-        <div>
-            <button mat-raised-button class="search-button" (click)="searchBotton()">Search</button>
-        </div>
-        <div>
-            <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button" (click)="popUpImport()">Excel</button>
-        </div>
-        <!-- style="    margin-top: 1.5rem; cursor: pointer;" -->
-        <div>
-            <mat-icon (click)="newinfo()">help</mat-icon>
-        </div>
-    </mat-card-content>
-</mat-card>
-
-
-
-<mat-card *ngIf="tableactive" mt-3 style="z-index: 1; overflow-y: auto;
-height: 650px">
-    <mat-card-content>
-        <div class="row justify-content-center center" style="z-index: 1;">
-
-            <div *ngIf="tableactive" class=" col-md-12">
-                <table class="table table-sm  table-light table-bordered table-responsive">
-                    <thead class="thead-light sticky">
-                        <tr>
-                            <th scope="col">S.NO</th>
-                            <th scope="col">Vendor Company</th>
-                            <th scope="col">Job Position</th>
-                            <th scope="col">Location</th>
-                            <!-- <th scope="col">Recruiter </th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let vendor of filteredVendorList; let i = index">
-                            <td scope="row">{{ i + 1 }}</td>
-                            <td class="user-info narvee clickable"> <a
-                                    (click)="navigateToJobSource(vendor.job_source)">{{ vendor.vendor }} </a> </td>
-
-                            <td class="narvee">{{ vendor.job_title }}</td>
-                            <td class="narvee">{{ vendor.job_location}}</td>
-                            <!-- <td class="narvee"><a (click)="openEmail(vendor.email)" class="email-link">{{ vendor.email }}</a></td> -->
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="pagination justify-content-end">
-                    <!-- Add the following to your HTML template -->
-                    <div class="pagination justify-content-end">
-                      
-             
-                    </div>
-
-                </div>
+<div class="overall-container">
+    <ul class="breadcrumb">
+        <li><a routerLink="/usit/dashboard">Home</a></li>
+        <li class="last">Search</li>
+    </ul>
+    <mat-card>
+        <mat-card-content class="card-content">
+            <mat-form-field appearance="fill" class="job-postion-form-field">
+                <mat-label>Job Position And Company</mat-label>
+                <input matInput [(ngModel)]="jobPositionAndCompany" maxlength="140">
+                <mat-error>Location is required</mat-error>
+            </mat-form-field>
+    
+            <mat-form-field appearance="fill" class="location-form-field">
+                <mat-label>Location</mat-label>
+                <input matInput [(ngModel)]="location" [matAutocomplete]="auto" maxlength="140" (input)="search()">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of locationSuggestions" [value]="option.job_location">
+                        {{ option.job_location }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error>Location is required</mat-error>
+            </mat-form-field>
+    
+            <div>
+                <button mat-raised-button class="search-button" (click)="searchBotton()">Search</button>
             </div>
-        </div>
-
-    </mat-card-content>
-</mat-card>
+            <div>
+                <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button"
+                    (click)="reset()">Back</button>
+    
+                    <button *ngIf="filteredVendorList.length>0" mat-raised-button class="excel-button"
+                        (click)="popUpImport()">Excel</button>
+            </div>
+            <!-- style="    margin-top: 1.5rem; cursor: pointer;" -->
+            <div>
+                <mat-icon (click)="newinfo()">help</mat-icon>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="tableactive" mt-3 style="z-index: 1; overflow-y: auto;" class="requirements-card">
+        <mat-card-content class="requirements-card-content">
+            <div class="row justify-content-center center" style="z-index: 1;">
+                <div *ngIf="tableactive" class=" col-md-12">
+                    <table class="table table-sm  table-light table-bordered table-responsive">
+                        <thead class="thead-light sticky">
+                            <tr>
+                                <th scope="col">S.NO</th>
+                                <th scope="col">Vendor Company</th>
+                                <th scope="col">Job Position</th>
+                                <th scope="col">Location</th>
+                                <!-- <th scope="col">Recruiter </th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let vendor of filteredVendorList; let i = index">
+                                <td scope="row">{{ vendor.serialNumber }}</td>
+                                <td class="user-info narvee clickable"> <a
+                                        (click)="navigateToJobSource(vendor.job_source)">{{ vendor.vendor }} </a> </td>
+                                <td class="narvee">{{ vendor.job_title }}</td>
+                                <td class="narvee">{{ vendor.job_location}}</td>
+                                <!-- <td class="narvee"><a (click)="openEmail(vendor.email)" class="email-link">{{ vendor.email }}</a></td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
+            </div>
+    
+        </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="tableactive === false" class="analysis-card">
+        <mat-card-content class="analysis-card-content">
+            <div class="analysis-container">
+            <!-- <div class="req-container">
+    
+            </div> -->
+            <!-- <div class="tab-container"> -->
+                <mat-tab-group>
+                    <mat-tab label="Skill Set Analysis">
+                        <div class="table-container table-wrapper">
+                            <div class="header-container-analysis">
+                                <span class="header-text">Skill Set Analysis</span>
+                                <div class="date-form-field">
+                                    <mat-form-field appearence="fill">
+                                        <mat-label>Choose a date</mat-label>
+                                        <input matInput [matDatepicker]="picker" (dateChange)="handleCategoryDateSelection($event)" [(ngModel)]="skillSetDate">
+                                        <mat-icon class="clear" matDatepickerToggleIcon (click)="clearSkillSetDate($event)">clear</mat-icon>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="vendor-actions">
+                                    <div class="search-vendor">
+                                        <input matInput type="text" class="search" placeholder="search Skill Set"
+                                            (keyup)="onCategoryFilter($event)">
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <section class="table-style mat-elevation-z8" style="height: calc(100vh - 338px); overflow-y: auto;">
+                                <table mat-table [dataSource]="dataSourceTech" class="responsive-table">
+        
+                                    <ng-container matColumnDef="SNo">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by SNo"> S.No
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element.serialNum }}</td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Date">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by Date">
+                                            Posted On
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_date | date:'MM-dd-yyyy'}} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Category">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by Category">
+                                            Skill Set
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.category_skill|titlecase}} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="VendorCount">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by VendorCount"> Vendor
+                                            Count
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <span class="count"
+                                                (click)="vendorCategoryPopup(element.category_skill,element.posted_date,'vendor')">
+                                                {{element.vendorcount}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+        
+                                    <tr mat-header-row *matHeaderRowDef="dataTableColumnsTechAnalysis; sticky: true"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: dataTableColumnsTechAnalysis;"></tr>
+                                </table>
+                            </section>
+                            
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Vendor Analysis">
+                        <div class="table-container table-wrapper">
+                            <div class="header-container-analysis">
+                                <span class="header-text">Vendor Analysis</span>
+                                <div class="date-form-field">
+                                    <mat-form-field appearence="fill">
+                                        <mat-label>Choose a date</mat-label>
+                                        <input matInput [matDatepicker]="picker1" (dateChange)="handleVendorDateSelection($event)" [(ngModel)]="vendorDate">
+                                        <mat-icon class="clear" matDatepickerToggleIcon (click)="clearVendorDate($event)">clear</mat-icon>
+                                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker1></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="vendor-actions">
+                                    <div class="search-vendor">
+                                        <input matInput type="text" class="search" placeholder="search vendor"
+                                            (keyup)="onVendorFilter($event)">
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <hr>
+                            <section class="table-style mat-elevation-z8" style="height: calc(100vh - 338px); overflow-y: auto;">
+                                <table mat-table [dataSource]="dataSourceVendor" class="responsive-table">
+        
+                                    <ng-container matColumnDef="SNo">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by SNo"> S.No
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            {{ element.serialNum }}
+                                        </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Date">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by Date">
+                                            Posted On
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_date | date:'MM-dd-yyyy'}} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="Vendor">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by Vendor">
+                                            Vendor
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.vendor|titlecase}} </td>
+                                    </ng-container>
+        
+                                    <ng-container matColumnDef="CategoryCount">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                            sortActionDescription="Sort by CategoryCount">
+                                            Skill Set Count
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <span class="count"
+                                                (click)="vendorCategoryPopup(element.vendor, element.posted_date, 'category')">
+                                                {{element.category_count}}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="dataTableColumnsVendorAnalysis; sticky: true"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: dataTableColumnsVendorAnalysis;"></tr>
+                                </table>
+                            </section>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            <!-- </div> -->
+            </div>
+        </mat-card-content>
+    </mat-card>
+    
+      <div class="paginator" *ngIf="tableactive">
+        <!-- paginator -->
+        <mat-paginator   (page)="handlePageEvent($event)"
+          [length]="totalItems" [pageSize]="pageSize"
+          [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
+          [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+          [hidePageSize]="true"
+          [pageIndex]="currentPageIndex" aria-label="Select page">
+        </mat-paginator>
+      </div>
+  </div>
