@@ -16,106 +16,108 @@
 
     <div id="table-container" class="table-wrapper">
 
-        <mat-tab-group>
+        <!-- <mat-tab-group>
             <mat-tab label="Active">
               <ng-container *ngTemplateOutlet="tableTemplate; context: { status: 'all' }"></ng-container>
             </mat-tab>
             <mat-tab label="All">
               <ng-container *ngTemplateOutlet="tableTemplate; context: { status: 'all' }"></ng-container>
             </mat-tab>
-          </mat-tab-group>
+          </mat-tab-group> -->
 
-          <ng-template #tableTemplate>
-            <section class="mat-elevation-z8 hot-list-table-style">
-                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false" class="sticky-header">
-    
-                    <!--- Note that these columns can be defined in any order.
-                    The actual rendered columns are set as a property on the row definition" -->
-    
-                    <!-- SNo Column -->
-                    <ng-container matColumnDef="SerialNum">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum">
-                            S.No </th>
-                        <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
-                    </ng-container>
-                    <!-- Name Column-->
-                    <!-- <ng-container matColumnDef="candidate_name">
-                        <th mat-header-cell *matHeaderCellDef>Candidate Name
-                        </th>
-                        <td mat-cell *matCellDef="let element">
-                            <span class="consultant-name">
-                                <a href="{{element?.profile_url}}" target="_blank">{{element?.candidate_name}} </a>
-                            </span>
-                            <span>
-                                <mat-icon class="privileges item-icon"
-                                    (click)="lockProfile(element.c_id)">lock_person</mat-icon>
-                            </span>
-                        </td>
-                    </ng-container> -->
-                    <ng-container matColumnDef="candidate_name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by candidate_name">Candidate Name</th>
-                        <td mat-cell *matCellDef="let element" >
-                            <div class="cell-container">
-                            <span class="consultant-name">
-                                <a href="{{element?.profile_url}}" target="_blank">{{element?.candidate_name|titlecase}} </a>
-                            </span>
-                            <span class="right-align profile" matTooltip="Lock Profile">
-                                <mat-icon class="privileges item-icon" (click)="lockProfile(element.c_id)">lock_person</mat-icon>
-                            </span>
-                        </div>
-                        </td>
-                    </ng-container>
-                    <!-- Technology Column-->
-                    <ng-container matColumnDef="address">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">
-                            Address </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element?.address}}
-                        </td>
-                    </ng-container>
-    
-                    <!-- Visa Column-->
-                    <ng-container matColumnDef="category">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by category">
-                            Category </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element?.category|titlecase}} </td>
-                    </ng-container>
-                    <!-- Experience Column-->
-                    <!-- <ng-container matColumnDef="profile_url">
-                        <th mat-header-cell *matHeaderCellDef> LinkedIn Url </th>
-                        <td mat-cell *matCellDef="let element">
-                            <span class="consultant-name">
-                                <a class="profile" (click)="lockProfile(element.c_id)">Lock
-                                    Profile</a>
-                            </span>
-                        </td>
-                    </ng-container> -->
-    
-                    <ng-container matColumnDef="experience_summary">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by experience_summary" style="width:20%"> Experience summary </th>
-                        <td mat-cell *matCellDef="let element" matTooltip="{{element?.experience_summary}}"
-                            matTooltipPosition="below" style="width:20%; overflow: hidden; text-overflow: ellipsis;">
-                            {{element?.experience_summary}} </td>
-                    </ng-container>
-    
-    
-    
-                    <ng-container matColumnDef="job_title">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by job_title" style="width:40%"> Status </th>
-                        <td mat-cell *matCellDef="let element" matTooltip="{{element?.job_title}}"
-                            matTooltipPosition="below" style="width:40%; overflow: hidden; text-overflow: ellipsis;">
-                            {{element?.job_title}} </td>
-                    </ng-container>
-    
-                    <!-- table ROW  experience_summary -->
-                    <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
-                </table>
-                <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
-            </section>
-            <hr>
-          </ng-template>
+          <!-- <ng-template #tableTemplate>
+          </ng-template> -->
+
+          <section class="mat-elevation-z8 hot-list-table-style">
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false" class="sticky-header">
+
+                <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- SNo Column -->
+                <ng-container matColumnDef="SerialNum">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum">
+                        S.No </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+                </ng-container>
+                <!-- Name Column-->
+                <!-- <ng-container matColumnDef="candidate_name">
+                    <th mat-header-cell *matHeaderCellDef>Candidate Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="consultant-name">
+                            <a href="{{element?.profile_url}}" target="_blank">{{element?.candidate_name}} </a>
+                        </span>
+                        <span>
+                            <mat-icon class="privileges item-icon"
+                                (click)="lockProfile(element.c_id)">lock_person</mat-icon>
+                        </span>
+                    </td>
+                </ng-container> -->
+                <ng-container matColumnDef="candidate_name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by candidate_name">Candidate Name</th>
+                    <td mat-cell *matCellDef="let element" >
+                        <div class="cell-container">
+                        <span class="consultant-name">
+                            <a href="{{element?.profile_url}}" target="_blank">{{element?.candidate_name|titlecase}} </a>
+                        </span>
+                        <span class="right-align profile" matTooltip="Lock Profile">
+                            <mat-icon class="privileges item-icon" (click)="lockProfile(element.c_id)">lock_person</mat-icon>
+                        </span>
+                    </div>
+                    </td>
+                </ng-container>
+                <!-- Technology Column-->
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">
+                        Address </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element?.address}}
+                    </td>
+                </ng-container>
+
+                <!-- Visa Column-->
+                <ng-container matColumnDef="category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by category">
+                        Category </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element?.category|titlecase}} </td>
+                </ng-container>
+                
+                <!-- Experience Column-->
+                <!-- <ng-container matColumnDef="profile_url">
+                    <th mat-header-cell *matHeaderCellDef> LinkedIn Url </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="consultant-name">
+                            <a class="profile" (click)="lockProfile(element.c_id)">Lock
+                                Profile</a>
+                        </span>
+                    </td>
+                </ng-container> -->
+
+                <ng-container matColumnDef="experience_summary">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by experience_summary" style="width:20%"> Experience summary </th>
+                    <td mat-cell *matCellDef="let element" matTooltip="{{element?.experience_summary}}"
+                        matTooltipPosition="below" style="width:20%; overflow: hidden; text-overflow: ellipsis;">
+                        {{element?.experience_summary}} </td>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="job_title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by job_title" style="width:40%"> Status </th>
+                    <td mat-cell *matCellDef="let element" matTooltip="{{element?.job_title}}"
+                        matTooltipPosition="below" style="width:40%; overflow: hidden; text-overflow: ellipsis;">
+                        {{element?.job_title}} </td>
+                </ng-container>
+
+                <!-- table ROW  experience_summary -->
+                <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+            </table>
+            <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+        </section>
+        <hr>
 
     </div>
 
