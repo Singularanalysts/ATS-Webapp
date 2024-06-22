@@ -1,0 +1,136 @@
+<div class="consultant-report-container">
+    <ul class="breadcrumb">
+        <li><a (click)="navigateToDashboard()">Home</a></li>
+        <li class="last">Report</li>
+    </ul>
+
+    <div class="open-req-report-container" style="display: block;">
+        <div class="open-req-report-search">
+            <form [formGroup]="sourcingreport" (ngSubmit)="onSubmit()">
+                <mat-card>
+                    <mat-card-content style="display: flex; align-items: center; justify-content: center;">
+                        <mat-form-field color="accent">
+                            <mat-label>Choose Starting Date</mat-label>
+                            <input matInput [matDatepicker]="picker1" class="form-control"
+                                formControlName="startDate" />
+                            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                            <mat-error *ngIf="sourcingreport.get('startDate')!.hasError('required')">Starting Date is
+                                required</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field color="accent">
+                            <mat-label>Choose Ending Date</mat-label>
+                            <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+                            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2 color="primary"></mat-datepicker>
+                            <mat-error *ngIf="sourcingreport.get('endDate')!.hasError('required')">Ending Date is
+                                required</mat-error>
+                        </mat-form-field>
+
+                        <button mat-raised-button color="primary">Submit</button>&nbsp;
+                        <button mat-raised-button color="warn" (click)="reset()">Reset</button>&nbsp;
+
+                        <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
+                            (click)="excelImport()">Excel Export</button>
+                    </mat-card-content>
+                </mat-card>
+            </form>
+        </div>
+    </div>
+
+    <div class="banter-table">
+        <mat-card class="matcards">
+            <mat-card-content>
+                <div id="table-container" class="table-wrapper">
+                    <section class="section">
+                        <div class="row scroll" style="height:500px;">
+                            <table class="table table-sm  table-light table-bordered table-responsive">
+                                <thead class="thead-light sticky">
+                                    <tr>
+                                        <th>Submission</th>
+                                        <th>Scheduled</th>
+                                        <th>On Hold</th>
+                                        <th>Closed</th>
+                                        <th>Rejected</th>
+                                        <th>On Boarded</th>
+                                        <th>Back Out</th>
+                                        <th>Selected</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of c_data let i=index">
+                                        <td let i=index nowrap>{{ generateSerialNumber(i)}}</td>
+                                        <td style="font-weight: bold;">
+                                            {{data.pseudoname}}
+                                        </td>
+                                        <td style="font-weight: bold;">
+                                            {{data.req_count}}
+                                        </td>
+                                        <td class="narvee">
+                                            <a>{{data.submission}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a>
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#interview">{{data.interview}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.schedule}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.onhold}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.closed}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.rejected}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.onboarded}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.backout}}</a>
+                                        </td>
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal"
+                                                data-bs-target="#consultantInfo">{{data.consultant}} </a>
+                                        </td>
+
+                                        <td class="narvee">
+                                            <a data-bs-toggle="modal" data-bs-target="#interview">{{data.selected}} </a>
+                                        </td>
+                                    </tr>
+                                    <!-- <tr class="narvee total sticky">
+                              <td colspan="2">Total</td>
+                              <td >{{reqsTotal}}</td>
+                              <td>{{subTotal}}</td>
+                              <td>{{intTotal}}</td>
+                              <td>{{scheduleTotal}}</td>
+                              <td>{{holdTotal}}</td>
+                              <td>{{closedTotal}}</td>
+                              <td>{{rejectTotal}}</td>
+                              <td>{{onboardedCnt}}</td>
+                              <td>{{backoutCnt}}</td>
+                              <td>{{consultantTotal}}</td>
+                              <td>{{selectTotal}}</td>
+                            </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="paginator">
+                    <!-- paginator -->
+                    <!-- <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+                      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                      [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+                    </mat-paginator> -->
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
