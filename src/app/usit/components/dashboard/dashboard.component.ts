@@ -56,19 +56,12 @@ export class DashboardComponent implements OnInit {
   dataTableColumnsDice: string[] = [
     'PostedDate',
     'JobTitle',
-    // 'Category',
     'JobLocation',
     'Vendor',
     'TaggedDate',
     'TaggedBy',
     'TCount'
-   
-    
-
   ];
-
- 
-
   dataTableColumnsTechAnalysis: string[] = [
     'SNo',
     'Date',
@@ -95,6 +88,10 @@ export class DashboardComponent implements OnInit {
   closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
   submissionFlagInd = 'daily';
+
+  empAppliedJobsFlag = "Today";
+  empSubmissionsFlag = "Today";
+  empInterviewsFlag = "Today";
 
   subCountArr: any[] = [];
   intCountArr: any[] = [];
@@ -124,6 +121,10 @@ export class DashboardComponent implements OnInit {
   sourcingCompletedcount = 0;
   sourcingVerifiedcount = 0;
   sourcingMoveToSalescount = 0;
+
+  empAppliedJobsCount = 0;
+  empSubmissionCount = 0;
+  empInterviewCount = 0;
 
   userid!: any;
   role!: any;
@@ -208,26 +209,29 @@ export class DashboardComponent implements OnInit {
       this.sourcingLead = true;
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
-    this.getDiceReqs();
-    this.getSourcingLeads();
-    this.getReqVendorCount();
-    this.getReqCatergoryCount();
-    this.dashboardServ.vmstransactions().subscribe(
-      ((response: any) => {
-        this.datarr = response.data;
-      })
-    );
-    if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
-      this.individualCounts = true;
-      this.refreshFlg = 'executive'
+    if (this.department !== 'Consultant' && this.role !== 'Employee') {
+      this.getDiceReqs();
+      this.getSourcingLeads();
+      this.getReqVendorCount();
+      this.getReqCatergoryCount();
+      this.dashboardServ.vmstransactions().subscribe(
+        ((response: any) => {
+          this.datarr = response.data;
+        })
+      );
+      if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
+        this.individualCounts = true;
+        this.refreshFlg = 'executive'
+      }
+      else {
+        this.individualCounts = false;
+        this.refreshFlg = 'company'
+      }
+      this.countCallingExecutiveAndLead();
+      this.countCallingHigherRole();
+    } else {
+      this.employeeDefaultCount();
     }
-    else {
-      this.individualCounts = false;
-      this.refreshFlg = 'company'
-    }
-    this.countCallingExecutiveAndLead();
-    this.countCallingHigherRole();
-
     this.myForm = this.formBuilder.group({
       startDate: [''], // Set default value if needed
       endDate: [''], // Set default value if needed
@@ -782,7 +786,6 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshData() {
-    // Reset form fields
     this.myForm.reset();
     this.getDiceReqs();
     const endDateControl = this.myForm.get('endDate');
@@ -792,8 +795,99 @@ export class DashboardComponent implements OnInit {
     }
 
   }
-  //
 
+  employeeDefaultCount() {
+    const appliedObj = {
+      type: "appliedjobs",
+      userid: this.userid,
+      interval: "daily",
+    }
+    this.dashboardServ.getEmployeeDashboardCount(appliedObj).subscribe({
+      next: (response: any) => {
+        this.empAppliedJobsCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+    const subObj = {
+      type: "submissions",
+      userid: this.userid,
+      interval: "daily",
+    }
+    this.dashboardServ.getEmployeeDashboardCount(subObj).subscribe({
+      next: (response: any) => {
+        this.empSubmissionCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+    const intObj = {
+      type: "interviews",
+      userid: this.userid,
+      interval: "daily",
+    }
+    this.dashboardServ.getEmployeeDashboardCount(intObj).subscribe({
+      next: (response: any) => {
+        this.empInterviewCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  employeeAppliedJobsCount(flg: any, interval: any) {
+    this.empAppliedJobsFlag = interval;
+    const appliedObj = {
+      type: "appliedjobs",
+      userid: this.userid,
+      interval: flg,
+    }
+    this.dashboardServ.getEmployeeDashboardCount(appliedObj).subscribe({
+      next: (response: any) => {
+        this.empAppliedJobsCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  employeeSubmissionCount(flg: any, interval: any) {
+    this.empSubmissionsFlag = interval;
+    const subObj = {
+      type: "submissions",
+      userid: this.userid,
+      interval: flg,
+    }
+    this.dashboardServ.getEmployeeDashboardCount(subObj).subscribe({
+      next: (response: any) => {
+        this.empSubmissionCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
+  }
+
+  employeeInterviewCount(flg: any, interval: any) {
+    this.empInterviewsFlag = interval;
+    const intObj = {
+      type: "interviews",
+      userid: this.userid,
+      interval: flg,
+    }
+    this.dashboardServ.getEmployeeDashboardCount(intObj).subscribe({
+      next: (response: any) => {
+        this.empInterviewCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
+  }
 }
 
 

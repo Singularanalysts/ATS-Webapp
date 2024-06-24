@@ -99,4 +99,7 @@ export class DashboardService {
     return this.apiServ.get("dashboard/reqCountsWithDate/" + date + "/" + type);
   }
 
+  getEmployeeDashboardCount(data: any) {
+    return this.apiServ.post("dashboard/employeeDashboardCounts", data);
+  }
 }
