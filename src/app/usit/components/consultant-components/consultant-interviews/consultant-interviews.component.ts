@@ -78,13 +78,13 @@ export class ConsultantInterviewsComponent implements OnInit, OnDestroy {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
-  // services
-  private activatedRoute = inject(ActivatedRoute);
   private interviewServ = inject(InterviewService);
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
+  sortField = 'updateddate';
+  sortOrder = 'desc';
 
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
@@ -93,10 +93,15 @@ export class ConsultantInterviewsComponent implements OnInit, OnDestroy {
   }
 
   getAll(pagIdx = 1) {
-    this.userid = localStorage.getItem('userid');
-    this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, this.field,
-      this.sortField,
-      this.sortOrder)
+    const pagObj = {
+      pageNumber: pagIdx,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+      userid: this.userid
+    }
+    this.interviewServ.getConsultantInterviewDataPagination(pagObj)
       .pipe(takeUntil(this.destroyed$)).subscribe(
         (response: any) => {
           this.entity = response.data.content;
@@ -113,9 +118,15 @@ export class ConsultantInterviewsComponent implements OnInit, OnDestroy {
   applyFilter(event: any) {
     const keyword = event.target.value;
     if (keyword != '') {
-      return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
-        this.sortField,
-        this.sortOrder).subscribe(
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+        userid: this.userid
+      }
+      return this.interviewServ.getConsultantInterviewDataPagination(pagObj).subscribe(
           ((response: any) => {
             this.entity = response.data.content;
             this.dataSource.data = response.data.content;
@@ -130,8 +141,6 @@ export class ConsultantInterviewsComponent implements OnInit, OnDestroy {
     return this.getAll(this.currentPageIndex + 1)
   }
 
-  sortField = 'updateddate';
-  sortOrder = 'desc';
   onSort(event: Sort) {
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'

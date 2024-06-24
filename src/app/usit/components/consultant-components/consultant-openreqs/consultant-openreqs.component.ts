@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
@@ -14,8 +14,9 @@ import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { RecruInfoComponent } from '../../openreqs/recru-info/recru-info.component';
 import { JobDescriptionComponent } from '../../openreqs/job-description/job-description.component';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
-import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 
 @Component({
   selector: 'app-consultant-openreqs',
@@ -35,6 +36,7 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
   ],
   templateUrl: './consultant-openreqs.component.html',
   styleUrls: ['./consultant-openreqs.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class ConsultantOpenreqsComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
@@ -45,7 +47,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
     'category_skill',
     'employment_type',
     'job_location',
-    // 'source',
     'Action'
   ];
   // pagination code
@@ -110,7 +111,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
 
     this.dialogServ.openDialogWithComponent(RecruInfoComponent, dialogConfig);
   }
-  
 
   getAllData(pagIdx = 1) {
     const pagObj = {
@@ -127,7 +127,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
       )
       .subscribe((response: any) => {
         this.dataSource.data = response.data.content;
-        // this.isCompanyExist = response.data.content[0].isexist;
         this.totalItems = response.data.totalElements;
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
