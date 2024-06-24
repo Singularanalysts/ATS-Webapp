@@ -1,7 +1,7 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent, MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
@@ -17,6 +17,8 @@ import { Recruiter } from 'src/app/usit/models/recruiter';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { utils, writeFile } from 'xlsx';
 import { OpenRequirementPopupListComponent } from '../../reports/open-requirements-reports/open-requirement-popup-list/open-requirement-popup-list.component';
+import { ConsultantAllSubmissionReportComponent } from './consultant-all-submission-report/consultant-all-submission-report.component';
+import { ConsultantAllInterviewReportComponent } from './consultant-all-interview-report/consultant-all-interview-report.component';
 
 @Component({
   selector: 'app-consultant-all-report',
@@ -91,6 +93,7 @@ export class ConsultantAllReportComponent {
   field = 'empty';
   isRejected: boolean = false;
   payload: any;
+  public dialog= inject(MatDialog);
 
   ngOnInit() {
     this.department = localStorage.getItem('department');
@@ -184,6 +187,33 @@ export class ConsultantAllReportComponent {
     utils.book_append_sheet(wb, ws, 'data');
     writeFile(wb, 'Open-Requirements-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
 
+  }
+
+  subOrIntPopup(status: any) {
+    const sDate = this.sourcingreport.get('startDate')!.value;
+    const eDate = this.sourcingreport.get('endDate')!.value;
+    if (status == 'submission') {
+      this.dialog.open(ConsultantAllSubmissionReportComponent, 
+      { width: '80%',
+      data: {
+          status: status,
+          id: this.userid,
+          startDate: this.datePipe.transform(sDate, 'yyyy-MM-dd'),
+          endDate: this.datePipe.transform(eDate, 'yyyy-MM-dd'),
+        },
+      });
+      
+    } else  {
+      this.dialog.open(ConsultantAllInterviewReportComponent, 
+      { width: '500px',
+      data: {
+        status: status,
+        id: this.userid,
+        startDate: this.datePipe.transform(sDate, 'yyyy-MM-dd'),
+        endDate: this.datePipe.transform(eDate, 'yyyy-MM-dd'),
+        },
+      });
+    }
   }
 
 }

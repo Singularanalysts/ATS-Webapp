@@ -363,6 +363,16 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     );
   }
 
+  showLateIcon(element: any): boolean {
+    if (element?.submission_count !== 0) {
+      return false;
+    }
+    const postedDate = new Date(element?.postedon);
+    const today = new Date();
+    const diffInDays = Math.floor((today.getTime() - postedDate.getTime()) / (1000 * 3600 * 24));
+    return diffInDays <= 60;
+  }
+
   ngOnDestroy(): void {
     this.destroyed$.next();
     this.destroyed$.complete();

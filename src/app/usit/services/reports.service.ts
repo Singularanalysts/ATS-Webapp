@@ -59,4 +59,12 @@ export class ReportsService {
   public getEmployeeReport(entity: any) {
     return this.apiServ.post("report/individualEmployeeReport", entity);
   }
+
+  public employeeSubmissionPopup(data: any) {
+    return this.apiServ.post("report/consultantsubpopUp", data);
+  }
+
+  public employeeInterviewPopup(data: any) {
+    return this.apiServ.post("report/consultantintervstatuspopUps", data);
+  }
 }
