@@ -102,4 +102,16 @@ export class DashboardService {
   getEmployeeDashboardCount(data: any) {
     return this.apiServ.post("dashboard/employeeDashboardCounts", data);
   }
+  
+  getEmployeeDashboardApPopup(data: any) {
+    return this.apiServ.post("dashboard/empAppliedJobPopUp", data);
+  }
+
+  getEmployeeDashboardSubmissionPopup(data: any) {
+    return this.apiServ.post("dashboard/empSubPopups", data);
+  }
+
+  getEmployeeDashboardInterviewPopup(data: any) {
+    return this.apiServ.post("dashboard/empInterviewPopUp", data);
+  }
 }

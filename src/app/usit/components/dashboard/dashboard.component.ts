@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { SourcingupdateComponent } from './sourcingupdate/sourcingupdate.component';
 import { SubmissionCountListComponent } from './submission-count-list/submission-count-list.component';
@@ -26,6 +26,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { utils, writeFile } from 'xlsx';
+import { EmpAppliedJobsListComponent } from './emp-applied-jobs-list/emp-applied-jobs-list.component';
+import { EmpSubmissionsListComponent } from './emp-submissions-list/emp-submissions-list.component';
+import { EmpInterviewsListComponent } from './emp-interviews-list/emp-interviews-list.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -137,6 +140,7 @@ export class DashboardComponent implements OnInit {
   myForm: any;
   startDateControl: FormControl | undefined;
   endDateControl: FormControl | undefined;
+  public dialog= inject(MatDialog);
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
@@ -148,6 +152,10 @@ export class DashboardComponent implements OnInit {
     this.closureFlagInd = 'Monthly';
     this.interviewFlagInd = 'daily';
     this.submissionFlagInd = 'daily';
+
+    this.empAppliedJobsFlag = "Today";
+    this.empSubmissionsFlag = "Today";
+    this.empInterviewsFlag = "Today";
 
     this.sclosecount = 0;
     this.rclosecount = 0;
@@ -166,20 +174,28 @@ export class DashboardComponent implements OnInit {
     this.subcountIndividual = 0;
     this.reccountIndividual = 0;
 
-    // You can perform any actions or logic inside this method
-    if (this.refreshFlg == 'executive') {
-      this.countCallingExecutiveAndLead();
-      this.countCallingHigherRole();
-    }
-    else {
-      this.countCallingHigherRole();
-    }
+    this.empAppliedJobsCount = 0;
+    this.empSubmissionCount = 0;
+    this.empInterviewCount = 0;
 
-    this.dashboardServ.vmstransactions().subscribe(
-      ((response: any) => {
-        this.datarr = response.data;
-      })
-    );
+    if (this.department !== 'Consultant' && this.role !== 'Employee') {
+      if (this.refreshFlg == 'executive') {
+        this.countCallingExecutiveAndLead();
+        this.countCallingHigherRole();
+      }
+      else {
+        this.countCallingHigherRole();
+      }
+  
+      this.dashboardServ.vmstransactions().subscribe(
+        ((response: any) => {
+          this.datarr = response.data;
+        })
+      );
+    } else {
+      this.employeeDefaultCount();
+    }
+    
   }
   refreshFlg = 'executive';
   department!: any;
@@ -888,7 +904,38 @@ export class DashboardComponent implements OnInit {
       }
     })
   }
+
+  empAppliedJobsPopup() {
+    this.dialog.open(EmpAppliedJobsListComponent,
+      {
+        width: '80%',
+        data: {
+          id: this.userid,
+          duration: this.empAppliedJobsFlag,
+        },
+      });
+  }
+
+  empSubmissionsPopup() {
+    this.dialog.open(EmpSubmissionsListComponent,
+      {
+        width: '80%',
+        data: {
+          id: this.userid,
+          duration: this.empSubmissionsFlag,
+        },
+      });
+  }
+
+  empInterviewsPopup() {
+    this.dialog.open(EmpInterviewsListComponent,
+      {
+        width: '80%',
+        data: {
+          id: this.userid,
+          duration: this.empInterviewsFlag,
+        },
+      });
+  }
+  
 }
-
-
-
