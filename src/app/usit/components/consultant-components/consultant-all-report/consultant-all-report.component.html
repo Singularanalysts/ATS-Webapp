@@ -30,9 +30,6 @@
 
                         <button mat-raised-button color="primary">Submit</button>
                         <button mat-raised-button color="warn" (click)="reset()">Reset</button>
-
-                        <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
-                            (click)="excelImport()">Excel Export</button>
                     </mat-card-content>
                 </mat-card>
             </form>
@@ -69,7 +66,7 @@
                                         </td>
                                         <td class="narvee">
                                             <a data-bs-toggle="modal" data-bs-target="#interview"
-                                                (click)="subOrIntPopup('onhold')">{{data.onhold}}</a>
+                                                (click)="subOrIntPopup('hold')">{{data.onhold}}</a>
                                         </td>
                                         <td class="narvee">
                                             <a data-bs-toggle="modal" data-bs-target="#interview"

@@ -61,10 +61,10 @@ export class ReportsService {
   }
 
   public employeeSubmissionPopup(data: any) {
-    return this.apiServ.post("report/consultantsubpopUp", data);
+    return this.apiServ.post("report/employeeSubPopup", data);
   }
 
   public employeeInterviewPopup(data: any) {
-    return this.apiServ.post("report/consultantintervstatuspopUps", data);
+    return this.apiServ.post("report/employeeIntervStatusPopups", data);
   }
 }

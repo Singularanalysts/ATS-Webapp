@@ -128,12 +128,12 @@ export class ConsultantAllReportComponent {
      this.payload = {
       "endDate": formattedRelievingDate,
       "startDate": formattedJoiningDate,
-      "userid": this.userid
+      "id": this.userid
     }
     this.reportsServ.getEmployeeReport(this.payload).subscribe((res: any) => {
       console.log(res);
-        this.c_data = res.data.content;
-        this.dataSource.data = res.data.content;
+        this.c_data = res.data;
+        this.dataSource.data = res.data;
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = this.generateSerialNumber(i);
         });
@@ -168,27 +168,6 @@ export class ConsultantAllReportComponent {
     this.router.navigateByUrl('/usit/dashboard');
   }
 
-  headings: any[] = [];
-  excelData: any[] = [];
-  excelImport() {
-    this.headings = [[
-      'Skill Set',
-      'Vendor Count'
-    ]];
-
-    this.excelData = this.c_data.map(c => [
-      c.category_skill,
-      c.vendorcount,
-    ]);
-    const wb = utils.book_new();
-    const ws: any = utils.json_to_sheet([]);
-    utils.sheet_add_aoa(ws, this.headings);
-    utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
-    utils.book_append_sheet(wb, ws, 'data');
-    writeFile(wb, 'Open-Requirements-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
-
-  }
-
   subOrIntPopup(status: any) {
     const sDate = this.sourcingreport.get('startDate')!.value;
     const eDate = this.sourcingreport.get('endDate')!.value;
@@ -205,7 +184,7 @@ export class ConsultantAllReportComponent {
       
     } else  {
       this.dialog.open(ConsultantAllInterviewReportComponent, 
-      { width: '500px',
+      { width: '80%',
       data: {
         status: status,
         id: this.userid,
