@@ -207,7 +207,6 @@ export class DashboardComponent implements OnInit {
     } else {
       this.showReport = false;
     }
-    this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
       .subscribe(() => {
@@ -230,6 +229,7 @@ export class DashboardComponent implements OnInit {
       this.getSourcingLeads();
       this.getReqVendorCount();
       this.getReqCatergoryCount();
+      this.getEmployeeNames();
       this.dashboardServ.vmstransactions().subscribe(
         ((response: any) => {
           this.datarr = response.data;
@@ -749,14 +749,15 @@ export class DashboardComponent implements OnInit {
   }
   //lavanya
   getEmployeeNames() {
-    this.dashboardServ.getEmployeeName().subscribe(
-      (response: any) => {
+    this.dashboardServ.getEmployeeName().subscribe({
+      next: (response: any) => {
         // Assuming the API response contains an array of objects with 'name' property for each employee
         this.benchSalesEmployees = response.data;
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error('Error fetching employee names:', error);
       }
+    }
     );
   }
 
@@ -816,7 +817,7 @@ export class DashboardComponent implements OnInit {
     const appliedObj = {
       type: "appliedjobs",
       userid: this.userid,
-      interval: "daily",
+      interval: "today",
     }
     this.dashboardServ.getEmployeeDashboardCount(appliedObj).subscribe({
       next: (response: any) => {
@@ -829,7 +830,7 @@ export class DashboardComponent implements OnInit {
     const subObj = {
       type: "submissions",
       userid: this.userid,
-      interval: "daily",
+      interval: "today",
     }
     this.dashboardServ.getEmployeeDashboardCount(subObj).subscribe({
       next: (response: any) => {
@@ -842,7 +843,7 @@ export class DashboardComponent implements OnInit {
     const intObj = {
       type: "interviews",
       userid: this.userid,
-      interval: "daily",
+      interval: "today",
     }
     this.dashboardServ.getEmployeeDashboardCount(intObj).subscribe({
       next: (response: any) => {

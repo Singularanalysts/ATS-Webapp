@@ -15,7 +15,7 @@
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="employeeAppliedJobsCount('daily', 'Today')">Today</button>
+                  <button mat-menu-item (click)="employeeAppliedJobsCount('today', 'Today')">Today</button>
                   <button mat-menu-item (click)="employeeAppliedJobsCount('weekly', 'Weekly')">Weekly</button>
                   <button mat-menu-item (click)="employeeAppliedJobsCount('monthly', 'Monthly')">Monthly</button>
                   <button mat-menu-item (click)="employeeAppliedJobsCount('YearToDate', 'Yearly')">YTD</button>
@@ -30,7 +30,7 @@
                   </div>
                   <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                     <p class="dashboard"><span style="color: #4154f1; font-weight: bold; cursor: pointer"
-                        (click)="subPop('Sales','admin')"> {{ empAppliedJobsCount }} </span>
+                        (click)="empAppliedJobsPopup()"> {{ empAppliedJobsCount }} </span>
                     </p>
                   </div>
                 </div>
@@ -45,7 +45,7 @@
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #menu1="matMenu">
-                  <button mat-menu-item (click)="employeeSubmissionCount('daily', 'Today')">Today</button>
+                  <button mat-menu-item (click)="employeeSubmissionCount('today', 'Today')">Today</button>
                   <button mat-menu-item (click)="employeeSubmissionCount('weekly', 'Weekly')">Weekly</button>
                   <button mat-menu-item (click)="employeeSubmissionCount('monthly', 'Monthly')">Monthly</button>
                   <button mat-menu-item (click)="employeeSubmissionCount('YearToDate', 'Yearly')">YTD</button>
@@ -60,7 +60,7 @@
                   </div>
                   <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                     <p class="dashboard"><span style="color: #4154f1; font-weight: bold; cursor: pointer"
-                        (click)="intPop('Sales','admin')">{{ empSubmissionCount }}</span></p>
+                        (click)="empSubmissionsPopup()">{{ empSubmissionCount }}</span></p>
                   </div>
                 </div>
               </mat-card-content>
@@ -74,7 +74,7 @@
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #menu2="matMenu">
-                  <button mat-menu-item (click)="employeeInterviewCount('daily', 'Today')">Today</button>
+                  <button mat-menu-item (click)="employeeInterviewCount('today', 'Today')">Today</button>
                   <button mat-menu-item (click)="employeeInterviewCount('weekly', 'Weekly')">Weekly</button>
                   <button mat-menu-item (click)="employeeInterviewCount('monthly', 'Monthly')">Monthly</button>
                   <button mat-menu-item (click)="employeeInterviewCount('YearToDate', 'Yearly')">YTD</button>
@@ -89,7 +89,7 @@
                   </div>
                   <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                     <p class="dashboard"><span style="color: rgb(25,135,84); font-weight: bold; cursor: pointer"
-                        (click)="closurePop('Sales','admin')">{{ empInterviewCount }}</span></p>
+                        (click)="empInterviewsPopup()">{{ empInterviewCount }}</span></p>
                   </div>
                 </div>
               </mat-card-content>

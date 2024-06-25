@@ -1,53 +1,55 @@
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    min-width: 350px;
-  }
-  
-  table tr th,
-  table tr td {
-    border-right: 1px solid #bbb;
-    border-bottom: 1px solid #bbb;
-    padding: 5px;
-  }
-  
-  table tr th:first-child,
-  table tr td:first-child {
-    border-left: 1px solid #bbb;
-  }
-  
-  table tr th {
-    background: #d5e7e7;
-    border-top: 1px solid #bbb;
-    text-align: left;
-  }
-  
-  table tr:first-child th:first-child {
-    border-top-left-radius: 6px;
-  }
-  
-  table tr:first-child th:last-child {
-    border-top-right-radius: 6px;
-  }
-  
-  table tr:last-child td:first-child {
-    border-bottom-left-radius: 6px;
-  }
-  
-  table tr:last-child td:last-child {
-    border-bottom-right-radius: 6px;
-  }
-  
-  .show {
-    display: none;
-  }
-  
-  table {
-    font-size: 80%;
-    user-select: none;
-  }
-  
-  table th {
-    font-weight: 500;
-  }
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  top: 0;
+  overflow: hidden;
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.mat-column-SerialNum,
+.mat-column-InterviewId,
+.mat-column-ConsultantName,
+.mat-column-DateAndToI,
+.mat-column-Round,
+.mat-column-Mode,
+.mat-column-Vendor,
+.mat-column-ImplementationPartner,
+.mat-column-Client,
+.mat-column-DateOfSubmission,
+.mat-column-EmployeerName,
+.mat-column-InterviewStatus {
+    border-right: 1px solid lightgray;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 4px 0 4px;
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+}
+
+.mat-mdc-row {
+  height: 30px !important;
+}
+
+.mat-mdc-header-row {
+  background-color: rgb(213, 231, 231);
+  top: 0;
+}
+
+.no-data-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-top: 64px;
+}
