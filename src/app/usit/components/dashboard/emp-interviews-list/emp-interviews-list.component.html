@@ -1,18 +1,8 @@
 <div class="submission-container">
-    <ul class="breadcrumb">
-        <li><a (click)="navigateToDashboard()">Home</a></li>
-        <li class="last">Interviews</li>
-    </ul>
     <div class="header-container mat-elevation-z1">
         <span class="header-text">
             Interviews
         </span>
-
-        <div class="submission-actions">
-            <div class="search-submission">
-                <input matInput type="text" class="search" placeholder="search interviews" (keyup)="applyFilter($event)">
-            </div>
-        </div>
     </div>
     <div id="table-container" class="table-wrapper">
         <section class="mat-elevation-z8 interview-table-style">
@@ -100,7 +90,7 @@
                 <!-- table columns ends  -->
                 <!-- table ROW -->
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngStyle]="getRowStyles(row)"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
             </table>
             <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
         </section>
@@ -109,13 +99,13 @@
 
     <div class="paginator">
         <!-- paginator -->
-        <mat-paginator   (page)="handlePageEvent($event)"
+        <!-- <mat-paginator   (page)="handlePageEvent($event)"
           [length]="totalItems" [pageSize]="pageSize"
           [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
           [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
           [hidePageSize]="true"
           [pageIndex]="currentPageIndex" aria-label="Select page">
-        </mat-paginator>
+        </mat-paginator> -->
       </div>
 
 </div>

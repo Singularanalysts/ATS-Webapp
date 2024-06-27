@@ -28,8 +28,8 @@ export class OpenreqService {
     return this.http.get("openreqs/linked/all");
   }
 
-  public linkedInPagination(pageNo: any, pageSize: any, field: any) {
-    return this.http.get("openreqs/linked/LinkedInPofiles/" + pageNo + "/" + pageSize + "/" + field );
+  linkedInPagination(data: any) {
+    return this.http.post("openreqs/linked/LinkedInPofiles", data);
   }
 
   public readrss() {

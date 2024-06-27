@@ -58,7 +58,7 @@
           <td mat-cell *matCellDef="let element" (click)="goToReqInfo(element)" style="width: 10%; text-wrap: nowrap;">
             <div style="display: flex; gap: 5px;">
               <span class="req-info">{{ element?.reqnumber }}</span> 
-            <mat-icon *ngIf = "element?.submission_count === 0" [ngClass]="{  'red-icon': element?.submission_count === 0 }">assignment_late</mat-icon>
+            <mat-icon *ngIf="showLateIcon(element)" [ngClass]="{  'red-icon': element?.submission_count === 0 }">assignment_late</mat-icon>
             </div>
           </td>
         </ng-container>

@@ -57,6 +57,7 @@ import { ConsultantAppliedJobsComponent } from './components/consultant-componen
 import { OpenreqsJobApplicationsComponent } from './components/openreqs-job-applications/openreqs-job-applications.component';
 import { CpvFpvOpenRequirementsComponent } from './components/openreqs/cpv-fpv-open-requirements/cpv-fpv-open-requirements.component';
 import { CxComponent } from './components/cx/cx.component';
+import { ConsultantAllReportComponent } from './components/consultant-components/consultant-all-report/consultant-all-report.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -190,19 +191,19 @@ const routes: Routes = [
   {
     path: 'sales-closures',
     component: ClosureListComponent,
-    canActivate:[CanActivateGuard],
+    canActivate: [CanActivateGuard],
     data: { isSalesClosure: true },
   },
   {
     path: 'rec-closures',
     component: ClosureListComponent,
-    canActivate:[CanActivateGuard],
+    canActivate: [CanActivateGuard],
     data: { isRecClosure: true },
   },
   {
     path: 'dom-closures',
     component: ClosureListComponent,
-    canActivate:[CanActivateGuard],
+    canActivate: [CanActivateGuard],
     data: { isDomClosure: true },
   },
   {
@@ -237,42 +238,38 @@ const routes: Routes = [
     path: 'linkedinprofiles', component: LinkedprofilesComponent,
   }
   ,
-  { 
+  {
     path: 'employee-report', component: EmployeeReportsComponent
   },
-  { 
-    path: 'sourcing-report', component: SourcingReportsComponent 
+  {
+    path: 'sourcing-report', component: SourcingReportsComponent
   },
-  { 
+  {
     path: 'open-reqs-report', component: OpenRequirementsReportsComponent
   },
   { path: 'consultant-info/:flg/:subFlag/:id', component: ConsultantInfoComponent },
-
-  { 
-    path: 'list-email', component: EmailextractionComponent 
+  {
+    path: 'list-email', component: EmailextractionComponent
   },
 
-  { 
-    path: 'list-techsupport', component: TechSupportListComponent 
+  {
+    path: 'list-techsupport', component: TechSupportListComponent
   },
-  { 
-    path: 'search', component: GlobalSearchComponent 
+  {
+    path: 'search', component: GlobalSearchComponent
   },
-  { 
-    path: 'mass-mailing-list', component: MassMailingListComponent 
+  {
+    path: 'mass-mailing-list', component: MassMailingListComponent
   },
-
-  { 
-    path: 'email-extraction-list', component: EmailExtractionComponent 
+  {
+    path: 'email-extraction-list', component: EmailExtractionComponent
   },
-  
   {
     path: 'invoices', component: InvoiceListComponent,
   },
   {
     path: 'receipts', component: ReceiptListComponent,
   },
-  
   {
     path: 'hot-list-providers', component: HotListProvidersListComponent,
   },
@@ -297,38 +294,37 @@ const routes: Routes = [
   {
     path: 'profile', component: ProfileComponent,
   },
-  // {
-  //   path: 'e-verify', component: EVerifyComponent,
-  // }
   {
     path: 'known-vendor-contacts', component: KnownVendorContactsComponent,
   },
-  { 
+  {
     path: 'banter-report', component: BanterReportComponent,
   },
-  { 
+  {
     path: 'submissions', component: ConsultantSubmissionsComponent,
   },
-  { 
+  {
     path: 'interviews', component: ConsultantInterviewsComponent,
   },
-  { 
+  {
     path: 'open-requirements', component: ConsultantOpenreqsComponent,
   },
-  { 
+  {
     path: 'applied-jobs', component: ConsultantAppliedJobsComponent,
   },
-  { 
+  {
     path: 'openreqs-job-applications', component: OpenreqsJobApplicationsComponent,
   },
-  { 
+  {
     path: 'vc-cx-profiles', component: CxComponent,
-  }
-
+  },
+  {
+    path: 'report', component: ConsultantAllReportComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class UsitRoutingModule {}
+export class UsitRoutingModule { }
