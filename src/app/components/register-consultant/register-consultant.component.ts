@@ -36,20 +36,13 @@ export class RegisterConsultantComponent implements OnInit {
 
   form: any = FormGroup;
   protected isFormSubmitted = false;
-  requestOtp = true;
-  isOTPSent = false;
-  showPasswordFields = false;
   id: any;
-  validateOtp = true;
-  details = false;
   clock: string = '';
   interval!: any;
   timeLeft: number = 0;
   searchTechOptions$!: Observable<any>;
   technologyOptions!: any;
   isTechnologyDataAvailable: boolean = false;
-  step1 = true;
-  step2 = false;
   uploadedfiles: string[] = [];
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
@@ -61,8 +54,11 @@ export class RegisterConsultantComponent implements OnInit {
   };
   resumeUploaded: boolean = false;
   private dialog= inject(MatDialog);
-  emailReadOnly: boolean = false;
-  otpReadOnly: boolean = false;
+  otpValidate: boolean = false;
+  showOtp: boolean = false;
+  isOtpValidated: boolean = false;
+  QualArr: any = [];
+  visadata: any = [];
 
   ngOnInit(): void {
     this.gettech();
@@ -83,6 +79,8 @@ export class RegisterConsultantComponent implements OnInit {
       experience: ['', Validators.required],
       technology: ['', Validators.required],
       skills: ['', Validators.required],
+      qualification: ['', Validators.required],
+      visa: ['', Validators.required]
     });
   }
   
@@ -110,17 +108,12 @@ export class RegisterConsultantComponent implements OnInit {
     };
     this.permissionServ.consultantSendOtp(emailValue).subscribe((response: any) => {
       if (response.status == "success") {
-        
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
-        this.emailReadOnly = true;
-        this.requestOtp = false;
-        this.isOTPSent = true;
+        this.showOtp = true;
       } else {
         this.showErrorNotification(response.message);
-        this.isOTPSent = false;
-        this.requestOtp = true;
-        this.emailReadOnly = false;
+        this.showOtp = false;
       }
     });
   }
@@ -132,15 +125,12 @@ export class RegisterConsultantComponent implements OnInit {
     const otpValue = this.form.get('otp')!.value;
     this.permissionServ.consultantValidateOtp(this.id, otpValue).subscribe((response: any) => {
       if (response.status == "success") {
+        this.otpValidate = true;
+        this.isOtpValidated = true;
+        this.showOtp = false;
         this.showErrorNotification(response.message, 'success');
-        this.otpReadOnly = true;
-        this.validateOtp = false; 
-        this.showPasswordFields = true;
-        this.details = true;
       } else {
         this.showErrorNotification(response.message, 'failure');
-        this.validateOtp = true;
-        this.otpReadOnly = false;
       }
     });
   }
@@ -251,11 +241,6 @@ export class RegisterConsultantComponent implements OnInit {
     return filteredTechnologies;
   }
 
-  proceedToStep2() {
-    this.step1 = false;
-    this.step2 = true;
-  }
-
   flg = true;
   resumeError: boolean = false;
   resumeFileNameLength: boolean = false;
@@ -326,5 +311,17 @@ export class RegisterConsultantComponent implements OnInit {
           );
         }
       });
+  }
+
+  getQualification() {
+    this.consultantServ.getQualification().subscribe((response: any) => {
+      this.QualArr = response.data;
+    });
+  }
+
+  getvisa() {
+    this.consultantServ.getvisa().subscribe((response: any) => {
+      this.visadata = response.data;
+    });
   }
 }
