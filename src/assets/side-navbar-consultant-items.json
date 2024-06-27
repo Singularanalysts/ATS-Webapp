@@ -44,5 +44,10 @@
     "text": "Interviews",
     "icon": "chat_bubble_outline",
     "routerLink": "/usit/interviews"
+  },
+  {
+    "text": "Report",
+    "icon": "reports",
+    "routerLink": "/usit/report"
   }
 ]

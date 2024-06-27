@@ -55,4 +55,16 @@ export class ReportsService {
   public getEmployeeByDeparment(department: string) {
     return this.apiServ.get(`auth/users/user/${department}`)
   }
+
+  public getEmployeeReport(entity: any) {
+    return this.apiServ.post("report/individualEmployeeReport", entity);
+  }
+
+  public employeeSubmissionPopup(data: any) {
+    return this.apiServ.post("report/employeeSubPopup", data);
+  }
+
+  public employeeInterviewPopup(data: any) {
+    return this.apiServ.post("report/employeeIntervStatusPopups", data);
+  }
 }

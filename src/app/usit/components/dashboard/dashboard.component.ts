@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { SourcingupdateComponent } from './sourcingupdate/sourcingupdate.component';
 import { SubmissionCountListComponent } from './submission-count-list/submission-count-list.component';
@@ -26,6 +26,9 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { utils, writeFile } from 'xlsx';
+import { EmpAppliedJobsListComponent } from './emp-applied-jobs-list/emp-applied-jobs-list.component';
+import { EmpSubmissionsListComponent } from './emp-submissions-list/emp-submissions-list.component';
+import { EmpInterviewsListComponent } from './emp-interviews-list/emp-interviews-list.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -56,19 +59,12 @@ export class DashboardComponent implements OnInit {
   dataTableColumnsDice: string[] = [
     'PostedDate',
     'JobTitle',
-    // 'Category',
     'JobLocation',
     'Vendor',
     'TaggedDate',
     'TaggedBy',
     'TCount'
-   
-    
-
   ];
-
- 
-
   dataTableColumnsTechAnalysis: string[] = [
     'SNo',
     'Date',
@@ -95,6 +91,10 @@ export class DashboardComponent implements OnInit {
   closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
   submissionFlagInd = 'daily';
+
+  empAppliedJobsFlag = "Today";
+  empSubmissionsFlag = "Today";
+  empInterviewsFlag = "Today";
 
   subCountArr: any[] = [];
   intCountArr: any[] = [];
@@ -125,6 +125,10 @@ export class DashboardComponent implements OnInit {
   sourcingVerifiedcount = 0;
   sourcingMoveToSalescount = 0;
 
+  empAppliedJobsCount = 0;
+  empSubmissionCount = 0;
+  empInterviewCount = 0;
+
   userid!: any;
   role!: any;
   submitted = false;
@@ -136,6 +140,7 @@ export class DashboardComponent implements OnInit {
   myForm: any;
   startDateControl: FormControl | undefined;
   endDateControl: FormControl | undefined;
+  public dialog= inject(MatDialog);
 
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
@@ -147,6 +152,10 @@ export class DashboardComponent implements OnInit {
     this.closureFlagInd = 'Monthly';
     this.interviewFlagInd = 'daily';
     this.submissionFlagInd = 'daily';
+
+    this.empAppliedJobsFlag = "Today";
+    this.empSubmissionsFlag = "Today";
+    this.empInterviewsFlag = "Today";
 
     this.sclosecount = 0;
     this.rclosecount = 0;
@@ -165,20 +174,28 @@ export class DashboardComponent implements OnInit {
     this.subcountIndividual = 0;
     this.reccountIndividual = 0;
 
-    // You can perform any actions or logic inside this method
-    if (this.refreshFlg == 'executive') {
-      this.countCallingExecutiveAndLead();
-      this.countCallingHigherRole();
-    }
-    else {
-      this.countCallingHigherRole();
-    }
+    this.empAppliedJobsCount = 0;
+    this.empSubmissionCount = 0;
+    this.empInterviewCount = 0;
 
-    this.dashboardServ.vmstransactions().subscribe(
-      ((response: any) => {
-        this.datarr = response.data;
-      })
-    );
+    if (this.department !== 'Consultant' && this.role !== 'Employee') {
+      if (this.refreshFlg == 'executive') {
+        this.countCallingExecutiveAndLead();
+        this.countCallingHigherRole();
+      }
+      else {
+        this.countCallingHigherRole();
+      }
+  
+      this.dashboardServ.vmstransactions().subscribe(
+        ((response: any) => {
+          this.datarr = response.data;
+        })
+      );
+    } else {
+      this.employeeDefaultCount();
+    }
+    
   }
   refreshFlg = 'executive';
   department!: any;
@@ -190,7 +207,6 @@ export class DashboardComponent implements OnInit {
     } else {
       this.showReport = false;
     }
-    this.getEmployeeNames();
     // this.intervalSubscription = interval(1 * 60 * 1000)
     this.intervalSubscription = interval(30 * 1000)
       .subscribe(() => {
@@ -208,26 +224,30 @@ export class DashboardComponent implements OnInit {
       this.sourcingLead = true;
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
-    this.getDiceReqs();
-    this.getSourcingLeads();
-    this.getReqVendorCount();
-    this.getReqCatergoryCount();
-    this.dashboardServ.vmstransactions().subscribe(
-      ((response: any) => {
-        this.datarr = response.data;
-      })
-    );
-    if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
-      this.individualCounts = true;
-      this.refreshFlg = 'executive'
+    if (this.department !== 'Consultant' && this.role !== 'Employee') {
+      this.getDiceReqs();
+      this.getSourcingLeads();
+      this.getReqVendorCount();
+      this.getReqCatergoryCount();
+      this.getEmployeeNames();
+      this.dashboardServ.vmstransactions().subscribe(
+        ((response: any) => {
+          this.datarr = response.data;
+        })
+      );
+      if (this.role === 'Sales Executive' || this.role === 'Team Leader Recruiting' || this.role === 'Team Leader Sales' || this.role === 'Recruiter' || this.role === 'Sales Manager' || this.role === 'Recruiting Manager') {
+        this.individualCounts = true;
+        this.refreshFlg = 'executive'
+      }
+      else {
+        this.individualCounts = false;
+        this.refreshFlg = 'company'
+      }
+      this.countCallingExecutiveAndLead();
+      this.countCallingHigherRole();
+    } else {
+      this.employeeDefaultCount();
     }
-    else {
-      this.individualCounts = false;
-      this.refreshFlg = 'company'
-    }
-    this.countCallingExecutiveAndLead();
-    this.countCallingHigherRole();
-
     this.myForm = this.formBuilder.group({
       startDate: [''], // Set default value if needed
       endDate: [''], // Set default value if needed
@@ -729,14 +749,15 @@ export class DashboardComponent implements OnInit {
   }
   //lavanya
   getEmployeeNames() {
-    this.dashboardServ.getEmployeeName().subscribe(
-      (response: any) => {
+    this.dashboardServ.getEmployeeName().subscribe({
+      next: (response: any) => {
         // Assuming the API response contains an array of objects with 'name' property for each employee
         this.benchSalesEmployees = response.data;
       },
-      (error: any) => {
+      error: (error: any) => {
         console.error('Error fetching employee names:', error);
       }
+    }
     );
   }
 
@@ -782,7 +803,6 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshData() {
-    // Reset form fields
     this.myForm.reset();
     this.getDiceReqs();
     const endDateControl = this.myForm.get('endDate');
@@ -792,9 +812,131 @@ export class DashboardComponent implements OnInit {
     }
 
   }
-  //
 
+  employeeDefaultCount() {
+    const appliedObj = {
+      type: "appliedjobs",
+      userid: this.userid,
+      interval: "today",
+    }
+    this.dashboardServ.getEmployeeDashboardCount(appliedObj).subscribe({
+      next: (response: any) => {
+        this.empAppliedJobsCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+    const subObj = {
+      type: "submissions",
+      userid: this.userid,
+      interval: "today",
+    }
+    this.dashboardServ.getEmployeeDashboardCount(subObj).subscribe({
+      next: (response: any) => {
+        this.empSubmissionCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+    const intObj = {
+      type: "interviews",
+      userid: this.userid,
+      interval: "today",
+    }
+    this.dashboardServ.getEmployeeDashboardCount(intObj).subscribe({
+      next: (response: any) => {
+        this.empInterviewCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  employeeAppliedJobsCount(flg: any, interval: any) {
+    this.empAppliedJobsFlag = interval;
+    const appliedObj = {
+      type: "appliedjobs",
+      userid: this.userid,
+      interval: flg,
+    }
+    this.dashboardServ.getEmployeeDashboardCount(appliedObj).subscribe({
+      next: (response: any) => {
+        this.empAppliedJobsCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  employeeSubmissionCount(flg: any, interval: any) {
+    this.empSubmissionsFlag = interval;
+    const subObj = {
+      type: "submissions",
+      userid: this.userid,
+      interval: flg,
+    }
+    this.dashboardServ.getEmployeeDashboardCount(subObj).subscribe({
+      next: (response: any) => {
+        this.empSubmissionCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
+  }
+
+  employeeInterviewCount(flg: any, interval: any) {
+    this.empInterviewsFlag = interval;
+    const intObj = {
+      type: "interviews",
+      userid: this.userid,
+      interval: flg,
+    }
+    this.dashboardServ.getEmployeeDashboardCount(intObj).subscribe({
+      next: (response: any) => {
+        this.empInterviewCount = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
+  }
+
+  empAppliedJobsPopup() {
+    this.dialog.open(EmpAppliedJobsListComponent,
+      {
+        width: '80%',
+        data: {
+          id: this.userid,
+          duration: this.empAppliedJobsFlag,
+        },
+      });
+  }
+
+  empSubmissionsPopup() {
+    this.dialog.open(EmpSubmissionsListComponent,
+      {
+        width: '80%',
+        data: {
+          id: this.userid,
+          duration: this.empSubmissionsFlag,
+        },
+      });
+  }
+
+  empInterviewsPopup() {
+    this.dialog.open(EmpInterviewsListComponent,
+      {
+        width: '80%',
+        data: {
+          id: this.userid,
+          duration: this.empInterviewsFlag,
+        },
+      });
+  }
+  
 }
-
-
-

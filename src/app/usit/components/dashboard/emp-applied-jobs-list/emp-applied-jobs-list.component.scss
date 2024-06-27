@@ -1,0 +1,54 @@
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  top: 0;
+  overflow: hidden;
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.mat-column-SerialNum,
+.mat-column-postedon,
+.mat-column-source,
+.mat-column-job_title,
+.mat-column-category_skill,
+.mat-column-employment_type,
+.mat-column-job_location,
+.mat-column-vendor,
+.mat-column-end_client,
+.mat-column-Status,
+.mat-column-JobDescription {
+  border-right: 1px solid lightgray;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 4px 0 4px;
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+}
+
+.mat-mdc-row {
+  height: 30px !important;
+}
+
+.mat-mdc-header-row {
+  background-color: rgb(213, 231, 231);
+  top: 0;
+}
+
+.no-data-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-top: 64px;
+}

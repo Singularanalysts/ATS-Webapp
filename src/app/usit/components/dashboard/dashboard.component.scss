@@ -82,6 +82,31 @@ ul.breadcrumb li a:hover {
   background-color: rgb(228, 231, 234);
 }
 
+.overall-container-employee {
+  height: calc(100vh - 110px);
+  overflow: auto;
+  padding: 10px;
+  background-color: rgb(228, 231, 234);
+
+  .container {
+    display: flex;
+    height: inherit;
+    justify-content: space-between;
+  }
+
+  .container .right-div {
+    width: 29%;
+    overflow: auto;
+    height: 100%;
+  }
+
+  .mat-mdc-card.activity-card-individual {
+    height: inherit;
+    padding: 15px;
+    overflow-y: auto;
+  }
+}
+
 .container {
   display: flex;
   height: auto;

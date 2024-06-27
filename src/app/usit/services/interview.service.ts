@@ -61,4 +61,8 @@ export class InterviewService {
   getOnboardedDetails(flg: string) {
     return this.apiServ.get("interview/getOnboardedDetails/" + flg);
   }
+
+  public getConsultantInterviewDataPagination(data: any) {
+    return this.apiServ.post("interview/getEmployeeInterviews", data);
+  }
 }
