@@ -265,15 +265,15 @@ export class RegisterConsultantComponent implements OnInit {
     const fileSizeInKB = Math.round(file.size / 1024);
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (fileExtension === 'doc') {
-      this.flg = false;
-      this.resume.nativeElement.value = '';
-      this.dataToBeSentToSnackBar.message = 'DOC files are not allowed. Please upload a PDF or DOCX file.';
-      this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-      this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-      this.resumeupload = null;
-      return;
-    }
+    // if (fileExtension === 'doc') {
+    //   this.flg = false;
+    //   this.resume.nativeElement.value = '';
+    //   this.dataToBeSentToSnackBar.message = 'DOC files are not allowed. Please upload a PDF or DOCX file.';
+    //   this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+    //   this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+    //   this.resumeupload = null;
+    //   return;
+    // }
     var items = file.name.split(".");
     const str = items[0];
     if (str.length > 20) {
