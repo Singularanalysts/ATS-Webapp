@@ -8,12 +8,22 @@
   
   }
   
+  // .login-card {
+  //   width: 100%;
+  //   max-width: 450px;
+  //   text-align: center;
+  //   background-color: rgb(255, 255, 255);
+  //   padding: 16px;
+  // }
+
   .login-card {
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
-    background-color: rgb(255, 255, 255);
+    margin: 0 auto;
     padding: 16px;
+    height: 80vh;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
   
   .login-content {
@@ -29,16 +39,17 @@
   
   .center-logo {
     text-align: center;
-    margin-bottom: 16px; 
   }
   
   .header-no-padding {
-    padding: 0 0 12px 0;
-    margin: 0 16px;
+    padding: 0;
+    text-align: center;
   }
   
   .no-padding {
     padding: 0 0;
+    height: auto;
+    // overflow: auto;
   }
   
   .mat-mdc-card-content:last-child {
@@ -107,110 +118,110 @@
   }
 
   /**** TEL INPUT   - STARTS ****/
-.country-selector {
-  opacity: 1 !important;
-  bottom: 8px !important;
-}
+// .country-selector {
+//   opacity: 1 !important;
+//   bottom: 8px !important;
+// }
 
-input:not(.country-search) {
-  bottom: 3px;
-  left: 10px;
-}
+// input:not(.country-search) {
+//   bottom: 3px;
+//   left: 10px;
+// }
 
-::ng-deep input .country-search {
-  width: 90%;
-  border: none;
-  border-bottom: 1px solid #f2f0f0;
-  font-size: 14px;
-  padding: 10px 10px !important;
-}
+// ::ng-deep input .country-search {
+//   width: 90%;
+//   border: none;
+//   border-bottom: 1px solid #f2f0f0;
+//   font-size: 14px;
+//   padding: 10px 10px !important;
+// }
 
-.country-list-button {
-  font-size: 0.8rem !important;
-}
+// .country-list-button {
+//   font-size: 0.8rem !important;
+// }
 
-.mat-mdc-menu-content:not(:empty) {
-  max-height: 250px !important;
-}
+// .mat-mdc-menu-content:not(:empty) {
+//   max-height: 250px !important;
+// }
 
-mat-mdc-menu-content {
-  max-height: 250px !important;
-}
+// mat-mdc-menu-content {
+//   max-height: 250px !important;
+// }
 
-::ng-deep .custom-intl-input .mat-mdc-menu-panel .ngx-mat-tel-input-mat-menu-panel {
-  max-height: 250px !important;
-}
+// ::ng-deep .custom-intl-input .mat-mdc-menu-panel .ngx-mat-tel-input-mat-menu-panel {
+//   max-height: 250px !important;
+// }
 
-::ng-deep .intl-input .mdc-button .mdc-button__label {
-  margin-top: 15px;
-}
+// ::ng-deep .intl-input .mdc-button .mdc-button__label {
+//   margin-top: 15px;
+// }
 
-::ng-deep .ngx-mat-tel-input-mat-menu-panel {
-  max-height: 280px !important;
-}
+// ::ng-deep .ngx-mat-tel-input-mat-menu-panel {
+//   max-height: 280px !important;
+// }
 
-::ng-deep .country-search {
-  width: calc(100% - 10px) !important;
-  padding: 4px !important;
-}
+// ::ng-deep .country-search {
+//   width: calc(100% - 10px) !important;
+//   padding: 4px !important;
+// }
 
-::ng-deep .country-list-button {
-  padding: 0px 4px !important;
-}
+// ::ng-deep .country-list-button {
+//   padding: 0px 4px !important;
+// }
 /**** TEL INPUT   - ENDS ****/
 
 /**** UPLOAD DOCUMENTS - STARTS ****/
 
 // HEADER
-.header-upload-documents {
-  display: flex;
-  height: 48px;
-  background-color: whitesmoke;
-  align-items: center;
-  margin: 0px 2px 10px 6px;
-}
+// .header-upload-documents {
+//   display: flex;
+//   height: 48px;
+//   background-color: whitesmoke;
+//   align-items: center;
+//   margin: 0px 2px 10px 6px;
+// }
 
-.header-upload-text {
-  margin-left: 4px;
-  font-weight: 400;
-  font-size: larger;
-}
+// .header-upload-text {
+//   margin-left: 4px;
+//   font-weight: 400;
+//   font-size: larger;
+// }
 
 
-.upload-doc-cotainer {
-  display: flex;
-  flex-direction: row;
-}
+// .upload-doc-cotainer {
+//   display: flex;
+//   flex-direction: row;
+// }
 
 .upload-inp-container {
   display: flex;
 }
 
-.upload-doc-left {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+// .upload-doc-left {
+//   width: 50%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
 
-.upload-doc-right {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+// .upload-doc-right {
+//   width: 50%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+// }
 
-.upload-doc-cotainer .upload-doc-left .mat-mdc-form-field {
-  width: 95%;
-}
+// .upload-doc-cotainer .upload-doc-left .mat-mdc-form-field {
+//   width: 95%;
+// }
 
-.upload-doc-cotainer .upload-doc-right .mat-mdc-form-field {
-  width: 99%;
-}
+// .upload-doc-cotainer .upload-doc-right .mat-mdc-form-field {
+//   width: 99%;
+// }
 
-.upload {
-  width: 100%;
-}
+// .upload {
+//   width: 100%;
+// }
 /**** UPLOAD DOCUMENTS - ENDS ****/
 
 .select-technology-field {
@@ -224,4 +235,85 @@ mat-mdc-menu-content {
   left: 0;
   right: 0;
   padding: 0 16px;
+}
+
+.form-column-left {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-column-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-form{
+  height: calc(100% - 220px);
+  overflow: auto;
+}
+
+.form {
+  display: flex;
+  padding-top: 16px;
+}
+
+.form .form-column-left  .mat-mdc-form-field, .form .form-column-right .mat-mdc-form-field {
+  width: 80%;
+}
+
+.form .form-column-left button, .form .form-column-right button {
+  width: 80%;
+}
+
+.form .form-column-left .form-column-left {
+  width: 100%;
+}
+
+.card-width {
+  width: 450px;
+  padding: 16px;
+  height: auto;
+}
+
+.only-email-otp {
+  display: none;
+}
+
+.only-email-form-column-left {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.only-email-otp-login-form{
+ height: auto;
+}
+
+.only-email-form {
+  padding-top: 16px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.form-column-left .mat-mdc-form-field {
+  width: 99%;
+  margin-bottom: 12px;
+}
+
+.form-column-right .mat-mdc-form-field {
+  width: 99%;
+  margin-bottom: 12px;
+}
+
+.form-action-buttons {
+  margin-top: 8px;
+  display: flex !important;
+  justify-content: flex-end;
+  gap: 10px;
 }
