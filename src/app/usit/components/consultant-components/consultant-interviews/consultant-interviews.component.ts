@@ -160,37 +160,6 @@ export class ConsultantInterviewsComponent implements OnInit, OnDestroy {
     return serialNumber;
   }
 
-  getRowStyles(row: any): any {
-    const intStatus = row.interview_status;
-    let backgroundColor = '';
-    let color = '';
-
-    switch (intStatus) {
-      case 'OnBoarded':
-        backgroundColor = 'rgb(185, 245, 210)';
-        color = 'black';
-        break;
-      case 'Selected':
-        backgroundColor = 'rgba(243, 208, 9, 0.945)';
-        color = '';
-        break;
-      case 'Hold':
-        backgroundColor = 'rgba(243, 208, 9, 0.945)';
-        color = '';
-        break;
-      case 'Rejected':
-        backgroundColor = '';
-        color = 'rgba(177, 19, 19, 0.945)';
-        break;
-      default:
-        backgroundColor = '';
-        color = '';
-        break;
-    }
-
-    return { 'background-color': backgroundColor, 'color': color };
-  }
-
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
