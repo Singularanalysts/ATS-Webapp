@@ -9,50 +9,52 @@
 
     <mat-card-content class="no-padding">
       <form [formGroup]="form" [ngClass]="{ 'login-form': otpValidate, 'only-email-otp-login-form': !otpValidate }">
-  
+
         <div [ngClass]="{ 'only-email-form': !otpValidate, 'form': otpValidate }">
           <div [ngClass]="{ 'form-column-left': otpValidate, 'only-email-form-column-left': !otpValidate }">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Enter Email</mat-label>
-              <input matInput formControlName="email" maxlength="40" />
+              <input matInput formControlName="email" maxlength="40" [readonly]="emailReadOnly"/>
               <mat-error *ngIf="form.get('email')!.hasError('required')">Email is required</mat-error>
               <mat-error *ngIf="form.get('email')!.hasError('email')">Invalid email address</mat-error>
             </mat-form-field>
-        
-            <button *ngIf="!showOtp && !isOtpValidated" mat-raised-button color="primary" class="full-width" type="button" (click)="sendOTP()"
-              [disabled]="form.controls['email'].invalid">
+
+            <button *ngIf="!showOtp && !isOtpValidated" mat-raised-button color="primary" class="full-width"
+              type="button" (click)="sendOTP()" [disabled]="form.controls['email'].invalid">
               Request OTP
             </button>
-        
+
             <mat-form-field appearance="outline" class="full-width" *ngIf="showOtp">
               <mat-label>Enter Your OTP</mat-label>
               <input matInput formControlName="otp" maxlength="6" />
               <mat-error *ngIf="form.get('otp')!.hasError('required')">OTP is required</mat-error>
             </mat-form-field>
-        
-            <button *ngIf="showOtp" mat-raised-button color="primary" type="button" class="full-width" (click)="validateOTP()"
-              [disabled]="form.controls['otp'].invalid">
+
+            <button *ngIf="showOtp" mat-raised-button color="primary" type="button" class="full-width"
+              (click)="validateOTP()" [disabled]="form.controls['otp'].invalid">
               Validate
             </button>
-        
-            <div *ngIf="otpValidate" [ngClass]="{ 'form-column-left': otpValidate, 'only-email-form-column-left': !otpValidate }">
+
+            <div *ngIf="otpValidate"
+              [ngClass]="{ 'form-column-left': otpValidate, 'only-email-form-column-left': !otpValidate }">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>First Name</mat-label>
                 <input matInput formControlName="firstname" maxlength="25" />
                 <mat-error *ngIf="form.get('firstname')!.hasError('required')">First Name is required</mat-error>
               </mat-form-field>
-          
+
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Last Name</mat-label>
                 <input matInput formControlName="lastname" maxlength="25" />
                 <mat-error *ngIf="form.get('lastname')!.hasError('required')">Last Name is required</mat-error>
               </mat-form-field>
-          
+
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Personal Contact Number </mat-label>
-                <ngx-mat-input-tel [onlyCountries]="['in','us']" matInput class="intl-input" formControlName="contactnumber"
-                  enablePlaceholder enableSearch enableSearchplaceholder="Search..." describedBy="phoneInput" required #phone
-                  name="contactnumber" id="intlInput" (keypress)="onlyNumberKey($event)">
+                <ngx-mat-input-tel [onlyCountries]="['in','us']" matInput class="intl-input"
+                  formControlName="contactnumber" enablePlaceholder enableSearch enableSearchplaceholder="Search..."
+                  describedBy="phoneInput" required #phone name="contactnumber" id="intlInput"
+                  (keypress)="onlyNumberKey($event)">
                 </ngx-mat-input-tel>
                 <mat-error
                   *ngIf="form.get('contactnumber').errors?.required && !form.get('contactnumber').errors?.validatePhoneNumber">Required
@@ -61,10 +63,11 @@
                   *ngIf="form.get('contactnumber').errors?.required && form.get('contactnumber').errors?.validatePhoneNumber">Invalid
                   Number</mat-error>
               </mat-form-field>
-          
+
               <mat-form-field appearance="outline" class="full-width password">
                 <mat-label> Create Password</mat-label>
-                <input matInput formControlName="password" maxlength="15" type="{{ hidePassword ? 'password' : 'text' }}" />
+                <input matInput formControlName="password" maxlength="15"
+                  type="{{ hidePassword ? 'password' : 'text' }}" />
                 <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
                 <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
                   <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -74,7 +77,7 @@
                   password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
                 </mat-error>
               </mat-form-field>
-          
+
               <mat-form-field appearance="outline" class="full-width password">
                 <mat-label>Confirm Password</mat-label>
                 <input matInput formControlName="confirmpassword" maxlength="15"
@@ -88,21 +91,46 @@
                 <mat-error *ngIf="form.get('confirmpassword')!.hasError('pattern')">
                   password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
                 </mat-error>
-                <mat-error *ngIf="form.hasError('confirmPasswordMismatch') && !form.get('confirmpassword')!.hasError('required')">
+                <mat-error
+                  *ngIf="form.hasError('confirmPasswordMismatch') && !form.get('confirmpassword')!.hasError('required')">
                   Passwords do not match
                 </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Select Qualification</mat-label>
+                <mat-select formControlName="qualification">
+                  <mat-option *ngFor="let option of QualArr" [value]="option.id">
+                    {{ option.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('qualification')!.hasError('required')">Qualification is
+                  Required
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Select Immigraion Status</mat-label>
+                <mat-select name="visa" formControlName="visa">
+                  <mat-option *ngFor="let option of visadata" [value]="option[0]">
+                    {{ option[1] }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('visa').hasError('required')">Immigration
+                  status is Required</mat-error>
               </mat-form-field>
             </div>
           </div>
 
-          <div class="form-column-right" *ngIf = "otpValidate" [ngClass]="{ 'only-email-otp': !otpValidate }">
+          <div class="form-column-right" *ngIf="otpValidate" [ngClass]="{ 'only-email-otp': !otpValidate }">
             <mat-form-field appearance="outline" class="upload">
               <mat-label for="resume">Resume</mat-label>
               <div class="upload-inp-container">
                 <input matInput readonly name="resumeName" class="file-input"
                   [value]="resumeupload ? resumeupload.name : 'No file chosen'" />
                 <label for="resume" class="browse-button-label">
-                  <button type="button" mat-icon-button (click)="resume.click()"><mat-icon>upload_file</mat-icon></button>
+                  <button type="button" mat-icon-button
+                    (click)="resume.click()"><mat-icon>upload_file</mat-icon></button>
                 </label>
                 <input type="file" #resume id="resume" (change)="uploadResume($event)" name="resumeUploadFile"
                   accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -117,7 +145,7 @@
                 to
                 15-20 characters before upload</mat-hint>
             </mat-form-field>
-        
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label> Current Location</mat-label>
               <input matInput formControlName="currentlocation" />
@@ -125,45 +153,18 @@
                 required</mat-error>
             </mat-form-field>
 
-            <div class="company-qualification-field">
-              <mat-form-field appearance="fill">
-                <mat-label>Select Qualification</mat-label>
-                <mat-select formControlName="qualification">
-                  <mat-option *ngFor="let option of QualArr" [value]="option.id">
-                    {{ option.name }}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('qualification')!.hasError('required')">Qualification is
-                  Required
-                </mat-error>
-              </mat-form-field>
-            </div>
-
-            <div class="select-visa-field">
-              <mat-form-field appearance="fill">
-                <mat-label>Select Immigraion Status</mat-label>
-                <mat-select name="visa" formControlName="visa">
-                  <mat-option *ngFor="let option of visadata" [value]="option[0]">
-                    {{ option[1] }}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('visa').hasError('required')">Immigration
-                  status is Required</mat-error>
-              </mat-form-field>
-            </div>
-        
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Job Title</mat-label>
               <input matInput formControlName="position" />
               <mat-error *ngIf="form.get('position')!.hasError('required')">Job Title is required</mat-error>
             </mat-form-field>
-        
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Experience (in years)</mat-label>
               <input matInput formControlName="experience" maxlength="2" (keypress)="onlyNumberKey($event)" />
               <mat-error *ngIf="form.get('experience')!.hasError('required')">Experience is required</mat-error>
             </mat-form-field>
-        
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Select Technology</mat-label>
               <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp">
@@ -174,19 +175,22 @@
               </mat-autocomplete>
               <mat-error *ngIf="form.get('technology').hasError('required')">Technology is Required</mat-error>
             </mat-form-field>
-        
-        
+
+
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Skills</mat-label>
               <textarea matInput formControlName="skills" rows="5" placeholder="Skill Set"></textarea>
               <mat-error *ngIf="form.get('skills')!.hasError('required')">Skills is required</mat-error>
             </mat-form-field>
-        
-            <button mat-raised-button color="primary" class="full-width" type="button" (click)="userLogin()">Submit</button>
+
           </div>
         </div>
-    
+
       </form>
+      <div class="form-action-buttons" *ngIf="otpValidate">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="userLogin()">Submit</button>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

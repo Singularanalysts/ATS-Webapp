@@ -38,6 +38,9 @@ export class ProfileComponent implements OnInit {
     this.consultantServ.getProfile(userid).subscribe((res: any) => {
     this.profiledata = res.data;
     this.qualificationId = res.data.qualification;
+    this.qualificationServ.getQualificationById(this.qualificationId).subscribe((res: any) => {
+      this.profiledata.qualification = res.data.name;
+    })
     })
   }
 

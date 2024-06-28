@@ -59,9 +59,12 @@ export class RegisterConsultantComponent implements OnInit {
   isOtpValidated: boolean = false;
   QualArr: any = [];
   visadata: any = [];
+  emailReadOnly: boolean = false;
 
   ngOnInit(): void {
     this.gettech();
+    this.getvisa();
+    this.getQualification();
     this.initializeLoginForm();
   }
 
@@ -111,9 +114,11 @@ export class RegisterConsultantComponent implements OnInit {
         this.id = response.data.id;
         this.showErrorNotification(response.message, 'success');
         this.showOtp = true;
+        this.emailReadOnly = true;
       } else {
         this.showErrorNotification(response.message);
         this.showOtp = false;
+        this.emailReadOnly = false;
       }
     });
   }
@@ -131,6 +136,10 @@ export class RegisterConsultantComponent implements OnInit {
         this.showErrorNotification(response.message, 'success');
       } else {
         this.showErrorNotification(response.message, 'failure');
+        this.otpValidate = false;
+        this.isOtpValidated = false;
+        this.showOtp = false;
+        this.form.get('otp').reset();
       }
     });
   }
@@ -323,5 +332,9 @@ export class RegisterConsultantComponent implements OnInit {
     this.consultantServ.getvisa().subscribe((response: any) => {
       this.visadata = response.data;
     });
+  }
+
+  onCancel() {
+    this.router.navigate(['/login']);
   }
 }
