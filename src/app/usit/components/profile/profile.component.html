@@ -9,10 +9,10 @@
             <img src="assets/images/file.png" alt="profile avatar" class="profile-avatar">
         </div>
         <div class="profile-name">
-            {{ profiledata?.consultantname }}
+            {{ profiledata?.consultantname | titlecase}}
         </div>
         <div class="job-title">
-            {{ profiledata?.position }}
+            {{ profiledata?.position | titlecase}}
         </div>
         <div class="flex-center">
             <div class="resume" [ngStyle]="{'cursor': profiledata?.resume ? 'pointer' : 'default'}" (click)="downloadfile(profiledata.consultantid,profiledata.resume,'resume')">

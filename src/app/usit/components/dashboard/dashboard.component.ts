@@ -853,6 +853,15 @@ export class DashboardComponent implements OnInit {
         console.log(err);
       }
     });
+
+    this.dashboardServ.getEmployeeDashboardRecentActivity(this.userid).subscribe({
+      next: (response: any) => {
+        this.datarr = response.data;
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
   }
 
   employeeAppliedJobsCount(flg: any, interval: any) {

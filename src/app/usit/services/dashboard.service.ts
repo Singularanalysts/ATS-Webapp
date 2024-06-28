@@ -114,4 +114,8 @@ export class DashboardService {
   getEmployeeDashboardInterviewPopup(data: any) {
     return this.apiServ.post("dashboard/empInterviewPopUp", data);
   }
+
+  getEmployeeDashboardRecentActivity(empid: any) {
+    return this.apiServ.get(`dashboard/getEmpRecentActivity/${empid}`);
+  }
 }

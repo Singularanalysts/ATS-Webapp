@@ -183,6 +183,31 @@
                     <!-- <span *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> -->
                   </b>
                 </div>
+
+                <div class="activity-content" *ngIf="data.flag=='submission'">
+                  <b class="bold-text status">{{data.status | titlecase}}</b> Your Profile for <b class="bold-text"><span *ngIf="data.company !== 'NULL'"
+                      class="bold-text">{{data.company}} (V),</span>
+                  </b> on
+                  <b class="bold-text">{{data.emptype}}</b>
+                  <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+                      *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
+                </div>
+                <div class="activity-content" *ngIf="data.flag=='interview'"> 
+                  <b class="bold-text status">{{data.status | titlecase}}</b> in an interview that was scheduled for <b class="bold-text">{{data.interview_date| date:'MM-dd-yyyy' }} at {{data.interview_date | date:'HH:mm' }} {{ data.time_zone }}, </b>
+                  <b class="bold-text ">{{ data.round| titlecase }}</b> round <b class="bold-text ">({{ data.mode}}), </b>
+                  <b class="bold-text"><span *ngIf="data.company !== 'NULL'"
+                      class="bold-text">{{data.company}} (V),</span>
+                  </b> on
+                  <b class="bold-text">{{data.emptype}}</b>
+                  <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+                      *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
+                </div>
+
+                <div class="activity-content" *ngIf="data.flag=='appliedJob'"> 
+                  <b class="bold-text status">{{data.status | titlecase}}</b> for <b class="bold-text position">{{ data.job_title }} </b> at <b class="bold-text">{{ data.job_location }}
+                  </b> on
+                  <b class="bold-text">{{data.employment_type}}</b>
+                </div>
               </div>
             </div>
           </mat-card>
