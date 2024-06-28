@@ -173,29 +173,6 @@ export class ConsultantSubmissionsComponent implements OnInit, OnDestroy {
     return;
   }
 
-  getRowStyles(row: any): any {
-    const subStatus = row.substatus;
-    let backgroundColor = '';
-    let color = '';
-
-    switch (subStatus) {
-      case 'Schedule':
-        backgroundColor = 'rgb(185, 245, 210)';
-        color = 'black';
-        break;
-      case 'Rejected':
-        backgroundColor = '';
-        color = 'rgba(177, 19, 19, 0.945)';
-        break;
-      default:
-        backgroundColor = '';
-        color = '';
-        break;
-    }
-
-    return { 'background-color': backgroundColor, 'color': color };
-  }
-
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
