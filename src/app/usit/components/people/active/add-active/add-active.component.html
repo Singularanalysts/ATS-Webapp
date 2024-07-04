@@ -242,6 +242,19 @@
           <textarea matInput formControlName="reason" maxlength="255"></textarea>
           <mat-error *ngIf="h1bForm.get('reason')?.hasError('required')"> Reason is required</mat-error>
         </mat-form-field>
+
+        <mat-form-field *ngIf="(h1bForm.get('status').value === 'Leave of Absence' || h1bForm.get('status').value === 'Terminated') && data.actionName === 'edit-active'">
+          <mat-label>{{ h1bForm.get('status').value === 'Leave of Absence' ? 'Leave of Absence Date' : '
+            Termination Date' }}</mat-label>
+          <input matInput [matDatepicker]="picker5" formControlName="terminationorloadate">
+          <mat-datepicker-toggle matIconSuffix [for]="picker5"></mat-datepicker-toggle>
+          <mat-datepicker #picker5></mat-datepicker>
+          <mat-error *ngIf="h1bForm.get('terminationorloadate')!.hasError('required')"> {{ h1bForm.get('status').value === 'Leave of Absence' ? 'Leave of Absence Date' : '
+            Termination Date' }} is Required
+          </mat-error>
+        </mat-form-field>
+
+
       </div>
     </div>
 

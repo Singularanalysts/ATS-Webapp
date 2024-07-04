@@ -75,8 +75,8 @@ export class RegisterConsultantComponent implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       contactnumber: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
-      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,15}')]],
+      password: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!-/:-@[-`{-~])[A-Za-z\d!-/:-@[-`{-~].{8,15}')]],
+      confirmpassword: ['', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!-/:-@[-`{-~])[A-Za-z\d!-/:-@[-`{-~].{8,15}')]],
       currentlocation: ['', Validators.required],
       position: ['', Validators.required],
       experience: ['', Validators.required],
@@ -84,7 +84,7 @@ export class RegisterConsultantComponent implements OnInit {
       skills: ['', Validators.required],
       qualification: ['', Validators.required],
       visa: ['', Validators.required]
-    });
+    },{ validator: this.passwordMatchValidator });
   }
   
   emailValidator(control: AbstractControl) {
@@ -144,6 +144,18 @@ export class RegisterConsultantComponent implements OnInit {
     });
   }
 
+  private passwordMatchValidator(formGroup: FormGroup): ValidationErrors | null {
+    const password = formGroup.get('password')!.value;
+    const confirmPassword = formGroup.get('confirmpassword')!.value;
+    if (password !== confirmPassword) {
+      formGroup.get('confirmpassword')!.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    } else {
+      formGroup.get('confirmpassword')!.setErrors(null);
+      return null;
+    }
+  }
+  
   
   get loginFrom() {
     return this.form.controls;

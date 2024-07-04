@@ -143,19 +143,24 @@ export class AddActiveComponent implements OnInit {
       status: [this.data.actionName === "edit-active" ? h1bData.status : 'Active'],
       reason: [this.data.actionName === "edit-active" ? h1bData.reason : ''],
       employeementype: [h1bData ? h1bData.employeementype : '', Validators.required],
-      permReferenceNumber: [''],
-      i140ReceiptNumber: [''],
+      permReferenceNumber: [h1bData ? h1bData.permReferenceNumber : ''],
+      i140ReceiptNumber: [h1bData ? h1bData.i140ReceiptNumber : ''],
+      terminationorloadate: [ h1bData ? h1bData.terminationorloadate : ''],
       user: localStorage.getItem('userid'),
     });
 
     this.h1bForm.get('status').valueChanges.subscribe((status: string) => {
       if (status === 'Leave of Absence' || status === 'Terminated') {
         this.h1bForm.get('reason').setValidators(Validators.required);
+        this.h1bForm.get('terminationorloadate').setValidators(Validators.required);
       } else {
         this.h1bForm.get('reason').clearValidators();
+        this.h1bForm.get('terminationorloadate').clearValidators();
       }
       this.h1bForm.get('reason').updateValueAndValidity();
+      this.h1bForm.get('terminationorloadate').updateValueAndValidity();
     });
+
   }
 
   toDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
