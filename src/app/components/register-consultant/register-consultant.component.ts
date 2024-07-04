@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core'
 import {
   AbstractControl,
   FormBuilder,
+  FormControlOptions,
   FormGroup,
   ValidationErrors,
   ValidatorFn,
@@ -84,7 +85,7 @@ export class RegisterConsultantComponent implements OnInit {
       skills: ['', Validators.required],
       qualification: ['', Validators.required],
       visa: ['', Validators.required]
-    },{ validator: this.passwordMatchValidator });
+    },{ validators: this.passwordMatchValidator } as FormControlOptions);
   }
   
   emailValidator(control: AbstractControl) {
@@ -151,7 +152,18 @@ export class RegisterConsultantComponent implements OnInit {
       formGroup.get('confirmpassword')!.setErrors({ passwordMismatch: true });
       return { passwordMismatch: true };
     } else {
-      formGroup.get('confirmpassword')!.setErrors(null);
+      const errors = confirmPassword.errors;
+
+      if (errors) {
+          delete errors['passwordMismatch'];
+
+          if (Object.keys(errors).length === 0) {
+            confirmPassword.setErrors(null);
+          } else {
+            confirmPassword.setErrors(errors);
+          }
+      }
+
       return null;
     }
   }
@@ -203,33 +215,6 @@ export class RegisterConsultantComponent implements OnInit {
       return false;
     return true;
   }
-
-  passwordValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value: string = control.value;
-
-      const hasUppercase = /[A-Z]/.test(value);
-      const hasNumber = /\d/.test(value);
-      const hasSpecialCharacter = /[!@#$%^&*]/.test(value);
-
-      if (!hasUppercase || !hasNumber || !hasSpecialCharacter) {
-        control.setErrors({ pattern: true })
-        return { pattern: true };
-      }
-
-      return null;
-    };
-  }
-
-  confirmPasswordValidator: ValidatorFn = (control: AbstractControl): { [key: string]: any } | null => {
-    const password = control.root.get('password');
-    
-    const confirmPassword = control.value;
-  
-    return password && confirmPassword && password.value !== confirmPassword
-      ? { confirmPasswordMismatch: true }
-      : null;
-  };
 
   gettech() {
     this.searchTechOptions$ = this.consultantServ.getregtech().pipe(map((x: any) => x.data), tap(resp => {
