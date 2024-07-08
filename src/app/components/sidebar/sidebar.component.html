@@ -1,68 +1,63 @@
 <div class="sidebar-container">
   <mat-toolbar color="primary" class="tool-bar-container">
-    <button  mat-icon-button matTooltip="{{sidenav.opened ? 'Close Sidenav' : 'Open Sidenav'}}"
-    matTooltipClass="custom-tooltip"
-    class="example-icon" aria-label="Example icon-button with menu icon"
-    (click)="sidenav.toggle()" >
+    <button mat-icon-button matTooltip="{{sidenav.opened ? 'Close Sidenav' : 'Open Sidenav'}}"
+      matTooltipClass="custom-tooltip" class="example-icon" aria-label="Example icon-button with menu icon"
+      (click)="sidenav.toggle()">
       <mat-icon [@rotate]="sidenav.opened ? 'close' : 'menu'">{{sidenav.opened ? 'close' : 'menu'}}</mat-icon>
     </button>
-    <!-- <img src="assets/images/singular-logo.png" alt="logo" width="150" height="150" loading="lazy"> -->
     <a routerLink="/usit/dashboard" style="height: inherit;">
       <img src="assets/images/singular-logo.png" alt="logo" loading="lazy">
     </a>
     <span class="button-divider"></span>
-    <!-- <button mat-icon-button class="login-icon" aria-label="login-icon" (click)="login()">
-      <mat-icon>login</mat-icon>
-    </button> -->
+    <button mat-icon-button [matMenuTriggerFor]="menuNotification"
+      *ngIf="department !== 'Consultant' && role !== 'Employee' ">
+      <mat-icon [matBadge]="unseenNotificationCount" matBadgeColor="warn">notifications</mat-icon>
+    </button>
+    <mat-menu #menuNotification="matMenu" xPosition="before" class="custom-notification-menu">
+      <button mat-menu-item *ngFor="let notification of notificationArr"
+        [ngClass]="{'unseen-notification': notification.seen === null || notification.seen === false}"
+        (click)="handleNotificationClick(notification)">
+        <div class="notification-content">
+          <span class="notification-time">{{ notification.trtime }}</span>
+          <span class="notification-text">
+            <span class="notification-bold">{{ notification.pseudoname }}</span> Added <span
+              class="notification-bold">{{ notification.vendorname }}</span>
+          </span>
+        </div>
+      </button>
+    </mat-menu>
     <button mat-icon-button class="profile-icon" aria-label="profile-icon" [matMenuTriggerFor]="menu">
-     <mat-icon>account_circle</mat-icon>
-     <span class="profile-user-name">{{ userManagementServ.getUserName() }}</span>
-    <!-- <mat-icon>arrow_drop_down</mat-icon> -->
-   </button>
-   <mat-menu #menu="matMenu" class="user-menu">
-    <button mat-menu-item class="user-name">
-      {{ userManagementServ.getRoleName() }} 
+      <mat-icon>account_circle</mat-icon>
+      <span class="profile-user-name">{{ userManagementServ.getUserName() }}</span>
     </button>
-    <button mat-menu-item  routerLink="password" *ngIf="role != 'Employee'">
-      My Profile
-      <mat-icon class="icon">person</mat-icon>
-    </button>
-    <button mat-menu-item *ngIf="role != 'Employee'">
-      <mat-icon class="icon">settings</mat-icon>
-      Account Settings
-    </button>
-    <button mat-menu-item *ngIf="role != 'Employee'">
-      <mat-icon class="icon">help</mat-icon>
-      Need Help?
-    </button>
-    <button mat-menu-item (click)="onSignOut()">
-      Sign Out
-      <mat-icon class="icon">logout</mat-icon>
-    </button>
-  </mat-menu>
+    <mat-menu #menu="matMenu" class="user-menu">
+      <button mat-menu-item class="user-name">
+        {{ userManagementServ.getRoleName() }}
+      </button>
+      <button mat-menu-item routerLink="password" *ngIf="role != 'Employee'">
+        My Profile
+        <mat-icon class="icon">person</mat-icon>
+      </button>
+      <button mat-menu-item *ngIf="role != 'Employee'">
+        <mat-icon class="icon">settings</mat-icon>
+        Account Settings
+      </button>
+      <button mat-menu-item *ngIf="role != 'Employee'">
+        <mat-icon class="icon">help</mat-icon>
+        Need Help?
+      </button>
+      <button mat-menu-item (click)="onSignOut()">
+        Sign Out
+        <mat-icon class="icon">logout</mat-icon>
+      </button>
+    </mat-menu>
   </mat-toolbar>
   <mat-sidenav-container class="sidebar-sidenav-container">
-    <mat-sidenav #sidenav mode="side"   opened="true" class="sidnav"  [fixedBottomGap]="10">
+    <mat-sidenav #sidenav mode="side" opened="true" class="sidnav" [fixedBottomGap]="10">
       <app-side-navbar></app-side-navbar>
     </mat-sidenav>
-    <!-- spinner -->
-
-
-    <mat-sidenav-content   class="router-container">
-      <!-- spinner -->
-      <!-- <mat-progress-spinner *ngIf="isLoading$ | async"
-        class="spinner"
-        [color]="color"
-        [mode]="progressSpinnerMode"
-        [value]="value">
-      </mat-progress-spinner> -->
-      <!-- progress-bar -->
-      <!-- <mat-progress-bar class="progress-bar"
-        [color]="color" *ngIf="isLoading$ | async"
-        [mode]="progressBarMode">
-      </mat-progress-bar> -->
+    <mat-sidenav-content class="router-container">
       <router-outlet></router-outlet>
     </mat-sidenav-content>
-
   </mat-sidenav-container>
 </div>

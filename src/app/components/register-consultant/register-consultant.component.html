@@ -56,8 +56,8 @@
                 (keypress)="onlyNumberKey($event)">
               </ngx-mat-input-tel>
               <mat-error
-                *ngIf="form.get('contactnumber').errors?.required && !form.get('contactnumber').errors?.validatePhoneNumber">Required
-                Field</mat-error>
+                *ngIf="form.get('contactnumber').errors?.required && !form.get('contactnumber').errors?.validatePhoneNumber">Personal Contact Number is required
+              </mat-error>
               <mat-error
                 *ngIf="form.get('contactnumber').errors?.required && form.get('contactnumber').errors?.validatePhoneNumber">Invalid
                 Number</mat-error>
@@ -73,7 +73,7 @@
               </button>
               <mat-error *ngIf="form.get('password')!.hasError('required')">Create Password is required</mat-error>
               <mat-error *ngIf="form.get('password')!.hasError('pattern')">
-                password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
+                Password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
               </mat-error>
             </mat-form-field>
 
@@ -88,7 +88,7 @@
               <mat-error *ngIf="form.get('confirmpassword')!.hasError('required')">Confirm Password is
                 required</mat-error>
               <mat-error *ngIf="form.get('confirmpassword')!.hasError('pattern')">
-                password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
+                Password: [ 8-15 chars, at least 1 upper, 1 lower, 1 special & 1 num]
               </mat-error>
               <mat-error *ngIf="form.controls['confirmpassword'].hasError('passwordMismatch')">
                 Passwords do not match.
@@ -103,7 +103,7 @@
                 </mat-option>
               </mat-select>
               <mat-error *ngIf="form.get('qualification')!.hasError('required')">Qualification is
-                Required
+                required
               </mat-error>
             </mat-form-field>
 
@@ -115,7 +115,7 @@
                 </mat-option>
               </mat-select>
               <mat-error *ngIf="form.get('visa').hasError('required')">Immigration
-                status is Required</mat-error>
+                status is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -171,7 +171,7 @@
                 {{ option.technologyarea }}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="form.get('technology').hasError('required')">Technology is Required</mat-error>
+            <mat-error *ngIf="form.get('technology').hasError('required')">Technology is required</mat-error>
           </mat-form-field>
 
 

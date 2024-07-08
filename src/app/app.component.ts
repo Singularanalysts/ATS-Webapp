@@ -4,14 +4,10 @@ import {
   NavigationStart,
   Router,
 } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { AuthService } from './services/auth.service';
+import { Subscription } from 'rxjs';
 import { PermissionsService } from './services/permissions.service';
 import { LoaderService } from './services/loader.service';
-// import { LoaderService } from './services/loader.service';
-// import { ThemePalette } from '@angular/material/core';
-// import { ProgressBarMode } from '@angular/material/progress-bar';
-// import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+import { WebsocketService } from './usit/services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -25,20 +21,15 @@ export class AppComponent implements OnInit, OnDestroy {
   protected isUserSignedIn = false;
   protected permServ = inject(PermissionsService);
 
-  public  _router= inject(Router);
+  public _router = inject(Router);
   loaderServ = inject(LoaderService);
   isLoading$ = this.loaderServ.isLoading$;
-//   loaderServ = inject(LoaderService);
-//   isLoading$ = this.loaderServ.isLoading$;
-//   color: ThemePalette = 'warn';
-//  // mode: ProgressBarMode = 'determinate';
-//   mode: ProgressSpinnerMode = 'determinate';
-//   value = 50;
+  private websocketService = inject(WebsocketService);
   currentURL: string = '';
   ngOnInit(): void {
-    // this.getCurrentURL();
-     this.currentURL = window.location.pathname;
+    this.currentURL = window.location.pathname;
     this.isUserSignedIn = this.permServ.isUserSignedin()
+    this.websocketService.connect();
   }
 
   private getCurrentURL() {

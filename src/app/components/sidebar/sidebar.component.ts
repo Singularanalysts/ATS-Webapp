@@ -10,6 +10,8 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { UserManagementService } from 'src/app/services/user-management.service';
+import { WebsocketService } from 'src/app/usit/services/websocket.service';
+
 const keyFrames = [
   style({ transform: 'rotate(0deg)', offset: '0'}),
   style({ transform: 'rotate(1turn)', offset: '1'})
@@ -31,7 +33,7 @@ export class SidebarComponent implements OnInit {
 
   private snackBarServ = inject(SnackBarService);
   protected permissionServ = inject(PermissionsService);
-  protected userManagementServ = inject(UserManagementService)
+  protected userManagementServ = inject(UserManagementService);
   private router = inject(Router);
   // loader
   loaderServ = inject(LoaderService);
@@ -41,13 +43,54 @@ export class SidebarComponent implements OnInit {
   progressSpinnerMode: ProgressSpinnerMode = 'indeterminate';
   value = 50;
   role!: string | null;
+  private websocketService = inject(WebsocketService);
+  messageSubscription: any;
+  unseenNotificationCount: number | undefined;
+  notificationArr: any[] = [];
+  department: string | null | undefined;
   
   ngOnInit() {
     this.role  = localStorage.getItem('role');
+    this.department  = localStorage.getItem('department');
+    this.userManagementServ.getNotifications().subscribe({
+      next: (res: any) => {
+        this.unseenNotificationCount = res.data.unSeenCount;
+        this.notificationArr = res.data.notifications;
+      }
+    });
+    this.messageSubscription = this.websocketService.getMessages().subscribe(
+      {
+        next: (message: string) => {
+          this.userManagementServ.getNotifications().subscribe({
+            next: (res: any) => {
+              this.unseenNotificationCount = res.data.unSeenCount;
+              this.notificationArr = res.data.notifications;
+            }
+          });
+        },
+        error: (error: any) => {
+          console.error('Error receiving WebSocket message:', error);
+        }
+      }
+    );
+
+  }
+
+  handleNotificationClick(notification: any) {
+    this.router.navigateByUrl('/usit/vendors');
+    if(notification.seen !== true) {
+      this.userManagementServ.seeNotification(notification.nt_id, notification.seen).subscribe({
+        next: (res: any) => {
+  
+        },
+        error: (err: any) => {
+  
+        }
+      });
+    }
   }
 
   onSignOut(){
-  //  this.snaclBar.open("You have Signed out.!", "", {duration: 1500});
   const dataToBeSentToSnackBar: ISnackBarData = {
     message: 'You have signed out!',
     duration: 2500,
@@ -61,6 +104,7 @@ export class SidebarComponent implements OnInit {
   this.permissionServ.logOut()
     .subscribe({
       next: () =>{
+        this.websocketService.disconnect();
         this.clearLocalStorageItemsOnLogOut();
         // navigate to login
         this.router.navigate(['/']);

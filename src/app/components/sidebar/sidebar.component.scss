@@ -17,9 +17,6 @@ img {
 }
 
 .sidebar-sidenav-container {
-  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-    causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
-  // background-color: rgb(223, 222, 222) !important;
   height: calc(100vh - 68px);
   background: #eee;
 }
@@ -43,38 +40,63 @@ img {
   align-items: center;
   justify-content: center;
 }
+
 .profile-user-name{
   margin-left: 8px;
 }
+
 .user-menu {
   background-color: #d76666 !important;
   margin-bottom: 2px !important;
 }
+
 .user-name {
   align-items: center;
   justify-content: center;
 }
 
-// @media (min-width: 320px) and (max-width: 480px) { // mobiles
-//   .sidnav{
-//     width: 100px;
-//   }
-// }
-// @media (min-width: 481px) and (max-width: 768px) { // ipad , tablets
-//   .sidnav{
-//     width: 100px;
-//   }
-// }
-// @media (min-width: 769px) and (max-width: 1024px) { // laptops
-//   .sidnav{
-//     width: 100px;
-//   }
-// }
-// @media (min-width: 1025px) and (max-width: 1200px) { // desktops
-//   .sidnav{
-//     width: 180px;
-//   }
-// }
 .tool-bar-container {
   height: 48px;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-left: 8px;
+}
+
+.notification-time {
+  font-size: 0.8em;
+  color: gray;
+  margin-right: 12px;
+  white-space: nowrap;
+}
+
+.notification-text {
+  font-size: 1em;
+  flex-grow: 1;
+}
+
+button[mat-menu-item] {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.unseen-notification {
+  background-color: rgb(218, 234, 255) !important;
+}
+
+.notification-bold {
+  font-weight: bold;
+}
+
+::ng-deep .mat-mdc-menu-content {
+  padding: 0px !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  max-height: 350px;
+  overflow-y: auto;
 }

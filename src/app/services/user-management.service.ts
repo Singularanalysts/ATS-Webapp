@@ -128,5 +128,15 @@ export class UserManagementService {
    public getAllTLBench() {
     return this.http.get(this.apiServ.apiUrl + "auth/users/teamleads");
   }
+
+  //Get Notifications
+  public getNotifications() {
+    return this.http.get(`${this.apiServ.apiUrl}websockets/notify/notifications`)
+  }
+
+  //See Notifications
+  public seeNotification(id: any, seen: any) {
+    return this.http.get(`${this.apiServ.apiUrl}websockets/notify/updateSeen/${id}/${seen}`)
+  }
   /** EMPLOYEE SERVICES - END */
 }
