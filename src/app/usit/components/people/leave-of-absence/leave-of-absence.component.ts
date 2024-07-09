@@ -138,6 +138,7 @@ export class LeaveOfAbsenceComponent implements OnInit, OnDestroy{
       sortOrder: this.sortOrder,
       keyword: this.field,
       status: this.status,
+      userId: this.userid
     }
     this.h1bServ.getAllActiveApplicants(pagObj)
       .pipe(takeUntil(this.destroyed$)).subscribe(
@@ -258,7 +259,8 @@ export class LeaveOfAbsenceComponent implements OnInit, OnDestroy{
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         keyword: keyword,
-        status: this.status
+        status: this.status,
+        userId: this.userid
       }
 
       return this.h1bServ.getAllActiveApplicants(pagObj).subscribe(
