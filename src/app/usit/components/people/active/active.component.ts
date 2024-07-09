@@ -28,8 +28,7 @@ import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { Subject, takeUntil } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InterviewService } from 'src/app/usit/services/interview.service';
+import { Router } from '@angular/router';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { AddActiveComponent } from './add-active/add-active.component';
 import { H1bImmigrantService } from 'src/app/usit/services/h1b-immigrant.service';
@@ -62,20 +61,14 @@ export class ActiveComponent implements OnInit, OnDestroy{
     'SerialNum',
     'EmpId',
     'Name',
-    'Employer',
     'Visa',
     'DOJ',
-    // 'PayType',
-    'EmployementType',
-    'StateofEmp',
-    'Status',
+    'PhysicalAddress',
     'Action',
   ];
   hasAcces!: any;
-  // intentity = new SalesInterview();
   entity: any[] = [];
   submitted = false;
-  // registerForm: any = FormGroup;
   showAlert = false;
   flag!: string;
   searchstring!: any;
@@ -93,9 +86,6 @@ export class ActiveComponent implements OnInit, OnDestroy{
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
-  // services
-  private activatedRoute = inject(ActivatedRoute);
-  private interviewServ = inject(InterviewService);
   private dialogServ = inject(DialogService);
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
@@ -109,25 +99,6 @@ export class ActiveComponent implements OnInit, OnDestroy{
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.getAll();
-  }
-  
-
-  getAllWP(pagIdx=1 ) {
-    this.userid = localStorage.getItem('userid');
-    // this.h1bServ.getAllActiveApplicants(pagIdx, this.itemsPerPage, this.field,
-    //   this.sortField,
-    //   this.sortOrder)
-    // .pipe(takeUntil(this.destroyed$)).subscribe(
-    //   (response: any) => {
-    //     this.entity = response.data.content;
-    //     this.dataSource.data = response.data.content;
-    //     this.totalItems = response.data.totalElements;
-    //     // for serial-num {}
-    //     this.dataSource.data.map((x: any, i) => {
-    //       x.serialNum = this.generateSerialNumber(i);
-    //     });
-    //   }
-    // )
   }
 
   getAll(pagIdx = 1) {
@@ -193,14 +164,13 @@ export class ActiveComponent implements OnInit, OnDestroy{
     })
   }
 
-  deleteInterview(interview: any) {
-
+  deleteActive(element: any) {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to delete?',
       confirmText: 'Yes',
       cancelText: 'No',
-      actionData: interview,
+      actionData: element,
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = 'fit-content';
@@ -214,9 +184,8 @@ export class ActiveComponent implements OnInit, OnDestroy{
     );
 
     // call delete api after  clicked 'Yes' on dialog click
-
     dialogRef.afterClosed().subscribe({
-      next: (resp) => {
+      next: () => {
         if (dialogRef.componentInstance.allowAction) {
           const dataToBeSentToSnackBar: ISnackBarData = {
             message: '',
@@ -227,7 +196,7 @@ export class ActiveComponent implements OnInit, OnDestroy{
             panelClass: ['custom-snack-success'],
           };
 
-          this.h1bServ.deleteEntity(interview.applicantid).pipe(takeUntil(this.destroyed$))
+          this.h1bServ.deleteEntity(element.applicantid).pipe(takeUntil(this.destroyed$))
           .subscribe({next:(response: any) => {
             if (response.status == 'success') {
               this.getAll();
@@ -245,10 +214,6 @@ export class ActiveComponent implements OnInit, OnDestroy{
         }
       },
     });
-  }
-
-  onFilter(event: any) {
-
   }
 
   applyFilter(event: any) {
@@ -293,77 +258,10 @@ export class ActiveComponent implements OnInit, OnDestroy{
     }
   }
 
-  applyFilter1(event: any) {
-    const keyword = event.target.value;
-    if (keyword != '') {
-      return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
-        this.sortField,
-        this.sortOrder).subscribe(
-        ((response: any) => {
-          this.entity = response.data.content;
-          this.dataSource.data  = response.data.content;
-           // for serial-num {}
-           this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-          this.totalItems = response.data.totalElements;
-        })
-      );
-    }
-    return  this.getAll(this.currentPageIndex + 1)
-  }
-
- 
-  onSort1(event: Sort) {
-    //this.sortField = event.active;
-    if (event.active == 'SerialNum')
-      this.sortField = 'updateddate'
-    else
-      this.sortField = event.active;
-    
-      this.sortOrder = event.direction;
-    
-    if (event.direction != ''){
-    ///this.sortOrder = event.direction;
-    this.getAll();
-    }
-  }
-
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
-  }
-
-  getRowStyles(row: any): any {
-    const intStatus = row.interview_status;
-    let backgroundColor = '';
-    let color = '';
-
-    switch (intStatus) {
-      case 'OnBoarded':
-        backgroundColor = 'rgb(185, 245, 210)';
-        color = 'black';
-        break;
-      case 'Selected':
-        backgroundColor = 'rgba(243, 208, 9, 0.945)';
-        color = '';
-        break;
-      case 'Hold':
-        backgroundColor = 'rgba(243, 208, 9, 0.945)';
-        color = '';
-        break;
-      case 'Rejected':
-        backgroundColor = '';
-        color = 'rgba(177, 19, 19, 0.945)';
-        break;
-      default:
-        backgroundColor = '';
-        color = '';
-        break;
-    }
-
-    return { 'background-color': backgroundColor, 'color': color };
   }
 
   handlePageEvent(event: PageEvent) {
