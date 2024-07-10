@@ -50,7 +50,7 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
   protected privilegeServ = inject(PrivilegesService);
 
   dataSource = new MatTableDataSource<Company>([]);
-  displayedColumns: string[] = ['SerialNum', 'Company', 'Actions'];
+  displayedColumns: string[] = ['SerialNum', 'Company', 'Domain', 'Code', 'AddedBy', 'Actions'];
   @ViewChild(MatSort) sort!: MatSort;
   companyList: Company[]= [];
   // paginator

@@ -7,7 +7,6 @@
 .table-wrapper {
   flex: 1;
   overflow: auto;
-  // padding:  0px 4px 4px 4px;
 }
 
 table {
@@ -39,7 +38,11 @@ thead {
   padding-right: 24px;
 }
 
-.mat-column-SerialNum {
+.mat-column-SerialNum,
+.mat-column-Company,
+.mat-column-Domain,
+.mat-column-Code,
+.mat-column-AddedBy {
   border-right: 1px solid lightgray;
 }
 
@@ -123,7 +126,6 @@ thead {
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  // height: 2rem;
   padding-top: 2px;
   top: 0;
 }
@@ -159,6 +161,7 @@ ul.breadcrumb li a:hover {
 .odd-row {
   background-color: rgb(213, 231, 231);
 }
+
 .edit-icon,
 .delete-icon {
   color: rgb(99, 98, 98);
