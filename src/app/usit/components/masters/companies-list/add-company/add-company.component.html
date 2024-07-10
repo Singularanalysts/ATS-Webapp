@@ -19,7 +19,7 @@
 
         <mat-form-field class="companyname-field">
           <mat-label>Company Domain</mat-label>
-          <input title="" matInput formControlName="domain" maxlength="15">
+          <input placeholder="Ex: narveetech.com" matInput formControlName="domain" maxlength="15">
           <!-- errors -->
           <mat-error class="error-message" *ngIf="controls['domain'].errors && controls['domain'].errors['required']">Company Domain is required</mat-error>
         </mat-form-field>
