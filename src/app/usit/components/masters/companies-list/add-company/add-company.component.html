@@ -16,6 +16,20 @@
           <!-- errors -->
           <mat-error class="error-message" *ngIf="controls['companyname'].errors && controls['companyname'].errors['required']">Company Name is required</mat-error>
         </mat-form-field>
+
+        <mat-form-field class="companyname-field">
+          <mat-label>Company Domain</mat-label>
+          <input title="" matInput formControlName="domain" maxlength="15">
+          <!-- errors -->
+          <mat-error class="error-message" *ngIf="controls['domain'].errors && controls['domain'].errors['required']">Company Domain is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="companyname-field">
+          <mat-label>Company Code</mat-label>
+          <input matInput placeholder="Ex: NT for Narvee Tech" formControlName="code" maxlength="15">
+          <!-- errors -->
+          <mat-error class="error-message" *ngIf="controls['code'].errors && controls['code'].errors['required']">Company Code is required</mat-error>
+        </mat-form-field>
         
         <mat-form-field class="description-field">
           <mat-label>Description</mat-label>

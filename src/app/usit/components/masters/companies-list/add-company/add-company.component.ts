@@ -65,6 +65,8 @@ export class AddCompanyComponent {
       companyid : [data ? data.companyid : ''],
       companyname: [data ? data.companyname : '', Validators.required],
       description: [data ? data.description : ''],
+      domain: [data ? data.domain : '', Validators.required],
+      code: [data ? data.code : '', Validators.required],
     });
   }
 
@@ -92,6 +94,8 @@ export class AddCompanyComponent {
       companyname: this.companyForm.get('companyname')!.value,
       description: this.companyForm.get('description')!.value,
       companyid: this.companyForm.get('companyid')!.value,
+      domain: this.companyForm.get('domain')!.value,
+      code: this.companyForm.get('companyid')!.value.toUpperCase(),
       addedby: userId,
     };
     const updateObj = {
@@ -99,6 +103,8 @@ export class AddCompanyComponent {
       companyname: this.companyForm.get('companyname')!.value,
       description: this.companyForm.get('description')!.value,
       companyid: this.companyForm.get('companyid')!.value,
+      domain: this.companyForm.get('domain')!.value,
+      code: this.companyForm.get('companyid')!.value.toUpperCase(),
       updatedby: userId,
     };
     const saveObj = this.data.actionName === "update-company" ? updateObj : addObj;
