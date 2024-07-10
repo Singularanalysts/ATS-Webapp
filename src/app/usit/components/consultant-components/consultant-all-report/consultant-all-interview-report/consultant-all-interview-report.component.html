@@ -1,11 +1,6 @@
 <div mat-dialog-content style="padding: 10px;">
     <div style="display: flex; justify-content: space-between; align-items: center">
-        <h1 mat-dialog-title>Inteviews </h1>
-        <!-- <div style="display: flex; gap: 8px">
-            <button mat-raised-button style="background-color: #774caf; color: white">
-                Close
-            </button>
-        </div> -->
+        <h1 mat-dialog-title>Interviews </h1>
     </div>
 
     <div class="row" oncopy="return false" onpaste="return false" oncut="return false"
@@ -15,14 +10,14 @@
                 <tr>
                     <th>S.No</th>
                     <th>Interview No</th>
-                    <th>Consultant Name</th>
+                    <!-- <th>Consultant Name</th> -->
                     <th>Date & Time Of Interview</th>
                     <th>Round</th>
                     <th>Mode</th>
                     <th>Vendor</th>
                     <th>Client</th>
                     <th>Date Of Submission</th>
-                    <th>Employee Name</th>
+                    <!-- <th>Employee Name</th> -->
                     <th>Interview Status</th>
                 </tr>
             </thead>
@@ -35,16 +30,16 @@
                         {{ data.interviewno }}
                     </td>
 
-                    <td>
+                    <!-- <td>
                         {{ data.name }}
-                    </td>
+                    </td> -->
                     <td>{{ data.interview_date }} ({{ data.time_zone }})</td>
                     <td>{{ data.round }}</td>
                     <td>{{ data.mode }}</td>
                     <td>{{ data.vendor }}</td>
                     <td>{{ data.endclient }}</td>
                     <td>{{ data.createddate }}</td>
-                    <td>{{ data.pseudoname }}</td>
+                    <!-- <td>{{ data.pseudoname }}</td> -->
                     <td>{{ data.interview_status }}</td>
                 </tr>
             </tbody>
