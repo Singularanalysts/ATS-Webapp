@@ -24,7 +24,7 @@ export class EmpSubmissionsListComponent {
     'SerialNum',
     'Dos',
     'submissionId',
-    'Consultant',
+    // 'Consultant',
     'Requirement',
     'ImplementationPartner',
     'EndClient',
