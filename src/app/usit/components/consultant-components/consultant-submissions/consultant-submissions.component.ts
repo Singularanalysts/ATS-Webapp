@@ -46,7 +46,7 @@ export class ConsultantSubmissionsComponent implements OnInit, OnDestroy {
     'SerialNum',
     'Dos',
     'Id',
-    'Consultant',
+    // 'Consultant',
     'Requirement',
     'ImplementationPartner',
     'EndClient',
