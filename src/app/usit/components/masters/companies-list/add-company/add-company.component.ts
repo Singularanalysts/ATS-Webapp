@@ -46,6 +46,9 @@ export class AddCompanyComponent {
   private snackBarServ = inject(SnackBarService);
   protected isFormSubmitted: boolean = false;
   allowAction = false;
+  companyObj: any;
+  entity: any;
+  message!: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
@@ -55,6 +58,14 @@ export class AddCompanyComponent {
   ngOnInit(): void {
     if(this.data.actionName === "update-company"){
       this.initializeCompanyForm(this.data.companyData);
+      this.companyServ.getCompanyById(this.data.companyData.companyid).subscribe({
+        next: (response: any) => {
+          if (response && response.data) {
+            this.companyObj = response.data;
+            this.initializeCompanyForm(this.companyObj);
+          }
+        }
+      });
     }else{
       this.initializeCompanyForm(this.data.companyData);
     }
@@ -62,11 +73,13 @@ export class AddCompanyComponent {
 
   private initializeCompanyForm(data : any) {
     this.companyForm = this.formBuilder.group({
-      companyid : [data ? data.companyid : ''],
+      companyid: [data ? data.companyid : ''],
       companyname: [data ? data.companyname : '', Validators.required],
       description: [data ? data.description : ''],
       domain: [data ? data.domain : '', Validators.required],
       code: [data ? data.code : '', Validators.required],
+      addedby: [data ? data.addedby : localStorage.getItem('userid'), Validators.required],
+      updatedby: [this.data.actionName === "update-company" ? localStorage.getItem('userid') : '0'],
     });
   }
 
@@ -89,26 +102,8 @@ export class AddCompanyComponent {
       this.displayFormErrors();
       return;
     }
-    const userId = localStorage.getItem('userid');
-    const addObj = {
-      companyname: this.companyForm.get('companyname')!.value,
-      description: this.companyForm.get('description')!.value,
-      companyid: this.companyForm.get('companyid')!.value,
-      domain: this.companyForm.get('domain')!.value,
-      code: this.companyForm.get('companyid')!.value.toUpperCase(),
-      addedby: userId,
-    };
-    const updateObj = {
-      ...this.data.companyData,
-      companyname: this.companyForm.get('companyname')!.value,
-      description: this.companyForm.get('description')!.value,
-      companyid: this.companyForm.get('companyid')!.value,
-      domain: this.companyForm.get('domain')!.value,
-      code: this.companyForm.get('companyid')!.value.toUpperCase(),
-      updatedby: userId,
-    };
-    const saveObj = this.data.actionName === "update-company" ? updateObj : addObj;
 
+    const saveObj = this.getSaveData();
     this.companyServ.addOrUpdateCompany(saveObj, this.data.actionName).subscribe(
       {
       next:(data: any) => {
@@ -131,12 +126,51 @@ export class AddCompanyComponent {
     }
   });
   }
+  getSaveData() {
+    const codeControl = this.companyForm.get('code');
+    if (codeControl && codeControl.value) {
+      const companyCode = codeControl.value.toUpperCase();
+      codeControl.setValue(companyCode);
+    }
+    if (this.data.actionName === 'update-company') {
+      return { ...this.entity, ...this.companyForm.value }
+    }
+    return this.companyForm.value;
+  }
 
   displayFormErrors() {
     Object.keys(this.companyForm.controls).forEach((field) => {
       const control = this.companyForm.get(field);
       if (control && control.invalid) {
         control.markAsTouched();
+      }
+    });
+  }
+
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+
+  emailDuplicate(fieldName: string, event: any) {
+    const value = event.target.value;
+    this.companyServ.duplicateCheck(fieldName, value).subscribe((response: any) => {
+      if (response.status == 'success') {
+        this.message = '';
+      } else if (response.status == 'fail') {
+        const duplicateValue = this.companyForm.get(fieldName);
+        duplicateValue!.setValue('');
+        this.dataToBeSentToSnackBar.message = 'Record already available with given value';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      } else {
+        this.dataToBeSentToSnackBar.message = 'Internal Server Error';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
     });
   }

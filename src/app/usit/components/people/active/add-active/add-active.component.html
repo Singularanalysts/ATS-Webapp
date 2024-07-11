@@ -183,6 +183,15 @@
           <input matInput formControlName="lcanumber" maxlength="30">
         </mat-form-field>
 
+        <!-- Physical Address -->
+        <mat-form-field appearance="fill">
+          <mat-label>Physical Address</mat-label>
+          <input matInput formControlName="physicaladdress" ngx-gp-autocomplete [options]='options'
+            (onAddressChange)="handlePermanentAddressChange($event)" maxlength="140">
+          <mat-error *ngIf="h1bForm.get('physicaladdress')?.hasError('required')">Physical Address is
+            required</mat-error>
+        </mat-form-field>
+
         <!-- Company -->
         <mat-form-field appearance="fill">
           <mat-label>Select Company</mat-label>

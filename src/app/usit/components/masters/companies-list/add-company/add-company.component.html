@@ -9,24 +9,23 @@
   
     <div class="content" mat-dialog-content>
       <form class="add-company-form" [formGroup]="companyForm" name="company-form" >
-        <input type="hidden" formControlName="companyid">
         <mat-form-field class="companyname-field">
           <mat-label>Company Name</mat-label>
-          <input title="" matInput formControlName="companyname" maxlength="15">
+          <input title="" matInput formControlName="companyname" (change)="emailDuplicate('companyname', $event)"  maxlength="35">
           <!-- errors -->
           <mat-error class="error-message" *ngIf="controls['companyname'].errors && controls['companyname'].errors['required']">Company Name is required</mat-error>
         </mat-form-field>
 
         <mat-form-field class="companyname-field">
           <mat-label>Company Domain</mat-label>
-          <input title="" matInput formControlName="domain" maxlength="15">
+          <input placeholder="Ex: narveetech.com" matInput formControlName="domain" (change)="emailDuplicate('domain', $event)" maxlength="35">
           <!-- errors -->
           <mat-error class="error-message" *ngIf="controls['domain'].errors && controls['domain'].errors['required']">Company Domain is required</mat-error>
         </mat-form-field>
 
         <mat-form-field class="companyname-field">
           <mat-label>Company Code</mat-label>
-          <input matInput placeholder="Ex: NT for Narvee Tech" formControlName="code" maxlength="15">
+          <input matInput placeholder="Ex: NT for Narvee Tech"  formControlName="code" (change)="emailDuplicate('code', $event)" maxlength="5">
           <!-- errors -->
           <mat-error class="error-message" *ngIf="controls['code'].errors && controls['code'].errors['required']">Company Code is required</mat-error>
         </mat-form-field>
