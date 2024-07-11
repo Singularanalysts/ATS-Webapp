@@ -118,7 +118,6 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
       )
   }
 
-
   applyFilter(event: any) {
     const keyword = event.target.value;
     if (keyword != '') {
@@ -155,7 +154,7 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
       this.sortOrder = event.direction;
     
     if (event.direction != ''){
-    this.getAll();
+      this.getAll();
     }
   }
 
@@ -175,7 +174,7 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
     const dialogRef = this.dialogServ.openDialogWithComponent(AddCompanyComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if(dialogRef.componentInstance.allowAction){
-        this.getAllCompanies();
+        this.getAll(this.currentPageIndex + 1);
       }
     })
   }
@@ -197,7 +196,7 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
     const dialogRef = this.dialogServ.openDialogWithComponent(AddCompanyComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if(dialogRef.componentInstance.allowAction){
-        this.getAllCompanies();
+        this.getAll(this.currentPageIndex + 1)
       }
     })
 
@@ -240,7 +239,7 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
                     dataToBeSentToSnackBar
                   );
                   // call get api after deleting a role
-                  this.getAllCompanies();
+                  this.getAll();
                 } else {
                   dataToBeSentToSnackBar.message = resp.message;
                   this.snackBarServ.openSnackBarFromComponent(
@@ -257,37 +256,6 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
 
   onFilter(event: any) {
     this.dataSource.filter = event.target.value;
-  }
-
-  // onSort(event: any) {
-  //   const sortDirection = event.direction;
-  //   const sortColumn = event.active;
-
-  //   if (sortDirection !== null && sortDirection !== undefined) {
-  //     this.dataSource.data = this.sortData(this.dataSource.data, sortColumn, sortDirection);
-  //   } else {
-  //     this.dataSource.data = [...this.companyList];
-  //   }
-  // }
-
-  private sortData(data: Company[], sortColumn: string, sortDirection: string): Company[] {
-    return data.sort((a, b) => {
-      switch (sortColumn) {
-        case 'Company':
-          const valueA = (a.companyname as string) || '';
-          const valueB = (b.companyname as string) || '';
-          if (sortDirection === 'asc') {
-            return valueA.localeCompare(valueB);
-          } else if (sortDirection === 'desc') {
-            return valueB.localeCompare(valueA);
-          } else {
-            return valueA.localeCompare(valueB);
-          }
-
-        default:
-          return 0;
-      }
-    });
   }
 
   getRowClass(row: any): string {

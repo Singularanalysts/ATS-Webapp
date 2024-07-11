@@ -35,6 +35,11 @@ export class CompanyService {
     return this.apiServ.delete("auth/company/delete/" + id);
   }
 
+  //duplicate check
+  duplicateCheck(fieldName: any, input: any) {
+    return this.apiServ.get(`auth/company/duplicateCheck/${fieldName}/${input}`);
+  }
+
   //register or update company
   addOrUpdateCompany(entity: any, action: string) {
     return action === "update-company" ? this.updateCompany(entity) : this.addCompany(entity);
