@@ -146,6 +146,7 @@ export class AddActiveComponent implements OnInit {
       permReferenceNumber: [h1bData ? h1bData.permReferenceNumber : ''],
       i140ReceiptNumber: [h1bData ? h1bData.i140ReceiptNumber : ''],
       terminationorloadate: [ h1bData ? h1bData.terminationorloadate : ''],
+      physicaladdress: [h1bData ? h1bData.physicaladdress : '', Validators.required],
       user: localStorage.getItem('userid'),
     });
 
@@ -196,6 +197,10 @@ export class AddActiveComponent implements OnInit {
 
   handleWorkAddressChange(address: any) {
     this.h1bForm.controls['stateofworking'].setValue(address.formatted_address);
+  }
+
+  handlePermanentAddressChange(address: any) {
+    this.h1bForm.controls['physicaladdress'].setValue(address.formatted_address);
   }
 
    // DOCS UPLOAD

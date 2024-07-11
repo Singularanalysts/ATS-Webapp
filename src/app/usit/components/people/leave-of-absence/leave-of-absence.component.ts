@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -94,6 +94,7 @@ export class LeaveOfAbsenceComponent implements OnInit, OnDestroy{
    private destroyed$ = new Subject<void>();
    private h1bServ = inject(H1bImmigrantService);
    status: any = 'leave of absence';
+   public dialog= inject(MatDialog);
    
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
@@ -274,21 +275,13 @@ export class LeaveOfAbsenceComponent implements OnInit, OnDestroy{
   /**
    * go to requirement-info
    */
-  goToImgInfo(element: any){
-    const actionData = {
-      title: `${element.employeename}`,
-      id: element.applicantid,
-      actionName: 'img-info',
-    };
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '62dvw';
-    dialogConfig.disableClose = false;
-    dialogConfig.panelClass = 'img-info';
-    dialogConfig.data = actionData;
-
-   this.dialogServ.openDialogWithComponent(
-      ImmigrantInfoComponent,
-      dialogConfig
-    );
+  goToImgInfo(element: any) {
+    this.dialog.open(ImmigrantInfoComponent,
+      {
+        width: '40%',
+        data: {
+          imginfo: element
+        },
+      });
   }
 }

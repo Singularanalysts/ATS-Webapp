@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RequirementService } from 'src/app/usit/services/requirement.service';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +12,7 @@ import { DialogService } from 'src/app/services/dialog.service';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { Subject, takeUntil } from 'rxjs';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { VisaService } from 'src/app/usit/services/visa.service';
 
 
 @Component({
@@ -45,17 +45,28 @@ export class ImmigrantInfoComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+  private visaServ = inject(VisaService);
+  filesArr!: any;
 
   ngOnInit(): void {
     this.getImgInfo();
   }
 
   getImgInfo() {
-    this.h1bServ.getH1bById(this.data.id).subscribe(
+    this.h1bServ.getH1bById(this.data.imginfo.applicantid).subscribe(
       (resp: any) => {
         if(resp.status === 'success'){
           if(resp.data){
             this.dataSource = resp.data;
+            this.filesArr = resp.data.i797doc;
+            const visaId = this.dataSource.visa;
+            if (visaId) {
+              this.visaServ.getVisaById(visaId).subscribe({
+                next: (res: any) => {
+                  this.dataSource.visa = res.data.visastatus;
+                }
+              })
+            }
           }
         }
       }
@@ -82,6 +93,27 @@ export class ImmigrantInfoComponent implements OnInit {
        }
        );
 
+  }
+
+  type:any
+  downloadMultiplefiles(fileData: FileData) {
+    this.type = fileData.filename;
+    var items = this.type.split(".");
+    this.fileService
+      .downloadMultipleFiles(fileData.docid)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          a.click();
+        }
+        else {
+          saveAs(blob, fileData.filename)
+        }
+      }
+      );
   }
 
   deletefile(id: number, doctype: string) {
@@ -132,4 +164,13 @@ export class ImmigrantInfoComponent implements OnInit {
         },
       });
   }
+}
+
+export class FileData {
+  docid!: number;
+  applicantid!: number;
+  filename?: string;
+  contentType?: string;
+  size?: number;
+  eid!: number;
 }

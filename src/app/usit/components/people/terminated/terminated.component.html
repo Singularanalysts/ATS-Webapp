@@ -39,10 +39,9 @@
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Name" mat-sort-header> Name
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{element?.employeename}}
-                        <!-- (click)="goToImgInfo(element)" <span class="consultant-id">
-                         {{element?.employeename}}
-                        </span> -->
+                         <span class="consultant-id" (click)="goToImgInfo(element)">
+                         {{element?.employeename | titlecase}}
+                        </span>
                     </td>
                 </ng-container>
 
@@ -61,7 +60,7 @@
                 <!-- Physical Address -->
                 <ng-container matColumnDef="PhysicalAddress">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by PhysicalAddress" mat-sort-header> Physical Address </th>
-                    <td mat-cell *matCellDef="let element"> {{element?.stateofworking}}
+                    <td mat-cell *matCellDef="let element"> {{element?.physicaladdress}}
                     </td>
                 </ng-container>
 
