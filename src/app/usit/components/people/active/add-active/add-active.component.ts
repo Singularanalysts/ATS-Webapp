@@ -147,7 +147,8 @@ export class AddActiveComponent implements OnInit {
       i140ReceiptNumber: [h1bData ? h1bData.i140ReceiptNumber : ''],
       terminationorloadate: [ h1bData ? h1bData.terminationorloadate : ''],
       physicaladdress: [h1bData ? h1bData.physicaladdress : '', Validators.required],
-      user: localStorage.getItem('userid'),
+      addedby: [h1bData ? h1bData.addedby : localStorage.getItem('userid')],
+      updatedby: [this.data.actionName === "edit-active" ? localStorage.getItem('userid') : null ]
     });
 
     this.h1bForm.get('status').valueChanges.subscribe((status: string) => {

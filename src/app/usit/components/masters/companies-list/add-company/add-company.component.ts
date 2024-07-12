@@ -78,7 +78,7 @@ export class AddCompanyComponent {
       description: [data ? data.description : ''],
       domain: [data ? data.domain : '', Validators.required],
       code: [data ? data.code : '', Validators.required],
-      addedby: [data ? data.addedby : localStorage.getItem('userid'), Validators.required],
+      addedby: [data ? data.addedby : localStorage.getItem('userid')],
       updatedby: [this.data.actionName === "update-company" ? localStorage.getItem('userid') : '0'],
     });
   }
