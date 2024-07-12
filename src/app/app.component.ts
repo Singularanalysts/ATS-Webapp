@@ -24,12 +24,11 @@ export class AppComponent implements OnInit, OnDestroy {
   public _router = inject(Router);
   loaderServ = inject(LoaderService);
   isLoading$ = this.loaderServ.isLoading$;
-  private websocketService = inject(WebsocketService);
   currentURL: string = '';
+  
   ngOnInit(): void {
     this.currentURL = window.location.pathname;
-    this.isUserSignedIn = this.permServ.isUserSignedin()
-    this.websocketService.connect();
+    this.isUserSignedIn = this.permServ.isUserSignedin();
   }
 
   private getCurrentURL() {

@@ -14,7 +14,7 @@ export class WebsocketService {
   constructor() {}
 
   public connect() {
-    this.socket = new WebSocket('ws://69.216.19.140:1122/websockets/notifications');
+    this.socket = new WebSocket('ws://50.28.107.39:1122/websockets/notifications');
 
     this.socket.onopen = (event) => {
       // console.log('WebSocket connection opened:', event);
