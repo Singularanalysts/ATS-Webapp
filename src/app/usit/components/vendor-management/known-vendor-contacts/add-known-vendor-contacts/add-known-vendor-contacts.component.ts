@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -23,7 +22,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { SearchPipe } from 'src/app/pipes/search.pipe';
-import { Vms } from 'src/app/usit/models/vms';
 import { MatCardModule } from '@angular/material/card';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
@@ -130,8 +128,10 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
       vendor: [hotlistProviderData ? hotlistProviderData.vendor : '', [Validators.required]],
       employeeName: [hotlistProviderData ? hotlistProviderData.employeeName : '', [Validators.required]],
       email: [hotlistProviderData ? hotlistProviderData.email : '', [ Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
-      referenceContactNumber: [hotlistProviderData ? hotlistProviderData.referenceContactNumber : '', [Validators.required]],
-      client: [hotlistProviderData ? hotlistProviderData.client : '', [Validators.required]],
+      referenceContactNumber: [hotlistProviderData ? hotlistProviderData.referenceContactNumber : ''],
+      client: [hotlistProviderData ? hotlistProviderData.client : ''],
+      linkedinProfilesUrl: [hotlistProviderData ? hotlistProviderData.linkedinProfilesUrl : '', [Validators.required]],
+      comments: [hotlistProviderData ? hotlistProviderData.comments : ''],
       addedBy: [hotlistProviderData ? hotlistProviderData.addedBy : localStorage.getItem('userid')],
       updatedBy: [this.hotlistObj.updatedBy],
       user: localStorage.getItem('userid'),
@@ -224,6 +224,9 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
         this.hotlistObj.id = this.data.KnownVendorContactData.id;
         this.hotlistObj.employeeName = formVal.employeeName;
         this.hotlistObj.referenceContactNumber = formVal.referenceContactNumber;
+        this.hotlistObj.linkedinProfilesUrl = formVal.linkedinProfilesUrl;
+        this.hotlistObj.comments = formVal.comments;
+        this.hotlistObj.client = formVal.client;
       })
       return this.hotlistObj
     }
@@ -241,14 +244,6 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
   }
 
   emailDuplicate(event: any) {
-
-  }
-
-  camelCase(event: any) {
-
-  }
-
-  convertToLowerCase(event: any) {
 
   }
 
@@ -275,5 +270,7 @@ export class KnownVendorContact {
   client!: any;
   createddate!: string;
   addedBy = localStorage.getItem('userid');
-  updatedBy !:  any;
+  updatedBy!:  any;
+  linkedinProfilesUrl!: string;
+  comments!: string;
 }
