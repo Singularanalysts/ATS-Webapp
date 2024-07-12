@@ -52,6 +52,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.role  = localStorage.getItem('role');
     this.department  = localStorage.getItem('department');
+    this.websocketService.connect();
     this.userManagementServ.getNotifications().subscribe({
       next: (res: any) => {
         this.unseenNotificationCount = res.data.unSeenCount;
