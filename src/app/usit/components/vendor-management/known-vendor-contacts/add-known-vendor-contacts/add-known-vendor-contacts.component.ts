@@ -132,8 +132,8 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
       client: [hotlistProviderData ? hotlistProviderData.client : ''],
       linkedinProfilesUrl: [hotlistProviderData ? hotlistProviderData.linkedinProfilesUrl : '', [Validators.required]],
       comments: [hotlistProviderData ? hotlistProviderData.comments : ''],
-      addedBy: [hotlistProviderData ? hotlistProviderData.addedBy : localStorage.getItem('userid')],
-      updatedBy: [this.hotlistObj.updatedBy],
+      addedBy: [hotlistProviderData && hotlistProviderData.addedBy ? hotlistProviderData.addedBy : localStorage.getItem('userid')],
+      updatedby: [this.data.actionName === "edit-known-vendor-contact" ? localStorage.getItem('userid') : null],
       user: localStorage.getItem('userid'),
     });
 
@@ -269,7 +269,7 @@ export class KnownVendorContact {
   email!: string;
   client!: any;
   createddate!: string;
-  addedBy = localStorage.getItem('userid');
+  addedBy!: any;
   updatedBy!:  any;
   linkedinProfilesUrl!: string;
   comments!: string;

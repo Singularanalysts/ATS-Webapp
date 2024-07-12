@@ -1,5 +1,5 @@
 export class H1bImmigrantInfo {
-    employeename !: string;
+    employeename!: string;
     everifydoc!: string;
     i9doc!: string;
     email!: string;
@@ -18,8 +18,9 @@ export class H1bImmigrantInfo {
     visa_status!: string;
     updateddate!: number;
     location!: string;
-    user !: number;
+    addedby!: any;
+    updatedby!: any
     gcstatus!: string;
     doj!: string;
     employeetype!: string
-}
+  }
