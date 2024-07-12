@@ -91,8 +91,10 @@ export class AddActiveComponent implements OnInit {
   showPermField: boolean = false;
   showI140Field: boolean = false;
   filesArr!: any;
+  userid!: string | null;
 
   ngOnInit(): void {
+    this.userid = localStorage.getItem('userid');
     this.getVisas();
     this.getCompanies();
     if(this.data.actionName === "edit-active"){
@@ -105,7 +107,7 @@ export class AddActiveComponent implements OnInit {
         }
       );
     } else {
-      this.initializeH1bForm(new H1bImmigrantInfo());
+      this.initializeH1bForm(null);
     }
   }
 
@@ -147,8 +149,8 @@ export class AddActiveComponent implements OnInit {
       i140ReceiptNumber: [h1bData ? h1bData.i140ReceiptNumber : ''],
       terminationorloadate: [ h1bData ? h1bData.terminationorloadate : ''],
       physicaladdress: [h1bData ? h1bData.physicaladdress : '', Validators.required],
-      addedby: [h1bData ? h1bData.addedby : localStorage.getItem('userid')],
-      updatedby: [this.data.actionName === "edit-active" ? localStorage.getItem('userid') : null ]
+      addedby: [h1bData && h1bData.addedby ? h1bData.addedby : this.userid],
+      updatedby: [this.data.actionName === "edit-active" ? this.userid : null]
     });
 
     this.h1bForm.get('status').valueChanges.subscribe((status: string) => {
