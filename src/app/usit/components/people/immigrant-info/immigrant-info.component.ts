@@ -92,7 +92,6 @@ export class ImmigrantInfoComponent implements OnInit {
          }
        }
        );
-
   }
 
   type:any
@@ -102,7 +101,7 @@ export class ImmigrantInfoComponent implements OnInit {
     this.fileService
       .downloadMultipleFiles(fileData.docid)
       .subscribe(blob => {
-        if (items[1] == 'pdf' || items[1] == 'PDF') {
+        if (items[items.length - 1] == 'pdf' || items[items.length - 1] == 'PDF') {
           var fileURL: any = URL.createObjectURL(blob);
           var a = document.createElement("a");
           a.href = fileURL;

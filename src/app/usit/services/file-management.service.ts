@@ -85,6 +85,7 @@ export class FileManagementService {
       responseType: 'blob',
     });
   }
+  
   downloadConsultantfile(id: number): Observable<Blob> {
     return this.http.get(`${this.apiServ.apiUrl}consultant/downloadfiles/${id}`, {
       responseType: 'blob',
