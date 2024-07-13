@@ -211,14 +211,14 @@ export class AddActiveComponent implements OnInit {
    passportError: boolean = false;
    everifyError: boolean = false;
    i9Error: boolean = false;
-  //  i797Error: boolean = false;
    i94Error: boolean = false;
    ssnError: boolean = false;
    w2Error: boolean = false;
+   lcaCopyError: boolean = false;
    passportFileNameLength: boolean = false;
    everifyFileNameLength: boolean = false;
    i9FileNameLength: boolean = false;
-  //  i797FileNameLength: boolean = false;
+   lcaCopyFileNameLength: boolean = false;
    i94FileNameLength: boolean = false;
    ssnFileNameLength: boolean = false;
    w2FileNameLength: boolean = false;
@@ -322,31 +322,31 @@ export class AddActiveComponent implements OnInit {
     }
   }
  
-  //  @ViewChild('I797doc')
-  //  I797doc: any = ElementRef;
-  //  I797docUpload!: any;
-  //  uploadI797(event: any) {
-  //    this.I797docUpload = event.target.files[0];
-  //    const file = event.target.files[0];
-  //    const fileSizeInKB = Math.round(file.size / 1024);
-  //    var items = file.name.split(".");
-  //    const str = items[0];
-  //    this.i797Error = false;
-  //    this.i797FileNameLength = false;
-  //    if (str.length > 20) {
-  //      this.i797FileNameLength = true;
-  //    }
+   @ViewChild('lcaCopy')
+   lcaCopydoc: any = ElementRef;
+   lcaCopydocUpload!: any;
+   uploadLcaCopy(event: any) {
+     this.lcaCopydocUpload = event.target.files[0];
+     const file = event.target.files[0];
+     const fileSizeInKB = Math.round(file.size / 1024);
+     var items = file.name.split(".");
+     const str = items[0];
+     this.lcaCopyError = false;
+     this.lcaCopyFileNameLength = false;
+     if (str.length > 20) {
+       this.lcaCopyFileNameLength = true;
+     }
  
-  //    if (fileSizeInKB > 2048) {
-  //      this.flg = false;
-  //      this.i797Error = true;
-  //      return;
-  //    }
-  //    else {
-  //      this.i797Error = false;
-  //      this.flg = true;
-  //    }
-  //  }
+     if (fileSizeInKB > 2048) {
+       this.flg = false;
+       this.lcaCopyError = true;
+       return;
+     }
+     else {
+       this.lcaCopyError = false;
+       this.flg = true;
+     }
+   }
 
   @ViewChild('i797doc')
   I797doc!: ElementRef;
@@ -521,9 +521,9 @@ export class AddActiveComponent implements OnInit {
       formData.append('i9doc', this.i9docUpload, this.i9docUpload.name);
     }
 
-    // if (this.I797docUpload != null) {
-    //   formData.append('I797doc', this.I797docUpload, this.I797docUpload.name);
-    // }
+    if (this.lcaCopydocUpload != null) {
+      formData.append('lcaCopy', this.lcaCopydocUpload, this.lcaCopydocUpload.name);
+    }
 
     if (this.i94docUpload != null) {
       formData.append('i94doc', this.i94docUpload, this.i94docUpload.name);

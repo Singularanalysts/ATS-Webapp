@@ -115,15 +115,13 @@
                         </td>
                     </tr>
 
-                    <tr *ngIf="filesArr !== null">
-                        <ng-container *ngFor="let data of filesArr">
-                            <td *ngIf="dataSource && dataSource.i797doc !== null">{{data.filename}}</td>
-                            <td *ngIf="dataSource && dataSource.i797doc !== null">
-                                <button mat-icon-button type="button" class="action-button-ed" (click)="downloadMultiplefiles(data)">
-                                    <mat-icon>file_download</mat-icon>
-                                </button>
-                            </td>
-                        </ng-container>
+                    <tr *ngFor="let data of filesArr">
+                        <td *ngIf="dataSource && dataSource.i797doc !== null">{{data.filename}}</td>
+                        <td *ngIf="dataSource && dataSource.i797doc !== null">
+                            <button mat-icon-button type="button" class="action-button-ed" (click)="downloadMultiplefiles(data)">
+                                <mat-icon>file_download</mat-icon>
+                            </button>
+                        </td>
                     </tr>
                     
 
@@ -142,6 +140,16 @@
                         <td *ngIf="dataSource && dataSource.ssndoc !==null ">
                             <button mat-icon-button type="button" class="action-button-ed"
                             (click)="downloadfile(dataSource.applicantid,dataSource.ssndoc,'ssndoc')">
+                              <mat-icon>file_download</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td *ngIf="dataSource && dataSource.lcaCopy !== null ">{{dataSource.lcaCopy}}</td>
+                        <td *ngIf="dataSource && dataSource.lcaCopy !==null ">
+                            <button mat-icon-button type="button" class="action-button-ed"
+                            (click)="downloadfile(dataSource.applicantid,dataSource.lcaCopy,'lcaCopy')">
                               <mat-icon>file_download</mat-icon>
                             </button>
                         </td>

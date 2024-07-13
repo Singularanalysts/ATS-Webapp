@@ -398,25 +398,6 @@
       </div>
 
       <div class="form-column-right">
-        <!-- I797 Upload -->
-        <!-- <mat-form-field class="upload">
-          <mat-label for="i797">I797</mat-label>
-          <div class="upload-inp-container">
-            <input matInput readonly name="I797doc" class="file-input"
-              [value]="I797docUpload ? I797docUpload .name : 'No file chosen'" />
-            <label for="I797doc" class="browse-button-label">
-              <button type="button" mat-icon-button (click)="I797doc.click()"><mat-icon>upload_file</mat-icon></button>
-            </label>
-            <input type="file" #I797doc id="I797docUploadFile" (change)="uploadI797($event)" name="I797docUploadFile"
-              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              style="display: none;" />
-          </div>
-          <mat-hint *ngIf="i797Error" style="color: #f44336; font-size: 12px;">I797 size should be less than 2
-            mb</mat-hint>
-          <mat-hint *ngIf="i797FileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
-            15-20 characters before upload</mat-hint>
-        </mat-form-field> -->
-
         <mat-form-field class="upload">
           <mat-label for="i797">I797</mat-label>
           <div class="upload-inp-container">
@@ -468,6 +449,25 @@
           <mat-hint *ngIf="ssnError" style="color: #f44336; font-size: 12px;">SSN size should be less than 2
             mb</mat-hint>
           <mat-hint *ngIf="ssnFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
+            15-20 characters before upload</mat-hint>
+        </mat-form-field>
+
+        <!-- LCA Copy Upload -->
+        <mat-form-field class="upload">
+          <mat-label for="lcaCopy">LCA Copy</mat-label>
+          <div class="upload-inp-container">
+            <input matInput readonly name="lcaCopydoc" class="file-input"
+              [value]="lcaCopydocUpload ? lcaCopydocUpload.name : 'No file chosen'" />
+            <label for="lcaCopydoc" class="browse-button-label">
+              <button type="button" mat-icon-button (click)="lcaCopydoc.click()"><mat-icon>upload_file</mat-icon></button>
+            </label>
+            <input type="file" #lcaCopydoc id="lcaCopydocUploadFile" (change)="uploadLcaCopy($event)" name="lcaCopydocUploadFile"
+              accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              style="display: none;" />
+          </div>
+          <mat-hint *ngIf="lcaCopyError" style="color: #f44336; font-size: 12px;">I797 size should be less than 2
+            mb</mat-hint>
+          <mat-hint *ngIf="lcaCopyFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename to
             15-20 characters before upload</mat-hint>
         </mat-form-field>
       </div>
@@ -571,6 +571,18 @@
           <td *ngIf="entity && entity.w2Doc !==null ">
             <button mat-icon-button type="button" class="action-button-ed"
               (click)="deletefile(entity.applicantid,'w2Doc')">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+
+        <tr>
+          <td *ngIf="entity && entity.lcaCopy !==null "><a class="download-file"
+              (click)="downloadfile(entity.applicantid,entity.lcaCopy,'lcaCopy')">{{entity.lcaCopy}}</a>
+          </td>
+          <td *ngIf="entity && entity.lcaCopy !==null ">
+            <button mat-icon-button type="button" class="action-button-ed"
+              (click)="deletefile(entity.applicantid,'lcaCopy')">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
