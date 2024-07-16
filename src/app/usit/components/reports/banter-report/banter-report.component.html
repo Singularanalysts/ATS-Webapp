@@ -53,6 +53,7 @@
               <mat-select formControlName="groupby" (selectionChange)="onDepartmentChange($event)">
                 <mat-option value="Bench sales">Bench Sales</mat-option>
                 <mat-option value="Recruiting">Recruiting</mat-option>
+                <mat-option value="Sourcing">Sourcing</mat-option>
               </mat-select>
               <mat-error
                 *ngIf="sourcingreport.get('groupby')!.hasError('required')"
