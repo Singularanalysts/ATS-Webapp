@@ -1,0 +1,245 @@
+<div class="candidate-container">
+    <ul class="breadcrumb">
+      <li><a (click)="navigateToDashboard()">Home</a></li>
+      <li class="last">Candidate Report</li>
+    </ul>
+    <div class="candidate-inner-container" style="display: block">
+      <div class="candidate-search-container">
+        <form [formGroup]="candidatereport" (ngSubmit)="onSubmit()">
+          <mat-card>
+            <mat-card-content
+              style="display: flex; align-items: center; justify-content: center; gap: 10px"
+            >
+              <mat-form-field color="accent">
+                <mat-label>Choose Starting Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker1"
+                  class="form-control"
+                  formControlName="startDate"
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker1"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+                <mat-error
+                  *ngIf="candidatereport.get('startDate')!.hasError('required')"
+                  >Starting Date is required</mat-error
+                >
+              </mat-form-field>
+    
+              <mat-form-field color="accent">
+                <mat-label>Choose Ending Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker2"
+                  class="form-control"
+                  formControlName="endDate"
+                />
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker2"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker2 color="primary"></mat-datepicker>
+                <mat-error
+                  *ngIf="candidatereport.get('endDate')!.hasError('required')"
+                  >Ending Date is required</mat-error
+                >
+              </mat-form-field>
+  
+              <button mat-raised-button color="primary">Submit</button>
+              <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+              <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
+              (click)="excelImport()">Excel Export</button>
+              
+            </mat-card-content>
+          </mat-card>
+        </form>
+      </div>
+    
+      <div class="candidate-table">
+        <mat-card>
+          <mat-card-content>
+            <div class="table-wrapper">
+              <section>
+                <table
+                  mat-table
+                  [dataSource]="dataSource"
+                  oncopy="return false"
+                >
+                  <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+    
+                  <!-- Serial Number -->
+                  <ng-container matColumnDef="SerialNum">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                      style="width: 2%"
+                    >
+                      S.No
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 2%">
+                      {{ element?.serialNum }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Candidate Name -->
+                  <ng-container matColumnDef="CandidateName">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Candidate Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.consultantname }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Applied Jobs -->
+                  <ng-container matColumnDef="AppliedJobs">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Applied Jobs
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.apply_count }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Submission -->
+                  <ng-container matColumnDef="Submission">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Submission
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.submission }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Scheduled -->
+                  <ng-container matColumnDef="Scheduled">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Scheduled
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.schedule }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- On Hold -->
+                  <ng-container matColumnDef="OnHold">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    On Hold
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.onhold }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Closed -->
+                  <ng-container matColumnDef="Closed">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Closed
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.closed }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Rejected -->
+                  <ng-container matColumnDef="Rejected">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Rejected
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.rejected }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- OnBoarded -->
+                  <ng-container matColumnDef="OnBoarded">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    OnBoarded
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.onboarded }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- BackOut -->
+                  <ng-container matColumnDef="BackOut">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Back Out
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.backout }}
+                    </td>
+                  </ng-container>
+    
+    
+                  <!-- Selected -->
+                  <ng-container matColumnDef="Selected">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    >
+                    Selected
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.selected }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- table columns ends  -->
+                  <!-- table ROW -->
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="dataTableColumns; sticky: true"
+                  ></tr>
+                  <tr mat-row *matRowDef="let row; columns: dataTableColumns"></tr>
+                </table>
+                <p class="no-data-found" *ngIf="!dataSource.filteredData.length">
+                  {{ "No matching data found" }}
+                </p>
+              </section>
+              <!-- <hr> -->
+            </div>
+            <!-- paginator -->
+            <!-- <div class="paginator" *ngIf="dataSource.filteredData.length">
+                <mat-paginator (page)="pageChanged($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
+                  [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                  [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+                </mat-paginator>
+              </div> -->
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  
