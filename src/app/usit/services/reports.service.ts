@@ -67,4 +67,8 @@ export class ReportsService {
   public employeeInterviewPopup(data: any) {
     return this.apiServ.post("report/employeeIntervStatusPopups", data);
   }
+
+  public candidateReport(data: any) {
+    return this.apiServ.post("report/reports/allemployeesreport", data);
+  }
 }
