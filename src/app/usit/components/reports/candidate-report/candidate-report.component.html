@@ -106,7 +106,8 @@
                     >
                     Applied Jobs
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.apply_count > 0}"
+                      (click)="element.apply_count > 0 ? appliedJobsPopup(element) : null">
                       {{ element.apply_count }}
                     </td>
                   </ng-container>
@@ -119,7 +120,8 @@
                     >
                     Submission
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.submission > 0}"
+                      (click)="element.submission > 0 ? subOrIntPopup('submission', element) : null">
                       {{ element.submission }}
                     </td>
                   </ng-container>
@@ -132,7 +134,8 @@
                     >
                     Scheduled
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element"[ngClass]="{'count': element.schedule > 0}"
+                      (click)="element.schedule > 0 ? subOrIntPopup('Schedule', element) : null">
                       {{ element.schedule }}
                     </td>
                   </ng-container>
@@ -145,7 +148,8 @@
                     >
                     On Hold
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.onhold > 0}"
+                      (click)="element.onhold > 0 ? subOrIntPopup('Hold', element) : null">
                       {{ element.onhold }}
                     </td>
                   </ng-container>
@@ -158,7 +162,8 @@
                     >
                     Closed
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.closed > 0}"
+                      (click)="element.closed > 0 ? subOrIntPopup('Closed', element) : null">
                       {{ element.closed }}
                     </td>
                   </ng-container>
@@ -171,7 +176,8 @@
                     >
                     Rejected
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.rejected > 0}"
+                      (click)="element.rejected > 0 ? subOrIntPopup('Rejected', element) : null">
                       {{ element.rejected }}
                     </td>
                   </ng-container>
@@ -184,7 +190,8 @@
                     >
                     OnBoarded
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.onboarded > 0}"
+                      (click)="element.onboarded > 0 ? subOrIntPopup('OnBoarded', element) : null">
                       {{ element.onboarded }}
                     </td>
                   </ng-container>
@@ -197,7 +204,8 @@
                     >
                     Back Out
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.backout > 0}"
+                      (click)="element.backout > 0 ? subOrIntPopup('BackOut', element) : null">
                       {{ element.backout }}
                     </td>
                   </ng-container>
@@ -211,7 +219,8 @@
                     >
                     Selected
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'count': element.selected > 0}"
+                      (click)="element.selected > 0 ? subOrIntPopup('Selected', element) : null">
                       {{ element.selected }}
                     </td>
                   </ng-container>

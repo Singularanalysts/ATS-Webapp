@@ -34,8 +34,8 @@ export class VendorService {
     return this.apiServ.get("vms/vendor/all/" + access + "/" + userid + "/" + page + "/" + size + "/" + field);
   }
 
-  getAllVendorsByPagination(access: string, userid: number, page: any, size: any, field: any, sortField:string,sortOrder:string ) {
-    return this.apiServ.get("vms/vendor/all/" + access + "/" + userid + "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+  getAllVendorsByPagination(data: any) {
+    return this.apiServ.post("vms/vendor/all", data);
   }
   deleteEntity(id: number) {
     return this.apiServ.delete("vms/vendor/delete/" + id);

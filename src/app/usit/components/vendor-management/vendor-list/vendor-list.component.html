@@ -1,8 +1,8 @@
 <div class="container">
-  <ul class="breadcrumb">
+  <!-- <ul class="breadcrumb">
     <li><a (click)="navigateToDashboard()">Home</a></li>
     <li class="last">Vendors</li>
-  </ul>
+  </ul> -->
   <div class="header-container mat-elevation-z1">
     <span class="header-text">
       Vendors
@@ -30,168 +30,184 @@
       </div>
     </div>
   </div>
+  <!-- <div>
+    <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
+      <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
+        <ng-container *ngTemplateOutlet="tableTemplate; context: { status: tab.status }"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
+  </div> -->
   <div id="table-container" class="table-wrapper">
-    <section class="vendor-table-style">
-      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
+    <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
+      <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
+        <ng-container *ngTemplateOutlet="tableTemplate; context: { status: tab.status }"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
 
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-
-        <!-- ID Column mat-sort-header sortActionDescription="Sort by Serial Number"-->
-        <ng-container matColumnDef="SerialNum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number"> S.No </th>
-          <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
-        </ng-container>
-
-        <!-- Company Column mat-sort-header sortActionDescription="Sort by Company"-->
-        <ng-container matColumnDef="Company">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Company</th>
-          <td mat-cell *matCellDef="let element">
-            <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company| titlecase}}</span>
-          </td>
-        </ng-container>
-
-        <!-- HeadQuarter Column mat-sort-header sortActionDescription="Sort by Head Quarter"-->
-        <ng-container matColumnDef="HeadQuarter">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by headquerter"> Head
-            Quarter </th>
-          <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.headquerter | titlecase}} </td>
-        </ng-container>
-
-        <!-- Fed-Id Column -->
-        <!-- <ng-container matColumnDef="Fed-Id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Fed-Id "> Fed-Id  </th>
-          <td mat-cell *matCellDef="let element"> {{element.fedid}} </td>
-        </ng-container> -->
-
-        <!-- VendorType Column mat-sort-header  -->
-        <ng-container matColumnDef="VendorType">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendortype"  mat-sort-header> Vendor Type
-          </th>
-          <td mat-cell *matCellDef="let element"> {{element.vendortype}} </td>
-        </ng-container>
-
-        <!-- TierType Column -->
-        <ng-container matColumnDef="TierType">
-          <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by tyretype"> Tier Type
-          </th>
-          <td mat-cell *matCellDef="let element"> {{element.tyretype}} </td>
-        </ng-container>
-
-        <!-- AddedBy Column -->
-        <ng-container matColumnDef="AddedBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname"> Added By </th>
-          <td mat-cell *matCellDef="let element">
-            <span class="user-info" (click)="goToUserInfo(element.addedby)"> {{element.pseudoname  | titlecase}}  </span>
-          </td>
-        </ng-container>
-
-        <!-- AddedOn Column -->
-        <ng-container matColumnDef="AddedOn">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by createddate"> Added On </th>
-          <td mat-cell *matCellDef="let element"> {{element.createddate | date:'MM-dd-yyyy'}} </td>
-        </ng-container>
-
-        <!-- LastUpdated Column -->
-        <ng-container matColumnDef="LastUpdated">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by updateddate"> Last
-            Updated </th>
-          <td mat-cell *matCellDef="let element"> {{element.updateddate  | date:'MM-dd-yyyy'}} </td>
-        </ng-container>
-
-        <!-- Status Column -->
-        <!-- <ng-container matColumnDef="Status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Status"> Status </th>
-          <td mat-cell *matCellDef="let emp" [ngStyle]="{ backGroundColor: emp.status === 'Active' ? 'green' : 'accent' }" ><span><button mat-raised-button (click)="onStatusUpdate(emp)" > {{emp.status}}</button> </span></td>
-        </ng-container> -->
-        <!-- <ng-container matColumnDef="Status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Status"> Status </th>
-          <td mat-cell *matCellDef="let vendor">
-            <span>
-              <button mat-raised-button (click)="onStatusUpdate(vendor)"
-                [ngStyle]="{ color: 'white' }"
-                [ngClass]="vendor.status === 'Approved' ? 'mat-primary' : vendor.status === 'Active' ? 'mat-primary' : 'mat-warn'">
-                {{ vendor.status }}
-              </button>
-            </span>
-          </td>
-        </ng-container> -->
-
-        <!-- Action Column -->
-        <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let vendor" style="white-space: nowrap;">
-            <span class="action-buttons">
-              <button [disabled]="!privilegeServ.hasPrivilege('EDIT_VENDOR')" mat-icon-button
-                (click)="editVendor(vendor)" class="action-button-ed">
-                <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_VENDOR')}">edit</mat-icon>
-              </button>
-              <button mat-icon-button [style.cursor]="'pointer'" matTooltip="Move to CPV or FPV or Blacklisted" class="action-button-ed" matTooltipPosition="above" (click)="moveVendorToCpvOrFpv(vendor)">
-                  <mat-icon class="edit-icon">arrow_forward</mat-icon>
+    <ng-template #tableTemplate>
+      <section class="vendor-table-style">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
+  
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+  
+          <!-- ID Column mat-sort-header sortActionDescription="Sort by Serial Number"-->
+          <ng-container matColumnDef="SerialNum">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number"> S.No </th>
+            <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+          </ng-container>
+  
+          <!-- Company Column mat-sort-header sortActionDescription="Sort by Company"-->
+          <ng-container matColumnDef="Company">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Company</th>
+            <td mat-cell *matCellDef="let element">
+              <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company| titlecase}}</span>
+            </td>
+          </ng-container>
+  
+          <!-- HeadQuarter Column mat-sort-header sortActionDescription="Sort by Head Quarter"-->
+          <ng-container matColumnDef="HeadQuarter">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by headquerter"> Head
+              Quarter </th>
+            <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.headquerter | titlecase}} </td>
+          </ng-container>
+  
+          <!-- Fed-Id Column -->
+          <!-- <ng-container matColumnDef="Fed-Id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Fed-Id "> Fed-Id  </th>
+            <td mat-cell *matCellDef="let element"> {{element.fedid}} </td>
+          </ng-container> -->
+  
+          <!-- VendorType Column mat-sort-header  -->
+          <ng-container matColumnDef="VendorType">
+            <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendortype"  mat-sort-header> Vendor Type
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.vendortype}} </td>
+          </ng-container>
+  
+          <!-- TierType Column -->
+          <ng-container matColumnDef="TierType">
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by tyretype"> Tier Type
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.tyretype}} </td>
+          </ng-container>
+  
+          <!-- AddedBy Column -->
+          <ng-container matColumnDef="AddedBy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname"> Added By </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="user-info" (click)="goToUserInfo(element.addedby)"> {{element.pseudoname  | titlecase}}  </span>
+            </td>
+          </ng-container>
+  
+          <!-- AddedOn Column -->
+          <ng-container matColumnDef="AddedOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by createddate"> Added On </th>
+            <td mat-cell *matCellDef="let element"> {{element.createddate | date:'MM-dd-yyyy'}} </td>
+          </ng-container>
+  
+          <!-- LastUpdated Column -->
+          <ng-container matColumnDef="LastUpdated">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by updateddate"> Last
+              Updated </th>
+            <td mat-cell *matCellDef="let element"> {{element.updateddate  | date:'MM-dd-yyyy'}} </td>
+          </ng-container>
+  
+          <!-- Status Column -->
+          <!-- <ng-container matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Status"> Status </th>
+            <td mat-cell *matCellDef="let emp" [ngStyle]="{ backGroundColor: emp.status === 'Active' ? 'green' : 'accent' }" ><span><button mat-raised-button (click)="onStatusUpdate(emp)" > {{emp.status}}</button> </span></td>
+          </ng-container> -->
+          <!-- <ng-container matColumnDef="Status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Status"> Status </th>
+            <td mat-cell *matCellDef="let vendor">
+              <span>
+                <button mat-raised-button (click)="onStatusUpdate(vendor)"
+                  [ngStyle]="{ color: 'white' }"
+                  [ngClass]="vendor.status === 'Approved' ? 'mat-primary' : vendor.status === 'Active' ? 'mat-primary' : 'mat-warn'">
+                  {{ vendor.status }}
                 </button>
-              <button [disabled]="!privilegeServ.hasPrivilege('DELETE_VENDOR')" mat-icon-button
-                (click)="deleteVendor(vendor)" class="action-button-ed">
-                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_VENDOR')}">delete</mat-icon>
-              </button>
-            </span>
-          </td>
-        </ng-container>
+              </span>
+            </td>
+          </ng-container> -->
+  
+          <!-- Action Column -->
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let vendor" style="white-space: nowrap;">
+              <span class="action-buttons">
+                <button [disabled]="!privilegeServ.hasPrivilege('EDIT_VENDOR')" mat-icon-button
+                  (click)="editVendor(vendor)" class="action-button-ed">
+                  <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_VENDOR')}">edit</mat-icon>
+                </button>
+                <button mat-icon-button [style.cursor]="'pointer'" matTooltip="Move to CPV or FPV or Blacklisted" class="action-button-ed" matTooltipPosition="above" (click)="moveVendorToCpvOrFpv(vendor)">
+                    <mat-icon class="edit-icon">arrow_forward</mat-icon>
+                  </button>
+                <button [disabled]="!privilegeServ.hasPrivilege('DELETE_VENDOR')" mat-icon-button
+                  (click)="deleteVendor(vendor)" class="action-button-ed">
+                  <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_VENDOR')}">delete</mat-icon>
+                </button>
+              </span>
+            </td>
+          </ng-container>
+  
+          <!-- Approve/Reject Column -->
+          <ng-container matColumnDef="ApproveOrReject">
+            <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ApproveOrReject" >
+              Approve/Reject </th>
+            <td mat-cell *matCellDef="let vendor" class="approve-buttons" style="white-space: nowrap;">
+              <ng-container *ngIf="['Approved'].includes(vendor.vms_stat);  else ifNotApproved">
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" mat-raised-button
+                  class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor)" style="width: 75px; height: 25px;"
+                  [ngStyle]="{ color: 'white' }"
+                  [ngClass]="vendor.vms_stat === 'Approved'  ?   'mat-primary' : vendor.vms_stat === 'Initiated'  ?  'mat-secondary' : 'mat-warn'">
+                  {{vendor.vms_stat}}
+                </button>
+              </ng-container>
+              <ng-template #ifNotApproved>
+                <!-- Initiated BUTTON -->
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
+                  *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button class="approve-reject-buttons"
+                  (click)="onApproveOrRejectVMS(vendor)" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
+                  [ngClass]="'mat-primary'"> {{vendor.vms_stat}}
+                </button>
+              
+                &nbsp;
+              
+                <!-- Reject BUTTON -->
+              
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
+                  *ngIf="vendor.vms_stat !== 'Approved' && vendor.vms_stat !== 'Rejected' && vendor.vms_stat !== 'Blacklisted'"
+                  mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor ,true)"
+                  [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
+                </button>
+              
+                <!-- Blacklisted BUTTON -->
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Blacklisted'"
+                  mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor, true)"
+                  [ngStyle]="{ color: 'white' }" style="width: 80px; height: 25px;" [ngClass]="'mat-warn'">
+                  {{'Blacklisted'}} <!-- Added button for Blacklisted status -->
+                </button>
+              
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Rejected'"
+                  mat-raised-button class="approve-reject-buttons" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
+                  [ngClass]="'mat-warn'"> {{vendor.vms_stat}}
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+  
+          <!-- table columns ends  -->
+  
+          <!-- table ROW -->
+          <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngClass]="getVendorRowClass(row)"></tr>
+        </table>
+        <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
+      </section>
+      <hr>
+    </ng-template>
 
-        <!-- Approve/Reject Column -->
-        <ng-container matColumnDef="ApproveOrReject">
-          <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ApproveOrReject" >
-            Approve/Reject </th>
-          <td mat-cell *matCellDef="let vendor" class="approve-buttons" style="white-space: nowrap;">
-            <ng-container *ngIf="['Approved'].includes(vendor.vms_stat);  else ifNotApproved">
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" mat-raised-button
-                class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor)" style="width: 75px; height: 25px;"
-                [ngStyle]="{ color: 'white' }"
-                [ngClass]="vendor.vms_stat === 'Approved'  ?   'mat-primary' : vendor.vms_stat === 'Initiated'  ?  'mat-secondary' : 'mat-warn'">
-                {{vendor.vms_stat}}
-              </button>
-            </ng-container>
-            <ng-template #ifNotApproved>
-              <!-- Initiated BUTTON -->
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
-                *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button class="approve-reject-buttons"
-                (click)="onApproveOrRejectVMS(vendor)" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
-                [ngClass]="'mat-primary'"> {{vendor.vms_stat}}
-              </button>
-            
-              &nbsp;
-            
-              <!-- Reject BUTTON -->
-            
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
-                *ngIf="vendor.vms_stat !== 'Approved' && vendor.vms_stat !== 'Rejected' && vendor.vms_stat !== 'Blacklisted'"
-                mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor ,true)"
-                [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
-              </button>
-            
-              <!-- Blacklisted BUTTON -->
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Blacklisted'"
-                mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor, true)"
-                [ngStyle]="{ color: 'white' }" style="width: 80px; height: 25px;" [ngClass]="'mat-warn'">
-                {{'Blacklisted'}} <!-- Added button for Blacklisted status -->
-              </button>
-            
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Rejected'"
-                mat-raised-button class="approve-reject-buttons" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
-                [ngClass]="'mat-warn'"> {{vendor.vms_stat}}
-              </button>
-            </ng-template>
-          </td>
-        </ng-container>
-
-        <!-- table columns ends  -->
-
-        <!-- table ROW -->
-        <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngClass]="getVendorRowClass(row)"></tr>
-      </table>
-      <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
-    </section>
-    <hr>
   </div>
   <!-- paginator -->
   <div class="paginator" *ngIf="dataSource.filteredData.length">

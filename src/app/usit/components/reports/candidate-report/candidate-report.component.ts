@@ -20,6 +20,10 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { Recruiter } from 'src/app/usit/models/recruiter';
 import { utils, writeFile } from 'xlsx';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { CandidateSubmissionsComponent } from './candidate-submissions/candidate-submissions.component';
+import { CandidateInterviewsComponent } from './candidate-interviews/candidate-interviews.component';
+import { CandidateAppliedJobsComponent } from './candidate-applied-jobs/candidate-applied-jobs.component';
 
 @Component({
   selector: 'app-candidate-report',
@@ -69,12 +73,15 @@ export class CandidateReportComponent {
   currentPageIndex = 0;
   totalItems: number = 0;
   payload: any;
+  userid!: string | null;
+  public dialog= inject(MatDialog);
   private router = inject(Router);
   get f() {
     return this.candidatereport.controls;
   }
 
   ngOnInit() {
+    this.userid = localStorage.getItem('userid')
     this.candidatereport = this.formBuilder.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -166,4 +173,46 @@ export class CandidateReportComponent {
     utils.book_append_sheet(wb, ws, 'data');
     writeFile(wb, 'Candidate-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
   }
+
+  subOrIntPopup(status: any, element: any) {
+    const sDate = this.candidatereport.get('startDate')!.value;
+    const eDate = this.candidatereport.get('endDate')!.value;
+    if (status == 'submission') {
+      this.dialog.open(CandidateSubmissionsComponent, 
+      { width: '80%',
+      data: {
+          id: element.userid,
+          startDate: this.datePipe.transform(sDate, 'yyyy-MM-dd'),
+          endDate: this.datePipe.transform(eDate, 'yyyy-MM-dd'),
+        },
+      });
+      
+    } else  {
+      this.dialog.open(CandidateInterviewsComponent, 
+      { width: '80%',
+      data: {
+        status: status,
+        id: element.userid,
+        startDate: this.datePipe.transform(sDate, 'yyyy-MM-dd'),
+        endDate: this.datePipe.transform(eDate, 'yyyy-MM-dd'),
+        },
+      });
+    }
+  }
+
+  appliedJobsPopup(element: any) {
+    const sDate = this.candidatereport.get('startDate')!.value;
+    const eDate = this.candidatereport.get('endDate')!.value;
+    this.dialog.open(CandidateAppliedJobsComponent,
+      {
+        width: '80%',
+        data: {
+          candidateName: element.consultantname,
+          id: element.userid,
+          startDate: this.datePipe.transform(sDate, 'yyyy-MM-dd'),
+          endDate: this.datePipe.transform(eDate, 'yyyy-MM-dd'),
+        },
+      });
+  }
+
 }
