@@ -40,6 +40,7 @@ import { VendorCompanyRecInfoComponent } from './vendor-company-rec-info/vendor-
 import { UploadVmsExcelComponent } from '../recruiter-list/upload-vms-excel/upload-vms-excel.component';
 import { ConfirmWithRadioButtonComponent } from 'src/app/dialogs/confirm-with-radio-button/confirm-with-radio-button.component';
 import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-with-radio-data';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-vendor-list',
@@ -57,6 +58,7 @@ import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-w
     MatPaginatorModule,
     CommonModule,
     MatTooltipModule,
+    MatTabsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
@@ -95,7 +97,7 @@ export class VendorListComponent implements OnInit {
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
 
-  hasAcces!: any;
+  role!: any;
   loginId!: any;
   department!: any;
   assignToPage: any;
@@ -120,9 +122,15 @@ export class VendorListComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+  tabs = [
+    { label: 'All', status: 'all' },
+    { label: 'USA', status: 'active' },
+    { label: 'UAE', status: 'inactive' } 
+  ];
+  status = 'all';
 
   ngOnInit(): void {
-    this.hasAcces = localStorage.getItem('role');
+    this.role = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
     // this.AssignedPageNum = localStorage.getItem('vnum');
@@ -142,7 +150,18 @@ export class VendorListComponent implements OnInit {
     this.dataSource.sort = this.sort;
     // this.dataSource.paginator = this.paginator;
   }
-  getAllData(currentPageIndex = 1) {
+
+  // const pagObj = {
+  //   pageNumber: pagIdx,
+  //   pageSize: this.itemsPerPage,
+  //   sortField: this.sortField,
+  //   sortOrder: this.sortOrder,
+  //   keyword: this.field,
+  // }
+  
+
+  
+  getAllData(currentPageIndex = 1, status: string = 'all') {
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 1500,
@@ -151,15 +170,19 @@ export class VendorListComponent implements OnInit {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
+    const pagObj = {
+    pageNumber: currentPageIndex,
+    pageSize: this.itemsPerPage,
+    sortField: this.sortField,
+    sortOrder: this.sortOrder,
+    keyword: this.field,
+	  role: this.role,
+	  userid: this.loginId,
+	  country: this.status
+  }
     return this.vendorServ
       .getAllVendorsByPagination(
-        this.hasAcces,
-        this.loginId,
-        currentPageIndex,
-        this.pageSize,
-        this.field,
-        this.sortField,
-        this.sortOrder
+        pagObj
       )
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
@@ -221,15 +244,19 @@ export class VendorListComponent implements OnInit {
     const keyword = event.target.value;
     this.field = keyword;
     if (keyword != '') {
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: this.field,
+        role: this.role,
+        userid: this.loginId,
+        country: this.status,
+      }
       return this.vendorServ
         .getAllVendorsByPagination(
-          this.hasAcces,
-          this.loginId,
-          1,
-          this.pageSize,
-          keyword,
-          this.sortField,
-          this.sortOrder
+          pagObj
         )
         .subscribe((response: any) => {
           this.datarr = response.data.content;
@@ -603,7 +630,7 @@ export class VendorListComponent implements OnInit {
         this.getAllVendorByType(this.companyType, event.pageIndex + 1)
         return
       }
-      this.getAllData(event.pageIndex + 1);
+      this.getAllData(event.pageIndex + 1,this.status);
     }
     return;
   }
@@ -649,7 +676,7 @@ export class VendorListComponent implements OnInit {
   getAllVendorByType(type: string, pageIndex = 0) {
     this.companyType = type;
     const page = pageIndex ? pageIndex : this.page;
-    this.vendorServ.getAllVendorByType(this.hasAcces, this.loginId, page, this.pageSize, type, this.field).subscribe(
+    this.vendorServ.getAllVendorByType(this.role, this.loginId, page, this.pageSize, type, this.field).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content
         // for serial-num {}
@@ -760,5 +787,11 @@ export class VendorListComponent implements OnInit {
       },
     });
 
+  }
+
+  onTabChanged(event: MatTabChangeEvent) {
+
+    this.status = event.tab.textLabel.toLowerCase();
+    this.getAllData(1, this.status);
   }
 }

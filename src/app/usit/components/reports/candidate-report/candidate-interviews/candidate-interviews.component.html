@@ -1,0 +1,48 @@
+<div mat-dialog-content style="padding: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+        <h1 mat-dialog-title>Interviews </h1>
+    </div>
+
+    <div class="row" oncopy="return false" onpaste="return false" oncut="return false"
+        style="max-height: 700px; overflow: auto">
+        <table class="table table-light table-bordered">
+            <thead class="thead-light sticky">
+                <tr>
+                    <th>S.No</th>
+                    <th>Interview No</th>
+                    <!-- <th>Consultant Name</th> -->
+                    <th>Date & Time Of Interview</th>
+                    <th>Round</th>
+                    <th>Mode</th>
+                    <th>Vendor</th>
+                    <th>Client</th>
+                    <th>Date Of Submission</th>
+                    <!-- <th>Employee Name</th> -->
+                    <th>Interview Status</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr *ngFor="let data of dataSource; let i = index">
+                    <td>
+                        {{ i + 1 }}
+                    </td>
+                    <td>
+                        {{ data.interviewno }}
+                    </td>
+
+                    <!-- <td>
+                        {{ data.name }}
+                    </td> -->
+                    <td>{{ data.interview_date }} ({{ data.time_zone }})</td>
+                    <td>{{ data.round }}</td>
+                    <td>{{ data.mode }}</td>
+                    <td>{{ data.vendor }}</td>
+                    <td>{{ data.endclient }}</td>
+                    <td>{{ data.createddate }}</td>
+                    <!-- <td>{{ data.pseudoname }}</td> -->
+                    <td>{{ data.interview_status }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -69,6 +69,18 @@ export class ReportsService {
   }
 
   public candidateReport(data: any) {
-    return this.apiServ.post("report/reports/allemployeesreport", data);
+    return this.apiServ.post("report/allemployeesreport", data);
+  }
+
+  public candidateSubmissionPopup(data: any) {
+    return this.apiServ.post("report/employeeSubmissionPopup", data);
+  }
+
+  public candidateInterviewPopup(data: any) {
+    return this.apiServ.post("report/employeeInterviewStatPopups", data);
+  }
+
+  public candidateAppliedJobsPopup(data: any) {
+    return this.apiServ.post("report/employeeJobApplyCount", data);
   }
 }

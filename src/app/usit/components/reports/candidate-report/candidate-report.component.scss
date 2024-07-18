@@ -405,3 +405,10 @@ ul.breadcrumb li:last-child {
 .candidate-table mat-card-content {
   height: 100%;
 }
+
+.count {
+  cursor: pointer;
+  color: #4154f1;
+  text-decoration: none;
+  font-weight: bold;
+}

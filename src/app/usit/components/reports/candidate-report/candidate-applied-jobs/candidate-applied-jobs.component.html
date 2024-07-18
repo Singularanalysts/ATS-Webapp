@@ -1,0 +1,37 @@
+<div mat-dialog-content style="padding: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+        <h1 mat-dialog-title>{{data.candidateName}} </h1>
+    </div>
+
+    <div class="row" oncopy="return false" onpaste="return false" oncut="return false"
+        style="max-height: 700px; overflow: auto">
+        <table class="table table-light table-bordered">
+            <thead class="thead-light sticky">
+                <tr>
+                    <th>S.No</th>
+                    <th>Posted On</th>
+                    <th>Job Title</th>
+                    <th>Category Skill</th>
+                    <th>Employment Type</th>
+                    <th>Job Location</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr *ngFor="let data of dataSource; let i = index">
+                    <td>
+                        {{ i + 1 }}
+                    </td>
+                    <td>
+                        {{ data.posted_on }}
+                    </td>
+                    <td>{{ data.job_title }} </td>
+                    <td>{{ data.category_skill }}</td>
+                    <td>{{ data.employment_type }}</td>
+                    <td>{{ data.job_location }}</td>
+                    <td>{{ data.source }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
