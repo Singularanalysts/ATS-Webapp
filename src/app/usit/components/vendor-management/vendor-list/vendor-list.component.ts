@@ -68,13 +68,11 @@ export class VendorListComponent implements OnInit {
     'SerialNum',
     'Company',
     'HeadQuarter',
-    //'Fed-Id',
     'VendorType',
     'TierType',
     'AddedBy',
     'AddedOn',
     'LastUpdated',
-    // 'Status',
     'Action',
     'ApproveOrReject',
   ];
@@ -88,7 +86,6 @@ export class VendorListComponent implements OnInit {
   showFirstLastButtons = true;
   pageEvent!: PageEvent;
   @ViewChild(MatSort) sort!: MatSort;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   cdr = inject(PaginatorIntlService);
   private dialogServ = inject(DialogService);
@@ -96,7 +93,6 @@ export class VendorListComponent implements OnInit {
   private vendorServ = inject(VendorService);
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
-
   role!: any;
   loginId!: any;
   department!: any;
@@ -108,7 +104,6 @@ export class VendorListComponent implements OnInit {
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
-  // AssignedPageNum!: any;
   field = 'empty';
   isRejected: boolean = false;
   // to clear subscriptions
@@ -122,45 +117,21 @@ export class VendorListComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
-  tabs = [
-    { label: 'All', status: 'all' },
-    { label: 'USA', status: 'active' },
-    { label: 'UAE', status: 'inactive' } 
-  ];
+  tabs = ['All', 'USA', 'UAE'];
   status = 'all';
+  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 
   ngOnInit(): void {
     this.role = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
-    // this.AssignedPageNum = localStorage.getItem('vnum');
-    //this.getall();
-    // if (this.AssignedPageNum == null) {
-    //   this.getAllData();
-    // } else {
-    //   this.gty(this.AssignedPageNum);
-    //   this.page = this.AssignedPageNum;
-    // }
     this.getAllData();
-
-    // this.getAllVendors();
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
   }
 
-  // const pagObj = {
-  //   pageNumber: pagIdx,
-  //   pageSize: this.itemsPerPage,
-  //   sortField: this.sortField,
-  //   sortOrder: this.sortOrder,
-  //   keyword: this.field,
-  // }
-  
-
-  
   getAllData(currentPageIndex = 1, status: string = 'all') {
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
@@ -171,15 +142,15 @@ export class VendorListComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const pagObj = {
-    pageNumber: currentPageIndex,
-    pageSize: this.itemsPerPage,
-    sortField: this.sortField,
-    sortOrder: this.sortOrder,
-    keyword: this.field,
-	  role: this.role,
-	  userid: this.loginId,
-	  country: this.status
-  }
+      pageNumber: currentPageIndex,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+      role: this.role,
+      userid: this.loginId,
+      country: this.status
+    }
     return this.vendorServ
       .getAllVendorsByPagination(
         pagObj
@@ -204,42 +175,9 @@ export class VendorListComponent implements OnInit {
   }
 
   /**
-   * get all vendor data
-   * @returns vendor data
-   */
-  getAllVendors() {
-    return this.vendorServ
-      .getAll()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          if (response.data) {
-            this.dataSource.data = response.data;
-          }
-        },
-        error: (err) => {
-          const dataToBeSentToSnackBar: ISnackBarData = {
-            message: '',
-            duration: 1500,
-            verticalPosition: 'top',
-            horizontalPosition: 'center',
-            direction: 'above',
-            panelClass: ['custom-snack-failure'],
-          };
-          dataToBeSentToSnackBar.message = err.message;
-          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-        },
-      });
-  }
-
-  /**
-   * on filter
+   * apply filter
    * @param event
    */
-  onFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim();
-  }
   applyFilter(event: any) {
     const keyword = event.target.value;
     this.field = keyword;
@@ -271,7 +209,7 @@ export class VendorListComponent implements OnInit {
     if (keyword == '') {
       this.field = 'empty';
     }
-    return this.getAllData(this.currentPageIndex + 1);
+    return this.getAllData(this.currentPageIndex + 1, this.status);
   }
 
   /**
@@ -285,17 +223,13 @@ export class VendorListComponent implements OnInit {
       this.sortField = 'updateddate'
     else
       this.sortField = event.active;
-    
-      this.sortOrder = event.direction;
-    
-    if (event.direction != ''){
-    this.getAllData();
+
+    this.sortOrder = event.direction;
+
+    if (event.direction != '') {
+      this.getAllData();
     }
   }
-  /**uplload
-   *
-   */
-  uploadVendor() { }
 
   /**
    * go to company-info
@@ -329,13 +263,9 @@ export class VendorListComponent implements OnInit {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '62dvw';
-    // dialogConfig.height = "100vh";
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'add-vendor';
     dialogConfig.data = actionData;
-
-    //this.dialogServ.openDialogWithComponent(AddVendorComponent, dialogConfig);
-
     const dialogRef = this.dialogServ.openDialogWithComponent(
       AddVendorComponent,
       dialogConfig
@@ -347,6 +277,7 @@ export class VendorListComponent implements OnInit {
       }
     });
   }
+
   /**
    * edit
    * @param endor
@@ -359,7 +290,6 @@ export class VendorListComponent implements OnInit {
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
-    //dialogConfig.height = '100vh';
     dialogConfig.panelClass = 'edit-vendor';
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(
@@ -373,6 +303,7 @@ export class VendorListComponent implements OnInit {
       }
     });
   }
+
   /**
    * delete
    * @param vendor
@@ -397,7 +328,6 @@ export class VendorListComponent implements OnInit {
     );
 
     // call delete api after  clicked 'Yes' on dialog click
-
     dialogRef.afterClosed().subscribe({
       next: (resp) => {
         if (dialogRef.componentInstance.allowAction) {
@@ -439,6 +369,7 @@ export class VendorListComponent implements OnInit {
       },
     });
   }
+
   /**
    * on status update
    * @param vendor
@@ -481,7 +412,6 @@ export class VendorListComponent implements OnInit {
             .subscribe({
               next: (response: any) => {
                 if (response.status == 'Success') {
-                  // this.gty(this.page);
                   this.getAllData(this.currentPageIndex + 1);
                   dataToBeSentToSnackBar.message =
                     'Status updated successfully';
@@ -506,8 +436,6 @@ export class VendorListComponent implements OnInit {
     });
   }
 
-  // approve initiate reject
-  //public action(id: number, ctype: string, action: string) {
   onApproveOrRejectVMS(vendor: any, rejectVendor = false) {
     this.isRejected = rejectVendor;
     if (vendor.vms_stat !== 'Approved') {
@@ -520,7 +448,6 @@ export class VendorListComponent implements OnInit {
         panelClass: ['custom-snack-success'],
       };
       if (this.department == vendor.ctype) {
-        // alertify.error("Your not Authorized to approve the Vendor");
         dataToBeSentToSnackBar.message =
           'You are not Authorized to approve the Vendor';
         dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -572,7 +499,6 @@ export class VendorListComponent implements OnInit {
             : 'Reject',
         id: vendor.id,
         userid: this.loginId,
-        // remarks: dialogRef.componentInstance.remarks
       };
       dialogRef.afterClosed().subscribe(() => {
         if (dialogRef.componentInstance.allowAction) {
@@ -598,7 +524,6 @@ export class VendorListComponent implements OnInit {
                   dataToBeSentToSnackBar
                 );
 
-                // this.gty(this.page);
                 this.getAllData(this.currentPageIndex + 1);
               },
               error: (err) => {
@@ -611,8 +536,6 @@ export class VendorListComponent implements OnInit {
             });
         }
       });
-
-      // after closing popup
     }
     return;
   }
@@ -624,15 +547,14 @@ export class VendorListComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
-      const currentPageIndex = event.pageIndex;
-      this.currentPageIndex = currentPageIndex;
+      this.currentPageIndex = event.pageIndex;
+      this.pageIndices[this.status] = this.currentPageIndex;
       if (this.companyType) {
-        this.getAllVendorByType(this.companyType, event.pageIndex + 1)
-        return
+        this.getAllVendorByType(this.companyType, event.pageIndex + 1);
+        return;
       }
-      this.getAllData(event.pageIndex + 1,this.status);
+      this.getAllData(event.pageIndex + 1, this.status);
     }
-    return;
   }
 
   getVendorRowClass(row: any) {
@@ -658,11 +580,13 @@ export class VendorListComponent implements OnInit {
       this.dataSource.data = this.datarr;
     }
   }
+
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
   }
+  
   /** clean up subscriptions */
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -704,7 +628,6 @@ export class VendorListComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'upload-recruiter';
     dialogConfig.data = actionData;
-
     this.dialogServ.openDialogWithComponent(UploadVmsExcelComponent, dialogConfig);
   }
 
@@ -727,71 +650,69 @@ export class VendorListComponent implements OnInit {
       ConfirmWithRadioButtonComponent,
       dialogConfig
     );
-    // call moveToSales api after  clicked 'Yes' on dialog click
-
     dialogRef.afterClosed().subscribe({
       next: (selectedOption: string) => {
         if (dialogRef.componentInstance.allowAction) {
-          if(selectedOption == 'Blacklisted') {
+          if (selectedOption == 'Blacklisted') {
             this.vendorServ
-            .moveToBlacklistedOrBack(
-              selectedOption,
-              vendor.id,
-              this.loginId
-            )
-            .subscribe((resp: any) => {
-              if (resp.status == 'success') {
-                this.dataToBeSentToSnackBar.panelClass = [
-                  'custom-snack-success',
-                ];
-                this.dataToBeSentToSnackBar.message = resp.message ;
+              .moveToBlacklistedOrBack(
+                selectedOption,
+                vendor.id,
+                this.loginId
+              )
+              .subscribe((resp: any) => {
+                if (resp.status == 'success') {
+                  this.dataToBeSentToSnackBar.panelClass = [
+                    'custom-snack-success',
+                  ];
+                  this.dataToBeSentToSnackBar.message = resp.message;
 
-              } else {
-                this.dataToBeSentToSnackBar.panelClass = [
-                  'custom-snack-failure',
-                ];
-                this.dataToBeSentToSnackBar.message = resp.message;
-              }
-              this.snackBarServ.openSnackBarFromComponent(
-                this.dataToBeSentToSnackBar
-              );
-              this.getAllData(this.currentPageIndex + 1);
-            });
+                } else {
+                  this.dataToBeSentToSnackBar.panelClass = [
+                    'custom-snack-failure',
+                  ];
+                  this.dataToBeSentToSnackBar.message = resp.message;
+                }
+                this.snackBarServ.openSnackBarFromComponent(
+                  this.dataToBeSentToSnackBar
+                );
+                this.getAllData(this.currentPageIndex + 1);
+              });
           } else {
             this.vendorServ
-            .moveToCPVOrFPV(
-              selectedOption,
-              vendor.id,
-              this.loginId
-            )
-            .subscribe((resp: any) => {
-              if (resp.status == 'success') {
-                this.dataToBeSentToSnackBar.panelClass = [
-                  'custom-snack-success',
-                ];
-                this.dataToBeSentToSnackBar.message = resp.message ;
+              .moveToCPVOrFPV(
+                selectedOption,
+                vendor.id,
+                this.loginId
+              )
+              .subscribe((resp: any) => {
+                if (resp.status == 'success') {
+                  this.dataToBeSentToSnackBar.panelClass = [
+                    'custom-snack-success',
+                  ];
+                  this.dataToBeSentToSnackBar.message = resp.message;
 
-              } else {
-                this.dataToBeSentToSnackBar.panelClass = [
-                  'custom-snack-failure',
-                ];
-                this.dataToBeSentToSnackBar.message = resp.message;
-              }
-              this.snackBarServ.openSnackBarFromComponent(
-                this.dataToBeSentToSnackBar
-              );
-              this.getAllData(this.currentPageIndex + 1);
-            });
+                } else {
+                  this.dataToBeSentToSnackBar.panelClass = [
+                    'custom-snack-failure',
+                  ];
+                  this.dataToBeSentToSnackBar.message = resp.message;
+                }
+                this.snackBarServ.openSnackBarFromComponent(
+                  this.dataToBeSentToSnackBar
+                );
+                this.getAllData(this.currentPageIndex + 1);
+              });
           }
         }
       },
     });
-
   }
 
   onTabChanged(event: MatTabChangeEvent) {
-
     this.status = event.tab.textLabel.toLowerCase();
-    this.getAllData(1, this.status);
+    this.currentPageIndex = this.pageIndices[this.status];
+    this.paginator.pageIndex = this.currentPageIndex;
+    this.getAllData(this.currentPageIndex + 1, this.status);
   }
 }
