@@ -171,6 +171,16 @@
         "text": "Open Reqs Reports",
         "icon": "dynamic_feed",
         "routerLink": "/usit/open-reqs-report"
+      },
+      {
+        "text": "Banter Reports",
+        "icon": "fax",
+        "routerLink": "/usit/banter-report"
+      },
+      {
+        "text": "Candidate Reports",
+        "icon": "contact_page",
+        "routerLink": "/usit/candidate-reports"
       }
     ]
   },
