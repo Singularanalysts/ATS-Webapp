@@ -7,7 +7,6 @@
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  // height: 2rem;
   padding-top: 2px;
   top: 0;
 }
@@ -64,10 +63,6 @@ tbody {
 .mat-sort-header-arrow {
   color: #1a1717;
 }
-
-// .mat-mdc-row {
-//   height: 48px !important;
-// }
 
 .mat-mdc-column {
   border-right: 1px solid currentColor;
@@ -139,16 +134,14 @@ tbody {
 }
 
 .recruiter-table-style {
-  //width: max-content;
   width: 100%;
-  // max-height: calc(100% - 2px);
   overflow-y: auto;
-  //display: block;
 }
 .action-btns{
   display: flex;
   flex-direction: row;
 }
+
 .mdc-data-table__cell,
 .mdc-data-table__header-cell {
   padding: 0 4px 0 4px;
@@ -166,7 +159,6 @@ tbody {
   margin-top: 64px;
 }
 
-
 .responsive-table {
   width: 100%;
 }
@@ -174,7 +166,7 @@ tbody {
 td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
   display: flex;
   column-gap: 5px;
-  height: 43px;
+  height: 49px;
   align-items: center;
 }
 
@@ -190,41 +182,20 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-
   .mdc-data-table__cell,
   .mdc-data-table__header-cell {
     padding: 0px 2px;
   }
 }
 
-// .action-buttons {
-//   // display: flex;
-//   align-items: center;
-//   // height: 43px;
-// }
-
-// .action-buttons button {
-//   margin: 0;
-//   padding: 0;
-//   width: 30px;
-//   height: 30px;
-// }
-
-// ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-//   width: 30px !important;
-//   height: 30px !important;
-// }
-
-// ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-//   width: 30px !important;
-//   height: 30px !important;
-//   top: 10px;
-// }
+.action-buttons {
+  display: flex;
+  align-items: center;
+}
 
 .edit-icon, .delete-icon {
   color: rgb(99, 98, 98);
 }
-
 
 .technical-recruiter {
   color: #f44336;
@@ -237,38 +208,6 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 .both-recruiters {
   color: black;
 }
-
-// @media screen and (min-width: 1600px) {
-//   .recruiter-table-style {
-//     width: 100%;
-//     height: calc(100% - 0px);
-//     overflow: auto;
-//   }
-// }
-
-// @media only screen and (min-width: 900px) and (max-width: 1228px) {
-//   .container {
-//     display: flex;
-//     flex-direction: column;
-//     height: 83vh;
-//   }
-// }
-
-// @media only screen and (min-width: 1228px) and (max-width: 1440px) {
-//   .container {
-//     display: flex;
-//     flex-direction: column;
-//     height: 85vh;
-//   }
-// }
-
-// @media only screen and (min-width: 1440px) {
-//   .container {
-//     display: flex;
-//     flex-direction: column;
-//     height: 87.5vh;
-//   }
-// }
 
 .mat-mdc-header-row {
   height: 30px !important;
@@ -294,12 +233,6 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   color: #0275d8;
 }
 
-// @media screen and (min-width: 1920px) {
-//   .container {
-//     height: 90vh;
-//   }
-// }
-
 .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
   --mdc-icon-button-state-layer-size: 24px;
   width: var(--mdc-icon-button-state-layer-size);
@@ -308,6 +241,11 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 }
 
 ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
   width: 24px !important;
   height: 24px !important;
 }

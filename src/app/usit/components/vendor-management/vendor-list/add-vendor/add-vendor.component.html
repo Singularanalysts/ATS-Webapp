@@ -18,31 +18,40 @@
           <!-- Company -->
           <mat-form-field appearance="fill">
             <mat-label>Company</mat-label>
-           <input matInput formControlName="company" [matAutocomplete]="companyAutoCmp" maxlength="75">
+            <input matInput formControlName="company" [matAutocomplete]="companyAutoCmp" maxlength="75">
             <mat-autocomplete #companyAutoCmp="matAutocomplete">
-                <mat-option *ngFor="let option of (searchCompanyOptions$ | async)"
-                  [value]="option.company.trim()">
-                  {{ option.company.trim() }}
-                </mat-option>
+              <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company.trim()">
+                {{ option.company.trim() }}
+              </mat-option>
             </mat-autocomplete>
-              <mat-hint *ngIf="isCompanyDataAvailable">Proceed to Add Vendor</mat-hint>
-              <mat-error *ngIf="vendorForm.get('company')!.hasError('required')">Company Name
-                is Required
-              </mat-error>
+            <mat-hint *ngIf="isCompanyDataAvailable">Proceed to Add Vendor</mat-hint>
+            <mat-error *ngIf="vendorForm.get('company')!.hasError('required')">Company Name
+              is Required
+            </mat-error>
           </mat-form-field>
-
-            <!-- Location - HeadQuarters -->
-            <mat-form-field appearance="fill">
-              <mat-label>Location</mat-label>
-              <input matInput formControlName="headquerter" ngx-gp-autocomplete (onAddressChange)="handleAddressChange($event)">
-              <mat-hint>Please search with company name</mat-hint>
-              <mat-error
-                *ngIf="vendorForm.get('headquerter')!.hasError('required') && vendorForm.get('headquerter')!.touched">Location
-                 is Required</mat-error>
-              <mat-error
-                *ngIf="vendorForm.get('headquerter')!.hasError('atLeastTwoNumbers') && vendorForm.get('headquerter')!.value">Please
-                Enter the full address of the company</mat-error>
-            </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Select Country</mat-label>
+            <mat-select formControlName="country">
+              <mat-option value="USA">USA</mat-option>
+              <mat-option value="UAE">UAE</mat-option>
+            </mat-select>
+            <mat-error *ngIf="vendorForm.get('country')!.hasError('required')"> Country is
+              required</mat-error>
+          </mat-form-field>
+          
+          <!-- Location - HeadQuarters -->
+          <mat-form-field appearance="fill">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="headquerter" ngx-gp-autocomplete (onAddressChange)="handleAddressChange($event)">
+            <mat-hint>Please search with company name</mat-hint>
+            <mat-error
+              *ngIf="vendorForm.get('headquerter')!.hasError('required') && vendorForm.get('headquerter')!.touched">Location
+              is Required</mat-error>
+            <mat-error
+              *ngIf="vendorForm.get('headquerter')!.hasError('atLeastTwoNumbers') && vendorForm.get('headquerter')!.value">Please
+              Enter the full address of the company</mat-error>
+          </mat-form-field>
            <!-- Fedid -->
            <!-- <mat-form-field appearance="fill">
             <mat-label>Fed-Id</mat-label>

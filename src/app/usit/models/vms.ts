@@ -19,7 +19,7 @@ export class Vms {
     client!: string;
     company!: string;
     companytype!: string;
-    //city!:string;
+    country!:string;
     headquerter!: string;
     fedid!: string;
     updateddate!: string;

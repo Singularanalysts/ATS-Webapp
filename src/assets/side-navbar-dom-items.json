@@ -146,6 +146,11 @@
         "text": "Banter Reports",
         "icon": "fax",
         "routerLink": "/usit/banter-report"
+      },
+      {
+        "text": "Candidate Reports",
+        "icon": "contact_page",
+        "routerLink": "/usit/candidate-reports"
       }
     ]
   }

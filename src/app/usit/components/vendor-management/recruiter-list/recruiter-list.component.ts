@@ -36,7 +36,7 @@ import {
 import { Recruiter } from 'src/app/usit/models/recruiter';
 import { RecruiterService } from 'src/app/usit/services/recruiter.service';
 import { AddRecruiterComponent } from './add-recruiter/add-recruiter.component';
-import { UploadVmsExcelComponent } from './upload-vms-excel/upload-vms-excel.component';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-recruiter-list',
@@ -52,6 +52,7 @@ import { UploadVmsExcelComponent } from './upload-vms-excel/upload-vms-excel.com
     MatPaginatorModule,
     CommonModule,
     MatTooltipModule,
+    MatTabsModule
   ],
   templateUrl: './recruiter-list.component.html',
   styleUrls: ['./recruiter-list.component.scss'],
@@ -91,7 +92,7 @@ export class RecruiterListComponent implements OnInit {
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
 
-  hasAcces!: any;
+  role!: any;
   loginId!: any;
   department!: any;
   assignToPage: any;
@@ -110,9 +111,12 @@ export class RecruiterListComponent implements OnInit {
   AssignedPageNum!: any;
   field = 'empty';
   companyType: string = '';
+  tabs = ['All', 'USA', 'UAE'];
+  status = 'all';
+  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 
   ngOnInit(): void {
-    this.hasAcces = localStorage.getItem('role');
+    this.role = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
     this.AssignedPageNum = localStorage.getItem('rnum');
@@ -136,16 +140,20 @@ export class RecruiterListComponent implements OnInit {
    * get all recruiter data
    * @returns recruiter data
    */
-  getAllRecruiters(pageNumber = 1) {
+  getAllRecruiters(pageNumber = 1, status: string = 'all') {
+    const pagObj = {
+      pageNumber: pageNumber,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+      role: this.role,
+      userid: this.loginId,
+      country: this.status
+    }
     return this.recruiterServ
       .getAllRecruitersPagination(
-        this.hasAcces,
-        this.loginId,
-        pageNumber,
-        this.pageSize,
-        this.field,
-        this.sortField,
-        this.sortOrder
+        pagObj
       )
       .subscribe((response: any) => {
         this.datarr = response.data.content;
@@ -170,15 +178,19 @@ export class RecruiterListComponent implements OnInit {
     const keyword = event.target.value;
     this.field = keyword;
     if (keyword != '') {
+      const pagObj = {
+        pageNumber: 1,
+        pageSize: this.itemsPerPage,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: this.field,
+        role: this.role,
+        userid: this.loginId,
+        country: this.status,
+      }
       return this.recruiterServ
         .getAllRecruitersPagination(
-          this.hasAcces,
-          this.loginId,
-          1,
-          this.pageSize,
-          keyword,
-          this.sortField,
-          this.sortOrder
+          pagObj
         )
         .subscribe((response: any) => {
           this.datarr = response.data.content;
@@ -193,7 +205,7 @@ export class RecruiterListComponent implements OnInit {
     if (keyword == '') {
       this.field = 'empty';
     }
-    return this.getAllRecruiters(this.currentPageIndex + 1);
+    return this.getAllRecruiters(this.currentPageIndex + 1, this.status);
   }
 
   /**
@@ -207,17 +219,8 @@ export class RecruiterListComponent implements OnInit {
       this.sortField = 'updateddate'
     else
       this.sortField = event.active;
-
     this.sortOrder = event.direction;
-
-    if (event.direction != '') {
-      if (this.vendorTypeFlag == false) {
-        this.getAllRecruiters();
-      }
-      else {
-        this.getAllVendorByType(this.companyType, 1)
-      }
-    }
+    this.getAllRecruiters();
   }
 
 
@@ -244,7 +247,7 @@ export class RecruiterListComponent implements OnInit {
     );
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAllRecruiters(this.currentPageIndex + 1);
+        this.getAllRecruiters(this.currentPageIndex + 1, this.status);
       }
     });
   }
@@ -271,7 +274,7 @@ export class RecruiterListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAllRecruiters(this.currentPageIndex + 1);
+        this.getAllRecruiters(this.currentPageIndex + 1, this.status);
       }
     });
   }
@@ -316,7 +319,7 @@ export class RecruiterListComponent implements OnInit {
             .deleteEntity(recruiter.id)
             .subscribe((response: any) => {
               if (response.status == 'success') {
-                this.getAllRecruiters(this.currentPageIndex + 1);
+                this.getAllRecruiters(this.currentPageIndex + 1, this.status);
                 dataToBeSentToSnackBar.message =
                   'Recruiter Deleted successfully';
               } else {
@@ -482,7 +485,7 @@ export class RecruiterListComponent implements OnInit {
                 this.snackBarServ.openSnackBarFromComponent(
                   dataToBeSentToSnackBar
                 );
-                this.getAllRecruiters(this.currentPageIndex + 1);
+                this.getAllRecruiters(this.currentPageIndex + 1, this.status);
               },
               error: (err) => {
                 dataToBeSentToSnackBar.message = err.message;
@@ -546,7 +549,7 @@ export class RecruiterListComponent implements OnInit {
         this.getAllVendorByType(this.companyType, event.pageIndex + 1)
         return
       }
-      this.getAllRecruiters(event.pageIndex + 1);
+      this.getAllRecruiters(event.pageIndex + 1, this.status);
     }
     return;
   }
@@ -554,12 +557,13 @@ export class RecruiterListComponent implements OnInit {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+  
   vendorTypeFlag = false;
   getAllVendorByType(type: string, pageIndex = 0) {
     this.vendorTypeFlag = true;
     this.companyType = type;
     const page = pageIndex ? pageIndex : this.page;
-    this.recruiterServ.getAllVendorByType(this.hasAcces, this.loginId, page, this.pageSize, type, this.field,
+    this.recruiterServ.getAllVendorByType(this.role, this.loginId, page, this.pageSize, type, this.field,
       this.sortField,
       this.sortOrder).subscribe(
         (response: any) => {
@@ -574,5 +578,12 @@ export class RecruiterListComponent implements OnInit {
 
   goToUserInfo(id: any) {
     this.router.navigate(['usit/user-info', 'recruiter', id])
+  }
+
+  onTabChanged(event: MatTabChangeEvent) {
+    this.status = event.tab.textLabel.toLowerCase();
+    this.currentPageIndex = this.pageIndices[this.status];
+    this.paginator.pageIndex = this.currentPageIndex;
+    this.getAllRecruiters(this.currentPageIndex + 1, this.status);
   }
 }

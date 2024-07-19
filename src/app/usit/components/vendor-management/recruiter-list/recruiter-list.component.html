@@ -1,19 +1,6 @@
 <div class="container">
-  <ul class="breadcrumb">
-    <li><a (click)="navigateToDashboard()">Home</a></li>
-    <li class="last">Recruiters</li>
-  </ul>
   <div class="header-container mat-elevation-z1">
     <span class="header-text"> Recruiters </span>
-    <!-- <div class="filter-recruiters">
-      <button mat-raised-button class="filter-button" color="warn" (click)="getAllVendorByType('Recruiter')">Technical
-        Recruiter</button>
-      <button mat-raised-button class="filter-button" color="primary" (click)="getAllVendorByType('Bench Sales')">Bench
-        Sales Recruiter</button>
-      <button mat-raised-button class="filter-button" style="background-color: black; color: white;"
-        (click)="getAllVendorByType('Both')">Both Technical & Bench Sales Recruiters</button>
-    </div> -->
-
     <div class="recruiter-actions">
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_RECRUITER')" mat-icon-button class="add-user"
         (click)="addRecruiter()" matTooltip="Add Recruiter" matTooltipPosition="above">
@@ -26,141 +13,133 @@
     </div>
   </div>
   <div id="table-container" class="table-wrapper">
-    <section class="recruiter-table-style">
-      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false"
-        onpaste="return false" oncut="return false">
-        <ng-container matColumnDef="SerialNum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 2%">S.No</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 2%">{{ recruiter?.serialNum }}</td>
-        </ng-container>
+    <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
+      <mat-tab *ngFor="let tab of tabs" [label]="tab">
+        <ng-container *ngTemplateOutlet="tableTemplate; context: { status: tab }"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
 
-        <ng-container matColumnDef="Company">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 18%">Company</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 18%">{{ recruiter.company| titlecase}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="RecruiterName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 12%">Recruiter Name</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 12%">{{ recruiter.recruiter |titlecase}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="PhoneNumber">
-          <th mat-header-cell *matHeaderCellDef style="width: 10%">Phone Number</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 10%">
-            <span>
-              {{ recruiter.usnumber == null ? recruiter.contactnumber : recruiter.usnumber}}
-            </span>
-            <br>
-            <span *ngIf="recruiter.extension!=null && recruiter.extension!='0' && recruiter.extension!=''"> Ext :
-              {{recruiter.extension}}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 18%">Email</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 18%">{{ recruiter.email }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="AddedBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%">Added By</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 8%">
-            <span class="user-info" (click)="goToUserInfo(recruiter.addedby)">{{ recruiter.pseudoname | titlecase }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="AddedOn">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%">Added On</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 8%">{{ recruiter.createddate | date:'MM-dd-yyyy'}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="LastUpdated">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%">Last Updated</th>
-          <td mat-cell *matCellDef="let recruiter" style="width: 8%">{{ recruiter.updateddate | date:'MM-dd-yyyy'}}</td>
-        </ng-container>
-
-        <!-- <ng-container matColumnDef="Status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-          <td mat-cell *matCellDef="let recruiter">
-          <span>
-            <button mat-raised-button (click)="onStatusUpdate(recruiter)" *ngIf="hasAcces!='Employee'  && hasAcces!='Team Lead'"
-              [ngStyle]="{ color: 'white' }"
-              [ngClass]="recruiter.status === 'Approved' ? 'mat-primary' : recruiter.status === 'Active' ? 'mat-primary' : 'mat-warn'">
-              {{ recruiter.status }}
-            </button>
-          </span>
-        </td>
-        </ng-container> -->
-
-        <!-- Action Column -->
-        <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef style="width: 5%">Action</th>
-          <td mat-cell *matCellDef="let recruiter" class="action-buttons" style="width: 5%">
-            <span class="action-btns">
-              <button [disabled]="!privilegeServ.hasPrivilege('EDIT_RECRUITER')" mat-icon-button
-                (click)="editRecruiter(recruiter)" class="action-button-ed"
-                *ngIf="hasAcces!='Employee'  && hasAcces!='Team Lead'">
-                <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_RECRUITER')}">edit</mat-icon>
-              </button>
-
-              <button [disabled]="!privilegeServ.hasPrivilege('DELETE_RECRUITER')" mat-icon-button
-                (click)="deleteRecruiter(recruiter)" class="action-button-ed"
-                *ngIf="hasAcces!='Employee'  && hasAcces!='Team Lead'">
-                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_RECRUITER')}">delete</mat-icon>
-              </button>
-            </span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Approve/Reject">
-          <th mat-header-cell *matHeaderCellDef>Approve/Reject</th>
-          <td mat-cell *matCellDef="let recruiter" class="approve-buttons">
-            <ng-container *ngIf="['Approved'].includes(recruiter.rec_stat);  else ifNotApproved">
-
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')" mat-raised-button
-                (click)="onApproveOrRejectRecruiter(recruiter)" class="approve-reject-buttons"
-                [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
-                [ngClass]="recruiter.rec_stat === 'Approved'  ?   'mat-primary' : recruiter.rec_stat === 'Initiated'  ?  'mat-secondary' : 'mat-warn'">
-                {{recruiter.rec_stat}}
-              </button>
-
-            </ng-container>
-            <ng-template #ifNotApproved>
-              <!-- Initiated BUTTON -->
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"
-                *ngIf="['Initiated', 'Approved'].includes(recruiter.rec_stat)" class="approve-reject-buttons"
-                mat-raised-button (click)="onApproveOrRejectRecruiter(recruiter)" [ngStyle]="{ color: 'white' }"
-                style="width: 75px; height: 25px;" [ngClass]="'mat-primary'"> {{recruiter.rec_stat}}
-              </button>
-
-              <!-- Reject BUTTON -->
-
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"
-                *ngIf="recruiter.rec_stat !== 'Approved' && recruiter.rec_stat !== 'Rejected'" mat-raised-button
-                (click)="onApproveOrRejectRecruiter(recruiter, true)" class="approve-reject-buttons"
-                [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
-              </button>
-
-              <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"
-                *ngIf="recruiter.rec_stat === 'Rejected'" mat-raised-button class="approve-reject-buttons"
-                [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'">
-                {{recruiter.rec_stat}}
-              </button>
-
-            </ng-template>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: dataTableColumns" [ngClass]="getRecruiterRowClass(row)"></tr>
-
-      </table>
-      <p class="no-data-found" *ngIf="!dataSource.filteredData.length">
-        {{ "No matching data found" }}
-      </p>
-    </section>
-
-    <hr>
-
+    <ng-template #tableTemplate>
+      <section class="recruiter-table-style">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false"
+          onpaste="return false" oncut="return false">
+          <ng-container matColumnDef="SerialNum">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 2%">S.No</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 2%">{{ recruiter?.serialNum }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="Company">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 18%">Company</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 18%">{{ recruiter.company| titlecase}}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="RecruiterName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 12%">Recruiter Name</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 12%">{{ recruiter.recruiter |titlecase}}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="PhoneNumber">
+            <th mat-header-cell *matHeaderCellDef style="width: 10%">Phone Number</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 10%">
+              <span>
+                {{ recruiter.usnumber == null ? recruiter.contactnumber : recruiter.usnumber}}
+              </span>
+              <br>
+              <span *ngIf="recruiter.extension!=null && recruiter.extension!='0' && recruiter.extension!=''"> Ext :
+                {{recruiter.extension}}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="Email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 18%">Email</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 18%">{{ recruiter.email }}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="AddedBy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%">Added By</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 8%">
+              <span class="user-info" (click)="goToUserInfo(recruiter.addedby)">{{ recruiter.pseudoname | titlecase }}</span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="AddedOn">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%">Added On</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 8%">{{ recruiter.createddate | date:'MM-dd-yyyy'}}</td>
+          </ng-container>
+  
+          <ng-container matColumnDef="LastUpdated">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%">Last Updated</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 8%">{{ recruiter.updateddate | date:'MM-dd-yyyy'}}</td>
+          </ng-container>
+  
+          <!-- Action Column -->
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef style="width: 5%">Action</th>
+            <td mat-cell *matCellDef="let recruiter" style="width: 5%" nowrap>
+              <span class="action-buttons">
+                <button [disabled]="!privilegeServ.hasPrivilege('EDIT_RECRUITER')" mat-icon-button
+                  (click)="editRecruiter(recruiter)" class="action-button-ed"
+                  *ngIf="role!='Employee'  && role!='Team Lead'">
+                  <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_RECRUITER')}">edit</mat-icon>
+                </button>
+  
+                <button [disabled]="!privilegeServ.hasPrivilege('DELETE_RECRUITER')" mat-icon-button
+                  (click)="deleteRecruiter(recruiter)" class="action-button-ed"
+                  *ngIf="role!='Employee'  && role!='Team Lead'">
+                  <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_RECRUITER')}">delete</mat-icon>
+                </button>
+              </span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="Approve/Reject">
+            <th mat-header-cell *matHeaderCellDef>Approve/Reject</th>
+            <td mat-cell *matCellDef="let recruiter" class="approve-buttons">
+              <ng-container *ngIf="['Approved'].includes(recruiter.rec_stat);  else ifNotApproved">
+  
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')" mat-raised-button
+                  (click)="onApproveOrRejectRecruiter(recruiter)" class="approve-reject-buttons"
+                  [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
+                  [ngClass]="recruiter.rec_stat === 'Approved'  ?   'mat-primary' : recruiter.rec_stat === 'Initiated'  ?  'mat-secondary' : 'mat-warn'">
+                  {{recruiter.rec_stat}}
+                </button>
+  
+              </ng-container>
+              <ng-template #ifNotApproved>
+                <!-- Initiated BUTTON -->
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"
+                  *ngIf="['Initiated', 'Approved'].includes(recruiter.rec_stat)" class="approve-reject-buttons"
+                  mat-raised-button (click)="onApproveOrRejectRecruiter(recruiter)" [ngStyle]="{ color: 'white' }"
+                  style="width: 75px; height: 25px;" [ngClass]="'mat-primary'"> {{recruiter.rec_stat}}
+                </button>
+  
+                <!-- Reject BUTTON -->
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"
+                  *ngIf="recruiter.rec_stat !== 'Approved' && recruiter.rec_stat !== 'Rejected'" mat-raised-button
+                  (click)="onApproveOrRejectRecruiter(recruiter, true)" class="approve-reject-buttons"
+                  [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
+                </button>
+  
+                <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"
+                  *ngIf="recruiter.rec_stat === 'Rejected'" mat-raised-button class="approve-reject-buttons"
+                  [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'">
+                  {{recruiter.rec_stat}}
+                </button>
+              </ng-template>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: dataTableColumns" [ngClass]="getRecruiterRowClass(row)"></tr>
+  
+        </table>
+        <p class="no-data-found" *ngIf="!dataSource.filteredData.length">
+          {{ "No matching data found" }}
+        </p>
+      </section>
+      <hr>
+    </ng-template>
+    
   </div>
   <div class="paginator">
     <!-- paginator -->
