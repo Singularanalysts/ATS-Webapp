@@ -31,8 +31,8 @@ export class RecruiterService {
     return this.apiServ.get("auth/users/emphierarchy");
   }
 
-  getAllRecruitersPagination( access: string, userid: number,page: any, size: any,field:any, sortField:string,sortOrder:string) {
-    return this.apiServ.get("vms/recruiter/all/" + access + "/" + userid+"/"+page+"/"+size+"/"+field+"/"+sortField+"/"+sortOrder);
+  getAllRecruitersPagination( data: any) {
+    return this.apiServ.post("vms/recruiter/all", data);
   }
 
 

@@ -167,18 +167,10 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   private iniVendorForm(vendorData: Vms) {
 
     this.vendorForm = this.formBuilder.group({
-      company: [
-        vendorData ? vendorData.company : '',
-        [Validators.required],
-      ],
-      //  fedid: [this.data.vendorData ? this.data.vendorData.fedid : ''],
-      vendortype: [
-        vendorData ? vendorData.vendortype : '',
-        Validators.required,
-      ],
-      companytype: [
-        vendorData ? vendorData.companytype : '', Validators.required,
-      ],
+      company: [vendorData ? vendorData.company : '', [Validators.required]],
+      vendortype: [vendorData ? vendorData.vendortype : '', Validators.required],
+      companytype: [vendorData ? vendorData.companytype : '', Validators.required],
+      country: [vendorData ? vendorData.country : '', Validators.required],
       tyretype: [vendorData ? vendorData.tyretype : ''],
       client: [vendorData ? vendorData.client : ''],
       addedby: [this.vendorObj.addedby],
@@ -188,19 +180,11 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       revenue: [vendorData ? vendorData.revenue : ''],
       website: [vendorData ? vendorData.website : ''],
       facebook: [vendorData ? vendorData.facebook : ''],
-      industrytype: [
-        vendorData ? vendorData.industrytype : '',
-      ],
+      industrytype: [vendorData ? vendorData.industrytype : ''],
       linkedinid: [vendorData ? vendorData.linkedinid : ''],
       twitterid: [vendorData ? vendorData.twitterid : ''],
-      // user: this.formBuilder.group({
-      //   userid: localStorage.getItem('userid'),
-      // }),
       user: localStorage.getItem('userid'),
-      headquerter: [
-        vendorData ? vendorData.headquerter : '',
-        [Validators.required, this.atLeastTwoNumbers]
-      ],
+      headquerter: [vendorData ? vendorData.headquerter : '', [Validators.required, this.atLeastTwoNumbers]],
     });
     if (this.data.actionName === 'edit-vendor') {
       this.vendorForm.addControl(

@@ -273,7 +273,7 @@ export class VendorListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAllData(this.currentPageIndex + 1);
+        this.getAllData(this.currentPageIndex + 1, this.status);
       }
     });
   }
@@ -299,7 +299,7 @@ export class VendorListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAllData(this.currentPageIndex + 1);
+        this.getAllData(this.currentPageIndex + 1, this.status);
       }
     });
   }
@@ -346,7 +346,7 @@ export class VendorListComponent implements OnInit {
             .subscribe({
               next: (response: any) => {
                 if (response.status == 'success') {
-                  this.getAllData(this.currentPageIndex + 1);
+                  this.getAllData(this.currentPageIndex + 1, this.status);
                   dataToBeSentToSnackBar.message =
                     'Vendor Deleted successfully';
                 } else {
@@ -412,7 +412,7 @@ export class VendorListComponent implements OnInit {
             .subscribe({
               next: (response: any) => {
                 if (response.status == 'Success') {
-                  this.getAllData(this.currentPageIndex + 1);
+                  this.getAllData(this.currentPageIndex + 1, this.status);
                   dataToBeSentToSnackBar.message =
                     'Status updated successfully';
                 } else {
@@ -524,7 +524,7 @@ export class VendorListComponent implements OnInit {
                   dataToBeSentToSnackBar
                 );
 
-                this.getAllData(this.currentPageIndex + 1);
+                this.getAllData(this.currentPageIndex + 1, this.status);
               },
               error: (err) => {
                 dataToBeSentToSnackBar.message = err.message;
