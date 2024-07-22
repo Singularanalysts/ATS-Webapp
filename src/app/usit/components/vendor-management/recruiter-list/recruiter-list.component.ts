@@ -71,7 +71,7 @@ export class RecruiterListComponent implements OnInit {
     'LastUpdated',
     // 'Status',
     'Action',
-    'Approve/Reject',
+    'ApproveOrReject',
   ];
 
   dataSource = new MatTableDataSource<any>([]);

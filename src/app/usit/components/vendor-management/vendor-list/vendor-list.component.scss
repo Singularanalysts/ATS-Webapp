@@ -151,10 +151,8 @@ tbody {
 }
 
 .vendor-table-style {
-  padding: 0 2px;
   width: 100%;
-  overflow: auto;
-  display: block;
+  overflow-y: auto;
 }
 
 .mdc-data-table__cell,

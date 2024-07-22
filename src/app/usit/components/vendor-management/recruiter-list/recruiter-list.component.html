@@ -92,9 +92,9 @@
             </td>
           </ng-container>
   
-          <ng-container matColumnDef="Approve/Reject">
+          <ng-container matColumnDef="ApproveOrReject">
             <th mat-header-cell *matHeaderCellDef>Approve/Reject</th>
-            <td mat-cell *matCellDef="let recruiter" class="approve-buttons">
+            <td mat-cell *matCellDef="let recruiter" class="approve-buttons" style="white-space: nowrap;">
               <ng-container *ngIf="['Approved'].includes(recruiter.rec_stat);  else ifNotApproved">
   
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')" mat-raised-button
@@ -112,6 +112,8 @@
                   mat-raised-button (click)="onApproveOrRejectRecruiter(recruiter)" [ngStyle]="{ color: 'white' }"
                   style="width: 75px; height: 25px;" [ngClass]="'mat-primary'"> {{recruiter.rec_stat}}
                 </button>
+
+                &nbsp;
   
                 <!-- Reject BUTTON -->
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_RECRUITER')"

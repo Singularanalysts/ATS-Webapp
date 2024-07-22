@@ -10,19 +10,19 @@ export class ClientInformationService {
   constructor() { }
 
   getAllTcvrs(data: any) {
-    return this.apiServ.post("vms/getAll", data);
+    return this.apiServ.post("vms/tcvr/getAll", data);
   }
 
   saveTcvr(entity: any) {
-    return this.apiServ.post("vms/saveTcvr", entity);
+    return this.apiServ.post("vms/tcvr/saveTcvr", entity);
   }
 
   getTcvrById(id: number) {
-    return this.apiServ.get(`vms/getById/${id}`);
+    return this.apiServ.get(`vms/tcvr/getById/${id}`);
   }
 
   updateTcvr(entity: any) {
-    return this.apiServ.put("vms/updateTcvr", entity);
+    return this.apiServ.put("vms/tcvr/updateTcvr", entity);
   }
 
   addORUpdateTcvr(entity: any, action: 'edit-tcvr' | 'add-tcvr'){
@@ -30,6 +30,6 @@ export class ClientInformationService {
   }
 
   deleteTcvr(id: number) {
-    return this.apiServ.delete(`vms/deletedById/${id}`);
+    return this.apiServ.delete(`vms/tcvr/deletedById/${id}`);
   }
 }
