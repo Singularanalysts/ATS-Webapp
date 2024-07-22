@@ -1,0 +1,337 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 68px);
+}
+
+ul {
+  padding-inline-start: 10px;
+  background-color: rgb(228, 231, 234);
+  padding-top: 2px;
+  top: 0;
+}
+
+ul.breadcrumb {
+  list-style: none;
+}
+
+ul.breadcrumb li {
+  display: inline;
+}
+
+ul.breadcrumb li + li:before {
+  color: black;
+  content: "/\00a0";
+}
+
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+.table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 4px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-header-row {
+  background-color: rgb(213, 231, 231);
+  position: sticky;
+  top: 0;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+}
+
+tbody {
+  text-align: left;
+}
+
+.mat-sort-header-arrow {
+  color: #1a1717;
+}
+
+.mat-mdc-column {
+  border-right: 1px solid currentColor;
+}
+
+.mat-column-Designation {
+  width: 32px;
+  border-right: 1px solid lightgray;
+  padding-right: 24px;
+}
+
+.mat-column-Name {
+  border-right: 1px solid lightgray;
+}
+
+.mat-column-ApproveOrReject {
+  width: fit-content !important;
+}
+
+.mat-column-SerialNum,
+.mat-column-Client,
+.mat-column-FirstLevelVendor,
+.mat-column-SecondLevelVendor,
+.mat-column-CareersPage,
+.mat-column-AddedBy,
+.mat-column-AddedOn,
+.mat-column-LastUpdated,
+.mat-column-Technology,
+.mat-column-Action {
+  border-right: 1px solid lightgray !important;
+}
+
+.company-recruiter-info {
+  cursor: pointer !important;
+  color: #4154f1;
+}
+
+.action-btns {
+  display: flex;
+  flex-direction: row;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  background-color: white;
+  top: 0;
+  overflow: hidden;
+  background-color: rgb(228, 231, 234);
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.add-client {
+  cursor: pointer;
+}
+
+.tcvr-actions {
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+
+  input:focus {
+    border: solid 2px #3f51b5 !important;
+    outline: none;
+  }
+
+  .search {
+    height: 32px;
+    padding: 0px 8px;
+  }
+}
+
+.tcvr-table-style {
+  padding: 0 2px;
+  width: 100%;
+  overflow: auto;
+  display: block;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  padding: 0 4px 0 4px;
+}
+
+.mat-mdc-header-row {
+  z-index: 1000;
+}
+
+.no-data-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  margin-top: 64px;
+}
+
+.responsive-table {
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .responsive-table {
+    table-layout: auto;
+  }
+
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding: 0px 2px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding: 0px 2px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.filter-clients {
+  display: flex;
+  column-gap: 5px;
+}
+
+.recruiting-companies {
+  color: #f44336;
+}
+
+.bench-sales-recruiter {
+  color: #3f51b5;
+}
+
+.both {
+  color: black;
+}
+
+.edit-icon,
+.delete-icon {
+  color: rgb(99, 98, 98);
+}
+
+td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
+  display: flex;
+  column-gap: 5px;
+  height: 49px;
+  align-items: center;
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+}
+
+.mat-mdc-row {
+  height: 30px !important;
+}
+
+.filter-button {
+  width: fit-content;
+  height: 25px;
+}
+
+.approve-reject-buttons {
+  width: fit-content;
+  height: auto;
+}
+
+ul.breadcrumb li:last-child {
+  color: black;
+  pointer-events: none;
+}
+
+.user-info {
+  cursor: pointer !important;
+  color: #4154f1;
+}
+
+::ng-deep .mat-mdc-paginator {
+  display: block;
+  line-height: var(--mat-paginator-container-text-line-height);
+  font-size: var(--mat-paginator-container-text-size);
+  font-weight: var(--mat-paginator-container-text-weight);
+  letter-spacing: var(--mat-paginator-container-text-tracking);
+}
+
+:host ::ng-deep.mat-paginator .mat-paginator-container {
+  height: 36px;
+}
+
+::ng-deep
+  .mat-mdc-paginator
+  .mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-focus-indicator {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep
+  .mat-mdc-paginator
+  .mat-mdc-icon-button
+  mat-mdc-tooltip-trigger
+  mat-mdc-paginator-navigation-first
+  mdc-icon-button
+  mat-mdc-icon-button
+  mat-unthemed
+  mat-mdc-button-base
+  mat-mdc-tooltip-disabled
+  ng-star-inserted {
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button .mat-mdc-button-base {
+  padding: 0px !important;
+  height: 24px;
+  width: 24px;
+}
+
+::ng-deep .mat-mdc-paginator .mat-mdc-icon-button {
+  padding: 0px !important;
+  height: 24px;
+  width: 24px;
+}
+
+.action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 24px;
+  width: var(--mdc-icon-button-state-layer-size);
+  height: var(--mdc-icon-button-state-layer-size);
+  padding: 0px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.truncate-text {
+  max-width: 250px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    cursor: pointer;
+    color: #4154f1;
+  }
+}

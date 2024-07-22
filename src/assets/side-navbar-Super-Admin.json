@@ -42,6 +42,11 @@
           "text": "Known Vendor Contacts",
           "icon": "group",
           "routerLink": "/usit/known-vendor-contacts"
+        },
+        {
+          "text": "TCVR",
+          "icon": "handshake",
+          "routerLink": "/usit/tcvr"
         }
       ]
     },
@@ -129,6 +134,32 @@
           "text": "Closures",
           "icon": "check_circle",
           "routerLink": "/usit/sales-closures"
+        }
+      ]
+    },
+    {
+      "text": "Pre-Sourcing",
+      "icon": "local_offer",
+      "children": [
+        {
+          "text": "Sourcing",
+          "icon": "flash_on",
+          "routerLink": "/usit/sourcing"
+        },
+        {
+          "text": "Pursuing",
+          "icon": "person",
+          "routerLink": "/usit/pursuing"
+        },
+        {
+          "text": "OnBoarding",
+          "icon": "assignment",
+          "routerLink": "/usit/onboarding"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/closures"
         }
       ]
     },

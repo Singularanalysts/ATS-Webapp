@@ -1,0 +1,67 @@
+<!-- top header container -->
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()" class="btn-close" id="btnClose">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<!-- mat-card starts -->
+<mat-card class="card" id="empCard">
+    <!-- form- starts -->
+    <form [formGroup]="tcvrForm" class="tcvr-form">
+        <section class=form-container>
+            <!-- form - left controls -->
+            <div class="form-column-left">
+                <!-- Company Name -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Client</mat-label>
+                    <input matInput formControlName="client" maxlength="50"/>
+                    <mat-error *ngIf="tcvrForm.get('client')!.hasError('required')">Client Name is Required</mat-error>
+                </mat-form-field>
+
+                <!-- First Level Vendor -->
+                <mat-form-field appearance="fill">
+                    <mat-label>First Level Vendor Name</mat-label>
+                    <input matInput formControlName="firstLevelVendor" maxlength="50">
+                    <mat-error *ngIf="tcvrForm.get('firstLevelVendor')!.hasError('required')">First Level Vendor Name is Required</mat-error>
+                </mat-form-field>
+
+                <!-- Second Level Vendor -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Second Level Vendor Name</mat-label>
+                    <input matInput formControlName="secondLevelVendor" maxlength="50"/>
+                    <mat-error *ngIf="tcvrForm.get('secondLevelVendor')!.hasError('required')">Second Level Vendor Name is Required</mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <!-- form - right controls -->
+            <div class="form-column-right">
+
+                <!-- Email -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Technology</mat-label>
+                    <input matInput formControlName="technology" maxlength="50" />
+                    <mat-error *ngIf="tcvrForm.get('technology')!.hasError('required')">Technology is Required</mat-error>
+                </mat-form-field>
+
+                <!-- Careers -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Careers Page</mat-label>
+                    <input matInput formControlName="careersPage" maxlength="150" />
+                    <mat-error *ngIf="tcvrForm.get('careersPage')!.hasError('required')"> Careers URL is required</mat-error>
+                </mat-form-field>
+
+            </div>
+        </section>
+    </form>
+    <!-- form-ends -->
+    <!-- form-bottom action buttons -->
+    <div class="form-action-buttons">
+        <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>
+<!-- mat-card-ends -->
