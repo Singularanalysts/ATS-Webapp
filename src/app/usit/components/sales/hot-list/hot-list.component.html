@@ -112,7 +112,7 @@
                 <ng-container matColumnDef="Rate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Rate">
                         Rate </th>
-                    <td mat-cell *matCellDef="let element">  {{ NumericValue(element.hourlyrate) }}
+                    <td mat-cell *matCellDef="let element">  {{ element?.hourlyrate }}
                     </td>
                 </ng-container>
 
