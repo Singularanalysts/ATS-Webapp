@@ -184,7 +184,7 @@ export class ClientInformationComponent implements OnInit {
    * @param event
    */
   sortField = 'updateddate';
-  sortOrder = 'asc';
+  sortOrder = 'desc';
   onSort(event: Sort) {
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
