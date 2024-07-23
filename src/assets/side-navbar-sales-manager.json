@@ -42,6 +42,11 @@
           "text": "Known Vendor Contacts",
           "icon": "group",
           "routerLink": "/usit/known-vendor-contacts"
+        },
+        {
+          "text": "TCVR",
+          "icon": "handshake",
+          "routerLink": "/usit/tcvr"
         }
       ]
     },

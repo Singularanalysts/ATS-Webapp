@@ -4,9 +4,9 @@
         TCVR
       </span>
       <div class="tcvr-actions">
-        <button mat-icon-button class="add-user"
+        <button  [disabled]="!privilegeServ.hasPrivilege('ADD_TCVR')" mat-icon-button class="add-user"
           (click)="addClient()" matTooltip="Add TCVR" matTooltipPosition="above">
-          <mat-icon class="item-icon">add_circle</mat-icon>
+          <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_TCVR')}">add_circle</mat-icon>
         </button>
   
         <div class="search-tcvr">
@@ -86,12 +86,12 @@
                 <th mat-header-cell *matHeaderCellDef> Action </th>
                 <td mat-cell *matCellDef="let tcvr" style="white-space: nowrap;">
                   <span class="action-buttons">
-                    <button mat-icon-button
+                    <button [disabled]="!privilegeServ.hasPrivilege('EDIT_TCVR')" mat-icon-button
                       (click)="editClient(tcvr)" class="action-button-ed">
-                      <mat-icon class="edit-icon">edit</mat-icon>
+                      <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_TCVR')}">edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="deleteClient(tcvr)" class="action-button-ed">
-                      <mat-icon class="delete-icon">delete</mat-icon>
+                    <button [disabled]="!privilegeServ.hasPrivilege('DELETE_TCVR')" mat-icon-button (click)="deleteClient(tcvr)" class="action-button-ed">
+                      <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_TCVR')}">delete</mat-icon>
                     </button>
                   </span>
                 </td>

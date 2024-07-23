@@ -58,6 +58,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   us_reports: any[] = [];
   privilegResp: any[] = [];
   company: any[] = [];
+  tcvr: any[] = [];
    // snackbar
    dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
@@ -111,6 +112,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         //reports privilages
         this.sourcing_reports = response.data.sourcing_reports;
         this.us_reports = response.data.us_reports;
+        this.tcvr = response.data.tcvr;
         this.selecedPrivileges();
         this.mapResponseData();
       });
@@ -246,6 +248,13 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         privileges: this.us_reports,
         isSelected: this.us_reports
           ? this.us_reports.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'TCVR',
+        privileges: this.tcvr,
+        isSelected: this.tcvr
+          ? this.tcvr.every((priv: any) => priv.selected === true)
           : false,
       }
 
@@ -483,6 +492,17 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         if (this.sourcing_reports != null) {
           this.sourcing_reports.forEach((ele) => {
             response.data.sourcing_reports.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+              }
+            });
+          });
+        }
+
+        if (this.tcvr != null) {
+          this.tcvr.forEach((ele) => {
+            response.data.tcvr.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
