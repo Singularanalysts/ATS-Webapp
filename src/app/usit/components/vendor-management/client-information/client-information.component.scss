@@ -19,7 +19,7 @@ ul.breadcrumb li {
   display: inline;
 }
 
-ul.breadcrumb li+li:before {
+ul.breadcrumb li + li:before {
   color: black;
   content: "/\00a0";
 }
@@ -44,7 +44,6 @@ ul.breadcrumb li a:hover {
 
 table {
   width: 100%;
-
 }
 
 .mat-mdc-header-row {
@@ -74,12 +73,10 @@ tbody {
   width: 32px;
   border-right: 1px solid lightgray;
   padding-right: 24px;
-
 }
 
 .mat-column-Name {
   border-right: 1px solid lightgray;
-
 }
 
 .mat-column-ApproveOrReject {
@@ -87,18 +84,15 @@ tbody {
 }
 
 .mat-column-SerialNum,
-.mat-column-Company,
-.mat-column-HeadQuarter,
-.mat-column-Fed-Id,
-.mat-column-Fed-Id,
-.mat-column-VendorType,
-.mat-column-TierType,
+.mat-column-Client,
+.mat-column-FirstLevelVendor,
+.mat-column-SecondLevelVendor,
+.mat-column-CareersPage,
 .mat-column-AddedBy,
 .mat-column-AddedOn,
 .mat-column-LastUpdated,
-.mat-column-Action,
-.mat-column-Status,
-.mat-column-ApproveOrReject {
+.mat-column-Technology,
+.mat-column-Action {
   border-right: 1px solid lightgray !important;
 }
 
@@ -129,11 +123,11 @@ tbody {
   font-weight: 600;
 }
 
-.add-vendor {
+.add-client {
   cursor: pointer;
 }
 
-.vendor-actions {
+.tcvr-actions {
   display: flex;
   align-items: center;
   padding-right: 8px;
@@ -146,13 +140,14 @@ tbody {
   .search {
     height: 32px;
     padding: 0px 8px;
-
   }
 }
 
-.vendor-table-style {
+.tcvr-table-style {
+  padding: 0 2px;
   width: 100%;
-  overflow-y: auto;
+  overflow: auto;
+  display: block;
 }
 
 .mdc-data-table__cell,
@@ -199,7 +194,7 @@ tbody {
   align-items: center;
 }
 
-.filter-vendors {
+.filter-clients {
   display: flex;
   column-gap: 5px;
 }
@@ -264,11 +259,13 @@ ul.breadcrumb li:last-child {
   letter-spacing: var(--mat-paginator-container-text-tracking);
 }
 
-:host ::ng-deep.mat-paginator .mat-paginator-container{
+:host ::ng-deep.mat-paginator .mat-paginator-container {
   height: 36px;
 }
 
-::ng-deep .mat-mdc-paginator .mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
+::ng-deep
+  .mat-mdc-paginator
+  .mat-mdc-button-persistent-ripple.mdc-icon-button__ripple {
   height: 24px;
   width: 24px;
 }
@@ -283,7 +280,17 @@ ul.breadcrumb li:last-child {
   width: 24px;
 }
 
-::ng-deep .mat-mdc-paginator .mat-mdc-icon-button mat-mdc-tooltip-trigger mat-mdc-paginator-navigation-first mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base mat-mdc-tooltip-disabled ng-star-inserted {
+::ng-deep
+  .mat-mdc-paginator
+  .mat-mdc-icon-button
+  mat-mdc-tooltip-trigger
+  mat-mdc-paginator-navigation-first
+  mdc-icon-button
+  mat-mdc-icon-button
+  mat-unthemed
+  mat-mdc-button-base
+  mat-mdc-tooltip-disabled
+  ng-star-inserted {
   height: 24px;
   width: 24px;
 }
@@ -315,4 +322,16 @@ ul.breadcrumb li:last-child {
 ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
   width: 24px !important;
   height: 24px !important;
+}
+
+.truncate-text {
+  max-width: 250px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  span {
+    cursor: pointer;
+    color: #4154f1;
+  }
 }

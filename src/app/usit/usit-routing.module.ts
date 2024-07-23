@@ -59,6 +59,7 @@ import { CpvFpvOpenRequirementsComponent } from './components/openreqs/cpv-fpv-o
 import { CxComponent } from './components/cx/cx.component';
 import { ConsultantAllReportComponent } from './components/consultant-components/consultant-all-report/consultant-all-report.component';
 import { CandidateReportComponent } from './components/reports/candidate-report/candidate-report.component';
+import { ClientInformationComponent } from './components/vendor-management/client-information/client-information.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -325,6 +326,9 @@ const routes: Routes = [
   {
     path: 'candidate-reports', component: CandidateReportComponent,
   },
+  {
+    path: 'tcvr', component: ClientInformationComponent,
+  }
 ];
 
 @NgModule({

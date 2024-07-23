@@ -132,7 +132,7 @@ export class VendorListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  getAllData(currentPageIndex = 1, status: string = 'all') {
+  getAllData(pageNumber = 1, status: string = 'all') {
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 1500,
@@ -142,7 +142,7 @@ export class VendorListComponent implements OnInit {
       panelClass: ['custom-snack-success'],
     };
     const pagObj = {
-      pageNumber: currentPageIndex,
+      pageNumber: pageNumber,
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
@@ -547,8 +547,8 @@ export class VendorListComponent implements OnInit {
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
-      this.currentPageIndex = event.pageIndex;
-      this.pageIndices[this.status] = this.currentPageIndex;
+      const currentPageIndex = event.pageIndex;
+      this.currentPageIndex = currentPageIndex;
       if (this.companyType) {
         this.getAllVendorByType(this.companyType, event.pageIndex + 1);
         return;

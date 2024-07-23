@@ -50,6 +50,7 @@ export class VendorService {
   public updateEntity(entity: any) {
     return this.apiServ.put("vms/vendor/vendor", entity);
   }
+  
   approvevms(action: string, id: number,userid:number) {
     return this.apiServ.get("vms/vendor/approve?stat=" + action + "&id=" + id+"&userid="+userid);
   }

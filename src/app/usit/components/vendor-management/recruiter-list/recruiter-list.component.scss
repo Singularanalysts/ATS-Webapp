@@ -165,7 +165,7 @@ tbody {
 
 td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
   display: flex;
-  column-gap: 5px;
+  column-gap: 5px !important;
   height: 49px;
   align-items: center;
 }
@@ -248,4 +248,13 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
   width: 24px !important;
   height: 24px !important;
+}
+
+.mat-column-ApproveOrReject {
+  width: fit-content !important;
+}
+
+.approve-reject-buttons {
+  width: fit-content;
+  height: auto;
 }
