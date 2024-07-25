@@ -712,7 +712,8 @@ export class VendorListComponent implements OnInit {
   onTabChanged(event: MatTabChangeEvent) {
     this.status = event.tab.textLabel.toLowerCase();
     this.currentPageIndex = this.pageIndices[this.status];
-    this.paginator.pageIndex = this.currentPageIndex;
+    // this.paginator!.pageIndex! = this.currentPageIndex;
+    // console.log(this.paginator.pageIndex)
     this.getAllData(this.currentPageIndex + 1, this.status);
   }
 }

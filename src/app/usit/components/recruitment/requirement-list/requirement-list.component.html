@@ -8,8 +8,18 @@
     <span class="header-text"> Requirements </span>
 
     <div class="requirement-actions">
-      <button  [disabled]="!privilegeServ.hasPrivilege('ADD_REQUIREMENTS')" mat-icon-button class="add-user" (click)="addRequirement()">
-        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_REQUIREMENTS')}">add_circle</mat-icon>
+      <button
+        [disabled]="!privilegeServ.hasPrivilege('ADD_REQUIREMENTS')"
+        mat-icon-button
+        class="add-user"
+        (click)="addRequirement()"
+      >
+        <mat-icon
+          [ngClass]="{
+            'item-icon': privilegeServ.hasPrivilege('ADD_REQUIREMENTS')
+          }"
+          >add_circle</mat-icon
+        >
       </button>
 
       <div class="search-requirement">
@@ -39,15 +49,18 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by Serial Number"
-            style="width:2%"
+            style="width: 2%"
           >
             S.No
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 2%">{{ element?.serialNum }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 2%">
+            {{ element?.serialNum }}
+          </td>
         </ng-container>
         <!-- Requirement No.-->
         <ng-container matColumnDef="RequirementNumber">
-          <th mat-sort-header
+          <th
+            mat-sort-header
             mat-header-cell
             *matHeaderCellDef
             sortActionDescription="Sort by RequirementNumber"
@@ -55,10 +68,19 @@
           >
             Requirement Number
           </th>
-          <td mat-cell *matCellDef="let element" (click)="goToReqInfo(element)" style="width: 10%; text-wrap: nowrap;">
-            <div style="display: flex; gap: 5px;">
-              <span class="req-info">{{ element?.reqnumber }}</span> 
-            <mat-icon *ngIf="showLateIcon(element)" [ngClass]="{  'red-icon': element?.submission_count === 0 }">assignment_late</mat-icon>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            (click)="goToReqInfo(element)"
+            style="width: 10%; text-wrap: nowrap"
+          >
+            <div style="display: flex; gap: 5px">
+              <span class="req-info">{{ element?.reqnumber }}</span>
+              <mat-icon
+                *ngIf="showLateIcon(element)"
+                [ngClass]="{ 'red-icon': element?.submission_count === 0 }"
+                >assignment_late</mat-icon
+              >
             </div>
           </td>
         </ng-container>
@@ -73,7 +95,9 @@
           >
             Date
           </th>
-          <td mat-cell *matCellDef="let element" nowrap style="width: 5%">{{ element?.postedon | date:'MM-dd-yyyy' }}</td>
+          <td mat-cell *matCellDef="let element" nowrap style="width: 5%">
+            {{ element?.postedon | date : "MM-dd-yyyy" }}
+          </td>
         </ng-container>
         <!-- Job Title-->
         <ng-container matColumnDef="JobTitle">
@@ -86,7 +110,9 @@
           >
             Job Title
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 20%">{{ element?.jobtitle | titlecase }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 20%">
+            {{ element?.jobtitle | titlecase }}
+          </td>
         </ng-container>
         <!-- Location-->
         <ng-container matColumnDef="Location">
@@ -99,7 +125,9 @@
           >
             Location
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 15%">{{ element?.location.replace(', USA', '') }}</td>
+          <td mat-cell *matCellDef="let element" style="width: 15%">
+            {{ element?.location.replace(", USA", "") }}
+          </td>
         </ng-container>
         <!-- Email-->
         <ng-container matColumnDef="IPVendor">
@@ -111,7 +139,9 @@
           >
             IP/Vendor
           </th>
-          <td mat-cell *matCellDef="let element">{{ element?.vendor | titlecase }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{ element?.vendor | titlecase }}
+          </td>
         </ng-container>
         <!-- Contact Number-->
         <ng-container matColumnDef="EmployementType">
@@ -125,21 +155,46 @@
             Emp Type
           </th>
           <td mat-cell *matCellDef="let element" style="width: 3%">
-            {{ element?.employmenttype | titlecase}}
+            {{ element?.employmenttype | titlecase }}
           </td>
         </ng-container>
 
         <!-- Assigned To Column-->
         <ng-container matColumnDef="AssignedTo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Submitted" style="width: 5%">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Submitted"
+            style="width: 5%"
+          >
             Assigned To
           </th>
-          <td mat-cell *matCellDef="let element" style="width: 5%; white-space: pre-line; overflow-wrap: break-word;">
+          <td
+            mat-cell
+            *matCellDef="let element"
+            style="width: 5%; white-space: pre-line; overflow-wrap: break-word"
+          >
             <div [matTooltip]="element?.fullname" class="truncate-text">
-              <ng-container *ngFor="let name of element?.fullname.split(','); let last = last">
-                {{ name.trim() | titlecase }}<span *ngIf="!last">,</span>
-                <br />
+              <ng-container *ngIf="element?.fullname; else noName">
+                <ng-container
+                  *ngIf="element.fullname.includes(','); else singleName"
+                >
+                  <ng-container
+                    *ngFor="
+                      let name of element.fullname.split(',');
+                      let last = last
+                    "
+                  >
+                    {{ name.trim() | titlecase }}<span *ngIf="!last">,</span>
+                    <br />
+                  </ng-container>
+                </ng-container>
+                <ng-template #singleName>
+                  {{ element.fullname | titlecase }}
+                </ng-template>
               </ng-container>
+              <ng-template #noName> <span style="font-weight: bold;"> - </span> </ng-template>
             </div>
           </td>
         </ng-container>
@@ -153,7 +208,7 @@
             sortActionDescription="Sort by AddedBy"
             style="width: 5%"
           >
-          Added By
+            Added By
           </th>
           <td mat-cell *matCellDef="let element" style="width: 5%">
             {{ element?.pseudoname | titlecase }}
@@ -169,10 +224,16 @@
             sortActionDescription="Sort by Submitted"
             style="width: 3%"
           >
-           CV's
+            CV's
           </th>
-          <td mat-cell *matCellDef="let element" class="submission-count" style="width: 3%" (click)="submissionCount(element)" >
-            {{ element?.submission_count}}
+          <td
+            mat-cell
+            *matCellDef="let element"
+            class="submission-count"
+            style="width: 3%"
+            (click)="submissionCount(element)"
+          >
+            {{ element?.submission_count }}
           </td>
         </ng-container>
 
@@ -187,35 +248,49 @@
           >
             Status
           </th>
-          <td
-            mat-cell
-            *matCellDef="let requirement"
-            style="width: 3%"
-          >
-          {{ requirement.status }}
+          <td mat-cell *matCellDef="let requirement" style="width: 3%">
+            {{ requirement.status }}
           </td>
         </ng-container>
 
         <!-- Action Column -->
         <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef >Action</th>
-          <td mat-cell *matCellDef="let requirement" style="white-space: nowrap;">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td
+            mat-cell
+            *matCellDef="let requirement"
+            style="white-space: nowrap"
+          >
             <span class="action-buttons">
-              <button [disabled]="!privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')"
-              mat-icon-button
-              (click)="editRequirement(requirement)"
-              class="action-button-ed"  
-            >
-              <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')}">edit</mat-icon>
-            </button>
+              <button
+                [disabled]="!privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')"
+                mat-icon-button
+                (click)="editRequirement(requirement)"
+                class="action-button-ed"
+              >
+                <mat-icon
+                  [ngClass]="{
+                    'edit-icon': privilegeServ.hasPrivilege('EDIT_REQUIREMENTS')
+                  }"
+                  >edit</mat-icon
+                >
+              </button>
 
-            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_REQUIREMENTS')"
-              mat-icon-button
-              (click)="deleteRequirement(requirement)"
-              class="action-button-ed"
-            >
-              <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_REQUIREMENTS')}">delete</mat-icon>
-            </button>
+              <button
+                [disabled]="!privilegeServ.hasPrivilege('DELETE_REQUIREMENTS')"
+                mat-icon-button
+                (click)="deleteRequirement(requirement)"
+                class="action-button-ed"
+              >
+                <mat-icon
+                  [ngClass]="{
+                    'delete-icon': privilegeServ.hasPrivilege(
+                      'DELETE_REQUIREMENTS'
+                    )
+                  }"
+                  >delete</mat-icon
+                >
+              </button>
             </span>
           </td>
         </ng-container>

@@ -583,7 +583,8 @@ export class RecruiterListComponent implements OnInit {
   onTabChanged(event: MatTabChangeEvent) {
     this.status = event.tab.textLabel.toLowerCase();
     this.currentPageIndex = this.pageIndices[this.status];
-    this.paginator.pageIndex = this.currentPageIndex;
+    // this.paginator.pageIndex = this.currentPageIndex;
+    // console.log(this.paginator.pageIndex)
     this.getAllRecruiters(this.currentPageIndex + 1, this.status);
   }
 }
