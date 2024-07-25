@@ -18,21 +18,18 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Client</mat-label>
                     <input matInput formControlName="client" maxlength="50"/>
-                    <mat-error *ngIf="tcvrForm.get('client')!.hasError('required')">Client Name is Required</mat-error>
                 </mat-form-field>
 
                 <!-- First Level Vendor -->
                 <mat-form-field appearance="fill">
                     <mat-label>First Level Vendor Name</mat-label>
                     <input matInput formControlName="firstLevelVendor" maxlength="50">
-                    <mat-error *ngIf="tcvrForm.get('firstLevelVendor')!.hasError('required')">First Level Vendor Name is Required</mat-error>
                 </mat-form-field>
 
                 <!-- Second Level Vendor -->
                 <mat-form-field appearance="fill">
                     <mat-label>Second Level Vendor Name</mat-label>
                     <input matInput formControlName="secondLevelVendor" maxlength="50"/>
-                    <mat-error *ngIf="tcvrForm.get('secondLevelVendor')!.hasError('required')">Second Level Vendor Name is Required</mat-error>
                 </mat-form-field>
 
             </div>

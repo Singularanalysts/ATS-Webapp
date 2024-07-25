@@ -102,9 +102,9 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
    */
   private initTcvrForm (tcvrData: Tcvr) {
     this.tcvrForm = this.formBuilder.group({
-      client: [tcvrData ? tcvrData.client : '', [Validators.required]],
-      firstLevelVendor: [tcvrData ? tcvrData.firstLevelVendor : '', [Validators.required]],
-      secondLevelVendor: [tcvrData ? tcvrData.secondLevelVendor : '', [ Validators.required]],
+      client: [tcvrData ? tcvrData.client : ''],
+      firstLevelVendor: [tcvrData ? tcvrData.firstLevelVendor : ''],
+      secondLevelVendor: [tcvrData ? tcvrData.secondLevelVendor : ''],
       technology: [tcvrData ? tcvrData.technology : '', [Validators.required]],
       careersPage: [tcvrData ? tcvrData.careersPage : '', [Validators.required]],
       addedby: [tcvrData && tcvrData.addedby ? tcvrData.addedby : localStorage.getItem('userid')],
