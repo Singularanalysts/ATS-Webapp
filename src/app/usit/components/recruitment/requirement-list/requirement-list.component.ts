@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -34,6 +34,8 @@ import { RequirementService } from 'src/app/usit/services/requirement.service';
 import { AddRequirementComponent } from './add-requirement/add-requirement.component';
 import { RequirementInfoComponent } from './requirement-info/requirement-info.component';
 import { RequirementSubmissionCountComponent } from './requirement-submission-count/requirement-submission-count.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatChipsModule} from '@angular/material/chips';
 
 @Component({
   selector: 'app-requirement-list',
@@ -48,6 +50,8 @@ import { RequirementSubmissionCountComponent } from './requirement-submission-co
     MatSortModule,
     MatPaginatorModule,
     CommonModule,
+    MatTooltipModule,
+    MatChipsModule
   ],
   templateUrl: './requirement-list.component.html',
   styleUrls: ['./requirement-list.component.scss'],
@@ -64,7 +68,8 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     'Location',
     'IPVendor',
     'EmployementType',
-    // 'SubmittedBy',
+    'AssignedTo',
+    'AddedBy',
     'Submitted',
     'Status',
     'Action',

@@ -88,7 +88,8 @@ tbody {
 .mat-column-EmployementType,
 .mat-column-Action,
 .mat-column-Submitted,
-.mat-column-SubmittedBy,
+.mat-column-AddedBy,
+.mat-column-AssignedTo,
 .mat-column-Status {
   border-right: 1px solid lightgray;
 }
@@ -201,7 +202,8 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   height: 30px !important;
 }
 
-.req-info, .submission-count {
+.req-info,
+.submission-count {
   cursor: pointer;
   color: #4154f1;
   text-decoration: none;
@@ -279,4 +281,14 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 
 .green-icon {
   color: green;
+}
+
+.truncate-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  max-height: 3.6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

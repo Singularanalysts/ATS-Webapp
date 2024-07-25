@@ -120,11 +120,43 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by EmployementType"
+            style="width: 3%"
           >
-            Employement Type
+            Emp Type
           </th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let element" style="width: 3%">
             {{ element?.employmenttype | titlecase}}
+          </td>
+        </ng-container>
+
+        <!-- Assigned To Column-->
+        <ng-container matColumnDef="AssignedTo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Submitted" style="width: 5%">
+            Assigned To
+          </th>
+          <td mat-cell *matCellDef="let element" style="width: 5%; white-space: pre-line; overflow-wrap: break-word;">
+            <div [matTooltip]="element?.fullname" class="truncate-text">
+              <ng-container *ngFor="let name of element?.fullname.split(','); let last = last">
+                {{ name.trim() | titlecase }}<span *ngIf="!last">,</span>
+                <br />
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Added By Column-->
+        <ng-container matColumnDef="AddedBy">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by AddedBy"
+            style="width: 5%"
+          >
+          Added By
+          </th>
+          <td mat-cell *matCellDef="let element" style="width: 5%">
+            {{ element?.pseudoname | titlecase }}
           </td>
         </ng-container>
 
@@ -135,28 +167,14 @@
             *matHeaderCellDef
             mat-sort-header
             sortActionDescription="Sort by Submitted"
+            style="width: 3%"
           >
-          Submitted CVs
+           CV's
           </th>
-          <td mat-cell *matCellDef="let element" class="submission-count" (click)="submissionCount(element)" >
+          <td mat-cell *matCellDef="let element" class="submission-count" style="width: 3%" (click)="submissionCount(element)" >
             {{ element?.submission_count}}
           </td>
         </ng-container>
-
-        <!-- Submitted By Column-->
-        <!-- <ng-container matColumnDef="SubmittedBy">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            sortActionDescription="Sort by SubmittedBy"
-          >
-          Submitted By
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element?.submittedby | titlecase}}
-          </td>
-        </ng-container> -->
 
         <!-- Status Column -->
         <ng-container matColumnDef="Status">
@@ -200,23 +218,6 @@
             </button>
             </span>
           </td>
-        </ng-container>
-
-        <!-- Status Column -->
-        <ng-container matColumnDef="Approve/Reject">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            
-            sortActionDescription="Sort by Approve/Reject" 
-          >
-            Approve/Reject
-          </th>
-          <td
-            mat-cell
-            *matCellDef="let requirement"
-            class="approve-buttons"
-          ></td>
         </ng-container>
 
         <!-- table columns ends  -->
