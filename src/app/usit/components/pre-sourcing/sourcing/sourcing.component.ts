@@ -58,7 +58,7 @@ export class SourcingComponent
   message: any;
   showAlert = false;
   submitted = false;
-  flag = 'sourcing';
+  flag = 'Sourcing';
   searchstring!: any;
   ttitle!: string;
   ttitle1!: string;

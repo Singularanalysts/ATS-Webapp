@@ -11,7 +11,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 @Component({
-  selector: 'app-userprofile',
+  selector: 'app-password-change',
   standalone: true,
   templateUrl: './password-change.component.html',
   styleUrls: ['./password-change.component.scss'],

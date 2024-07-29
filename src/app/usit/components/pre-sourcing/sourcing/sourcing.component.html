@@ -150,7 +150,7 @@
                 <button 
                   [disabled]="!privilegeServ.hasPrivilege('EDIT_CONSULTANT')" 
                   mat-icon-button
-                  *ngIf="(consultant.status != 'Verified' || role != 'Employee') && (flag.toLocaleLowerCase() === 'sourcing')"
+                  *ngIf="(consultant.status != 'Verified' || role != 'Employee') && (flag.toLocaleLowerCase() === 'Sourcing')"
                   (click)="editConsultant(consultant)"
                   class="action-button-ed">
                   <mat-icon [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('EDIT_CONSULTANT')}">edit</mat-icon>
@@ -161,7 +161,7 @@
                 <button 
                   mat-icon-button 
                   [style.cursor]="'pointer'"
-                  *ngIf="(consultant.status != 'Verified' || role != 'Employee') && (flag.toLocaleLowerCase() === 'sourcing') && (consultant.consultantflg === 'Sourcing')"
+                  *ngIf="(consultant.status != 'Verified' || role != 'Employee') && (flag.toLocaleLowerCase() === 'Sourcing') && (consultant.consultantflg === 'Sourcing')"
                   (click)="moveConsultant(consultant, 'Pursuing')"
                   class="action-button-ed"
                   matTooltip="Move to Pursuing">
