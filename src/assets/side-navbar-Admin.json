@@ -93,7 +93,32 @@
       "icon": "local_offer",
       "routerLink": "/usit/pre-sales"
     },
-
+    {
+      "text": "Sourcing",
+      "icon": "local_offer",
+      "children": [
+        {
+          "text": "Sourcing",
+          "icon": "flash_on",
+          "routerLink": "/usit/sourcing"
+        },
+        {
+          "text": "Pursuing",
+          "icon": "person",
+          "routerLink": "/usit/pursuing"
+        },
+        {
+          "text": "OnBoarding",
+          "icon": "assignment",
+          "routerLink": "/usit/onboarding"
+        },
+        {
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/sourcing-closures"
+        }
+      ]
+    },
     {
       "text": "Sales",
       "icon": "attach_money",
