@@ -60,6 +60,11 @@ import { CxComponent } from './components/cx/cx.component';
 import { ConsultantAllReportComponent } from './components/consultant-components/consultant-all-report/consultant-all-report.component';
 import { CandidateReportComponent } from './components/reports/candidate-report/candidate-report.component';
 import { ClientInformationComponent } from './components/vendor-management/client-information/client-information.component';
+import { OnboardingComponent } from './components/pre-sourcing/onboarding/onboarding.component';
+import { PursuingComponent } from './components/pre-sourcing/pursuing/pursuing.component';
+import { SourcingClosuresComponent } from './components/pre-sourcing/sourcing-closures/sourcing-closures.component';
+import { SourcingComponent } from './components/pre-sourcing/sourcing/sourcing.component';
+import { PasswordChangeComponent } from '../components/password-change/password-change.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -328,6 +333,21 @@ const routes: Routes = [
   },
   {
     path: 'tcvr', component: ClientInformationComponent,
+  },
+  {
+    path: 'sourcing', component: SourcingComponent,
+  },
+  {
+    path: 'pursuing', component: PursuingComponent,
+  },
+  {
+    path: 'onboarding', component: OnboardingComponent,
+  },
+  {
+    path: 'closures', component: SourcingClosuresComponent,
+  },
+  {
+    path: 'change-password', component: PasswordChangeComponent,
   }
 ];
 
