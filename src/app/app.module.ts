@@ -30,8 +30,8 @@ import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
     PageNotFoundComponent,
     FooterComponent,
     SidebarComponent,
-     SideNavbarComponent,
-     RegisterConsultantComponent
+    SideNavbarComponent,
+    RegisterConsultantComponent
   ],
   imports: [
     BrowserModule,

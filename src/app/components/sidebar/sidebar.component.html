@@ -34,11 +34,11 @@
       <button mat-menu-item class="user-name">
         {{ userManagementServ.getRoleName() }}
       </button>
-      <button mat-menu-item routerLink="password" *ngIf="role != 'Employee'">
+      <button mat-menu-item *ngIf="role != 'Employee'">
         My Profile
         <mat-icon class="icon">person</mat-icon>
       </button>
-      <button mat-menu-item *ngIf="role != 'Employee'">
+      <button mat-menu-item [matMenuTriggerFor]="accountSettingsMenu" *ngIf="role != 'Employee'">
         <mat-icon class="icon">settings</mat-icon>
         Account Settings
       </button>
@@ -49,6 +49,16 @@
       <button mat-menu-item (click)="onSignOut()">
         Sign Out
         <mat-icon class="icon">logout</mat-icon>
+      </button>
+    </mat-menu>
+    <mat-menu #accountSettingsMenu="matMenu">
+      <button mat-menu-item routerLink="usit/change-password">
+        <mat-icon class="icon">lock_reset</mat-icon>
+        Change Password
+      </button>
+      <button mat-menu-item routerLink="usit/email-configuration">
+        <mat-icon class="icon">email</mat-icon>
+        Email Configuration
       </button>
     </mat-menu>
   </mat-toolbar>
