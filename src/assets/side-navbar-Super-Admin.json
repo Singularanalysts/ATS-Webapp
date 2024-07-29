@@ -127,7 +127,7 @@
         {
           "text": "Closures",
           "icon": "check_circle",
-          "routerLink": "/usit/closures"
+          "routerLink": "/usit/sourcing-closures"
         }
       ]
     },

@@ -321,7 +321,7 @@ export class OnboardingComponent
   moveConsultant(consultant: Consultantinfo, cond: string) {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
-      message: cond == "BackToPursuing" ? 'Are you sure you want to Move Profiles to Pursuing?' :  `Are you sure you want to Move Profiles to ${cond}?`,
+      message: cond == "BackToPursuing" ? 'Are you sure you want to Move Profiles to Pursuing?' :  `Are you sure you want to Move Profiles to ${cond}s?`,
       confirmText: 'Yes',
       cancelText: 'No',
       actionData: consultant,
@@ -351,7 +351,7 @@ export class OnboardingComponent
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-success',
                 ];
-                this.dataToBeSentToSnackBar.message = resp.message == 'closures' ? 'Consultant moved to Cloures successfully' : 'Consultant moved to Pursuing successfully';
+                this.dataToBeSentToSnackBar.message = resp.message == 'Closure' ? 'Consultant moved to Closures successfully' : 'Consultant moved to Pursuing successfully';
 
               } else {
                 this.dataToBeSentToSnackBar.panelClass = [

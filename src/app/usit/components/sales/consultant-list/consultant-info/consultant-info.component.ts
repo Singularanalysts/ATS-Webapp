@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild,inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -13,16 +13,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
-
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { FileManagementService } from 'src/app/usit/services/file-management.service';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { DialogService } from 'src/app/services/dialog.service';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { EmployeeManagementService } from 'src/app/usit/services/employee-management.service';
-import { DashboardService } from 'src/app/usit/services/dashboard.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -44,10 +40,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatRadioModule,
     NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
-    CommonModule, RouterLink, MatTooltipModule, 
+    CommonModule, RouterLink, MatTooltipModule,
     MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule
   ],
- 
+
   templateUrl: './consultant-info.component.html',
   styleUrls: ['./consultant-info.component.scss']
 })
@@ -76,11 +72,8 @@ export class ConsultantInfoComponent implements OnInit {
   datarr: any[] = [];
   id!: any;
   hasAcces: any;
-  @ViewChild('stepper') private myStepper!: MatStepper;
   dataSource = new MatTableDataSource([]);
   displayedColumns: string[] = ['RoleName', 'Actions'];
-  private empServ = inject(EmployeeManagementService);
-  private dashboardServ = inject(DashboardService);
   private consultantServ = inject(ConsultantService);
   private snackBarServ = inject(SnackBarService);
   private router = inject(Router);
@@ -99,16 +92,13 @@ export class ConsultantInfoComponent implements OnInit {
   };
   subFlag: any;
 
-
-  
-
   onFileChange(event: any) {
     for (var i = 0; i < event.target.files.length; i++) {
       const file = event.target.files[i];
       var items = file.name.split('.');
       const str = items[0];
       if (str.length > 20) {
-        this.dataToBeSentToSnackBar.message =  'File name is too large, please rename the file before upload, it should be 15 to 20 characters';
+        this.dataToBeSentToSnackBar.message = 'File name is too large, please rename the file before upload, it should be 15 to 20 characters';
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         this.multifiles.nativeElement.value = '';
@@ -120,13 +110,13 @@ export class ConsultantInfoComponent implements OnInit {
       } else {
         this.multifiles.nativeElement.value = '';
         this.uploadedfiles = [];
-        this.dataToBeSentToSnackBar.message =  'Files size should not exceed 4 mb';
+        this.dataToBeSentToSnackBar.message = 'Files size should not exceed 4 mb';
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
-      //this.uploadedfiles.push(event.target.files[i]);
     }
   }
+
   @ViewChild('resume')
   resume: any = ElementRef;
   resumeupload!: any;
@@ -137,7 +127,7 @@ export class ConsultantInfoComponent implements OnInit {
     if (fileSizeInKB > 4300) {
       this.flg = false;
       this.resume.nativeElement.value = '';
-      this.dataToBeSentToSnackBar.message =  'Resume size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'Resume size should be less than 2 mb';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
 
@@ -147,6 +137,7 @@ export class ConsultantInfoComponent implements OnInit {
       this.flg = true;
     }
   }
+
   @ViewChild('h1b') h1b: any = ElementRef;
   h1bupload!: any;
   uploadH1B(event: any) {
@@ -157,7 +148,7 @@ export class ConsultantInfoComponent implements OnInit {
       this.flg = false;
       this.h1b.nativeElement.value = '';
       this.message = 'H1B size should be less than 2 mb';
-      this.dataToBeSentToSnackBar.message =  'H1B size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'H1B size should be less than 2 mb';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       return;
@@ -166,6 +157,7 @@ export class ConsultantInfoComponent implements OnInit {
       this.flg = true;
     }
   }
+
   @ViewChild('dl')
   dl: any = ElementRef;
   dlupload!: any;
@@ -173,19 +165,12 @@ export class ConsultantInfoComponent implements OnInit {
     this.dlupload = event.target.files[0];
     const file = event.target.files[0];
     const fileSizeInKB = Math.round(file.size / 1024);
-    // var items = file.name.split(".");
-    // const str = items[0];
-    // if (str.length > 16) {
-    //   //alertify.error("File name is toot large, please rename the file before upload, it should be 10 to 15 characters")
-    //   this.dl.nativeElement.value = "";
-    // }
 
     if (fileSizeInKB > 4300) {
-      //2200
       this.flg = false;
       this.dl.nativeElement.value = '';
       this.message = 'DL size should be less than 2 mb';
-      this.dataToBeSentToSnackBar.message =  'DL size should be less than 2 mb';
+      this.dataToBeSentToSnackBar.message = 'DL size should be less than 2 mb';
       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
       this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       return;
@@ -194,6 +179,7 @@ export class ConsultantInfoComponent implements OnInit {
       this.flg = true;
     }
   }
+
   onFileSubmit(id: number) {
     const formData = new FormData();
     for (var i = 0; i < this.uploadedfiles.length; i++) {
@@ -202,20 +188,16 @@ export class ConsultantInfoComponent implements OnInit {
 
     if (this.resumeupload != null) {
       formData.append('resume', this.resumeupload, this.resumeupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
     if (this.h1bupload != null) {
       formData.append('h1b', this.h1bupload, this.h1bupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
     if (this.dlupload != null) {
       formData.append('dl', this.dlupload, this.dlupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
-    //upload
     this.fileService
       .ConUploadFile(formData, id)
       .subscribe((response: any) => {
@@ -229,52 +211,67 @@ export class ConsultantInfoComponent implements OnInit {
         }
       });
   }
+
   ngOnInit(): void {
-      this.hasAcces = localStorage.getItem('role');
-      this.id = this.activatedRoute.snapshot.params['id'];
-      this.flag = this.activatedRoute.snapshot.params['flg'];
-      this.subFlag = this.activatedRoute.snapshot.params['subFlag'];
-      this.consultantServ.consultantInfoByconId(this.id).subscribe((response: any) => {
-        this.entity = response.data;
-        this.dataSource.data = response.data;
-      });
-    }
-  
-    backtolist() {
-      if (this.flag == 'sales' && this.subFlag=='consultant')
-        this.router.navigate(['usit/sales-consultants']);
+    this.hasAcces = localStorage.getItem('role');
+    this.id = this.activatedRoute.snapshot.params['id'];
+    this.flag = this.activatedRoute.snapshot.params['flg'];
+    this.subFlag = this.activatedRoute.snapshot.params['subFlag'];
+    console.log(this.flag, this.subFlag);
+    
+    this.consultantServ.consultantInfoByconId(this.id).subscribe((response: any) => {
+      this.entity = response.data;
+      this.dataSource.data = response.data;
+    });
+  }
 
-      else if (this.flag == 'presales')
-        this.router.navigate(['usit/pre-sales']);
+  backtolist() {
+    if (this.flag == 'sales' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/sales-consultants']);
 
-      else if (this.flag == 'DomRecruiting'  && this.subFlag=='consultant')
-        this.router.navigate(['usit/dom-consultants']);
+    else if (this.flag == 'presales')
+      this.router.navigate(['usit/pre-sales']);
 
-      else if (this.flag == 'Recruiting'  && this.subFlag=='consultant')
-        this.router.navigate(['usit/rec-consultants']);
+    else if (this.flag == 'DomRecruiting' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/dom-consultants']);
 
-      else  if (this.flag == 'Sales' && this.subFlag=='submission')
-        this.router.navigate(['usit/sales-submissions']);
+    else if (this.flag == 'Recruiting' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/rec-consultants']);
 
-        else if (this.flag == 'Domrecruiting'  && this.subFlag=='submission')
-        this.router.navigate(['usit/dom-submission']);
+    else if (this.flag == 'Sales' && this.subFlag == 'submission')
+      this.router.navigate(['usit/sales-submissions']);
 
-      else if (this.flag == 'Recruiting'  && this.subFlag=='submission')
-        this.router.navigate(['usit/rec-submissions']);
+    else if (this.flag == 'Domrecruiting' && this.subFlag == 'submission')
+      this.router.navigate(['usit/dom-submission']);
+
+    else if (this.flag == 'Recruiting' && this.subFlag == 'submission')
+      this.router.navigate(['usit/rec-submissions']);
 
 
-        else  if (this.flag == 'Sales' && this.subFlag=='interview')
-        this.router.navigate(['usit/sales-interviews']);
+    else if (this.flag == 'Sales' && this.subFlag == 'interview')
+      this.router.navigate(['usit/sales-interviews']);
 
-        else if (this.flag == 'Domrecruiting'  && this.subFlag=='interview')
-        this.router.navigate(['usit/dom-interviews']);
+    else if (this.flag == 'Domrecruiting' && this.subFlag == 'interview')
+      this.router.navigate(['usit/dom-interviews']);
 
-      else if (this.flag == 'Recruiting'  && this.subFlag=='interview')
-        this.router.navigate(['usit/rec-interviews']);
+    else if (this.flag == 'Recruiting' && this.subFlag == 'interview')
+      this.router.navigate(['usit/rec-interviews']);
 
-        else if (this.flag == 'dashboard'  && this.subFlag=='consultant')
-        this.router.navigate(['usit/dashboard']);
-      
-      else this.router.navigate(['usit/dashboard']);
-    }
+    else if (this.flag == 'dashboard' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/dashboard']);
+
+    else if (this.flag == 'Sourcing' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/sourcing']);
+
+    else if (this.flag == 'pursuing' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/pursuing']);
+
+    else if (this.flag == 'onboarding' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/onboarding']);
+
+    else if (this.flag == 'closure' && this.subFlag == 'consultant')
+      this.router.navigate(['usit/sourcing-closures']);
+
+    else this.router.navigate(['usit/dashboard']);
+  }
 }

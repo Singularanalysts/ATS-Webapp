@@ -63,7 +63,7 @@ export class PursuingComponent
   ttitle1!: string;
   tclass!: string;
   dept!: any;
-  subFlag = 'domrec-consultant';
+  subFlag = 'pursuing';
   consultant_track: any[] = [];
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',

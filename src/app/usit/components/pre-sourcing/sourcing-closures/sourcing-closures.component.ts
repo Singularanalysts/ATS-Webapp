@@ -352,7 +352,7 @@ export class SourcingClosuresComponent
                 this.dataToBeSentToSnackBar.panelClass = [
                   'custom-snack-success',
                 ];
-                this.dataToBeSentToSnackBar.message = 'Consultant moved to Pursuing successfully';
+                this.dataToBeSentToSnackBar.message = 'Consultant moved to OnBoarding successfully';
 
               } else {
                 this.dataToBeSentToSnackBar.panelClass = [
