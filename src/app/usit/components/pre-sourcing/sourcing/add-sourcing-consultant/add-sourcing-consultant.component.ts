@@ -1,46 +1,40 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ConsultantService } from 'src/app/usit/services/consultant.service';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { Observable, Subject, map, startWith, takeUntil, tap } from 'rxjs';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatRadioModule, MatRadioChange } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { Router } from '@angular/router';
 import { Loader } from '@googlemaps/js-api-loader';
+import * as saveAs from 'file-saver';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
-import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
-import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
-import { DialogService } from 'src/app/services/dialog.service';
-import { AddCompanyComponent } from '../../../masters/companies-list/add-company/add-company.component';
-import { AddVisaComponent } from '../../../masters/visa-list/add-visa/add-visa.component';
-import { AddTechnologyTagComponent } from '../../../technology-tag-list/add-technology-tag/add-technology-tag.component';
-import { AddQualificationComponent } from '../../../masters/qualification-list/add-qualification/add-qualification.component';
-import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
-import { saveAs } from 'file-saver';
-import { FileData } from '../../../employee-list/add-employee/add-employee.component';
-import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
-import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
-import { FileManagementService } from 'src/app/usit/services/file-management.service';
+import { Subject, Observable, map, tap, startWith, takeUntil } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
+import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
+import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
+import { DialogService } from 'src/app/services/dialog.service';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
+import { ConsultantService } from 'src/app/usit/services/consultant.service';
+import { FileManagementService } from 'src/app/usit/services/file-management.service';
+import { FileData } from '../../../employee-list/add-employee/add-employee.component';
+import { AddCompanyComponent } from '../../../masters/companies-list/add-company/add-company.component';
+import { AddQualificationComponent } from '../../../masters/qualification-list/add-qualification/add-qualification.component';
+import { AddVisaComponent } from '../../../masters/visa-list/add-visa/add-visa.component';
+import { AddconsultantComponent } from '../../../sales/consultant-list/add-consultant/add-consultant.component';
+import { AddTechnologyTagComponent } from '../../../technology-tag-list/add-technology-tag/add-technology-tag.component';
 
 @Component({
-  selector: 'app-add-consultant',
+  selector: 'app-add-sourcing-consultant',
   standalone: true,
   imports: [
     CommonModule,
@@ -58,8 +52,9 @@ import { ApiService } from 'src/app/core/services/api.service';
     MatRadioModule,
     NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
-
   ],
+  templateUrl: './add-sourcing-consultant.component.html',
+  styleUrls: ['./add-sourcing-consultant.component.scss'],
   providers: [
     {
       provide: Loader,
@@ -69,10 +64,8 @@ import { ApiService } from 'src/app/core/services/api.service';
       }),
     },
   ],
-  templateUrl: './add-consultant.component.html',
-  styleUrls: ['./add-consultant.component.scss'],
 })
-export class AddconsultantComponent implements OnInit, OnDestroy {
+export class AddSourcingConsultantComponent implements OnInit, OnDestroy {
   flag!: string;
   // private baseUrl: string = environment.API_BASE_URL;
   protected isFormSubmitted: boolean = false;
@@ -148,7 +141,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.gettech();
     this.getQualification();
     this.getCompanies();
-    this.getFlag(this.data.flag.toLocaleLowerCase());
    
     if (this.data.actionName === "edit-consultant") {
       this.kiran = 'edit'
@@ -174,18 +166,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.initConsultantForm(new Consultantinfo());
     }
   }
-  getFlag(type: string) {
-    //alert(type)
-    if (type === 'sales') {
-      this.flag = 'sales';
-    } else if (type === 'presales') {
-      this.flag = 'presales';
-    } else if (type === 'recruiting') { // for edit
-      this.flag = "Recruiting";
-    } else {
-      this.flag = 'DomRecruiting';
-    }
-  }
+  
   initConsultantForm(consultantData: Consultantinfo) {
     this.consultantForm = this.formBuilder.group({
       consultantid: [consultantData ? consultantData.consultantid : ''],
@@ -196,9 +177,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
       resume: [consultantData ? consultantData.resume : ''],
       dlcopy: [consultantData ? consultantData.dlcopy : ''],
-      // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
-      firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
-      lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
+      firstname: [consultantData ? consultantData.firstname : '', Validators.required],
+      lastname: [consultantData ? consultantData.lastname : '', Validators.required],
       consultantemail: [
         consultantData ? consultantData.consultantemail : '',
         [
@@ -219,7 +199,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       company: [consultantData ? consultantData.company : '', Validators.required],
       position: [consultantData ? consultantData.position : '', Validators.required],
       status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
-      // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
       experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
       hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
       skills: [consultantData ? consultantData.skills : ''],
@@ -231,27 +210,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       university: [consultantData ? consultantData.university : ''],
       yop: [consultantData ? consultantData.yop : ''],
       emprefname: [consultantData ? consultantData.emprefname : ''],
-      //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
       emprefemail: [consultantData ? consultantData.emprefemail : ''],
-      //emprefcont: new FormControl(consultantData ? consultantData.emprefcont : ''),
       emprefcont: [consultantData ? consultantData.emprefcont : ''],
       companyname: [consultantData ? consultantData.companyname : ''],
       refname: [consultantData ? consultantData.refname : ''],
-      // refemail: new FormControl(consultantData ? consultantData.refemail : ''),
       refemail: [consultantData ? consultantData.refemail : ''],
-      //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
       refcont: [consultantData ? consultantData.refcont : ''],
-      // // number: ['', Validators.required],
-      // status:[this.consultantForm.status],
-      relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
-      relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
-      consultantflg: this.data.flag.toLocaleLowerCase(),
-      /* requirements: this.formBuilder.group({
-         requirementid: id
-       }),
-       */
+      relocation: [consultantData ? consultantData.relocation : '', Validators.required],
+      relocatOther: [consultantData ? consultantData.relocatOther : ''],
+      consultantflg: ['sourcing'],
+      preSource: [1],
       addedby: localStorage.getItem('userid'),
-      preSource: [0]
     });
 
     if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
@@ -259,44 +228,37 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     }
 
     if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
-      this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
-        (technology: any) => {
+      this.consultantServ.gettechDropDown(consultantData.technology).subscribe({
+        next: (technology: any) => {
           if (technology && technology.data) {
             this.techid = technology.data[0].id;
             this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
           }
         },
-        (error: any) => {
+        error: (error: any) => {  
           console.error('Error fetching consultant details:', error);
         }
-      );
+      });
     }
 
     this.validateControls();
   }
   private validateControls() {
     if (this.kiran !== "edit" && (this.flag === 'Recruiting' || this.flag === 'sales')) {
-      // alert()
       this.consultantForm.get('status').setValue('Active');
   }
   
-
-
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
       const consultantemail = this.consultantForm.get('consultantemail');
       const contactnumber = this.consultantForm.get('number');
       const projectavailabity = this.consultantForm.get('projectavailabity');
-      const availabilityforinterviews = this.consultantForm.get(
-        'availabilityforinterviews'
-      );
+      const availabilityforinterviews = this.consultantForm.get('availabilityforinterviews');
       const position = this.consultantForm.get('position');
       const experience = this.consultantForm.get('experience');
       const firstname = this.consultantForm.get('firstname');
       const lastname = this.consultantForm.get('lastname');
       const ratetype = this.consultantForm.get('ratetype');
       const currentlocation = this.consultantForm.get('currentlocation');
-
-
 
       if (res == 'Tagged') {
         this.consultantForm.get('technology').setValue('14');
@@ -408,43 +370,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       relocatOther.updateValueAndValidity();
     });
     
-    // this.consultantForm.get('consultanttype').valueChanges.subscribe((res: any) => {
-    //   if (res == "Future") {
-    //     this.consultantForm.get('projectavailabity').clearValidators();
-    //     this.consultantForm.get('visa').clearValidators();
-    //     this.consultantForm.get('availabilityforinterviews').clearValidators();
-    //     this.consultantForm.get('priority').clearValidators();
-    //     this.consultantForm.get('company').clearValidators();
-    //     this.consultantForm.get('position').clearValidators();
-    //     this.consultantForm.get('hourlyrate').clearValidators();
-    //     this.consultantForm.get('currentlocation').clearValidators();
-    //     this.consultantForm.get('qualification').clearValidators();
-    //     this.consultantForm.get('relocation').clearValidators();
-    //     this.consultantForm.get('experience').clearValidators();
-    //   } else {
-    //     this.consultantForm.get('projectavailabity').setValidators([Validators.required]);
-    //     this.consultantForm.get('visa').setValidators([Validators.required]);
-    //     this.consultantForm.get('availabilityforinterviews').setValidators([Validators.required]);
-    //     this.consultantForm.get('priority').setValidators([Validators.required]);
-    //     this.consultantForm.get('company').setValidators([Validators.required]);
-    //     this.consultantForm.get('position').setValidators([Validators.required]);
-    //     this.consultantForm.get('hourlyrate').setValidators([Validators.required]);
-    //     this.consultantForm.get('currentlocation').setValidators([Validators.required]);
-    //     this.consultantForm.get('qualification').setValidators([Validators.required]);
-    //     this.consultantForm.get('relocation').setValidators([Validators.required]);
-    //   }
-    //   this.consultantForm.get('projectavailabity').updateValueAndValidity();
-    //   this.consultantForm.get('visa').updateValueAndValidity();
-    //   this.consultantForm.get('availabilityforinterviews').updateValueAndValidity();
-    //   this.consultantForm.get('priority').updateValueAndValidity();
-    //   this.consultantForm.get('company').updateValueAndValidity();
-    //   this.consultantForm.get('position').updateValueAndValidity();
-    //   this.consultantForm.get('hourlyrate').updateValueAndValidity();
-    //   this.consultantForm.get('currentlocation').updateValueAndValidity();
-    //   this.consultantForm.get('qualification').updateValueAndValidity();
-    //   this.consultantForm.get('relocation').updateValueAndValidity();
-    //   this.consultantForm.get('experience').updateValueAndValidity();
-    // });
     const priority = this.consultantForm.get('priority');
 
     if (this.flag == 'sales') {
@@ -462,22 +387,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   clrValidators() {
-    // Loop through all controls in the form
     Object.keys(this.consultantForm.controls).forEach(key => {
       const control = this.consultantForm.get(key);
-      // Clear validators for each control
       control.clearValidators();
-      // Update value and validity
       control.updateValueAndValidity();
     });
   }
 
-  // techskills(event: any) {
-  //   const newVal = event.target.value;
-  //   this.consultantServ.getSkilldata(newVal).subscribe((response: any) => {
-  //     this.autoskills = response.data;
-  //   });
-  // }
   techskills(option: any) {
     const newVal = option.id;
     this.techid = option.id;
@@ -485,6 +401,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.consultantForm.get('skills').setValue(response.data);
     });
   }
+
   options: any = {
     componentRestrictions: { country: ['IN', 'US'] },
   };
@@ -514,7 +431,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.onFileSubmitted = true;
     this.submitted = true;
-    // stop here if consultantForm is invalid
     if (this.consultantForm.invalid) {
       this.isFormSubmitted = false
       this.isRadSelected = true;
@@ -565,10 +481,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.trimSpacesFromFormValues();
     const saveObj = this.data.actionName === "edit-consultant" ? this.entity : this.consultantForm.value;
 
-    const lenkedIn = this.consultantForm.get('linkedin')?.value;
-
     if (this.flg == true) {
-      // const saveReqObj = this.getSaveObjData()
       this.consultantServ.registerconsultant(saveObj)
         .subscribe({
           next: (data: any) => {
@@ -610,17 +523,19 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     }
     return this.consultantForm.value;
   }
-  // supporting drop downs
+
   getrequirements() {
     this.consultantServ.getrequirements().subscribe((response: any) => {
       this.requirementdata = response.data;
     });
   }
+
   getvisa() {
     this.consultantServ.getvisa().subscribe((response: any) => {
       this.visadata = response.data;
     });
   }
+
   gettech() {
     this.searchTechOptions$ = this.consultantServ.gettechDropDown(0).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
@@ -639,6 +554,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         )
       );
   }
+
   techid!: any;
   private _filterOptions(value: any, options: any[]): any[] {
     const filterValue = (value ? value.toString() : '').toLowerCase();
@@ -676,6 +592,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   ctnumber!: any;
   changeFn(event: any) {
     const number = `+${this.dailCode}${event.target.value}`;
@@ -698,6 +615,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         }
       });
   }
+
   /**
    *
    * @param event fetch dial-code of the country for contact number
@@ -705,6 +623,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   onContryChange(event: any) {
     this.dailCode = event.dialCode;
   }
+
   @ViewChild('multifiles')
   multifiles: any = ElementRef;
   sum = 0;
@@ -730,7 +649,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
-      //this.uploadedfiles.push(event.target.files[i]);
     }
   }
 
@@ -780,15 +698,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.dlupload = event.target.files[0];
     const file = event.target.files[0];
     const fileSizeInKB = Math.round(file.size / 1024);
-    // var items = file.name.split(".");
-    // const str = items[0];
-    // if (str.length > 16) {
-    //   //alertify.error("File name is toot large, please rename the file before upload, it should be 10 to 15 characters")
-    //   this.dl.nativeElement.value = "";
-    // }
 
     if (fileSizeInKB > 4300) {
-      //2200
       this.flg = false;
       this.dl.nativeElement.value = '';
       this.message = 'DL size should be less than 2 mb';
@@ -801,6 +712,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.flg = true;
     }
   }
+
   onFileSubmit(id: number) {
     const formData = new FormData();
     for (var i = 0; i < this.uploadedfiles.length; i++) {
@@ -809,20 +721,16 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
     if (this.resumeupload != null) {
       formData.append('resume', this.resumeupload, this.resumeupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
     if (this.h1bupload != null) {
       formData.append('h1b', this.h1bupload, this.h1bupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
     if (this.dlupload != null) {
       formData.append('dl', this.dlupload, this.dlupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
-    //upload
     this.fileService
       .ConUploadFile(formData, id)
       .subscribe((response: any) => {
@@ -836,7 +744,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         }
       });
   }
-  /** to display form validation messages */
+
   displayFormErrors() {
     Object.keys(this.consultantForm.controls).forEach((field) => {
       const control = this.consultantForm.get(field);
@@ -863,10 +771,12 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
     })
   }
+
   stopEvntProp(event: Event) {
     event.preventDefault();
     event.stopPropagation();
   }
+
   onAddVisa() {
     const dataToBeSentToDailog = {
       title: 'Add Visa',
@@ -885,6 +795,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
     })
   }
+
   onAddTechnology() {
     const dataToBeSentToDailog = {
       title: 'Add Technology',
@@ -903,6 +814,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
     })
   }
+
   onAddQualification() {
     const dataToBeSentToDailog = {
       title: 'Add Qualification',
@@ -928,7 +840,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   onRelocationRadioChange(event: MatRadioChange) {
     this.isRelocationRadSelected = event.value
   }
-  // fileList?: FileData[];
+ 
   type!: any;
   filedetails(fileData: FileData) {
     this.type = fileData.filename;
@@ -941,19 +853,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           var a = document.createElement("a");
           a.href = fileURL;
           a.target = '_blank';
-          // a.download = filename;
           a.click();
         }
         else {
           saveAs(blob, fileData.filename)
         }
       }
-        // saveAs(blob, fileData.filename)
       );
 
   }
-  downloadfile(id: number, filename: string, flg: string) {
 
+  downloadfile(id: number, filename: string, flg: string) {
     var items = filename.split(".");
     this.fileService
       .downloadconresume(id, flg)
@@ -963,8 +873,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           var a = document.createElement("a");
           a.href = fileURL;
           a.target = '_blank';
-          // Don't set download attribute
-          //a.download = filename;
           a.click();
         }
         else {
@@ -972,7 +880,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         }
       }
       );
-
   }
 
   deletefile(id: number, doctype: string) {
@@ -999,7 +906,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           this.fileService.conremovefile(id, doctype).pipe(takeUntil(this.destroyed$)).subscribe({
             next: (response: any) => {
               if (response.status == 'success') {
-                //  this.getAllEmployees();
                 this.dataToBeSentToSnackBar.message =
                   'File Deleted successfully';
                 this.dialogRef.close();
@@ -1076,7 +982,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     });
   }
 
-
   /**
   * Cancel
   */
@@ -1112,6 +1017,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     return true;
   }
 }
+
 export const IV_AVAILABILITY = [
   'Availabity for the interviews *',
   'Anytime',
@@ -1129,7 +1035,6 @@ export const PRIORITY = [
   { code: 'P8', desc: 'P8 - independent visa holder project looking for a high rate' },
   { code: 'P9', desc: 'P9 - 3rd party consultant' },
   { code: 'P10', desc: 'P10' },
-
 ]
 
 export const STATUS = [

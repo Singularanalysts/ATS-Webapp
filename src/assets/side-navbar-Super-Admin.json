@@ -106,7 +106,7 @@
       "routerLink": "/usit/pre-sales"
     },
     {
-      "text": "Pre-Sourcing",
+      "text": "Sourcing",
       "icon": "local_offer",
       "children": [
         {
