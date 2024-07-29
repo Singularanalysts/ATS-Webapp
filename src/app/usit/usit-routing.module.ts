@@ -344,7 +344,7 @@ const routes: Routes = [
     path: 'onboarding', component: OnboardingComponent,
   },
   {
-    path: 'closures', component: SourcingClosuresComponent,
+    path: 'sourcing-closures', component: SourcingClosuresComponent,
   },
   {
     path: 'change-password', component: PasswordChangeComponent,
