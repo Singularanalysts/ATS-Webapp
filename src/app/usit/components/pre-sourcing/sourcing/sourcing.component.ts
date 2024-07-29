@@ -12,14 +12,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, MatSort, Sort } from '@angular/material/sort';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { StatusComponent } from 'src/app/dialogs/status/status.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
-import { PrivilegesService } from 'src/app/services/privileges.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
@@ -111,7 +110,6 @@ export class SourcingComponent
   private snackBarServ = inject(SnackBarService);
   private consultantServ = inject(ConsultantService);
   private router = inject(Router);
-  protected privilegeServ = inject(PrivilegesService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   priority: [string, string] = ['', ''];
@@ -136,7 +134,6 @@ export class SourcingComponent
   filterValues: any;
   filterRequest: any;
   size: any;
-  private activatedRoute = inject(ActivatedRoute);
 
   constructor(private formBuilder: FormBuilder) {
     this.experienceForm = this.formBuilder.group({
@@ -153,13 +150,8 @@ export class SourcingComponent
 
   userid: any;
   page: number = 1;
-  move2sales = false;
   
   ngOnInit(): void {
-    const mvt = this.privilegeServ.hasPrivilege('MOVETOPRESALES');
-    if (mvt) {
-      this.move2sales = true;
-    }
     this.role = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.dept = localStorage.getItem('department');
