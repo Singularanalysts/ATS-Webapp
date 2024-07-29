@@ -218,7 +218,7 @@ export class AddSourcingConsultantComponent implements OnInit, OnDestroy {
       refcont: [consultantData ? consultantData.refcont : ''],
       relocation: [consultantData ? consultantData.relocation : '', Validators.required],
       relocatOther: [consultantData ? consultantData.relocatOther : ''],
-      consultantflg: [this.flag],
+      consultantflg: [this.data.flag],
       preSource: [1],
       addedby: localStorage.getItem('userid'),
     });
