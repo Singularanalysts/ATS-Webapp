@@ -50,20 +50,19 @@ export class ConsultantService {
     return this.http.get("consultant/consultantInfoByconId/" + id);
   }
 
-  //consultantInfoByconId
-
-
   getConsultantList2(flg: string, access: string, userid: number) {
     return this.http.get("consultant/all/" + flg + "/" + access + "/" + userid);
   }
 
-  getAllConsultantData(flg: string, access: string, userid: number, page: any, size: any, field: any, sortField:string,sortOrder:string ) {
-    // "/all/{access}/{userid}/{page}/{size}/{field}
-    return this.http.get("consultant/all/" + flg + "/" + access + "/" + userid + "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+  getAllConsultantData(data: any) {
+    return this.http.post("consultant/all", data);
+  }
+
+  getAllSourcingConsultantData(data: any) {
+    return this.http.post("consultant/getAllSourcingCounsultants", data);
   }
 
   getAllH1TransferConsultantData(page: any, size: any, field: any) {
-    // "/all/{access}/{userid}/{page}/{size}/{field}
     return this.http.get("consultant/all/" + page + "/" + size + "/" + field);
   }
 
@@ -81,23 +80,14 @@ export class ConsultantService {
     return this.http.get("consultant/movedtosales/" + id + "/" + flg +  "/" + userid);
   }
 
+  moveConsultant(id: number, flg: string, userid: number) {
+    return this.http.get("consultant/moveConsultant/" + id + "/" + flg +  "/" + userid);
+  }
+
   //used for delete the consultant
   consultantTracker(id: number) {
     return this.http.get("consultant/consultantTrack/" + id);
   }
-
-  // downloadfile(id: number): Observable<Blob> {
-  //   return this.http.get( "consultant/downloadfiles/" + id, {
-  //     responseType: 'blob'
-  //   });
-  // }
-
-  // download file
-  // downloadresume(id: number, flg: string): Observable<Blob> {
-  //   return this.http.get( "consultant/download/" + id + "/" + flg, {
-  //     responseType: 'blob'
-  //   });
-  // }
 
   removingfile(id: number, flg: string) {
     return this.http.get("consultant/removefile/" + id + "/" + flg);
@@ -121,7 +111,6 @@ export class ConsultantService {
   public gettechDropDown(techid: any) {
     return this.http.get("consultant/technology/"+techid);
   }
-
 
   getQualification() {
     return this.http.get("consultant/qualification/all");
@@ -186,6 +175,7 @@ export class ConsultantService {
   getFilteredConsultants(request:any) {
     return this.http.post("consultant/consultantFilter",request);
   }
+
   //both
   getFilteredConsults(request:any, pageno: any, pagesize: any) {
     return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
