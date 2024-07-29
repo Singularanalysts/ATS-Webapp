@@ -19,7 +19,6 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { StatusComponent } from 'src/app/dialogs/status/status.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
-import { PrivilegesService } from 'src/app/services/privileges.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
@@ -111,7 +110,6 @@ export class SourcingClosuresComponent
   private snackBarServ = inject(SnackBarService);
   private consultantServ = inject(ConsultantService);
   private router = inject(Router);
-  protected privilegeServ = inject(PrivilegesService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   priority: [string, string] = ['', ''];
@@ -156,10 +154,6 @@ export class SourcingClosuresComponent
   move2sales = false;
   
   ngOnInit(): void {
-    const mvt = this.privilegeServ.hasPrivilege('MOVETOPRESALES');
-    if (mvt) {
-      this.move2sales = true;
-    }
     this.role = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.dept = localStorage.getItem('department');
