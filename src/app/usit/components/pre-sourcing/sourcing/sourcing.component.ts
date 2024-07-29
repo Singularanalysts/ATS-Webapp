@@ -63,7 +63,7 @@ export class SourcingComponent
   ttitle1!: string;
   tclass!: string;
   dept!: any;
-  subFlag = 'domrec-consultant';
+  subFlag = 'sourcing';
   consultant_track: any[] = [];
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
