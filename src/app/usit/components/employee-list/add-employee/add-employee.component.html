@@ -53,7 +53,6 @@
         <!-- Personal Contact -->
         <mat-form-field appearance="fill">
           <mat-label>Personal Contact Number </mat-label>
-          <!-- <input matInput formControlName="personalcontactnumber"> -->
           <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']"
             formControlName="personalcontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
             name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb (keypress)="onlyNumberKey($event)">
@@ -65,7 +64,6 @@
         <!-- company contact -->
         <mat-form-field appearance="fill">
           <mat-label>Company Contact Number</mat-label>
-          <!-- <input matInput formControlName="companycontactnumber"> -->
           <ngx-mat-intl-tel-input [preferredCountries]="['in','us']" class="intl-input"
             formControlName="companycontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
             name="companycontactnumber" id="intlInputCompany" #companycontactnumber (keypress)="onlyNumberKey($event)">
@@ -74,21 +72,16 @@
         <!-- Joining Date -->
         <mat-form-field appearance="fill">
           <mat-label>Joining Date</mat-label>
-
           <input matInput [matDatepicker]="datepicker" formControlName="joiningdate" placeholder="MM/DD/YYYY">
-
           <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
           <mat-datepicker #datepicker>
-
           </mat-datepicker>
           <mat-error *ngIf="employeeForm.controls.joiningdate.hasError('required')">Joining Date Required</mat-error>
         </mat-form-field>
         <!-- Releiving Date -->
         <mat-form-field appearance="fill">
           <mat-label>Releiving Date</mat-label>
-
           <input matInput [matDatepicker]="datepicker2" formControlName="relievingdate">
-
           <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
           <mat-datepicker #datepicker2>
           </mat-datepicker>
@@ -207,8 +200,6 @@
         <!-- Manager with MatSelect-->
         <mat-form-field *ngIf="managerflg" appearance="fill">
           <mat-label>Select Manager</mat-label>
-          <!-- <input matInput formControlName="manager" [matAutocomplete]="roleAuto" >
-        <mat-autocomplete #roleAuto="matAutocomplete"> -->
           <mat-select formControlName="manager" (selectionChange)="managerid($event)">
             <mat-option *ngFor="let option of managerOptions" [value]="option[0]">
               {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
@@ -228,36 +219,15 @@
               {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
             </mat-option>
           </mat-autocomplete>
-          <!-- <mat-error *ngIf="employeeForm.get('teamlead')!.hasError('required')">Manager
-            is Required</mat-error> -->
         </mat-form-field>
         <mat-form-field *ngIf="teamleadflg" appearance="fill">
           <mat-label>Select Team Lead</mat-label>
-          <!-- <input matInput formControlName="teamlead"
-          [matAutocomplete]="roleAuto">
-        <mat-autocomplete #roleAuto="matAutocomplete"> -->
           <mat-select formControlName="teamlead">
             <mat-option *ngFor="let option of teamLeadOptions" [value]="option[0]">
               {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
             </mat-option>
           </mat-select>
-          <!-- </mat-autocomplete> -->
-          <!-- <mat-error *ngIf="employeeForm.get('teamlead')!.hasError('required')">Manager
-          is Required</mat-error> -->
         </mat-form-field>
-        <!-- <mat-form-field *ngIf="employeeForm.get('role')!.value === 'Team Lead'"
-          appearance="fill">
-          <mat-label>Select Manager</mat-label>
-          <input matInput formControlName="manager" [matAutocomplete]="roleAuto">
-          <mat-autocomplete #roleAuto="matAutocomplete">
-            <mat-option *ngFor="let option of filteredManagerOptions | async"
-              [value]="option">
-              {{ option }}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="employeeForm.get('manager')!.hasError('required')">Manager
-            is Required</mat-error>
-        </mat-form-field> -->
       </div>
     </section>
     <!--form upload controls -->
