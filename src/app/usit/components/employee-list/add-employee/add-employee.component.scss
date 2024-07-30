@@ -13,9 +13,6 @@
 
 .close-btn{
   overflow: hidden !important;
-  // border: none;
-  // background: none;
-  // cursor: pointer;
 }
 
 .header-text {
@@ -86,14 +83,12 @@
   background-color: #e3edf6;
 }
 
-
 .mat-mdc-form-field-infix {
   padding-top: 0;
 }
 
 
 /**** UPLOAD DOCUMENTS - STARTS ****/
-
 // HEADER
 .header-upload-documents {
   display: flex;
@@ -142,8 +137,6 @@
 }
 /**** UPLOAD DOCUMENTS - ENDS ****/
 
-
-
 /**** DOCUMENT LIST TABLE  - STARTS ****/
 .list-documents-table-container{
   margin: 0px 2px 0px 6px;
@@ -163,6 +156,7 @@
 .tbl-header-name{
   width: 85%;
 }
+
 .mat-mdc-header-row {
   background-color: rgb(213, 231, 231);
 }
@@ -171,6 +165,7 @@ table {
   border-collapse: collapse;
   width: 92%;
 }
+
 td{
   height: 1rem;
 }
@@ -190,6 +185,7 @@ th {
 tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
 .no-data-found{
   display: flex;
   align-items: center;
@@ -199,15 +195,14 @@ tr:nth-child(even) {
 }
 /**** DOCUMENT LIST TABLE  - ENDS ****/
 
-
 .mat-mdc-option {
   min-height: 36px !important;
 }
+
 // MAT-ERROR style alignment with label
 :host ::ng-deep .mat-mdc-form-field-error-wrapper {
   padding: 0px !important;
 }
-
 
 /**** TEL INPUT   - STARTS ****/
 .country-selector {
@@ -222,7 +217,6 @@ input:not(.country-search) {
 
 ::ng-deep input .country-search {
   width: 90%;
-  /* height: 34px; */
   border: none;
   border-bottom: 1px solid #f2f0f0;
   font-size: 14px;

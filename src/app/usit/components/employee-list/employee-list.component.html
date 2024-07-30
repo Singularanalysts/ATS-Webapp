@@ -23,7 +23,7 @@
 
   <div id="table-container" class="table-wrapper">
 
-    <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+    <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
       <mat-tab label="All">
         <ng-container *ngTemplateOutlet="tableTemplate; context: { status: 'all' }"></ng-container>
       </mat-tab>
