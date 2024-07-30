@@ -40,4 +40,5 @@ export class Employee {
   aadhar!: any;
   alternatenumber!: any;
   loginAs!: any;
+  banterno!: string;
 }
