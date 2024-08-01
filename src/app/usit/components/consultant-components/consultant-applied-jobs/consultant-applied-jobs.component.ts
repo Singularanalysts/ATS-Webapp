@@ -46,8 +46,6 @@ export class ConsultantAppliedJobsComponent implements OnInit {
     'category_skill',
     'employment_type',
     'job_location',
-    'source',
-    // 'Status'
   ];
   // pagination code
   page: number = 1;

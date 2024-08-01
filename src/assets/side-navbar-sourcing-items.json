@@ -5,11 +5,6 @@
     "routerLink": "/usit/dashboard"
   },
   {
-    "text": "Technology Tags",
-    "icon": "build",
-    "routerLink": "/usit/technology-tag"
-  },
-  {
     "text": "Search",
     "icon": "search",
     "routerLink": "/usit/search"

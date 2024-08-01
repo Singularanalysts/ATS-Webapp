@@ -8,7 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatSortModule, Sort } from '@angular/material/sort';
 
@@ -68,26 +68,23 @@ export class LinkedprofilesComponent implements OnInit {
   };
   sortField = 'updateddate';
   sortOrder = 'desc';
+  tabs = ['All', 'USA', 'UAE'];
+  status = 'all';
+  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getAllData();
   }
 
-  empTag(id: number) {
-    this.service.openReqsEmpTagging(id, this.userid).subscribe(
-      (response: any) => {
-
-      })
-  }
-
-  getAllData(pagIdx = 1) {
+  getAllData(pagIdx = 1, status: string = 'all') {
     const pagObj = {
       pageNumber: pagIdx,
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       keyword: this.field,
+      country: status
     }
     this.service.linkedInPagination(pagObj).subscribe(
       (response: any) => {
@@ -131,6 +128,7 @@ export class LinkedprofilesComponent implements OnInit {
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       keyword: keyword,
+      country: this.status
     }
     if (keyword != '') {
       return this.service.linkedInPagination(pagObj).subscribe(
@@ -148,14 +146,14 @@ export class LinkedprofilesComponent implements OnInit {
     if (keyword == '') {
       this.field = 'empty';
     }
-    return this.getAllData(this.currentPageIndex + 1);
+    return this.getAllData(this.currentPageIndex + 1, this.status);
   }
 
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      this.getAllData(event.pageIndex + 1)
+      this.getAllData(event.pageIndex + 1, this.status)
     }
     return;
   }
@@ -184,8 +182,10 @@ export class LinkedprofilesComponent implements OnInit {
     )
   }
 
-  navigateToDashboard() {
-    this.router.navigateByUrl('/usit/dashboard');
+  onTabChanged(event: MatTabChangeEvent) {
+    this.status = event.tab.textLabel.toLowerCase();
+    this.currentPageIndex = this.pageIndices[this.status];
+    this.getAllData(this.currentPageIndex + 1, this.status);
   }
 }
 

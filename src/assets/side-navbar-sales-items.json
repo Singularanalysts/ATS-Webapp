@@ -50,12 +50,6 @@
       }
     ]
   },
-
-  {
-    "text": "Technology Tags",
-    "icon": "build",
-    "routerLink": "/usit/technology-tag"
-  },
   {
     "text": "H1 Transfer",
     "icon": "people",
