@@ -1,0 +1,125 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title class="title">{{ buttonText }} Email Configuration</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="emailForm" autocomplete="off">
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" autocomplete="new-email" [readonly]="buttonText !== 'Save'" />
+          <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
+          <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
+            Invalid Email Address
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Old Password -->
+        <mat-form-field appearance="outline" class="full-width"
+          *ngIf="showOldPasswordField && !forgotPassword && !otpValidated">
+          <mat-label>Old Password</mat-label>
+          <input matInput formControlName="oldpassword" type="{{ hideOPassword ? 'password' : 'text' }}"
+            autocomplete="new-password" (change)="validateOldPassword($event)" />
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideOPassword = !hideOPassword">
+            <mat-icon>{{
+              hideOPassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+          </button>
+          <mat-error *ngIf="emailForm.get('oldpassword')?.invalid">
+            Old Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- New Password -->
+        <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
+          <mat-label>New Password</mat-label>
+          <input matInput formControlName="password" type="{{ hideNPassword ? 'password' : 'text' }}"
+            autocomplete="new-password" />
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideNPassword = !hideNPassword">
+            <mat-icon>{{
+              hideNPassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+          </button>
+          <mat-error *ngIf="emailForm.get('password')?.invalid">
+            New Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf=" buttonText === 'Save'">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" type="{{ hideNPassword ? 'password' : 'text' }}"
+            autocomplete="new-password" />
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideNPassword = !hideNPassword">
+            <mat-icon>{{ hideNPassword ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+          <mat-error *ngIf="emailForm.get('password')?.hasError('required')">
+             Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput formControlName="conformpassword" type="{{ hideCPassword ? 'password' : 'text' }}"
+            autocomplete="new-password" />
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideCPassword = !hideCPassword">
+            <mat-icon>{{
+              hideCPassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+          </button>
+          <mat-error *ngIf="emailForm.get('conformpassword')?.invalid">
+            Confirm Password is required
+          </mat-error>
+        </mat-form-field>
+
+
+        <div class="forgot-password" *ngIf="buttonText === 'Update' && !forgotPassword && !otpValidated">
+          <a class="forgot-password-link" (click)="onForgotPassword()">Forgot Password?</a>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="otpSent && !otpValidated">
+          <mat-label>Enter OTP</mat-label>
+          <input matInput formControlName="otp" type="text" autocomplete="off" />
+          <mat-icon [style.color]="'#3f51b5'" matPrefix>vpn_key</mat-icon>
+          <mat-error *ngIf="emailForm.get('otp')?.invalid">
+            OTP is required.
+          </mat-error>
+        </mat-form-field>
+
+        <div class="button-container" *ngIf="!otpSent && forgotPassword">
+          <button mat-raised-button color="primary" type="submit"
+            (click)="requestOtp()">
+            Request OTP
+          </button>
+        </div>
+
+        <div class="button-container" *ngIf="otpSent && forgotPassword">
+          <button mat-raised-button color="primary" type="submit"
+            [disabled]="otpSent && emailForm.get('otp')?.value.length !== 6"
+            (click)="validateOtp()">
+            Validate OTP
+          </button>
+        </div>
+
+        <div class="button-container" *ngIf="!otpSent && !otpValidated && !forgotPassword">
+          <button mat-raised-button color="primary" type="submit"
+            (click)="saveDetails()">
+            {{ buttonText }}
+          </button>
+        </div>
+
+        <div class="button-container" *ngIf="otpValidated">
+          <button mat-raised-button color="primary" type="button" (click)="saveChangedPassword()">
+            Submit
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

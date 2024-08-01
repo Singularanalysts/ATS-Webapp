@@ -257,4 +257,60 @@ export class EmailExtractionComponent implements OnInit {
     });
   }
 
+  extractEmails() {
+    const extractEmail = {
+      userid: this.userid
+    }
+    return this.service.extractEmails(extractEmail).subscribe({
+      next: (response: any) => {
+        if (response.status === 'Success') {
+          this.getAll();
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else if (response.status === 'Configure') {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else if (response.status === 'failed') {
+          this.dataToBeSentToSnackBar.message = 'Oops! It seems there are no new emails at the moment';
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else if (response.status === 'Invalid-credentials') {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else if (response.status === 'Invalid-Domain') {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        }
+      },
+      error: (err: any) => {
+        this.dataToBeSentToSnackBar.message = err.message;
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataToBeSentToSnackBar
+        );
+      },
+    });
+   
+  }
+
 }
