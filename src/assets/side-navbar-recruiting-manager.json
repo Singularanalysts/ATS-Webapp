@@ -51,12 +51,6 @@
       "routerLink": "/usit/mass-mailing"
     },
     {
-      "text": "Technology Tags",
-      "icon": "build",
-      "routerLink": "/usit/technology-tag"
-    },
-
-    {
       "text": "Tech & Support",
       "icon": "build",
       "routerLink": "/usit/list-techsupport"

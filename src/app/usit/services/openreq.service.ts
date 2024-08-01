@@ -20,8 +20,8 @@ export class OpenreqService {
     return this.http.get("openreqs/dice/empTagging/" + reqid + "/" + empid);
   }
 
-  public getopenReqWithPaginationAndSource(pageNo: any, pageSize: any, field: any, source: any) {
-    return this.http.get("openreqs/dice/allreqs/" + pageNo + "/" + pageSize + "/" + field + "/" + source);
+  public getopenReqWithPaginationAndSource(pageNo: any, pageSize: any, field: any, source: any, country: string) {
+    return this.http.get("openreqs/dice/allreqs/" + pageNo + "/" + pageSize + "/" + field + "/" + source + "/" + country);
   }
 
   public linkedinProfiles() {
@@ -90,4 +90,34 @@ export class OpenreqService {
   getCfoAndVp(data: any) {
     return this.http.post("openreqs/linked/LinkedInPofilesRequest", data);
   }
+
+  extractEmails(data: any) {
+    return this.http.post("mail/extractEmail", data);
+  }
+
+  saveConfiguredEmail(data: any) {
+    return this.http.post("mail/emailcredentials/save", data);
+  }
+
+  updateConfiguredEmail(data: any) {
+    return this.http.put("mail/emailcredentials/update", data);
+  }
+
+  getConfiguredEmailById(id: string) {
+    return this.http.get(`mail/emailcredentials/getByUserId/${id}`);
+  }
+
+  validateOldPassword(data: any) {
+    return this.http.post(`mail/emailcredentials/emailValidation`, data);
+  }
+
+  requestOtp(data: any) {
+    return this.http.post(`mail/emailcredentials/forgotPassword`, data);
+  }
+
+  validateOtp(id: any, otp: any) {
+    return this.http.get(`mail/emailcredentials/validate/${id}/${otp}`);
+  }
+
+  
 }

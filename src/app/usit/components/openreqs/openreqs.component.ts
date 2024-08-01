@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
@@ -11,11 +10,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { RecruInfoComponent } from './recru-info/recru-info.component';
-import { MatDialog } from '@angular/material/dialog';
-import { RequirementInfoComponent } from '../recruitment/requirement-list/requirement-info/requirement-info.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { JobDescriptionComponent } from './job-description/job-description.component';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
+
 @Component({
   selector: 'app-openreqs',
   standalone: true,
@@ -28,8 +27,8 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
     MatPaginatorModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatDialogModule
-
+    MatDialogModule,
+    MatTabsModule
   ],
   templateUrl: './openreqs.component.html',
   styleUrls: ['./openreqs.component.scss'],
@@ -47,7 +46,6 @@ export class OpenreqsComponent implements OnInit {
     'vendor',
     'JobDescription',
     'source',
-    // 'end_client',
   ];
   // pagination code
   page: number = 1;
@@ -63,28 +61,25 @@ export class OpenreqsComponent implements OnInit {
   pageSizeOptions = [50, 75, 100];
   isCompanyExist: any;
   source = 'all';
+  tabs = ['All', 'USA', 'UAE'];
+  status = 'all';
+  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 
-  private router = inject(Router);
   private service = inject(OpenreqService);
   userid!: any;
   dialog: any;
   private dialogServ = inject(DialogService);
+
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getAllreqsData();
   }
-  empTag(id: number) {
-    this.service.openReqsEmpTagging(id, this.userid).subscribe(
-      (response: any) => {
-
-      })
-  }
-
 
   onSelectionChange(event: MatSelectChange) {
     this.source = event.value;
     this.getAllreqsData()
   }
+  
   openVendorPopup(vendor: string): void {
     this.dialog.open({
       data: { vendor: vendor }
@@ -98,7 +93,6 @@ export class OpenreqsComponent implements OnInit {
       id: element.vendor,
       isExist: element.isexist,
       actionName: 'req-info',
-
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -112,19 +106,19 @@ export class OpenreqsComponent implements OnInit {
       dialogConfig
     );
   }
+
   getAllreqsData() {
     if (this.source && this.source !== 'empty') {
-      this.getAllData(1); // Call API with source
+      this.getAllData(1);
     } else {
-      this.getAllData(1); // Call API without source
+      this.getAllData(1);
     }
   }
 
-  getAllData(pagIdx = 1) {
-    this.service.getopenReqWithPaginationAndSource(pagIdx, this.itemsPerPage, this.field, this.source).subscribe(
+  getAllData(pagIdx = 1, status: string = 'all') {
+    this.service.getopenReqWithPaginationAndSource(pagIdx, this.itemsPerPage, this.field, this.source, this.status).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
-        // this.isCompanyExist = response.data.content[0].isexist;
         this.totalItems = response.data.totalElements;
         // for serial-num {}
         this.dataSource.data.map((x: any, i) => {
@@ -144,7 +138,7 @@ export class OpenreqsComponent implements OnInit {
     const keyword = event.target.value;
     this.field = keyword;
     if (keyword != '') {
-      return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source).subscribe(
+      return this.service.getopenReqWithPaginationAndSource(1, this.itemsPerPage, keyword, this.source,  this.status).subscribe(
         ((response: any) => {
           this.dataSource.data = response.data.content;
           // for serial-num {}
@@ -159,24 +153,16 @@ export class OpenreqsComponent implements OnInit {
     if (keyword == '') {
       this.field = 'empty';
     }
-    return this.getAllData(this.currentPageIndex + 1);
-  }
-
-  onSort(event: any) {
-
+    return this.getAllData(this.currentPageIndex + 1, this.status);
   }
 
   handlePageEvent(event: PageEvent) {
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      this.getAllData(event.pageIndex + 1)
+      this.getAllData(event.pageIndex + 1, this.status)
     }
     return;
-  }
-
-  navigateToDashboard() {
-    this.router.navigateByUrl('/usit/dashboard');
   }
 
   getRowStyles(row: any): any {
@@ -214,4 +200,18 @@ export class OpenreqsComponent implements OnInit {
     );
   }
 
+  onTabChanged(event: MatTabChangeEvent) {
+    this.status = event.tab.textLabel.toLowerCase();
+    this.currentPageIndex = this.pageIndices[this.status];
+    this.getAllData(this.currentPageIndex + 1, this.status);
+  }
+
+  isValidDate(dateString: any): boolean {
+    if (!dateString) {
+      return false;
+    }
+    const date = new Date(dateString);
+    return !isNaN(date.getTime());
+  }
+  
 }
