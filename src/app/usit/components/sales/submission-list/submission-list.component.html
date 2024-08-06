@@ -88,11 +88,11 @@
                         <ng-container *ngIf="this.flag == 'Recruiting'; then trueCondition else elseTemplate"></ng-container>
                         <ng-container *ngIf="this.flag === 'Domrecruiting'; then anotherCondition"></ng-container>
                         <ng-template #trueCondition>
-                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber |titlecase}}
+                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber }}
                             </span>
                         </ng-template>
                         <ng-template #anotherCondition>
-                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber|titlecase }}
+                            <span class="consultant-id" (click)="goToReqInfo(element)">{{ element?.reqnumber }}
                             </span>
                         </ng-template>
                         <ng-template #elseTemplate>
@@ -122,6 +122,7 @@
                     <td mat-cell *matCellDef="let element"> {{element?.vendor|titlecase}}
                     </td>
                 </ng-container>
+
                 <!-- Sub Rate Column 
                 <ng-container matColumnDef="SubRate">
                     <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubRate" mat-sort-header>
@@ -135,7 +136,7 @@
                     </th>
                     <td mat-cell *matCellDef="let element">  
                       <!-- Check if flag is set to "Recruiting" before applying the NumericValue method -->
-                      {{ (flag === 'Recruiting' || flag === 'Sales') ? NumericValue(element.submissionrate) : element.submissionrate }}
+                      {{ element.submissionrate }}
                       
                     </td>
                   </ng-container>
