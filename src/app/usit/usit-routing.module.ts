@@ -65,6 +65,7 @@ import { PursuingComponent } from './components/pre-sourcing/pursuing/pursuing.c
 import { SourcingClosuresComponent } from './components/pre-sourcing/sourcing-closures/sourcing-closures.component';
 import { SourcingComponent } from './components/pre-sourcing/sourcing/sourcing.component';
 import { PasswordChangeComponent } from '../components/password-change/password-change.component';
+import { EmailConfigurationComponent } from './components/email-configuration/email-configuration.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -348,6 +349,9 @@ const routes: Routes = [
   },
   {
     path: 'change-password', component: PasswordChangeComponent,
+  },
+  {
+    path: 'email-configuration', component: EmailConfigurationComponent
   }
 ];
 
