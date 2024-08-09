@@ -7,6 +7,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { JobDescriptionComponent } from '../../openreqs/job-description/job-description.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { PageEvent } from '@angular/material/paginator';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-emp-applied-jobs-list',
@@ -44,9 +45,17 @@ export class EmpAppliedJobsListComponent {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageSizeOptions = [50, 75, 100];
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+  private snackBarServ = inject(SnackBarService);
 
   ngOnInit(): void {
-    console.log(this.data)
     this.getAllData(); 
   }
 
@@ -68,7 +77,9 @@ export class EmpAppliedJobsListComponent {
           });
       },
       error: (err: any) => {
-        console.error('Error fetching consultant data:', err);
+        this.dataToBeSentToSnackBar.message = err.message;
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
     });
   }
