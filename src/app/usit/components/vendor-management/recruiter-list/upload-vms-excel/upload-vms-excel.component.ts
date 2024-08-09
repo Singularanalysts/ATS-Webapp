@@ -41,6 +41,7 @@ export class UploadVmsExcelComponent implements OnInit {
     'CompanyType',
     'Location',
     'Contact',
+    'Country'
   ];
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<UploadVmsExcelComponent>);

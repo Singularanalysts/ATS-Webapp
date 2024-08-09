@@ -28,7 +28,6 @@ export class EmpAppliedJobsListComponent {
     'category_skill',
     'employment_type',
     'job_location',
-    'source',
   ];
   data = inject(MAT_DIALOG_DATA);
   dashboardServ = inject(DashboardService);
