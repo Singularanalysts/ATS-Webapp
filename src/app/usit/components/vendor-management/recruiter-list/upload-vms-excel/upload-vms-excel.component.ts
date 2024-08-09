@@ -129,6 +129,7 @@ export class UploadVmsExcelComponent implements OnInit {
       'CompanyType',
       'Location',
       'Contact',
+      'Country'
     ]];
     const wb = utils.book_new();
     const ws: any = utils.json_to_sheet([]);
