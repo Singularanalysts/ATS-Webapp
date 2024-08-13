@@ -69,6 +69,39 @@ export class OpenreqsComponent implements OnInit {
   userid!: any;
   dialog: any;
   private dialogServ = inject(DialogService);
+  currentOptions: { value: string, label: string }[] = [];
+  tabOptions = {
+    'All': [
+      { value: 'all', label: 'All' },
+      { value: 'dice', label: 'Dice' },
+      { value: 'glassdoor', label: 'Glassdoor' },
+      { value: 'indeed', label: 'Indeed' },
+      { value: 'linkedin', label: 'LinkedIn' },
+      { value: 'recruit.net', label: 'Recruit' },
+      { value: 'techfetch', label: 'Tech Fetch' },
+      { value: 'jobsora', label: 'Jobsora' }
+    ],
+    'USA': [
+      { value: 'all', label: 'All' },
+      { value: 'dice', label: 'Dice' },
+      { value: 'glassdoor', label: 'Glassdoor' },
+      { value: 'indeed', label: 'Indeed' },
+      { value: 'linkedin', label: 'LinkedIn' },
+      { value: 'recruit.net', label: 'Recruit' },
+      { value: 'techfetch', label: 'Tech Fetch' },
+      { value: 'jobsora', label: 'Jobsora' }
+    ],
+    'UAE': [
+      { value: 'all', label: 'All' },
+      { value: 'glassdoor', label: 'Glassdoor' },
+      { value: 'indeed', label: 'Indeed' },
+      { value: 'linkedin', label: 'LinkedIn' }
+    ]
+  };
+
+  constructor() {
+    this.currentOptions = this.tabOptions['All'];
+  }
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
@@ -202,6 +235,8 @@ export class OpenreqsComponent implements OnInit {
 
   onTabChanged(event: MatTabChangeEvent) {
     this.status = event.tab.textLabel.toLowerCase();
+    const selectedTab = this.tabs[event.index] as 'All' | 'USA' | 'UAE';
+    this.currentOptions = this.tabOptions[selectedTab];
     this.currentPageIndex = this.pageIndices[this.status];
     this.getAllData(this.currentPageIndex + 1, this.status);
   }
