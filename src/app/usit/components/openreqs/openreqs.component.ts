@@ -108,6 +108,13 @@ export class OpenreqsComponent implements OnInit {
     this.getAllreqsData();
   }
 
+  empTag(id: number) {
+    this.service.openReqsEmpTagging(id, this.userid).subscribe(
+      (response: any) => {
+
+      })
+  }
+
   onSelectionChange(event: MatSelectChange) {
     this.source = event.value;
     this.getAllreqsData()
