@@ -95,7 +95,8 @@ export class OpenreqsComponent implements OnInit {
       { value: 'all', label: 'All' },
       { value: 'glassdoor', label: 'Glassdoor' },
       { value: 'indeed', label: 'Indeed' },
-      { value: 'linkedin', label: 'LinkedIn' }
+      { value: 'linkedin', label: 'LinkedIn' },
+      { value: 'jobsora', label: 'Jobsora' }
     ]
   };
 
