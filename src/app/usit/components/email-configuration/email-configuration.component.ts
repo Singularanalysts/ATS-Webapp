@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
@@ -62,8 +62,18 @@ export class EmailConfigurationComponent {
       password: [''],
       otp: [''],
       conformpassword: ['']
-    });
+    }, { validator: this.passwordMatchValidator });
     this.checkExistingDetails();
+  }
+
+  private passwordMatchValidator(formGroup: FormGroup): ValidationErrors | null {
+    const password = formGroup.get('password')!.value;
+    const confirmPassword = formGroup.get('conformpassword')!.value;
+    if (confirmPassword && password && password !== confirmPassword) {
+      formGroup.get('conformpassword')!.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    }
+    return null;
   }
 
   checkExistingDetails() {
@@ -117,6 +127,9 @@ export class EmailConfigurationComponent {
           oldPassword!.setValue('');
         } else {
           this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          const oldPassword = this.emailForm.get('oldpassword');
+          oldPassword!.setValue('');
         }
         this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       },
@@ -129,28 +142,21 @@ export class EmailConfigurationComponent {
   }
 
   saveDetails() {
-    if (this.buttonText === 'Save') {
-      this.emailForm.get('email')?.setValidators([Validators.required, Validators.email]);
-      this.emailForm.get('password')?.setValidators([Validators.required]);
-
-      this.emailForm.get('email')?.updateValueAndValidity();
-      this.emailForm.get('password')?.updateValueAndValidity();
-    }
+    this.emailForm.get('email')?.setValidators([Validators.required, Validators.email]);
+    this.emailForm.get('password')?.setValidators([Validators.required]);
 
     if (this.buttonText === 'Update') {
-      this.emailForm.get('email')?.setValidators([Validators.required, Validators.email]);
       this.emailForm.get('oldpassword')?.setValidators([Validators.required]);
-      this.emailForm.get('password')?.setValidators([Validators.required]);
       this.emailForm.get('conformpassword')?.setValidators([Validators.required]);
 
       this.emailForm.get('email')?.updateValueAndValidity();
       this.emailForm.get('oldpassword')?.updateValueAndValidity();
       this.emailForm.get('password')?.updateValueAndValidity();
       this.emailForm.get('conformpassword')?.updateValueAndValidity();
+      this.emailForm.updateValueAndValidity();
     }
 
     this.emailForm.markAllAsTouched();
-    this.emailForm.updateValueAndValidity();
     const formValues = this.emailForm.value;
     formValues.userid = this.userid;
     if (this.emailForm.invalid) {
@@ -267,6 +273,10 @@ export class EmailConfigurationComponent {
             this.otpSent = false;
             this.otpValidated = true;
             this.buttonText = '';
+            this.emailForm.patchValue({
+              password: '',
+              conformpassword: '',
+            });
             this.emailForm.get('password')!.clearValidators();
             this.emailForm.get('conformpassword')!.clearValidators();
 
@@ -288,13 +298,9 @@ export class EmailConfigurationComponent {
   }
 
   saveChangedPassword() {
-    this.emailForm.get('email')?.setValidators([Validators.required, Validators.email]);
-    this.emailForm.get('password')?.setValidators([Validators.required]);
-    this.emailForm.get('conformpassword')?.setValidators([Validators.required]);
+    this.emailForm.updateValueAndValidity();
+    this.emailForm.markAllAsTouched();
 
-    this.emailForm.get('email')?.updateValueAndValidity();
-    this.emailForm.get('password')?.updateValueAndValidity();
-    this.emailForm.get('conformpassword')?.updateValueAndValidity();
     if (this.emailForm.invalid) {
       return;
     }
@@ -338,4 +344,5 @@ export class EmailConfigurationComponent {
     });
     this.checkExistingDetails();
   }
+  
 }

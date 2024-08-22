@@ -8,6 +8,9 @@
             Email Extraction
         </span>
         <div class="hot-list-actions">
+            <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
+                <mat-icon>delete</mat-icon>
+            </button>
             <button mat-raised-button color="primary" class="add-email" (click)="extractEmails()">
                 Extract Emails
             </button>
@@ -21,77 +24,139 @@
     <div id="table-container" class="table-wrapper">
         <section class="mat-elevation-z8 hot-list-table-style">
             <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
-
+    
                 <!--- Note that these columns can be defined in any order.
-                The actual rendered columns are set as a property on the row definition" -->
-
+                        The actual rendered columns are set as a property on the row definition" -->
+    
+                <!-- Select Column-->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef style="width: 5%">
+                        <mat-checkbox (change)="$event ? selectAll($event) : null" [checked]="isAllSelected()"
+                            [indeterminate]="isIndeterminate()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element" style="width: 5%">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelection(element) : null"
+                            [checked]="selection.isSelected(element)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+    
                 <!-- SNo Column -->
-                <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef style=" width: 1% " >
+                <!-- <ng-container matColumnDef="SerialNum">
+                    <th mat-header-cell *matHeaderCellDef style=" width: 1% ">
                         S.No </th>
                     <td mat-cell *matCellDef="let element" style=" width: 1% "> {{element?.serialNum}} </td>
+                </ng-container> -->
+    
+                <!-- To Column -->
+                <ng-container matColumnDef="To">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by To">
+                      To
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span [ngClass]="element?.tomails_displayedEmail ? 'consultant-name' : 'bold-class'">
+                        {{ element?.tomails_displayedEmail || '-' }}
+                        <span *ngIf="element?.tomails_remainingEmailsCount > 0" [matMenuTriggerFor]="tomailsMenu" class="email-count">
+                          +{{ element?.tomails_remainingEmailsCount }}
+                        </span>
+                      </span>
+                      <mat-menu #tomailsMenu="matMenu" class="to-menu">
+                        <ng-container *ngFor="let email of element?.tomails_remainingEmails">
+                          <button mat-menu-item>{{ email }}</button>
+                        </ng-container>
+                      </mat-menu>
+                    </td>
+                  </ng-container>
+    
+                <!-- From Column -->
+                <ng-container matColumnDef="From">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by From">
+                        From
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="consultant-name">{{ element?.sender }}</span>
+                        <!-- <span [ngClass]="element?.sender_displayedEmail ? 'consultant-name' : 'bold-class'">
+                            {{ element?.sender_displayedEmail || '-' }}
+                            <span *ngIf="element?.sender_remainingEmailsCount > 0" [matMenuTriggerFor]="sendermailsMenu" class="email-count">
+                              +{{ element?.sender_remainingEmailsCount }}
+                            </span>
+                          </span>
+                          <mat-menu #sendermailsMenu="matMenu">
+                            <ng-container *ngFor="let email of element?.sender_remainingEmails">
+                              <button mat-menu-item>{{ email }}</button>
+                            </ng-container>
+                          </mat-menu> -->
+                    </td>
                 </ng-container>
+    
+                <!-- CC Column -->
+                <ng-container matColumnDef="CC">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by CC">
+                        Cc
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [ngClass]="element?.ccmails_displayedEmail ? 'consultant-name' : 'bold-class'">
+                            {{ element?.ccmails_displayedEmail || '-' }}
+                            <span *ngIf="element?.ccmails_remainingEmailsCount > 0" [matMenuTriggerFor]="ccmailsMenu" class="email-count">
+                                +{{ element?.ccmails_remainingEmailsCount }}
+                            </span>
+                          </span>
+                          <mat-menu #ccmailsMenu="matMenu" class="cc-menu">
+                            <ng-container *ngFor="let email of element?.ccmails_remainingEmails">
+                              <button mat-menu-item>{{ email }}</button>
+                            </ng-container>
+                          </mat-menu>
+                    </td>
+                </ng-container>
+
                 <!-- Subject Column-->
                 <ng-container matColumnDef="Subject">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Subject" style=" width: 30% !important;" >
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Subject">
                         Subject</th>
-                    <td mat-cell *matCellDef="let element" style=" width: 30% !important;" >{{element?.subject | titlecase}} </td>
-                </ng-container>
-                <!-- From Column-->
-                <ng-container matColumnDef="From">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by From"   style=" width: 15% ">
-                        From </th>
-                    <td mat-cell *matCellDef="let element"  style=" width: 15% "><span class="consultant-name">{{element?.sender}}
-                        </span> </td>
-                </ng-container>
-                 <!-- To Column-->
-                 <ng-container matColumnDef="To">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by To"   style=" width: 15% ">
-                        To </th>
-                    <td mat-cell *matCellDef="let element"  style=" width: 15% ">
-                        <span class="consultant-name" class="truncate-multiline" [matTooltip]="element?.tomails">
-                            {{element?.tomails}}
-                        </span>
+                    <td mat-cell *matCellDef="let element">
+                        <!-- {{element?.subject | titlecase}} -->
+                        <span class="subject-text"
+                        [matTooltip]="element?.subject | titlecase"
+                        matTooltipPosition="above">
+                    {{ (element?.subject | titlecase) | slice:0:32 }}<ng-container *ngIf="(element?.subject | titlecase).length > 32">...</ng-container>
+                  </span>
                     </td>
                 </ng-container>
-                <!-- CC Column-->
-                <ng-container matColumnDef="CC">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by CC"   style=" width: 15% ">
-                        Cc </th>
-                    <td mat-cell *matCellDef="let element"  style=" width: 15% ">
-                        <span [ngClass]="element?.ccmails ? 'consultant-name' : 'bold-class'" class="truncate-multiline" [matTooltip]="element?.ccmails || '-'">
-                            {{ element?.ccmails || '-' }}
-                        </span>
-                    </td>
-                </ng-container>
+
                 <!-- Received Date Column-->
                 <ng-container matColumnDef="ReceivedDate">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ReceivedDate"
                         style=" width: 10% !important;" nowrap>
                         Received Date </th>
                     <td mat-cell *matCellDef="let element" style=" width: 10% !important;">
-                        {{element?.sentdate}}</td>
+                        {{element?.receiveddate}}</td>
                 </ng-container>
+
                 <!-- Body Column-->
                 <ng-container matColumnDef="Body">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Body" style=" width: 3% "> Body </th>
-                    <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)" style=" width: 3% ">VIEW
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Body" style=" width: 3% "> Body
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="req-info" (click)="goToReqInfo(element)"
+                        style=" width: 3% ">
+                        <mat-icon>visibility</mat-icon>
                     </td>
                 </ng-container>
                 <!-- Action Column-->
-                <ng-container matColumnDef="Action">
+                <!-- <ng-container matColumnDef="Action">
                     <th mat-header-cell *matHeaderCellDef style="width: 5%"> Action </th>
                     <td mat-cell *matCellDef="let element" style="width: 5%">
                         <span class="action-buttons">
-                            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_VENDOR')" mat-icon-button (click)="delete(element)"
-                                class="action-button-ed">
-                                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_VENDOR')}">delete</mat-icon>
+                            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_VENDOR')" mat-icon-button
+                                (click)="delete(element)" class="action-button-ed">
+                                <mat-icon
+                                    [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_VENDOR')}">delete</mat-icon>
                             </button>
                         </span>
                     </td>
-                </ng-container>
-                
-                <!-- table ROW  experience_summary -->
+                </ng-container> -->
+    
+                <!-- table ROW -->
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
             </table>

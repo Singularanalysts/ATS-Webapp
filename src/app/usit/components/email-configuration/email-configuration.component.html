@@ -65,20 +65,19 @@
 
         <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
           <mat-label>Confirm Password</mat-label>
-          <input matInput formControlName="conformpassword" type="{{ hideCPassword ? 'password' : 'text' }}"
-            autocomplete="new-password" />
+          <input matInput formControlName="conformpassword" type="{{ hideCPassword ? 'password' : 'text' }}" autocomplete="new-password" />
           <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
           <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideCPassword = !hideCPassword">
-            <mat-icon>{{
-              hideCPassword ? "visibility_off" : "visibility"
-              }}</mat-icon>
+            <mat-icon>{{ hideCPassword ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
-          <mat-error *ngIf="emailForm.get('conformpassword')?.invalid">
+          <mat-error *ngIf="emailForm.get('conformpassword')?.hasError('required')">
             Confirm Password is required
           </mat-error>
+          <mat-error *ngIf="emailForm.controls['conformpassword'].hasError('passwordMismatch')">
+            Passwords do not match
+          </mat-error>
         </mat-form-field>
-
-
+        
         <div class="forgot-password" *ngIf="buttonText === 'Update' && !forgotPassword && !otpValidated">
           <a class="forgot-password-link" (click)="onForgotPassword()">Forgot Password?</a>
         </div>
@@ -122,4 +121,5 @@
       </form>
     </mat-card-content>
   </mat-card>
+  
 </div>

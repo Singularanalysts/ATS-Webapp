@@ -72,15 +72,16 @@ tbody {
   border-right: 1px solid lightgray;
 }
 
-.mat-column-SerialNum,
-.mat-column-Subject,
-.mat-column-From,
-.mat-column-To,
-.mat-column-CC,
-.mat-column-ReceivedDate,
-.mat-column-Body {
-  border-right: 1px solid lightgray;
-}
+// .mat-column-select,
+// .mat-column-SerialNum,
+// .mat-column-Subject,
+// .mat-column-From,
+// .mat-column-To,
+// .mat-column-CC,
+// .mat-column-ReceivedDate,
+// .mat-column-Body {
+//   border-right: 1px solid lightgray;
+// }
 
 .header-container {
   display: flex;
@@ -270,3 +271,19 @@ ul.breadcrumb li:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.email-count {
+  color: #007bff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.subject-text {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  cursor: pointer;
+}
+
