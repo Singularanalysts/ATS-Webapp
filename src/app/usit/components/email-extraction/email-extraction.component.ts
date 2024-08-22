@@ -18,6 +18,9 @@ import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { Subject, takeUntil } from 'rxjs';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-email-extraction',
@@ -29,7 +32,9 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
     MatTooltipModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatCheckboxModule,
+    MatMenuModule
   ],
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
   templateUrl: './email-extraction.component.html',
@@ -38,14 +43,15 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 export class EmailExtractionComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
-    'SerialNum',
-    'Subject',
-    'From',
+    'select',
+    // 'SerialNum',
     'To',
+    'From',
     'CC',
+    'Subject',
     'ReceivedDate',
     'Body',
-    'Action'
+    // 'Action'
   ];
   private destroyed$ = new Subject<void>();
   private service = inject(OpenreqService);
@@ -75,6 +81,8 @@ export class EmailExtractionComponent implements OnInit {
   entity: any;
   private dialogServ = inject(DialogService);
   protected privilegeServ = inject(PrivilegesService);
+  selection = new SelectionModel<any>(true, []);
+  showDeleteButton = false;
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
@@ -98,11 +106,41 @@ export class EmailExtractionComponent implements OnInit {
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
+            x = this.processEmailsForKeys(x, ['tomails', 'sender', 'ccmails']);
+            return x;
           });
         }
       )
   }
 
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+}
+
+isIndeterminate() {
+    return this.selection.hasValue() && !this.isAllSelected();
+}
+
+selectAll(event: MatCheckboxChange): void {
+  if (event.checked) {
+      this.dataSource.data.forEach(row => this.selection.select(row));
+  } else {
+      this.selection.clear();
+  }
+  this.updateDeleteButtonVisibility();
+}
+
+
+toggleSelection(element: any) {
+    this.selection.toggle(element);
+    this.updateDeleteButtonVisibility();
+}
+
+updateDeleteButtonVisibility(): void {
+  this.showDeleteButton = this.selection.selected.length > 0;
+}
 
   applyFilter(event: any) {
     const keyword = event.target.value;
@@ -121,6 +159,8 @@ export class EmailExtractionComponent implements OnInit {
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
+            x = this.processEmailsForKeys(x, ['tomails', 'sender', 'ccmails']);
+            return x;
           });
           this.totalItems = response.data.totalElements;
         })
@@ -128,6 +168,27 @@ export class EmailExtractionComponent implements OnInit {
     }
     return this.getAll(this.currentPageIndex + 1)
   }
+
+  processEmailsForKeys(obj: any, keys: string[]) {
+    keys.forEach(key => {
+      if (obj[key]) {
+        const emailArray = obj[key].split(',').map((email: any) => email.trim());
+        const filteredEmails = emailArray.filter((email: any, index: any) => email !== '' || index !== emailArray.length - 1);
+        
+        obj[`${key}_displayedEmail`] = filteredEmails[0] || '';
+        obj[`${key}_remainingEmails`] = filteredEmails.slice(1);
+        obj[`${key}_remainingEmailsCount`] = filteredEmails.length > 1 ? filteredEmails.length - 1 : 0;
+        obj[`${key}_showRemainingEmails`] = false;
+      }
+    });
+    return obj;
+  }
+  
+
+  toggleEmailList(element: any, key: string) {
+    element[`${key}_showRemainingEmails`] = !element[`${key}_showRemainingEmails`];
+  }
+  
 
   sortField = 'ReceivedDate';
   sortOrder = 'desc';
@@ -311,6 +372,33 @@ export class EmailExtractionComponent implements OnInit {
       },
     });
    
+  }
+
+  bulkDelete(): void {
+    const selectedEmails = this.selection.selected;
+    const idsToDelete = selectedEmails.map(email => email.id);
+    const delObj = {
+      ids: idsToDelete
+    }
+
+    if (idsToDelete.length) {
+      this.service.deleteEmails(delObj)
+        .subscribe({
+          next: (response: any) => {
+            this.dataToBeSentToSnackBar.message = response.message;
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+            this.getAll();
+            this.selection.clear();
+            this.updateDeleteButtonVisibility();
+          },
+          error: (error: any) => {
+            console.error('Error deleting emails', error);
+          }
+        });
+    }
   }
 
 }

@@ -119,5 +119,7 @@ export class OpenreqService {
     return this.http.get(`mail/emailcredentials/validate/${id}/${otp}`);
   }
 
-  
+  deleteEmails(data: any) {
+    return this.http.post(`mail/deleteMailByIds`, data);
+  }
 }

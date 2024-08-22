@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-email-body',
@@ -22,13 +23,11 @@ import { MatButtonModule } from '@angular/material/button';
 export class EmailBodyComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<EmailBodyComponent>);
-  body!:any;
+  body!: SafeHtml;
+
+  constructor(private sanitizer: DomSanitizer) {}
+
   ngOnInit(): void {
-    this.getReqInfo();
-  }
-
-  getReqInfo() {
-
-   this.body = this.data.data.body
+    this.body = this.sanitizer.bypassSecurityTrustHtml(this.data.data.body);
   }
 }
