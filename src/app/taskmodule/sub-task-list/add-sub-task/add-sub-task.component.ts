@@ -2,7 +2,10 @@ import { CommonModule, DatePipe } from '@angular/common';
 import {
   Component,
   Inject,
-  inject} from '@angular/core';
+  inject,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -22,7 +25,7 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -31,6 +34,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TaskService } from '../../services/task.service';
 import { DEPARTMENT } from 'src/app/constants/department';
+import { SubtaskService } from '../../services/subtask.service';
 
 interface DropdownItem {
   item_id: number;
@@ -38,7 +42,7 @@ interface DropdownItem {
 }
 
 @Component({
-  selector: 'app-add-task',
+  selector: 'app-add-sub-task',
   standalone: true,
   imports: [
     CommonModule,
@@ -59,26 +63,28 @@ interface DropdownItem {
   providers: [
     DatePipe
   ],
-  templateUrl: './add-task.component.html',
-  styleUrls: ['./add-task.component.scss']
+  templateUrl: './add-sub-task.component.html',
+  styleUrls: ['./add-sub-task.component.scss']
 })
-export class AddTaskComponent {
-  deptOptions = DEPARTMENT;
-  taskForm!: FormGroup;
+export class AddSubTaskComponent {
+  // Services
   private formBuilder = inject(FormBuilder);
   private snackBarServ = inject(SnackBarService);
   private taskServ = inject(TaskService);
-  protected isFormSubmitted: boolean = false;
+  private subtaskServ = inject(SubtaskService);
+  private datePipe = inject(DatePipe);
+
+  // Data
+  deptOptions = DEPARTMENT;
+  subTaskForm!: FormGroup;
+  isFormSubmitted = false;
   submitted = false;
-  // to clear subscriptions
-  private destroyed$ = new Subject<void>();
   isAllOptionsSelected = false;
   entity: any;
-  private datePipe = inject(DatePipe);
   dropdownList!: DropdownItem[];
   selectedItems!: DropdownItem[];
   dropdownSettings!: IDropdownSettings;
-  pid: string | null = null;
+  taskid!: string | number;
   employeeData: any;
   statusType = [
     'To Do',
@@ -87,19 +93,23 @@ export class AddTaskComponent {
     'In Review',
     'Backlogs',
     'Completed',
-  ]
+  ];
+
+  // Subscription management
+  private destroyed$ = new Subject<void>();
+
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
-    public dialogRef: MatDialogRef<AddTaskComponent>
+    public dialogRef: MatDialogRef<AddSubTaskComponent>
   ) { }
 
   ngOnInit(): void {
-    this.pid = this.data.pid;
+    this.taskid = this.data.taskid;
     this.getEmployee();
     this.initializeTaskForm(null);
-    if (this.data.actionName === 'edit-task') {
+    if (this.data.actionName === 'edit-sub-task') {
       this.initializeTaskForm(null);
-      this.taskServ.getTaskById(this.data.taskData.taskid).subscribe(
+      this.subtaskServ.getsubTaskById(this.data.subtaskData.subTaskId).subscribe(
         (response: any) => {
           if (response && response.data) {
             this.initializeTaskForm(response.data)
@@ -110,36 +120,33 @@ export class AddTaskComponent {
   }
 
   get assignedToControl(): FormControl {
-    const control = this.taskForm.get('assignedto');
+    const control = this.subTaskForm.get('assignedto');
     if (control instanceof FormControl) {
       return control;
     } else {
       throw new Error('Form control is not of type FormControl');
     }
   }
-  
 
-  private initializeTaskForm(taskData: any) {
-    this.taskForm = this.formBuilder.group({
-      pid: [this.pid, Validators.required],
-      taskid: [taskData ? taskData.taskid : ''],
-      targetdate: [taskData ? taskData.targetdate : '', Validators.required],
-      taskname: [taskData ? taskData.taskname : '', Validators.required],
-      description: [taskData ? taskData.description : '', Validators.required],
-      department: [taskData ? taskData.department : 'Software'],
-      assignedto: [taskData ? taskData.assignedto : [], Validators.required],
-      addedby: [taskData ? taskData.addedby : localStorage.getItem('userid')],
-      status: [taskData ? taskData.status : 'To Do'],
-      updatedby: [this.data.actionName === "edit-task" ? localStorage.getItem('userid') : null]
+  private initializeTaskForm(subtaskData: any) {
+    this.subTaskForm = this.formBuilder.group({
+      taskid: [this.taskid],
+      subTaskId: [subtaskData ? subtaskData.subTaskId : ''],
+      targetDate: [subtaskData ? subtaskData.targetDate : '', Validators.required],
+      subTaskName: [subtaskData ? subtaskData.subTaskName : '', Validators.required],
+      subTaskDescription: [subtaskData ? subtaskData.subTaskDescription : '', Validators.required],
+      department: [subtaskData ? subtaskData.department : 'Software'],
+      assignedto: [subtaskData ? subtaskData.assignedto : [], Validators.required],
+      addedby: [subtaskData ? subtaskData.addedby : localStorage.getItem('userid')],
+      status: [subtaskData ? subtaskData.status : 'To Do'],
+      updatedby: [this.data.actionName === "edit-sub-task" ? localStorage.getItem('userid') : null]
     });
-
   }
 
   get controls() {
-    return this.taskForm.controls;
+    return this.subTaskForm.controls;
   }
 
-  department = "software";
   getEmployee() {
     this.taskServ.getUsersByDepartment("software").subscribe(
       (response: any) => {
@@ -166,11 +173,11 @@ export class AddTaskComponent {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
-    const TargetDate = this.taskForm.get('targetdate');
+    const TargetDate = this.subTaskForm.get('targetDate');
     const targetDateForm = this.datePipe.transform(TargetDate!.value, 'yyyy-MM-dd');
     TargetDate!.setValue(targetDateForm);
-    if (this.taskForm.invalid) {
-      this.taskForm.markAllAsTouched();
+    if (this.subTaskForm.invalid) {
+      this.subTaskForm.markAllAsTouched();
       this.isFormSubmitted = false;
       return;
     }
@@ -178,22 +185,22 @@ export class AddTaskComponent {
       this.isFormSubmitted = true
     }
     const saveReqObj = this.getSaveData();
-    this.taskServ
-      .addORUpdateTask(saveReqObj, this.data.actionName)
+    this.subtaskServ
+      .addORUpdateSubTask(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (resp: any) => {
           if (resp.status == 'success') {
             dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-task'
-                ? 'Task added successfully'
-                : 'Task updated successfully';
+              this.data.actionName === 'add-sub-task'
+                ? 'Sub Task added successfully'
+                : 'Sub Task updated successfully';
             this.dialogRef.close();
           } else {
             dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-task'
-                ? 'Task addition is failed'
-                : 'Task updation is failed';
+              this.data.actionName === 'add-sub-task'
+                ? 'Sub Task addition is failed'
+                : 'Sub Task updation is failed';
             dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
@@ -211,15 +218,15 @@ export class AddTaskComponent {
   }
  
   getSaveData() { 
-    const formValue = this.taskForm.value;
+    const formValue = this.subTaskForm.value;
     const transformedData = {
-      project: {
-        pid: formValue.pid
+      task: {
+        taskid: formValue.taskid
       },
-      targetdate: formValue.targetdate,
-      taskid: formValue.taskid,
-      taskname: formValue.taskname,
-      description: formValue.description,
+      subTaskId: formValue.subTaskId,
+      targetDate: formValue.targetDate,
+      subTaskName: formValue.subTaskName,
+      subTaskDescription: formValue.subTaskDescription,
       department: formValue.department,
       assignedto: formValue.assignedto,
       addedby: formValue.addedby,

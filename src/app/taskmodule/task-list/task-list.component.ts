@@ -14,7 +14,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
 import {
@@ -23,17 +23,27 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InterviewService } from 'src/app/usit/services/interview.service';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { AddTaskComponent } from './add-task/add-task.component';
 import { TaskService } from '../services/task.service';
-import { TaskUpdateComponent } from './task-update/task-update.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { Task } from 'src/app/usit/models/task';
 import { AssignedUserComponent } from './assigned-user/assigned-user.component';
-
+import {
+  CdkDragDrop,
+  CdkDrag,
+  CdkDropList,
+  CdkDropListGroup,
+  moveItemInArray,
+  transferArrayItem,
+  CdkDragPlaceholder,
+} from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
+import { TaskDescriptionComponent } from './task-description/task-description.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CommentsComponent } from '../comments/comments.component';
 
 @Component({
   selector: 'app-task-list',
@@ -48,14 +58,19 @@ import { AssignedUserComponent } from './assigned-user/assigned-user.component';
     MatSortModule,
     MatPaginatorModule,
     CommonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    RouterModule,
+    CdkDropListGroup,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPlaceholder,
+    MatMenuModule
   ],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
 export class TaskListComponent implements OnInit {
-  private service = inject(TaskService);
-  displayedColumns: string[] = ['SerialNum', 'ticketid', 'taskname', 'description', 'targetdate', 'status','update','Actions'];
+  private taskServ = inject(TaskService);
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -88,11 +103,11 @@ export class TaskListComponent implements OnInit {
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
   // services
-  private interviewServ = inject(InterviewService);
   private dialogServ = inject(DialogService);
   private router = inject(Router);
   protected privilegeServ = inject(PrivilegesService);
   private snackBarServ = inject(SnackBarService);
+  private route = inject(ActivatedRoute);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   dataTobeSentToSnackBarService: ISnackBarData = {
@@ -103,6 +118,18 @@ export class TaskListComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+  sortField = 'status';
+  sortOrder = 'desc';
+  projectId: any;
+  pid!: string | number;
+  todo: any[] = [];
+  inProgress: any[] = [];
+  inReview: any[] = [];
+  onHold: any[] = [];
+  backlog: any[] = [];
+  completed: any[] = [];
+  showUserList = false;
+  private breakpointObserver = inject(BreakpointObserver);
 
 
   ngOnInit(): void {
@@ -111,56 +138,131 @@ export class TaskListComponent implements OnInit {
     this.getAll();
   }
 
-  getAll() {
-    return this.service.getAllTasks().pipe(takeUntil(this.destroyed$)).subscribe(
-      {
-        next: (response: any) => {
-          this.entity = response.data;
-          this.dataSource.data = response.data;
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = i + 1;
-          });
-        },
-        error: (err) => {}
+  getAll(pagIdx = 1) {
+    this.route.params.subscribe(params => {
+      this.projectId = params['projectId'];
+      const taskObj = {
+        pageNumber: pagIdx,
+        pageSize: this.pageSize,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: this.field,
+        projectid: this.projectId
       }
-    );
-    /*this.userid = localStorage.getItem('userid');
-    this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, this.field)
-    .pipe(takeUntil(this.destroyed$)).subscribe(
 
-      (response: any) => {
-        this.entity = response.data.content;
-        this.dataSource.data = response.data.content;
-        this.totalItems = response.data.totalElements;
-        // for serial-num {}
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = this.generateSerialNumber(i);
-        });
-      }
-    )
-    */
+      return this.taskServ.getAllTasksOfProject(taskObj).pipe(takeUntil(this.destroyed$)).subscribe(
+        {
+          next: (response: any) => {
+            this.entity = response.data.tasks;
+            this.dataSource.data = response.data.tasks;
+            const tasks = response.data.tasks;
+            this.pid = response.data.pid;
+            this.entity = tasks;
+            this.dataSource.data = tasks;
+
+            this.todo = [];
+            this.inProgress = [];
+            this.inReview = [];
+            this.onHold = [];
+            this.backlog = [];
+            this.completed = [];
+
+            tasks.forEach((task: any) => {
+              task.targetdate = task.targetdate || 'N/A';
+              task.remaining = task.assignUsers.slice(4);
+
+              switch (task.status) {
+                case 'To Do':
+                  this.todo.push(task);
+                  break;
+                case 'In Progress':
+                  this.inProgress.push(task);
+                  break;
+                case 'In Review':
+                  this.inReview.push(task);
+                  break;
+                case 'On Hold':
+                  this.onHold.push(task);
+                  break;
+                case 'Backlog':
+                  this.backlog.push(task);
+                  break;
+                case 'Completed':
+                  this.completed.push(task);
+                  break;
+                default:
+                  console.warn(`Unknown status: ${task.status}`);
+              }
+            });
+
+            this.todo.forEach((task, i) => task.serialNum = i + 1);
+            this.inProgress.forEach((task, i) => task.serialNum = i + 1);
+            this.inReview.forEach((task, i) => task.serialNum = i + 1);
+            this.onHold.forEach((task, i) => task.serialNum = i + 1);
+            this.backlog.forEach((task, i) => task.serialNum = i + 1);
+            this.completed.forEach((task, i) => task.serialNum = i + 1);
+            this.dataSource.data.map((x: any, i) => {
+              x.serialNum = i + 1;
+            });
+          },
+          error: (err: any) => {
+            this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+            this.dataTobeSentToSnackBarService.message = err.message;
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataTobeSentToSnackBarService
+            );
+          }
+        }
+      );
+    });
+
   }
-  editTask(emp: Task){
-    const dataToBeSentToDailog = {
-      title: 'Update Task',
-      taskData: emp,
-      actionName: 'edit-task',
-    };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: false, edit: true, add: false});
-    const dialogRef =  this.dialogServ.openDialogWithComponent(AddTaskComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if(dialogRef.componentInstance.submitted){
-        this.getAll();
-    }})
+
+  getInitials(fullName: string): string {
+    const nameParts = fullName.split(' ');
+
+    let initials = '';
+
+    if (nameParts.length > 1) {
+      initials = nameParts[0].charAt(0) + nameParts[1].charAt(0);
+    } else {
+      initials = nameParts[0].charAt(0) + (nameParts[0].charAt(1) || '');
+    }
+
+    return initials.toUpperCase();
   }
+
   addTask() {
     const actionData = {
       title: 'Add Task',
+      taskData: null,
+      projectId: this.projectId,
+      pid: this.pid,
+      actionName: 'add-task',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '65vw';
+    dialogConfig.width = '30vw';
     dialogConfig.disableClose = false;
-    // dialogConfig.panelClass = 'add-interview';
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddTaskComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
+      }
+    })
+  }
+
+  editTask(task: Task) {
+    const actionData = {
+      title: 'Update Task',
+      taskData: task,
+      projectId: this.projectId,
+      pid: this.pid,
+      actionName: 'edit-task',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '30vw';
+    dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddTaskComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
@@ -189,7 +291,7 @@ export class TaskListComponent implements OnInit {
       next: (resp) => {
         if (dialogRef.componentInstance.allowAction) {
           // call delete api
-          this.service.deleteTask(id).pipe(takeUntil(this.destroyed$)).subscribe({
+          this.taskServ.deleteTask(id).pipe(takeUntil(this.destroyed$)).subscribe({
             next: (response: any) => {
               if (response.status == 'success') {
                 this.getAll();
@@ -197,7 +299,7 @@ export class TaskListComponent implements OnInit {
                   'Task Deleted successfully';
               } else {
                 this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
-                this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
+                this.dataTobeSentToSnackBarService.message = response.message;
               }
               this.snackBarServ.openSnackBarFromComponent(
                 this.dataTobeSentToSnackBarService
@@ -226,21 +328,15 @@ export class TaskListComponent implements OnInit {
     return dialogConfig;
   }
 
-  updateTask(element: any) {
+  openDescriptionDialog(data: any) {
     const actionData = {
-      title: 'Update Task',
-      // interviewData: null,
-      // actionName: 'add-interview',
-      // flag: this.flag,
-      taskid: element.taskid
-      
+      taskData: data
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '65vw';
+    dialogConfig.width = '50vw';
     dialogConfig.disableClose = false;
-    // dialogConfig.panelClass = 'add-interview';
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(TaskUpdateComponent, dialogConfig);
+    const dialogRef = this.dialogServ.openDialogWithComponent(TaskDescriptionComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
         this.getAll();
@@ -248,60 +344,10 @@ export class TaskListComponent implements OnInit {
     })
   }
 
-
-  // applyFilter(event: any) {
-  //   const keyword = event.target.value;
-  //   if (keyword != '') {
-  //     return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword).subscribe(
-  //       ((response: any) => {
-  //         this.entity = response.data.content;
-  //         this.dataSource.data = response.data.content;
-  //         // for serial-num {}
-  //         this.dataSource.data.map((x: any, i) => {
-  //           x.serialNum = this.generateSerialNumber(i);
-  //         });
-  //         this.totalItems = response.data.totalElements;
-  //       })
-  //     );
-  //   }
-  //   return this.getAll()
-  // }
-  onSort(event: any) {
-  }
-
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
-  }
-
-  getRowStyles(row: any): any {
-    const intStatus = row.interview_status;
-    let backgroundColor = '';
-    let color = '';
-    switch (intStatus) {
-      case 'OnBoarded':
-        backgroundColor = 'rgb(185, 245, 210)';
-        color = 'black';
-        break;
-      case 'Selected':
-        backgroundColor = 'rgba(243, 208, 9, 0.945)';
-        color = '';
-        break;
-      case 'Hold':
-        backgroundColor = 'rgba(243, 208, 9, 0.945)';
-        color = '';
-        break;
-      case 'Rejected':
-        backgroundColor = '';
-        color = 'rgba(177, 19, 19, 0.945)';
-        break;
-      default:
-        backgroundColor = '';
-        color = '';
-        break;
-    }
-    return { 'background-color': backgroundColor, 'color': color };
   }
 
   handlePageEvent(event: PageEvent) {
@@ -325,16 +371,16 @@ export class TaskListComponent implements OnInit {
   goToUserInfo(id: number) {
     this.router.navigate(['usit/user-info', id])
   }
-  popup(id: number,tid:string){
+
+  popup(id: number, tid: string) {
     const actionData = {
       title: tid,
-      id:id,
-      Actionname:'task-details'
+      id: id,
+      Actionname: 'task-details'
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
     dialogConfig.disableClose = false;
-    // dialogConfig.panelClass = 'add-interview';
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AssignedUserComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
@@ -343,6 +389,116 @@ export class TaskListComponent implements OnInit {
       }
     })
   }
+
+  drop(event: CdkDragDrop<any[]>) {
+    const previousContainer = event.previousContainer;
+    const currentContainer = event.container;
+
+    const statusMapping = {
+      todo: 'To Do',
+      inProgress: 'In Progress',
+      onHold: 'On Hold',
+      backlog: 'Backlog',
+      inReview: 'In Review',
+      completed: 'Completed',
+    } as const;
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      const movedTask = previousContainer.data[event.previousIndex];
+      const newStatusKey = this.getListStatus(currentContainer.data) as keyof typeof statusMapping;
+      const newStatus = statusMapping[newStatusKey];
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      if (movedTask) {
+        if (movedTask.status !== newStatus) {
+          this.saveTaskChanges(movedTask.taskid, newStatus);
+        }
+      }
+    }
+  }
+
+  saveTaskChanges(taskId: string, newStatus: string) {
+    this.taskServ.updateTaskStatus(taskId, newStatus).subscribe({
+      next: (response: any) => {
+        if (response.status == 'success') {
+          this.dataTobeSentToSnackBarService.message = 'Task Status Updated successfully';
+          this.getAll();
+        } else {
+          this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+          this.dataTobeSentToSnackBarService.message = response.message;
+        }
+        this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+      },
+      error: (error: any) => {
+        this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+        this.dataTobeSentToSnackBarService.message = error.message;
+        this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+      }
+    }
+    );
+  }
+
+  getListStatus(list: any[]): string {
+    if (list === this.todo) return 'todo';
+    if (list === this.inProgress) return 'inProgress';
+    if (list === this.inReview) return 'inReview';
+    if (list === this.onHold) return 'onHold';
+    if (list === this.backlog) return 'backlog';
+    if (list === this.completed) return 'completed';
+    return '';
+  }
+
+  toggleUserList() {
+    this.showUserList = !this.showUserList;
+  }
+
+  openSubTasks(card: any): void {
+    const projectId = this.projectId;
+    const ticketId = card.ticketid;
+    this.router.navigate([`/task-management/projects/${projectId}/tasks/${ticketId}/subtasks`]);
+  }
+
+  openCommentsDialog(data: any) {
+    const actionData = {
+      taskData: data
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.data = actionData;
+
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '90vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '40vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '30vw';
+        }
+      }
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(CommentsComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          this.getAll();
+        }
+      });
+    });
+  }
 }
-
-

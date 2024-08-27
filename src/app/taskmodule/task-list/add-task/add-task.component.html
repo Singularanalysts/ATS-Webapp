@@ -1,92 +1,64 @@
 <div class="header-container mat-elevation-z1">
     <span class="header-text" mat-dialog-title>
-       Add Task
+        {{data.title}}
     </span>
-    <button mat-icon-button (click)="onCancel()">
+    <button mat-icon-button (click)="onCancel()" class="close-btn">
         <mat-icon>close</mat-icon>
     </button>
 </div>
-<mat-card class="center-card">
-    <form [formGroup]="requirementForm"  class="vendor-form">
-        <div class="form">
-            <div class="form-column-left">
-                <!-- Client -->
-                <mat-form-field appearance="fill">
-                    <mat-label>Task Name</mat-label>
-                    <input matInput formControlName="taskname" maxlength="120">
-                    <mat-error *ngIf="requirementForm.get('taskname')!.hasError('required')"> Task Name is
-                        required</mat-error>
-                </mat-form-field>
+<mat-card class="card">
+    <form [formGroup]="taskForm" class="task-form">
+        <section class="form-container">
+            <!-- Client -->
+            <mat-form-field appearance="outline" class="first-field">
+                <mat-label>Task Name</mat-label>
+                <input matInput formControlName="taskname" maxlength="120">
+                <mat-error *ngIf="taskForm.get('taskname')!.hasError('required')"> Task Name is
+                    required</mat-error>
+            </mat-form-field>
 
-                <!-- Job Description -->
-                <mat-form-field class="description-field">
-                    <mat-label>Task Description</mat-label>
-                    <textarea formControlName="description" matInput rows="4" maxlength="10000"></textarea>
-                    <mat-error *ngIf="requirementForm.get('description')!.hasError('required')"> Task Description is
-                        required</mat-error>
-                </mat-form-field>
-            </div>
-            <div class="form-column-right">
-                <mat-form-field appearance="fill">
-                    <mat-label>Target Date</mat-label>
-                    <input matInput [matDatepicker]="datepicker" formControlName="targetdate" placeholder="DD-MM-YYYY">
-                    <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
-                    <mat-datepicker #datepicker></mat-datepicker>
-                    <div *ngIf="requirementForm.get('targetdate')?.value" class="formatted-date">
-                        {{ requirementForm.get('targetdate')?.value | date }}
-                    </div>
-                    <mat-error *ngIf="requirementForm.get('targetdate')!.hasError('required')"> Target Date is
-                        required</mat-error>
-                </mat-form-field>
+            <!-- Job Description -->
+            <mat-form-field class="description-field" appearance="outline">
+                <mat-label>Task Description</mat-label>
+                <textarea formControlName="description" matInput rows="4" maxlength="10000"></textarea>
+                <mat-error *ngIf="taskForm.get('description')!.hasError('required')"> Task Description is
+                    required</mat-error>
+            </mat-form-field>
 
-
-                <!-- Assign Recruiter -->
-                <mat-form-field appearance="fill">
-                    <mat-label>Assign Employee</mat-label>
-                    <mat-chip-grid #chipGrid aria-label="Assign Recruiter" formControlName="assignedto">
-                        <mat-chip-row *ngFor="let employee of selectData" class="chip-style"
-                            (removed)="remove(employee)">
-                            {{ employee.fullname }}
-                            <button matChipRemove [attr.aria-label]="'remove ' + employee">
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </mat-chip-row>
-                    </mat-chip-grid>
-
-                    <input #employeeInput formControlName="assignedto" [matChipInputFor]="chipGrid"
-                        [matAutocomplete]="auto" (matChipInputTokenEnd)="add($event)" />
-                    <mat-autocomplete #auto="matAutocomplete" formControlName="assignedto">
-                        <mat-checkbox [checked]="isAllOptionsSelected" color="primary" (change)="onSelectAll($event)">{{
-                            isAllOptionsSelected ? 'UnSelect All': 'Select All'}}</mat-checkbox>
-                        <mat-option *ngFor="let employee of empArr">
-                            <div (click)="optionClicked($event, employee)">
-                                <mat-checkbox [checked]="employee.selected" color="primary"
-                                    (change)="toggleSelection(employee)" (click)="$event.stopPropagation()">
-                                    {{ employee.fullname }}
-                                </mat-checkbox>
-                            </div>
-                        </mat-option>
-                    </mat-autocomplete>
-                    <mat-error
-                        *ngIf="requirementForm.get('assignedto')!.hasError('required') || requirementForm.get('assignedto')?.value ">Select
-                        Employee</mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="fill" class="category-field">
+            <!-- Department -->
+            <!-- <mat-form-field appearance="outline" class="category-field">
                     <mat-label>Select Department</mat-label>
-                    <!-- <input matInput formControlName="department" placeholder="Enter Department"> -->
                     <mat-select name="department" formControlName="department" >
                       <mat-option *ngFor="let option of deptOptions" [value]="option.name">
                         {{ option.name }}
                       </mat-option>
                     </mat-select>
-                      <mat-error *ngIf="requirementForm.get('department')!.hasError('required')"> Department is required</mat-error>
-                  </mat-form-field>
+                      <mat-error *ngIf="taskForm.get('department')!.hasError('required')"> Department is required</mat-error>
+                </mat-form-field> -->
 
+            <!-- Target Date -->
+            <mat-form-field appearance="outline">
+                <mat-label>Target Date</mat-label>
+                <input matInput [matDatepicker]="datepicker" formControlName="targetdate" placeholder="DD-MM-YYYY">
+                <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+                <mat-datepicker #datepicker></mat-datepicker>
+                <mat-error *ngIf="taskForm.get('targetdate')!.hasError('required')"> Target Date is
+                    required</mat-error>
+            </mat-form-field>
+
+            <!-- Assigned To -->
+            <div *ngIf="taskForm.get('assignedto')">
+                <ng-multiselect-dropdown [placeholder]="'Assigned To *'" [settings]="dropdownSettings"
+                    [data]="employeeData" [formControl]="assignedToControl">
+                </ng-multiselect-dropdown>
+                <mat-error
+                    *ngIf="taskForm.get('assignedto')!.hasError('required') && taskForm.get('assignedto')!.touched">
+                    Assigned To is required
+                </mat-error>
             </div>
-        </div>
+        </section>
     </form>
-    <div class="form-button-right">
+    <div class="form-action-buttons">
         <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
         <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
     </div>

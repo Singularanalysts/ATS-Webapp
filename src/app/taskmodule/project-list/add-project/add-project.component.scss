@@ -11,7 +11,7 @@
 }
 
 .header-text {
-  padding-left: 2rem;
+  padding-left: 16px;
   font-weight: 600;
   font-size: larger;
 }
@@ -24,15 +24,15 @@
   margin: 0 auto;
   padding: 16px;
   height: max-content;
-  max-height: 85vh;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
 
-.task-form {
+.project-form {
   height: max-content;
-  max-height: 85vh;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -45,23 +45,8 @@
   width: auto;
 }
 
-.mat-list {
-  max-width: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-.mat-mdc-list-item-content {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
 .mat-mdc-form-field-infix {
   padding-top: 0;
-}
-
-.mat-elevation-z1 {
-  box-shadow: none;
 }
 
 mat-error {
@@ -69,7 +54,7 @@ mat-error {
 }
 
 @media screen and (max-width: 425px) {
-  .form {
+  .form-container {
     flex-direction: column;
   }
 
@@ -90,18 +75,14 @@ mat-error {
   gap: 10px;
 }
 
-.first-field {
+.btn-cancel {
+  background-color: #e3edf6;
+}
+
+.mat-mdc-option {
+  min-height: 36px !important;
+}
+
+.project-name-field {
   margin-top: 4px;
-}
-
-.custom-mat-form-field {
-  display: block;
-  margin: 8px 0;
-}
-
-.custom-mat-form-field .mat-label {
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.6);
-  margin-bottom: 4px;
-  display: inline-block;
 }

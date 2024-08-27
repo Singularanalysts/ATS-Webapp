@@ -1,7 +1,10 @@
-<section class="header-container">
+<section class="header-container  mat-elevation-z1">
     <span class="header-text" mat-dialog-title>
         {{data.imginfo.employeename | titlecase}}
     </span>
+    <button mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
 </section>
 <mat-card class="card mat-elevation-z8">
     <mat-card-content class="card-content">

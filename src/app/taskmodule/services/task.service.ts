@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { ApiService } from 'src/app/core/services/api.service';
 
@@ -9,35 +8,33 @@ export class TaskService {
   private apiServ = inject(ApiService);
   constructor() { }
 
-  getAllTasks() {
-    return this.apiServ.get("task/getAllTasks");
+  getAllTasksOfProject(entity: any) {
+    return this.apiServ.post("task/findByProjectId", entity);
+  }
+  
+  getUsersByDepartment(department: string) {
+    return this.apiServ.get(`task/getUsers/${department}`);
   }
 
   createTask(entity: any) {
     return this.apiServ.post("task/createTask", entity);
   }
 
-  getEmployee() {
-    return this.apiServ.get("auth/users/recruiterlist2");
+  getTaskById(taskid: number | string) {
+    return this.apiServ.get("task/getbyTaskId/" + taskid);
   }
 
-  public updateTask(entity: any) {
-    return this.apiServ.post("task/updateTask", entity);
+  public Taskupdate(entity: any) {
+    return this.apiServ.post("task/update", entity);
   }
- 
 
   trackByUser(id: number) {
     return this.apiServ.get("task/trackByUser/" + id);
   }
 
-  deleteTask(id: number) {
-    return this.apiServ.delete("task/delete/" + id);
+  getTaskByTicketId(ticketid: string) {
+    return this.apiServ.get("task/getByTicketId/" + ticketid);
   }
-
-  getTaskById(taskid: number) {
-    return this.apiServ.get("task/getbyTaskId/" + taskid);
-  }
-
 
   public popup(taskid: any) {
     return this.apiServ.get("task/taskAssinInfo/" + taskid);
@@ -45,5 +42,17 @@ export class TaskService {
 
   task_report(value: any) {
     return this.apiServ.post("task/getTaskReports", value);
+  }
+
+  deleteTask(id: any) {
+    return this.apiServ.delete(`task/delete/${id}`);
+  }
+
+  updateTaskStatus(taskid: any, status: any) {
+    return this.apiServ.get(`task/update/${taskid}/${status}`);
+  }
+
+  addORUpdateTask(entity: any, action: 'edit-task' | 'add-task'){
+    return action === 'edit-task' ? this.Taskupdate(entity): this.createTask(entity);
   }
 }

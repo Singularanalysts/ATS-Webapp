@@ -1,0 +1,26 @@
+<div class="header-container mat-elevation-z1">
+  <ng-container *ngIf="data.taskData?.taskName; else noTitle">
+    <span class="header-text" mat-dialog-title>
+      {{ data.taskData.taskName }}
+    </span>
+  </ng-container>
+  <ng-template #noTitle>
+    <span class="header-text" mat-dialog-title>
+      {{ data.subtaskData?.subTaskName }}
+    </span>
+  </ng-template>
+    <button mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<mat-card class="card mat-elevation-z8">
+  <mat-card-content class="card-content">
+    <ng-container *ngIf="data.taskData?.description; else noDescription">
+      <p class="task-description">{{ data.taskData.description }}</p>
+    </ng-container>
+    <ng-template #noDescription>
+      <p class="task-description">{{ data.subtaskData?.subTaskDescription }}</p>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

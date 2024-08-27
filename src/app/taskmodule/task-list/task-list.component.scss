@@ -1,261 +1,333 @@
-.submission-container {
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 68px);
-  }
-  
-  ul {
-    padding-inline-start: 10px;
-    background-color: rgb(228, 231, 234);
-    // height: 2rem;
-    padding-top: 2px;
-    top: 0;
-  }
-  
-  ul.breadcrumb {
-    list-style: none;
-  }
-  
-  ul.breadcrumb li {
-    display: inline;
-  }
-  
-  ul.breadcrumb li+li:before {
-    color: black;
-    content: "/\00a0";
-  }
-  
-  ul.breadcrumb li a {
-    color: #0275d8;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  
-  ul.breadcrumb li a:hover {
-    color: #01447e;
-    text-decoration: underline;
-  }
-  
-  .table-wrapper {
-    flex: 1;
-    overflow: auto;
-  }
-  
-  table {
-    width: 100%;
-  
-  }
-  
-  .mat-mdc-header-row {
-    background-color: rgb(213, 231, 231);
-    position: sticky;
-    top: 0;
-  }
-  
-  thead {
-    position: sticky;
-    top: 0;
-  }
-  
-  tbody {
-    text-align: left;
-  }
-  
-  .mat-sort-header-arrow {
-    color: #1a1717;
-  }
-  
-  .mat-mdc-column {
-    border-right: 1px solid currentColor;
-  }
-  
-  .mat-column-Designation {
-    width: 32px;
-    border-right: 1px solid lightgray;
-    padding-right: 24px;
-  }
-  
-  .mat-column-Name {
-    border-right: 1px solid lightgray;
-  }
-  
-  .mat-column-SerialNum,
-  .mat-column-ticketid,
-  .mat-column-taskname,
-  .mat-column-description,
-  .mat-column-targetdate,
-  .mat-column-status, 
-  .mat-column-update, 
-  .mat-column-Action {
-    border-right: 1px solid lightgray;
-  }
-  
-  .header-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    height: 48px;
-    background-color: white;
-    top: 0;
-    overflow: hidden;
-    margin: 4px;
-    background-color: rgb(228, 231, 234);
-  }
-  
-  .header-text {
-    padding-left: 8px;
-    font-weight: 600;
-  }
-  
-  .add-submission {
-    cursor: pointer;
-  }
-  
-  .submission-actions {
-    display: flex;
-    align-items: center;
-  
-    .search {
-      height: 32px;
-      padding: 0px 8px;
-    }
-  }
-  
-  .interview-table-style {
-    // padding: 0 2px;
-    width: 100%;
-    // max-height: calc(100% - 3px);
-    overflow: auto;
-    display: block;
-  }
-  
-  .mdc-data-table__cell,
-  .mdc-data-table__header-cell {
-    padding: 0 4px 0 4px;
-  }
-  
-  .mat-mdc-header-row {
-    z-index: 1000;
-  }
-  
-  .no-data-found {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    margin-top: 64px;
-  }
-  
-  
-  .responsive-table {
-    width: 100%;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .responsive-table {
-      table-layout: auto;
-    }
-  
-    .mdc-data-table__cell,
-    .mdc-data-table__header-cell {
-      padding: 0px 2px;
-    }
-  }
-  
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
-  
-    .mdc-data-table__cell,
-    .mdc-data-table__header-cell {
-      padding: 0px 2px;
-    }
-  }
-  
-  .action-buttons {
-    display: flex;
-    align-items: center;
-    height: 43px;
-  }
-  
-  .action-buttons button {
-    margin: 0;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-  }
-  
-  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-    width: 30px !important;
-    height: 30px !important;
-  }
-  
-  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-    width: 30px !important;
-    height: 30px !important;
-    top: 10px;
-  }
-  
-  .filter-vendors {
-    display: flex;
-    column-gap: 5px;
-  }
-  
-  // @media screen and (min-width: 1500px) {
-  //   .interview-table-style {
-  //     width: 100%;
-  //     height: calc(100% - 8px);
-  //     overflow: auto;
-  //   }
-  // }
-  
-  .recruiting-companies {
-    color: #f44336;
-  }
-  
-  .bench-sales-recruiter {
-    color: #3f51b5;
-  }
-  
-  .both {
-    color: black;
-  }
-  
-  .edit-icon,
-  .delete-icon {
-    color: rgb(99, 98, 98);
-  }
-  
-  td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
-    display: flex;
-    column-gap: 5px;
-    height: 49px;
-    align-items: center;
-  }
-  
-  .mat-mdc-header-row {
-    height: 30px !important;
-  }
-  
-  .mat-mdc-row {
-    height: 30px !important;
-  }
-  
-  .filter-button {
-    width: fit-content;
-    height: 25px;
-  }
-  
-  .approve-reject-buttons {
-    width: fit-content;
-    height: auto;
-  }
-  
-  ul.breadcrumb li:last-child {
-    color: black;
-    pointer-events: none;
-  }
+.task-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 68px);
+}
 
-  .employeer-name {
-    cursor: pointer;
-    color: #0275d8;
+.table-wrapper {
+  padding: 4px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  background-color: #edebeb;
+  top: 0;
+  overflow: hidden;
+}
+
+.header-text {
+  padding-left: 8px;
+  font-weight: 600;
+}
+
+.project-text {
+  padding-left: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+  color: #0000ee;
+}
+
+.add-task {
+  cursor: pointer;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
+  gap: 10px;
+
+  .search {
+    height: 32px;
+    padding: 0px 8px;
   }
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  height: 43px;
+}
+
+.action-buttons button {
+  margin: 0;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  width: 30px !important;
+  height: 30px !important;
+  top: 10px;
+}
+
+.edit-icon,
+.delete-icon {
+  color: rgb(99, 98, 98);
+}
+
+.mat-mdc-header-row {
+  height: 30px !important;
+}
+
+.mat-mdc-row {
+  height: 30px !important;
+}
+
+.flex-container {
+  display: flex;
+  gap: 10px;
+  height: calc(100vh - 124px);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.example-list {
+  flex: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.item-heading {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 8px 0;
+  padding: 8px;
+  border: 1px solid black;
+}
+
+.card-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.card {
+  width: 100%;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  cursor: move;
+}
+
+.example-list .card:last-child {
+  margin-bottom: 0;
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.cdk-drop-placeholder {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px dashed #ccc;
+}
+
+.heading-todo {
+  background-color: #FCE4EC;
+  color: #E91E63 ;
+}
+
+.heading-in-progress {
+  background-color: #FFF3E0;
+  color: #FF9800 ; 
+}
+
+.heading-in-review {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+}
+
+.heading-on-hold {
+  background-color: #E3F2FD;
+  color: #2196F3;
+}
+
+.heading-completed {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+}
+
+.heading-backlog {
+  background-color: #FFEBEE;
+  color: #F44336;
+}
+
+.description-container {
+  position: relative;
+}
+
+.more-info-link {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.more-info-link:hover {
+  text-decoration: none;
+}
+
+.card {
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.mat-card-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.labels-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ticket-label, .date-label {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.ticket-label, .date-label {
+  background-color: #3f51b5;
+  color: #fff;
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.description-icon {
+  color: #2196f3;
+  cursor: pointer;
+}
+
+.comment-icon {
+  color: #4caf50;
+  cursor: pointer;
+}
+
+.initial-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.initial-circle:hover {
+  border: 2px solid white;
+  z-index: 1;
+}
+
+.initial-circle:nth-child(n+2) {
+  margin-left: -10px;
+}
+
+.container {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.assigned-users {
+  display: flex;
+  align-items: center;
+}
+
+.mat-icon {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.additional-users {
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.mat-mdc-menu-content {
+  background: lightblue !important;
+}
+
+.mat-mdc-menu-item {
+  min-height: max-content !important;
+}
+
+.card-color {
+  background-color: #ecd3d3;
+}
+
+.example-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  min-height: 60px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  width: 100%;
+  height: 100px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.edit-icon {
+  cursor: pointer;
+  color: #3f51b5;
+}
+
+.delete-icon {
+  cursor: pointer;
+  color: #f44336;
+}
+
+.truncate-multiline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  max-height: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,0 +1,43 @@
+<!-- top header container -->
+<section class="header-container">
+  <span class="header-text" mat-dialog-title>
+    Comments
+  </span>
+  <button mat-icon-button (click)="onClose()" class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</section>
+
+<mat-dialog-content>
+  <mat-form-field class="comment-field" appearance="outline">
+    <mat-label>Add a comment</mat-label>
+    <input matInput [(ngModel)]="newComment">
+  </mat-form-field>
+
+  <div *ngIf="comments?.length > 0">
+    <div *ngFor="let comment of comments" style="display: flex; align-items: center;">
+      <div class="initial-circle">
+        {{ getUserInitials(comment.fullname) }}
+      </div>
+      <div>
+        <mat-list>
+          <mat-list-item>
+            <div mat-line><span class="comment-author">{{ comment.fullname }}</span> - <span class="comment-date">{{
+                comment.createddate | date:'yyyy-MM-dd HH:mm' }}</span></div>
+            <div mat-line class="comment-description truncate-multiline" matTooltip="{{ comment.description }}"
+              matTooltipPosition="above" [matTooltipShowDelay]="500">{{ comment.description }}</div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!comments || comments.length === 0">
+    <p>No comments yet.</p>
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="accent" (click)="onClose()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="addComment()">Add Comment</button>
+</mat-dialog-actions>

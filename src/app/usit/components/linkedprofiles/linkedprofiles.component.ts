@@ -77,6 +77,13 @@ export class LinkedprofilesComponent implements OnInit {
     this.getAllData();
   }
 
+  empTag(id: number) {
+    this.service.openReqsEmpTagging(id, this.userid).subscribe(
+      (response: any) => {
+
+      })
+  }
+
   getAllData(pagIdx = 1, status: string = 'all') {
     const pagObj = {
       pageNumber: pagIdx,

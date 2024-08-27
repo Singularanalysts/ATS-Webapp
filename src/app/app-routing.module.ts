@@ -3,10 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { SidebarV2Component } from './components/sidebar-v2/sidebar-v2.component';
 import { CanLoadGuard } from './core/guards/can-load.guard';
-import { PasswordChangeComponent } from './components/password-change/password-change.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
 
@@ -38,7 +35,7 @@ const routes: Routes = [
     canLoad: [CanLoadGuard] // add canactivate to check sign in
   },
   {
-    path: 'task',
+    path: 'task-management',
     loadChildren: () => import('./taskmodule/task.module').then(n => n.TaskModule)
   },
   {
