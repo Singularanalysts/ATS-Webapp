@@ -1,0 +1,117 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    background-color: rgb(228, 231, 234);
+    z-index: 99999;
+    top: 0;
+    overflow: hidden;
+}
+
+.close-btn {
+    overflow: hidden !important;
+}
+
+.header-text {
+    padding-left: 8px;
+    font-weight: 600;
+    font-size: larger;
+}
+
+.card {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.card-content {
+    padding: 8px !important;
+}
+
+.task-title {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.task-description {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+}
+
+.task-details {
+    margin-bottom: 16px;
+}
+
+.detail {
+    margin-bottom: 8px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+mat-divider {
+    margin: 16px 0;
+}
+
+.mat-mdc-dialog-actions {
+    justify-content: end;
+}
+
+.comment-field {
+    width: 100%;
+    padding-top: 8px;
+}
+
+::ng-deep {
+    .comment-field .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+}
+
+.initial-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #3f51b5;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.comment-author {
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-date {
+    font-weight: lighter;
+    color: #999;
+}
+
+.comment-description {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.truncate-multiline {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    max-height: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

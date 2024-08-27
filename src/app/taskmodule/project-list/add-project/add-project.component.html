@@ -1,0 +1,52 @@
+<!-- top header container -->
+<section class="header-container">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()" class="close-btn">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<!-- mat-card starts -->
+<mat-card class="card">
+    <!-- form- starts -->
+    <form [formGroup]="projectForm" class="project-form">
+        <section class="form-container">
+            <!-- Project Name -->
+            <mat-form-field appearance="outline" class="project-name-field">
+                <mat-label>Project Name</mat-label>
+                <input matInput formControlName="projectName" maxlength="64" />
+                <mat-error *ngIf="projectForm.get('projectName')!.hasError('required')">Project Name
+                    is Required
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Status -->
+            <mat-form-field appearance="outline" *ngIf="data.actionName === 'edit-project'">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="To Do">To Do</mat-option>
+                  <mat-option value="In Progress">In Progress</mat-option>
+                  <mat-option value="On Hold">On Hold</mat-option>
+                  <mat-option value="In Review">In Review</mat-option>
+                  <mat-option value="Completed">Completed</mat-option>
+                </mat-select>
+              </mat-form-field>
+    
+            <!-- Description -->
+            <mat-form-field appearance="outline" class="description-field">
+                <mat-label>Description</mat-label>
+                <textarea maxlength="1024" rows="5" matInput formControlName="description"></textarea>
+                <mat-error *ngIf="projectForm.get('description')!.hasError('required')">Description
+                    Required</mat-error>
+            </mat-form-field>
+        </section>
+    </form>
+    <!-- form-ends -->
+    <!-- form-bottom action buttons -->
+    <div class="form-action-buttons">
+        <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>
+<!-- mat-card-ends -->

@@ -163,6 +163,10 @@ export class ImmigrantInfoComponent implements OnInit {
         },
       });
   }
+
+  onClose() {
+    this.dialogRef.close();
+  }
 }
 
 export class FileData {
