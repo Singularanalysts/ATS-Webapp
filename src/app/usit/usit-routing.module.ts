@@ -32,7 +32,6 @@ import { EmployeeReportsComponent } from './components/reports/employee-reports/
 import { SourcingReportsComponent } from './components/reports/sourcing-reports/sourcing-reports.component';
 import { LinkedprofilesComponent } from './components/linkedprofiles/linkedprofiles.component';
 import { ConsultantInfoComponent } from './components/sales/consultant-list/consultant-info/consultant-info.component';
-import { EmailextractionComponent } from './components/emailextraction/emailextraction.component';
 import { TechSupportListComponent } from './components/tech-support-list/tech-support-list.component';
 import { GlobalSearchComponent } from './components/global-search/global-search.component';
 import { OpenRequirementsReportsComponent } from './components/reports/open-requirements-reports/open-requirements-reports.component';
@@ -256,10 +255,6 @@ const routes: Routes = [
     path: 'open-reqs-report', component: OpenRequirementsReportsComponent
   },
   { path: 'consultant-info/:flg/:subFlag/:id', component: ConsultantInfoComponent },
-  {
-    path: 'list-email', component: EmailextractionComponent
-  },
-
   {
     path: 'list-techsupport', component: TechSupportListComponent
   },

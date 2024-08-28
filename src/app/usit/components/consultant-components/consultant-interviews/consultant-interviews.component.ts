@@ -52,9 +52,6 @@ export class ConsultantInterviewsComponent implements OnInit, OnDestroy {
     'DateAndToI',
     'Round',
     'Mode',
-    'Vendor',
-    'ImplementationPartner',
-    'Client',
     'DateOfSubmission',
     'InterviewStatus',
   ];

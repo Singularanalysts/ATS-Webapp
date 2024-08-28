@@ -25,9 +25,6 @@ export class EmpInterviewsListComponent {
     'DateAndToI',
     'Round',
     'Mode',
-    'Vendor',
-    'ImplementationPartner',
-    'Client',
     'DateOfSubmission',
     'InterviewStatus',
   ];
