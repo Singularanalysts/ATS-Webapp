@@ -33,14 +33,6 @@
                       {{element?.subno}}
                   </td>
               </ng-container>
-              <!-- Name-->
-              <!-- <ng-container matColumnDef="Consultant">
-                  <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Consultant" mat-sort-header>
-                      Consultant </th>
-                  <td mat-cell *matCellDef="let element">
-                      {{element?.consultantname|titlecase}}
-                  </td>
-              </ng-container> -->
                
               <!-- Requirement-->
               <ng-container matColumnDef="Requirement">
@@ -49,29 +41,6 @@
                   </th>
                   <td mat-cell *matCellDef="let element">
                       {{ element?.position | titlecase}}
-                  </td>
-              </ng-container>
-
-              <!-- Implementation Partner-->
-              <ng-container matColumnDef="ImplementationPartner">
-                  <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by ImplementationPartner"
-                      mat-sort-header>
-                      IP / Vendor </th>
-                  <td mat-cell *matCellDef="let element"> {{element?.implpartner | titlecase}}
-                  </td>
-              </ng-container>
-              <!-- End Client-->
-              <ng-container matColumnDef="EndClient">
-                  <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by EndClient" mat-sort-header> End
-                      Client </th>
-                  <td mat-cell *matCellDef="let element"> {{element?.endclient | titlecase}}
-                  </td>
-              </ng-container>
-              <!-- Third Party Vendor -->
-              <ng-container matColumnDef="Vendor">
-                  <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Current Vendor"
-                      mat-sort-header> Third Party Vendor </th>
-                  <td mat-cell *matCellDef="let element"> {{element?.vendor|titlecase}}
                   </td>
               </ng-container>
 
