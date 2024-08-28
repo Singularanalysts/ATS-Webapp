@@ -33,7 +33,8 @@
 .sub-task-form {
   height: max-content;
   max-height: 85vh;
-  overflow-y: auto;
+  // overflow-y: auto;
+  overflow-y: visible;
 }
 
 .form-container {

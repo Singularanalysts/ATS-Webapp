@@ -27,10 +27,13 @@
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of todo" cdkDrag>
                             <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;">{{ card.subTaskName }}</mat-card-title>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase}}</mat-card-title>
                                 <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
                                 </div>
                             </mat-card-header>
                             <mat-card-content>
@@ -70,10 +73,13 @@
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of inProgress" cdkDrag>
                             <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;">{{ card.subTaskName }}</mat-card-title>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase }}</mat-card-title>
                                 <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
                                 </div>
                             </mat-card-header>
                             <mat-card-content>
@@ -111,10 +117,13 @@
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of inReview" cdkDrag>
                             <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;">{{ card.subTaskName }}</mat-card-title>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase }}</mat-card-title>
                                 <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
                                 </div>
                             </mat-card-header>
                             <mat-card-content>
@@ -152,10 +161,13 @@
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of onHold" cdkDrag>
                             <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;">{{ card.subTaskName }}</mat-card-title>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase }}</mat-card-title>
                                 <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
                                 </div>
                             </mat-card-header>
                             <mat-card-content>
@@ -193,10 +205,13 @@
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of backlog" cdkDrag>
                             <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;">{{ card.subTaskName }}</mat-card-title>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase }}</mat-card-title>
                                 <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
                                 </div>
                             </mat-card-header>
                             <mat-card-content>
@@ -234,10 +249,13 @@
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of completed" cdkDrag>
                             <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;">{{ card.subTaskName }}</mat-card-title>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase }}</mat-card-title>
                                 <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
                                 </div>
                             </mat-card-header>
                             <mat-card-content>
