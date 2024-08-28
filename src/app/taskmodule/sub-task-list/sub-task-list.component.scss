@@ -10,54 +10,6 @@
     overflow: hidden;
 }
 
-table {
-    width: 100%;
-}
-
-.mat-mdc-header-row {
-    background-color: rgb(213, 231, 231);
-    position: sticky;
-    top: 0;
-}
-
-thead {
-    position: sticky;
-    top: 0;
-}
-
-tbody {
-    text-align: left;
-}
-
-.mat-sort-header-arrow {
-    color: #1a1717;
-}
-
-.mat-mdc-column {
-    border-right: 1px solid currentColor;
-}
-
-.mat-column-Designation {
-    width: 32px;
-    border-right: 1px solid lightgray;
-    padding-right: 24px;
-}
-
-.mat-column-Name {
-    border-right: 1px solid lightgray;
-}
-
-.mat-column-SerialNum,
-.mat-column-ticketid,
-.mat-column-taskname,
-.mat-column-description,
-.mat-column-targetdate,
-.mat-column-status,
-.mat-column-update,
-.mat-column-Action {
-    border-right: 1px solid lightgray;
-}
-
 .header-container {
     display: flex;
     flex-direction: row;
