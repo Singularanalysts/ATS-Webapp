@@ -48,8 +48,8 @@ export class TaskService {
     return this.apiServ.delete(`task/delete/${id}`);
   }
 
-  updateTaskStatus(taskid: any, status: any) {
-    return this.apiServ.get(`task/update/${taskid}/${status}`);
+  updateTaskStatus(taskid: any, status: any, userid: any) {
+    return this.apiServ.get(`task/update/${taskid}/${status}/${userid}`);
   }
 
   addORUpdateTask(entity: any, action: 'edit-task' | 'add-task'){

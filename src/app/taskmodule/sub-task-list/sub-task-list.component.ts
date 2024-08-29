@@ -444,7 +444,7 @@ export class SubTaskListComponent implements OnInit {
   }
 
   saveSubTaskChanges(subTaskId: string, newStatus: string) {
-    this.subtaskServ.updateSubTaskStatus(subTaskId, newStatus).subscribe({
+    this.subtaskServ.updateSubTaskStatus(subTaskId, newStatus, this.userid).subscribe({
       next: (response: any) => {
         if (response.status == 'success') {
           this.dataTobeSentToSnackBarService.message = 'Sub Task Status Updated successfully';
