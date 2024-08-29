@@ -424,7 +424,7 @@ export class TaskListComponent implements OnInit {
   }
 
   saveTaskChanges(taskId: string, newStatus: string) {
-    this.taskServ.updateTaskStatus(taskId, newStatus).subscribe({
+    this.taskServ.updateTaskStatus(taskId, newStatus, this.userid).subscribe({
       next: (response: any) => {
         if (response.status == 'success') {
           this.dataTobeSentToSnackBarService.message = 'Task Status Updated successfully';

@@ -49,8 +49,8 @@ export class SubtaskService {
     return this.apiServ.get(`task/getUsers/${department}`);
   }
 
-  updateSubTaskStatus(subtaskid: any, status: any) {
-    return this.apiServ.get(`task/subTask/updateSubTaskStatus/${subtaskid}/${status}`);
+  updateSubTaskStatus(subtaskid: any, status: any, userid: any) {
+    return this.apiServ.get(`task/subTask/updateSubTaskStatus/${subtaskid}/${status}/${userid}`);
   }
 
   addComments(data: any) {
