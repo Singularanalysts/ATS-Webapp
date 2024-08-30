@@ -1,0 +1,88 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    background-color: whitesmoke;
+    z-index: 99999;
+    top: 0;
+    overflow: hidden;
+  }
+  
+  .header-text {
+    padding-left: 16px;
+    font-weight: 600;
+    font-size: larger;
+  }
+  
+  .close-btn {
+    overflow: hidden !important;
+  }
+  
+  .card {
+    margin: 0 auto;
+    padding: 16px;
+    height: max-content;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .project-form {
+    height: max-content;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mat-icon-button {
+    width: auto;
+  }
+  
+  .mat-mdc-form-field-infix {
+    padding-top: 0;
+  }
+  
+  mat-error {
+    font-size: 12px;
+  }
+  
+  @media screen and (max-width: 425px) {
+    .form-container {
+      flex-direction: column;
+    }
+  
+    .card {
+      margin: 0 auto;
+      padding: 8px;
+    }
+  
+    .header-container {
+      padding: 6px 28px;
+    }
+  }
+  
+  .form-action-buttons {
+    margin-top: 8px;
+    display: flex !important;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .btn-cancel {
+    background-color: #e3edf6;
+  }
+  
+  .mat-mdc-option {
+    min-height: 36px !important;
+  }
+  
+  .project-name-field {
+    margin-top: 4px;
+  }

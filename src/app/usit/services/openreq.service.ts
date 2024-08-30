@@ -108,7 +108,7 @@ export class OpenreqService {
   }
 
   validateOldPassword(data: any) {
-    return this.http.post(`mail/emailcredentials/emailValidation`, data);
+    return this.http.post(`mail/emailcredentials/oldPasswordValidation`, data);
   }
 
   requestOtp(data: any) {
@@ -121,5 +121,13 @@ export class OpenreqService {
 
   deleteEmails(data: any) {
     return this.http.post(`mail/deleteMailByIds`, data);
+  }
+
+  addORUpdateEmailConfiguration(entity: any, action: 'edit-email-configuration' | 'add-email-configuration'){
+    return action === 'edit-email-configuration' ? this.updateConfiguredEmail(entity): this.saveConfiguredEmail(entity);
+  }
+
+  getEmailById(id: any) {
+    return this.http.get(`mail/emailcredentials/getByRecordId/${id}`);
   }
 }
