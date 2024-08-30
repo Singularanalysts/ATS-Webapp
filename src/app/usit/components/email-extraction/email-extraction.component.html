@@ -1,8 +1,8 @@
 <div class="hot-list-container">
-    <ul class="breadcrumb">
+    <!-- <ul class="breadcrumb">
         <li><a (click)="navigateToDashboard()">Home</a></li>
         <li class="last">Email Extraction</li>
-    </ul>
+    </ul> -->
     <div class="header-container mat-elevation-z1">
         <span class="header-text">
             Email Extraction
@@ -11,7 +11,7 @@
             <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
                 <mat-icon>delete</mat-icon>
             </button>
-            <button mat-raised-button color="primary" class="add-email" (click)="extractEmails()">
+            <button mat-raised-button color="primary" class="add-email" (click)="extractEmails()" *ngIf="this.role !== 'Super Administrator'">
                 Extract Emails
             </button>
 

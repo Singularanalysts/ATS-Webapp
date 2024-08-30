@@ -1,0 +1,50 @@
+<!-- top header container -->
+<section class="header-container">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()" class="close-btn">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<!-- mat-card starts -->
+<mat-card class="card">
+    <!-- form- starts -->
+    <form [formGroup]="emailConfigurationForm" class="project-form">
+        <section class="form-container">
+            <!-- Email -->
+            <mat-form-field appearance="outline" class="project-name-field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" maxlength="64" />
+                <mat-error *ngIf="emailConfigurationForm.get('email')!.hasError('required')">Email
+                    is Required
+                </mat-error>
+                <mat-error *ngIf="emailConfigurationForm.get('email')!.hasError('email')">Invalid Email Address
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Password -->
+            <mat-form-field appearance="outline" class="description-field">
+                <mat-label>Password</mat-label>
+                <input maxlength="1024" matInput formControlName="password">
+                <mat-error *ngIf="emailConfigurationForm.get('password')!.hasError('required')">Password
+                    Required</mat-error>
+            </mat-form-field>
+
+            <!-- Technology -->
+            <mat-form-field appearance="outline" class="description-field">
+                <mat-label>Technology</mat-label>
+                <input maxlength="1024" matInput formControlName="technology">
+                <mat-error *ngIf="emailConfigurationForm.get('technology')!.hasError('required')">Technology
+                    Required</mat-error>
+            </mat-form-field>
+        </section>
+    </form>
+    <!-- form-ends -->
+    <!-- form-bottom action buttons -->
+    <div class="form-action-buttons">
+        <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>
+<!-- mat-card-ends -->

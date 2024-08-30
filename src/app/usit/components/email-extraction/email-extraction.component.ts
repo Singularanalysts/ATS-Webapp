@@ -83,9 +83,11 @@ export class EmailExtractionComponent implements OnInit {
   protected privilegeServ = inject(PrivilegesService);
   selection = new SelectionModel<any>(true, []);
   showDeleteButton = false;
+  role!: string | null;
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
+    this.role = localStorage.getItem('role');
     this.getAll();
   }
 
@@ -395,7 +397,11 @@ updateDeleteButtonVisibility(): void {
             this.updateDeleteButtonVisibility();
           },
           error: (error: any) => {
-            console.error('Error deleting emails', error);
+            this.dataToBeSentToSnackBar.message = error.message;
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
           }
         });
     }

@@ -10,6 +10,11 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { Subject, takeUntil } from 'rxjs';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { AddEmailConfigurationComponent } from './add-email-configuration/add-email-configuration.component';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-email-configuration',
@@ -22,7 +27,8 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
     MatButtonModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatTableModule,
   ],
   templateUrl: './email-configuration.component.html',
   styleUrls: ['./email-configuration.component.scss']
@@ -30,7 +36,7 @@ import { Router } from '@angular/router';
 export class EmailConfigurationComponent {
   emailForm!: FormGroup;
   private OpenReqServ = inject(OpenreqService);
-  userid!: string | null;
+  userid!: string;
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -51,11 +57,28 @@ export class EmailConfigurationComponent {
   otpValidated: boolean = false;
   showOtpField: boolean = false;
   private router = inject(Router);
+  emailValidationId: any;
+  role!: string ;
+  dataSource = new MatTableDataSource<any>([]);
+  dataTableColumns: string[] = [
+    'SerialNum',
+    'Technology',
+    'Email',
+    'Password',
+    'ReceivedDate',
+    'Action'
+  ];
+  entity: any;
+  private destroyed$ = new Subject<void>();
+  currentPageIndex = 0;
+  private dialogServ = inject(DialogService);
+  private openServ = inject(OpenreqService);
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.userid = localStorage.getItem('userid');
+    this.role = localStorage.getItem('role') || '';
+    this.userid = localStorage.getItem('userid') || '';
     this.emailForm = this.fb.group({
       email: [''],
       oldpassword: [''],
@@ -77,13 +100,14 @@ export class EmailConfigurationComponent {
   }
 
   checkExistingDetails() {
-    if (this.userid) {
+    if (this.userid && this.role !== "Super Administrator") {
       this.OpenReqServ.getConfiguredEmailById(this.userid).subscribe({
         next: (response: any) => {
-          if (response && response.status == "Sucess") {
+          if (response && response.status == "Success") {
             this.buttonText = 'Update';
             this.showOldPasswordField = true;
             this.otpSent = false;
+            this.emailValidationId = response.data[0].id;
             this.emailForm.get('oldpassword')!.clearValidators();
             this.emailForm.get('password')!.clearValidators();
             this.emailForm.get('conformpassword')!.clearValidators();
@@ -92,7 +116,7 @@ export class EmailConfigurationComponent {
             this.emailForm.get('password')!.updateValueAndValidity();
             this.emailForm.get('conformpassword')!.updateValueAndValidity();
             this.emailForm.patchValue({
-              email: response.data.email,
+              email: response.data[0].email,
               oldpassword: '',
               password: '',
               conformpassword: '',
@@ -107,17 +131,37 @@ export class EmailConfigurationComponent {
           console.error(err);
         }
       });
+    } else {
+      this.OpenReqServ.getConfiguredEmailById(this.userid)
+      .pipe(takeUntil(this.destroyed$)).subscribe(
+        (response: any) => {
+          this.entity = response.data;
+          this.dataSource.data = response.data;
+          // this.totalItems = response.data.totalElements;
+          // for serial-num {}
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      )
     }
+  }
+
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    return serialNumber;
   }
 
   validateOldPassword(event: any) {
     const oldPasswordObj = {
-      userid: this.userid,
-      oldpassword: event.target.value
+      // userid: this.userid,
+      oldpassword: event.target.value,
+      id: this.emailValidationId
     }
     this.OpenReqServ.validateOldPassword(oldPasswordObj).subscribe({
       next: (response: any) => {
-        if (response.status == 'Sucess') {
+        if (response.status == 'Success') {
           this.dataToBeSentToSnackBar.message = "Old password validated Successfully";
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
         } else if (response.status == 'Mismatch') {
@@ -157,15 +201,15 @@ export class EmailConfigurationComponent {
     }
 
     this.emailForm.markAllAsTouched();
-    const formValues = this.emailForm.value;
-    formValues.userid = this.userid;
     if (this.emailForm.invalid) {
       return;
     }
     if (this.buttonText === 'Save') {
+      const formValues = this.emailForm.value;
+      formValues.userid = this.userid;
       this.OpenReqServ.saveConfiguredEmail(formValues).subscribe({
         next: (response: any) => {
-          if (response.status === 'Sucess') {
+          if (response.status === 'Success') {
             this.dataToBeSentToSnackBar.message = response.message;
             this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
             this.snackBarServ.openSnackBarFromComponent(
@@ -195,9 +239,11 @@ export class EmailConfigurationComponent {
         }
       });
     } else if (this.buttonText === 'Update') {
+      const formValues = this.emailForm.value;
+      formValues.id = this.emailValidationId;
       this.OpenReqServ.updateConfiguredEmail(formValues).subscribe({
         next: (response: any) => {
-          if (response.status === 'Sucess') {
+          if (response.status === 'Success') {
             this.dataToBeSentToSnackBar.message = 'Password updated Successfully';
             this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
             this.snackBarServ.openSnackBarFromComponent(
@@ -313,7 +359,7 @@ export class EmailConfigurationComponent {
     }
     this.OpenReqServ.updateConfiguredEmail(savePasswordObj).subscribe({
       next: (response: any) => {
-        if (response.status == 'Sucess') {
+        if (response.status == 'Success') {
           this.dataToBeSentToSnackBar.message = "Password Updated successfully";
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
           this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
@@ -344,5 +390,91 @@ export class EmailConfigurationComponent {
     });
     this.checkExistingDetails();
   }
+
+  addEmail() {
+    const actionData = {
+      title: 'Add Email Configuration',
+      emailData: null,
+      actionName: 'add-email-configuration',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '30vw';
+    dialogConfig.disableClose = false;
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.checkExistingDetails();
+      }
+    })
+  }
+
+  editEmail(email: any) {
+    const actionData = {
+      title: 'Update Email Configuration',
+      emailData: email,
+      actionName: 'edit-email-configuration',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '30vw';
+    dialogConfig.disableClose = false;
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.checkExistingDetails();
+      }
+    })
+  }
   
+  extractEmails(element: any) {
+    const extractEmail = {
+      userid: this.userid,
+      id: element.id
+    }
+    return this.openServ.extractEmails(extractEmail).subscribe({
+      next: (response: any) => {
+        if (response.status === 'Success') {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+          this.router.navigate(['usit/email-extraction-list']);
+        }  else if (response.status === 'failed') {
+          this.dataToBeSentToSnackBar.message = 'Oops! It seems there are no new emails at the moment';
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else if (response.status === 'Invalid-credentials') {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else if (response.status === 'Invalid-Domain') {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        } else {
+          this.dataToBeSentToSnackBar.message = response.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        }
+      },
+      error: (err: any) => {
+        this.dataToBeSentToSnackBar.message = err.message;
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataToBeSentToSnackBar
+        );
+      },
+    });
+   
+  }
 }

@@ -72,16 +72,16 @@ tbody {
   border-right: 1px solid lightgray;
 }
 
-// .mat-column-select,
-// .mat-column-SerialNum,
-// .mat-column-Subject,
-// .mat-column-From,
-// .mat-column-To,
-// .mat-column-CC,
-// .mat-column-ReceivedDate,
-// .mat-column-Body {
-//   border-right: 1px solid lightgray;
-// }
+.mat-column-select,
+.mat-column-SerialNum,
+.mat-column-Subject,
+.mat-column-From,
+.mat-column-To,
+.mat-column-CC,
+.mat-column-ReceivedDate,
+.mat-column-Body {
+  border-right: 1px solid lightgray;
+}
 
 .header-container {
   display: flex;
@@ -92,7 +92,6 @@ tbody {
   background-color: white;
   top: 0;
   overflow: hidden;
-  margin: 4px;
   background-color: rgb(228, 231, 234);
 }
 
@@ -109,6 +108,7 @@ tbody {
   display: flex;
   align-items: center;
   column-gap: 10px;
+  padding-right: 8px;
 
   .search {
     height: 32px;

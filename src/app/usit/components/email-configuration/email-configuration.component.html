@@ -1,125 +1,231 @@
-<div class="container">
-  <mat-card>
-    <mat-card-title class="title">{{ buttonText }} Email Configuration</mat-card-title>
-    <mat-card-content>
-      <form [formGroup]="emailForm" autocomplete="off">
-
-        <!-- Email -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" autocomplete="new-email" [readonly]="buttonText !== 'Save'" />
-          <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
-          <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
-            Invalid Email Address
-          </mat-error>
-        </mat-form-field>
-
-        <!-- Old Password -->
-        <mat-form-field appearance="outline" class="full-width"
-          *ngIf="showOldPasswordField && !forgotPassword && !otpValidated">
-          <mat-label>Old Password</mat-label>
-          <input matInput formControlName="oldpassword" type="{{ hideOPassword ? 'password' : 'text' }}"
-            autocomplete="new-password" (change)="validateOldPassword($event)" />
-          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideOPassword = !hideOPassword">
-            <mat-icon>{{
-              hideOPassword ? "visibility_off" : "visibility"
-              }}</mat-icon>
-          </button>
-          <mat-error *ngIf="emailForm.get('oldpassword')?.invalid">
-            Old Password is required
-          </mat-error>
-        </mat-form-field>
-
-        <!-- New Password -->
-        <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
-          <mat-label>New Password</mat-label>
-          <input matInput formControlName="password" type="{{ hideNPassword ? 'password' : 'text' }}"
-            autocomplete="new-password" />
-          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideNPassword = !hideNPassword">
-            <mat-icon>{{
-              hideNPassword ? "visibility_off" : "visibility"
-              }}</mat-icon>
-          </button>
-          <mat-error *ngIf="emailForm.get('password')?.invalid">
-            New Password is required
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width" *ngIf=" buttonText === 'Save'">
-          <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="{{ hideNPassword ? 'password' : 'text' }}"
-            autocomplete="new-password" />
-          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideNPassword = !hideNPassword">
-            <mat-icon>{{ hideNPassword ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
-          <mat-error *ngIf="emailForm.get('password')?.hasError('required')">
-             Password is required
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
-          <mat-label>Confirm Password</mat-label>
-          <input matInput formControlName="conformpassword" type="{{ hideCPassword ? 'password' : 'text' }}" autocomplete="new-password" />
-          <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-          <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideCPassword = !hideCPassword">
-            <mat-icon>{{ hideCPassword ? "visibility_off" : "visibility" }}</mat-icon>
-          </button>
-          <mat-error *ngIf="emailForm.get('conformpassword')?.hasError('required')">
-            Confirm Password is required
-          </mat-error>
-          <mat-error *ngIf="emailForm.controls['conformpassword'].hasError('passwordMismatch')">
-            Passwords do not match
-          </mat-error>
-        </mat-form-field>
-        
-        <div class="forgot-password" *ngIf="buttonText === 'Update' && !forgotPassword && !otpValidated">
-          <a class="forgot-password-link" (click)="onForgotPassword()">Forgot Password?</a>
-        </div>
-
-        <mat-form-field appearance="outline" class="full-width" *ngIf="otpSent && !otpValidated">
-          <mat-label>Enter OTP</mat-label>
-          <input matInput formControlName="otp" type="text" autocomplete="off" />
-          <mat-icon [style.color]="'#3f51b5'" matPrefix>vpn_key</mat-icon>
-          <mat-error *ngIf="emailForm.get('otp')?.invalid">
-            OTP is required.
-          </mat-error>
-        </mat-form-field>
-
-        <div class="button-container" *ngIf="!otpSent && forgotPassword">
-          <button mat-raised-button color="primary" type="submit"
-            (click)="requestOtp()">
-            Request OTP
-          </button>
-        </div>
-
-        <div class="button-container" *ngIf="otpSent && forgotPassword">
-          <button mat-raised-button color="primary" type="submit"
-            [disabled]="otpSent && emailForm.get('otp')?.value.length !== 6"
-            (click)="validateOtp()">
-            Validate OTP
-          </button>
-        </div>
-
-        <div class="button-container" *ngIf="!otpSent && !otpValidated && !forgotPassword">
-          <button mat-raised-button color="primary" type="submit"
-            (click)="saveDetails()">
-            {{ buttonText }}
-          </button>
-        </div>
-
-        <div class="button-container" *ngIf="otpValidated">
-          <button mat-raised-button color="primary" type="button" (click)="saveChangedPassword()">
-            Submit
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+<ng-container *ngIf="role !== 'Super Administrator'">
+  <div class="container">
+    <mat-card>
+      <mat-card-title class="title">{{ buttonText }} Email Configuration</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="emailForm" autocomplete="off">
   
-</div>
+          <!-- Email -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <!-- [readonly]="buttonText !== 'Save'" -->
+            <input matInput formControlName="email" type="email" autocomplete="new-email" />
+            <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
+            <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="emailForm.get('email')?.hasError('email')">
+              Invalid Email Address
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Old Password -->
+          <mat-form-field appearance="outline" class="full-width"
+            *ngIf="showOldPasswordField && !forgotPassword && !otpValidated">
+            <mat-label>Old Password</mat-label>
+            <input matInput formControlName="oldpassword" type="{{ hideOPassword ? 'password' : 'text' }}"
+              autocomplete="new-password" (change)="validateOldPassword($event)" />
+            <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+            <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideOPassword = !hideOPassword">
+              <mat-icon>{{
+                hideOPassword ? "visibility_off" : "visibility"
+                }}</mat-icon>
+            </button>
+            <mat-error *ngIf="emailForm.get('oldpassword')?.invalid">
+              Old Password is required
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- New Password -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
+            <mat-label>New Password</mat-label>
+            <input matInput formControlName="password" type="{{ hideNPassword ? 'password' : 'text' }}"
+              autocomplete="new-password" />
+            <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+            <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideNPassword = !hideNPassword">
+              <mat-icon>{{
+                hideNPassword ? "visibility_off" : "visibility"
+                }}</mat-icon>
+            </button>
+            <mat-error *ngIf="emailForm.get('password')?.invalid">
+              New Password is required
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="full-width" *ngIf=" buttonText === 'Save'">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="{{ hideNPassword ? 'password' : 'text' }}"
+              autocomplete="new-password" />
+            <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+            <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideNPassword = !hideNPassword">
+              <mat-icon>{{ hideNPassword ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-error *ngIf="emailForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="full-width" *ngIf="otpValidated || buttonText === 'Update'">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput formControlName="conformpassword" type="{{ hideCPassword ? 'password' : 'text' }}"
+              autocomplete="new-password" />
+            <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
+            <button mat-icon-button type="button" matSuffix autocomplete="off" (click)="hideCPassword = !hideCPassword">
+              <mat-icon>{{ hideCPassword ? "visibility_off" : "visibility" }}</mat-icon>
+            </button>
+            <mat-error *ngIf="emailForm.get('conformpassword')?.hasError('required')">
+              Confirm Password is required
+            </mat-error>
+            <mat-error *ngIf="emailForm.controls['conformpassword'].hasError('passwordMismatch')">
+              Passwords do not match
+            </mat-error>
+          </mat-form-field>
+  
+          <div class="forgot-password" *ngIf="buttonText === 'Update' && !forgotPassword && !otpValidated">
+            <a class="forgot-password-link" (click)="onForgotPassword()">Forgot Password?</a>
+          </div>
+  
+          <mat-form-field appearance="outline" class="full-width" *ngIf="otpSent && !otpValidated">
+            <mat-label>Enter OTP</mat-label>
+            <input matInput formControlName="otp" type="text" autocomplete="off" />
+            <mat-icon [style.color]="'#3f51b5'" matPrefix>vpn_key</mat-icon>
+            <mat-error *ngIf="emailForm.get('otp')?.invalid">
+              OTP is required.
+            </mat-error>
+          </mat-form-field>
+  
+          <div class="button-container" *ngIf="!otpSent && forgotPassword">
+            <button mat-raised-button color="primary" type="submit" (click)="requestOtp()">
+              Request OTP
+            </button>
+          </div>
+  
+          <div class="button-container" *ngIf="otpSent && forgotPassword">
+            <button mat-raised-button color="primary" type="submit"
+              [disabled]="otpSent && emailForm.get('otp')?.value.length !== 6" (click)="validateOtp()">
+              Validate OTP
+            </button>
+          </div>
+  
+          <div class="button-container" *ngIf="!otpSent && !otpValidated && !forgotPassword">
+            <button mat-raised-button color="primary" type="submit" (click)="saveDetails()">
+              {{ buttonText }}
+            </button>
+          </div>
+  
+          <div class="button-container" *ngIf="otpValidated">
+            <button mat-raised-button color="primary" type="button" (click)="saveChangedPassword()">
+              Submit
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  
+  </div>
+</ng-container>
+<ng-container *ngIf="role === 'Super Administrator'">
+  <div class="hot-list-container">
+    <div class="header-container mat-elevation-z1">
+      <span class="header-text">
+        Email Configuration
+      </span>
+      <div class="hot-list-actions">
+        <button mat-icon-button color="primary" class="add-email" matToolTip="Add" (click)="addEmail()">
+          <mat-icon class="item-icon">add_circle</mat-icon>
+        </button>
+  
+        <div class="search-hot-list">
+          <input matInput type="text" class="search" placeholder="search">
+          <!-- (keyup)="applyFilter($event)" -->
+        </div>
+      </div>
+    </div>
+  
+    <div id="table-container" class="table-wrapper">
+      <section class="mat-elevation-z8 hot-list-table-style">
+        <table mat-table [dataSource]="dataSource" matSort oncopy="return false">
+          <!-- (matSortChange)="onSort($event)" -->
+  
+          <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+  
+          <!-- SNo Column -->
+          <ng-container matColumnDef="SerialNum">
+            <th mat-header-cell *matHeaderCellDef style=" width: 1% ">
+              S.No </th>
+            <td mat-cell *matCellDef="let element" style=" width: 1% "> {{element?.serialNum}} </td>
+          </ng-container>
+  
+          <!-- Technology Column -->
+          <ng-container matColumnDef="Technology">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Technology">
+              Technology
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{element?.technology ?? '-'}}
+            </td>
+          </ng-container>
+  
+          <!-- Email Column -->
+          <ng-container matColumnDef="Email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Email">
+              Email
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.email }}
+            </td>
+          </ng-container>
+  
+          <!-- Password Column-->
+          <ng-container matColumnDef="Password">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Password">
+              Password</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.password }}
+            </td>
+          </ng-container>
+  
+          <!-- Received Date Column-->
+          <ng-container matColumnDef="ReceivedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by ReceivedDate"
+              style=" width: 10% !important;" nowrap>
+              Extraxt Emails </th>
+            <td mat-cell *matCellDef="let element" style=" width: 10% !important;">
+              <button mat-raised-button color="primary" style="width: max-content; height: max-content" (click)="extractEmails(element)">
+                Extract
+              </button>
+            </td>
+          </ng-container>
+  
+          <!-- Action Column-->
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef style="width: 5%"> Action </th>
+            <td mat-cell *matCellDef="let element" style="width: 5%">
+              <span class="action-buttons">
+                <button mat-icon-button class="action-button-ed" (click)="editEmail(element)">
+                  <!-- (click)="delete(element)" -->
+                  <mat-icon class="edit-icon">edit</mat-icon>
+                </button>
+              </span>
+            </td>
+          </ng-container>
+  
+          <!-- table ROW -->
+          <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+        </table>
+        <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+      </section>
+    </div>
+  
+    <div class="paginator">
+      <!-- paginator -->
+      <!-- <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+              [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+              [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+          </mat-paginator> -->
+    </div>
+  
+  </div>
+</ng-container>
