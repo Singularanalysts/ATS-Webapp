@@ -12,19 +12,65 @@
             </button>
 
             <div class="search-task">
-                <input matInput type="text" class="search" placeholder="search tasks" />
-                <!-- (keyup)="applyFilter($event)" -->
+                <input matInput type="text" class="search" placeholder="search tasks"  (keyup)="applyFilter($event)"/>
             </div>
         </div>
     </div>
     <div id="table-container" class="table-wrapper">
         <div cdkDropListGroup>
             <div class="flex-container">
+                <div cdkDropList [cdkDropListData]="backlog" class="example-list" (cdkDropListDropped)="drop($event)">
+                    <h5 class="item-heading heading-backlog">Backlogs ({{ backlog.length }})</h5>
+                    <div class="card-container">
+                        <mat-card class="card" *ngFor="let card of backlog" cdkDrag>
+                            <mat-card-header>
+                                <mat-card-title (click)="openSubTasks(card)" style="cursor: pointer; font-weight: 600; color: #0000ee;" 
+                                class="truncate-multiline"
+                                matTooltip="{{ card.taskName | titlecase }}" 
+                                matTooltipPosition="above">{{ card.taskName | titlecase }}</mat-card-title>
+                                <div class="card-actions">
+                                    <mat-icon matTooltip="Edit Task" (click)="editTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Task" (click)="deleteTask(card.taskid)" class="delete-icon">delete</mat-icon>
+                                </div>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="labels-container">
+                                    <span class="ticket-label">Task ID: {{ card.ticketid }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetdate),
+                                        'date-label': !isPastDue(card.targetdate)
+                                      }">Target Date: {{ card.targetdate }}</span>
+                                </div>
+                                <div class="container">
+                                    <div class="assigned-users">
+                                        <ng-container *ngFor="let user of card.assignUsers; let i = index">
+                                            <div *ngIf="i < 4" matTooltip="{{ user.fullname }}" class="initial-circle">
+                                              {{ getInitials(user.fullname) }}
+                                            </div>
+                                          </ng-container>
+                                          <div *ngIf="card.assignUsers.length > 4" class="additional-users" (click)="toggleUserList()" [matMenuTriggerFor]="afterMenu">
+                                            +{{ card.assignUsers.length - 4 }}
+                                          </div>
+                                          <mat-menu #afterMenu="matMenu" xPosition="after">
+                                            <button mat-menu-item *ngFor="let user of card.remaining">
+                                              {{ user.fullname }}
+                                            </button>
+                                          </mat-menu>
+                                    </div>
+                                    <div class="actions-container">
+                                        <mat-icon matTooltip="Description" class="description-icon" (click)="openDescriptionDialog(card)">description</mat-icon>
+                                        <mat-icon matTooltip="Comments" class="comment-icon" (click)="openCommentsDialog(card)">comment</mat-icon>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
                 <div cdkDropList [cdkDropListData]="todo" class="example-list" (cdkDropListDropped)="drop($event)">
                     <h5 class="item-heading heading-todo">To Do ({{ todo.length }})</h5>
                     <div class="card-container">
                         <mat-card class="card" *ngFor="let card of todo" cdkDrag>
-                            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
                             <mat-card-header>
                                 <mat-card-title (click)="openSubTasks(card)" 
                                 style="cursor: pointer; font-weight: 600; color: #0000ee;" 
@@ -39,7 +85,10 @@
                             <mat-card-content>
                                 <div class="labels-container">
                                     <span class="ticket-label">Task ID: {{ card.ticketid }}</span>
-                                    <span class="date-label">Target Date: {{ card.targetdate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetdate),
+                                        'date-label': !isPastDue(card.targetdate)
+                                      }">Target Date: {{ card.targetdate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">
@@ -69,10 +118,10 @@
                     </div>
                 </div>
 
-                <div cdkDropList [cdkDropListData]="inProgress" class="example-list" (cdkDropListDropped)="drop($event)">
-                    <h5 class="item-heading heading-in-progress">In Progress ({{ inProgress.length }})</h5>
+                <div cdkDropList [cdkDropListData]="inReview" class="example-list" (cdkDropListDropped)="drop($event)">
+                    <h5 class="item-heading heading-in-review">In Review ({{ inReview.length }})</h5>
                     <div class="card-container">
-                        <mat-card class="card" *ngFor="let card of inProgress" cdkDrag>
+                        <mat-card class="card" *ngFor="let card of inReview" cdkDrag>
                             <mat-card-header>
                                 <mat-card-title (click)="openSubTasks(card)" style="cursor: pointer; font-weight: 600; color: #0000ee;" 
                                 class="truncate-multiline"
@@ -86,7 +135,10 @@
                             <mat-card-content>
                                 <div class="labels-container">
                                     <span class="ticket-label">Task ID: {{ card.ticketid }}</span>
-                                    <span class="date-label">Target Date: {{ card.targetdate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetdate),
+                                        'date-label': !isPastDue(card.targetdate)
+                                      }">Target Date: {{ card.targetdate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">
@@ -114,10 +166,10 @@
                     </div>
                 </div>
 
-                <div cdkDropList [cdkDropListData]="inReview" class="example-list" (cdkDropListDropped)="drop($event)">
-                    <h5 class="item-heading heading-in-review">In Review ({{ inReview.length }})</h5>
+                <div cdkDropList [cdkDropListData]="inProgress" class="example-list" (cdkDropListDropped)="drop($event)">
+                    <h5 class="item-heading heading-in-progress">In Progress ({{ inProgress.length }})</h5>
                     <div class="card-container">
-                        <mat-card class="card" *ngFor="let card of inReview" cdkDrag>
+                        <mat-card class="card" *ngFor="let card of inProgress" cdkDrag>
                             <mat-card-header>
                                 <mat-card-title (click)="openSubTasks(card)" style="cursor: pointer; font-weight: 600; color: #0000ee;" 
                                 class="truncate-multiline"
@@ -131,7 +183,10 @@
                             <mat-card-content>
                                 <div class="labels-container">
                                     <span class="ticket-label">Task ID: {{ card.ticketid }}</span>
-                                    <span class="date-label">Target Date: {{ card.targetdate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetdate),
+                                        'date-label': !isPastDue(card.targetdate)
+                                      }">Target Date: {{ card.targetdate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">
@@ -176,52 +231,10 @@
                             <mat-card-content>
                                 <div class="labels-container">
                                     <span class="ticket-label">Task ID: {{ card.ticketid }}</span>
-                                    <span class="date-label">Target Date: {{ card.targetdate }}</span>
-                                </div>
-                                <div class="container">
-                                    <div class="assigned-users">
-                                        <ng-container *ngFor="let user of card.assignUsers; let i = index">
-                                            <div *ngIf="i < 4" matTooltip="{{ user.fullname }}" class="initial-circle">
-                                              {{ getInitials(user.fullname) }}
-                                            </div>
-                                          </ng-container>
-                                          <div *ngIf="card.assignUsers.length > 4" class="additional-users" (click)="toggleUserList()" [matMenuTriggerFor]="afterMenu">
-                                            +{{ card.assignUsers.length - 4 }}
-                                          </div>
-                                          <mat-menu #afterMenu="matMenu" xPosition="after">
-                                            <button mat-menu-item *ngFor="let user of card.remaining">
-                                              {{ user.fullname }}
-                                            </button>
-                                          </mat-menu>
-                                    </div>
-                                    <div class="actions-container">
-                                        <mat-icon matTooltip="Description" class="description-icon" (click)="openDescriptionDialog(card)">description</mat-icon>
-                                        <mat-icon matTooltip="Comments" class="comment-icon" (click)="openCommentsDialog(card)">comment</mat-icon>
-                                    </div>
-                                </div>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                </div>
-
-                <div cdkDropList [cdkDropListData]="backlog" class="example-list" (cdkDropListDropped)="drop($event)">
-                    <h5 class="item-heading heading-backlog">Backlogs ({{ backlog.length }})</h5>
-                    <div class="card-container">
-                        <mat-card class="card" *ngFor="let card of backlog" cdkDrag>
-                            <mat-card-header>
-                                <mat-card-title (click)="openSubTasks(card)" style="cursor: pointer; font-weight: 600; color: #0000ee;" 
-                                class="truncate-multiline"
-                                matTooltip="{{ card.taskName | titlecase }}" 
-                                matTooltipPosition="above">{{ card.taskName | titlecase }}</mat-card-title>
-                                <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Task" (click)="editTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Task" (click)="deleteTask(card.taskid)" class="delete-icon">delete</mat-icon>
-                                </div>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <div class="labels-container">
-                                    <span class="ticket-label">Task ID: {{ card.ticketid }}</span>
-                                    <span class="date-label">Target Date: {{ card.targetdate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetdate),
+                                        'date-label': !isPastDue(card.targetdate)
+                                      }">Target Date: {{ card.targetdate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">

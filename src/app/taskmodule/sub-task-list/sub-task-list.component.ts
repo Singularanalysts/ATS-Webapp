@@ -35,7 +35,7 @@ import { AddSubTaskComponent } from './add-sub-task/add-sub-task.component';
 import { SubtaskService } from '../services/subtask.service';
 import { TaskDescriptionComponent } from '../task-list/task-description/task-description.component';
 import { CommentsComponent } from '../comments/comments.component';
-import { BreakpointObserver, Breakpoints  } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-sub-task-list',
@@ -195,6 +195,7 @@ export class SubTaskListComponent implements OnInit {
       subtaskData: null,
       ticketId: this.ticketId,
       taskid: this.taskid,
+      projectId: this.projectId,
       actionName: 'add-sub-task',
     };
     const dialogConfig = new MatDialogConfig();
@@ -231,12 +232,12 @@ export class SubTaskListComponent implements OnInit {
   }
 
   editSubTask(subtask: Task) {
-    console.log(subtask);
     const actionData = {
       title: 'Update Sub Task',
       subtaskData: subtask,
       ticketId: this.ticketId,
       taskid: this.taskid,
+      projectId: this.projectId,
       actionName: 'edit-sub-task',
     };
     const dialogConfig = new MatDialogConfig();
@@ -410,6 +411,7 @@ export class SubTaskListComponent implements OnInit {
     this.destroyed$.complete()
   }
 
+
   drop(event: CdkDragDrop<any[]>) {
     const previousContainer = event.previousContainer;
     const currentContainer = event.container;
@@ -421,32 +423,103 @@ export class SubTaskListComponent implements OnInit {
       backlog: 'Backlog',
       inReview: 'In Review',
       completed: 'Completed',
-    }  as const;
+    } as const;
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      const movedSubTask = previousContainer.data[event.previousIndex];
+      const movedTask = previousContainer.data[event.previousIndex];
       const newStatusKey = this.getListStatus(currentContainer.data) as keyof typeof statusMapping;
       const newStatus = statusMapping[newStatusKey];
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-      if (movedSubTask) {
-        if (movedSubTask.status !== newStatus) {
-          this.saveSubTaskChanges(movedSubTask.subTaskId, newStatus);
+
+      const currentDate = new Date();
+      const formattedCurrentDate = this.formatDate(currentDate);
+
+      if (movedTask) {
+        const targetDateStr = movedTask.targetDate;
+        let formattedTargetDate: string | null = null;
+
+        if (targetDateStr && targetDateStr !== 'N/A') {
+          formattedTargetDate = targetDateStr;
+
+          const dateParts = formattedTargetDate!.split('-');
+          if (dateParts.length === 3) {
+            const [year, month, day] = dateParts.map(Number);
+            if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+            } else {
+              formattedTargetDate = null;
+            }
+          } else {
+            formattedTargetDate = null;
+          }
+        }
+
+        if (newStatus === 'Backlog' && formattedTargetDate && formattedTargetDate < formattedCurrentDate) {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex
+          );
+          this.saveSubTaskChanges(movedTask.subTaskId, newStatus);
+        }
+
+        else if (movedTask.status === 'On Hold' && newStatus === 'In Progress') {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex
+          );
+          this.saveSubTaskChanges(movedTask.subTaskId, newStatus);
+        }
+        else if (this.canMoveForward(movedTask.status, newStatus)) {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex
+          );
+          this.saveSubTaskChanges(movedTask.subTaskId, newStatus);
+        }
+        else if (movedTask.status === 'In Progress' && formattedTargetDate && formattedTargetDate < formattedCurrentDate) {
+          this.saveSubTaskChanges(movedTask.subTaskId, 'Backlog');
         }
       }
     }
   }
 
+  isPastDue(targetDate: string): boolean {
+    const todayFormatted = this.formatDate(new Date());
+    return targetDate < todayFormatted;
+  }
+  
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  canMoveForward(currentStatus: string, newStatus: string): boolean {
+    const statusOrder = [
+      'Backlog',
+      'To Do',
+      'In Review',
+      'In Progress',
+      'On Hold',
+      'Completed',
+    ];
+    const currentIndex = statusOrder.indexOf(currentStatus);
+    const newIndex = statusOrder.indexOf(newStatus);
+
+    return newIndex > currentIndex;
+  }
+
   saveSubTaskChanges(subTaskId: string, newStatus: string) {
     this.subtaskServ.updateSubTaskStatus(subTaskId, newStatus, this.userid).subscribe({
       next: (response: any) => {
-        if (response.status == 'success') {
+        if (response.status === 'success') {
           this.dataTobeSentToSnackBarService.message = 'Sub Task Status Updated successfully';
           this.getAll();
         } else {
@@ -460,8 +533,7 @@ export class SubTaskListComponent implements OnInit {
         this.dataTobeSentToSnackBarService.message = error.message;
         this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
       }
-    }
-    );
+    });
   }
 
   getListStatus(list: any[]): string {

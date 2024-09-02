@@ -16,6 +16,10 @@ export class TaskService {
     return this.apiServ.get(`task/getUsers/${department}`);
   }
 
+  getUsersByProject(projectId: any) {
+    return this.apiServ.get(`task/getProjectUsers/${projectId}`)
+  }
+
   createTask(entity: any) {
     return this.apiServ.post("task/createTask", entity);
   }

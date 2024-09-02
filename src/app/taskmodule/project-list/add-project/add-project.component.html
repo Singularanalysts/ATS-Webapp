@@ -31,6 +31,8 @@
                   <mat-option value="In Review">In Review</mat-option>
                   <mat-option value="Completed">Completed</mat-option>
                 </mat-select>
+                <mat-error *ngIf="projectForm.get('status')!.hasError('required')">Status
+                    Required</mat-error>
               </mat-form-field>
     
             <!-- Description -->
@@ -40,6 +42,16 @@
                 <mat-error *ngIf="projectForm.get('description')!.hasError('required')">Description
                     Required</mat-error>
             </mat-form-field>
+
+            <div *ngIf="projectForm.get('assignedto')" style="width: calc(100% - 24px);">
+                <ng-multiselect-dropdown [placeholder]="'Assigned To *'" [settings]="dropdownSettings"
+                    [data]="employeeData" [formControl]="assignedToControl">
+                </ng-multiselect-dropdown>
+                <mat-error
+                    *ngIf="projectForm.get('assignedto')!.hasError('required') && projectForm.get('assignedto')!.touched">
+                    Assigned To is required
+                </mat-error>
+            </div>
         </section>
     </form>
     <!-- form-ends -->

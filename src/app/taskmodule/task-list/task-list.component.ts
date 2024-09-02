@@ -131,7 +131,6 @@ export class TaskListComponent implements OnInit {
   showUserList = false;
   private breakpointObserver = inject(BreakpointObserver);
 
-
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
@@ -390,10 +389,12 @@ export class TaskListComponent implements OnInit {
     })
   }
 
+  
+
   drop(event: CdkDragDrop<any[]>) {
     const previousContainer = event.previousContainer;
     const currentContainer = event.container;
-
+  
     const statusMapping = {
       todo: 'To Do',
       inProgress: 'In Progress',
@@ -402,31 +403,102 @@ export class TaskListComponent implements OnInit {
       inReview: 'In Review',
       completed: 'Completed',
     } as const;
-
+  
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       const movedTask = previousContainer.data[event.previousIndex];
       const newStatusKey = this.getListStatus(currentContainer.data) as keyof typeof statusMapping;
       const newStatus = statusMapping[newStatusKey];
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+
+      const currentDate = new Date();
+      const formattedCurrentDate = this.formatDate(currentDate);
+  
       if (movedTask) {
-        if (movedTask.status !== newStatus) {
+        const targetDateStr = movedTask.targetDate;
+        let formattedTargetDate: string | null = null;
+
+        if (targetDateStr && targetDateStr !== 'N/A') {
+          formattedTargetDate = targetDateStr;
+
+          const dateParts = formattedTargetDate!.split('-');
+          if (dateParts.length === 3) {
+            const [year, month, day] = dateParts.map(Number);
+            if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+            } else {
+              formattedTargetDate = null;
+            }
+          } else {
+            formattedTargetDate = null;
+          }
+        }
+
+        if (newStatus === 'Backlog' && formattedTargetDate && formattedTargetDate < formattedCurrentDate) {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex
+          );
+          this.saveTaskChanges(movedTask.taskid, newStatus);
+        }
+        else if (movedTask.status === 'On Hold' && newStatus === 'In Progress') {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex
+          );
+          this.saveTaskChanges(movedTask.taskid, newStatus);
+        } else if (
+          movedTask.status === 'In Progress' &&
+          new Date(movedTask.targetdate) < currentDate
+        ) {
+          this.saveTaskChanges(movedTask.taskid, 'Backlog');
+        } else if (this.canMoveForward(movedTask.status, newStatus)) {
+          transferArrayItem(
+            event.previousContainer.data,
+            event.container.data,
+            event.previousIndex,
+            event.currentIndex
+          );
           this.saveTaskChanges(movedTask.taskid, newStatus);
         }
       }
     }
   }
 
+  isPastDue(targetDate: string): boolean {
+    const todayFormatted = this.formatDate(new Date());
+    return targetDate < todayFormatted;
+  }
+  
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+  canMoveForward(currentStatus: string, newStatus: string): boolean {
+    const statusOrder = [
+      'Backlog',
+      'To Do',
+      'In Review',
+      'In Progress',
+      'On Hold',
+      'Completed',
+    ];
+    const currentIndex = statusOrder.indexOf(currentStatus);
+    const newIndex = statusOrder.indexOf(newStatus);
+  
+    return newIndex > currentIndex;
+  }
+
   saveTaskChanges(taskId: string, newStatus: string) {
     this.taskServ.updateTaskStatus(taskId, newStatus, this.userid).subscribe({
       next: (response: any) => {
-        if (response.status == 'success') {
+        if (response.status === 'success') {
           this.dataTobeSentToSnackBarService.message = 'Task Status Updated successfully';
           this.getAll();
         } else {
@@ -500,5 +572,84 @@ export class TaskListComponent implements OnInit {
         }
       });
     });
+  }
+
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    if (keyword != '') {
+      const taskObj = {
+        pageNumber: 1,
+        pageSize: this.pageSize,
+        sortField: this.sortField,
+        sortOrder: this.sortOrder,
+        keyword: keyword,
+        projectid: this.projectId
+      }
+      return this.taskServ.getAllTasksOfProject(taskObj).pipe(takeUntil(this.destroyed$)).subscribe(
+        {
+          next: (response: any) => {
+            this.entity = response.data.tasks;
+            this.dataSource.data = response.data.tasks;
+            const tasks = response.data.tasks;
+            this.pid = response.data.pid;
+            this.entity = tasks;
+            this.dataSource.data = tasks;
+
+            this.todo = [];
+            this.inProgress = [];
+            this.inReview = [];
+            this.onHold = [];
+            this.backlog = [];
+            this.completed = [];
+
+            tasks.forEach((task: any) => {
+              task.targetdate = task.targetdate || 'N/A';
+              task.remaining = task.assignUsers.slice(4);
+
+              switch (task.status) {
+                case 'To Do':
+                  this.todo.push(task);
+                  break;
+                case 'In Progress':
+                  this.inProgress.push(task);
+                  break;
+                case 'In Review':
+                  this.inReview.push(task);
+                  break;
+                case 'On Hold':
+                  this.onHold.push(task);
+                  break;
+                case 'Backlog':
+                  this.backlog.push(task);
+                  break;
+                case 'Completed':
+                  this.completed.push(task);
+                  break;
+                default:
+                  console.warn(`Unknown status: ${task.status}`);
+              }
+            });
+
+            this.todo.forEach((task, i) => task.serialNum = i + 1);
+            this.inProgress.forEach((task, i) => task.serialNum = i + 1);
+            this.inReview.forEach((task, i) => task.serialNum = i + 1);
+            this.onHold.forEach((task, i) => task.serialNum = i + 1);
+            this.backlog.forEach((task, i) => task.serialNum = i + 1);
+            this.completed.forEach((task, i) => task.serialNum = i + 1);
+            this.dataSource.data.map((x: any, i) => {
+              x.serialNum = i + 1;
+            });
+          },
+          error: (err: any) => {
+            this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+            this.dataTobeSentToSnackBarService.message = err.message;
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataTobeSentToSnackBarService
+            );
+          }
+        }
+      );
+    }
+    return this.getAll();
   }
 }

@@ -102,6 +102,8 @@ export class ProjectListComponent implements OnInit {
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       keyword: this.field,
+      access: this.hasAcces,
+      userid: this.userid
     }
     return this.projectServ.getAllProjectsWithPaginationAndSorting(pagObj).pipe(takeUntil(this.destroyed$)).subscribe(
       {
@@ -228,6 +230,8 @@ export class ProjectListComponent implements OnInit {
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         keyword: this.field,
+        access: this.hasAcces,
+        userid: this.userid
       }
       return this.projectServ.getAllProjectsWithPaginationAndSorting(pagObj).subscribe({
         next: (response: any) => {
@@ -255,6 +259,15 @@ export class ProjectListComponent implements OnInit {
   }
 
   onSort(event: any) {
+    if (event.active == 'SerialNum')
+      this.sortField = 'postedon'
+    else
+      this.sortField = event.active;
+    this.sortOrder = event.direction;
+
+    if (event.direction != '') {
+      this.getAll();
+    }
   }
 
   generateSerialNumber(index: number): number {
