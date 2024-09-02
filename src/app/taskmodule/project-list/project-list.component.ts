@@ -49,6 +49,7 @@ export class ProjectListComponent implements OnInit {
     'projectId',
     'projectName',
     'description',
+    'createdDate',
     'status',
     'Action',
   ];

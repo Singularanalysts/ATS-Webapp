@@ -43,6 +43,7 @@ export class CommentsComponent {
   };
   private snackBarServ = inject(SnackBarService);
   userName!: string | null;
+  ticketid: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
@@ -50,6 +51,7 @@ export class CommentsComponent {
   ) { }
 
   ngOnInit() {
+    this.ticketid = this.data.taskData.ticketid;
     const taskId = this.data.subtaskData?.taskId || this.data.taskData?.taskid;
     this.subtaskServ.taskComments(taskId).subscribe({
       next: (response: any) => {
@@ -83,6 +85,7 @@ export class CommentsComponent {
         comments: this.newComment,
         taskid: this.data.subtaskData?.taskId || this.data.taskData?.taskid,
         status: this.data.subtaskData?.status || this.data.taskData?.status,
+        ticketid: this.ticketid,
         updatedby: localStorage.getItem('userid')
       };
       this.subtaskServ.addComments(commentData).subscribe({

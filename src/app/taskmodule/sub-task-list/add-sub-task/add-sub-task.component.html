@@ -40,7 +40,7 @@
                 <!-- Target Date -->
                 <mat-form-field appearance="outline">
                     <mat-label>Target Date</mat-label>
-                    <input matInput [matDatepicker]="datepicker" formControlName="targetDate" placeholder="DD-MM-YYYY">
+                    <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="datepicker" formControlName="targetDate" placeholder="DD-MM-YYYY">
                     <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
                     <mat-datepicker #datepicker></mat-datepicker>
                     <mat-error *ngIf="subTaskForm.get('targetDate')!.hasError('required')"> Target Date is
