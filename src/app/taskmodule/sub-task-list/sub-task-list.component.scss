@@ -207,6 +207,14 @@
     color: #fff;
 }
 
+.past-due {
+    background-color: red;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
 .actions-container {
     display: flex;
     align-items: center;

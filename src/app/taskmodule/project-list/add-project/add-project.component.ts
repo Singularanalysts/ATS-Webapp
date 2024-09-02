@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,14 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { SnackBarService, ISnackBarData } from 'src/app/services/snack-bar.service';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { TaskService } from '../../services/task.service';
+
+interface DropdownItem {
+  item_id: number;
+  item_text: string;
+}
 
 @Component({
   selector: 'app-add-project',
@@ -33,6 +41,7 @@ import { Project } from '../../models/project.model';
     MatSelectModule,
     MatCardModule,
     MatRippleModule,
+    NgMultiSelectDropDownModule
   ],
   templateUrl: './add-project.component.html',
   styleUrls: ['./add-project.component.scss']
@@ -56,11 +65,27 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   private destroyed$ = new Subject<void>();
   designation = localStorage.getItem('designation');
   isCompanyDataAvailable: boolean = false;
+  dropdownList!: DropdownItem[];
+  selectedItems!: DropdownItem[];
+  dropdownSettings!: IDropdownSettings;
+  pid: string | null = null;
+  employeeData: any;
+  private taskServ = inject(TaskService);
 
   ngOnInit(): void {
+    this.getEmployee();
     this.initProjectForm(new Project());
     if (this.data.actionName === "edit-project") {
       this.bindFormControlValueOnEdit();
+    }
+  }
+
+  get assignedToControl(): FormControl {
+    const control = this.projectForm.get('assignedto');
+    if (control instanceof FormControl) {
+      return control;
+    } else {
+      throw new Error('Form control is not of type FormControl');
     }
   }
 
@@ -95,10 +120,10 @@ export class AddProjectComponent implements OnInit, OnDestroy {
    * initializes Project Form
    */
   private initProjectForm(projectData: Project) {
-
     this.projectForm = this.formBuilder.group({
       projectName: [projectData ? projectData.projectName : '', [Validators.required]],
       description: [projectData ? projectData.description : '', [Validators.required]],
+      assignedto: [projectData ? projectData.assignedto : [], Validators.required],
       addedBy: [projectData && projectData.addedBy ? projectData.addedBy : localStorage.getItem('userid')],
       updatedby: [this.data.actionName === "edit-project" ? localStorage.getItem('userid') : null]
     });
@@ -118,6 +143,24 @@ export class AddProjectComponent implements OnInit, OnDestroy {
         )
       );
     }
+  }
+
+  
+  department = "software";
+  getEmployee() {
+    this.taskServ.getUsersByDepartment("software").subscribe(
+      (response: any) => {
+        this.employeeData = response.data;
+        this.dropdownSettings = {
+          idField: 'userid',
+          textField: 'fullname',
+          selectAllText: 'Select All',
+          unSelectAllText: 'UnSelect All',
+          itemsShowLimit: 3,
+          allowSearchFilter: true
+        };
+      }
+    )
   }
 
   /**

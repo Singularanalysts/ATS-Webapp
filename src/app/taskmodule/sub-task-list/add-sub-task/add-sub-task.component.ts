@@ -2,10 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import {
   Component,
   Inject,
-  inject,
-  ElementRef,
-  ViewChild
-} from '@angular/core';
+  inject} from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -25,7 +22,7 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -97,6 +94,7 @@ export class AddSubTaskComponent {
 
   // Subscription management
   private destroyed$ = new Subject<void>();
+  projectId: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
@@ -104,6 +102,7 @@ export class AddSubTaskComponent {
   ) { }
 
   ngOnInit(): void {
+   this.projectId = this.data.projectId;
     this.taskid = this.data.taskid;
     this.getEmployee();
     this.initializeTaskForm(null);
@@ -148,7 +147,7 @@ export class AddSubTaskComponent {
   }
 
   getEmployee() {
-    this.taskServ.getUsersByDepartment("software").subscribe(
+    this.taskServ.getUsersByProject(this.projectId).subscribe(
       (response: any) => {
         this.employeeData = response.data;
         this.dropdownSettings = {

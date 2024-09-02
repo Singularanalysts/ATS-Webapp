@@ -88,12 +88,14 @@ export class AddTaskComponent {
     'Backlogs',
     'Completed',
   ]
+  projectId: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddTaskComponent>
   ) { }
 
   ngOnInit(): void {
+    this.projectId = this.data.projectId;
     this.pid = this.data.pid;
     this.getEmployee();
     this.initializeTaskForm(null);
@@ -139,9 +141,8 @@ export class AddTaskComponent {
     return this.taskForm.controls;
   }
 
-  department = "software";
   getEmployee() {
-    this.taskServ.getUsersByDepartment("software").subscribe(
+    this.taskServ.getUsersByProject(this.projectId).subscribe(
       (response: any) => {
         this.employeeData = response.data;
         this.dropdownSettings = {

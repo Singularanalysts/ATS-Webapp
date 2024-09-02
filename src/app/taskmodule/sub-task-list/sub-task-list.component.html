@@ -13,15 +13,62 @@
                 Add Sub Task
             </button>
 
-            <div class="search-sub-task">
+            <!-- <div class="search-sub-task">
                 <input matInput type="text" class="search" placeholder="search tasks" />
-                <!-- (keyup)="applyFilter($event)" -->
-            </div>
+                (keyup)="applyFilter($event)"
+            </div> -->
         </div>
     </div>
     <div id="table-container" class="table-wrapper">
         <div cdkDropListGroup>
             <div class="flex-container">
+                <div cdkDropList [cdkDropListData]="backlog" class="example-list" (cdkDropListDropped)="drop($event)">
+                    <h5 class="item-heading heading-backlog">Backlogs ({{ backlog.length }})</h5>
+                    <div class="card-container">
+                        <mat-card class="card" *ngFor="let card of backlog" cdkDrag>
+                            <mat-card-header>
+                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
+                                matTooltip="{{ card.subTaskName | titlecase }}" 
+                                matTooltipPosition="above"
+                                >{{ card.subTaskName | titlecase }}</mat-card-title>
+                                <div class="card-actions">
+                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
+                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
+                                </div>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="labels-container">
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetDate),
+                                        'date-label': !isPastDue(card.targetDate)
+                                      }">Target Date: {{ card.targetDate }}</span>
+                                </div>
+                                <div class="container">
+                                    <div class="assigned-users">
+                                        <ng-container *ngFor="let user of card.assignedto; let i = index">
+                                            <div *ngIf="i < 4" matTooltip="{{ user.fullname }}" class="initial-circle">
+                                              {{ getInitials(user.fullname) }}
+                                            </div>
+                                          </ng-container>
+                                          <div *ngIf="card.assignedto.length > 4" class="additional-users" (click)="toggleUserList()" [matMenuTriggerFor]="afterMenu">
+                                            +{{ card.assignedto.length - 4 }}
+                                          </div>
+                                          <mat-menu #afterMenu="matMenu" xPosition="after">
+                                            <button mat-menu-item *ngFor="let user of card.remaining">
+                                              {{ user.fullname }}
+                                            </button>
+                                          </mat-menu>
+                                    </div>
+                                    <div class="actions-container">
+                                        <mat-icon matTooltip="Description" class="description-icon" (click)="openDescriptionDialog(card)">description</mat-icon>
+                                        <mat-icon matTooltip="Comments" class="comment-icon" (click)="openCommentsDialog(card)">comment</mat-icon>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
                 <div cdkDropList [cdkDropListData]="todo" class="example-list" (cdkDropListDropped)="drop($event)">
                     <h5 class="item-heading heading-todo">To Do ({{ todo.length }})</h5>
                     <div class="card-container">
@@ -38,7 +85,10 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <div class="labels-container">
-                                    <span class="date-label">Target Date: {{ card.targetDate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetDate),
+                                        'date-label': !isPastDue(card.targetDate)
+                                      }">Target Date: {{ card.targetDate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">
@@ -68,10 +118,10 @@
                     </div>
                 </div>
 
-                <div cdkDropList [cdkDropListData]="inProgress" class="example-list" (cdkDropListDropped)="drop($event)">
-                    <h5 class="item-heading heading-in-progress">In Progress ({{ inProgress.length }})</h5>
+                <div cdkDropList [cdkDropListData]="inReview" class="example-list" (cdkDropListDropped)="drop($event)">
+                    <h5 class="item-heading heading-in-review">In Review ({{ inReview.length }})</h5>
                     <div class="card-container">
-                        <mat-card class="card" *ngFor="let card of inProgress" cdkDrag>
+                        <mat-card class="card" *ngFor="let card of inReview" cdkDrag>
                             <mat-card-header>
                                 <mat-card-title class="truncate-multiline" style="font-weight: 600;"
                                 matTooltip="{{ card.subTaskName | titlecase }}" 
@@ -84,7 +134,10 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <div class="labels-container">
-                                    <span class="date-label">Target Date: {{ card.targetDate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetDate),
+                                        'date-label': !isPastDue(card.targetDate)
+                                      }">Target Date: {{ card.targetDate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">
@@ -112,10 +165,10 @@
                     </div>
                 </div>
 
-                <div cdkDropList [cdkDropListData]="inReview" class="example-list" (cdkDropListDropped)="drop($event)">
-                    <h5 class="item-heading heading-in-review">In Review ({{ inReview.length }})</h5>
+                <div cdkDropList [cdkDropListData]="inProgress" class="example-list" (cdkDropListDropped)="drop($event)">
+                    <h5 class="item-heading heading-in-progress">In Progress ({{ inProgress.length }})</h5>
                     <div class="card-container">
-                        <mat-card class="card" *ngFor="let card of inReview" cdkDrag>
+                        <mat-card class="card" *ngFor="let card of inProgress" cdkDrag>
                             <mat-card-header>
                                 <mat-card-title class="truncate-multiline" style="font-weight: 600;"
                                 matTooltip="{{ card.subTaskName | titlecase }}" 
@@ -128,7 +181,10 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <div class="labels-container">
-                                    <span class="date-label">Target Date: {{ card.targetDate }}</span>
+                                    <span [ngClass]="{
+                                        'date-label': true,
+                                        'past-due': isPastDue(card.targetDate)
+                                      }">Target Date: {{ card.targetDate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">
@@ -172,51 +228,10 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <div class="labels-container">
-                                    <span class="date-label">Target Date: {{ card.targetDate }}</span>
-                                </div>
-                                <div class="container">
-                                    <div class="assigned-users">
-                                        <ng-container *ngFor="let user of card.assignedto; let i = index">
-                                            <div *ngIf="i < 4" matTooltip="{{ user.fullname }}" class="initial-circle">
-                                              {{ getInitials(user.fullname) }}
-                                            </div>
-                                          </ng-container>
-                                          <div *ngIf="card.assignedto.length > 4" class="additional-users" (click)="toggleUserList()" [matMenuTriggerFor]="afterMenu">
-                                            +{{ card.assignedto.length - 4 }}
-                                          </div>
-                                          <mat-menu #afterMenu="matMenu" xPosition="after">
-                                            <button mat-menu-item *ngFor="let user of card.remaining">
-                                              {{ user.fullname }}
-                                            </button>
-                                          </mat-menu>
-                                    </div>
-                                    <div class="actions-container">
-                                        <mat-icon matTooltip="Description" class="description-icon" (click)="openDescriptionDialog(card)">description</mat-icon>
-                                        <mat-icon matTooltip="Comments" class="comment-icon" (click)="openCommentsDialog(card)">comment</mat-icon>
-                                    </div>
-                                </div>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                </div>
-
-                <div cdkDropList [cdkDropListData]="backlog" class="example-list" (cdkDropListDropped)="drop($event)">
-                    <h5 class="item-heading heading-backlog">Backlogs ({{ backlog.length }})</h5>
-                    <div class="card-container">
-                        <mat-card class="card" *ngFor="let card of backlog" cdkDrag>
-                            <mat-card-header>
-                                <mat-card-title class="truncate-multiline" style="font-weight: 600;"
-                                matTooltip="{{ card.subTaskName | titlecase }}" 
-                                matTooltipPosition="above"
-                                >{{ card.subTaskName | titlecase }}</mat-card-title>
-                                <div class="card-actions">
-                                    <mat-icon matTooltip="Edit Sub Task" (click)="editSubTask(card)" class="edit-icon">edit</mat-icon>
-                                    <mat-icon matTooltip="Delete Sub Task" (click)="deleteSubTask(card.subTaskId)" class="delete-icon">delete</mat-icon>
-                                </div>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <div class="labels-container">
-                                    <span class="date-label">Target Date: {{ card.targetDate }}</span>
+                                    <span [ngClass]="{
+                                        'past-due': isPastDue(card.targetDate),
+                                        'date-label': !isPastDue(card.targetDate)
+                                      }">Target Date: {{ card.targetDate }}</span>
                                 </div>
                                 <div class="container">
                                     <div class="assigned-users">

@@ -47,7 +47,7 @@
             </mat-form-field>
 
             <!-- Assigned To -->
-            <div *ngIf="taskForm.get('assignedto')">
+            <div *ngIf="taskForm.get('assignedto')" style="width: calc(100% - 24px);">
                 <ng-multiselect-dropdown [placeholder]="'Assigned To *'" [settings]="dropdownSettings"
                     [data]="employeeData" [formControl]="assignedToControl">
                 </ng-multiselect-dropdown>
