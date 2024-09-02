@@ -31,6 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TaskService } from '../../services/task.service';
 import { DEPARTMENT } from 'src/app/constants/department';
+import { MatNativeDateModule } from '@angular/material/core';
 
 interface DropdownItem {
   item_id: number;
@@ -54,7 +55,8 @@ interface DropdownItem {
     MatSelectModule,
     MatChipsModule,
     NgMultiSelectDropDownModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatNativeDateModule
   ],
   providers: [
     DatePipe
@@ -104,12 +106,25 @@ export class AddTaskComponent {
       this.taskServ.getTaskById(this.data.taskData.taskid).subscribe(
         (response: any) => {
           if (response && response.data) {
-            this.initializeTaskForm(response.data)
+            this.initializeTaskForm(response.data);
           }
         }
       )
     }
   }
+
+  myFilter = (d: Date | null): boolean => {
+    if (!d) {
+      return false;
+    }
+    
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    
+    const dayOfWeek = d!.getDay();
+    
+    return d >= currentDate && !(dayOfWeek === 0 && d > currentDate);
+  };
 
   get assignedToControl(): FormControl {
     const control = this.taskForm.get('assignedto');
