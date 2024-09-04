@@ -30,7 +30,6 @@ import { TaskService } from '../services/task.service';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { Task } from 'src/app/usit/models/task';
-import { AssignedUserComponent } from './assigned-user/assigned-user.component';
 import {
   CdkDragDrop,
   CdkDrag,
@@ -358,38 +357,10 @@ export class TaskListComponent implements OnInit {
     return;
   }
 
-  navigateToDashboard() {
-    this.router.navigateByUrl('/usit/dashboard');
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next(undefined);
     this.destroyed$.complete()
   }
-
-  goToUserInfo(id: number) {
-    this.router.navigate(['usit/user-info', id])
-  }
-
-  popup(id: number, tid: string) {
-    const actionData = {
-      title: tid,
-      id: id,
-      Actionname: 'task-details'
-    };
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '65vw';
-    dialogConfig.disableClose = false;
-    dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AssignedUserComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.getAll();
-      }
-    })
-  }
-
-  
 
   drop(event: CdkDragDrop<any[]>) {
     const previousContainer = event.previousContainer;

@@ -153,5 +153,16 @@
         "routerLink": "/usit/candidate-reports"
       }
     ]
+  },
+  {
+    "text": "Task Management",
+    "icon": "task",
+    "children": [
+      {
+        "text": "Projects",
+        "icon": "work",
+        "routerLink": "/task-management/projects"
+      }
+    ]
   }
 ]

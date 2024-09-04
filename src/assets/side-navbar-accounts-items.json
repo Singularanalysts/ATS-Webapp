@@ -220,12 +220,12 @@
     },
     {
       "text": "Task Management",
-      "icon": "receipt_long",
+      "icon": "task",
       "children": [
         {
-          "text": "Task List",
-          "icon": "note_add",
-          "routerLink": "/task/list-task"
+          "text": "Projects",
+          "icon": "work",
+          "routerLink": "/task-management/projects"
         }
       ]
     }

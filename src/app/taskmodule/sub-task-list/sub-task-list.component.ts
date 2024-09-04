@@ -199,35 +199,14 @@ export class SubTaskListComponent implements OnInit {
       actionName: 'add-sub-task',
     };
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '30vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    this.breakpointObserver.observe([
-      Breakpoints.XSmall,
-      Breakpoints.Small,
-      Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge
-    ]).subscribe(result => {
-      if (result.matches) {
-        if (result.breakpoints[Breakpoints.XSmall]) {
-          dialogConfig.width = '90vw';
-        } else if (result.breakpoints[Breakpoints.Small]) {
-          dialogConfig.width = '70vw';
-        } else if (result.breakpoints[Breakpoints.Medium]) {
-          dialogConfig.width = '50vw';
-        } else if (result.breakpoints[Breakpoints.Large]) {
-          dialogConfig.width = '40vw';
-        } else if (result.breakpoints[Breakpoints.XLarge]) {
-          dialogConfig.width = '30vw';
-        }
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
-
-      const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(() => {
-        if (dialogRef.componentInstance.submitted) {
-          this.getAll();
-        }
-      });
     });
   }
 
@@ -244,33 +223,11 @@ export class SubTaskListComponent implements OnInit {
     dialogConfig.width = '30vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    this.breakpointObserver.observe([
-      Breakpoints.XSmall,
-      Breakpoints.Small,
-      Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge
-    ]).subscribe(result => {
-      if (result.matches) {
-        if (result.breakpoints[Breakpoints.XSmall]) {
-          dialogConfig.width = '90vw';
-        } else if (result.breakpoints[Breakpoints.Small]) {
-          dialogConfig.width = '70vw';
-        } else if (result.breakpoints[Breakpoints.Medium]) {
-          dialogConfig.width = '50vw';
-        } else if (result.breakpoints[Breakpoints.Large]) {
-          dialogConfig.width = '40vw';
-        } else if (result.breakpoints[Breakpoints.XLarge]) {
-          dialogConfig.width = '30vw';
-        }
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
-
-      const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(() => {
-        if (dialogRef.componentInstance.submitted) {
-          this.getAll();
-        }
-      });
     });
   }
 
