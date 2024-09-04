@@ -25,16 +25,16 @@
             <mat-form-field appearance="outline" *ngIf="data.actionName === 'edit-project'">
                 <mat-label>Status</mat-label>
                 <mat-select formControlName="status">
-                  <mat-option value="To Do">To Do</mat-option>
-                  <mat-option value="In Progress">In Progress</mat-option>
-                  <mat-option value="On Hold">On Hold</mat-option>
-                  <mat-option value="In Review">In Review</mat-option>
-                  <mat-option value="Completed">Completed</mat-option>
+                    <mat-option value="To Do">To Do</mat-option>
+                    <mat-option value="In Progress">In Progress</mat-option>
+                    <mat-option value="On Hold">On Hold</mat-option>
+                    <mat-option value="In Review">In Review</mat-option>
+                    <mat-option value="Completed">Completed</mat-option>
                 </mat-select>
                 <mat-error *ngIf="projectForm.get('status')!.hasError('required')">Status
                     Required</mat-error>
-              </mat-form-field>
-    
+            </mat-form-field>
+
             <!-- Description -->
             <mat-form-field appearance="outline" class="description-field">
                 <mat-label>Description</mat-label>
@@ -43,6 +43,20 @@
                     Required</mat-error>
             </mat-form-field>
 
+            <!--Select Department -->
+            <mat-form-field appearance="outline">
+                <mat-label>Select Department</mat-label>
+                <input matInput formControlName="department" [matAutocomplete]="departmentAuto">
+                <mat-autocomplete #departmentAuto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredDepartmentOptions | async" [value]="option">
+                        {{ option }}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="projectForm.get('department').hasError('required')">Choose
+                    Deparment</mat-error>
+            </mat-form-field>
+
+            <!-- Assigned Users -->
             <div *ngIf="projectForm.get('assignedto')" style="width: calc(100% - 24px);">
                 <ng-multiselect-dropdown [placeholder]="'Assigned To *'" [settings]="dropdownSettings"
                     [data]="employeeData" [formControl]="assignedToControl">
@@ -55,10 +69,11 @@
         </section>
     </form>
     <!-- form-ends -->
-    <!-- form-bottom action buttons -->
-    <div class="form-action-buttons">
-        <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
-        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
-    </div>
 </mat-card>
 <!-- mat-card-ends -->
+
+ <!-- form-bottom action buttons -->
+ <div class="form-action-buttons">
+    <button mat-raised-button class="btn-cancel" color="white" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+</div>

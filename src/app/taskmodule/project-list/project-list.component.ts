@@ -286,17 +286,9 @@ export class ProjectListComponent implements OnInit {
     return;
   }
 
-  navigateToDashboard() {
-    this.router.navigateByUrl('/usit/dashboard');
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next(undefined);
     this.destroyed$.complete()
-  }
-
-  goToUserInfo(id: number) {
-    this.router.navigate(['usit/user-info', id])
   }
 
   openTasks(projectId: string, pid: string | number): void {

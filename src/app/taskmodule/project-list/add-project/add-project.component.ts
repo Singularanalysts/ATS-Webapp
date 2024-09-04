@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { map, Observable, startWith, Subject, takeUntil } from 'rxjs';
 import { SnackBarService, ISnackBarData } from 'src/app/services/snack-bar.service';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
@@ -50,34 +50,43 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   projectObj = new Project();
   projectForm: any = FormGroup;
   submitted = false;
-  companyOptions: any = [];
-  cityarr: any = [];
-  pinarr: any = [];
-  statearr: any = [];
   private projectServ = inject(ProjectService);
   private snackBarServ = inject(SnackBarService);
   private formBuilder = inject(FormBuilder);
-  companySearchData: any[] = [];
-  searchCompanyOptions$!: Observable<any>;
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<AddProjectComponent>);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
-  designation = localStorage.getItem('designation');
-  isCompanyDataAvailable: boolean = false;
   dropdownList!: DropdownItem[];
   selectedItems!: DropdownItem[];
   dropdownSettings!: IDropdownSettings;
   pid: string | null = null;
   employeeData: any;
   private taskServ = inject(TaskService);
+  departmentOptions: string[] = [
+    'Administration',
+    'Recruiting',
+    'Software',
+    'Bench Sales',
+    'Sourcing',
+    'Dom Recruiting',
+    'Accounts',
+    'Guest',
+    'HR Team'
+  ];
+  filteredDepartmentOptions!: Observable<string[]>;
 
   ngOnInit(): void {
-    this.getEmployee();
     this.initProjectForm(new Project());
     if (this.data.actionName === "edit-project") {
       this.bindFormControlValueOnEdit();
     }
+    this.optionsMethod('department');
+    this.projectForm.get('department').valueChanges.subscribe((department: any) => {
+      if (department) {
+        this.getEmployee(department);
+      }
+    });
   }
 
   get assignedToControl(): FormControl {
@@ -123,13 +132,12 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     this.projectForm = this.formBuilder.group({
       projectName: [projectData ? projectData.projectName : '', [Validators.required]],
       description: [projectData ? projectData.description : '', [Validators.required]],
+      department: [projectData ? projectData.department : '', Validators.required],
       assignedto: [projectData ? projectData.assignedto : [], Validators.required],
       addedBy: [projectData && projectData.addedBy ? projectData.addedBy : localStorage.getItem('userid')],
       updatedby: [this.data.actionName === "edit-project" ? localStorage.getItem('userid') : null]
     });
-
     if (this.data.actionName === 'edit-project') {
-
       this.projectForm.addControl(
         'id',
         this.formBuilder.control(
@@ -145,10 +153,25 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  
-  department = "software";
-  getEmployee() {
-    this.taskServ.getUsersByDepartment("software").subscribe(
+  private optionsMethod(type: string) {
+    this.filteredDepartmentOptions =
+      this.projectForm.controls.department.valueChanges.pipe(
+        startWith(''),
+        map((value: any) =>
+          this._filterOptions(value || '', this.departmentOptions)
+        )
+      );
+  }
+
+  private _filterOptions(value: string, options: string[]): string[] {
+    const filterValue = value.toLowerCase();
+    return options.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
+
+  getEmployee(department: string) {
+    this.taskServ.getUsersByDepartment(department).subscribe(
       (response: any) => {
         this.employeeData = response.data;
         this.dropdownSettings = {

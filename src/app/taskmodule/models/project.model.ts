@@ -3,6 +3,7 @@ export class Project {
   public projectId: any;
   public projectName!: string;
   public description!: string;
+  public department!: string;
   public assignedto!: any
   public status!: string;
   public addedBy: any;
