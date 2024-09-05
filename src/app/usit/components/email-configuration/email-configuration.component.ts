@@ -73,6 +73,7 @@ export class EmailConfigurationComponent {
   currentPageIndex = 0;
   private dialogServ = inject(DialogService);
   private openServ = inject(OpenreqService);
+  message: any;
 
   constructor(private fb: FormBuilder) { }
 
@@ -398,7 +399,7 @@ export class EmailConfigurationComponent {
       actionName: 'add-email-configuration',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '30vw';
+    dialogConfig.width = '25vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
@@ -416,7 +417,7 @@ export class EmailConfigurationComponent {
       actionName: 'edit-email-configuration',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '30vw';
+    dialogConfig.width = '25vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
     const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
@@ -425,6 +426,28 @@ export class EmailConfigurationComponent {
         this.checkExistingDetails();
       }
     })
+  }
+
+  emailDuplicate(event: any) {
+    const emailObj = {
+      email: event.target.value
+    }
+    this.OpenReqServ.duplicatecheckEmail(emailObj).subscribe((response: any) => {
+      if (response.status == 'Success') {
+        this.message = '';
+      } else if (response.status == 'Exist') {
+        const configEmail = this.emailForm.get('email');
+        configEmail!.setValue('');
+        this.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      } else {
+        this.dataToBeSentToSnackBar.message = 'Internal Server Error';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      }
+    });
   }
   
   extractEmails(element: any) {
