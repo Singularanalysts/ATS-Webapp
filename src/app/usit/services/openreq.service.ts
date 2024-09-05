@@ -130,4 +130,8 @@ export class OpenreqService {
   getEmailById(id: any) {
     return this.http.get(`mail/emailcredentials/getByRecordId/${id}`);
   }
+
+  duplicatecheckEmail(data: any) {
+    return this.http.put(`mail/emailcredentials/credentialUpdate`, data);
+  }
 }

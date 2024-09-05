@@ -9,7 +9,7 @@
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Email</mat-label>
             <!-- [readonly]="buttonText !== 'Save'" -->
-            <input matInput formControlName="email" type="email" autocomplete="new-email" />
+            <input matInput formControlName="email" type="email" autocomplete="new-email" (change)="emailDuplicate($event)"/>
             <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
             <mat-error *ngIf="emailForm.get('email')?.hasError('required')">
               Email is required

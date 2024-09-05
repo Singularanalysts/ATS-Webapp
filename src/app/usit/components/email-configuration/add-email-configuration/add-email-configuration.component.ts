@@ -57,6 +57,15 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
   designation = localStorage.getItem('designation');
   isCompanyDataAvailable: boolean = false;
   private OpenReqServ = inject(OpenreqService);
+  message: any;
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
 
   ngOnInit(): void {
     this.initProjectForm(new Project());
@@ -200,6 +209,28 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
       const control = this.emailConfigurationForm.get(field);
       if (control && control.invalid) {
         control.markAsTouched();
+      }
+    });
+  }
+
+  emailDuplicate(event: any) {
+    const emailObj = {
+      email: event.target.value
+    }
+    this.OpenReqServ.duplicatecheckEmail(emailObj).subscribe((response: any) => {
+      if (response.status == 'Success') {
+        this.message = '';
+      } else if (response.status == 'Exist') {
+        const configEmail = this.emailConfigurationForm.get('email');
+        configEmail.setValue('');
+        this.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.message = 'Record already available with given Mail address';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      } else {
+        this.dataToBeSentToSnackBar.message = 'Internal Server Error';
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
     });
   }
