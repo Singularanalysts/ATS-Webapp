@@ -24,7 +24,7 @@
   margin: 0 auto;
   padding: 16px;
   height: max-content;
-  max-height: 80vh;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -33,8 +33,8 @@
 
 .email-form {
   height: max-content;
-  max-height: 70vh;
-  overflow-y: auto;
+  max-height: 85vh;
+  overflow-y: visible;
 }
 
 .form-container {
