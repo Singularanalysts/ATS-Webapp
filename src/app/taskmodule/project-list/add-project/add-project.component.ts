@@ -58,10 +58,10 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
   dropdownList!: DropdownItem[];
-  selectedItems!: DropdownItem[];
+  selectedItems: DropdownItem[] = [];
   dropdownSettings!: IDropdownSettings;
   pid: string | null = null;
-  employeeData: any;
+  employeeData = [];
   private taskServ = inject(TaskService);
   departmentOptions: string[] = [
     'Administration',
@@ -77,25 +77,17 @@ export class AddProjectComponent implements OnInit, OnDestroy {
   filteredDepartmentOptions!: Observable<string[]>;
 
   ngOnInit(): void {
+    this.initDropdownSettings();
     this.initProjectForm(new Project());
     if (this.data.actionName === "edit-project") {
       this.bindFormControlValueOnEdit();
     }
-    this.optionsMethod('department');
+    this.optionsMethod();
     this.projectForm.get('department').valueChanges.subscribe((department: any) => {
       if (department) {
         this.getEmployee(department);
       }
     });
-  }
-
-  get assignedToControl(): FormControl {
-    const control = this.projectForm.get('assignedto');
-    if (control instanceof FormControl) {
-      return control;
-    } else {
-      throw new Error('Form control is not of type FormControl');
-    }
   }
 
   private bindFormControlValueOnEdit() {
@@ -116,6 +108,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
           this.projectObj = response.data;
           //init form and  update control values on edit
           this.initProjectForm(this.projectObj);
+          this.getEmployee(this.projectObj.department);
         }
       }, error: (err: any) => {
         dataToBeSentToSnackBar.message = err.message;
@@ -123,6 +116,17 @@ export class AddProjectComponent implements OnInit, OnDestroy {
         this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
       }
     });
+  }
+
+  initDropdownSettings() {
+    this.dropdownSettings = {
+      idField: 'userid',
+      textField: 'fullname',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
   }
 
   /**
@@ -153,7 +157,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  private optionsMethod(type: string) {
+  private optionsMethod() {
     this.filteredDepartmentOptions =
       this.projectForm.controls.department.valueChanges.pipe(
         startWith(''),
@@ -174,14 +178,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     this.taskServ.getUsersByDepartment(department).subscribe(
       (response: any) => {
         this.employeeData = response.data;
-        this.dropdownSettings = {
-          idField: 'userid',
-          textField: 'fullname',
-          selectAllText: 'Select All',
-          unSelectAllText: 'UnSelect All',
-          itemsShowLimit: 3,
-          allowSearchFilter: true
-        };
+        this.initDropdownSettings();
       }
     )
   }

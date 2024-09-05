@@ -58,14 +58,18 @@
 
             <!-- Assigned Users -->
             <div *ngIf="projectForm.get('assignedto')" style="width: calc(100% - 24px);">
-                <ng-multiselect-dropdown formControlName="assignedto" [placeholder]="'Assigned To *'" [settings]="dropdownSettings"
-                    [data]="employeeData">
+                <ng-multiselect-dropdown
+                  [formControl]="projectForm.get('assignedto')"
+                  [placeholder]="'Assigned To *'"
+                  [settings]="dropdownSettings"
+                  [data]="employeeData">
                 </ng-multiselect-dropdown>
                 <mat-error
-                    *ngIf="projectForm.get('assignedto')!.hasError('required') && projectForm.get('assignedto')!.touched">
-                    Assigned To is required
+                  *ngIf="projectForm.get('assignedto')!.hasError('required') && projectForm.get('assignedto')!.touched">
+                  Assigned To is required
                 </mat-error>
-            </div>
+              </div>
+              
         </section>
     </form>
     <!-- form-ends -->
