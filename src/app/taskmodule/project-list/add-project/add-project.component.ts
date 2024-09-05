@@ -257,6 +257,7 @@ export class AddProjectComponent implements OnInit, OnDestroy {
         this.projectObj.description = formVal.description;
         this.projectObj.assignedto = formVal.assignedto;
         this.projectObj.status = formVal.status;
+        this.projectObj.department = formVal.department;
         this.projectObj.addedBy = formVal.addedBy;;
         this.projectObj.updatedBy = localStorage.getItem('userid');
       })
