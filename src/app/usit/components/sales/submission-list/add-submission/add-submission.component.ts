@@ -619,6 +619,7 @@ export const SOURCE_TYPE = [
   'Monster',
   'Job Portal',
   'LinkedIn',
+  'Email',
   'Mass Mail',
   'Personal',
   'Reference',
