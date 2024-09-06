@@ -14,7 +14,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { SnackBarService, ISnackBarData } from 'src/app/services/snack-bar.service';
 import { Project } from 'src/app/taskmodule/models/project.model';
-import { ProjectService } from 'src/app/taskmodule/services/project.service';
 import { OpenreqService } from 'src/app/usit/services/openreq.service';
 
 @Component({
@@ -68,7 +67,7 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.initProjectForm(new Project());
+    this.initProjectForm(null);
     if (this.data.actionName === "edit-email-configuration") {
       this.bindFormControlValueOnEdit();
     }
@@ -84,7 +83,7 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
-    this.initProjectForm(new Project());
+    this.initProjectForm(null);
     // api call
     this.OpenReqServ.getEmailById(this.data.emailData.id).subscribe({
       next: (response: any) => {
@@ -109,7 +108,7 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
     this.emailConfigurationForm = this.formBuilder.group({
       email: [emailConfigData ? emailConfigData.email : '', [Validators.required, Validators.email]],
       password: [emailConfigData ? emailConfigData.password : '', [Validators.required]],
-      technology: [emailConfigData ? emailConfigData.technology : '', [Validators.required]],
+      technology: [emailConfigData ? emailConfigData.technology : ''],
       userid: localStorage.getItem('userid'),
       addedBy: [emailConfigData && emailConfigData.addedBy ? emailConfigData.addedBy : localStorage.getItem('userid')],
       updatedby: [this.data.actionName === "edit-email-configuration" ? localStorage.getItem('userid') : null]
@@ -157,8 +156,8 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
           if (resp.status == 'Success') {
             dataToBeSentToSnackBar.message =
               this.data.actionName === 'add-email-configuration'
-                ? 'Email cofigurated successfully'
-                : 'Project updated successfully';
+                ? 'Email Configuration saved successfully'
+                : 'Email Configuration updated successfully';
             this.dialogRef.close();
           } else {
             this.isFormSubmitted = false;
@@ -170,8 +169,8 @@ export class AddEmailConfigurationComponent implements OnInit, OnDestroy {
           this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-project'
-              ? 'Project addition is failed'
-              : 'Project updation is failed';
+              ? 'Email Configuration addition is failed'
+              : 'Email Configuration updation is failed';
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },

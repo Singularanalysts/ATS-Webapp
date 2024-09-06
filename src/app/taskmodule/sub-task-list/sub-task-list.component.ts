@@ -15,7 +15,7 @@ import {
   ISnackBarData,
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PrivilegesService } from 'src/app/services/privileges.service';
@@ -199,14 +199,35 @@ export class SubTaskListComponent implements OnInit {
       actionName: 'add-sub-task',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '30vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
+      if (result.breakpoints[Breakpoints.XSmall]) {
+        dialogConfig.width = '80vw';
+      } else if (result.breakpoints[Breakpoints.Small]) {
+        dialogConfig.width = '70vw';
+      } else if (result.breakpoints[Breakpoints.Medium]) {
+        dialogConfig.width = '50vw';
+      } else if (result.breakpoints[Breakpoints.Large]) {
+        dialogConfig.width = '40vw';
+      } else if (result.breakpoints[Breakpoints.XLarge]) {
+        dialogConfig.width = '30vw';
+      }
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
         this.getAll();
       }
+    });
     });
   }
 
@@ -220,14 +241,36 @@ export class SubTaskListComponent implements OnInit {
       actionName: 'edit-sub-task',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '30vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.getAll();
+
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
+      if (result.breakpoints[Breakpoints.XSmall]) {
+        dialogConfig.width = '80vw';
+      } else if (result.breakpoints[Breakpoints.Small]) {
+        dialogConfig.width = '70vw';
+      } else if (result.breakpoints[Breakpoints.Medium]) {
+        dialogConfig.width = '50vw';
+      } else if (result.breakpoints[Breakpoints.Large]) {
+        dialogConfig.width = '40vw';
+      } else if (result.breakpoints[Breakpoints.XLarge]) {
+        dialogConfig.width = '30vw';
       }
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddSubTaskComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          this.getAll();
+        }
+      });
     });
   }
 
@@ -301,19 +344,19 @@ export class SubTaskListComponent implements OnInit {
       Breakpoints.Medium,
       Breakpoints.Large,
       Breakpoints.XLarge
-    ]).subscribe(result => {
-      if (result.matches) {
-        if (result.breakpoints[Breakpoints.XSmall]) {
-          dialogConfig.width = '90vw';
-        } else if (result.breakpoints[Breakpoints.Small]) {
-          dialogConfig.width = '70vw';
-        } else if (result.breakpoints[Breakpoints.Medium]) {
-          dialogConfig.width = '50vw';
-        } else if (result.breakpoints[Breakpoints.Large]) {
-          dialogConfig.width = '40vw';
-        } else if (result.breakpoints[Breakpoints.XLarge]) {
-          dialogConfig.width = '30vw';
-        }
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
+      if (result.breakpoints[Breakpoints.XSmall]) {
+        dialogConfig.width = '80vw';
+      } else if (result.breakpoints[Breakpoints.Small]) {
+        dialogConfig.width = '70vw';
+      } else if (result.breakpoints[Breakpoints.Medium]) {
+        dialogConfig.width = '50vw';
+      } else if (result.breakpoints[Breakpoints.Large]) {
+        dialogConfig.width = '40vw';
+      } else if (result.breakpoints[Breakpoints.XLarge]) {
+        dialogConfig.width = '30vw';
       }
 
       const dialogRef = this.dialogServ.openDialogWithComponent(TaskDescriptionComponent, dialogConfig);
@@ -327,7 +370,8 @@ export class SubTaskListComponent implements OnInit {
 
   openCommentsDialog(data: any) {
     const actionData = {
-      subtaskData: data
+      subtaskData: data,
+      ticketid: this.ticketId
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -339,19 +383,19 @@ export class SubTaskListComponent implements OnInit {
       Breakpoints.Medium,
       Breakpoints.Large,
       Breakpoints.XLarge
-    ]).subscribe(result => {
-      if (result.matches) {
-        if (result.breakpoints[Breakpoints.XSmall]) {
-          dialogConfig.width = '90vw';
-        } else if (result.breakpoints[Breakpoints.Small]) {
-          dialogConfig.width = '70vw';
-        } else if (result.breakpoints[Breakpoints.Medium]) {
-          dialogConfig.width = '50vw';
-        } else if (result.breakpoints[Breakpoints.Large]) {
-          dialogConfig.width = '40vw';
-        } else if (result.breakpoints[Breakpoints.XLarge]) {
-          dialogConfig.width = '30vw';
-        }
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
+      if (result.breakpoints[Breakpoints.XSmall]) {
+        dialogConfig.width = '80vw';
+      } else if (result.breakpoints[Breakpoints.Small]) {
+        dialogConfig.width = '70vw';
+      } else if (result.breakpoints[Breakpoints.Medium]) {
+        dialogConfig.width = '50vw';
+      } else if (result.breakpoints[Breakpoints.Large]) {
+        dialogConfig.width = '40vw';
+      } else if (result.breakpoints[Breakpoints.XLarge]) {
+        dialogConfig.width = '30vw';
       }
 
       const dialogRef = this.dialogServ.openDialogWithComponent(CommentsComponent, dialogConfig);

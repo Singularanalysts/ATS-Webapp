@@ -51,7 +51,7 @@ export class CommentsComponent {
   ) { }
 
   ngOnInit() {
-    this.ticketid = this.data.taskData.ticketid;
+    this.ticketid = this.data.ticketid;
     const taskId = this.data.subtaskData?.taskId || this.data.taskData?.taskid;
     this.subtaskServ.taskComments(taskId).subscribe({
       next: (response: any) => {
