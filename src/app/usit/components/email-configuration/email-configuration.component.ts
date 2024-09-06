@@ -15,6 +15,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddEmailConfigurationComponent } from './add-email-configuration/add-email-configuration.component';
 import { DialogService } from 'src/app/services/dialog.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-email-configuration',
@@ -74,6 +75,7 @@ export class EmailConfigurationComponent {
   private dialogServ = inject(DialogService);
   private openServ = inject(OpenreqService);
   message: any;
+  private breakpointObserver = inject(BreakpointObserver);
 
   constructor(private fb: FormBuilder) { }
 
@@ -399,15 +401,37 @@ export class EmailConfigurationComponent {
       actionName: 'add-email-configuration',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '25vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.checkExistingDetails();
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '80vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '35vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '25vw';
+        }
       }
-    })
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          this.checkExistingDetails();
+        }
+      });
+    });
+
   }
 
   editEmail(email: any) {
@@ -420,12 +444,34 @@ export class EmailConfigurationComponent {
     dialogConfig.width = '25vw';
     dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.checkExistingDetails();
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '80vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '35vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '25vw';
+        }
       }
-    })
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddEmailConfigurationComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          this.checkExistingDetails();
+        }
+      })
+    });
   }
 
   emailDuplicate(event: any) {

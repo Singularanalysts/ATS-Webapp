@@ -21,6 +21,7 @@ import { Project } from '../models/project.model';
 import { AddProjectComponent } from './add-project/add-project.component';
 import { ProjectService } from '../services/project.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-project-list',
@@ -89,6 +90,7 @@ export class ProjectListComponent implements OnInit {
   };
   sortField = 'updateddate';
   sortOrder = 'desc';
+  private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
@@ -134,16 +136,39 @@ export class ProjectListComponent implements OnInit {
       actionName: 'add-project',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '25vw';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'add-project';
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddProjectComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.getAll();
+
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '80vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '40vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '30vw';
+        }
       }
-    })
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddProjectComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          this.getAll();
+        }
+      });
+    });
+
   }
 
   editProject(project: Project) {
@@ -153,16 +178,38 @@ export class ProjectListComponent implements OnInit {
       actionName: 'edit-project',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '25vw';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'edit-project';
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddProjectComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.getAll();
+
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '80vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '40vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '30vw';
+        }
       }
-    })
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddProjectComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          this.getAll();
+        }
+      });
+    });
   }
 
   deleteProject(project: Project) {
