@@ -59,4 +59,8 @@ export class TaskService {
   addORUpdateTask(entity: any, action: 'edit-task' | 'add-task'){
     return action === 'edit-task' ? this.Taskupdate(entity): this.createTask(entity);
   }
+
+  taskComments(taskid: any) {
+    return this.apiServ.get(`task/trackByTask/${taskid}`);
+  }
 }
