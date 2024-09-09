@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SubtaskService } from '../services/subtask.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-comments',
@@ -33,6 +34,7 @@ export class CommentsComponent {
   comments: any;
   newComment: string = '';
   private subtaskServ = inject(SubtaskService);
+  private taskServ = inject(TaskService);
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 2500,
@@ -52,21 +54,37 @@ export class CommentsComponent {
 
   ngOnInit() {
     this.ticketid = this.data.ticketid || this.data.taskData.ticketid;
-    const taskId = this.data.subtaskData?.taskId || this.data.taskData?.taskid;
-    this.subtaskServ.taskComments(taskId).subscribe({
-      next: (response: any) => {
-        this.comments = response.data;
-      },
-      error: (err: any) => {
-        this.dataToBeSentToSnackBar.message = err.message;
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-      }
-    })
+    const taskId = this.data.taskData?.taskid;
+    const subtaskId = this.data.subtaskData?.subTaskId;
+    if(this.data.actionName === 'sub-task-comments') {
+      this.subtaskServ.subtaskComments(subtaskId).subscribe({
+        next: (response: any) => {
+          this.comments = response.data;
+        },
+        error: (err: any) => {
+          this.dataToBeSentToSnackBar.message = err.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        }
+      })
+    } else {
+      this.taskServ.taskComments(taskId).subscribe({
+        next: (response: any) => {
+          this.comments = response.data;
+        },
+        error: (err: any) => {
+          this.dataToBeSentToSnackBar.message = err.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        }
+      })
+
+    }
   }
 
-  getUserInitials(fullname: string | null) {
-    const nameParts = fullname!.split(' ');
+  getUserInitials(fullname: string) {
+  
+    const nameParts = fullname.split(' ');
 
     let initials = '';
 

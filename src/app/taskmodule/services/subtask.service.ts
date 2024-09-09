@@ -57,8 +57,8 @@ export class SubtaskService {
     return this.apiServ.post(`task/updateTask`, data);
   }
 
-  taskComments(taskid: any) {
-    return this.apiServ.get(`task/trackByTask/${taskid}`);
+  subtaskComments(subtaskid: any) {
+    return this.apiServ.get(`task/subTask/trackBySubTask/${subtaskid}`);
   }
 
   addORUpdateSubTask(entity: any, action: 'edit-sub-task' | 'add-sub-task'){
