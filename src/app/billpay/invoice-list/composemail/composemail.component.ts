@@ -107,29 +107,11 @@ export class ComposemailComponent {
     this.emailForm = this.fb.group({
       toMail: ['', [Validators.required, Validators.email]],
       subject: ['', Validators.required],
-      ccMails: [[]], // Initialize as FormControl with array type
+      ccMails: [[]],
       body: ['', Validators.required],
       attachAttachments: [false],
       attachments: this.filesControl
     });
-    console.log('Form Controls:', this.emailForm.controls);
-
-    // const emailMessage = `
-    //   Dear ${this.data.invoiceData.vendorname},<br><br>
-    //   You invoice <strong>${this.data.invoiceData.invoicenumber}</strong> will be due on <strong>${this.data.invoiceData.duedate}</strong><br>
-    //   You can view the invoice on the following link: ${this.data.invoiceData.invoicenumber}<br>
-    //   Please contact us for more information.<br>
-    //   <div><br>
-    //   <strong>Kind Regards,</strong><br>
-    //   Accounts Team,<br>
-    //   Narvee Tech Inc,<br>
-    //   1333 Corporate Dr, Suite#102,<br>
-    //   Irving, Texas, 75038.<br>
-    //   Email: accounts@narveetech.com<br>
-    //   Phone: +1 (469) 300-6363<br>
-    //   Website: https://www.narveetech.com/
-    //   </div>
-    // `;
 
     const emailMessage = `
     <div>Dear ${this.data.invoiceData.vendorName},</div><br>
@@ -156,26 +138,6 @@ export class ComposemailComponent {
     this.emailForm.get('body')!.setValue(emailMessage);
   }
 
-  // get ccMails(): FormArray {
-  //   return this.emailForm.get('ccMails') as FormArray;
-  // }
-
-  // createCcGroup(): FormGroup {
-  //   return this.fb.group({
-  //     ccMails: ['', [Validators.required, Validators.email]]
-  //   });
-  // }
-
-  // addCcField(): void {
-  //   this.ccMails.push(this.createCcGroup());
-  // }
-
-  // removeCcField(index: number): void {
-  //   if (this.ccMails.length > 1) {
-  //     this.ccMails.removeAt(index);
-  //   }
-  // }
-
   onSubmit(): void {
     if (this.emailForm.valid) {
       const formValues = this.emailForm.value;
@@ -188,19 +150,6 @@ export class ComposemailComponent {
       this.formData.append('invoiceId', this.invoiceid || '');
       this.formData.append('invoiceNumber', this.invoicenumber || '');
       this.formData.append('ccMails', formValues.ccMails || '');
-
-      // if (Array.isArray(formValues.ccMails)) {
-      //   formValues.ccMails.forEach((group: any, index: number) => {
-      //     const email = group.ccMail;
-      //     if (email) {
-      //       this.formData.append('ccMails', email);
-      //     } else {
-      //       console.warn(`ccMail at index ${index} is empty.`);
-      //     }
-      //   });
-      // } else {
-      //   console.warn('ccMails is not an array or is empty.');
-      // }
 
       const attachments = formValues.attachments;
       if (attachments && attachments.length > 0) {

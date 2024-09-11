@@ -12,7 +12,7 @@ import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { ComposemailComponent } from './composemail/composemail.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -223,7 +223,9 @@ export class InvoiceListComponent implements OnInit {
       Breakpoints.Medium,
       Breakpoints.Large,
       Breakpoints.XLarge
-    ]).subscribe(result => {
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
       if (result.matches) {
         if (result.breakpoints[Breakpoints.XSmall]) {
           dialogConfig.width = '90vw';
