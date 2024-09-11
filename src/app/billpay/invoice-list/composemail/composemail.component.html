@@ -1,0 +1,91 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{ data.title }}
+    </span>
+    <button mat-icon-button (click)="onCancel()" class="close-btn">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="card">
+    <form [formGroup]="emailForm" class="task-form">
+        <section class="form-container">
+            <mat-form-field appearance="outline">
+                <mat-label>To</mat-label>
+                <input matInput formControlName="toMail" type="email" placeholder="recipient@example.com" required />
+                <mat-error *ngIf="emailForm.get('toMail')?.hasError('required')">
+                    Recipient is required
+                </mat-error>
+                <mat-error *ngIf="emailForm.get('toMail')?.hasError('email')">
+                    Enter a valid email
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Subject</mat-label>
+                <input matInput formControlName="subject" type="text" placeholder="Subject" required />
+                <mat-error *ngIf="emailForm.get('subject')?.hasError('required')">
+                    Subject is required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>CC Emails</mat-label>
+                <mat-select formControlName="ccMails" multiple>
+                  <mat-select-trigger>
+                    {{emailForm.get('ccMails')!.value?.[0] || ''}}
+                    <span *ngIf="(emailForm.get('ccMails'))!.value?.length > 1" class="example-additional-selection">
+                      (+{{(emailForm.get('ccMails')!.value?.length || 0) - 1}} {{emailForm.get('ccMails')!.value?.length === 2 ? 'other' : 'others'}})
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let email of ccMailsList" [value]="email">{{email}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              
+
+            <!-- <ng-container formArrayName="ccMails">
+                <ng-container *ngFor="let ccControl of ccMails.controls; let i = index">
+                    <ng-container [formGroupName]="i">
+                        <div class="cc-container">
+                            <mat-form-field appearance="outline">
+                                <input matInput formControlName="ccMails" type="text" placeholder="ccMails email" required />
+                                <mat-error *ngIf="ccMails.at(i).hasError('email')">
+                                    Enter a valid email
+                                </mat-error>
+                            </mat-form-field>
+                            <button mat-icon-button (click)="removeCcField(i)" *ngIf="ccMails.controls.length > 1">
+                                <mat-icon>remove_circle</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary" (click)="addCcField()" type="button" *ngIf="i === ccMails.controls.length - 1">
+                                <mat-icon>add_circle</mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </ng-container> -->
+
+            <!-- Show "Add ccMails" button only if there are no ccMails fields -->
+            <!-- <button mat-icon-button color="primary" (click)="addCcField()" type="button" *ngIf="ccMails.controls.length === 0">
+                <mat-icon>add_circle</mat-icon>
+            </button> -->
+
+            <mat-checkbox formControlName="attachAttachments">Attach Attachments</mat-checkbox>
+
+            <ng-container *ngIf="emailForm.get('attachAttachments')?.value"> 
+                <file-upload formControlName="attachments" [multiple]="multiple" [animation]="animation"
+                    accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></file-upload>
+            </ng-container>
+
+            <div class="NgxEditor__Wrapper">
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                </ngx-editor-menu>
+                <ngx-editor [editor]="editor" formControlName="body"></ngx-editor>
+            </div>
+        </section>
+    </form>
+</mat-card>
+<div class="form-action-buttons">
+    <button mat-raised-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+        Submit
+    </button>
+</div>

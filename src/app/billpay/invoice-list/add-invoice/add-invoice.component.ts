@@ -81,7 +81,7 @@ export class AddInvoiceComponent implements OnInit {
       netterm: [invoiceData ? invoiceData.netterm : '', [Validators.required]],
       invoicedate: [invoiceData ? invoiceData.invoicedate : new Date(), [Validators.required]],
       duedate: [invoiceData ? invoiceData.duedate : '', [Validators.required]],
-      jobdescription: [invoiceData ? invoiceData.jobdescription : '', [Validators.required]],
+      expenses: [invoiceData ? invoiceData.expenses : '', [Validators.required]],
       numberofhours: [invoiceData ? invoiceData.numberofhours : '', [Validators.required]],
       hourlyrate: [invoiceData ? invoiceData.hourlyrate : '', [Validators.required]],
       tax: [invoiceData ? invoiceData.tax : ''],
@@ -236,11 +236,6 @@ export class AddInvoiceComponent implements OnInit {
       return;
     }
 
-    if (this.invoiceForm.invalid) {
-      this.invoiceForm.markAllAsTouched();
-      return;
-    }
-
     const invoiceDateFormControl = this.invoiceForm.get('invoicedate');
     const dueDateFormControl = this.invoiceForm.get('duedate');
     if (invoiceDateFormControl?.value) {
@@ -314,7 +309,6 @@ export class AddInvoiceComponent implements OnInit {
     }
   }
 
-
   submit(id: number) {
     const formData = new FormData();
 
@@ -336,7 +330,7 @@ export class AddInvoiceComponent implements OnInit {
   }
 
   selectOptionObj = {
-    jobdescription: JOBDESCRIPTION,
+    expenses: EXPENSES,
     netterm: NETTERM,
   };
 
@@ -351,7 +345,7 @@ export const NETTERM = [
   'Net 90',
 ]
 
-export const JOBDESCRIPTION = [
+export const EXPENSES = [
   'Consultation Charges For',
   'Travelling Expenses from',
 ]

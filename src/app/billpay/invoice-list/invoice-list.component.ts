@@ -15,6 +15,7 @@ import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.servi
 import { Subject, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { ComposemailComponent } from './composemail/composemail.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-invoice-list',
@@ -43,6 +44,8 @@ export class InvoiceListComponent implements OnInit {
     'Rate',
     'InvoiceValue',
     'Status',
+    'Invoice',
+    'Mail',
     'Action',
   ];
   private router = inject(Router);
@@ -63,7 +66,7 @@ export class InvoiceListComponent implements OnInit {
   showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
-
+  private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit(): void {
     this.getAll();
@@ -72,7 +75,6 @@ export class InvoiceListComponent implements OnInit {
     this.purchaseOrderServ.getAllIvoice()
       .pipe(takeUntil(this.destroyed$)).subscribe(
         (response: any) => {
-          // this.entity = response.data.content;
           this.dataSource.data = response.data;
           this.totalItems = response.data.totalElements;
           // for serial-num {}
@@ -88,6 +90,7 @@ export class InvoiceListComponent implements OnInit {
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
   }
+
   addInvoice() {
     const actionData = {
       title: 'Add Invoice',
@@ -148,19 +151,8 @@ export class InvoiceListComponent implements OnInit {
         // }
 
       })
-    }
+  }
 
-  //   deleteInvoice(invoice: any) {
-  //     const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
-  //       title: 'Confirmation',
-  //       message: 'Are you sure you want to delete?',
-  //       confirmText: 'Yes',
-  //       cancelText: 'No',
-  //       actionData: invoice,
-
-  //     }
-  //     );
-  // }
   deleteInvoice(invoice: any) {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
@@ -211,28 +203,48 @@ export class InvoiceListComponent implements OnInit {
       }
     })
   }
-  applyFilter(event: any){
+  
+  applyFilter(event: any) {
 
   }
 
-  sendEmail(invoice: any){
+  sendEmail(invoice: any) {
     const actionData = {
-      title: 'Update Invoice',
+      title: 'Email',
       invoiceData: invoice,
-      actionName: 'edit-invoice',
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '65vw';
-    dialogConfig.panelClass = 'edit-invoice';
+    dialogConfig.disableClose = false;
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(ComposemailComponent, dialogConfig);
 
-    dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.getAll();
-        // this.getAllData(this.currentPageIndex + 1);
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '90vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '40vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '30vw';
+        }
       }
-    })
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(ComposemailComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if (dialogRef.componentInstance.submitted) {
+          // this.getAll();
+        }
+      });
+    });
   }
 
   navigateToDashboard() {
