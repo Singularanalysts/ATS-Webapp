@@ -135,7 +135,7 @@ export class InvoiceListComponent implements OnInit {
 
   download(invoice: any) {
     this.purchaseOrderServ
-      .downloadInvoice(invoice.invoiceid)
+      .downloadInvoice(invoice.invoiceId)
       .subscribe(blob => {
         // if (items[1] == 'pdf' || items[1] == 'PDF') {
         var fileURL: any = URL.createObjectURL(blob);
