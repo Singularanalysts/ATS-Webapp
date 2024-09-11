@@ -389,23 +389,34 @@
       ]
     },
     {
-      "text": "Accounts & Billing",
-      "icon": "receipt_long",
+      "text": "Bill Pay",
+      "icon": "account_balance",
       "children": [
         {
-          "text": "Create PO",
-          "icon": "note_add",
-          "routerLink": "/usit/purchase-orders"
+          "text": "Purchase Orders",
+          "icon": "request_page",
+          "routerLink": "/billpay/purchase-orders"
         },
         {
-          "text": "InVoices",
-          "icon": "note_add",
-          "routerLink": "/usit/invoices"
+          "text": "Invoices",
+          "icon": "description",
+          "routerLink": "/billpay/invoices"
         },
         {
           "text": "Receipts",
-          "icon": "note_add",
-          "routerLink": "/usit/receipts"
+          "icon": "receipt",
+          "routerLink": "/billpay/receipts"
+        }
+      ]
+    },
+    {
+      "text": "Docsync",
+      "icon": "folder",
+      "children": [
+        {
+          "text": "All Files",
+          "icon": "view_list",
+          "routerLink": "/docsync/all-files"
         }
       ]
     },

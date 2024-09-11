@@ -1,0 +1,151 @@
+// @import 'ckeditor5/ckeditor5.css';
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  background: #f1f1f1;
+  z-index: 99999;
+  top: 0;
+  overflow: hidden;
+}
+
+.header-text {
+  padding-left: 2rem;
+  font-weight: 600;
+  font-size: larger;
+}
+
+.close-btn {
+  overflow: hidden !important;
+}
+
+.card {
+  margin: 0 auto;
+  padding: 16px;
+  height: max-content;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+:host ::ng-deep .ck-editor__editable_inline {
+  min-height: 300px;
+}
+
+.ckeditor-container {
+  margin-top: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.card {
+  margin: 0 auto;
+  padding: 16px;
+  height: max-content;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  // overflow-y: visible;
+}
+
+.task-form {
+  height: max-content;
+  max-height: 85vh;
+  // overflow-y: auto;
+  overflow-y: visible;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-icon-button {
+  width: auto;
+}
+
+.mat-list {
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.mat-mdc-list-item-content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.mat-mdc-form-field-infix {
+  padding-top: 0;
+}
+
+.mat-elevation-z1 {
+  box-shadow: none;
+}
+
+mat-error {
+  font-size: 12px;
+}
+
+@media screen and (max-width: 425px) {
+  .form {
+    flex-direction: column;
+  }
+
+  .card {
+    margin: 0 auto;
+    padding: 8px;
+  }
+
+  .header-container {
+    padding: 6px 28px;
+  }
+}
+
+// .form-action-buttons {
+//   margin-top: 8px;
+//   display: flex !important;
+//   justify-content: flex-end;
+//   gap: 10px;
+// }
+
+.form-action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+  background: #f1f1f1;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  gap: 10px;
+}
+
+.first-field {
+  margin-top: 4px;
+}
+
+.custom-mat-form-field {
+  display: block;
+  margin: 8px 0;
+}
+
+.custom-mat-form-field .mat-label {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.NgxEditor__Wrapper {
+  min-height: 300px;
+}

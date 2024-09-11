@@ -19,7 +19,6 @@ import { QuizListComponent } from './components/quiz/quiz-list/quiz-list.compone
 import { PrivilegeListComponent } from './components/privilege-list/privilege-list.component';
 import { QuizResultComponent } from './components/quiz/quiz-result/quiz-result.component';
 import { ClosureListComponent } from './components/sales/closure-list/closure-list.component';
-import { PurchaseOrderListComponent } from './components/accounts&billing/purchase-order-list/purchase-order-list.component';
 import { UserInfoComponent } from './components/recruitment/user-info/user-info.component';
 import { H1bImmigrationComponent } from './components/Immigration/h1b-immigration/h1b-immigration.component';
 import { FutureOptCptComponent } from './components/Immigration/future-opt-cpt/future-opt-cpt.component';
@@ -37,8 +36,6 @@ import { GlobalSearchComponent } from './components/global-search/global-search.
 import { OpenRequirementsReportsComponent } from './components/reports/open-requirements-reports/open-requirements-reports.component';
 import { MassMailingListComponent } from './components/vendor-management/mass-mailing-list/mass-mailing-list.component';
 import { EmailExtractionComponent } from './components/email-extraction/email-extraction.component';
-import { InvoiceListComponent } from './components/accounts&billing/invoice-list/invoice-list.component';
-import { ReceiptListComponent } from './components/accounts&billing/receipt-list/receipt-list.component';
 import { HotListProvidersListComponent } from './components/hot-list-providers-list/hot-list-providers-list.component';
 import { BlacklistedCompaniesListComponent } from './components/vendor-management/blacklisted-companies-list/blacklisted-companies-list.component';
 import { CurrentPrimaryVendorListComponent } from './components/vendor-management/current-primary-vendor-list/current-primary-vendor-list.component';
@@ -214,10 +211,6 @@ const routes: Routes = [
     data: { isDomClosure: true },
   },
   {
-    path: 'purchase-orders',
-    component: PurchaseOrderListComponent,
-  },
-  {
     path: 'h1b-immigartion', component: H1bImmigrationComponent,
   },
   {
@@ -266,12 +259,6 @@ const routes: Routes = [
   },
   {
     path: 'email-extraction-list', component: EmailExtractionComponent
-  },
-  {
-    path: 'invoices', component: InvoiceListComponent,
-  },
-  {
-    path: 'receipts', component: ReceiptListComponent,
   },
   {
     path: 'hot-list-providers', component: HotListProvidersListComponent,
@@ -327,26 +314,54 @@ const routes: Routes = [
   {
     path: 'candidate-reports', component: CandidateReportComponent,
   },
+  // {
+  //   path: 'tcvr', component: ClientInformationComponent,
+  // },
+  // {
+  //   path: 'sourcing', component: SourcingComponent,
+  // },
+  // {
+  //   path: 'pursuing', component: PursuingComponent,
+  // },
+  // {
+  //   path: 'onboarding', component: OnboardingComponent,
+  // },
+  // {
+  //   path: 'sourcing-closures', component: SourcingClosuresComponent,
+  // },
+  // {
+  //   path: 'change-password', component: PasswordChangeComponent,
+  // },
+  // {
+  //   path: 'email-configuration', component: EmailConfigurationComponent
+  // }
   {
-    path: 'tcvr', component: ClientInformationComponent,
+    path: 'tcvr',
+    loadComponent: () => import('../usit/components/vendor-management/client-information/client-information.component').then(m => m.ClientInformationComponent)
   },
   {
-    path: 'sourcing', component: SourcingComponent,
+    path: 'sourcing',
+    loadComponent: () => import('../usit/components/pre-sourcing/sourcing/sourcing.component').then(m => m.SourcingComponent)
   },
   {
-    path: 'pursuing', component: PursuingComponent,
+    path: 'pursuing',
+    loadComponent: () => import('../usit/components/pre-sourcing/pursuing/pursuing.component').then(m => m.PursuingComponent)
   },
   {
-    path: 'onboarding', component: OnboardingComponent,
+    path: 'onboarding',
+    loadComponent: () => import('../usit/components/pre-sourcing/onboarding/onboarding.component').then(m => m.OnboardingComponent)
   },
   {
-    path: 'sourcing-closures', component: SourcingClosuresComponent,
+    path: 'sourcing-closures',
+    loadComponent: () => import('../usit/components/pre-sourcing/sourcing-closures/sourcing-closures.component').then(m => m.SourcingClosuresComponent)
   },
   {
-    path: 'change-password', component: PasswordChangeComponent,
+    path: 'change-password',
+    loadComponent: () => import('../../app/components/password-change/password-change.component').then(m => m.PasswordChangeComponent)
   },
   {
-    path: 'email-configuration', component: EmailConfigurationComponent
+    path: 'email-configuration',
+    loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
   }
 ];
 

@@ -32,11 +32,22 @@ const routes: Routes = [
   {
     path: 'usit',
     loadChildren: () => import('./usit/usit.module').then(m => m.UsitModule),
-    canLoad: [CanLoadGuard] // add canactivate to check sign in
+    canLoad: [CanLoadGuard]
   },
   {
     path: 'task-management',
-    loadChildren: () => import('./taskmodule/task.module').then(n => n.TaskModule)
+    loadChildren: () => import('./taskmodule/task.module').then(n => n.TaskModule),
+    canLoad: [CanLoadGuard]
+  },
+  {
+    path: 'docsync',
+    loadChildren: () => import('./docsync/docsync.module').then(n => n.DocsyncModule),
+    canLoad: [CanLoadGuard]
+  },
+  {
+    path: 'billpay',
+    loadChildren: () => import('./billpay/billpay.module').then(n => n.BillpayModule),
+    canLoad: [CanLoadGuard]
   },
   {
     path: '**',

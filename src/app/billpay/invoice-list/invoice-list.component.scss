@@ -87,18 +87,19 @@ tbody {
 }
 
 .mat-column-SerialNum,
-  .mat-column-InvoiceDate,
-  .mat-column-ConsultantName,
-  .mat-column-DueDate,
-  .mat-column-invoicenumber,
-  .mat-column-Consultant,
-  .mat-column-NetTerm,
-  .mat-column-NoOfHours,
-  .mat-column-Rate,
-  .mat-column-InvoiceValue,
-  .mat-column-Status,
-  .mat-column-Action 
-{
+.mat-column-InvoiceDate,
+.mat-column-ConsultantName,
+.mat-column-DueDate,
+.mat-column-invoicenumber,
+.mat-column-Consultant,
+.mat-column-NetTerm,
+.mat-column-NoOfHours,
+.mat-column-Rate,
+.mat-column-InvoiceValue,
+.mat-column-Status,
+.mat-column-Invoice,
+.mat-column-Mail,
+.mat-column-Action {
   border-right: 1px solid lightgray;
 }
 
@@ -111,7 +112,7 @@ tbody {
   background-color: white;
   top: 0;
   overflow: hidden;
-  margin: 4px;
+  // margin: 4px;
   background-color: rgb(228, 231, 234);
 }
 
@@ -127,6 +128,7 @@ tbody {
 .purchase-order-actions {
   display: flex;
   align-items: center;
+  padding-right: 8px;
 
   .search {
     height: 32px;
@@ -275,3 +277,11 @@ ul.breadcrumb li:last-child {
 .text-right {
   text-align: right;
 }
+
+// ::ng-deep .mdc-button__ripple {
+//   top: -1px;
+//   left: -1px;
+//   bottom: -1px;
+//   right: -1px;
+//   border: solid black 1px;
+// }

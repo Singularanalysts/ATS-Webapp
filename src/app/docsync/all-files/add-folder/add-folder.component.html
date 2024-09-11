@@ -1,0 +1,32 @@
+<!-- top header container -->
+<section class="header-container">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="closeDialog()" class="close-btn">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<!-- mat-card starts -->
+<mat-card class="card">
+    <!-- form- starts -->
+    <form [formGroup]="folderForm" class="email-form">
+        <section class="form-container">
+            <!-- Email -->
+            <mat-form-field appearance="outline" class="project-name-field">
+                <mat-label>Folder Name</mat-label>
+                <input matInput formControlName="name"/>
+                <mat-error *ngIf="folderForm.get('name')!.hasError('required')">Folder Name
+                    is Required
+                </mat-error>
+            </mat-form-field>
+        </section>
+    </form>
+    <!-- form-ends -->
+</mat-card>
+<!-- mat-card-ends -->
+<!-- form-bottom action buttons -->
+<div class="form-action-buttons">
+    <button mat-raised-button class="btn-cancel" color="white" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+</div>

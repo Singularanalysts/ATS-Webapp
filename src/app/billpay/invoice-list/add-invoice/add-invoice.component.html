@@ -32,12 +32,12 @@
 
                 <mat-form-field>
                     <mat-label>Expenses</mat-label>
-                    <mat-select formControlName="jobdescription">
-                        <mat-option *ngFor="let option of selectOptionObj.jobdescription" [value]="option">
+                    <mat-select formControlName="expenses">
+                        <mat-option *ngFor="let option of selectOptionObj.expenses" [value]="option">
                             {{ option }}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('jobdescription')!.hasError('required')"> Job Description is
+                    <mat-error *ngIf="invoiceForm.get('expenses')!.hasError('required')"> Job Description is
                         required</mat-error>
                 </mat-form-field>
                 <mat-form-field>
