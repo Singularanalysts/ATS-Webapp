@@ -87,7 +87,8 @@ export class EmailConfigurationComponent {
       oldpassword: [''],
       password: [''],
       otp: [''],
-      conformpassword: ['']
+      conformpassword: [''],
+      technology: ['']
     }, { validator: this.passwordMatchValidator });
     this.checkExistingDetails();
   }
@@ -244,6 +245,7 @@ export class EmailConfigurationComponent {
     } else if (this.buttonText === 'Update') {
       const formValues = this.emailForm.value;
       formValues.id = this.emailValidationId;
+      formValues.userid = this.userid;
       this.OpenReqServ.updateConfiguredEmail(formValues).subscribe({
         next: (response: any) => {
           if (response.status === 'Success') {
