@@ -44,7 +44,7 @@ export class EmailExtractionComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'select',
-    // 'SerialNum',
+    'SerialNum',
     'To',
     'From',
     'CC',
