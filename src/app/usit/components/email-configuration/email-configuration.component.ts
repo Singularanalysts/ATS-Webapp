@@ -11,7 +11,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { AddEmailConfigurationComponent } from './add-email-configuration/add-email-configuration.component';
 import { DialogService } from 'src/app/services/dialog.service';
@@ -411,7 +411,9 @@ export class EmailConfigurationComponent {
       Breakpoints.Medium,
       Breakpoints.Large,
       Breakpoints.XLarge
-    ]).subscribe(result => {
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
       if (result.matches) {
         if (result.breakpoints[Breakpoints.XSmall]) {
           dialogConfig.width = '80vw';
@@ -452,7 +454,9 @@ export class EmailConfigurationComponent {
       Breakpoints.Medium,
       Breakpoints.Large,
       Breakpoints.XLarge
-    ]).subscribe(result => {
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
       if (result.matches) {
         if (result.breakpoints[Breakpoints.XSmall]) {
           dialogConfig.width = '80vw';
