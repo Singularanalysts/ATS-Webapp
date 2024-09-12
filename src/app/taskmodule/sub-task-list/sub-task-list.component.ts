@@ -370,7 +370,7 @@ export class SubTaskListComponent implements OnInit {
 
   openCommentsDialog(data: any) {
     const actionData = {
-      actionName : 'sub-task-comments',
+      actionName : 'add-sub-task-comments',
       subtaskData: data,
       ticketid: this.ticketId
     };

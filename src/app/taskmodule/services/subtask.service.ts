@@ -53,8 +53,8 @@ export class SubtaskService {
     return this.apiServ.get(`task/subTask/updateSubTaskStatus/${subtaskid}/${status}/${userid}`);
   }
 
-  addComments(data: any) {
-    return this.apiServ.post(`task/updateTask`, data);
+  addSubtaskComments(data: any) {
+    return this.apiServ.post(`task/subTask/updateSubTaskTrack`, data);
   }
 
   subtaskComments(subtaskid: any) {

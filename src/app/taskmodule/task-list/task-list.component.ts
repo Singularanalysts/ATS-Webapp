@@ -576,6 +576,7 @@ export class TaskListComponent implements OnInit {
   
   openCommentsDialog(data: any) {
     const actionData = {
+      actionName: 'add-task-comments',
       taskData: data
     };
     const dialogConfig = new MatDialogConfig();

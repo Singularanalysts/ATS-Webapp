@@ -63,4 +63,8 @@ export class TaskService {
   taskComments(taskid: any) {
     return this.apiServ.get(`task/trackByTask/${taskid}`);
   }
+
+  addComments(data: any) {
+    return this.apiServ.post(`task/updateTask`, data);
+  }
 }
