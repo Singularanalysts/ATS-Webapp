@@ -56,7 +56,7 @@ export class AddInvoiceComponent implements OnInit {
     this.getCompanies();
     if (this.data.actionName === "edit-invoice") {
       this.initializeInvoiceForm(this.data.invoiceData);
-      this.purchaseOrderServ.getPoDropdown(this.data.invoiceData.potype).subscribe(
+      this.purchaseOrderServ.getPoDropdown(this.data.invoiceData.poType).subscribe(
         (response: any) => {
           this.poData = response.data;
         }
@@ -71,32 +71,58 @@ export class AddInvoiceComponent implements OnInit {
   private initializeInvoiceForm(invoiceData: any) {
     this.invoiceForm = this.formBuilder.group({
       company: [invoiceData ? invoiceData.company : ''],
-      invoiceid: [invoiceData ? invoiceData.invoiceid : ''],
-      poid: [invoiceData ? invoiceData.poid : '', [Validators.required]],
-      potype: [invoiceData ? invoiceData.potype : '', [Validators.required]],
-      invoicenumber: [invoiceData ? invoiceData.invoicenumber : '', [Validators.required]],
+      invoiceid: [invoiceData ? invoiceData.invoiceId : ''],
+      poid: [invoiceData ? invoiceData.poId : '', [Validators.required]],
+      potype: [invoiceData ? invoiceData.poType : '', [Validators.required]],
+      invoicenumber: [invoiceData ? invoiceData.invoiceNumber : '', [Validators.required]],
       vendor: [invoiceData ? invoiceData.vendor : '', [Validators.required]],
       consultant: [invoiceData ? invoiceData.consultant : '', [Validators.required]],
-      additionalcharges: [invoiceData ? invoiceData.additionalcharges : ''],
-      netterm: [invoiceData ? invoiceData.netterm : '', [Validators.required]],
-      invoicedate: [invoiceData ? invoiceData.invoicedate : new Date(), [Validators.required]],
-      duedate: [invoiceData ? invoiceData.duedate : '', [Validators.required]],
+      additionalcharges: [invoiceData ? invoiceData.additionalCharges : ''],
+      netterm: [invoiceData ? invoiceData.netTerm : '', [Validators.required]],
+      invoicedate: [invoiceData ? invoiceData.invoiceDate : new Date(), [Validators.required]],
+      duedate: [invoiceData ? invoiceData.dueDate : '', [Validators.required]],
       expenses: [invoiceData ? invoiceData.expenses : '', [Validators.required]],
-      numberofhours: [invoiceData ? invoiceData.numberofhours : '', [Validators.required]],
-      hourlyrate: [invoiceData ? invoiceData.hourlyrate : '', [Validators.required]],
+      numberofhours: [invoiceData ? invoiceData.numberOfHours : '', [Validators.required]],
+      hourlyrate: [invoiceData ? invoiceData.hourlyRate : '', [Validators.required]],
       tax: [invoiceData ? invoiceData.tax : ''],
-      invoicevalue: [invoiceData ? invoiceData.invoicevalue : '', [Validators.required]],
+      invoicevalue: [invoiceData ? invoiceData.invoiceValue : '', [Validators.required]],
       remarks: [invoiceData ? invoiceData.remarks : '', [Validators.required]],
       cloudMaxnumber: [invoiceData ? invoiceData.cloudMaxnumber : ''],
       proMaxnumber: [invoiceData ? invoiceData.proMaxnumber : ''],
       singMaxnumber: [invoiceData ? invoiceData.singMaxnumber : ''],
       narveeMaxnumber: [invoiceData ? invoiceData.narveeMaxnumber : ''],
       maxnumber: [invoiceData ? invoiceData.maxnumber : ''],
-      updatedby: [this.data.actionName === "edit-purchase-order" ? localStorage.getItem('userid') : '0'],
+      updatedby: [this.data.actionName === "edit-invoice" ? localStorage.getItem('userid') : '0'],
       addedby: [invoiceData ? invoiceData.addedby : localStorage.getItem('userid')],
 
     });
+
+    // Watch for changes in 'invoicedate' and 'netterm'
+    this.invoiceForm.get('invoicedate')?.valueChanges.subscribe(() => {
+      this.calculateDueDate();
+    });
+
+    this.invoiceForm.get('netterm')?.valueChanges.subscribe(() => {
+      this.calculateDueDate();
+    });
+
   }
+
+  // Function to calculate the due date
+  calculateDueDate(): void {
+    const invoiceDate = new Date(this.invoiceForm.get('invoicedate')?.value);
+    const netTerm = this.invoiceForm.get('netterm')?.value;
+
+    if (invoiceDate && netTerm) {
+      // Add netTerm days to the invoiceDate using JavaScript's native Date object
+      const dueDate = new Date(invoiceDate);
+      dueDate.setDate(invoiceDate.getDate() + Number(netTerm));
+
+      // Update the due date in the form
+      this.invoiceForm.get('duedate')?.setValue(dueDate.toISOString().substring(0, 10)); // Format to yyyy-mm-dd
+    }
+  }
+  
   poData: any[] = [];
   flg !: any;
   onPoTypeSelect(event: MatSelectChange) {
@@ -213,7 +239,7 @@ export class AddInvoiceComponent implements OnInit {
   protected isFormSubmitted: boolean = false;
   private snackBarServ = inject(SnackBarService);
   getSaveData() {
-    if (this.data.actionName === 'edit-purchase-order') {
+    if (this.data.actionName === 'edit-invoice') {
       return { ...this.entity, ...this.invoiceForm.value }
     }
     return this.invoiceForm.value;
@@ -252,7 +278,7 @@ export class AddInvoiceComponent implements OnInit {
       .subscribe({
         next: (resp: any) => {
           if (resp.status == 'success') {
-            this.submit(resp.data.invoiceid);
+            // this.submit(resp.data.invoiceid);
             dataToBeSentToSnackBar.message =
               this.data.actionName === 'add-invoice'
                 ? 'Invoice added successfully'
@@ -277,54 +303,54 @@ export class AddInvoiceComponent implements OnInit {
         },
       });
   }
-  multifilesError: boolean = false;
-  uploadedFileNames: string[] = [];
-  uploadedfiles: string[] = []
-  multifilesFileNameLength: boolean = false;
-  @ViewChild('multifiles')
-  multifiles: any = ElementRef;
-  sum = 0;
-  onFileChange(event: any) {
-    this.uploadedFileNames = [];
-    for (var i = 0; i < event.target.files.length; i++) {
-      const file = event.target.files[i];
-      var items = file.name.split(".");
-      const str = items[0];
-      const fileSizeInKB = Math.round(file.size / 1024);
-      this.sum = this.sum + fileSizeInKB;
-      if (str.length > 20) {
-        this.multifilesFileNameLength = true;
-      }
-      if (fileSizeInKB < 4048) {
-        this.uploadedfiles.push(event.target.files[i]);
-        this.uploadedFileNames.push(file.name);
-        this.multifilesError = false;
-      }
-      else {
-        this.multifiles.nativeElement.value = "";
-        this.uploadedfiles = [];
-        this.multifilesError = true;
-        this.multifilesFileNameLength = false;
-      }
-    }
-  }
+  // multifilesError: boolean = false;
+  // uploadedFileNames: string[] = [];
+  // uploadedfiles: string[] = []
+  // multifilesFileNameLength: boolean = false;
+  // @ViewChild('multifiles')
+  // multifiles: any = ElementRef;
+  // sum = 0;
+  // onFileChange(event: any) {
+  //   this.uploadedFileNames = [];
+  //   for (var i = 0; i < event.target.files.length; i++) {
+  //     const file = event.target.files[i];
+  //     var items = file.name.split(".");
+  //     const str = items[0];
+  //     const fileSizeInKB = Math.round(file.size / 1024);
+  //     this.sum = this.sum + fileSizeInKB;
+  //     if (str.length > 20) {
+  //       this.multifilesFileNameLength = true;
+  //     }
+  //     if (fileSizeInKB < 4048) {
+  //       this.uploadedfiles.push(event.target.files[i]);
+  //       this.uploadedFileNames.push(file.name);
+  //       this.multifilesError = false;
+  //     }
+  //     else {
+  //       this.multifiles.nativeElement.value = "";
+  //       this.uploadedfiles = [];
+  //       this.multifilesError = true;
+  //       this.multifilesFileNameLength = false;
+  //     }
+  //   }
+  // }
 
-  submit(id: number) {
-    const formData = new FormData();
+  // submit(id: number) {
+  //   const formData = new FormData();
 
-    for (var i = 0; i < this.uploadedfiles.length; i++) {
-      formData.append("files", this.uploadedfiles[i]);
-    }
+  //   for (var i = 0; i < this.uploadedfiles.length; i++) {
+  //     formData.append("files", this.uploadedfiles[i]);
+  //   }
     
-    this.fileService.uploadFileBillPay(formData, id)
-      .subscribe((response: any) => {
-        if (response.status === 200) {
+  //   this.fileService.uploadFileBillPay(formData, id)
+  //     .subscribe((response: any) => {
+  //       if (response.status === 200) {
 
-        } else {
-        }
-      }
-      );
-  }
+  //       } else {
+  //       }
+  //     }
+  //     );
+  // }
   onCancel() {
     this.dialogRef.close();
   }

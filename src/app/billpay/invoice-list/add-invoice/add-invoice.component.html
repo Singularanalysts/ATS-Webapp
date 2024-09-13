@@ -1,6 +1,6 @@
 <div class="header-container mat-elevation-z1">
     <span class="header-text" mat-dialog-title>
-        {{data.title}}
+        {{ data.title }}
     </span>
     <button mat-icon-button (click)="onCancel()">
         <mat-icon>close</mat-icon>
@@ -9,25 +9,75 @@
 <mat-card class="center-card">
     <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" class="invoice-form">
         <div class="form">
-            <div class="form-column-left ">
+            <div class="form-column-left">
                 <mat-form-field>
                     <mat-label>Select PO Type</mat-label>
                     <mat-select formControlName="potype" (selectionChange)="onPoTypeSelect($event)">
                         <mat-option value="InWard">InWard</mat-option>
                         <mat-option value="OutWard">OutWard</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('potype')!.hasError('required')"> PO Type is
-                        required</mat-error>
+                    <mat-error *ngIf="invoiceForm.get('potype')!.hasError('required')">
+                        PO Type is required</mat-error>
                 </mat-form-field>
-<!--(selectionChange)="onVendorSelect($event)"-->
+
                 <mat-form-field appearance="fill">
-                    <mat-label>Select Vendor</mat-label>
-                    <mat-select formControlName="vendor" >
-                        <mat-option *ngFor="let obj of vendordata" [value]="obj[0]">
+                    <mat-label>Select Consultant</mat-label>
+                    <mat-select formControlName="consultant">
+                        <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
                             {{ obj[1] }}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('vendor')!.hasError('required')"> Vendor is required</mat-error>
+                    <mat-error *ngIf="invoiceForm.get('consultant')!.hasError('required')">
+                        Consultant is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Net Term</mat-label>
+                    <input matInput formControlName="netterm" type="number" />
+                    <span matTextPrefix style="padding-right: 10px">Net</span>
+                    <mat-error *ngIf="invoiceForm.get('netterm')!.hasError('required')">
+                        Net Term is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>No Of Hours</mat-label>
+                    <input matInput formControlName="numberofhours" (change)="calculateInvoice()" />
+                    <mat-error *ngIf="invoiceForm.get('numberofhours')!.hasError('required')">
+                        Hourly Rate is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Tax</mat-label>
+                    <input matInput formControlName="tax" (change)="calculateInvoice()" />
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-middle">
+                <mat-form-field>
+                    <mat-label>Select PO</mat-label>
+                    <mat-select formControlName="poid" (selectionChange)="onPoSelect($event)">
+                        <mat-option *ngFor="let option of poData" [value]="option[0]">
+                            {{ option[1] }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="invoiceForm.get('poid')!.hasError('required')">
+                        PO is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Invoice Number</mat-label>
+                    <input matInput formControlName="invoicenumber" maxlength="50" readonly />
+                    <mat-error *ngIf="invoiceForm.get('invoicenumber')!.hasError('required')">
+                        Invoice Value is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Due Date</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="duedate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                    <mat-error *ngIf="invoiceForm.get('duedate')!.hasError('required')">
+                        Due Date is required</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
@@ -37,159 +87,63 @@
                             {{ option }}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('expenses')!.hasError('required')"> Job Description is
-                        required</mat-error>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Tax</mat-label>
-                    <input matInput formControlName="tax" (change)="calculateInvoice()">
-                </mat-form-field>
-
-            </div>
-
-            <div class="form-column-right">
-                <mat-form-field>
-                    <mat-label>Select PO</mat-label>
-                    <mat-select formControlName="poid" (selectionChange)="onPoSelect($event)">
-                        <mat-option *ngFor="let option of poData" [value]="option[0]">
-                            {{ option[1] }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('poid')!.hasError('required')"> PO is
-                        required</mat-error>
-                </mat-form-field>
-
-                <!-- <mat-form-field>
-                    <mat-label>Select Company</mat-label>
-                    <mat-select formControlName="company" (selectionChange)="onCompanySelect($event)">
-                        <mat-option *ngFor="let option of company" [value]="option[0]">
-                            {{ option[1] }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('company')!.hasError('required')"> Company is
-                        required</mat-error>
-                </mat-form-field> -->
-
-
-                <mat-form-field appearance="fill">
-                    <mat-label>Select Net Term</mat-label>
-                    <mat-select formControlName="netterm">
-                        <mat-option *ngFor="let option of selectOptionObj.netterm" [value]="option">
-                            {{ option }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('netterm')!.hasError('required')"> Net Term is
-                        required</mat-error>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>No Of Hours</mat-label>
-                    <input matInput formControlName="numberofhours" (change)="calculateInvoice()">
-                    <mat-error *ngIf="invoiceForm.get('numberofhours')!.hasError('required')"> Hourly Rate is
-                        required</mat-error>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Invoice Value</mat-label>
-                    <input matInput formControlName="invoicevalue">
-                    <mat-error *ngIf="invoiceForm.get('invoicevalue')!.hasError('required')"> Invoice Value is
-                        required</mat-error>
-                </mat-form-field>
-            </div>
-            <div class="form-column-left11 ">
-                <mat-form-field appearance="fill">
-                    <mat-label>Select Consultant</mat-label>
-                    <mat-select formControlName="consultant">
-                        <mat-option *ngFor="let obj of consultantdata" [value]="obj[0]">
-                            {{ obj[1] }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="invoiceForm.get('consultant')!.hasError('required')"> Consultant is
-                        required</mat-error>
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-label>Invoice Date</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="invoicedate">
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                    <mat-error *ngIf="invoiceForm.get('invoicedate')!.hasError('required')"> Invoice Date is
-                        required</mat-error>
-                </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Hourly Rate</mat-label>
-                    <input matInput formControlName="hourlyrate" (change)="calculateInvoice()">
-                    <mat-error *ngIf="invoiceForm.get('hourlyrate')!.hasError('required')"> Hourly Rate is
-                        required</mat-error>
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-label>Remarks</mat-label>
-                    <input matInput formControlName="remarks">
-                    <mat-error *ngIf="invoiceForm.get('remarks')!.hasError('required')"> Remarks is required</mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="form-column-right11">
-                <mat-form-field appearance="fill">
-                    <mat-label>Invoice Number</mat-label>
-                    <input matInput formControlName="invoicenumber" maxlength="50" readonly>
-                    <mat-error *ngIf="invoiceForm.get('invoicenumber')!.hasError('required')"> Invoice Value is
-                        required</mat-error>
-                </mat-form-field>
-
-                <mat-form-field>
-                    <mat-label>Due Date</mat-label>
-                    <input matInput [matDatepicker]="picker2" formControlName="duedate">
-                    <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-                    <mat-datepicker #picker2></mat-datepicker>
-                    <mat-error *ngIf="invoiceForm.get('duedate')!.hasError('required')"> Due Date is
-                        required</mat-error>
+                    <mat-error *ngIf="invoiceForm.get('expenses')!.hasError('required')">
+                        Job Description is required</mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                     <mat-label>Additional Charges</mat-label>
-                    <input matInput formControlName="additionalcharges" (change)="calculateInvoice()">
+                    <input matInput formControlName="additionalcharges" (change)="calculateInvoice()" />
                 </mat-form-field>
-                <mat-form-field class="upload">
-                    <mat-label for="otherDocumentsUploadFile">Multiple Documents</mat-label>
-                    <div class="upload-inp-container">
-                      <input matInput multiple readonly name="otherDocumentsName" class="file-input" />
-                      <label for="otherDocumentsUploadFile" class="browse-button-label">
-                        <button type="button" mat-icon-button
-                          (click)="multifiles.click()"><mat-icon>upload_file</mat-icon></button>
-                      </label>
-                      <input type="file" id="otherDocumentsUploadFile" (change)="onFileChange($event)" multiple #multifiles
-                        name="otherDocumentsUploadFile" multiple="multiple"
-                        accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        style="display: none;" />
-                    </div>
-                    <mat-hint *ngIf="multifilesError" style="color: #f44336; font-size: 12px;">Other Documents size should be less
-                      than 4 mb</mat-hint>
-                    <mat-hint *ngIf="multifilesFileNameLength" style="color: #f44336; font-size: 12px;">File name too long, rename
-                      to 15-20 characters before upload</mat-hint>
-                  </mat-form-field>
-
-<!--
-                <mat-form-field class="upload">
-                    <mat-label for="otherDocumentsUploadFile">Multiple Documents</mat-label>
-                    <div class="upload-container">
-                        <input matInput multiple readonly name="otherDocumentsName" class="file-input">
-                        <label for="otherDocumentsUploadFile" class="browse-button-label">
-                            <button type="button" mat-icon-button
-                                (click)="multifiles.click()"><mat-icon>upload_file</mat-icon></button>
-                        </label>
-                        <input type="file" id="otherDocumentsUploadFile" (change)="onFileChange($event)" multiple
-                            #multifiles name="otherDocumentsUploadFile" multiple="multiple"
-                            accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                            style="display: none;" />
-                    </div>
+            </div>
+            <div class="form-column-right">
+                <!--(selectionChange)="onVendorSelect($event)"-->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Vendor</mat-label>
+                    <mat-select formControlName="vendor">
+                        <mat-option *ngFor="let obj of vendordata" [value]="obj[0]">
+                            {{ obj[1] }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="invoiceForm.get('vendor')!.hasError('required')">
+                        Vendor is required</mat-error>
                 </mat-form-field>
 
-            -->
+                <mat-form-field>
+                    <mat-label>Invoice Date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="invoicedate" />
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="invoiceForm.get('invoicedate')!.hasError('required')">
+                        Invoice Date is required</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Hourly Rate</mat-label>
+                    <input matInput formControlName="hourlyrate" (change)="calculateInvoice()" />
+                    <mat-error *ngIf="invoiceForm.get('hourlyrate')!.hasError('required')">
+                        Hourly Rate is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>For</mat-label>
+                    <input matInput formControlName="remarks" />
+                    <mat-error *ngIf="invoiceForm.get('remarks')!.hasError('required')">
+                        For is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Invoice Value</mat-label>
+                    <input matInput formControlName="invoicevalue" />
+                    <mat-error *ngIf="invoiceForm.get('invoicevalue')!.hasError('required')">
+                        Invoice Value is required</mat-error>
+                </mat-form-field>
             </div>
         </div>
     </form>
     <div class="form-button-right">
         <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">
+            Send add-email
+        </button>
     </div>
 </mat-card>

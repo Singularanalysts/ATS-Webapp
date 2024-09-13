@@ -77,18 +77,18 @@
                     </mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
+                <!-- <mat-form-field appearance="fill">
                     <mat-label>Margin</mat-label>
                     <mat-select formControlName="percentage" (selectionChange)="calculateMargin($event)">
                         <mat-option *ngFor="let option of selectOptionObj.margin" [value]="option">
                             {{ option }}
                         </mat-option>
                     </mat-select>
-                </mat-form-field>
+                </mat-form-field> -->
 
 
                 <mat-form-field appearance="fill">
-                    <mat-label>PayRate To Consultant</mat-label>
+                    <mat-label>Pay Rate To Consultant</mat-label>
                     <input matInput formControlName="payratetoconsultant" maxlength="60">
                 </mat-form-field>
 
@@ -134,11 +134,8 @@
 
                 <mat-form-field appearance="fill">
                     <mat-label>Select Net Term</mat-label>
-                    <mat-select formControlName="netterm">
-                        <mat-option *ngFor="let option of selectOptionObj.netterm" [value]="option">
-                            {{ option }}
-                        </mat-option>
-                    </mat-select>
+                    <input matInput formControlName="netterm" type="number">
+                    <span matTextPrefix style="padding-right: 10px;">Net</span>
                     <mat-error *ngIf="purchaseOrderForm.get('netterm')!.hasError('required')"> Net Term is
                         required</mat-error>
                 </mat-form-field>

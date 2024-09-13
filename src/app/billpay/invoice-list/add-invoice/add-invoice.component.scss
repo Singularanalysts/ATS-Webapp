@@ -1,240 +1,217 @@
-
-
 @media screen and (max-width: 768px) {
-    .responsive-list {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .responsive-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .spacer {
-        display: none;
-    }
+  .spacer {
+    display: none;
+  }
 }
 
 .form-column-left {
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .fg-div {
     width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .fg-div{
-        width: 50%;
-        display: contents;
-    }
+    display: contents;
+  }
 }
 
 .form-column-right {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    .select-role-field {
-        width: 100%;
-        display: contents;
-    }
+  .select-role-field {
+    width: 100%;
+    display: contents;
+  }
 
-    .fg-div{
-        width: 100%;
-        display: contents;
-      }
+  .fg-div {
+    width: 100%;
+    display: contents;
+  }
 }
-
 
 .form {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
+
 .form .form-column-left .mat-mdc-form-field {
-    width: 80%;
-    margin-bottom: 12px;
+  width: 80%;
+  margin-bottom: 12px;
+}
+
+.form .form-column-middle .mat-mdc-form-field {
+  width: 80%;
+  margin-bottom: 12px;
 }
 
 .form .form-column-right .mat-mdc-form-field {
-    width: 80%;
-    margin-bottom: 12px;
+  width: 80%;
+  margin-bottom: 12px;
 }
 
 .form-button {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .form-button-left {
-    width: 50%;
-    display: flex !important;
-    justify-content: flex-start;
+  width: 50%;
+  display: flex !important;
+  justify-content: flex-start;
 }
 
 .form-button-right {
-    margin-top: 8px;
-    display: flex !important;
-    justify-content: flex-end;
-    gap: 10px;
-    padding-right: 45px;
+  margin-top: 8px;
+  display: flex !important;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-right: 45px;
 }
 .mat-card {
-    max-width: 96%;
-    padding-top: 20px;
+  max-width: 96%;
+  padding-top: 20px;
 }
 
-
 .mat-icon-button {
-    width: auto;
+  width: auto;
 }
 
 .center-card {
-    margin: 0 auto;
-    padding: 16px;
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: none;
 }
 
 .invoice-form {
-    height: 75vh;
-    overflow: auto;
+  height: max-content;
+  max-height: 85vh;
+  overflow: auto;
 }
 
 .header-text {
-    padding-left: 8px;
-    font-weight: 600;
+  padding-left: 8px;
+  font-weight: 600;
 }
 
 .header-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 6px 55px;
-    justify-content: space-between;
-    height: 48px;
-    background-color: whitesmoke;
-    z-index: 99999;
-    top: 0;
-    overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 6px 55px;
+  justify-content: space-between;
+  height: 48px;
+  background-color: whitesmoke;
+  z-index: 99999;
+  top: 0;
+  overflow: hidden;
 }
 
 .header-text {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .mat-elevation-z1 {
-    box-shadow: none;
+  box-shadow: none;
 }
 
 mat-error {
-    font-size: 12px;
+  font-size: 12px;
 }
 
-
 @media screen and (max-width: 425px) {
-    .form {
-        flex-direction: column;
-    }
+  .form {
+    flex-direction: column;
+  }
 
-    .form-column-left,
-    .form-column-right {
-        width: 100%;
-    }
+  .form-column-left,
+  .form-column-right {
+    width: 100%;
+  }
 
-    .center-card {
-        margin: 0 auto;
-        padding: 8px;
-    }
+  .center-card {
+    margin: 0 auto;
+    padding: 8px;
+  }
 
-    .header-container {
-        padding: 6px 28px;
-    }
+  .header-container {
+    padding: 6px 28px;
+  }
 }
 
 /*kiran */
 
-.form-column-left11 {
+.form-column-middle {
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .fg-div {
     width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .fg-div{
-        width: 50%;
-        display: contents;
-    }
+    display: contents;
+  }
 }
-
-.form-column-right11 {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    .select-role-field {
-        width: 100%;
-        display: contents;
-    }
-
-    .fg-div{
-        width: 100%;
-        display: contents;
-      }
-}
-
 
 .form {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
-.form .form-column-left11 .mat-mdc-form-field {
-    width: 80%;
-    margin-bottom: 12px;
-}
-
-.form .form-column-right11 .mat-mdc-form-field {
-    width: 80%;
-    margin-bottom: 12px;
+.form .form-column-middle .mat-mdc-form-field {
+  width: 80%;
+  margin-bottom: 12px;
 }
 
 .form-button {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .form-button-left11 {
-    width: 50%;
-    display: flex !important;
-    justify-content: flex-start;
+  width: 50%;
+  display: flex !important;
+  justify-content: flex-start;
 }
 
 .form-button-right11 {
-    margin-top: 8px;
-    display: flex !important;
-    justify-content: flex-end;
-    gap: 10px;
-    padding-right: 45px;
+  margin-top: 8px;
+  display: flex !important;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-right: 45px;
 }
 
-
-
 @media screen and (max-width: 425px) {
-    .form {
-        flex-direction: column;
-    }
+  .form {
+    flex-direction: column;
+  }
 
-    .form-column-left11,
-    .form-column-right11 {
-        width: 100%;
-    }
+  .form-column-left11,
+  .form-column-right11 {
+    width: 100%;
+  }
 
-    .center-card {
-        margin: 0 auto;
-        padding: 8px;
-    }
+  .center-card {
+    margin: 0 auto;
+    padding: 8px;
+  }
 
-    .header-container {
-        padding: 6px 28px;
-    }
+  .header-container {
+    padding: 6px 28px;
+  }
 }
