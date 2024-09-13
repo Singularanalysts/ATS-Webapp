@@ -180,7 +180,7 @@ export class InvoiceListComponent implements OnInit {
             direction: 'above',
             panelClass: ['custom-snack-success'],
           };
-          this.purchaseOrderServ.deleteInvoice(invoice.invoiceid).pipe(takeUntil(this.destroyed$)).subscribe
+          this.purchaseOrderServ.deleteInvoice(invoice.invoiceId).pipe(takeUntil(this.destroyed$)).subscribe
             ({
               next: (resp: any) => {
                 if (resp.status == 'success') {
