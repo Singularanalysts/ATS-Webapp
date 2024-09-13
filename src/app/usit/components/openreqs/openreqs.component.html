@@ -67,12 +67,12 @@
                     </ng-container>
     
                     <!-- Visa Column mat-sort-header sortActionDescription="Sort by Visa" -->
-                    <ng-container matColumnDef="category_skill">
+                    <!-- <ng-container matColumnDef="category_skill">
                         <th mat-header-cell *matHeaderCellDef style="width: 13%">
                             Category </th>
                         <td mat-cell *matCellDef="let element"style="width: 13%">
                             {{ element?.category_skill | titlecase }} </td>
-                    </ng-container>
+                    </ng-container> -->
     
                     <!-- Experience Column  sortActionDescription="Sort by Experience"-->
                     <ng-container matColumnDef="employment_type">
@@ -99,6 +99,18 @@
                         <th mat-header-cell *matHeaderCellDef style=" width: 3% "> Job Description </th>
                         <td mat-cell *matCellDef="let element" class="jd-info" (click)="goToJobDescription(element)"  style=" width: 3% ">VIEW </td>
                     </ng-container>
+
+                    <!-- <ng-container matColumnDef="Matching">
+                        <th mat-header-cell *matHeaderCellDef style=" width: 3% "> Matching </th>
+                        <td mat-cell *matCellDef="let element">
+                            <select name="cars" id="cars">
+                                <option value="volvo">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="mercedes">Mercedes</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </td>
+                    </ng-container> -->
     
                     <!-- Source Column mat-sort-header sortActionDescription="Sort by Source"-->
                     <ng-container matColumnDef="source">

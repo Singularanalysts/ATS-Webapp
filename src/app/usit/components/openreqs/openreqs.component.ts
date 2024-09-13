@@ -40,11 +40,12 @@ export class OpenreqsComponent implements OnInit {
     'SerialNum',
     'posted_on',
     'job_title',
-    'category_skill',
+    // 'category_skill',
     'employment_type',
     'job_location',
     'vendor',
     'JobDescription',
+    // 'Matching',
     'source',
   ];
   // pagination code
@@ -79,7 +80,8 @@ export class OpenreqsComponent implements OnInit {
       { value: 'linkedin', label: 'LinkedIn' },
       { value: 'recruit.net', label: 'Recruit' },
       { value: 'techfetch', label: 'Tech Fetch' },
-      { value: 'jobsora', label: 'Jobsora' }
+      { value: 'jobsora', label: 'Jobsora' },
+      { value: 'jobdiva', label: 'Jobdiva' }
     ],
     'USA': [
       { value: 'all', label: 'All' },
@@ -89,7 +91,7 @@ export class OpenreqsComponent implements OnInit {
       { value: 'linkedin', label: 'LinkedIn' },
       { value: 'recruit.net', label: 'Recruit' },
       { value: 'techfetch', label: 'Tech Fetch' },
-      { value: 'jobsora', label: 'Jobsora' }
+      { value: 'jobdiva', label: 'Jobdiva' }
     ],
     'UAE': [
       { value: 'all', label: 'All' },

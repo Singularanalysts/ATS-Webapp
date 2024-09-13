@@ -7,7 +7,6 @@
 ul {
   padding-inline-start: 10px;
   background-color: rgb(228, 231, 234);
-  // height: 2rem;
   padding-top: 2px;
   top: 0;
 }
@@ -78,11 +77,11 @@ tbody {
 .mat-column-posted_on,
 .mat-column-source,
 .mat-column-job_title,
-.mat-column-category_skill,
 .mat-column-employment_type,
 .mat-column-job_location,
 .mat-column-vendor,
 .mat-column-end_client,
+.mat-column-Matching,
 .mat-column-JobDescription {
   border-right: 1px solid lightgray;
 }
@@ -96,7 +95,7 @@ tbody {
   background-color: white;
   top: 0;
   overflow: hidden;
-  margin: 4px;
+  // margin: 4px;
   background-color: rgb(228, 231, 234);
 }
 
@@ -112,6 +111,7 @@ tbody {
 .hot-list-actions {
   display: flex;
   align-items: center;
+  padding-right: 8px;
 
   .search {
     height: 32px;
