@@ -12,22 +12,8 @@
     <div class="form">
       <div class="form-column-left">
         <input type="hidden" formControlName="intrid" name="intrid">
-        <!-- Submission -->
 
-        <!-- <div class="fg-div">
-          <mat-form-field appearance="fill">
-            <mat-label>Select Submission</mat-label>
-            <mat-select formControlName="submission">
-              <mat-option *ngFor="let obj of submissiondata" [value]="obj[0]">
-                        {{obj[1]}} - {{obj[2]}} - {{obj[3]}} ({{obj[4]}})
-                    </mat-option>
-              <mat-option *ngFor="let obj of submissiondata" [value]="obj.subid">
-                {{obj.subdetails}}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="interviewForm.get('submission')?.hasError('required')"> Submission is Required</mat-error>
-          </mat-form-field>
-        </div> -->
+        <!-- Submission -->
         <div class="fg-div">
           <mat-form-field appearance="fill">
             <mat-label>Select Submission</mat-label>
@@ -55,6 +41,7 @@
           <mat-error *ngIf="interviewForm.get('interviewdate')!.hasError('required')"> Interview Date is
             Required</mat-error>
         </mat-form-field>
+
         <!-- interview-date time -->
         <mat-form-field appearance="fill">
           <mat-label>Interview Date & Time</mat-label>
@@ -62,6 +49,7 @@
           <mat-error *ngIf="interviewForm.get('interviewdate')!.hasError('required')"> Interview Date is
             Required</mat-error>
         </mat-form-field>
+
         <!--  Time Zone -->
         <mat-form-field appearance="fill">
           <mat-label>Select Time Zone</mat-label>
@@ -107,18 +95,6 @@
             is Required
           </mat-error>
         </mat-form-field>
-
-        <!-- Status -->
-        <!-- <mat-form-field appearance="fill">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="interviewstatus">
-                <mat-option *ngFor="let option of selectOptionObj.status" [value]="option"> {{ option }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="interviewForm.get('interviewstatus')!.hasError('required')">Status
-                is Required
-            </mat-error>
-        </mat-form-field> -->
 
         <div style="width: 80%;">
           <mat-label>Status</mat-label><br>
@@ -170,7 +146,6 @@
 
           <mat-form-field>
             <mat-label>Billing Cycle</mat-label>
-            <!-- <input type="text" matInput formControlName="billingCycle"> -->
             <mat-select formControlName="billingCycle">
               <mat-option value="Weekly">Weekly</mat-option>
               <mat-option value="BiWeekly">BiWeekly</mat-option>
@@ -222,14 +197,8 @@
 
           <mat-form-field>
             <mat-label>Payment Cycle</mat-label>
-            <mat-select formControlName="paymentCycle">
-              <mat-option *ngFor="let item of [].constructor(100); let i = index" [value]="i + 1">
-                Net {{ i + 1 }}
-              </mat-option> 
-              <!-- <mat-option *ngFor="let option of selectOptionObj.netterm" [value]="option">
-                {{ option }}
-            </mat-option> -->
-            </mat-select>
+            <input matInput formControlName="paymentCycle" type="number">
+            <span matTextPrefix style="padding-right: 10px;">Net</span>
             <mat-error *ngIf="interviewForm.get('closure.paymentCycle')!.hasError('required')"> Payment Cycle is
               Required</mat-error>
           </mat-form-field>
