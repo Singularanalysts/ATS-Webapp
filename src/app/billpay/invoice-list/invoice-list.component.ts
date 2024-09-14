@@ -16,6 +16,7 @@ import { Subject, take, takeUntil } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import { ComposemailComponent } from './composemail/composemail.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AddReceiptComponent } from '../receipt-list/add-receipt/add-receipt.component';
 
 @Component({
   selector: 'app-invoice-list',
@@ -46,7 +47,8 @@ export class InvoiceListComponent implements OnInit {
     'Status',
     'Invoice',
     'Mail',
-    'Action',
+    'Payment',
+    'Action'
   ];
   private router = inject(Router);
   private dialogServ = inject(DialogService);
@@ -247,6 +249,51 @@ export class InvoiceListComponent implements OnInit {
         }
       });
     });
+  }
+
+  pay(invoice: any) {
+    const actionData = {
+      title: 'Add Payment',
+      receiptData: null,
+      actionName: 'add-Payment',
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'add-receipt';
+    dialogConfig.data = actionData;
+
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).pipe(
+      take(1)
+    ).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          dialogConfig.width = '80vw';
+        } else if (result.breakpoints[Breakpoints.Small]) {
+          dialogConfig.width = '70vw';
+        } else if (result.breakpoints[Breakpoints.Medium]) {
+          dialogConfig.width = '60vw';
+        } else if (result.breakpoints[Breakpoints.Large]) {
+          dialogConfig.width = '50vw';
+        } else if (result.breakpoints[Breakpoints.XLarge]) {
+          dialogConfig.width = '40vw';
+        }
+      }
+
+      const dialogRef = this.dialogServ.openDialogWithComponent(AddReceiptComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(() => {
+        if(dialogRef.componentInstance.submitted){
+          //  this.getAll(this.currentPageIndex + 1);
+        }
+      });
+    });
+
+    
   }
 
   navigateToDashboard() {
