@@ -100,7 +100,6 @@ export class ComposemailComponent {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.apiServ.apiUrl)
     this.invoiceid = this.data.invoiceData.invoiceId;
     this.invoicenumber = this.data.invoiceData.invoiceNumber;
     this.editor = new Editor();
@@ -116,7 +115,7 @@ export class ComposemailComponent {
     const emailMessage = `
     <div>Dear ${this.data.invoiceData.vendorName},</div><br>
     <div>I hope this message finds you well.</div><br>
-    <div>We have prepared the following invoice for you: <strong> #${ this.data.invoiceData.invoiceNumber } </strong> <div>
+    <div>We have prepared the following invoice for you: <strong> # ${ this.data.invoiceData.invoiceNumber } </strong> <div>
     <div>
       <strong>Invoice Status: </strong> ${ this.data.invoiceData!.status}<br>
       You can view the invoice on the following link: <a href="${this.apiServ.apiUrl}billpay/invoice/downloadInvoice/${this.data.invoiceData.invoiceId}" target="_blank">${this.data.invoiceData.invoiceNumber}</a></li>

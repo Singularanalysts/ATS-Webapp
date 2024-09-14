@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, inject, Inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -13,7 +13,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { Subject, takeUntil } from 'rxjs';
-import { FileManagementService } from 'src/app/usit/services/file-management.service';
 
 @Component({
   selector: 'app-add-invoice',
@@ -35,7 +34,6 @@ import { FileManagementService } from 'src/app/usit/services/file-management.ser
   styleUrls: ['./add-invoice.component.scss']
 })
 export class AddInvoiceComponent implements OnInit {
-  private fileService = inject(FileManagementService);
   company: any = [];
   vendordata: any = [];
   consultantdata: any[] = [];
@@ -50,7 +48,7 @@ export class AddInvoiceComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddInvoiceComponent>
   ) { }
-  // invoiceNumber = 
+
   invoiceData !:any;
   ngOnInit(): void {
     this.getCompanies();
@@ -71,7 +69,7 @@ export class AddInvoiceComponent implements OnInit {
   private initializeInvoiceForm(invoiceData: any) {
     this.invoiceForm = this.formBuilder.group({
       company: [invoiceData ? invoiceData.company : ''],
-      invoiceid: [invoiceData ? invoiceData.invoiceId : ''],
+      invId: [invoiceData ? invoiceData.invoiceId : ''],
       poid: [invoiceData ? invoiceData.poId : '', [Validators.required]],
       potype: [invoiceData ? invoiceData.poType : '', [Validators.required]],
       invoicenumber: [invoiceData ? invoiceData.invoiceNumber : '', [Validators.required]],
@@ -87,17 +85,11 @@ export class AddInvoiceComponent implements OnInit {
       tax: [invoiceData ? invoiceData.tax : ''],
       invoicevalue: [invoiceData ? invoiceData.invoiceValue : '', [Validators.required]],
       remarks: [invoiceData ? invoiceData.remarks : '', [Validators.required]],
-      cloudMaxnumber: [invoiceData ? invoiceData.cloudMaxnumber : ''],
-      proMaxnumber: [invoiceData ? invoiceData.proMaxnumber : ''],
-      singMaxnumber: [invoiceData ? invoiceData.singMaxnumber : ''],
-      narveeMaxnumber: [invoiceData ? invoiceData.narveeMaxnumber : ''],
-      maxnumber: [invoiceData ? invoiceData.maxnumber : ''],
       updatedby: [this.data.actionName === "edit-invoice" ? localStorage.getItem('userid') : '0'],
       addedby: [invoiceData ? invoiceData.addedby : localStorage.getItem('userid')],
 
     });
 
-    // Watch for changes in 'invoicedate' and 'netterm'
     this.invoiceForm.get('invoicedate')?.valueChanges.subscribe(() => {
       this.calculateDueDate();
     });
@@ -108,17 +100,14 @@ export class AddInvoiceComponent implements OnInit {
 
   }
 
-  // Function to calculate the due date
   calculateDueDate(): void {
     const invoiceDate = new Date(this.invoiceForm.get('invoicedate')?.value);
     const netTerm = this.invoiceForm.get('netterm')?.value;
 
     if (invoiceDate && netTerm) {
-      // Add netTerm days to the invoiceDate using JavaScript's native Date object
       const dueDate = new Date(invoiceDate);
       dueDate.setDate(invoiceDate.getDate() + Number(netTerm));
 
-      // Update the due date in the form
       this.invoiceForm.get('duedate')?.setValue(dueDate.toISOString().substring(0, 10)); // Format to yyyy-mm-dd
     }
   }
@@ -129,11 +118,9 @@ export class AddInvoiceComponent implements OnInit {
     if (event.value == "OutWard") {
       this.flg = "OutWard"
       this.poTypeSelected = 'Recruiting';
-      // this.recruitingFlag = true;
     } else {
       this.poTypeSelected = 'Sales';
       this.flg = "InWard"
-      //this.recruitingFlag = false;
     }
 
     this.purchaseOrderServ.getPoDropdown(this.flg).subscribe(
@@ -146,7 +133,6 @@ export class AddInvoiceComponent implements OnInit {
   onPoSelect(event: MatSelectChange) {
     this.purchaseOrderServ.getPoById(event.value).subscribe(
       (response: any) => {
-        //this.poData = response.data;
         this.getConsultant(response.data);
         this.getVendorcompanies(response.data);
         this.invoiceForm.get("hourlyrate")?.setValue(response.data.hourlyrate)
@@ -156,7 +142,6 @@ export class AddInvoiceComponent implements OnInit {
     )
   }
   getConsultant(data: any) {
-    // this.resetVendorFormFields();
     this.purchaseOrderServ.getConsultantData(data.vendor, data.consultant).subscribe(
       (response: any) => {
         this.consultantdata = response.data;
@@ -166,14 +151,12 @@ export class AddInvoiceComponent implements OnInit {
   }
 
   getVendorcompanies(data: any) {
-    // if (this.poTypeSelected && this.companySelected) {
     this.purchaseOrderServ.getVendorsPO(data.consultant, data.vendor).subscribe(
       (response: any) => {
         this.vendordata = response.data;
         this.invoiceForm.get("vendor")?.setValue(data.vendor)
       }
     )
-    // }
   }
   getCompanies() {
     this.purchaseOrderServ.getCompanies().subscribe((response: any) => {
@@ -185,20 +168,6 @@ export class AddInvoiceComponent implements OnInit {
       const companyName = selectedCompany[1];
     this.purchaseOrderServ.getInvoiceNumber(companyName).subscribe((response: any) => {
       this.invoiceForm.get("invoicenumber")?.setValue(response.data[0]);
-
-      if (companyName == 'Narvee') {
-        this.invoiceForm.get("narveeMaxnumber")?.setValue(response.data[1]);
-      }
-      else if (companyName == 'Singular') {
-        this.invoiceForm.get("singMaxnumber")?.setValue(response.data[1]);
-      }
-
-      else if (companyName == 'ProBPM') {
-        this.invoiceForm.get("proMaxnumber")?.setValue(response.data[1]);
-      }
-      else {
-        this.invoiceForm.get("cloudMaxnumber")?.setValue(response.data[1]);
-      }
     });
 
   }
@@ -223,26 +192,32 @@ export class AddInvoiceComponent implements OnInit {
       this.tax = 0;
     }
 
-    // Calculate additional charges
     this.otherCharges = this.additionalCharges + this.tax;
-
-    // Calculate actual invoice value
     this.invoiceActualValue = this.hourlyRate * this.numberOfHours;
-
-    // Calculate total invoice value
     this.totalValue = this.invoiceActualValue + this.otherCharges;
-
-    // Set total value in form
     this.invoiceForm.get('invoicevalue')?.setValue(this.totalValue);
   }
   entity !: any;
   protected isFormSubmitted: boolean = false;
   private snackBarServ = inject(SnackBarService);
   getSaveData() {
+    const formValue = this.invoiceForm.value;
     if (this.data.actionName === 'edit-invoice') {
-      return { ...this.entity, ...this.invoiceForm.value }
+      return {
+        ...this.entity,
+        ...formValue,
+        purchaseOrder: {
+          poid: formValue.poid
+        },
+        poid: undefined
+      };
     }
-    return this.invoiceForm.value;
+    return {
+      ...formValue,
+      purchaseOrder: {
+        poid: formValue.poid
+      },
+      poid: undefined};
   }
   private destroyed$ = new Subject<void>();
   submitted = false;
@@ -292,7 +267,7 @@ export class AddInvoiceComponent implements OnInit {
           }
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
-        error: (err: any) => {
+        error: () => {
           this.isFormSubmitted = false;
           dataToBeSentToSnackBar.message =
             this.data.actionName === 'add-invoice'

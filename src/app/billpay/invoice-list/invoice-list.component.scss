@@ -4,38 +4,6 @@
   height: calc(100vh - 68px);
 }
 
-ul {
-  padding-inline-start: 10px;
-  background-color: rgb(228, 231, 234);
-  height: 2rem;
-  padding-top: 8PX;
-  top: 0;
-}
-
-ul.breadcrumb {
-  list-style: none;
-}
-
-ul.breadcrumb li {
-  display: inline;
-}
-
-ul.breadcrumb li+li:before {
-  color: black;
-  content: "/\00a0";
-}
-
-ul.breadcrumb li a {
-  color: #0275d8;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-ul.breadcrumb li a:hover {
-  color: #01447e;
-  text-decoration: underline;
-}
-
 .table-wrapper {
   flex: 1;
   width: 100%;
@@ -65,9 +33,6 @@ tbody {
   color: #1a1717;
 }
 
-// .mat-mdc-row  {
-//   height: 48px !important;
-// }
 .mat-mdc-column {
   border-right: 1px solid currentColor;
 }
@@ -76,14 +41,10 @@ tbody {
   width: 32px;
   border-right: 1px solid lightgray;
   padding-right: 24px;
-
 }
 
 .mat-column-Name {
-
   border-right: 1px solid lightgray;
-
-
 }
 
 .mat-column-SerialNum,
@@ -99,6 +60,7 @@ tbody {
 .mat-column-Status,
 .mat-column-Invoice,
 .mat-column-Mail,
+.mat-column-Payment,
 .mat-column-Action {
   border-right: 1px solid lightgray;
 }
@@ -112,7 +74,6 @@ tbody {
   background-color: white;
   top: 0;
   overflow: hidden;
-  // margin: 4px;
   background-color: rgb(228, 231, 234);
 }
 
@@ -137,9 +98,7 @@ tbody {
 }
 
 .purchase-order-table-style {
-  // padding: 0 2px;
   width: 100%;
-  // max-height: calc(100% - 2px);
   overflow: auto;
   display: block;
 }
@@ -161,7 +120,6 @@ tbody {
   margin-top: 64px;
 }
 
-
 .responsive-table {
   width: 100%;
 }
@@ -178,7 +136,6 @@ tbody {
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-
   .mdc-data-table__cell,
   .mdc-data-table__header-cell {
     padding: 0px 2px;
@@ -213,14 +170,6 @@ tbody {
   display: flex;
   column-gap: 5px;
 }
-
-// @media screen and (min-width: 1400px) {
-//   .vendor-table-style {
-//     width: 100%;
-//     height: calc(100% - 0px);
-//     overflow: auto;
-//   }
-// }
 
 .recruiting-companies {
   color: #f44336;
@@ -269,7 +218,8 @@ ul.breadcrumb li:last-child {
   pointer-events: none;
 }
 
-.consultant-name, .employeer-name {
+.consultant-name,
+.employeer-name {
   cursor: pointer;
   color: #0275d8;
 }
@@ -277,11 +227,3 @@ ul.breadcrumb li:last-child {
 .text-right {
   text-align: right;
 }
-
-// ::ng-deep .mdc-button__ripple {
-//   top: -1px;
-//   left: -1px;
-//   bottom: -1px;
-//   right: -1px;
-//   border: solid black 1px;
-// }
