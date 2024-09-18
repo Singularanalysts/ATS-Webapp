@@ -78,8 +78,6 @@ export class AddPurchaseOrderComponent {
 
   ngOnInit(): void {
     this.getCompanies();
-   // this.initializePurchaseOrderForm(null);
-
     if (this.data.actionName === "edit-purchase-order") {
       this.initializePurchaseOrderForm(this.data.purchaseOrderData);
       this.companySelected = this.data.purchaseOrderData.company
@@ -120,7 +118,6 @@ export class AddPurchaseOrderComponent {
       consultant: [purchaseOrderData ? purchaseOrderData.consultant : '', [Validators.required]],
       endclient: [purchaseOrderData ? purchaseOrderData.endclient : '', [Validators.required]],
       implpartner: [purchaseOrderData ? purchaseOrderData.implpartner : ''],
-
       projstartdate: [purchaseOrderData ? purchaseOrderData.projstartdate : '', [Validators.required]],
       projenddate: [purchaseOrderData ? purchaseOrderData.projenddate : ''],
       duration: [purchaseOrderData ? purchaseOrderData.duration : '', [Validators.required]],
@@ -129,29 +126,22 @@ export class AddPurchaseOrderComponent {
       recname: [purchaseOrderData ? purchaseOrderData.recname : ''],
       recemail: [purchaseOrderData ? purchaseOrderData.recemail : ''],
       recnumber: [purchaseOrderData ? purchaseOrderData.recnumber : ''],
-      ///addedby: [this.data.actionName === "edit-interview" ? interviewData?.users : localStorage.getItem('userid')],
       updatedby: [this.data.actionName === "edit-purchase-order" ? localStorage.getItem('userid') : '0'],
       addedby: [purchaseOrderData ? purchaseOrderData.addedby : localStorage.getItem('userid')],
       acrname: [purchaseOrderData ? purchaseOrderData.acrname : '', [Validators.required]],
       acrmail: [purchaseOrderData ? purchaseOrderData.acrmail : '', [Validators.required]],
       acrno: [purchaseOrderData ? purchaseOrderData.acrno : '', [Validators.required]],
-      percentage: [purchaseOrderData ? purchaseOrderData.percentage : '', [Validators.required]],
       payratetoconsultant: [purchaseOrderData ? purchaseOrderData.payratetoconsultant : '', [Validators.required]],
       acpname: [purchaseOrderData ? purchaseOrderData.acpname : ''],
       acpmail: [purchaseOrderData ? purchaseOrderData.acpmail : ''],
       acpno: [purchaseOrderData ? purchaseOrderData.acpno : ''],
-
-
       hourlyrate: [purchaseOrderData ? purchaseOrderData.hourlyrate : '', [Validators.required]],
-
       // hourlyrate: this.flg === 'OutWard' ?
       // this.formBuilder.control(purchaseOrderData && purchaseOrderData.billratevendor ? purchaseOrderData.billratevendor : '') :
       // null,
-
     });
 
     this.purchaseOrderForm.get('potype').valueChanges.subscribe((res: any) => {
-
       const acpname = this.purchaseOrderForm.get('acpname');
       const acpmail = this.purchaseOrderForm.get('acpmail');
       const acpno = this.purchaseOrderForm.get('acpno');
@@ -171,6 +161,7 @@ export class AddPurchaseOrderComponent {
       acpno.updateValueAndValidity();
     })
   }
+
   flg !: any;
   onPoTypeSelect(event: MatSelectChange) {
     if (event.value == "OutWard") {
@@ -191,7 +182,7 @@ export class AddPurchaseOrderComponent {
   consultantAmount!: number;
   vendorAMount!: number;
   calculateMargin(event: MatSelectChange) {
-    this.hourlyRate = parseFloat(this.purchaseOrderForm.get('hourlyrate').value);// this.purchaseOrderForm.get('hourlyrate');
+    this.hourlyRate = parseFloat(this.purchaseOrderForm.get('hourlyrate').value);
     this.percentage = event.value;
     this.consultantPercentage = 100 - this.percentage;
     this.consultantAmount = this.hourlyRate * this.consultantPercentage / 100;
@@ -303,7 +294,6 @@ export class AddPurchaseOrderComponent {
     )
   }
 
-  // flg = true;
   msaError: boolean = false;
   msaFileNameLength: boolean = false;
   poError: boolean = false;
@@ -331,7 +321,6 @@ export class AddPurchaseOrderComponent {
     }
   }
 
-
   @ViewChild('po') po: any = ElementRef;
   poUpload!: any;
   uploadPo(event: any) {
@@ -353,6 +342,7 @@ export class AddPurchaseOrderComponent {
       this.flg = true;
     }
   }
+
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 2500,
@@ -361,12 +351,14 @@ export class AddPurchaseOrderComponent {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+
   getSaveData() {
     if (this.data.actionName === 'edit-purchase-order') {
       return { ...this.entity, ...this.purchaseOrderForm.value }
     }
     return this.purchaseOrderForm.value;
   }
+
   submitted = false;
   onSubmit() {
     this.submitted = true;
@@ -423,8 +415,6 @@ export class AddPurchaseOrderComponent {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
-
-
   }
 
   onFileSubmit(id: number) {
@@ -432,51 +422,29 @@ export class AddPurchaseOrderComponent {
 
     if (this.msaupload != null) {
       formData.append('msa', this.msaupload, this.msaupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
     if (this.poUpload != null) {
       formData.append('po', this.poUpload, this.poUpload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
     }
 
     if (this.poUpload != null || this.msaupload != null) {
-    //upload
-    this.fileService
-      .poFilesUpload(formData, id)
-      .subscribe((response: any) => {
-        if (response.status === 200) {
-        } else {
-          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          this.dataToBeSentToSnackBar.message = 'File upload failed';
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataToBeSentToSnackBar
-          );
-        }
-      });
+      this.fileService
+        .poFilesUpload(formData, id)
+        .subscribe((response: any) => {
+          if (response.status === 200) {
+          } else {
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            this.dataToBeSentToSnackBar.message = 'File upload failed';
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          }
+        });
     }
   }
 
   onCancel() {
     this.dialogRef.close();
   }
-  selectOptionObj = {
-    margin: MARGIN,
-    netterm: NETTERM,
-  };
-
-
 }
-
-export const MARGIN = [
-  '20',
-  '30',
-]
-
-export const NETTERM = [
-  'Net 15',
-  'Net 30',
-  'Net 45',
-  'Net 60',
-  'Net 90',
-]

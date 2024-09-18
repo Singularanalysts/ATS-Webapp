@@ -10,6 +10,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ReceiptService } from '../../services/receipt.service';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-add-receipt',
@@ -24,7 +29,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSelectModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTableModule
   ],
   templateUrl: './add-receipt.component.html',
   styleUrls: ['./add-receipt.component.scss']
@@ -32,6 +38,35 @@ import { MatNativeDateModule } from '@angular/material/core';
 export class AddReceiptComponent {
   receiptForm!: FormGroup;
   private formBuilder = inject(FormBuilder);
+  private receiptServ = inject(ReceiptService);
+  private snackBarServ = inject(SnackBarService);
+  protected isFormSubmitted: boolean = false;
+  private destroyed$ = new Subject<void>();
+  dataToBeSentToSnackBar: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+  entity: any;
+  dataSource = new MatTableDataSource<any>([]);
+  dataTableColumns: string[] = [
+    // 'SerialNum',
+    // 'invoicenumber',
+    // 'InvoiceDate',
+    // 'DueDate',
+    // 'Consultant',
+    // 'NetTerm',
+    // 'NoOfHours',
+    // 'Rate',
+    // 'InvoiceValue',
+    // 'Status',
+    // 'Invoice',
+    // 'Action'
+  ];
+  invoiceId: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
@@ -39,23 +74,35 @@ export class AddReceiptComponent {
   ) {}
 
   ngOnInit(): void {
+    this.invoiceId = this.data.receiptData.invoiceId
     this.initializeReceiptForm(null);
+    this.getPayments(this.invoiceId);
   }
 
   private initializeReceiptForm(receiptData: any) {
     this.receiptForm = this.formBuilder.group({
-      serialno: [receiptData ? receiptData.serialno : '', [Validators.required]],
-      amount: [receiptData ? receiptData.amount : '', [Validators.required]],
-      transactiontype: [receiptData ? receiptData.transactiontype : '', [Validators.required]],
-      chequeno: [receiptData ? receiptData.chequeno : '', [Validators.required]],
-      chequedate: [receiptData ? receiptData.chequedate : '', [Validators.required]],
-      bankname: [receiptData ? receiptData.bankname : '', [Validators.required]],
-      onlineid: [receiptData ? receiptData.onlineid : '', [Validators.required]],
-      remarks: [receiptData ? receiptData.remarks : '', [Validators.required]],
-      vendor: [receiptData ? receiptData.vendor : '', [Validators.required]],
-      invoiceid: [receiptData ? receiptData.invoiceid : '', [Validators.required]],
-      bank: [receiptData ? receiptData.bank : '', [Validators.required]],
+      invId: [receiptData ? receiptData.invoiceid : this.invoiceId],
+      paymentId: [receiptData ? receiptData.paymentId : ''],
+      paymentDate: [receiptData ? receiptData.paymentDate : '', [Validators.required]],
+      amountReceived: [receiptData ? receiptData.amountReceived : '', [Validators.required]],
+      paymentMode: [receiptData ? receiptData.paymentMode : '', [Validators.required]],
+      chequeNumber: [receiptData ? receiptData.chequeNumber : ''],
+      chequeDate: [receiptData ? receiptData.chequeDate : ''],
+      remarks: [receiptData ? receiptData.remarks : ''],
+      addedby: [receiptData ? receiptData.addedby : localStorage.getItem('userid')],
+      updatedby: [this.data.actionName === "edit-receipt" ? localStorage.getItem('userid') : '0'],
     });
+  }
+
+  getPayments(id: any) {
+    return this.receiptServ.getReceiptsByInvoiceId(id).subscribe({
+      next: (resp: any) => {
+        console.log(resp)
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
   }
 
   onSubmit() {
@@ -63,6 +110,56 @@ export class AddReceiptComponent {
       this.receiptForm.markAllAsTouched();
       return;
     }
+    const saveReqObj = this.getSaveData();
+    this.receiptServ
+      .addORUpdateReceipt(saveReqObj, this.data.actionName)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (resp: any) => {
+          if (resp.status == 'success') {
+            this.dataToBeSentToSnackBar.message =
+              this.data.actionName === 'add-receipt'
+                ? 'Payment added successfully'
+                : 'Payment updated successfully';
+            this.dialogRef.close();
+          } else {
+            this.isFormSubmitted = false;
+            this.dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Transaction Failed';
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          }
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        },
+        error: (err: any) => {
+          this.isFormSubmitted = false;
+          this.dataToBeSentToSnackBar.message =
+            this.data.actionName === 'add-receipt'
+              ? 'Payment addition is failed'
+              : 'Payment updation is failed';
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        },
+      });
+  }
+
+  getSaveData() {
+    const formValue = this.receiptForm.value;
+    if (this.data.actionName === 'edit-receipt') {
+      return {
+        ...this.entity,
+        ...formValue,
+      };
+    }
+    return {
+      ...formValue
+    };
+  }
+
+  editReceipt(receipt: any){
+
+  }
+
+  deleteReceipt(receipt: any){
+    
   }
 
   onCancel() {

@@ -100,10 +100,8 @@
     align-items: center;
     justify-content: space-between;
     height: 48px;
-    background-color: white;
     top: 0;
     overflow: hidden;
-    margin: 4px;
     background-color: rgb(228, 231, 234);
   }
   
@@ -119,6 +117,7 @@
   .receipt-actions {
     display: flex;
     align-items: center;
+    padding-right: 8px;
   
     .search {
       height: 32px;

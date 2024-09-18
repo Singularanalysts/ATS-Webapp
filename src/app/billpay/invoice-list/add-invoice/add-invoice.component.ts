@@ -200,6 +200,7 @@ export class AddInvoiceComponent implements OnInit {
   entity !: any;
   protected isFormSubmitted: boolean = false;
   private snackBarServ = inject(SnackBarService);
+
   getSaveData() {
     const formValue = this.invoiceForm.value;
     if (this.data.actionName === 'edit-invoice') {
@@ -217,8 +218,10 @@ export class AddInvoiceComponent implements OnInit {
       purchaseOrder: {
         poid: formValue.poid
       },
-      poid: undefined};
+      poid: undefined
+    };
   }
+
   private destroyed$ = new Subject<void>();
   submitted = false;
   onSubmit() {
