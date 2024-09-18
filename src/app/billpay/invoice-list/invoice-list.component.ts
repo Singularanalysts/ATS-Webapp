@@ -254,7 +254,7 @@ export class InvoiceListComponent implements OnInit {
   pay(invoice: any) {
     const actionData = {
       title: 'Add Payment',
-      receiptData: null,
+      receiptData: invoice,
       actionName: 'add-Payment',
     };
     const dialogConfig = new MatDialogConfig();
