@@ -1,0 +1,183 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    z-index: 99999;
+    overflow: hidden;
+    background-color: rgb(228, 231, 234);
+}
+
+.close-btn {
+    overflow: hidden !important;
+}
+
+.header-text {
+    padding-left: 1.3rem;
+    font-weight: 600;
+    font-size: larger;
+}
+
+.center-card {
+    margin: 0 auto;
+    padding: 16px;
+    height: max-content;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.vendor-form {
+    width: 100%;
+    height: max-content;
+    max-height: 75vh;
+    overflow: auto;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.form-column-left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-column-right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form .form-column-left .mat-mdc-form-field {
+    width: 80%;
+    margin-bottom: 12px;
+}
+
+.form .form-column-right .mat-mdc-form-field {
+    width: 80%;
+    margin-bottom: 12px;
+}
+
+.form-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.form-button-left {
+    width: 50%;
+    display: flex !important;
+    justify-content: flex-start;
+}
+
+.form-button-right {
+    margin-top: 8px;
+    display: flex !important;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-right: 45px;
+}
+
+#table-container {
+    padding: 0px 8px 4px 8px;
+}
+
+table-wrapper {
+    flex: 1;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-mdc-header-row {
+    background-color: rgb(213, 231, 231);
+    position: sticky;
+    top: 0;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+}
+
+tbody {
+    text-align: left;
+}
+
+.mat-sort-header-arrow {
+    color: #1a1717;
+}
+
+.mat-mdc-column {
+    border-right: 1px solid currentColor;
+}
+
+.mat-column-Designation {
+    width: 32px;
+    border-right: 1px solid lightgray;
+    padding-right: 24px;
+}
+
+.mat-column-Name {
+    border-right: 1px solid lightgray;
+}
+
+.mat-column-SerialNum,
+.mat-column-consultantName,
+.mat-column-Status,
+.mat-column-Comment,
+.mat-column-CommentedBy,
+.mat-column-CommentedDate {
+    border-right: 1px solid lightgray;
+}
+
+.job-apply-comments-table-style {
+    width: 100%;
+    overflow: auto;
+    display: block;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+    padding: 0 4px 0 4px;
+}
+
+.mat-mdc-header-row {
+    z-index: 1000;
+}
+
+.mat-mdc-header-row {
+    height: 30px !important;
+}
+
+.mat-mdc-row {
+    height: 30px !important;
+}
+
+.comment-text {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    cursor: pointer;
+  }
+
+.no-data-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 64px;
+}

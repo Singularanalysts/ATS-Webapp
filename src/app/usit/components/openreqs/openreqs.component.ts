@@ -8,12 +8,17 @@ import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/materi
 import { OpenreqService } from '../../services/openreq.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { RecruInfoComponent } from './recru-info/recru-info.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { JobDescriptionComponent } from './job-description/job-description.component';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatchProfileJobDescriptionComponent } from './match-profile-job-description/match-profile-job-description.component';
+import { JobApplicationCommentsComponent } from './job-application-comments/job-application-comments.component';
 
 @Component({
   selector: 'app-openreqs',
@@ -28,7 +33,10 @@ import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
     MatFormFieldModule,
     MatSelectModule,
     MatDialogModule,
-    MatTabsModule
+    MatTabsModule,
+    MatInputModule,
+    FormsModule,
+    MatAutocompleteModule
   ],
   templateUrl: './openreqs.component.html',
   styleUrls: ['./openreqs.component.scss'],
@@ -40,11 +48,12 @@ export class OpenreqsComponent implements OnInit {
     'SerialNum',
     'posted_on',
     'job_title',
-    // 'category_skill',
+    'category_skill',
     'employment_type',
     'job_location',
     'vendor',
     'JobDescription',
+    'Comments',
     // 'Matching',
     'source',
   ];
@@ -68,7 +77,9 @@ export class OpenreqsComponent implements OnInit {
 
   private service = inject(OpenreqService);
   userid!: any;
-  dialog: any;
+  vendordialog: any;
+  private dialog = inject(MatDialog);
+  
   private dialogServ = inject(DialogService);
   currentOptions: { value: string, label: string }[] = [];
   tabOptions = {
@@ -101,6 +112,8 @@ export class OpenreqsComponent implements OnInit {
       { value: 'jobsora', label: 'Jobsora' }
     ]
   };
+  consultantData: any[] = [];
+  searchText: string = '';
 
   constructor() {
     this.currentOptions = this.tabOptions['All'];
@@ -124,13 +137,12 @@ export class OpenreqsComponent implements OnInit {
   }
   
   openVendorPopup(vendor: string): void {
-    this.dialog.open({
+    this.vendordialog.open({
       data: { vendor: vendor }
     });
   }
 
   goToReqInfo(element: any) {
-
     const actionData = {
       title: `${element.vendor}`,
       id: element.vendor,
@@ -243,6 +255,17 @@ export class OpenreqsComponent implements OnInit {
     );
   }
 
+  matching(job: any) {
+    console.log(job);
+    this.dialog.open(MatchProfileJobDescriptionComponent, {
+      width: '60vw',
+      data: {
+        title: job.job_title,
+        jobData: job
+      },
+    });
+  }
+
   onTabChanged(event: MatTabChangeEvent) {
     this.status = event.tab.textLabel.toLowerCase();
     const selectedTab = this.tabs[event.index] as 'All' | 'USA' | 'UAE';
@@ -257,6 +280,16 @@ export class OpenreqsComponent implements OnInit {
     }
     const date = new Date(dateString);
     return !isNaN(date.getTime());
+  }
+
+  jobComments(job: any) {
+    this.dialog.open(JobApplicationCommentsComponent, {
+      width: '60vw',
+      data: {
+        title: job.job_title,
+        jobData: job
+      },
+    });
   }
   
 }
