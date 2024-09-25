@@ -1,0 +1,44 @@
+<section class="header-container" id="mainHeader">
+  <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+    {{data.title}}
+  </span>
+  <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
+    <mat-icon>close</mat-icon>
+  </button>
+</section>
+<mat-card class="card mat-elevation-z8">
+  <mat-card-content class="card-content">
+    <div class="info-container">
+      <mat-form-field appearance="fill">
+        <mat-label>Select Consultant</mat-label>
+        <input matInput [formControl]="searchControl" [matAutocomplete]="consultantAutoCmp">
+        <mat-autocomplete #consultantAutoCmp="matAutocomplete">
+          <mat-option *ngFor="let option of (searchConsultantOptions$ | async)" [value]="option.consultantname"
+            [attr.data-consultantid]="option.consultantid">
+            {{ option.consultantname }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <div class="button-container">
+        <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="searchControl.invalid">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <div class="chips-textarea-container">
+      <div class="chips-textarea">
+        <!-- <span *ngFor="let chip of responseChips1" class="chip">
+          {{ chip }}
+        </span> -->
+      </div>
+  
+      <div class="chips-textarea">
+        <!-- <span *ngFor="let chip of responseChips2" class="chip">
+          {{ chip }}
+        </span> -->
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

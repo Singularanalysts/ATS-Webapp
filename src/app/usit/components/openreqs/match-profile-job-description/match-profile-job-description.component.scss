@@ -1,0 +1,92 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    z-index: 99999;
+    overflow: hidden;
+    background-color: rgb(228, 231, 234);
+}
+
+.close-btn {
+    overflow: hidden !important;
+}
+
+.header-text {
+    padding-left: 1.3rem;
+    font-weight: 600;
+    font-size: larger;
+}
+
+.card {
+    margin: 0 auto;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Space between elements */
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Align button to the right */
+}
+
+mat-hint {
+    color: red;
+    /* Error hint color */
+}
+
+.chips-textarea-container {
+    display: flex;
+    justify-content: space-between;
+    /* Space chips side by side */
+    margin-top: 20px;
+}
+
+.chips-textarea {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 40px;
+    /* Height of the text area */
+    width: 48%;
+    /* Adjust as necessary */
+    display: flex;
+    flex-wrap: wrap;
+    /* Allow chips to wrap */
+    background-color: #f9f9f9;
+}
+
+.chip {
+    background-color: #e0e0e0;
+    border-radius: 16px;
+    padding: 4px 8px;
+    margin: 4px;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .info-container {
+        gap: 8px;
+        /* Reduced space for mobile */
+    }
+
+    .chips-textarea-container {
+        flex-direction: column;
+        /* Stack chips on small screens */
+    }
+
+    .chips-textarea {
+        width: 100%;
+        /* Full width on small screens */
+    }
+}

@@ -134,4 +134,20 @@ export class OpenreqService {
   duplicatecheckEmail(data: any) {
     return this.http.put(`mail/emailcredentials/credentialUpdate`, data);
   }
+
+  getHotlist() {
+    return this.http.get(`consultant/analyz/hotListDropdown`);
+  }
+
+  matchResume(consultantId: number, jobDescription: string) {
+    return this.http.get(`consultant/analyz/matchResume/${consultantId}/${jobDescription}`);
+  }
+
+  addComment(data: any) {
+    return this.http.post(`openreqs/dice/comment`, data);
+  }
+
+  jobComments(reqId: number) {
+    return this.http.get(`openreqs/dice/getComment/${reqId}`);
+  }
 }
