@@ -104,6 +104,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
     this.tcvrForm = this.formBuilder.group({
       client: [tcvrData ? tcvrData.client : ''],
       firstLevelVendor: [tcvrData ? tcvrData.firstLevelVendor : ''],
+      comments: [tcvrData ? tcvrData.comments : ''],
       secondLevelVendor: [tcvrData ? tcvrData.secondLevelVendor : ''],
       technology: [tcvrData ? tcvrData.technology : '', [Validators.required]],
       careersPage: [tcvrData ? tcvrData.careersPage : '', [Validators.required]],
@@ -195,6 +196,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
         this.tcvrObj.firstLevelVendor = formVal.firstLevelVendor;
         this.tcvrObj.secondLevelVendor = formVal.secondLevelVendor;
         this.tcvrObj.technology = formVal.technology;
+        this.tcvrObj.comments = formVal.comments;
         this.tcvrObj.careersPage = formVal.careersPage;
         this.tcvrObj.addedby = formVal.addedby;;
         this.tcvrObj.updatedby = localStorage.getItem('userid');
@@ -231,6 +233,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
 export class Tcvr {
   id!: any;
   client!: string;
+  comments!: string;
   firstLevelVendor!: string;
   secondLevelVendor!: string;
   technology!: string;

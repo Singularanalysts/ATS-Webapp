@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -15,6 +15,7 @@ import { JobDescriptionComponent } from '../job-description/job-description.comp
 import { RecruInfoComponent } from '../recru-info/recru-info.component';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { JobApplicationCommentsComponent } from '../job-application-comments/job-application-comments.component';
 
 @Component({
   selector: 'app-cpv-fpv-open-requirements',
@@ -46,6 +47,7 @@ export class CpvFpvOpenRequirementsComponent implements OnInit {
     'job_location',
     'vendor',
     'JobDescription',
+    'comments',
     'source',
   ];
   // pagination code
@@ -66,7 +68,8 @@ export class CpvFpvOpenRequirementsComponent implements OnInit {
   private dialogServ = inject(DialogService);
   private route= inject(ActivatedRoute);
   userid!: any;
-  dialog: any;
+  dialog1: any;
+  private dialog = inject(MatDialog);
   vendorType!: any;
   sortField = 'postedon';
   sortOrder = 'desc';
@@ -85,7 +88,7 @@ export class CpvFpvOpenRequirementsComponent implements OnInit {
   }
 
   openVendorPopup(vendor: string): void {
-    this.dialog.open({
+    this.dialog1.open({
       data: { vendor: vendor }
     });
   }
@@ -222,6 +225,20 @@ export class CpvFpvOpenRequirementsComponent implements OnInit {
       JobDescriptionComponent,
       dialogConfig
     );
+  }
+
+  jobComments(job: any) {
+    this.dialog.open(JobApplicationCommentsComponent, {
+      
+      width: '60vw',
+      data: {
+        title: job.job_title,
+        jobData: job
+
+        
+      },
+    });
+    
   }
 
 }

@@ -33,6 +33,7 @@ import {
 } from 'src/app/services/snack-bar.service';
 import { AddClientInformationComponent } from './add-client-information/add-client-information.component';
 import { ClientInformationService } from 'src/app/usit/services/client-information.service';
+import { JobApplicationCommentsComponent } from '../../openreqs/job-application-comments/job-application-comments.component';
 
 @Component({
   selector: 'app-client-information',
@@ -226,7 +227,7 @@ export class ClientInformationComponent implements OnInit {
 
   /**
    * edit
-   * @param endor
+   * @param endorgetAllData
    */
   editClient(client: any) {
     const actionData = {

@@ -283,13 +283,20 @@ export class OpenreqsComponent implements OnInit {
   }
 
   jobComments(job: any) {
-    this.dialog.open(JobApplicationCommentsComponent, {
+    const data =this.dialog.open(JobApplicationCommentsComponent, {
       width: '60vw',
       data: {
         title: job.job_title,
         jobData: job
       },
     });
+
+    data.afterClosed().subscribe(() => {
+      console.log(data)
+      if(data.componentInstance){
+         this.getAllreqsData();
+      }
+    })
   }
   
 }

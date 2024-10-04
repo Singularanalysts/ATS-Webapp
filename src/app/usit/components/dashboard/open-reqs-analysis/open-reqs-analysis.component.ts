@@ -50,7 +50,6 @@ export class OpenReqsAnalysisComponent {
   dataTableColumns: string[] = [
     'SerialNum',
     'posted_on',
-    'source',
     'job_title',
     'category_skill',
     'employment_type',
@@ -59,11 +58,19 @@ export class OpenReqsAnalysisComponent {
   ];
   totalItems: any;
   private dashboardServ = inject(DashboardService);
+  department: any;
 
   ngOnInit(): void {
+    this.department = localStorage.getItem('department');
+    
+    if (this.department.trim().toLowerCase() !== 'consultant') {
+      alert(this.department)
+      this.dataTableColumns.push('source');
+    } 
+
     const userid = localStorage.getItem('userid');
     this.getReqVendorPopup();
-    
+
   }
 
   getReqVendorPopup() {

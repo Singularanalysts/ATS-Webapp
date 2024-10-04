@@ -30,7 +30,7 @@
             </ng-container>
 
             <!-- Source Column-->
-            <ng-container matColumnDef="source">
+            <ng-container *ngIf="department!=='consulatnt'" matColumnDef="source">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Source"
                     style="width: 7%">
                     Source

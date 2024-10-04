@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -50,7 +50,8 @@ export class JobApplicationCommentsComponent implements OnInit {
     'Status',
     'Comment',
     'CommentedBy',
-    'CommentedDate'
+    'CommentedDate',
+    'Action'
   ];
   entity: any;
   currentPageIndex = 0;
@@ -69,10 +70,13 @@ export class JobApplicationCommentsComponent implements OnInit {
     panelClass: ['custom-snack-success'],
   };
   selectedConsultantId: any;
+  userId!: string | null;
+  dialogServ: any;
 
   ngOnInit(): void {
-    this.initializeJobApplicationCommentsForm();
+    this.userId = localStorage.getItem('userid');
     this.getAll();
+    this.initializeJobApplicationCommentsForm(null);
     this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getConsultantOptionsForAutoComplete(resp);
@@ -122,13 +126,15 @@ export class JobApplicationCommentsComponent implements OnInit {
     return serialNumber;
   }
 
-  private initializeJobApplicationCommentsForm() {
+  private initializeJobApplicationCommentsForm(data:any) {
+
     this.jobApplyCommentsForm = this.formBuilder.group({
       reqId: [this.data.jobData.id, Validators.required],
-      consultantId: ['', Validators.required],
-      issueType: ['', [Validators.required]],
-      comment: ['', Validators.required],
-      commentedBy: [localStorage.getItem('userid'), Validators.required],
+      consultantId: [data ? data.consultantname : '', Validators.required],
+      issueType: [data ? data.issue_type :'', [Validators.required]],
+      comment: [data ? data.comment :'', Validators.required],
+      commentedBy: [this.userId, Validators.required],
+      
     });
   }
 
@@ -160,7 +166,8 @@ export class JobApplicationCommentsComponent implements OnInit {
         if (resp.status == 'success') {
           this.dataToBeSentToSnackBar.message = 'Comment added successfully';
           this.jobApplyCommentsForm.reset();
-          this.getAll();
+          this.onCancel()
+          // this.getAll();
         } else {
           this.dataToBeSentToSnackBar.message = resp.message;
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -174,6 +181,20 @@ export class JobApplicationCommentsComponent implements OnInit {
       },
     })
   }
+
+  editComment(comment:any){
+this.initializeJobApplicationCommentsForm(comment)
+this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+  if (resp && resp.length) {
+    this.getConsultantOptionsForAutoComplete(resp);
+  }
+}));
+
+
+  }
+
+
+
 
   onCancel() {
     this.dialogRef.close();

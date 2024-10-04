@@ -80,6 +80,7 @@ tbody {
 .mat-column-job_location,
 .mat-column-vendor,
 .mat-column-end_client,
+.mat-column-comments,
 .mat-column-JobDescription {
   border-right: 1px solid lightgray;
 }
@@ -260,4 +261,19 @@ ul.breadcrumb li:last-child {
   padding: 0px !important;
   height: 24px;
   width: 24px;
+}
+
+::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+action-button-ed
+.mat-column-Name {
+  border-right: 1px solid lightgray;
 }
