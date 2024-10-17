@@ -256,7 +256,6 @@ export class OpenreqsComponent implements OnInit {
   }
 
   matching(job: any) {
-    console.log(job);
     this.dialog.open(MatchProfileJobDescriptionComponent, {
       width: '60vw',
       data: {
@@ -292,8 +291,7 @@ export class OpenreqsComponent implements OnInit {
     });
 
     data.afterClosed().subscribe(() => {
-      console.log(data)
-      if(data.componentInstance){
+      if(data.componentInstance.submitted){
          this.getAllreqsData();
       }
     })

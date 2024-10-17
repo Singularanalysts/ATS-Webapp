@@ -39,15 +39,18 @@
 .card {
   margin: 0 auto;
   padding: 16px;
-  height: 40vh;
+  height: max-content;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  box-shadow: none;
 }
 
 .tcvr-form {
-  height: 32vh;
-  overflow: auto;
+  height: max-content;
+  max-height: 85vh;
+  overflow-y: visible;
 }
 
 .form-column-left {

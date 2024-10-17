@@ -91,11 +91,13 @@
     padding: 0px 8px 4px 8px;
 }
 
-table-wrapper {
-    flex: 1;
-    overflow: auto;
+.table-wrapper {
+    max-height: 400px;
+    overflow-x: auto;  
+    overflow-y: auto;
+    display: block;
 }
-
+    
 table {
     width: 100%;
 }

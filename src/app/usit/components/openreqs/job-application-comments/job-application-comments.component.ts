@@ -72,6 +72,9 @@ export class JobApplicationCommentsComponent implements OnInit {
   selectedConsultantId: any;
   userId!: string | null;
   dialogServ: any;
+  submitted: any;
+  isEdit!: boolean;
+  commentData: any;
 
   ngOnInit(): void {
     this.userId = localStorage.getItem('userid');
@@ -126,15 +129,16 @@ export class JobApplicationCommentsComponent implements OnInit {
     return serialNumber;
   }
 
-  private initializeJobApplicationCommentsForm(data:any) {
+  private initializeJobApplicationCommentsForm(data: any) {
 
     this.jobApplyCommentsForm = this.formBuilder.group({
       reqId: [this.data.jobData.id, Validators.required],
       consultantId: [data ? data.consultantname : '', Validators.required],
-      issueType: [data ? data.issue_type :'', [Validators.required]],
-      comment: [data ? data.comment :'', Validators.required],
+      issueType: [data ? data.issue_type : '', [Validators.required]],
+      comment: [data ? data.comment : '', Validators.required],
       commentedBy: [this.userId, Validators.required],
-      
+      commentId: [data ? data.comment_id : ''],
+
     });
   }
 
@@ -144,12 +148,24 @@ export class JobApplicationCommentsComponent implements OnInit {
       return;
     }
 
-    const selectedValue = this.jobApplyCommentsForm.get('consultantId').value;
-    const selectedOption = this.consultantOptions.find(option => option.consultantname === selectedValue);
+    this.submitted = true;
 
-    if (selectedOption) {
-      this.selectedConsultantId = selectedOption.consultantid;
+    const selectedValue = this.jobApplyCommentsForm.get('consultantId').value;
+
+    if (this.isEdit) {
+      this.selectedConsultantId = this.commentData.consultantid
+
+    } else {
+      const selectedOption = this.consultantOptions.find(option => option.consultantname === selectedValue);
+
+      if (selectedOption) {
+        this.selectedConsultantId = selectedOption.consultantid;
+      }
+
+
+      
     }
+
 
     const formData = this.jobApplyCommentsForm.value;
 
@@ -158,7 +174,8 @@ export class JobApplicationCommentsComponent implements OnInit {
       consultantId: this.selectedConsultantId,
       issueType: formData.issueType,
       comment: formData.comment,
-      commentedBy: formData.commentedBy
+      commentedBy: formData.commentedBy,
+      commentId: formData.commentId
     };
 
     this.openServ.addComment(saveCommentObj).subscribe({
@@ -182,18 +199,24 @@ export class JobApplicationCommentsComponent implements OnInit {
     })
   }
 
-  editComment(comment:any){
-this.initializeJobApplicationCommentsForm(comment)
-this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
-  if (resp && resp.length) {
-    this.getConsultantOptionsForAutoComplete(resp);
-  }
-}));
+  editComment(comment: any) {
+    this.initializeJobApplicationCommentsForm(comment)
+    this.isEdit=true;
+    this.commentData=comment;
+
+
+    
+
+    this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+      if (resp && resp.length) {
+        this.getConsultantOptionsForAutoComplete(resp);
+      }
+    }));
 
 
   }
 
-
+ 
 
 
   onCancel() {
