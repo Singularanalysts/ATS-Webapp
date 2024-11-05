@@ -49,5 +49,17 @@
     "text": "Report",
     "icon": "reports",
     "routerLink": "/usit/report"
-  }
+  },
+    {
+      "text": "Task Management",
+      "icon": "task",
+      "children": [
+        {
+          "text": "Projects",
+          "icon": "work",
+          "routerLink": "/task-management/projects"
+        }
+      ]
+    }
+  
 ]

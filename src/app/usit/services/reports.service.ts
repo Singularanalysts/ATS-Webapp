@@ -83,4 +83,8 @@ export class ReportsService {
   public candidateAppliedJobsPopup(data: any) {
     return this.apiServ.post("report/employeeJobApplyCount", data);
   }
+
+  public requirementPopup(data: any) {
+    return this.apiServ.post("report/reqPopups", data);
+  }
 }

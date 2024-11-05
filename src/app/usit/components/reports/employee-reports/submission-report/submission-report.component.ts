@@ -21,6 +21,7 @@ export class SubmissionReportComponent {
   consultant: any[] = [];
   protected privilegeServ = inject(PrivilegesService);
   popUpImport() {
+  
     if (this.vo.vo.status == 'submission') {
       this.headings = [
         [
@@ -148,7 +149,51 @@ export class SubmissionReportComponent {
           c.hourlyrate,
         ]
       );
+    }else if (this.vo.vo.status == 'requirement') {
+      this.headings = [
+        [
+          'Date',
+          'Name',
+          'Email',
+          'Contact Number',
+          'Visa',
+          'Current Location',
+          'Position',
+          'Exp',
+          'Relocation',
+          'Rate',
+        ],
+      ];
+      this.excelData = this.consultant.map(
+        (c: {
+          createddate: any;
+          consultantname: any;
+          consultantemail: any;
+          contactnumber: any;
+          visa_status: any;
+          currentlocation: any;
+          position: any;
+          experience: any;
+          relocation: any;
+          hourlyrate: any;
+        }) => [
+          c.createddate,
+          c.consultantname,
+          c.consultantemail,
+          c.contactnumber,
+          c.visa_status,
+          c.currentlocation,
+          c.position,
+          c.experience,
+          c.relocation,
+          c.hourlyrate,
+        ]
+      );
     }
+    
+    
+
+    
     const wb = utils.book_new();
     const ws: any = utils.json_to_sheet([]);
     utils.sheet_add_aoa(ws, this.headings);

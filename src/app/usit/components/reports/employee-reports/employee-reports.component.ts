@@ -23,6 +23,7 @@ import { InterviewReportComponent } from './interview-report/interview-report.co
 import { ConsultantReportComponent } from './consultant-report/consultant-report.component';
 import { SubmissionReportComponent } from './submission-report/submission-report.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { RequirementReportComponent } from './requirement-report/requirement-report.component';
 
 interface Select {
   value: string;
@@ -126,7 +127,7 @@ export class EmployeeReportsComponent {
   backoutCnt = 0;
   submitted: boolean = false;
   showReport: boolean = false;
-  passName!:string;
+  passName!: string;
   onSort(event: any) { }
   c_data: any[] = [];
   Activecnt = 0;
@@ -167,6 +168,7 @@ export class EmployeeReportsComponent {
         // handle any result or action after the dialog is closed
       });
     } else if (
+      
       status == 'interview' ||
       status == 'Schedule' ||
       status == 'Hold' ||
@@ -179,9 +181,11 @@ export class EmployeeReportsComponent {
       const dialogRef = this.dialog.open(InterviewReportComponent, {
         width: '80%', // adjust the width as needed
         // data: this.vo,
+
         data: {
           vo: this.vo,
           additionalValue1: this.passName,
+
         },
       });
 
@@ -190,7 +194,8 @@ export class EmployeeReportsComponent {
       });
     } else if (status == 'consultant') {
       const dialogRef = this.dialog.open(ConsultantReportComponent, {
-        width: '80%', // adjust the width as needed
+        width: '80%',
+         // adjust the width as needed
         data: {
           vo: this.vo,
           additionalValue1: this.passName,
@@ -201,6 +206,23 @@ export class EmployeeReportsComponent {
         // handle any result or action after the dialog is closed
       });
     }
+    else if (status == 'requirement') {
+      const dialogRef = this.dialog.open(RequirementReportComponent, {
+        width: '80%',// adjust the width as needed
+      
+        data: {
+          vo: this.vo,
+          additionalValue1: this.passName,
+          
+          
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        // handle any result or action after the dialog is closed
+      });
+    }
+
 
     this.hiddenflg == 'submain';
     if (consul == null && company == null) {
@@ -392,9 +414,9 @@ export class EmployeeReportsComponent {
       joiningDateFormControl.setValue(formattedJoiningDate);
       relievingDateFormControl?.setValue(formattedRelievingDate);
     }
-  // Assign the formatted dates to the properties in your component
-  this.vo.startDate = joiningDateFormControl?.value;
-  this.vo.endDate = relievingDateFormControl?.value;
+    // Assign the formatted dates to the properties in your component
+    this.vo.startDate = joiningDateFormControl?.value;
+    this.vo.endDate = relievingDateFormControl?.value;
 
     this.vo.flg = this.employeeReport.get('flg')?.value;
     this.vo.groupby = this.employeeReport.get('groupby')?.value;

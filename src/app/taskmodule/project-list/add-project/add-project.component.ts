@@ -72,7 +72,8 @@ export class AddProjectComponent implements OnInit, OnDestroy {
     'Dom Recruiting',
     'Accounts',
     'Guest',
-    'HR Team'
+    'HR Team',
+    'Consultant'
   ];
   filteredDepartmentOptions!: Observable<string[]>;
 
