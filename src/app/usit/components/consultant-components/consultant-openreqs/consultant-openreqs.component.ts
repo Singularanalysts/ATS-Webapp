@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,8 @@ import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { AddResumeComponent } from './add-resume/add-resume.component';
+import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 
 @Component({
   selector: 'app-consultant-openreqs',
@@ -32,7 +34,8 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
     MatSelectModule,
     MatDialogModule,
     MatSortModule,
-    MatTabsModule
+    MatTabsModule,
+
   ],
   templateUrl: './consultant-openreqs.component.html',
   styleUrls: ['./consultant-openreqs.component.scss'],
@@ -60,6 +63,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
   pageSize = 50;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
+  selectedFile: File | null = null;
   pageSizeOptions = [50, 75, 100];
   isCompanyExist: any;
   source = 'all';
@@ -108,7 +112,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'req-info';
     dialogConfig.data = actionData;
-
     this.dialogServ.openDialogWithComponent(RecruInfoComponent, dialogConfig);
   }
 
@@ -218,31 +221,45 @@ export class ConsultantOpenreqsComponent implements OnInit {
     );
   }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = action.edit || action.add ? '450px' : action.delete ? 'fit-content' : '400px';
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = dataToBeSentToDailog.actionName;
+    dialogConfig.data = dataToBeSentToDailog;
+    return dialogConfig;
+  }
+
+
   apply(data: any) {
     const applyObj = {
       ...data,
       applied_by: this.userid,
       jobid: data.id
     }
-    this.openServ.applyJob(applyObj).subscribe({
-      next: (response: any) => {
-        if(response.status === 'success') {
-          this.dataToBeSentToSnackBar.message = 'You have successfully applied to the job';
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        } else {
-          this.dataToBeSentToSnackBar.message = 'You have Already applied for this job';
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        }
+    // console.log(applyObj);
+    const dataToBeSentToDailog = {
+      title: 'Add resume',
+      empployeeData: applyObj,
+      actionName: 'add-resume',
+    };
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddResumeComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+
+
+      if (dialogRef.componentInstance.allowAction) {
         this.getAllData();
-      },
-      error: (err: any) => {
-        this.dataToBeSentToSnackBar.message = err?.message;
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
       }
     })
 
+
+
   }
+
 }
