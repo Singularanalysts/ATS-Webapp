@@ -186,6 +186,7 @@ ul.breadcrumb li:last-child {
   cursor: pointer;
 }
 
+
 ::ng-deep {
   .portal-form-field .mat-mdc-form-field-subscript-wrapper {
     display: none;
@@ -264,3 +265,40 @@ ul.breadcrumb li:last-child {
   height: 24px;
   width: 24px;
 }
+
+
+.resume-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.resume-popup {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resume-popup .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.resume-popup .content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+

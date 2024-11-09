@@ -37,7 +37,8 @@
 
                 <!-- SNo Column -->
                 <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" style="width: 1%">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number"
+                        style="width: 1%">
                         S.No </th>
                     <td mat-cell *matCellDef="let element" style="width: 1%"> {{element?.serialNum}}</td>
                 </ng-container>
@@ -47,7 +48,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by postedon"
                         style="width: 2%">Posted On</th>
                     <td mat-cell *matCellDef="let element" nowrap style="width: 2%"> {{element?.posted_on |
-                        date:'MM-dd-yyyy HH:mm'  }} </td>
+                        date:'MM-dd-yyyy HH:mm' }} </td>
                 </ng-container>
 
                 <!-- Job Title Column-->
@@ -57,29 +58,34 @@
                         Title </th>
                     <td mat-cell *matCellDef="let element" style="width: 20%">
                         <span class="consultant-name" (click)="goToJobDescription(element)">
-                        {{element?.job_title|titlecase}}
+                            {{element?.job_title|titlecase}}
                         </span>
                     </td>
                 </ng-container>
 
                 <!-- Category Column-->
                 <ng-container matColumnDef="category_skill">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category" style="width: 13%">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"
+                        style="width: 13%">
                         Category </th>
-                    <td mat-cell *matCellDef="let element"style="width: 13%">
+                    <td mat-cell *matCellDef="let element" style="width: 13%">
                         {{ element?.category_skill | titlecase }} </td>
                 </ng-container>
 
                 <!-- Employment Type Column-->
                 <ng-container matColumnDef="employment_type">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by employment_type" style="width: 3%"> Emp Type </th>
-                    <td mat-cell *matCellDef="let element" style="width: 3%">{{element?.employment_type | titlecase}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        sortActionDescription="Sort by employment_type" style="width: 3%"> Emp Type </th>
+                    <td mat-cell *matCellDef="let element" style="width: 3%">{{element?.employment_type | titlecase}}
+                    </td>
                 </ng-container>
 
                 <!-- Job Location Column-->
                 <ng-container matColumnDef="job_location">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Job Location" style="width: 10%"> Location </th>
-                    <td mat-cell *matCellDef="let element"style="width: 10%">{{element?.job_location | titlecase}} </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Job Location"
+                        style="width: 10%"> Location </th>
+                    <td mat-cell *matCellDef="let element" style="width: 10%">{{element?.job_location | titlecase}}
+                    </td>
                 </ng-container>
 
                 <!-- Source Column-->
@@ -88,14 +94,15 @@
                         style="width: 3%">Source</th>
                     <td mat-cell *matCellDef="let element" nowrap style="width: 3%"> {{ element?.source | titlecase}} </td>
                 </ng-container> -->
-                
+
                 <!-- Action Column-->
                 <ng-container matColumnDef="Action">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Action"
                         style="width: 3%">Action</th>
                     <td mat-cell *matCellDef="let element" nowrap style="width: 3%">
                         <ng-container *ngIf="element?.status === 'Apply'; else statusText">
-                            <button mat-flat-button color="primary" style="width: max-content; height: max-content" (click)="apply(element)">
+                            <button mat-flat-button color="primary" style="width: max-content; height: max-content"
+                                (click)="apply(element)">
                                 {{element?.status}}
                             </button>
                         </ng-container>
@@ -107,6 +114,7 @@
                     </td>
                 </ng-container>
 
+
                 <!-- table ROW -->
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
@@ -115,8 +123,7 @@
         </section>
         <hr>
     </div>
-
-
+    
     <div class="paginator">
         <!-- paginator -->
         <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
@@ -124,5 +131,4 @@
             [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
         </mat-paginator>
     </div>
-
 </div>

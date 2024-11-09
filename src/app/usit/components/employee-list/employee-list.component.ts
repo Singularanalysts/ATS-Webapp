@@ -291,6 +291,7 @@ onFilter(event: any) {
       empployeeData: null,
       actionName: 'add-employee',
     };
+
     const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });
     const dialogRef = this.dialogServ.openDialogWithComponent(AddEmployeeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
@@ -300,6 +301,7 @@ onFilter(event: any) {
     })
   }
 
+  
   editEmployee(emp: Employee) {
     const dataToBeSentToDailog = {
       title: 'Update Employee',
@@ -422,9 +424,6 @@ onFilter(event: any) {
   }
 
   // lavanya 
-
-
-  // 
   // status update
   onStatusUpdate(emp: Employee) {
     const dataToBeSentToDailog = {
