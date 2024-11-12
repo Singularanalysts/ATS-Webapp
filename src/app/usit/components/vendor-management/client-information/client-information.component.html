@@ -15,6 +15,14 @@
       </div>
     </div>
     <div id="table-container" class="table-wrapper">
+
+        <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
+          <mat-tab *ngFor="let tab of tabs" [label]="tab">
+            <ng-container *ngTemplateOutlet="tableTemplate; context: { status: tab }"></ng-container>
+          </mat-tab>
+        </mat-tab-group>
+
+        <ng-template #tableTemplate>
         <section class="tcvr-table-style">
             <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
       
@@ -106,6 +114,7 @@
             <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
           </section>
           <hr>
+        </ng-template>
   
     </div>
     <!-- paginator -->
@@ -115,6 +124,5 @@
         [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
       </mat-paginator>
     </div>
-  
   </div>
   

@@ -78,7 +78,9 @@ import {
   templateUrl: './add-vendor.component.html',
   styleUrls: ['./add-vendor.component.scss'],
 })
+
 export class AddVendorComponent implements OnInit, OnDestroy {
+
   vendorObj = new Vms();
   vendorForm: any = FormGroup;
   submitted = false;
@@ -92,6 +94,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   // options = {
   //   componentRestrictions: { country: ['IN', 'US'] },
   // };
+
   companySearchData: any[] = [];
   searchCompanyOptions$!: Observable<any>;
   selectOptionObj = {
@@ -165,7 +168,6 @@ export class AddVendorComponent implements OnInit, OnDestroy {
    * initializes vendor Form
    */
   private iniVendorForm(vendorData: Vms) {
-
     this.vendorForm = this.formBuilder.group({
       company: [vendorData ? vendorData.company : '', [Validators.required]],
       vendortype: [vendorData ? vendorData.vendortype : '', Validators.required],
@@ -186,6 +188,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
       user: localStorage.getItem('userid'),
       headquerter: [vendorData ? vendorData.headquerter : '', [Validators.required, this.atLeastTwoNumbers]],
     });
+
     if (this.data.actionName === 'edit-vendor') {
       this.vendorForm.addControl(
         'status',
@@ -278,6 +281,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
   /**
    * getVendor Company Details : NOT USED
    */
+  
   getvendorcompanydetails() {
     this.vendorServ.getCompanies().subscribe((response: any) => {
       this.companyOptions = response.data;
@@ -373,7 +377,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
       });
-    
+
   }
   trimSpacesFromFormValues() {
     Object.keys(this.vendorForm.controls).forEach((controlName: string) => {
@@ -384,13 +388,14 @@ export class AddVendorComponent implements OnInit, OnDestroy {
     });
   }
 
-  // return to be saved/ updated data
+  // return to be saved/ updated data 
   getSaveData() {
     this.trimSpacesFromFormValues();
     // updates employee object form values
     if (this.data.actionName === "edit-vendor") {
       [this.vendorForm.value].forEach((formVal, idx) => {
         this.vendorObj.company = formVal.company;
+        this.vendorObj.country = formVal.country;
         this.vendorObj.vendortype = formVal.vendortype;
         this.vendorObj.companytype = formVal.companytype;
         this.vendorObj.tyretype = formVal.tyretype;

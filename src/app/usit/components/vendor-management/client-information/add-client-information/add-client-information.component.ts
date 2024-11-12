@@ -74,6 +74,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
   }
 
   private bindFormControlValueOnEdit() {
+
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 2500,
@@ -82,6 +83,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
       direction: 'above',
       panelClass: ['custom-snack-success'],
     };
+
     this.initTcvrForm (new Tcvr());
     this.clientInfoServ.getTcvrById(this.data.clientData.id).subscribe({
       next: (response: any) => {
@@ -89,6 +91,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
           this.tcvrObj = response.data;
           this.initTcvrForm (this.tcvrObj);
         }
+
       }, error: (err: any) => {
         dataToBeSentToSnackBar.message = err.message;
         dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -103,6 +106,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
   private initTcvrForm (tcvrData: Tcvr) {
     this.tcvrForm = this.formBuilder.group({
       client: [tcvrData ? tcvrData.client : ''],
+      country: [tcvrData ? tcvrData.country : '', Validators.required],
       firstLevelVendor: [tcvrData ? tcvrData.firstLevelVendor : ''],
       comments: [tcvrData ? tcvrData.comments : ''],
       secondLevelVendor: [tcvrData ? tcvrData.secondLevelVendor : ''],
@@ -112,7 +116,6 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
       updatedby: [this.data.actionName === "edit-tcvr" ? localStorage.getItem('userid') : null],
       user: localStorage.getItem('userid'),
     });
-
     if (this.data.actionName === 'edit-tcvr') {
       this.tcvrForm.addControl(
         'id',
@@ -121,6 +124,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
         )
       );
     }
+
   }
 
   /**
@@ -146,7 +150,9 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
     else {
       this.isFormSubmitted = true
     }
+
     const saveReqObj = this.getSaveData();
+  
     this.clientInfoServ
       .addORUpdateTcvr(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -185,7 +191,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
     });
   }
 
-  // return to be saved/ updated data
+  // return to be saved/ updated data   country: [tcvrData ? tcvrData.country : '', Validators.required],
   getSaveData() {
     this.trimSpacesFromFormValues();
     // updates employee object form values
@@ -193,12 +199,13 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
       this.tcvrObj.id = this.data.clientData.id;
       [this.tcvrForm.value].forEach((formVal, idx) => {
         this.tcvrObj.client = formVal.client;
+        this.tcvrObj.country = formVal.country;
         this.tcvrObj.firstLevelVendor = formVal.firstLevelVendor;
         this.tcvrObj.secondLevelVendor = formVal.secondLevelVendor;
         this.tcvrObj.technology = formVal.technology;
         this.tcvrObj.comments = formVal.comments;
         this.tcvrObj.careersPage = formVal.careersPage;
-        this.tcvrObj.addedby = formVal.addedby;;
+        this.tcvrObj.addedby = formVal.addedby;
         this.tcvrObj.updatedby = localStorage.getItem('userid');
       })
       return this.tcvrObj
@@ -233,6 +240,7 @@ export class AddClientInformationComponent implements OnInit, OnDestroy {
 export class Tcvr {
   id!: any;
   client!: string;
+  country!:string;
   comments!: string;
   firstLevelVendor!: string;
   secondLevelVendor!: string;
