@@ -34,6 +34,7 @@ import {
 import { AddClientInformationComponent } from './add-client-information/add-client-information.component';
 import { ClientInformationService } from 'src/app/usit/services/client-information.service';
 import { JobApplicationCommentsComponent } from '../../openreqs/job-application-comments/job-application-comments.component';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-client-information',
@@ -47,6 +48,7 @@ import { JobApplicationCommentsComponent } from '../../openreqs/job-application-
     MatFormFieldModule,
     MatSortModule,
     MatPaginatorModule,
+    MatTabsModule,
     CommonModule,
     MatTooltipModule
   ],
@@ -94,6 +96,7 @@ export class ClientInformationComponent implements OnInit {
   field = 'empty';
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
+
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -102,13 +105,15 @@ export class ClientInformationComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
-
+  tabs = ['All', 'USA', 'UAE'];
+  status = 'all';
+  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
   ngOnInit(): void {
     this.loginId = localStorage.getItem('userid');
     this.getAllData();
   }
 
-  getAllData(currentPageIndex = 1) {
+  getAllData(currentPageIndex = 1, status: string = 'all') {
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 1500,
@@ -122,7 +127,9 @@ export class ClientInformationComponent implements OnInit {
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      keyword: this.field
+      keyword: this.field,
+      country: this.status
+
     }
     return this.clientInfoServ
       .getAllTcvrs(pagObj)
@@ -220,7 +227,7 @@ export class ClientInformationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAllData(this.currentPageIndex + 1);
+        this.getAllData(this.currentPageIndex + 1, this.status);
       }
     });
   }
@@ -246,9 +253,10 @@ export class ClientInformationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAllData(this.currentPageIndex + 1);
+        this.getAllData(this.currentPageIndex + 1, this.status);
       }
     });
+  
   }
 
   /**
@@ -335,7 +343,7 @@ export class ClientInformationComponent implements OnInit {
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
   }
-  
+
   /** clean up subscriptions */
   ngOnDestroy(): void {
     this.destroyed$.next();
@@ -354,5 +362,13 @@ export class ClientInformationComponent implements OnInit {
     if (url) {
       window.open(url, '_blank');  // Opens the URL in a new tab
     }
+  }
+
+  onTabChanged(event: MatTabChangeEvent) {
+    this.status = event.tab.textLabel.toLowerCase();
+    this.currentPageIndex = this.pageIndices[this.status];
+    // this.paginator!.pageIndex! = this.currentPageIndex;
+    // console.log(this.paginator.pageIndex)
+    this.getAllData(this.currentPageIndex + 1, this.status);
   }
 }
