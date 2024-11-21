@@ -50,7 +50,6 @@ ul.breadcrumb li:nth-child(2) {
   align-items: center;
   justify-content: space-between;
   background-color: whitesmoke;
-
 }
 .add-privilege{
   margin-right: 20px;
@@ -78,7 +77,6 @@ ul.breadcrumb li:nth-child(2) {
 .card {
   height: 250px;
   width: 300px;
-
   margin: 4px;
 }
 
@@ -94,5 +92,24 @@ ul.breadcrumb li:nth-child(2) {
 }
 
 .access-check-box{
-  margin-left: 32px;
+  margin-left: 0px;
+  font-weight: bold;
+  // font-size: 15px;
+}
+
+.access-check-boxs{
+  margin-left: 35px;
+}
+
+.my-checkbx{
+
+}
+
+.fontstyle{
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.access-check-boxs[_ngcontent-ng-c3594766312] {
+  margin-left: 96px;
 }

@@ -362,7 +362,10 @@ const routes: Routes = [
   {
     path: 'email-configuration',
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
-  }
+  },
+  {
+     path: 'privileges/:id/:rolename', component: PrivilegeListComponent ,
+  },
 ];
 
 @NgModule({

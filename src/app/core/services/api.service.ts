@@ -10,8 +10,8 @@ import { HttpErrors } from '../models/http-errors';
   providedIn: 'root',
 })
 export class ApiService {
-  readonly apiUrl = 'http://69.216.19.140:1122/';
-  //  readonly apiUrl = 'http://localhost:1122/';
+  // readonly apiUrl = 'http://69.216.19.140:1122/';
+   readonly apiUrl = 'http://localhost:1122/';
   // readonly apiUrl = 'http://23.81.209.229:1122/';
   // readonly apiUrl = 'http://50.28.107.39:1122/'
   constructor(private http: HttpClient) {}
