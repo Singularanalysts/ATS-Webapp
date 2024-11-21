@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import {
   MatCheckboxChange,
@@ -9,12 +9,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
+import { every, Subject, takeUntil } from 'rxjs';
+import {
+  ISnackBarData,
+  SnackBarService,
+} from 'src/app/services/snack-bar.service';
 import { ManagePrivilegeComponent } from './manage-privilege/manage-privilege.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RoleManagementService } from '../../services/role-management.service';
+import { Role } from '../../models/role';
+
 @Component({
   selector: 'app-privilege-list',
   standalone: true,
@@ -24,14 +30,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './privilege-list.component.html',
   styleUrls: ['./privilege-list.component.scss'],
 })
+
 export class PrivilegeListComponent implements OnInit, OnDestroy {
   // variables
   keysObj = Object;
+  flg: boolean = false;
   id!: number;
   RoleName!: string;
   entity = new Privilege();
@@ -45,22 +53,76 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   visa: any[] = [];
   configuration: any[] = [];
   taskmanagement: any[] = [];
-  //taskmanagement
+  
   qualification: any[] = [];
   kpt: any[] = [];
   requirement: any[] = [];
   technology_tags: any[] = [];
+
   immigration: any[] = [];
   users: any[] = [];
   submission: any[] = [];
   interview: any[] = [];
+
   sourcing_reports: any[] = [];
   us_reports: any[] = [];
+  vc_cx_profiles: any[] = [];
+  vc_cx_profiles1: any[] = [];
+  talentpool: any[] = [];
+  talentpool1: any[] = [];
+  Open_reqs_job_application: any[] = [];
+  Open_reqs_job_application1: any[] = [];
+  presales: any[] = [];
+  presales1: any[] = [];
+  h1_transfer: any[] = [];
+  h1_transfer1: any[] = [];
+  mass_mailing: any[] = [];
   privilegResp: any[] = [];
   company: any[] = [];
-  tcvr: any[] = [];
-   // snackbar
-   dataToBeSentToSnackBar: ISnackBarData = {
+  cards: any[] = [];
+
+  privilegResp1: any[] = [];
+  role1: any[] = [];
+  company1: any[] = [];
+  users1: any[] = [];
+  vendor1: any[] = [];
+  us_reports1: any[] = [];
+  dashboard: any[] = [];
+  search: any[] = [];
+  search1: any[] = [];
+  mass_mailing1: any[] = [];
+  dashboard1: any[] = [];
+  sourcing_reports1: any[] = [];
+  immigration1: any[] = [];
+  technology_tags1: any[] = [];
+  requirement1: any[] = [];
+  interview1: any[] = [];
+  submission1: any[] = [];
+  kpt1: any[] = [];
+  qualification1: any[] = [];
+  taskmanagement1: any[] = [];
+  tech_support1: any[] = [];
+  configuration1: any[] = [];
+  recruiter1: any[] = [];
+  visa1: any[] = [];
+  consultant1: any[] = [];
+
+  rolename!: string;
+  roleNames: string[] = [];
+  vms: any[] = [];
+  sales: any[] = [];
+  recruitment: any[] = [];
+  talent_acquisition: any[] = [];
+  people: any[] = [];
+  masters: any[] = []; 
+  billpay: any[] = []; 
+  sourcing: any[] = []; 
+  onboarding: any[] = []; 
+  open_requirements: any[] = [];
+  reports: any[] = [];
+
+  // snackbar
+  dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
     verticalPosition: 'top',
@@ -68,8 +130,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
- // services
- private snackBarServ = inject(SnackBarService);
+
+  // services
+  private snackBarServ = inject(SnackBarService);
   private activatedRoute = inject(ActivatedRoute);
   private privilegServ = inject(PrivilegesService);
   private router = inject(Router);
@@ -77,7 +140,12 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
 
+  constructor(private route: ActivatedRoute, private roleManagementServ: RoleManagementService) {}
+
   ngOnInit(): void {
+        // Retrieve the rolename from the route parameter
+        this.rolename = this.route.snapshot.paramMap.get('rolename')!;
+
     this.id = this.activatedRoute.snapshot.params['id'];
     this.entity.roleId = +this.id;
     this.getAll();
@@ -91,6 +159,8 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
       .getAllPrivileges()
       .pipe(takeUntil(this.destroyed$))
       .subscribe((response: any) => {
+        // alert("full=="+JSON.stringify(response.data.vms));
+        this.users = response.data.user;
         this.vendor = response.data.vendor;
         this.recruiter = response.data.recruiter;
         this.tech_support = response.data.tech_support;
@@ -98,34 +168,55 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.visa = response.data.visa;
         this.configuration = response.data.configuration;
         this.qualification = response.data.qualification;
-        //taskmanagement
-        this.requirement =  response.data.requirement;
-        this.kpt =  response.data.kpt;
-        this.role =  response.data.role;
-        this.company =  response.data.company;
+        
+        this.requirement = response.data.requirement;
+        this.kpt = response.data.kpt;
+        this.role = response.data.role;
+        this.company = response.data.company;
+      
         this.taskmanagement = response.data.taskmanagement;
         this.technology_tags = response.data.technology_tag;
         this.immigration = response.data.immigration;
-        this.users = response.data.user;
         this.submission = response.data.submission;
         this.interview = response.data.interview;
-        //reports privilages
+   
         this.sourcing_reports = response.data.sourcing_reports;
         this.us_reports = response.data.us_reports;
-        this.tcvr = response.data.tcvr;
+        this.dashboard = response.data.dashboard;
+
+        this.search = response.data.search;
+        this.mass_mailing = response.data.massmailing;
+        this.h1_transfer = response.data.h1transfer;
+        this.presales = response.data.presales;
+        this.Open_reqs_job_application = response.data.open_reqs_job_application;
+        this.talentpool = response.data.talentpool;
+        this.vc_cx_profiles = response.data.vc_cx_profiles;
+        this.vms = response.data.vms;
+        this.sales = response.data.sales;
+        this.recruitment = response.data.recruitment;
+        this.talent_acquisition = response.data.talent_acquisition;
+        this.people = response.data.people;
+        this.masters = response.data.masters;
+        this.billpay = response.data.billpay;
+        this.sourcing = response.data.sourcing;
+        this.onboarding = response.data.onboarding;
+        this.open_requirements = response.data.open_requirements;
+        this.reports = response.data.reports;
+
         this.selecedPrivileges();
         this.mapResponseData();
+        // this.selecedPrivileges();
       });
   }
 
   private mapResponseData() {
-    this.privilegResp.push(
+    this.privilegResp.push(   // array of objects
       {
         title: 'User',
         privileges: this.users,
         isSelected: this.users
           ? this.users.every((priv: any) => priv.selected === true)
-          : false,
+          : false
       },
       {
         title: 'Role',
@@ -225,7 +316,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.kpt.every((priv: any) => priv.selected === true)
           : false,
       },
-      //requirement
       {
         title: 'Task Management',
         privileges: this.taskmanagement,
@@ -233,7 +323,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.taskmanagement.every((priv: any) => priv.selected === true)
           : false,
       },
-      // reports
 
       {
         title: 'Sourcing Reports',
@@ -242,7 +331,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.sourcing_reports.every((priv: any) => priv.selected === true)
           : false,
       },
-
       {
         title: 'S&R Reports',
         privileges: this.us_reports,
@@ -250,17 +338,472 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.us_reports.every((priv: any) => priv.selected === true)
           : false,
       },
+
       {
-        title: 'TCVR',
-        privileges: this.tcvr,
-        isSelected: this.tcvr
-          ? this.tcvr.every((priv: any) => priv.selected === true)
+        title: 'DASHBOARD',
+        privileges: this.dashboard,
+        isSelected: this.dashboard
+          ? this.dashboard.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'Search',
+        privileges: this.search,
+        isSelected: this.search
+          ? this.search.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'Mass Mailing',
+        privileges: this.mass_mailing,
+        isSelected: this.mass_mailing
+          ? this.mass_mailing.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'H1 Transfer',
+        privileges: this.h1_transfer,
+        isSelected: this.h1_transfer
+          ? this.h1_transfer.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'Presales',
+        privileges: this.presales,
+        isSelected: this.presales
+          ? this.presales.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'Open_reqs_job_application',
+        privileges: this.Open_reqs_job_application,
+        isSelected: this.Open_reqs_job_application
+          ? this.Open_reqs_job_application.every(
+              (priv: any) => priv.selected === true
+            )
+          : false,
+      },
+      {
+        title: 'Talentpool',
+        privileges: this.talentpool,
+        isSelected: this.talentpool
+          ? this.talentpool.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'Vc-cx-profiles',
+        privileges: this.vc_cx_profiles,
+        isSelected: this.vc_cx_profiles
+          ? this.vc_cx_profiles.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'VMS',
+        privileges: this.vms,
+        isSelected: this.vms
+          ? this.vms.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'SALES',
+        privileges: this.sales,
+        isSelected: this.sales
+          ? this.sales.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'RECRUITMENT',
+        privileges: this.recruitment,
+        isSelected: this.recruitment
+          ? this.recruitment.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'talent_acquisition',
+        privileges: this.talent_acquisition,
+        isSelected: this.talent_acquisition
+          ? this.talent_acquisition.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'people',
+        privileges: this.people,
+        isSelected: this.people
+          ? this.people.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'masters',
+        privileges: this.masters,
+        isSelected: this.masters
+          ? this.masters.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'billpay',
+        privileges: this.billpay,
+        isSelected: this.billpay
+          ? this.billpay.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'sourcing',
+        privileges: this.sourcing,
+        isSelected: this.sourcing
+          ? this.sourcing.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'onboarding',
+        privileges: this.onboarding,
+        isSelected: this.onboarding
+          ? this.onboarding.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'open_requirements',
+        privileges: this.open_requirements,
+        isSelected: this.open_requirements
+          ? this.open_requirements.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'reports',
+        privileges: this.reports,
+        isSelected: this.reports
+          ? this.reports.every((priv: any) => priv.selected === true)
           : false,
       }
-
-      //taskmanagement
     );
   }
+
+// selectedCardPrivileges() {
+  //   this.privilegServ
+  //     .getPrivilegesById(+this.id)
+  //     .pipe(takeUntil(this.destroyed$))
+  //     .subscribe((response: any) => {
+  //       JSON.stringify('data:' + response);
+  //       if (this.users != null) {
+  //         this.users.forEach((userele) => {
+  //           response.data.user.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.role != null) {
+  //         this.role.forEach((userele) => {
+  //           response.data.role.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.vendor != null) {
+  //         this.vendor.forEach((userele) => {
+  //           response.data.vendor.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.recruiter != null) {
+  //         this.recruiter.forEach((userele) => {
+  //           response.data.recruiter.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.technology_tags != null) {
+  //         this.technology_tags.forEach((userele) => {
+  //           response.data.technology_tag.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.tech_support != null) {
+  //         this.tech_support.forEach((userele) => {
+  //           response.data.tech_support.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.immigration != null) {
+  //         this.immigration.forEach((userele) => {
+  //           response.data.immigration.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.company != null) {
+  //         this.company.forEach((userele) => {
+  //           response.data.company.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.consultant != null) {
+  //         this.consultant.forEach((userele) => {
+  //           response.data.consultant.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.submission != null) {
+  //         this.submission.forEach((userele) => {
+  //           response.data.submission.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.interview != null) {
+  //         this.interview.forEach((userele) => {
+  //           response.data.interview.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.visa != null) {
+  //         this.visa.forEach((userele) => {
+  //           response.data.visa.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.qualification != null) {
+  //         this.qualification1.forEach((userele) => {
+  //           response.data.qualification.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.requirement != null) {
+  //         this.requirement.forEach((userele) => {
+  //           response.data.requirement.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.kpt != null) {
+  //         this.kpt.forEach((userele) => {
+  //           response.data.kpt.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.taskmanagement != null) {
+  //         this.taskmanagement.forEach((userele) => {
+  //           response.data.taskmanagement.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.sourcing_reports != null) {
+  //         this.sourcing_reports.forEach((userele) => {
+  //           response.data.sourcing_reports.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.us_reports != null) {
+  //         this.us_reports.forEach((userele) => {
+  //           response.data.us_reports.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       // if (this.us_reports1 != null) {
+  //       //   this.us_reports1.forEach((userele) => {
+  //       //     response.data.us_reports.forEach((userresp: any) => {
+  //       //       if (userele.id === userresp.id) {
+  //       //         this.entity.cardIds.push(userresp.id);
+  //       //         userele.selected = true;
+  //       //       }
+  //       //     });
+  //       //   });
+  //       // }
+
+  //       if (this.dashboard != null) {
+  //         this.dashboard.forEach((userele) => {
+  //           response.data.dashboard.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.search != null) {
+  //         this.search.forEach((userele) => {
+  //           response.data.search.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.mass_mailing != null) {
+  //         this.mass_mailing.forEach((userele) => {
+  //           response.data.massmailing.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.h1_transfer != null) {
+  //         this.h1_transfer.forEach((userele) => {
+  //           response.data.h1transfer.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.presales != null) {
+  //         this.presales.forEach((userele) => {
+  //           response.data.presales.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.Open_reqs_job_application != null) {
+  //         this.Open_reqs_job_application.forEach((userele) => {
+  //           response.data.open_reqs_job_application.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.talentpool != null) {
+  //         this.talentpool.forEach((userele) => {
+  //           response.data.talentpool.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.vc_cx_profiles != null) {
+  //         this.vc_cx_profiles.forEach((userele) => {
+  //           response.data.vc_cx_profiles.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //       if (this.vms != null) {
+  //         this.vms.forEach((userele) => {
+  //           response.data.vms.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+        
+  //       if (this.sales != null) {
+  //         this.sales.forEach((userele) => {
+  //           response.data.sales.forEach((userresp: any) => {
+  //             if (userele.id === userresp.id) {
+  //               this.entity.cardIds.push(userresp.id);
+  //               userele.selected = true;
+  //             }
+  //           });
+  //         });
+  //       }
+
+  //     });
+  // }
 
   /**
    * fetch privileges by id
@@ -270,22 +813,14 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
       .getPrivilegesById(+this.id)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((response: any) => {
-        if (this.recruiter != null) {
-          this.recruiter.forEach((ele) => {
-            response.data.recruiter.forEach((resp: any) => {
+
+        if (this.vendor != null) {
+          this.vendor.forEach((ele) => {
+            response.data.vendor.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
-              }
-            });
-          });
-        }
-        if (this.users != null) {
-          this.users.forEach((userele) => {
-            response.data.user.forEach((userresp: any) => {
-              if (userele.id === userresp.id) {
-                this.entity.privilegeIds.push(userresp.id);
-                userele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -297,17 +832,31 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (role.id === userresp.id) {
                 this.entity.privilegeIds.push(userresp.id);
                 role.selected = true;
+                this.flg = true;
               }
             });
           });
         }
 
-        if (this.vendor != null) {
-          this.vendor.forEach((ele) => {
-            response.data.vendor.forEach((resp: any) => {
+        if (this.recruiter != null) {
+          this.recruiter.forEach((ele) => {
+            response.data.recruiter.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.users != null) {
+          this.users.forEach((userele) => {
+            response.data.user.forEach((userresp: any) => {
+              if (userele.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                userele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -319,6 +868,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -330,16 +880,19 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
+
         if (this.immigration != null) {
           this.immigration.forEach((ele) => {
             response.data.immigration.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -351,6 +904,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -362,6 +916,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -373,6 +928,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -384,59 +940,69 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
-//requirement
+
+        //requirement
         if (this.qualification != null) {
           this.qualification.forEach((ele) => {
             response.data.qualification.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
+
         if (this.taskmanagement != null) {
           this.taskmanagement.forEach((ele) => {
             response.data.taskmanagement.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
         //taskmanagement
-       
+
         if (this.interview != null) {
           this.interview.forEach((ele) => {
             response.data.interview.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
+
         if (this.visa != null) {
           this.visa.forEach((ele) => {
             response.data.visa.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
+
         if (this.requirement != null) {
           this.requirement.forEach((ele) => {
             response.data.requirement.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -448,10 +1014,12 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
+
         //requirement
         if (this.qualification != null) {
           this.qualification.forEach((ele) => {
@@ -459,6 +1027,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
@@ -470,11 +1039,11 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
-
 
         if (this.us_reports != null) {
           this.us_reports.forEach((ele) => {
@@ -482,12 +1051,11 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
-
-
 
         if (this.sourcing_reports != null) {
           this.sourcing_reports.forEach((ele) => {
@@ -495,21 +1063,240 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
 
-        if (this.tcvr != null) {
-          this.tcvr.forEach((ele) => {
-            response.data.tcvr.forEach((resp: any) => {
+        if (this.dashboard != null) {
+          this.dashboard.forEach((ele) => {
+            response.data.dashboard.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
+                this.flg = true;
               }
             });
           });
         }
+
+        if (this.search != null) {
+          this.search.forEach((ele) => {
+            response.data.search.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.mass_mailing != null) {
+          this.mass_mailing.forEach((ele) => {
+            response.data.massmailing.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.h1_transfer != null) {
+          this.h1_transfer.forEach((ele) => {
+            response.data.h1transfer.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.presales != null) {
+          this.presales.forEach((ele) => {
+            response.data.presales.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.Open_reqs_job_application != null) {
+          this.Open_reqs_job_application.forEach((ele) => {
+            response.data.open_reqs_job_application.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.talentpool != null) {
+          this.talentpool.forEach((ele) => {
+            response.data.talentpool.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.vc_cx_profiles != null) {
+          this.vc_cx_profiles.forEach((ele) => {
+            response.data.vc_cx_profiles.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.vms != null) {
+          this.vms.forEach((ele) => {
+            response.data.vms.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.sales != null) {
+          this.sales.forEach((role) => {
+            response.data.sales.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.recruitment != null) {
+          this.recruitment.forEach((role) => {
+            response.data.recruitment.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.talent_acquisition != null) {
+          this.talent_acquisition.forEach((role) => {
+            response.data.talent_acquisition.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.people != null) {
+          this.people.forEach((ele) => {
+            response.data.people.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.masters != null) {
+          this.masters.forEach((ele) => {
+            response.data.masters.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.billpay != null) {
+          this.billpay.forEach((ele) => {
+            response.data.billpay.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.sourcing != null) {
+          this.sourcing.forEach((ele) => {
+            response.data.sourcing.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.onboarding != null) {
+          this.onboarding.forEach((ele) => {
+            response.data.onboarding.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.open_requirements != null) {
+          this.open_requirements.forEach((ele) => {
+            response.data.open_requirements.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.reports != null) {
+          this.reports.forEach((ele) => {
+            response.data.reports.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
       });
   }
 
@@ -533,31 +1320,15 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           }
         });
       }
-      this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)]
+      this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
     });
+    JSON.stringify('selected:' + this.entity.privilegeIds);
   }
 
   /**
    * manage side nav-item's visibility
    */
-  private getSideNavData() {
-    // this.apiServ.getJson('assets/side-navbar-items.json').subscribe({
-    //   next: (data: any[]) => {
-    //     this.menuList = data;
-    //     let indexOfSideNavItem: number = 0;
-    //     if(!this.permissionServ.hasPrivilege('LIST_EMPLOYEE')){
-    //       indexOfSideNavItem = data.indexOf((item:any) => item.text === "Employees")
-    //     }
-    //     else if(!this.permissionServ.hasPrivilege('LIST_ROLES')){
-    //       indexOfSideNavItem = data.indexOf((item:any) => item.text.includes("Roles"));
-    //     }
-
-    //     if(indexOfSideNavItem >=0){
-    //        this.menuList.splice(indexOfSideNavItem, 1)
-    //     }
-    //   },
-    // });
-  }
+  // private getSideNavData() {}
 
   /**
    * form privilge ids based on selected type
@@ -580,6 +1351,55 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
     });
   }
 
+  selectCardAccess(event: MatCheckboxChange, cardId: number, card: any) {
+    if (event.checked) {
+      // Increment cardId by 1
+      const adjustedCardId = cardId + 1;
+
+      this.cards[adjustedCardId] = event.checked;
+
+      this.entity.cardIds.push(adjustedCardId);
+      this.entity.cardIds = [...new Set(this.entity.cardIds)];
+
+      card.privileges?.forEach((ele: any) => {
+        // if (event.checked) {
+        ele.selected = true;
+        this.entity.privilegeIds.push(ele.id);
+        card.isSelected = true;
+        // }
+        this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+      });
+    } else {
+      // Remove cardId from cardIds array if unchecked
+      const adjustedCardId = cardId + 1;
+      this.entity.cardIds = this.entity.cardIds.filter(
+        (id) => id !== adjustedCardId
+      );
+
+      //  this.entity.cardIds = [...new Set(this.entity.cardIds)];
+      //     this.cards[cardId].selected = event.checked;
+      //     const uncheckedPrivId = this.cards[cardId].id;
+      //     const uncheckedPrivIdIndex = this.entity.cardIds.indexOf(uncheckedPrivId)
+      //     if (uncheckedPrivIdIndex >= 0) {
+      //       this.entity.cardIds.splice(uncheckedPrivIdIndex, 1);
+      //     }
+
+      card.privileges?.forEach((ele: any) => {
+        if (event.checked) {
+        } else {
+          ele.selected = false;
+          card.isSelected = false;
+          this.entity.privilegeIds.forEach((id, index) => {
+            if (ele.id === id) {
+              this.entity.privilegeIds?.splice(index, 1);
+            }
+          });
+        }
+        this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+      });
+    }
+  }
+
   /**
    * checkbox event
    * @param event
@@ -588,77 +1408,200 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
     event: MatCheckboxChange,
     privileges: any,
     privId: number,
-    cardId: number
-  ) {
-    if (event.checked) {
+    cardId: number,
+    card: any,
+  priv: any,  privilegResp: any) {
+// alert("single card index"+cardId);
+if(priv.cardType==='many' && event.checked){
+  
+  let myval: number=0;
+  let mypri: number=0;
+ privilegResp?.forEach((care:any) => {
+     care.privileges?.forEach((ar: any)=>{
+         // alert("priv names========="+ar.name.toLowerCase() +" " +priv.name.toLowerCase());
+       if(priv.name.toLowerCase() === ar.name.toLowerCase() && cardId!=myval){
+
+        care.privileges?.forEach((ele: any) => {
+        if (event.checked) {
+          ele.selected = true;
+          this.entity.privilegeIds.push(ele.id);
+          care.isSelected = true;
+        }
+        this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+      });
+         // alert("same titled privilege matched========="+ar.name.toLowerCase() +" "+priv.name.toLowerCase() +" "+cardId +" "+myval);
+       }
+   })
+   myval=myval+1;
+ })
+
+}  //if end
+else if(priv.cardType==='many' && !event.checked){
+  
+ let myval: number=0;
+ let mypri: number=0;
+privilegResp?.forEach((care:any) => {
+    care.privileges?.forEach((ar: any)=>{
+        // alert("priv names========="+ar.name.toLowerCase() +" " +priv.name.toLowerCase());
+      if(priv.name.toLowerCase() === ar.name.toLowerCase() && cardId!=myval){
+        care.privileges?.forEach((ele: any) => {
+          // alert("alert"+JSON.stringify(ele)) 
+          let count =0;
+          if(ele.selected==true && ele.name!="")
+          
+          if (privId === 0 || privId != 0) {
+            ele.selected = false;
+            care.isSelected = false;
+            this.entity.privilegeIds.forEach((id, index) => {
+              if (ele.id === id) {
+                this.entity.privilegeIds?.splice(index, 1);
+              }
+            });
+          }else{
+  
+          }
+          this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+        });
+        // alert("same titled privilege matched========="+ar.name.toLowerCase() +" "+priv.name.toLowerCase() +" "+cardId +" "+myval);
+      }
+  })
+  myval=myval+1;
+}
+)
+}
+
+    let boolean = true;
+    if (event.checked && privId === 0) {
+      boolean = false;
+
+      card.privileges?.forEach((ele: any) => {
+        if (event.checked) {
+          ele.selected = true;
+          this.entity.privilegeIds.push(ele.id);
+          card.isSelected = true;
+        }
+        this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+      });
+    } else {
+      
+      card.privileges?.forEach((ele: any) => {
+        // alert("alert"+JSON.stringify(ele)) 
+        let count =0;
+        if(ele.selected==true && ele.name!="")
+        
+        if (privId === 0) {
+          ele.selected = false;
+          card.isSelected = false;
+          this.entity.privilegeIds.forEach((id, index) => {
+            if (ele.id === id) {
+              this.entity.privilegeIds?.splice(index, 1);
+            }
+          });
+        }else{
+
+        }
+        this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+      });
+    }
+    // this.privilegResp[cardId].isSelected = privileges.every(
+    //   (priv: any) => priv.selected === true
+    // );
+
+    if (event.checked && privId != 0) {
+      privileges[0].selected = event.checked;
       privileges[privId].selected = event.checked;
       this.entity.privilegeIds.push(privileges[privId].id);
-      this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)]
-    } else {
-      this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)]
+      this.entity.privilegeIds.push(privileges[0].id);
+
+      this.entity.privilegeIds = [...new Set(this.entity.privilegeIds)];
+    } else if (boolean) {
+      // Uncheck the privilege
+      // privileges[0].selected = event.checked;
       privileges[privId].selected = event.checked;
-      const uncheckedPrivId = privileges[privId].id;
-      const uncheckedPrivIdIndex = this.entity.privilegeIds.indexOf(uncheckedPrivId)
-      if (uncheckedPrivIdIndex >= 0) {
-        this.entity.privilegeIds.splice(uncheckedPrivIdIndex, 1);
-      }
+      this.entity.privilegeIds.push(privileges[0].id);
+
+      // Remove the unchecked privilege ids from privilegeIds array
+      this.entity.privilegeIds = this.entity.privilegeIds.filter(
+        (id) => id !== privileges[privId].id && id !== privileges[1].id
+      );
     }
-    this.privilegResp[cardId].isSelected = privileges.every(
-      (priv: any) => priv.selected === true
-    );
   }
 
   /**
    * Add privilege
    */
 
-   // add
-   addPrivilege(){
+  // add
+  addPrivilege() {
     const actionData = {
       title: 'Add Privilege',
       buttonCancelText: 'Cancel',
       buttonSubmitText: 'Submit',
-      actionName: 'add-privilege'
+      actionName: 'add-privilege',
     };
+
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "480px";
-    dialogConfig.height = "300px";
+    dialogConfig.width = '480px';
+    dialogConfig.height = '300px';
     dialogConfig.disableClose = false;
-    dialogConfig.panelClass = "add-privilege";
+    dialogConfig.panelClass = 'add-privilege';
     dialogConfig.data = actionData;
-    const dialogRef = this.dialogServ.openDialogWithComponent(ManagePrivilegeComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(resp =>{
-      if(dialogRef.componentInstance.submitted){
-        this.getAll()
+
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ManagePrivilegeComponent,
+      dialogConfig
+    );
+    dialogRef.afterClosed().subscribe((resp) => {
+      if (dialogRef.componentInstance.submitted) {
+        this.getAll();
       }
-    })
+    });
   }
 
   /**
    * save
    */
   savePrivileges() {
-    this.privilegServ.addPrevilegeToRole(this.entity).pipe(takeUntil(this.destroyed$)).subscribe(
-      (result) => {
-        this.dataToBeSentToSnackBar.message =  'Previleges added successfully!';
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        this.router.navigate(['/usit/roles']);
-
-      }, (error: any) => {
-        if (error.status == 401) {
-        this.dataToBeSentToSnackBar.message =  'Previleges addition is failed!';
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+    //console.log("Save Privileges Object", this.entity)
+    this.privilegServ
+      .addPrevilegeToRole(this.entity)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(
+        (result) => {
+          this.dataToBeSentToSnackBar.message =
+            'Previleges added successfully!';
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+          this.router.navigate(['/usit/roles']);
+        },
+        (error: any) => {
+          if (error.status == 401) {
+            this.dataToBeSentToSnackBar.message =
+              'Previleges addition is failed!';
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          } else {
+            this.dataToBeSentToSnackBar.message =
+              'Previleges addition is failed!';
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          }
         }
-        else {
-          this.dataToBeSentToSnackBar.message =  'Previleges addition is failed!';
-          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        }
-      });
+      );
   }
 
   onCancel() {
     this.router.navigate(['/usit/roles']);
   }
+
+  //  onReset(role : Role) {
+  //   // this.router.navigate(['/usit/roles']);
+  //   // this.router.navigate(['/usit/privileges']);
+  //   this.router.navigate(['/usit/privileges', role.roleid, role.rolename])
+  // }
 
   ngOnDestroy(): void {
     this.destroyed$.next(undefined);
@@ -669,4 +1612,5 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
 export class Privilege {
   roleId!: number;
   privilegeIds: any[] = [];
+  cardIds: any[] = [];
 }
