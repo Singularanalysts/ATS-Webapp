@@ -613,8 +613,20 @@ myRoles(){
           "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
         }
       ]
-    }
-        
+    },
+    {
+      "test": "receipts",
+      "text": "Task Management",
+      "icon": "task",
+      "children": [
+        {
+          "text": "Projects",
+          "icon": "work",
+          "routerLink": "/task-management/projects",
+          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        }
+      ]
+    }  
     ];
 
     // Replace static roles with dynamic roles
