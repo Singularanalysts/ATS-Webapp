@@ -75,6 +75,13 @@ export class ManagePrivilegeComponent implements OnInit{
         }
       });
 
+
+      // dialogRef.afterClosed().subscribe(() => {
+      //   if (dialogRef.componentInstance.submitted) {
+      //     this.getAllData(this.currentPageIndex + 1, this.status);
+      //   }
+      // });
+
   }
 
   displayFormErrors() {

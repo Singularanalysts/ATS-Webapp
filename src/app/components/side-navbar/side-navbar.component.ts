@@ -44,6 +44,8 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
       // });
 
     if (this.role==="Super Administrator" && this.department === 'SoftWare') {
+
+      
       // alert("First===========");
       this.myRoles();
       // this.getSideNavData1('assets/For-testing.json');
@@ -83,12 +85,23 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
 
   }
 
+superAdmin(){
+
+
+
+  
+
+
+}
+
+
+
 myRoles(){
   // alert("second===========");
   this.getRoles().subscribe({
     next: (roles: string[]) => {
-this.roleNames = roles;  
-      console.log(this.roleNames);  
+  this.roleNames = roles;  
+      // console.log(this.roleNames);  
       
       const formattedRoleNames = this.roleNames.map(role => `"${role}"`).join(', ');
 
@@ -636,7 +649,7 @@ this.roleNames = roles;
   });
 
     this.menuData = menuData;
-    console.log("Lak final data-----------"+JSON.stringify(this.menuData));
+    // console.log("Lak final data-----------"+JSON.stringify(this.menuData));
     this.getSideNavData(this.menuData);
   }
 
@@ -676,7 +689,7 @@ this.roleNames = roles;
     this.privilegeServ.menuList = this.menuList;
   
     // You can optionally log the filtered menu list to debug
-    console.log('Filtered Menu List:', JSON.stringify(this.menuList));
+    // console.log('Filtered Menu List:', JSON.stringify(this.menuList));
   }
   
   ngAfterViewInit(): void {

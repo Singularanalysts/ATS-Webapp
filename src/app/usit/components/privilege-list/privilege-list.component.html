@@ -12,8 +12,10 @@
         <mat-icon class="item-icon">enhanced_encryption</mat-icon>
       </button>
       </section>
-      <mat-card-content class="main-card-content">  
-      <mat-card class="card" *ngFor="let card of privilegResp;let cardId=index">
+      <mat-card-content class="main-card-content"> 
+        <ng-container *ngFor="let card of privilegResp; let cardId = index"> 
+          <mat-card class="card" *ngIf="card.privileges?.length > 0">
+       
   
   <mat-card-header class="card-header"><div class="my-checkbx"><span style="color: white; font-size: 12px;"> 
     </span> </div>
@@ -32,6 +34,7 @@
           </ng-container>
         </mat-card-content >
       </mat-card>
+    </ng-container>
     </mat-card-content>
     <mat-card-actions class="main-card-actions">
         <button mat-raised-button color="primary" (click)="onCancel()"><mat-icon class="edit-icon" style="font-size: 20px;">arrow_backward</mat-icon></button>

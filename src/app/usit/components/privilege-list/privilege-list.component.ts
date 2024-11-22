@@ -81,7 +81,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   company: any[] = [];
   cards: any[] = [];
 
-  privilegResp1: any[] = [];
+
   role1: any[] = [];
   company1: any[] = [];
   users1: any[] = [];
@@ -139,6 +139,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   private dialogServ = inject(DialogService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
+  filteredResp!: any[];
 
   constructor(private route: ActivatedRoute, private roleManagementServ: RoleManagementService) {}
 
@@ -149,6 +150,13 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.entity.roleId = +this.id;
     this.getAll();
+
+
+
+
+    this.filteredResp = this.privilegResp.filter(card => card !== null );
+
+    
   }
 
   /**
@@ -210,6 +218,8 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   }
 
   private mapResponseData() {
+
+
     this.privilegResp.push(   // array of objects
       {
         title: 'User',
@@ -226,6 +236,34 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           : false,
       },
       {
+        title: 'Search',
+        privileges: this.search,
+        isSelected: this.search
+          ? this.search.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'DASHBOARD',
+        privileges: this.dashboard,
+        isSelected: this.dashboard
+          ? this.dashboard.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'Tech & Support',
+        privileges: this.tech_support,
+        isSelected: this.tech_support
+          ? this.tech_support.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+        title: 'VMS',
+        privileges: this.vms,
+        isSelected: this.vms
+          ? this.vms.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
         title: 'Vendor',
         privileges: this.vendor,
         isSelected: this.vendor
@@ -239,20 +277,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.recruiter.every((priv: any) => priv.selected === true)
           : false,
       },
-      {
-        title: 'Technology Tags',
-        privileges: this.technology_tags,
-        isSelected: this.technology_tags
-          ? this.technology_tags.every((priv: any) => priv.selected === true)
-          : false,
-      },
-      {
-        title: 'Tech & Support',
-        privileges: this.tech_support,
-        isSelected: this.tech_support
-          ? this.tech_support.every((priv: any) => priv.selected === true)
-          : false,
-      },
+      
       {
         title: 'Immigration',
         privileges: this.immigration,
@@ -261,12 +286,20 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           : false,
       },
       {
-        title: 'Company',
-        privileges: this.company,
-        isSelected: this.company
-          ? this.company.every((priv: any) => priv.selected === true)
+        title: 'Presales',
+        privileges: this.presales,
+        isSelected: this.presales
+          ? this.presales.every((priv: any) => priv.selected === true)
           : false,
       },
+      {
+        title: 'SALES',
+        privileges: this.sales,
+        isSelected: this.sales
+          ? this.sales.every((priv: any) => priv.selected === true)
+          : false,
+      },
+     
       {
         title: 'Consultant',
         privileges: this.consultant,
@@ -289,6 +322,13 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           : false,
       },
       {
+        title: 'Company',
+        privileges: this.company,
+        isSelected: this.company
+          ? this.company.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
         title: 'Visa',
         privileges: this.visa,
         isSelected: this.visa
@@ -302,6 +342,22 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.qualification.every((priv: any) => priv.selected === true)
           : false,
       },
+      {
+        title: 'Technology Tags',
+        privileges: this.technology_tags,
+        isSelected: this.technology_tags
+          ? this.technology_tags.every((priv: any) => priv.selected === true)
+          : false,
+      },
+
+      {
+        title: 'RECRUITMENT',
+        privileges: this.recruitment,
+        isSelected: this.recruitment
+          ? this.recruitment.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      
       {
         title: 'Requirement',
         privileges: this.requirement,
@@ -338,21 +394,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.us_reports.every((priv: any) => priv.selected === true)
           : false,
       },
-
-      {
-        title: 'DASHBOARD',
-        privileges: this.dashboard,
-        isSelected: this.dashboard
-          ? this.dashboard.every((priv: any) => priv.selected === true)
-          : false,
-      },
-      {
-        title: 'Search',
-        privileges: this.search,
-        isSelected: this.search
-          ? this.search.every((priv: any) => priv.selected === true)
-          : false,
-      },
+    
       {
         title: 'Mass Mailing',
         privileges: this.mass_mailing,
@@ -367,13 +409,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.h1_transfer.every((priv: any) => priv.selected === true)
           : false,
       },
-      {
-        title: 'Presales',
-        privileges: this.presales,
-        isSelected: this.presales
-          ? this.presales.every((priv: any) => priv.selected === true)
-          : false,
-      },
+     
       {
         title: 'Open_reqs_job_application',
         privileges: this.Open_reqs_job_application,
@@ -397,27 +433,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.vc_cx_profiles.every((priv: any) => priv.selected === true)
           : false,
       },
-      {
-        title: 'VMS',
-        privileges: this.vms,
-        isSelected: this.vms
-          ? this.vms.every((priv: any) => priv.selected === true)
-          : false,
-      },
-      {
-        title: 'SALES',
-        privileges: this.sales,
-        isSelected: this.sales
-          ? this.sales.every((priv: any) => priv.selected === true)
-          : false,
-      },
-      {
-        title: 'RECRUITMENT',
-        privileges: this.recruitment,
-        isSelected: this.recruitment
-          ? this.recruitment.every((priv: any) => priv.selected === true)
-          : false,
-      },
+   
       {
         title: 'talent_acquisition',
         privileges: this.talent_acquisition,
@@ -474,8 +490,13 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.reports.every((priv: any) => priv.selected === true)
           : false,
       }
+      
     );
+
+
+    
   }
+
 
 // selectedCardPrivileges() {
   //   this.privilegServ
@@ -1413,7 +1434,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   priv: any,  privilegResp: any) {
 // alert("single card index"+cardId);
 if(priv.cardType==='many' && event.checked){
-  
   let myval: number=0;
   let mypri: number=0;
  privilegResp?.forEach((care:any) => {

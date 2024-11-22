@@ -61,9 +61,7 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
   ],
   providers: [
