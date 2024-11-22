@@ -140,12 +140,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.entity.roleId = +this.id;
     this.getAll();
-
-
-
-
-    this.filteredResp = this.privilegResp.filter(card => card !== null );
-
     
   }
 
