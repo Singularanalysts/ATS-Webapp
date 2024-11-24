@@ -85,17 +85,6 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
 
   }
 
-superAdmin(){
-
-
-
-  
-
-
-}
-
-
-
 myRoles(){
   // alert("second===========");
   this.getRoles().subscribe({
@@ -126,14 +115,14 @@ myRoles(){
         "text": "Dashboard",
         "icon": "dashboard",
         "routerLink": "/usit/dashboard",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "SEARCH",
         "text": "Search",
         "icon": "search",
         "routerLink": "/usit/search",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "VMS",
@@ -146,42 +135,56 @@ myRoles(){
             "text": "Vendor",
             "icon": "group",
             "routerLink": "/usit/vendors",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "RECRUITER",
             "text": "Recruiters",
             "icon": "business_center",
             "routerLink": "/usit/recruiters",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "Blacklisted Companies",
             "text": "Blacklisted Companies",
             "icon": "block",
             "routerLink": "/usit/blacklisted-companies",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "Current Primary Vendor",
             "text": "Current Primary Vendor",
             "icon": "group",
             "routerLink": "/usit/current-primary-vendor",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "Future Primary Vendor",
             "text": "Future Primary Vendor",
             "icon": "group",
             "routerLink": "/usit/future-primary-vendor",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "Know Vendor Contacts",
             "text": "Known Contacts",
             "icon": "group",
             "routerLink": "/usit/known-contacts",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
+          },
+          {
+            "test": "Know Vendor Contacts",
+            "text": "Known Contacts",
+            "icon": "group",
+            "routerLink": "/usit/known-contacts",
+            "roles":["Super Administrator"]  
+          },
+          {
+            "test": "TCVR",
+            "text": "TCVR",
+            "icon": "handshake",
+            "routerLink": "/usit/tcvr",
+            "roles":["Super Administrator"]  
           }
         ]
       },
@@ -190,21 +193,21 @@ myRoles(){
         "text": "Mass Mailing",
         "icon": "mail",
         "routerLink": "/usit/mass-mailing",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "TECHNOLOGY_TAG",
         "text": "Technology Tags",
         "icon": "build",
         "routerLink": "/usit/technology-tag",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "TECH_SUPPORT",
         "text": "Tech & Support",
         "icon": "build",
         "routerLink": "/usit/list-techsupport",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       }, 
       {
         "test": "PEOPLE",
@@ -216,21 +219,21 @@ myRoles(){
             "text": "Active",
             "icon": "check_circle",
             "routerLink": "/usit/active",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "Leave of Absence",
             "text": "Leave of Absence",
             "icon": "event_busy",
             "routerLink": "/usit/leave-of-absence",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           },
           {
             "test": "Terminated",
             "text": "Terminated",
             "icon": "cancel",
             "routerLink": "/usit/terminated",
-            "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+            "roles":["Super Administrator"]  
           }
         ]
       },
@@ -239,21 +242,21 @@ myRoles(){
         "text": "Employees",
         "icon": "people",
         "routerLink": "/usit/employees",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "H_TRANSFER",
         "text": "H1 Transfer",
         "icon": "people",
         "routerLink": "/usit/h1transfer",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "PRESALES",
         "text": "Pre-sales",
         "icon": "local_offer",
         "routerLink": "/usit/pre-sales",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
     {
       "test": "SOURCING",
@@ -265,28 +268,28 @@ myRoles(){
           "text": "Sourcing",
           "icon": "flash_on",
           "routerLink": "/usit/sourcing",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "Pursuing",
           "text": "Pursuing",
           "icon": "person",
           "routerLink": "/usit/pursuing",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "OnBoarding",
           "text": "OnBoarding",
           "icon": "assignment",
           "routerLink": "/usit/onboarding",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "Closures",
           "text": "Closures",
           "icon": "check_circle",
           "routerLink": "/usit/sourcing-closures",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -294,106 +297,126 @@ myRoles(){
       "test": "SALES",
       "text": "Sales",
       "icon": "attach_money",
-      "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  ,
+      "roles":["Super Administrator"]  ,
       "children": [
         {
-          "test": "Hot List",
+          "test": "Hot_List",
           "text": "Hot List",
           "icon": "flash_on",
           "routerLink": "/usit/hot-list",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
-          "test": "Consultant",
+          "test": "SALES_CONSULTANT",
           "text": "Consultants",
           "icon": "person",
           "routerLink": "/usit/sales-consultants",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
-          "test": "SUBMISSION",
+          "test": "SALES_SUBMISSION",
           "text": "Submissions",
           "icon": "assignment",
           "routerLink": "/usit/sales-submissions",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
-          "test": "INTERVIEW",
+          "test": "SALES_INTERVIEW",
           "text": "Interviews",
           "icon": "chat_bubble_outline",
           "routerLink": "/usit/sales-interviews",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
+        },
+        {
+          "test": "SALES_CLOSURES",
+          "text": "Closures",
+          "icon": "check_circle",
+          "routerLink": "/usit/sales-closures",
+          "roles":["Super Administrator"]  
         }
-        ,
-    
-    {
+      ]
+    } ,
+        {
+      "test":"RECRUITMENT",
       "text": "Recruitment",
       "icon": "business",
       "children": [
         {
+          "test":"RECRUITING_REQUIREMENT",
           "text": "Requirements",
           "icon": "assignment_turned_in",
-          "routerLink": "/usit/rec-requirements"
+          "routerLink": "/usit/rec-requirements",
+          "roles":["Super Administrator"] 
         },
         {
+          "test":"RECRUITING_CONSULTANT",
           "text": "Consultants",
           "icon": "person_search",
-          "routerLink": "/usit/rec-consultants"
+          "routerLink": "/usit/rec-consultants",
+          "roles":["Super Administrator"] 
         },
         {
+          "test":"RECRUITING_SUBMISSION",
           "text": "Submissions",
           "icon": "assignment",
-          "routerLink": "/usit/rec-submissions"
+          "routerLink": "/usit/rec-submissions",
+          "roles":["Super Administrator"] 
         },
         {
+          "test":"RECRUITING_INTERVIEW",
           "text": "Interviews",
           "icon": "chat_bubble_outline",
-          "routerLink": "/usit/rec-interviews"
+          "routerLink": "/usit/rec-interviews",
+          "roles":["Super Administrator"] 
         },
         {
+          "test":"RECRUITING_CLOSURES",
           "text": "Closures",
           "icon": "check_circle",
-          "routerLink": "/usit/rec-closures"
+          "routerLink": "/usit/rec-closures",
+          "roles":["Super Administrator"] 
         }
       ]
     },
     {
+      "test": "DOM_RECRUITMENT",
       "text": "Dom Recruitment",
       "icon": "business",
       "children": [
         {
+          "test":"DOM_REQUIREMENT",
           "text": "Requirements",
           "icon": "assignment_turned_in",
-          "routerLink": "/usit/dom-requirements"
+          "routerLink": "/usit/dom-requirements",
+          "roles":["Super Administrator"]  
         },
         {
+          "test":"DOM_CONSULTANT",
           "text": "Consultants",
           "icon": "person_search",
-          "routerLink": "/usit/dom-consultants"
+          "routerLink": "/usit/dom-consultants",
+          "roles":["Super Administrator"]  
         },
         {
+          "test":"DOM_SUBMISSION",
           "text": "Submissions",
           "icon": "assignment",
-          "routerLink": "/usit/dom-submission"
+          "routerLink": "/usit/dom-submission",
+          "roles":["Super Administrator"]  
         },
         {
+          "test":"DOM_INTERVIEW",
           "text": "Interviews",
           "icon": "chat_bubble_outline",
-          "routerLink": "/usit/dom-interview"
+          "routerLink": "/usit/dom-interview",
+          "roles":["Super Administrator"]  
         },
         {
+          "test":"DOM_CLOSURES",
           "text": "Closures",
           "icon": "check_circle",
-          "routerLink": "/usit/dom-closures"
-        }
-      ]
-    },
-        {
-          "test": "Closures",
-          "text": "Closures",
-          "icon": "check_circle",
-          "routerLink": "/usit/sales-closures",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "routerLink": "/usit/dom-closures",
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -407,28 +430,28 @@ myRoles(){
           "text": "Employement Contract",
           "icon": "assignment_turned_in",
           "routerLink": "/usit/employement-contract",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "Tax Documents",
           "text": "Tax Documents",
           "icon": "person_search",
           "routerLink": "/usit/tax-documents",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "Offer benefits package",
           "text": "Offer Benefits Package",
           "icon": "assignment",
           "routerLink": "/usit/offer-benefits-package",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "set up payroll",
           "text": "Set Up Payroll",
           "icon": "chat_bubble_outline",
           "routerLink": "/usit/set-up-payroll",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -442,35 +465,35 @@ myRoles(){
               "text": "Portal Requirements",
               "icon": "group",
               "routerLink": "/usit/portalreqs",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "cpv portal requirements",
               "text": "CPV Portal Requirements",
               "icon": "group",
               "routerLink": "/usit/cpv-portal-requirements",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Fpv Portal Requirements",
               "text": "FPV Portal Requirements",
               "icon": "group",
               "routerLink": "/usit/fpv-portal-requirements",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Rss",
               "text": "RSS",
               "icon": "business_center",
               "routerLink": "/usit/rssfeed",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Email Extraction",
               "text": "Email Extraction",
               "icon": "business_center",
               "routerLink": "/usit/email-extraction-list",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             }
           ]
         },
@@ -479,21 +502,21 @@ myRoles(){
         "text": "Openreqs Job Applications",
         "icon": "view_carousel",
         "routerLink": "/usit/openreqs-job-applications",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "TALENT_POOL",
         "text": "Talent Pool",
         "icon": "business_center",
         "routerLink": "/usit/linkedinprofiles",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
       {
         "test": "VC_CX_PROFILES",
         "text": "VC-CX Profiles",
         "icon": "badge",
         "routerLink": "/usit/vc-cx-profiles",
-        "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+        "roles":["Super Administrator"]  
       },
     {
       "test": "TALENT_ACQUISITION",
@@ -505,7 +528,7 @@ myRoles(){
           "text": "Hot List Providers",
           "icon": "groups",
           "routerLink": "/usit/hot-list-providers",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -514,7 +537,7 @@ myRoles(){
           "text": "Roles - Privileges",
           "icon": "assignment_ind",
           "routerLink": "/usit/roles",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "REPORTS",
@@ -526,35 +549,35 @@ myRoles(){
               "text": "Employees Reports",
               "icon": "assignment_ind",
               "routerLink": "/usit/employee-report",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Sourcing Reports",
               "text": "Sourcing Reports",
               "icon": "dynamic_feed",
               "routerLink": "/usit/sourcing-report",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Open Reqs Reports",
               "text": "Open Reqs Reports",
               "icon": "dynamic_feed",
               "routerLink": "/usit/open-reqs-report",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Banter Reports",
               "text": "Banter Reports",
               "icon": "fax",
               "routerLink": "/usit/banter-report",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             },
             {
               "test": "Candidate Reports",
               "text": "Candidate Reports",
               "icon": "contact_page",
               "routerLink": "/usit/candidate-reports",
-              "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+              "roles":["Super Administrator"]  
             }
           ]
         },
@@ -564,25 +587,25 @@ myRoles(){
       "icon": "extension",
       "children": [
         {
-          "test": "Visa",
+          "test": "VISA",
           "text": "Visa",
           "icon": "credit_card",
           "routerLink": "/usit/visa",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
-          "test": "Qualification",
+          "test": "QUALIFICATION",
           "text": "Qualification",
           "icon": "school",
           "routerLink": "/usit/qualification",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
-          "test": "Companies",
+          "test": "COMPANY",
           "text": "Companies",
           "icon": "business",
           "routerLink": "/usit/companies",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -596,37 +619,67 @@ myRoles(){
           "text": "Purchase Orders",
           "icon": "request_page",
           "routerLink": "/billpay/purchase-orders",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "invoices",
           "text": "Invoices",
           "icon": "description",
           "routerLink": "/billpay/invoices",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         },
         {
           "test": "receipts",
           "text": "Receipts",
           "icon": "receipt",
           "routerLink": "/billpay/receipts",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         }
       ]
     },
     {
-      "test": "receipts",
+      "test": "TASKMANAGEMENT",
       "text": "Task Management",
       "icon": "task",
       "children": [
         {
+          "test": "PROJECTS",
           "text": "Projects",
           "icon": "work",
           "routerLink": "/task-management/projects",
-          "roles":["Super Administrator", "Administrator", "Sales Manager", "Recruiting Manager","Team Leader Sales", "Team Leader Recruiting", "Sales Executive"]  
+          "roles":["Super Administrator"]  
         }
       ]
-    }  
+    },
+    {
+      "test": "KPT",
+      "text": "KPT",
+      "icon": "quiz",
+      "children": [
+        {
+          "test": "ADD_KPT",
+          "text": "ADD_KPT",
+          "icon": "quiz",
+          "routerLink": "/usit/quiz-list",
+         "roles":["Super Administrator"] 
+        },
+        {
+          "test": "WRITE_KPT",
+          "text": "WRITE_KPT",
+          "icon": "assignment",
+          "routerLink": "/usit/attempt-quiz",
+          "roles":["Super Administrator"] 
+        },
+        {
+          "test": "RESULT_KPT",
+          "text": "RESULT_KPT",
+          "icon": "assignment",
+          "routerLink": "/usit/quiz-result",
+         "roles":["Super Administrator"] 
+        }
+      ]
+    }
+
     ];
 
     // Replace static roles with dynamic roles

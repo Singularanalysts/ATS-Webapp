@@ -101,9 +101,9 @@ ul.breadcrumb li:nth-child(2) {
   margin-left: 35px;
 }
 
-.my-checkbx{
+// .my-checkbx{
 
-}
+// }
 
 .fontstyle{
   font-weight: bold;
@@ -112,4 +112,9 @@ ul.breadcrumb li:nth-child(2) {
 
 .access-check-boxs[_ngcontent-ng-c3594766312] {
   margin-left: 96px;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 16px;
+  margin-left: 50px;
 }
