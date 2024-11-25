@@ -48,6 +48,7 @@ export class ManagePrivilegeComponent implements OnInit{
       {
         type: ['', [Validators.required, Validators.maxLength(50)]],
         name: ['', [Validators.required, Validators.maxLength(50)]],
+        cardType: ['', [Validators.required, Validators.maxLength(50)]],
       }
     );
   }
@@ -58,8 +59,10 @@ export class ManagePrivilegeComponent implements OnInit{
       this.displayFormErrors()
       return;
     }
+    //console.log("form-val", JSON.stringify(this.form.value))
     this.privilegeServ.registerprevilage(this.form.value)
       .subscribe((data: any) => {
+        //console.log(data.status)
         if (data.status == 'Success') {
           this.dataToBeSentToSnackBar.message =  this.data.actionName === 'add-privilege' ?
           'Previlege added successfully!' : 'Previlege updated successfully!';
@@ -71,6 +74,13 @@ export class ManagePrivilegeComponent implements OnInit{
           this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
       });
+
+
+      // dialogRef.afterClosed().subscribe(() => {
+      //   if (dialogRef.componentInstance.submitted) {
+      //     this.getAllData(this.currentPageIndex + 1, this.status);
+      //   }
+      // });
 
   }
 

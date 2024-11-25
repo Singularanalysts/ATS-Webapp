@@ -24,6 +24,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { ManagePrivilegeComponent } from '../privilege-list/manage-privilege/manage-privilege.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-roles-list',
   templateUrl: './roles-list.component.html',
@@ -76,7 +78,7 @@ export class RolesListComponent implements OnInit , AfterViewInit{
   // add
   addRole(){
     const actionData = {
-      title: 'Add New Role',
+      title: 'New Role',
       buttonCancelText: 'Cancel',
       buttonSubmitText: 'Submit',
       actionName: 'add-role'
@@ -243,7 +245,7 @@ export class RolesListComponent implements OnInit , AfterViewInit{
    */
 
   goToPrivilegeScreen(role: Role){
-this.router.navigate(['/usit/privileges', role.roleid])
+this.router.navigate(['/usit/privileges', role.roleid, role.rolename])
   }
 
   }
