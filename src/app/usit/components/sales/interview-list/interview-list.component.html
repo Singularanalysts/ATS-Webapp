@@ -10,12 +10,31 @@
         </span>
 
         <div class="submission-actions">
-            <button [disabled]="!privilegeServ.hasPrivilege('ADD_INTERVIEWS')" matTooltip="Add" matTooltipPosition="left" mat-icon-button class="add-submission" (click)="addInterview()">
-                <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_INTERVIEWS')}">add_circle</mat-icon>
+
+            <button [disabled]="!privilegeServ.hasPrivilege('ADD_INTERVIEWS_SALES')" matTooltip="Add"
+                *ngIf="flag==='Sales'" matTooltipPosition="left" mat-icon-button class="add-submission"
+                (click)="addInterview()">
+                <mat-icon
+                    [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_INTERVIEWS_SALES')}">add_circle</mat-icon>
+            </button>
+
+            <button [disabled]="!privilegeServ.hasPrivilege('ADD_INTERVIEWS_RECRUITING')" matTooltip="Add"
+                *ngIf="flag==='Recruiting'" matTooltipPosition="left" mat-icon-button class="add-submission"
+                (click)="addInterview()">
+                <mat-icon
+                    [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_INTERVIEWS_RECRUITING')}">add_circle</mat-icon>
+            </button>
+
+            <button [disabled]="!privilegeServ.hasPrivilege('ADD_INTERVIEWS_DOM')" matTooltip="Add"
+                *ngIf="flag==='Domrecruiting'" matTooltipPosition="left" mat-icon-button class="add-submission"
+                (click)="addInterview()">
+                <mat-icon
+                    [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_INTERVIEWS_DOM')}">add_circle</mat-icon>
             </button>
 
             <div class="search-submission">
-                <input matInput type="text" class="search" placeholder="search interviews" (keyup)="applyFilter($event)">
+                <input matInput type="text" class="search" placeholder="search interviews"
+                    (keyup)="applyFilter($event)">
             </div>
         </div>
     </div>
@@ -34,18 +53,20 @@
                 </ng-container>
                 <!-- Date-->
                 <ng-container matColumnDef="InterviewId">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by InterviewId" mat-sort-header> Interview ID
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by InterviewId" mat-sort-header>
+                        Interview ID
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element?.interviewno}} </td>
                 </ng-container>
                 <!-- ID-->
                 <ng-container matColumnDef="ConsultantName">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ConsultantName" mat-sort-header> Consultant Name </th>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by ConsultantName"
+                        mat-sort-header> Consultant Name </th>
                     <td mat-cell *matCellDef="let element">
                         <span class="consultant-id"
-                        (click)="goToConsultantInfo(element, flag)">{{element?.name|titlecase}}
-                      </span>
-                    
+                            (click)="goToConsultantInfo(element, flag)">{{element?.name|titlecase}}
+                        </span>
+
                     </td>
                 </ng-container>
                 <!-- Name-->
@@ -57,61 +78,67 @@
                 </ng-container>
                 <!-- Track(S/I)-->
                 <ng-container matColumnDef="Round">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Round" mat-sort-header> Round </th>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Round" mat-sort-header> Round
+                    </th>
                     <td mat-cell *matCellDef="let element">{{element?.round}} </td>
                 </ng-container>
                 <!-- Requirement-->
                 <ng-container matColumnDef="Mode">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Mode" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Mode" mat-sort-header>
                         Mode </th>
                     <td mat-cell *matCellDef="let element"> {{element?.mode}}
                     </td>
                 </ng-container>
                 <!-- Vendor-->
                 <ng-container matColumnDef="Vendor">
-                    <th mat-header-cell *matHeaderCellDef 
-                        sortActionDescription="Sort by Vendor" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Vendor" mat-sort-header>
                         Vendor </th>
                     <td mat-cell *matCellDef="let element"> {{element?.vendor}}
                     </td>
                 </ng-container>
                 <!-- Implementation Partner-->
                 <ng-container matColumnDef="ImplementationPartner">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ImplementationPartner" mat-sort-header> Implementation Partner </th>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by ImplementationPartner"
+                        mat-sort-header> Implementation Partner </th>
                     <td mat-cell *matCellDef="let element"> {{element?.implpartner}}
                     </td>
                 </ng-container>
                 <!-- Client Location -->
                 <ng-container matColumnDef="Client">
-                    <th mat-header-cell *matHeaderCellDef 
-                        sortActionDescription="Sort by Client" mat-sort-header> Client </th>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Client" mat-sort-header> Client
+                    </th>
                     <td mat-cell *matCellDef="let element"> {{element?.endclient}}
                     </td>
                 </ng-container>
                 <!-- Sub Rate Column -->
                 <ng-container matColumnDef="DateOfSubmission">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by DateOfSubmission" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by DateOfSubmission"
+                        mat-sort-header>
                         Date of Submission</th>
                     <td mat-cell *matCellDef="let element"> {{element.createddate | date:'MM-dd-yyyy'}}
                     </td>
                 </ng-container>
                 <!-- Project Location Column -->
                 <ng-container matColumnDef="EmployeerName">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by EmployeerName" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by EmployeerName" mat-sort-header>
                         Employeer Name</th>
                     <td mat-cell *matCellDef="let element">
-                        <ng-container *ngIf="this.flag == 'Recruiting'; then recInterview else salesInterview"></ng-container>
+                        <ng-container
+                            *ngIf="this.flag == 'Recruiting'; then recInterview else salesInterview"></ng-container>
                         <ng-template #recInterview>
-                            {{ element?.reqnumber }}<span class="employeer-name" (click)="goToUserInfo(element.userid)">{{element.fullname}}</span>
+                            {{ element?.reqnumber }}<span class="employeer-name"
+                                (click)="goToUserInfo(element.userid)">{{element.fullname}}</span>
                         </ng-template>
                         <ng-template #salesInterview>
-                            <span class="employeer-name" (click)="goToUserInfo(element.userid)">{{element.pseudoname}}</span>
+                            <span class="employeer-name"
+                                (click)="goToUserInfo(element.userid)">{{element.pseudoname}}</span>
                         </ng-template>
                 </ng-container>
 
                 <!-- Interview Status Column -->
                 <ng-container matColumnDef="InterviewStatus">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by InterviewStatus" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by InterviewStatus"
+                        mat-sort-header>
                         Interview Status
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element.interview_status}} </td>
@@ -121,10 +148,34 @@
                 <ng-container matColumnDef="Action">
                     <th mat-header-cell *matHeaderCellDef> Action </th>
                     <td mat-cell *matCellDef="let interview">
-                        <span class="action-buttons" >
-                            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_INTERVIEWS') " mat-icon-button (click)="editInterview(interview)" class="action-button-ed">
-                                <mat-icon >edit</mat-icon></button>        <button [disabled]="!privilegeServ.hasPrivilege('DELETE_INTERVIEWS')"  mat-icon-button (click)="deleteInterview(interview)" class="action-button-ed">
-                                <mat-icon  [ngClass]="{'edit-icon': privilegeServ.hasPrivilege('DELETE_INTERVIEWS')}" [ngClass]="'delete-icon'">delete</mat-icon>
+                        <span class="action-buttons">
+
+                            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_INTERVIEWS_SALES') " mat-icon-button
+                                *ngIf="flag==='Sales'" (click)="editInterview(interview)" class="action-button-ed">
+                                <mat-icon>edit</mat-icon></button>
+
+                            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_INTERVIEWS_RECRUITING') " mat-icon-button
+                                *ngIf="flag==='Recruiting'" (click)="editInterview(interview)" class="action-button-ed">
+                                <mat-icon>edit</mat-icon></button>
+
+                            <button [disabled]="!privilegeServ.hasPrivilege('EDIT_INTERVIEWS_DOM') " mat-icon-button
+                                *ngIf="flag==='Domrecruiting'" (click)="editInterview(interview)"
+                                class="action-button-ed">
+                                <mat-icon>edit</mat-icon></button>
+
+                            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_INTERVIEWS_SALES')" mat-icon-button *ngIf="flag==='Sales'"
+                                (click)="deleteInterview(interview)" class="action-button-ed">
+                                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_INTERVIEWS_SALES')}">delete</mat-icon>
+                            </button>
+
+                            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_INTERVIEWS_RECRUITING')" mat-icon-button *ngIf="flag==='Recruiting'"
+                                (click)="deleteInterview(interview)" class="action-button-ed">
+                                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_INTERVIEWS_RECRUITING')}">delete</mat-icon>
+                            </button>
+
+                            <button [disabled]="!privilegeServ.hasPrivilege('DELETE_INTERVIEWS_DOM')" mat-icon-button *ngIf="flag==='Domrecruiting'"
+                                (click)="deleteInterview(interview)" class="action-button-ed">
+                                <mat-icon [ngClass]="{'delete-icon': privilegeServ.hasPrivilege('DELETE_INTERVIEWS_DOM')}">delete</mat-icon>
                             </button>
                         </span>
                     </td>
@@ -143,13 +194,10 @@
 
     <div class="paginator">
         <!-- paginator -->
-        <mat-paginator   (page)="handlePageEvent($event)"
-          [length]="totalItems" [pageSize]="pageSize"
-          [disabled]="false" [showFirstLastButtons]="showFirstLastButtons"
-          [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
-          [hidePageSize]="true"
-          [pageIndex]="currentPageIndex" aria-label="Select page">
+        <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
         </mat-paginator>
-      </div>
+    </div>
 
 </div>

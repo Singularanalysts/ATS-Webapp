@@ -18,7 +18,6 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
   private apiServ = inject(ApiService);
   protected privilegeServ = inject(PrivilegesService);
   protected roleManagementServ= inject(RoleManagementService);
-  department: any;
   role: any;
   cardPvis: string[] = [];
   myarra: never[] | undefined;
@@ -26,62 +25,12 @@ export class SideNavbarComponent implements OnInit, AfterViewInit {
   menuData: any[] = [];
 
   ngOnInit(): void {
-    this.department = localStorage.getItem('department');
+    
     this.role = localStorage.getItem('role');
-    const cardPriv= localStorage.getItem('cardPrivileges');
-   
-       // Call the method that returns the Observable
-      //  this.getRoles().subscribe({
-      //   next: (roles: string[]) => {
-      //     if(this.role===roles){
-      //       alert("inside role match========="+this.role +" "+this.role);
-      //        this.getSideNavData('assets/For-testing.json');
-      //     }
-      //   },
-      //   error: (err) => {
-      //     alert('Failed to fetch roles');
-      //   }
-      // });
-
-    if (this.role==="Super Administrator" && this.department === 'SoftWare') {
-
+    const cardPriv= localStorage.getItem('cardPrivileges')
+    this.myRoles();
       
-      // alert("First===========");
-      this.myRoles();
-      // this.getSideNavData1('assets/For-testing.json');
-    }
-    else if (this.role=='Administrator' || this.department=='SoftWare' || this.department=='Software'){
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
-    else if(this.department=='DomRecruiting'){
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
-    else if(this.role=='Sales Manager'){
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
-    else if (this.role=='Recruiting Manager'){
-      this.myRoles();
-      // this.getSideNavData('aassets/For-testing.json')
-    }
-    else if ( (this.role=='Team Leader Recruiting' || this.role=='Recruiter') && (this.department == 'Recruiting')){
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
-    else if ( (this.role=='Team Leader Sales' || this.role=='Sales Executive') && (this.department == 'Bench Sales')){
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
-    else if (this.department=='Sourcing'){
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
-    else{
-      this.myRoles();
-      // this.getSideNavData('assets/For-testing.json')
-    }
+    
 
   }
 
@@ -165,13 +114,7 @@ myRoles(){
             "routerLink": "/usit/future-primary-vendor",
             "roles":["Super Administrator"]  
           },
-          {
-            "test": "Know Vendor Contacts",
-            "text": "Known Contacts",
-            "icon": "group",
-            "routerLink": "/usit/known-contacts",
-            "roles":["Super Administrator"]  
-          },
+          
           {
             "test": "Know Vendor Contacts",
             "text": "Known Contacts",
