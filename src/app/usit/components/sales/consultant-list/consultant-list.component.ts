@@ -183,7 +183,7 @@ export class ConsultantListComponent
   page: number = 1;
   move2sales = false;
   ngOnInit(): void {
-    const mvt = this.privilegeServ.hasPrivilege('MOVETOPRESALES');
+    const mvt = this.privilegeServ.hasPrivilege('MOVETOSALES_PRESALES');
     if (mvt) {
       this.move2sales = true;
     }

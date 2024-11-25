@@ -195,19 +195,19 @@ const routes: Routes = [
   {
     path: 'sales-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isSalesClosure: true },
   },
   {
     path: 'rec-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isRecClosure: true },
   },
   {
     path: 'dom-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isDomClosure: true },
   },
   {
@@ -362,7 +362,10 @@ const routes: Routes = [
   {
     path: 'email-configuration',
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
-  }
+  },
+  {
+     path: 'privileges/:id/:rolename', component: PrivilegeListComponent ,
+  },
 ];
 
 @NgModule({

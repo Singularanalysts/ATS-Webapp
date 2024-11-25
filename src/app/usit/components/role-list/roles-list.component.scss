@@ -6,7 +6,7 @@
 
 .table-wrapper{
   overflow: auto;
-  padding: 4px;
+  padding: 14px;
 }
 table {
   width: 100%;
@@ -29,7 +29,7 @@ thead {
 }
 
 .mat-column-RoleName{
-  width: 95%;
+  width: 35%;
   border-right: 1px solid lightgray;
   padding-right: 24px;
 
@@ -150,3 +150,10 @@ ul.breadcrumb li a:hover {
 .mat-mdc-header-row {
   z-index: 1000;
 }
+
+.actions-view{
+  margin-left: 10px;
+  // padding-left: 30px;
+  }
+
+  
