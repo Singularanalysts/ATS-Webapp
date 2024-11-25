@@ -109,7 +109,8 @@ export class OpenreqsComponent implements OnInit {
       { value: 'glassdoor', label: 'Glassdoor' },
       { value: 'indeed', label: 'Indeed' },
       { value: 'linkedin', label: 'LinkedIn' },
-      { value: 'jobsora', label: 'Jobsora' }
+      { value: 'jobsora', label: 'Jobsora' },
+      { value:'All Local Jobs', label: 'All Local Jobs' }
     ]
   };
   consultantData: any[] = [];

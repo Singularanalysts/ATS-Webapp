@@ -40,7 +40,6 @@ import { ClientInformationService } from 'src/app/usit/services/client-informati
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule
   ],
   templateUrl: './add-client-information.component.html',
