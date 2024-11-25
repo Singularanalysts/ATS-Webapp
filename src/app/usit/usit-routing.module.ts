@@ -195,19 +195,19 @@ const routes: Routes = [
   {
     path: 'sales-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isSalesClosure: true },
   },
   {
     path: 'rec-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isRecClosure: true },
   },
   {
     path: 'dom-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isDomClosure: true },
   },
   {
