@@ -388,7 +388,7 @@ export class EmployeeReportsComponent {
   grpby = '';
   onSubmit() {
 
-    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
     this.submitted = true;
     if (this.employeeReport.invalid) {
       this.showReport = false;

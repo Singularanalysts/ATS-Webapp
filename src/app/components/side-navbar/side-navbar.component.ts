@@ -623,26 +623,26 @@ myRoles(){
       ]
     },
     {
-      "test": "VIEW_CONSULTATNT_PROFILE",
+      "test": "EMPLOYEE_LOGIN_VIEW_PROFILE",
       "text": "View Profile",
       "icon": "person",
       "routerLink": "/usit/profile",
       "roles":["Super Administrator"] 
     }
     ,
-  {  "test":"CONSULTATNT_JOB_REQUIREMENTS",
+  {  "test":"EMPLOYEE_LOGIN_JOB_REQUIREMENTS",
     "text": "Job Requirements",
     "icon": "business_center",
     "children": [
       {
-        "test":"CONSULTATNTS_CONTRACT_REQUIREMENTS",
+        "test":"EMPLOYEE_LOGIN_CONTRACT_REQUIREMENTS",
         "text": "Contract",
         "icon": "library_books",
         "routerLink": "/usit/open-requirements",
         "roles":["Super Administrator"] 
       },
       {
-        "test":"CONSULTATNTS_FULL_TIME_REQUIREMENTS",
+        "test":"EMPLOYEE_LOGIN_FULL_TIME_REQUIREMENTS",
         "text": "Full Time",
         "icon": "library_books",
         "routerLink": "/usit/full-time-requirements",
@@ -651,7 +651,7 @@ myRoles(){
     ]
   },
   {
-    "test":"CONSULTATNTS_APPLIED_JOBS",
+    "test":"EMPLOYEE_LOGIN_APPLIED_JOBS",
     "text": "Applied Jobs",
     "icon": "bookmark_border",
     "routerLink": "/usit/applied-jobs",
@@ -659,21 +659,21 @@ myRoles(){
   }
   ,
   {
-    "test":"CONSULTATNT_SUBMISSIONS",
+    "test":"EMPLOYEE_LOGIN_SUBMISSIONS",
     "text": "Submissions",
     "icon": "assignment",
     "routerLink": "/usit/submissions",
     "roles":["Super Administrator"] 
   },
   {
-    "test":"CONSULTATNT_INTERVIEWS",
+    "test":"EMPLOYEE_LOGIN_INTERVIEWS",
     "text": "Interviews",
     "icon": "chat_bubble_outline",
     "routerLink": "/usit/interviews",
     "roles":["Super Administrator"] 
   },
   {
-    "test":"CONSULTANT_REPORT",
+    "test":"EMPLOYEE_LOGIN_REPORT",
     "text": "Report",
     "icon": "reports",
     "routerLink": "/usit/report",

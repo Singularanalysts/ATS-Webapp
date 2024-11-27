@@ -59,7 +59,7 @@ export class H1transferComponent implements OnInit{
   private consultantServ = inject(ConsultantService);
   protected privilegeServ = inject(PrivilegesService);
   ngOnInit(): void {
-    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
     this.getAllData();
     if (shoWresult) {
       this.showReport = true;

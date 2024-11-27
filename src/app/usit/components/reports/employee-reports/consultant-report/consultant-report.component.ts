@@ -99,7 +99,7 @@ export class ConsultantReportComponent {
   ) {}
 
   ngOnInit(): void {
-    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
     if (shoWresult) {
       this.showReport = true;
     } else {
