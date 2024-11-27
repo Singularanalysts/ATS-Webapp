@@ -71,6 +71,10 @@ export class OpenreqService {
     return this.http.post("openreqs/dice/allEmpAllReqs", data);
   }
 
+  getConsultantOpenReqsFulltimeByPaginationSortandFilter(data: any) {
+    return this.http.post("openreqs/dice/allEmpFulltimeReqs", data);
+  }
+
   applyJob(data: any) {
     return this.http.post("openreqs/apply/applyJob", data);
   }
