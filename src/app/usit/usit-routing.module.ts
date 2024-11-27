@@ -62,6 +62,7 @@ import { SourcingClosuresComponent } from './components/pre-sourcing/sourcing-cl
 import { SourcingComponent } from './components/pre-sourcing/sourcing/sourcing.component';
 import { PasswordChangeComponent } from '../components/password-change/password-change.component';
 import { EmailConfigurationComponent } from './components/email-configuration/email-configuration.component';
+import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-fulltime-openreqs/consultant-fulltime-openreqs.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -298,6 +299,9 @@ const routes: Routes = [
   },
   {
     path: 'open-requirements', component: ConsultantOpenreqsComponent,
+  },
+  {
+    path: 'full-time-requirements', component: ConsultantFulltimeOpenreqsComponent,
   },
   {
     path: 'applied-jobs', component: ConsultantAppliedJobsComponent,
