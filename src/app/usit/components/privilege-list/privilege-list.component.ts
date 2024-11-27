@@ -113,14 +113,16 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
 
   projects: any[] = [];
   tcvr: any[] = [];
-  view_consultant_profile: any[] = [];
-  consultant_job_requirements: any[] = [];
+  view_employee_profile: any[] = [];
+  employee_job_requirements: any[] = [];
  
-  consultants_applied_jobs: any[] = [];
+  employee_applied_jobs: any[] = [];
  
-  consultatnt_submissions: any[] = []; 
-  consultatnt_interviews: any[] = [];
-  consultant_report: any[] = [];
+  employee_submissions: any[] = []; 
+  employee_interviews: any[] = [];
+  employee_report: any[] = [];
+ 
+  excel_export: any[] = [];
 
   // snackbaran
   dataToBeSentToSnackBar: ISnackBarData = {
@@ -223,13 +225,15 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
 
         this.projects = response.data.projects;
         this.tcvr = response.data.tcvr;
-        this.view_consultant_profile = response.data.view_consultant_profile;
-        this.consultant_job_requirements = response.data.consultant_job_requirements;
-        this.consultants_applied_jobs = response.data.consultatnts_applied_jobs;
+        this.view_employee_profile = response.data.view_employee_profile;
+        this.employee_job_requirements = response.data.employee_job_requirements;
+        this.employee_applied_jobs = response.data.employee_applied_jobs;
 
-        this.consultatnt_submissions = response.data.consultatnt_submissions;
-        this.consultatnt_interviews = response.data.consultatnt_interviews;
-        this.consultant_report = response.data.consultant_report;
+        this.employee_submissions = response.data.employee_submissions;
+        this.employee_interviews = response.data.employee_interviews;
+        this.employee_report = response.data.employee_report;
+        this.excel_export = response.data.excel_export;
+             
 
         this.selecedPrivileges();
         this.mapResponseData();
@@ -607,53 +611,62 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
       },
      
       {
-        title: 'View Consultant Profile',
-        privileges: this.view_consultant_profile,
-        isSelected: this.view_consultant_profile
-          ? this.view_consultant_profile.every((priv: any) => priv.selected === true)
+        title: 'View Employee Profile',
+        privileges: this.view_employee_profile,
+        isSelected: this.view_employee_profile
+          ? this.view_employee_profile.every((priv: any) => priv.selected === true)
           : false,
       },
 
       {
-        title: 'Consultant Job Requirements',
-        privileges: this.consultant_job_requirements,
-        isSelected: this.consultant_job_requirements
-          ? this.consultant_job_requirements.every((priv: any) => priv.selected === true)
+        title: 'Employee Job Requirements',
+        privileges: this.employee_job_requirements,
+        isSelected: this.employee_job_requirements
+          ? this.employee_job_requirements.every((priv: any) => priv.selected === true)
           : false,
       },
      
       {
-        title: 'Consultatnts Applied Jobs',
-        privileges: this.consultants_applied_jobs,
-        isSelected: this.consultants_applied_jobs
-          ? this.consultants_applied_jobs.every((priv: any) => priv.selected === true)
+        title: 'Employee Applied Jobs',
+        privileges: this.employee_applied_jobs,
+        isSelected: this.employee_applied_jobs
+          ? this.employee_applied_jobs.every((priv: any) => priv.selected === true)
           : false,
       }
       ,
      
       {
-        title: 'Consultatnt Submissions',
-        privileges: this.consultatnt_submissions,
-        isSelected: this.consultatnt_submissions
-          ? this.consultatnt_submissions.every((priv: any) => priv.selected === true)
+        title: 'Employee Submissions',
+        privileges: this.employee_submissions,
+        isSelected: this.employee_submissions
+          ? this.employee_submissions.every((priv: any) => priv.selected === true)
           : false,
       }
       ,
      
       {
-        title: 'Consultatnt Interviews',
-        privileges: this.consultatnt_interviews,
-        isSelected: this.consultatnt_interviews
-          ? this.consultatnt_interviews.every((priv: any) => priv.selected === true)
+        title: 'Employee Interviews',
+        privileges: this.employee_interviews,
+        isSelected: this.employee_interviews
+          ? this.employee_interviews.every((priv: any) => priv.selected === true)
           : false,
       }
       ,
      
       {
-        title: 'Consultant Report',
-        privileges: this.consultant_report,
-        isSelected: this.consultant_report
-          ? this.consultant_report.every((priv: any) => priv.selected === true)
+        title: 'Employee Report',
+        privileges: this.employee_report,
+        isSelected: this.employee_report
+          ? this.employee_report.every((priv: any) => priv.selected === true)
+          : false,
+      }
+      ,
+     
+      {
+        title: 'Excel Export',
+        privileges: this.excel_export,
+        isSelected: this.excel_export
+          ? this.excel_export.every((priv: any) => priv.selected === true)
           : false,
       }
 
@@ -1312,9 +1325,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.view_consultant_profile != null) {
-          this.view_consultant_profile.forEach((ele) => {
-            response.data.view_consultant_profile.forEach((resp: any) => {
+        if (this.view_employee_profile != null) {
+          this.view_employee_profile.forEach((ele) => {
+            response.data.view_employee_profile.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
@@ -1324,9 +1337,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.consultant_job_requirements != null) {
-          this.consultant_job_requirements.forEach((role) => {
-            response.data.consultant_job_requirements.forEach((userresp: any) => {
+        if (this.employee_job_requirements != null) {
+          this.employee_job_requirements.forEach((role) => {
+            response.data.employee_job_requirements.forEach((userresp: any) => {
               if (role.id === userresp.id) {
                 this.entity.privilegeIds.push(userresp.id);
                 role.selected = true;
@@ -1336,9 +1349,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-           if (this.consultants_applied_jobs != null) {
-          this.consultants_applied_jobs.forEach((ele) => {
-            response.data.consultants_applied_jobs.forEach((resp: any) => {
+           if (this.employee_applied_jobs != null) {
+          this.employee_applied_jobs.forEach((ele) => {
+            response.data.employee_applied_jobs.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
@@ -1348,9 +1361,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.consultatnt_submissions != null) {
-          this.consultatnt_submissions.forEach((role) => {
-            response.data.consultatnt_submissions.forEach((userresp: any) => {
+        if (this.employee_submissions != null) {
+          this.employee_submissions.forEach((role) => {
+            response.data.employee_submissions.forEach((userresp: any) => {
               if (role.id === userresp.id) {
                 this.entity.privilegeIds.push(userresp.id);
                 role.selected = true;
@@ -1360,9 +1373,9 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.consultatnt_interviews != null) {
-          this.consultatnt_interviews.forEach((role) => {
-            response.data.consultatnt_interviews.forEach((userresp: any) => {
+        if (this.employee_interviews != null) {
+          this.employee_interviews.forEach((role) => {
+            response.data.employee_interviews.forEach((userresp: any) => {
               if (role.id === userresp.id) {
                 this.entity.privilegeIds.push(userresp.id);
                 role.selected = true;
@@ -1372,12 +1385,24 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.consultant_report != null) {
-          this.consultant_report.forEach((role) => {
-            response.data.consultant_report.forEach((userresp: any) => {
+        if (this.employee_report != null) {
+          this.employee_report.forEach((role) => {
+            response.data.employee_report.forEach((userresp: any) => {
               if (role.id === userresp.id) {
                 this.entity.privilegeIds.push(userresp.id);
                 role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+           if (this.excel_export != null) {
+          this.excel_export.forEach((ele) => {
+            response.data.excel_export.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
                 this.flg = true;
               }
             });

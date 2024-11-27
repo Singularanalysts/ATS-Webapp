@@ -35,7 +35,7 @@ import { EmpInterviewsListComponent } from './emp-interviews-list/emp-interviews
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule, RouterLink, MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
+  imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
   providers: [DatePipe]
 })
@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit {
   department!: any;
   sourcingLead = true;
   ngOnInit(): void {
-    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
     if (shoWresult) {
       this.showReport = true;
     } else {
