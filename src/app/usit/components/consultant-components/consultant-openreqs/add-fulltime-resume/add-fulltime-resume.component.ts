@@ -97,7 +97,6 @@ export class AddFulltimeResumeComponent {
       this.openServ.applyJobs(formData).subscribe({
         next: (response: any) => {
           console.log(response.status);
-          alert("full time apply check"+response.status);
           if (response.status === 'success') {
             this.dataToBeSentToSnackBar.message = 'You have successfully applied to the job';
             this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
