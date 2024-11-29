@@ -113,8 +113,18 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
 
   projects: any[] = [];
   tcvr: any[] = [];
+  view_employee_profile: any[] = [];
+  employee_job_requirements: any[] = [];
+ 
+  employee_applied_jobs: any[] = [];
+ 
+  employee_submissions: any[] = []; 
+  employee_interviews: any[] = [];
+  employee_report: any[] = [];
+ 
+  excel_export: any[] = [];
 
-  // snackbar
+  // snackbaran
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -214,7 +224,16 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.dom_closures = response.data.dom_closures;
 
         this.projects = response.data.projects;
-        this.tcvr = response.data.tcvr
+        this.tcvr = response.data.tcvr;
+        this.view_employee_profile = response.data.view_employee_profile;
+        this.employee_job_requirements = response.data.employee_job_requirements;
+        this.employee_applied_jobs = response.data.employee_applied_jobs;
+
+        this.employee_submissions = response.data.employee_submissions;
+        this.employee_interviews = response.data.employee_interviews;
+        this.employee_report = response.data.employee_report;
+        this.excel_export = response.data.excel_export;
+             
 
         this.selecedPrivileges();
         this.mapResponseData();
@@ -248,7 +267,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.dashboard.every((priv: any) => priv.selected === true)
           : false,
       },
-     
      
       {
         title: 'Search',
@@ -590,8 +608,68 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         isSelected: this.reports
           ? this.reports.every((priv: any) => priv.selected === true)
           : false,
-      }
+      },
      
+      {
+        title: 'View Employee Profile',
+        privileges: this.view_employee_profile,
+        isSelected: this.view_employee_profile
+          ? this.view_employee_profile.every((priv: any) => priv.selected === true)
+          : false,
+      },
+
+      {
+        title: 'Employee Job Requirements',
+        privileges: this.employee_job_requirements,
+        isSelected: this.employee_job_requirements
+          ? this.employee_job_requirements.every((priv: any) => priv.selected === true)
+          : false,
+      },
+     
+      {
+        title: 'Employee Applied Jobs',
+        privileges: this.employee_applied_jobs,
+        isSelected: this.employee_applied_jobs
+          ? this.employee_applied_jobs.every((priv: any) => priv.selected === true)
+          : false,
+      }
+      ,
+     
+      {
+        title: 'Employee Submissions',
+        privileges: this.employee_submissions,
+        isSelected: this.employee_submissions
+          ? this.employee_submissions.every((priv: any) => priv.selected === true)
+          : false,
+      }
+      ,
+     
+      {
+        title: 'Employee Interviews',
+        privileges: this.employee_interviews,
+        isSelected: this.employee_interviews
+          ? this.employee_interviews.every((priv: any) => priv.selected === true)
+          : false,
+      }
+      ,
+     
+      {
+        title: 'Employee Report',
+        privileges: this.employee_report,
+        isSelected: this.employee_report
+          ? this.employee_report.every((priv: any) => priv.selected === true)
+          : false,
+      }
+      ,
+     
+      {
+        title: 'Excel Export',
+        privileges: this.excel_export,
+        isSelected: this.excel_export
+          ? this.excel_export.every((priv: any) => priv.selected === true)
+          : false,
+      }
+
     );
     
   }
@@ -1139,42 +1217,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
-        // if (this.sales != null) {
-        //   this.sales.forEach((role) => {
-        //     response.data.sales.forEach((userresp: any) => {
-        //       if (role.id === userresp.id) {
-        //         this.entity.privilegeIds.push(userresp.id);
-        //         role.selected = true;
-        //         this.flg = true;
-        //       }
-        //     });
-        //   });
-        // }
-
-        // if (this.recruitment != null) {
-        //   this.recruitment.forEach((role) => {
-        //     response.data.recruitment.forEach((userresp: any) => {
-        //       if (role.id === userresp.id) {
-        //         this.entity.privilegeIds.push(userresp.id);
-        //         role.selected = true;
-        //         this.flg = true;
-        //       }
-        //     });
-        //   });
-        // }
-
-        // if (this.dom_recruitment != null) {
-        //   this.dom_recruitment.forEach((role) => {
-        //     response.data.dom_recruitment.forEach((userresp: any) => {
-        //       if (role.id === userresp.id) {
-        //         this.entity.privilegeIds.push(userresp.id);
-        //         role.selected = true;
-        //         this.flg = true;
-        //       }
-        //     });
-        //   });
-        // }
-
         if (this.talent_acquisition != null) {
           this.talent_acquisition.forEach((role) => {
             response.data.talent_acquisition.forEach((userresp: any) => {
@@ -1274,6 +1316,90 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         if (this.projects != null) {
           this.projects.forEach((ele) => {
             response.data.projects.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.view_employee_profile != null) {
+          this.view_employee_profile.forEach((ele) => {
+            response.data.view_employee_profile.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.employee_job_requirements != null) {
+          this.employee_job_requirements.forEach((role) => {
+            response.data.employee_job_requirements.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+           if (this.employee_applied_jobs != null) {
+          this.employee_applied_jobs.forEach((ele) => {
+            response.data.employee_applied_jobs.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.employee_submissions != null) {
+          this.employee_submissions.forEach((role) => {
+            response.data.employee_submissions.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.employee_interviews != null) {
+          this.employee_interviews.forEach((role) => {
+            response.data.employee_interviews.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.employee_report != null) {
+          this.employee_report.forEach((role) => {
+            response.data.employee_report.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+           if (this.excel_export != null) {
+          this.excel_export.forEach((ele) => {
+            response.data.excel_export.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
