@@ -20,6 +20,7 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { AddResumeComponent } from '../add-resume/add-resume.component';
 import { JobDescriptionComponent } from '../../../openreqs/job-description/job-description.component';
 import { RecruInfoComponent } from '../../../openreqs/recru-info/recru-info.component';
+import { AddFulltimeResumeComponent } from '../add-fulltime-resume/add-fulltime-resume.component';
 
 
 @Component({
@@ -124,7 +125,7 @@ export class ConsultantFulltimeOpenreqsComponent {
       userid: this.userid,
       keyword: this.field
     }
-    this.openServ.getConsultantOpenReqsByPaginationSortandFilter(pagObj).subscribe((response: any) => {
+    this.openServ.getConsultantOpenReqsFulltimeByPaginationSortandFilter(pagObj).subscribe((response: any) => {
 
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
@@ -154,15 +155,12 @@ export class ConsultantFulltimeOpenreqsComponent {
     }
     if (keyword != '') {
       return this.openServ
-        .getConsultantOpenReqsFulltimeByPaginationSortandFilter(
-          pagObj
-        )
-        .subscribe((response: any) => {
+        .getConsultantOpenReqsFulltimeByPaginationSortandFilter(pagObj).subscribe((response: any) => {
+
           this.dataSource.data = response.data.content;
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
+            x.serialNum = this.generateSerialNumber(i);  });
           this.totalItems = response.data.totalElements;
         });
     }
@@ -178,7 +176,7 @@ export class ConsultantFulltimeOpenreqsComponent {
     if (event.active == 'SerialNum')
       this.sortField = 'postedon'
     else
-      this.sortField = event.active;
+    this.sortField = event.active;
     this.sortOrder = event.direction;
 
     if (event.direction != '') {
@@ -232,7 +230,6 @@ export class ConsultantFulltimeOpenreqsComponent {
     return dialogConfig;
   }
 
-
   apply(data: any) {
     const applyObj = {
       ...data,
@@ -243,10 +240,10 @@ export class ConsultantFulltimeOpenreqsComponent {
     const dataToBeSentToDailog = {
       title: 'Add resume',
       empployeeData: applyObj,
-      actionName: 'add-resume',
+      actionName: 'add-fulltime-resume',
     };
     const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddResumeComponent, dialogConfig);
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddFulltimeResumeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
 
       if (dialogRef.componentInstance.allowAction) {
