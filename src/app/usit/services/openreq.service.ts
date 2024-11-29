@@ -68,15 +68,23 @@ export class OpenreqService {
   }
 
   getConsultantOpenReqsByPaginationSortandFilter(data: any) {
-    return this.http.post("openreqs/dice/allEmpAllReqs", data);
+    return this.http.post("openreqs/dice/allEmpContractReqs", data);
   }
 
   getConsultantOpenReqsFulltimeByPaginationSortandFilter(data: any) {
     return this.http.post("openreqs/dice/allEmpFulltimeReqs", data);
   }
 
+  // applyJob(data: any) {
+  //   return this.http.post("openreqs/apply/applyJob", data);
+  // }
+
   applyJob(data: any) {
-    return this.http.post("openreqs/apply/applyJob", data);
+    return this.http.post("openreqs/apply/applyContractJob", data);
+  }
+
+  applyJobs(data: any) {
+    return this.http.post("openreqs/apply/applyFulltimeJob", data);
   }
 
   appliedJobs(data: any) {
