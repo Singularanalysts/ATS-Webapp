@@ -87,9 +87,10 @@ export class AddFulltimeResumeComponent {
 
       // Step 3: Append the fields as a JSON object string
       const appliedDTOJson = {
-        id: this.data.empployeeData.id,
+        // id: this.data.empployeeData.id,
         applied_by: this.data.empployeeData.applied_by,
-        jobid: this.data.empployeeData.jobid
+        // jobid: this.data.empployeeData.jobid
+        fulltimejobid: this.data.empployeeData.fulltimejobid
       };
 
       // Convert the object to a JSON string

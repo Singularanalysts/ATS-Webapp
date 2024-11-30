@@ -234,7 +234,8 @@ export class ConsultantFulltimeOpenreqsComponent {
     const applyObj = {
       ...data,
       applied_by: this.userid,
-      jobid: data.id
+      fulltimejobid: data.id,
+      // jobid: data.jobid
     }
     // console.log(applyObj);
     const dataToBeSentToDailog = {
