@@ -87,9 +87,10 @@ export class AddFulltimeResumeComponent {
 
       // Step 3: Append the fields as a JSON object string
       const appliedDTOJson = {
-        id: this.data.empployeeData.id,
+        // id: this.data.empployeeData.id,
         applied_by: this.data.empployeeData.applied_by,
-        jobid: this.data.empployeeData.jobid
+        // jobid: this.data.empployeeData.jobid
+        fulltimejobid: this.data.empployeeData.fulltimejobid
       };
 
       // Convert the object to a JSON string
@@ -97,7 +98,6 @@ export class AddFulltimeResumeComponent {
       this.openServ.applyJobs(formData).subscribe({
         next: (response: any) => {
           console.log(response.status);
-          alert("full time apply check"+response.status);
           if (response.status === 'success') {
             this.dataToBeSentToSnackBar.message = 'You have successfully applied to the job';
             this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
