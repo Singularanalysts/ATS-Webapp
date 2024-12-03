@@ -257,9 +257,6 @@ export class ConsultantOpenreqsComponent implements OnInit {
         this.getAllData();
       }
     })
-
-
-
   }
 
 }

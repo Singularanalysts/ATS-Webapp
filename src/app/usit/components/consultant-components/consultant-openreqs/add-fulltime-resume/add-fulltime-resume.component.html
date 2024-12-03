@@ -1,0 +1,49 @@
+<!-- top header container -->
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+      {{data.title}}
+    </span>
+    <button mat-icon-button  (click)="onCancel()" class="btn-close" id="btnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+  </section>
+  
+  <!-- matcard starts-->
+  <mat-card class="card" id="empCard">
+  <!--form starts-->
+  <form [formGroup]="employeeForm" class="employee-form" id="empForm">
+      <!-- Resume Upload Section -->
+      <section class="section-upload-documents">
+    
+        <div class="upload-doc-container">
+          <mat-form-field class="upload">
+            <mat-label for="resume">Resume</mat-label>
+            <div class="upload-inp-container">
+              <input matInput readonly name="resumeName" class="file-input"
+                [value]="resumeUpload ? resumeUpload.name : 'No file chosen'" />
+              <label for="resume" class="browse-button-label">
+                <button type="button" mat-icon-button (click)="resume.click()"><mat-icon>upload_file</mat-icon></button>
+              </label>
+              <input type="file" #resume id="resume" (change)="uploadResume($event)" name="resumeUploadFile"
+                accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                style="display: none;" />
+            </div>
+            <mat-hint *ngIf="resumeError" style="color: #f44336; font-size: 12px;">
+              Resume size should be less than 1 MB
+            </mat-hint>
+            <mat-hint *ngIf="resumeFileNameLength" style="color: #f44336; font-size: 12px;">
+              File name too long, rename to 15-20 characters before upload   
+            </mat-hint>
+          </mat-form-field> 
+        </div>
+      </section>
+    </form>
+      <!-- form ends-->
+    <!-- Bottom Action Buttons -->
+    <div class="action-btns">
+      <button class="btn-cancel" mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+      <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+  </mat-card>
+  <!-- matcard ends-->
+  
