@@ -29,7 +29,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatTooltipModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSelectModule, AddconsultantComponent,
+    MatSelectModule, 
     ReactiveFormsModule,MatSortModule
   ],
   templateUrl: './hot-list.component.html',
@@ -115,7 +115,7 @@ export class HotListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-    const shoWresult = this.privilegeServ.hasPrivilege('US_M1EXCELIMP')
+    const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
     if (shoWresult) {
       this.showReport = true;
     } else {
