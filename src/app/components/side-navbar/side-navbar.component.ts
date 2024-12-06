@@ -119,7 +119,7 @@ myRoles(){
             "test": "Know Vendor Contacts",
             "text": "Known Contacts",
             "icon": "group",
-            "routerLink": "/usit/known-contacts",
+            "routerLink": "/usit/known-vendor-contacts",
             "roles":["Super Administrator"]  
           },
           {
