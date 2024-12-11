@@ -15,6 +15,7 @@ import { FileUploadValidators } from '@iplab/ngx-file-upload';
 import { InvoiceService } from '../../services/invoice.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { MatSelectModule } from '@angular/material/select';
+import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 
 const editorConfig: NgxEditorConfig = {
   locals: {
@@ -87,6 +88,7 @@ export class ComposemailComponent {
   public multiple: boolean = true;
   private filesControl = new FormControl<File[]>([], FileUploadValidators.filesLimit(6));
   private invoiceServ = inject(InvoiceService);
+  private snackBarServ = inject(SnackBarService);
   formData: FormData = new FormData();
   invoiceid: any;
   invoicenumber: any;
@@ -104,8 +106,8 @@ export class ComposemailComponent {
     this.invoicenumber = this.data.invoiceData.invoiceNumber;
     this.editor = new Editor();
     this.emailForm = this.fb.group({
-      toMail: ['', [Validators.required, Validators.email]],
-      subject: ['', Validators.required],
+      toMail: [this.data.invoiceData ?  this.data.invoiceData.acrmail :'', [Validators.required, Validators.email]],
+      subject: ['Invoice Payment Recorded', Validators.required],
       ccMails: [[]],
       body: ['', Validators.required],
       attachAttachments: [false],
@@ -128,7 +130,7 @@ export class ComposemailComponent {
       Narvee Tech Inc, <br>
       1333 Corporate Dr, Suite#102, <br>
       Irving, Texas, 75038.<br>
-      Email: accounts @narveetech.com<br>
+      Email: accounts@narveetech.com<br>
       Phone: +1(469) 300 - 6363<br>
       Website: https://www.narveetech.com
     </div>
@@ -138,6 +140,17 @@ export class ComposemailComponent {
   }
 
   onSubmit(): void {
+
+
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 2500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };  
+    
     if (this.emailForm.valid) {
       const formValues = this.emailForm.value;
       this.formData = new FormData();
@@ -158,10 +171,18 @@ export class ComposemailComponent {
       } else {
         console.warn('No attachments found.');
       }
-
+      
       this.invoiceServ.sendEmail(this.formData).subscribe({
         next: (resp: any) => {
-          this.dialogRef.close();
+          if (resp.status == 'success') {
+            dataToBeSentToSnackBar.message ="Email sent successfully"
+                this.dialogRef.close();
+          } else{
+
+            dataToBeSentToSnackBar.message ="Email sent failed"
+          }
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+          
         },
         error: (err: any) => {
           console.error('Error from API:', err);

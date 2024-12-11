@@ -1,0 +1,47 @@
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+      {{ data?.title }}
+    </span>
+    <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+  </section>
+  
+  <mat-card class="card mat-elevation-z8" *ngIf="dataSource">
+    <mat-card-content class="card-content">
+      <div class="info-container">
+        <div class="info-item">
+          <span class="static-label" >Account Person Name :</span>
+          <span class="dynamic-value"   >{{ dataSource.acrname }}</span>
+        </div>
+        <div class="info-item">
+          <span class="static-label"> Account Person  Email:</span>
+          <span class="dynamic-value">{{ dataSource.acrmail }}</span>
+        </div>
+        <div class="info-item">
+          <span class="static-label">Account Person Contact Number :</span>
+          <span class="dynamic-value">{{ dataSource.acrno }}</span>
+        </div><br>
+  
+        <div class="info-item">
+          <span class="static-label">Recruiter Name :</span>
+          <span class="dynamic-value">{{ dataSource.recname }}</span>
+        </div>
+        <div class="info-item">
+          <span class="static-label">Recruiter Email :</span>
+          <span class="dynamic-value">{{ dataSource.recemail }}</span>
+        </div>
+        <div class="info-item">
+          <span class="static-label">Recruiter Contact Number :</span>
+          <span class="dynamic-value">{{ dataSource.recnumber }}</span>
+        </div>
+  
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+  <!-- Show a loader or message if dataSource is null or undefined -->
+  <div *ngIf="!dataSource">
+    <p>Loading purchase order information...</p>
+  </div>
+  
