@@ -14,7 +14,7 @@
         <mat-icon class="item-icon">upload</mat-icon>
       </button> -->
         <div class="form-container">
-          <ng-container *ngIf="flag !== 'presales'">
+          <ng-container *ngIf="flag !== 'presales'  && flag !== 'DomRecruiting'">
             <mat-form-field appearance="fill" style="width:8rem;margin-left:6rem;">
               <mat-label class="bold-label">Visa</mat-label>
               <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)">
@@ -25,7 +25,7 @@
             </mat-form-field>
           </ng-container>
         </div>
-        <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting'">
+        <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting' && flag !== 'DomRecruiting'">
           <mat-form-field appearance="fill" style="margin-top:1rem;margin-right:3rem;width:8rem;">
             <mat-label class="bold-label">Priority</mat-label>
             <!--<mat-select formControlName="priority"(selectionChange)="onPriority($event.value)">-->
@@ -37,7 +37,7 @@
           </mat-form-field>
         </ng-container>
         <div>
-          <ng-container *ngIf="flag !== 'presales'">
+          <ng-container *ngIf="flag !== 'presales' ">
             <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right:25rem;width: 10rem;">
               <mat-label class="bold-label">Experience</mat-label>
               <mat-select formControlName="experience" (selectionChange)="onExperienceChange($event)">
@@ -48,14 +48,7 @@
         </div>
         <button type="button" mat-raised-button color="primary" (click)="refreshForm()"
           *ngIf="flag !== 'presales'">Refresh</button>
-
-        <!-- <button [disabled]="!privilegeServ.hasPrivilege('SALES_CONSULTANT')&&!privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES') ||
-        !privilegeServ.hasPrivilege('RECRUITING_CONSULTANT') && privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')" mat-icon-button class="add-user"
-          (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
-          <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT')}">add_circle</mat-icon>
-        </button> -->
-
-
+      
         <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')"  *ngIf="flag === 'sales'" mat-icon-button class="add-user"
           (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
           <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')}">add_circle</mat-icon>
@@ -80,7 +73,7 @@
 
         <div class="search-consultant">
           <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
-          <input matInput type="text" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
+          <input matInput type="search" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
         </div>
       </div>
     </form>
