@@ -63,6 +63,10 @@ export class OpenreqService {
     return this.http.get("openreqs/dice/getByReqId/"+id);
   }
 
+  getOpenFulltimeReqsById(id:number) {
+    return this.http.get("openreqs/dice/getByFulltimeReqId/"+id);
+  }
+
   emailEXtractionByPaginationSortandFilter(data: any) {
     return this.http.post("mail/read", data);
   }
