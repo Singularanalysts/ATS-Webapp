@@ -101,6 +101,10 @@
             </mat-autocomplete>
             <button matSuffix mat-icon-button (click)="addTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
             <mat-error *ngIf="requirementForm.get('technology')!.hasError('required')">Technology is Required</mat-error>
+            <mat-error *ngIf="requirementForm.get('technology')?.hasError('techNotSelected')">
+              Please select a valid technology.
+            </mat-error>
+            
           </mat-form-field>
         </div>
 
