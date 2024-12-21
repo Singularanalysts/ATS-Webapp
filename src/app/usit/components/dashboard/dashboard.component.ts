@@ -225,7 +225,8 @@ export class DashboardComponent implements OnInit {
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     if (this.department !== 'Consultant' && this.role !== 'Employee') {
-      this.getDiceReqs();
+      this.getDiceReqs(); 
+      // this.getDiceReqss();
       this.getSourcingLeads();
       this.getReqVendorCount();
       this.getReqCatergoryCount();
@@ -655,7 +656,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getDiceReqs() {
-    this.dashboardServ.getDiceRequirements().subscribe(
+    this.dashboardServ.getDiceRequirements(this.role).subscribe(
       (response: any) => {
         //this.entity = response.data;
         this.dataSourceDice.data = response.data;
@@ -665,6 +666,14 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
+  // getDiceReqss() {
+  //   this.dashboardServ.getDiceRequirementss().subscribe(
+  //     (response: any) => {
+  //       this.dataSourceDice.data = response.data;
+  //     }
+  //   );
+  // }
 
 
   sourcingPop(element: any, condition: any) {
