@@ -38,6 +38,7 @@
   
   .table-wrapper {
     flex: 1;
+    width: 100%;
     overflow: auto;
   }
   
@@ -95,12 +96,6 @@
   .mat-column-BillingCycle,
   .mat-column-NetTerm,
   .mat-column-PayRate,
-  .mat-column-RecruiterName,
-  .mat-column-RecruiterEmail,
-  .mat-column-RecruiterContactNumber,
-  .mat-column-AccountPersonName,
-  .mat-column-AccountPersonEmail,
-  .mat-column-AccountPersonContactNumber,
   .mat-column-Implpartner,
   .mat-column-POTYPE,
   .mat-column-PayToconsultant {
@@ -140,9 +135,7 @@
   }
   
   .purchase-order-table-style {
-    // padding: 0 2px;
-    width: max-content;
-    // max-height: calc(100% - 2px);
+    width: 100%;
     overflow: auto;
     display: block;
   }
@@ -279,4 +272,11 @@
 
   .text-right {
     text-align: right;
+}
+
+.po-info {
+  cursor: pointer;
+  color: #4154f1;
+  text-decoration: none;
+  font-weight: bold;
 }

@@ -28,4 +28,10 @@ export class ReceiptService {
   deleteReceipt(invoiceid: any) {
     return this.apiServ.delete(`billpay/payments /getAllPayments/${invoiceid}`);
   }
+
+
+
+  getAllPayments(data: any) {
+    return this.apiServ.post("billpay/payments/getAllPayments", data);
+  }
 }
