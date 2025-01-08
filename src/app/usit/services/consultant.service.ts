@@ -177,7 +177,7 @@ export class ConsultantService {
   }
 
   //both
-  getFilteredConsults(request:any, pageno: any, pagesize: any) {
+  getFilteredConsults(pageno: any, pagesize: any, request:any) {
     return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
   }
 

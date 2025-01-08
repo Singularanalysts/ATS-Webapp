@@ -6,32 +6,39 @@
     <mat-card class="mat-elevation-z8 main-card">
       <section class="main-header">
       <mat-card-header class="main-card-header">
-        {{'Privileges'}}
+        {{ rolename }}
       </mat-card-header>
       <button mat-icon-button class="add-privilege" (click)="addPrivilege()" matTooltip="Add Privilege" matTooltipPosition="above">
         <mat-icon class="item-icon">enhanced_encryption</mat-icon>
       </button>
       </section>
-      <mat-card-content class="main-card-content">
-      <mat-card class="card" *ngFor="let card of privilegResp;let cardId=index">
-        <mat-card-header class="card-header">
-          {{card.title}}
-        </mat-card-header>
+      <mat-card-content class="main-card-content"> 
+        <ng-container *ngFor="let card of privilegResp; let cardId = index"> 
+          <mat-card class="card" *ngIf="card.privileges?.length > 0">
+       
+  
+  <mat-card-header class="card-header"><div class="my-checkbx"><span style="color: white; font-size: 12px;"> 
+    </span> </div>
+  </mat-card-header>
 
         <mat-card-content class="card-content" *ngIf="card.privileges?.length">
-          <mat-checkbox color="primary" [checked]="card.isSelected" (change)="selectAllAccess(card, $event)" >GRANT ALL ACCESS</mat-checkbox>
-          <ng-container *ngFor="let priv of card.privileges; let privId=index">
-            <mat-checkbox color="primary" class="access-check-box"  [checked]="priv.selected" (change)="selectInidividualAccess($event, card.privileges, privId, cardId)">{{priv.name}}</mat-checkbox>
+          <ng-container *ngFor="let priv of card.privileges; let privId=index;">
+            <mat-checkbox
+            [color]="privId === 0 ? 'primary' : 'primary'"
+            [class]="privId === 0 ? 'access-check-box' : 'access-check-boxs'"
+            class="access-check-box" [checked]="priv.selected" (change)="selectInidividualAccess($event, card.privileges, privId, cardId, card, priv, privilegResp)">
+             <div [class]="privId === 0 ? 'fontstyle' : 'general'"> {{priv.name}} 
+              <!-- {{priv.cardType}} -->
+             </div>
+            </mat-checkbox>
           </ng-container>
-        </mat-card-content>
-        <!-- <mat-card-title>
-            {{keysObj.keys(privilege)[0]}}
-        </mat-card-title> -->
+        </mat-card-content >
       </mat-card>
+    </ng-container>
     </mat-card-content>
     <mat-card-actions class="main-card-actions">
-      <button mat-raised-button (click)="onCancel()">Go To Roles</button>
-      <button mat-raised-button color="primary" (click)="savePrivileges()">Save</button>
+        <button mat-raised-button color="primary" (click)="onCancel()"><mat-icon class="edit-icon" style="font-size: 20px;">arrow_backward</mat-icon></button>
+        <button mat-raised-button color="primary" (click)="savePrivileges()">Save</button>
     </mat-card-actions>
   </mat-card>
 </div>

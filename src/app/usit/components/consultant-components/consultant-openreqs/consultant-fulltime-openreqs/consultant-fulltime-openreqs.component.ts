@@ -1,3 +1,4 @@
+
 import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,17 +12,20 @@ import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { OpenreqService } from 'src/app/usit/services/openreq.service';
-import { RecruInfoComponent } from '../../openreqs/recru-info/recru-info.component';
-import { JobDescriptionComponent } from '../../openreqs/job-description/job-description.component';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
-import { AddResumeComponent } from './add-resume/add-resume.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
+import { AddResumeComponent } from '../add-resume/add-resume.component';
+import { JobDescriptionComponent } from '../../../openreqs/job-description/job-description.component';
+import { RecruInfoComponent } from '../../../openreqs/recru-info/recru-info.component';
+import { AddFulltimeResumeComponent } from '../add-fulltime-resume/add-fulltime-resume.component';
+
 
 @Component({
-  selector: 'app-consultant-openreqs',
+  selector: 'app-consultant-fulltime-openreqs',
+  templateUrl: './consultant-fulltime-openreqs.component.html',
   standalone: true,
   imports: [
     CommonModule,
@@ -34,14 +38,12 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
     MatSelectModule,
     MatDialogModule,
     MatSortModule,
-    MatTabsModule,
-
+    MatTabsModule
   ],
-  templateUrl: './consultant-openreqs.component.html',
-  styleUrls: ['./consultant-openreqs.component.scss'],
-  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
+  styleUrls: ['./consultant-fulltime-openreqs.component.scss']
 })
-export class ConsultantOpenreqsComponent implements OnInit {
+export class ConsultantFulltimeOpenreqsComponent {
+
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -89,8 +91,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
   }
 
   onSelectionChange(event: MatSelectChange) {
-    this.source = event.value;
-    this.getAllData();
+    this.source = event.value; 
   }
 
   openVendorPopup(vendor: string): void {
@@ -124,14 +125,11 @@ export class ConsultantOpenreqsComponent implements OnInit {
       userid: this.userid,
       keyword: this.field
     }
-    this.openServ
-      .getConsultantOpenReqsByPaginationSortandFilter(
-        pagObj
-      )
-      .subscribe((response: any) => {
+    this.openServ.getConsultantOpenReqsFulltimeByPaginationSortandFilter(pagObj).subscribe((response: any) => {
+
         this.dataSource.data = response.data.content;
         this.totalItems = response.data.totalElements;
-        // for serial-num {}
+      
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = this.generateSerialNumber(i);
         });
@@ -157,15 +155,12 @@ export class ConsultantOpenreqsComponent implements OnInit {
     }
     if (keyword != '') {
       return this.openServ
-        .getConsultantOpenReqsByPaginationSortandFilter(
-          pagObj
-        )
-        .subscribe((response: any) => {
+        .getConsultantOpenReqsFulltimeByPaginationSortandFilter(pagObj).subscribe((response: any) => {
+
           this.dataSource.data = response.data.content;
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
+            x.serialNum = this.generateSerialNumber(i);  });
           this.totalItems = response.data.totalElements;
         });
     }
@@ -181,7 +176,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
     if (event.active == 'SerialNum')
       this.sortField = 'postedon'
     else
-      this.sortField = event.active;
+    this.sortField = event.active;
     this.sortOrder = event.direction;
 
     if (event.direction != '') {
@@ -207,6 +202,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
       title: `${element.job_title}`,
       id: element.id,
       actionName: 'job-description',
+      jobType: 'fulltime',
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -235,28 +231,28 @@ export class ConsultantOpenreqsComponent implements OnInit {
     return dialogConfig;
   }
 
-
   apply(data: any) {
     const applyObj = {
       ...data,
       applied_by: this.userid,
-      jobid: data.id
+      fulltimejobid: data.id,
+      // jobid: data.jobid
     }
     // console.log(applyObj);
     const dataToBeSentToDailog = {
       title: 'Add resume',
       empployeeData: applyObj,
-      actionName: 'add-resume',
+      actionName: 'add-fulltime-resume',
     };
     const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });
-    const dialogRef = this.dialogServ.openDialogWithComponent(AddResumeComponent, dialogConfig);
+    const dialogRef = this.dialogServ.openDialogWithComponent(AddFulltimeResumeComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
-
 
       if (dialogRef.componentInstance.allowAction) {
         this.getAllData();
       }
     })
+
   }
 
 }

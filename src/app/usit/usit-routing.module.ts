@@ -62,6 +62,7 @@ import { SourcingClosuresComponent } from './components/pre-sourcing/sourcing-cl
 import { SourcingComponent } from './components/pre-sourcing/sourcing/sourcing.component';
 import { PasswordChangeComponent } from '../components/password-change/password-change.component';
 import { EmailConfigurationComponent } from './components/email-configuration/email-configuration.component';
+import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-fulltime-openreqs/consultant-fulltime-openreqs.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -195,19 +196,19 @@ const routes: Routes = [
   {
     path: 'sales-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isSalesClosure: true },
   },
   {
     path: 'rec-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isRecClosure: true },
   },
   {
     path: 'dom-closures',
     component: ClosureListComponent,
-    canActivate: [CanActivateGuard],
+    // canActivate: [CanActivateGuard],
     data: { isDomClosure: true },
   },
   {
@@ -300,6 +301,9 @@ const routes: Routes = [
     path: 'open-requirements', component: ConsultantOpenreqsComponent,
   },
   {
+    path: 'full-time-requirements', component: ConsultantFulltimeOpenreqsComponent,
+  },
+  {
     path: 'applied-jobs', component: ConsultantAppliedJobsComponent,
   },
   {
@@ -362,7 +366,10 @@ const routes: Routes = [
   {
     path: 'email-configuration',
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
-  }
+  },
+  {
+     path: 'privileges/:id/:rolename', component: PrivilegeListComponent ,
+  },
 ];
 
 @NgModule({

@@ -12,6 +12,7 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  AbstractControl,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -246,7 +247,7 @@ export class AddRequirementComponent {
       jobskills: [requirementData ? requirementData.jobskills : ''],
       jobdescription: [requirementData ? requirementData.jobdescription : '', Validators.required],
       duration: [requirementData ? requirementData.duration : '', Validators.required],
-      technology: [requirementData ? requirementData.technology : '', Validators.required],
+      technology: [requirementData ? requirementData.technology : '', [Validators.required, , this.techSelectionValidator()]],
       empid: [requirementData ? requirementData.empid : '', Validators.required],
       recruiter: [requirementData ? requirementData.recruiter : '', [Validators.required]],
       pocphonenumber: [requirementData ? requirementData.pocphonenumber : ''],
@@ -299,12 +300,27 @@ export class AddRequirementComponent {
 
   }
 
+  techSelectionValidator() {
+    return (control: AbstractControl) => {
+      const selectedValue = control.value;
+      const isValid = this.technologyOptions && this.technologyOptions.length > 0
+        ? this.technologyOptions.some((option: any) => option.technologyarea === selectedValue)
+        : false;
+      return isValid ? null : { techNotSelected: true };
+    };
+  }
+
   getTech() {
     this.searchTechOptions$ = this.requirementServ.gettechDropDown(0).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getTechOptionsForAutoComplete(resp);
       }
     }));
+
+    this.searchTechOptions$.subscribe(options => {
+      this.technologyOptions = options;
+      this.requirementForm.get('technology')?.updateValueAndValidity();
+    });
   }
 
   getTechOptionsForAutoComplete(data: any) {

@@ -159,6 +159,7 @@ export class ConsultantListComponent
   filterValues: any;
   filterRequest: any;
   size: any;
+  filterApply!: boolean;
   constructor(private formBuilder: FormBuilder) {
     this.experienceForm = this.formBuilder.group({
       experience: ['']
@@ -183,7 +184,7 @@ export class ConsultantListComponent
   page: number = 1;
   move2sales = false;
   ngOnInit(): void {
-    const mvt = this.privilegeServ.hasPrivilege('MOVETOPRESALES');
+    const mvt = this.privilegeServ.hasPrivilege('MOVETOSALES_PRESALES');
     if (mvt) {
       this.move2sales = true;
     }
@@ -191,7 +192,6 @@ export class ConsultantListComponent
     this.userid = localStorage.getItem('userid');
     this.dept = localStorage.getItem('department');
     this.getFlag();
-    // alert(this.flag)
     
     this.getAllData();
     //lavanya
@@ -204,24 +204,40 @@ export class ConsultantListComponent
     });
 
   }
-  filterData(request: any) {
-    this.consultantServ.getFilteredConsults(request,1,this.pageSize )
-      .subscribe(
-        (response: any) => {
+
+  
+  filterData(request: any,page:any) {
+  this.filterApply=true
+    return this.consultantServ.getFilteredConsults(page,this.pageSize ,request).subscribe(
+      ((response: any) => {
+        this.consultant = response.data.content;
+        this.dataSource.data = response.data.content;
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
+        });
+        this.totalItems = response.data.totalElements;
+      })
+    );
+
+
+    
+    // this.consultantServ.getFilteredConsults(request,1,this.pageSize )
+    //   .subscribe(
+    //     (response: any) => {
           
-          this.dataSource.data = response.data.content;
-          // Reassign serial numbers after filtering
-          this.dataSource.data.map((item: any, index: number) => {
-            item.serialNum = index + 1;
-            return item;
-          });
+    //       this.dataSource.data = response.data.content;
+    //       // Reassign serial numbers after filtering
+    //       this.dataSource.data.map((item: any, index: number) => {
+    //         item.serialNum = index + 1;
+    //         return item;
+    //       });
           
-        },
-        (error: any) => {
-          // Handle errors here
-          console.error('An error occurred:', error);
-        }
-      );
+    //     },
+    //     (error: any) => {
+    //       // Handle errors here
+    //       console.error('An error occurred:', error);
+    //     }
+    //   );
    
   }
   //lavanya
@@ -291,6 +307,7 @@ export class ConsultantListComponent
    * @returns number of records based on pagenumber
    */
   getAllData(pageIndex = 1) {
+    this.filterApply  =false;
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 1500,
@@ -694,7 +711,22 @@ export class ConsultantListComponent
     if (event) {
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
-      this.getAllData(event.pageIndex + 1);
+      if(this.filterApply){
+        const visa = this.myForm.get('visa').value;
+        const priority = this.myForm.get('priority').value;
+        const experience = this.myForm.get('experience').value;
+        const consultantflg = this.flag;
+        this.request.visaStatus = visa;
+        this.request.priority = priority;
+        this.request.experience = experience;
+        this.request.consultantflg=consultantflg;
+        this.filterData(this.request,this.currentPageIndex+1 );
+        
+      }else{
+        this.getAllData(event.pageIndex + 1);
+
+      }
+     
     }
     return;
   }
@@ -724,11 +756,14 @@ export class ConsultantListComponent
     const visa = this.myForm.get('visa').value;
     const priority = this.myForm.get('priority').value;
     const experience = this.myForm.get('experience').value;
+    const consultantflg =this.flag;
+    
     this.request.visaStatus = visa;
     this.request.priority = priority;
     this.request.experience = experience;
+    this.request.consultantflg=consultantflg;
 
-    this.filterData(this.request);
+    this.filterData(this.request,this.page);
   }
   
   refreshForm(): void {
@@ -751,6 +786,7 @@ export class FilterRequest {
   visaStatus: any;
   priority: any;
   experience: any;
+  consultantflg:any;
 
 }
 
