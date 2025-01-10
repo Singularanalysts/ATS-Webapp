@@ -65,6 +65,7 @@ export class Consultantinfo {
     salesmaxno!:number;
     recmaxno!:number;
     consultanttype!: string;
+    empid!: number;
 }
 
 
