@@ -107,10 +107,22 @@ export class OpenreqService {
     return this.http.post("openreqs/linked/LinkedInPofilesRequest", data);
   }
 
-  extractEmails(data: any) {
-    return this.http.post("mail/extractEmail", data);
-  }
+  // extractEmails(data: any) {
+  //   return this.http.post("mail/extractEmail", data);
+  // }
 
+  extractEmails(data: any) {
+    return this.http.post("mail/fetch", data);
+  }
+  callTheStatus(email : string){
+    return this.http.get("mail/status"+`/${email}`)
+  }
+  stopTheExtraction(email : any){
+    return this.http.get("mail/stop"+`/${email}`);
+  }
+  showBody(id : string){
+    return this.http.get("mail/body"+`/${id}`);
+  }
   saveConfiguredEmail(data: any) {
     return this.http.post("mail/emailcredentials/save", data);
   }
@@ -120,7 +132,7 @@ export class OpenreqService {
   }
 
   getConfiguredEmailById(id: string) {
-    return this.http.get(`mail/emailcredentials/getByUserId/${id}`);
+    return this.http.get(`mail/emailcredentials/getEmailCredentialsByUserId/${id}`);
   }
 
   validateOldPassword(data: any) {
@@ -166,4 +178,5 @@ export class OpenreqService {
   jobComments(reqId: number) {
     return this.http.get(`openreqs/dice/getComment/${reqId}`);
   }
+
 }
