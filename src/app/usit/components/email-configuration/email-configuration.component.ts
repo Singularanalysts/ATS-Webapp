@@ -67,6 +67,8 @@ export class EmailConfigurationComponent {
     'Email',
     'Password',
     'ReceivedDate',
+    'StopExtraction',
+    'Status',
     'Action'
   ];
   entity: any;
@@ -102,7 +104,16 @@ export class EmailConfigurationComponent {
     }
     return null;
   }
-
+// check(){
+//   this.OpenReqServ.getConfiguredEmailById(this.userid).subscribe({
+//     next: (response: any) => {
+//       console.log(response)
+//     },
+//     error: (err: any) => {
+//       console.error(err);
+//     }
+//   });
+// }
   checkExistingDetails() {
     if (this.userid && this.role !== "Super Administrator") {
       this.OpenReqServ.getConfiguredEmailById(this.userid).subscribe({
@@ -141,6 +152,9 @@ export class EmailConfigurationComponent {
         (response: any) => {
           this.entity = response.data;
           this.dataSource.data = response.data;
+
+          
+          console.log("hello"+JSON.stringify(this.dataSource.data));
           // this.totalItems = response.data.totalElements;
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
@@ -501,12 +515,32 @@ export class EmailConfigurationComponent {
       }
     });
   }
-  
+
+  stopExtraction(element : string){
+    this.openServ.stopTheExtraction(element).subscribe({
+      next: (response: any) => {
+        // alert(JSON.stringify(response.status));
+        if (response.status === 'success') {
+          console.log('stop extraction');
+          window.location.reload(); // Reload the entire page
+        } else {
+          console.log('stop not calling');
+         
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while calling the status:', err);
+      }
+    });
+  }
+
   extractEmails(element: any) {
     const extractEmail = {
       userid: this.userid,
-      id: element.id
+      id: element.id,
+      email : element.email
     }
+   this.statusCallMethod(element.email);
     return this.openServ.extractEmails(extractEmail).subscribe({
       next: (response: any) => {
         if (response.status === 'Success') {
@@ -516,6 +550,7 @@ export class EmailConfigurationComponent {
             this.dataToBeSentToSnackBar
           );
           this.router.navigate(['usit/email-extraction-list']);
+          this.checkExistingDetails();
         }  else if (response.status === 'failed') {
           this.dataToBeSentToSnackBar.message = 'Oops! It seems there are no new emails at the moment';
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
@@ -552,4 +587,19 @@ export class EmailConfigurationComponent {
     });
    
   }
+  statusCallMethod(element: string): void {
+    this.openServ.callTheStatus(element).subscribe({
+      next: (response: any) => {
+        if (response.response === 'success') {
+          console.log('It is calling');
+        } else {
+          console.log('Not calling');
+        }
+      },
+      error: (err: any) => {
+        console.error('Error occurred while calling the status:', err);
+      }
+    });
+  }
+  
 }
