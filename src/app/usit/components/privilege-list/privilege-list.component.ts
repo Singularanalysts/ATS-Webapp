@@ -124,6 +124,8 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
  
   excel_export: any[] = [];
 
+  docsynch: any[] = [];
+
   // snackbaran
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
@@ -234,6 +236,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.employee_report = response.data.employee_report;
         this.excel_export = response.data.excel_export;
              
+        this.docsynch = response.data.docsynch;
 
         this.selecedPrivileges();
         this.mapResponseData();
@@ -667,6 +670,14 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         privileges: this.excel_export,
         isSelected: this.excel_export
           ? this.excel_export.every((priv: any) => priv.selected === true)
+          : false,
+      } ,
+     
+      {
+        title: 'Doc synch',
+        privileges: this.docsynch,
+        isSelected: this.docsynch
+          ? this.docsynch.every((priv: any) => priv.selected === true)
           : false,
       }
 
@@ -1400,6 +1411,18 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
            if (this.excel_export != null) {
           this.excel_export.forEach((ele) => {
             response.data.excel_export.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
+        if (this.docsynch != null) {
+          this.docsynch.forEach((ele) => {
+            response.data.docsynch.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
