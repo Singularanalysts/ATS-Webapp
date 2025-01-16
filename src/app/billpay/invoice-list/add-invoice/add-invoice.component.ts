@@ -68,7 +68,6 @@ export class AddInvoiceComponent implements OnInit {
   }
   private initializeInvoiceForm(invoiceData: any) {
     this.invoiceForm = this.formBuilder.group({
-      company: [invoiceData ? invoiceData.company : ''],
       invId: [invoiceData ? invoiceData.invoiceId : ''],
       poid: [invoiceData ? invoiceData.poId : '', [Validators.required]],
       potype: [invoiceData ? invoiceData.poType : '', [Validators.required]],
