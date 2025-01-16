@@ -39,6 +39,9 @@ import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { FileManagementService } from 'src/app/usit/services/file-management.service';
 import { ApiService } from 'src/app/core/services/api.service';
 
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
+
 @Component({
   selector: 'app-add-consultant',
   standalone: true,
@@ -58,7 +61,8 @@ import { ApiService } from 'src/app/core/services/api.service';
     MatRadioModule,
     NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
-
+    MatChipsModule,
+    MatCheckboxModule
   ],
   providers: [
     {
@@ -99,6 +103,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   entity = new Consultantinfo();
   cno !: string;
   filesArr!: any;
+
+  selectData: any = [];
+  isAllOptionsSelected = false;
+  empArr: any = [];
+  employees: any[] = [];
+  employeedata: any = [];
+
   selectOptionObj = {
     interviewAvailability: IV_AVAILABILITY,
     priority: PRIORITY,
@@ -150,6 +161,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.getCompanies();
     this.getFlag(this.data.flag.toLocaleLowerCase());
    
+    this.getEmployee();
+
     if (this.data.actionName === "edit-consultant") {
       this.kiran = 'edit'
       this.initConsultantForm(new Consultantinfo());
@@ -161,6 +174,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
               this.cno = this.entity.consultantno;
               this.autoskills = response.data.skills;
               this.filesArr = response.data.fileupload;
+              this.getAssignedEmployee();
               this.initConsultantForm(response.data);
             }, error: err => {
               this.dataToBeSentToSnackBar.message = err.message;
@@ -174,6 +188,145 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.initConsultantForm(new Consultantinfo());
     }
   }
+
+  get controls() {
+    return this.consultantForm.controls;
+  }
+
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our employee
+    if (value) {
+      this.employees.push(value);
+    }
+
+    // Clear the input value
+    event.chipInput!.clear();
+
+    this.controls['empid']!.setValue(null);
+  }
+  
+  remove(employee: any): void {
+
+    const index = this.selectData.indexOf(employee);
+    if (index >= 0) {
+      this.selectData.splice(index, 1);
+    }
+    this.empArr.find((y: any) => y.userid === employee.userid).selected = false;
+    // this.toggleSelection(employee);
+    this.controls['empid'].updateValueAndValidity();
+
+    const mapToApiFormat = (emp: any) => ({
+      userid: emp.userid,
+      fullname: emp.fullname,
+    });
+    const mappedData = this.selectData.map(mapToApiFormat);
+    this.consultantForm.get('empid')!.setValue(mappedData);
+
+  }
+
+  optionClicked(event: any, employee: any): void {
+    event.stopPropagation();
+    this.toggleSelection(employee);
+  }
+
+  onSelectAll(event: MatCheckboxChange) {
+   
+    this.isAllOptionsSelected = event.checked;
+    this.empArr.map(
+      (x: any) => x.selected = event.checked
+    )
+    if (event.checked) {
+      this.selectData = this.empArr;
+    }
+    else {
+      this.selectData = []
+    }
+
+  }
+
+  toggleSelection(employee: any) {
+
+    // Mapping function to convert employee object to API format
+    const mapToApiFormat = (emp: any) => ({
+      userid: emp.userid,
+      fullname: emp.fullname,
+    });
+
+    // Toggle the selected status of the employee
+    employee.selected = !employee.selected;
+
+    if (employee.selected) {
+      // If employee is selected, add to selectData array
+      this.selectData.push(employee);
+    } else {
+      // If employee is deselected, find index and remove from selectData array
+      const index = this.selectData.findIndex((emp: any) => emp.userid === employee.userid);
+      if (index !== -1) {
+        this.selectData.splice(index, 1);
+      }
+    }
+
+    // Update the isAllOptionsSelected flag based on selection status of all employees
+    this.isAllOptionsSelected = !this.empArr.some((x: any) => !x.selected);
+
+    // Map the selected employee data to API format and update empid form control
+    const mappedData = this.selectData.map(mapToApiFormat);
+    this.consultantForm.get('empid')!.setValue(mappedData);
+    
+  }
+
+  getEmployee() {
+
+    if(!(this.flag === 'Recruiting')){
+    this.consultantServ.getEmployee().subscribe(
+      (response: any) => {
+        this.empArr = response.data;
+        this.empArr.map((x: any) => x.selected = false);
+        this.prepopulateSelectedEmployees();
+      }
+    )
+  }
+  else
+  {
+    this.consultantServ.getRecruiters().subscribe(
+      (response: any) => {
+        this.empArr = response.data;
+        this.empArr.map((x: any) => x.selected = false);
+        this.prepopulateSelectedEmployees();
+      }
+    )
+  }
+  }
+
+  prepopulateSelectedEmployees() {
+    // Clear the existing employees array
+    this.selectData = [];
+    this.selectData = this.employeedata;
+    this.consultantForm.get('empid')?.patchValue(this.selectData);
+
+    if (this.empArr.length && this.employeedata.length) {
+      this.employeedata.forEach((x: any, listId: number) => {
+        this.empArr.find((y: any) => y.userid === x.userid).selected = true;
+      })
+    }
+
+    this.isAllOptionsSelected = this.empArr.every((x: any) => x.selected === true)
+
+  }
+
+  private getAssignedEmployee() {
+    this.consultantServ.getAssignedRecruiter(this.data.consultantData.consultantid).subscribe(
+      (response: any) => {
+        this.employeedata = response.data; // saveed selected items from assign rec field
+        this.employeedata.map((x: any) => x.selected = true);
+        this.getEmployee();
+        // this.prepopulateSelectedEmployees();
+      }
+    );
+  }
+
   getFlag(type: string) {
     //alert(type)
     if (type === 'sales') {
@@ -242,7 +395,9 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
       refcont: [consultantData ? consultantData.refcont : ''],
       // // number: ['', Validators.required],
-      // status:[this.consultantForm.status],
+      empid: [consultantData ? consultantData.empid : '', Validators.required],
+      // empid:[this.consultantForm.empid, Validators.required],
+      // empid: [this.consultantForm.empid : '', Validators.required],
       relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
       relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
       consultantflg: this.data.flag.toLocaleLowerCase(),
@@ -528,6 +683,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
     if (this.data.actionName === "edit-consultant") {
+    //   this.selectData = consultantData.empid || []; // Assuming empid is an array of employee objects
+    // this.consultantForm.get('empid')?.setValue(this.selectData);
+    // this.consultantForm.get('empid')?.setValue(this.employeedata);
+    this.consultantForm.get('empid')?.setValue(this.empArr);
       [this.consultantForm.value].forEach((formVal, idx) => {
         this.entity.firstname = formVal.firstname.trim();
         this.entity.lastname = formVal.lastname.trim();
@@ -560,9 +719,12 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.refcont = formVal.refcont;
         this.entity.relocation = formVal.relocation;
         this.entity.relocatOther = formVal.relocatOther;
+        // this.entity.empid = formVal.empid;
+        this.entity.empid = this.selectData;
       })
     }
     this.trimSpacesFromFormValues();
+    this.consultantForm.get('empid')!.setValue(this.selectData);
     const saveObj = this.data.actionName === "edit-consultant" ? this.entity : this.consultantForm.value;
 
     const lenkedIn = this.consultantForm.get('linkedin')?.value;

@@ -168,6 +168,38 @@
           </mat-error>
         </mat-form-field>
 
+<!-- Assign consultant -->
+<mat-form-field appearance="fill" *ngIf="this.role !== 'Employee' && flag !== 'DomRecruiting'">
+  <mat-label>Assign Consultant To</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Assign consultant" formControlName="empid">
+      <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
+        {{ employee.fullname }}
+        <button matChipRemove [attr.aria-label]="'remove ' + employee">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+    
+    <input
+      #employeeInput
+      formControlName="empid"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
+      (matChipInputTokenEnd)="add($event)"
+    />
+    <mat-autocomplete #auto="matAutocomplete" formControlName="empid">
+      <mat-checkbox [checked]="isAllOptionsSelected" color="primary" (change)="onSelectAll($event)">{{ isAllOptionsSelected ? 'UnSelect All': 'Select All'}}</mat-checkbox>
+      <mat-option *ngFor="let employee of empArr">
+        <div (click)="optionClicked($event, employee)">
+          <mat-checkbox [checked]="employee.selected" color="primary" (change)="toggleSelection(employee)" (click)="$event.stopPropagation()">
+            {{ employee.fullname }}
+          </mat-checkbox>
+        </div>
+      </mat-option>
+    </mat-autocomplete>
+  <mat-error *ngIf="consultantForm.get('empid')!.hasError('required') || consultantForm.get('empid')?.value ">Select Executive</mat-error>
+</mat-form-field>
+
       </div>
     </div>
     <div class="header-container">

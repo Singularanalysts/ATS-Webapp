@@ -114,6 +114,7 @@ export class ClientInformationComponent implements OnInit {
   }
 
   getAllData(currentPageIndex = 1, status: string = 'all') {
+    
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 1500,
@@ -129,6 +130,7 @@ export class ClientInformationComponent implements OnInit {
       sortOrder: this.sortOrder,
       keyword: this.field,
       country: this.status
+     
 
     }
     return this.clientInfoServ
@@ -165,7 +167,8 @@ export class ClientInformationComponent implements OnInit {
         pageSize: this.itemsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
-        keyword: this.field
+        keyword: this.field,
+        country: this.status
       }
       return this.clientInfoServ
         .getAllTcvrs(

@@ -28,9 +28,23 @@ export class DashboardService {
     return this.apiServ.get("dashboard/closurecount/" + flag);
   }
 
-  public getDiceRequirements() {
-    return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
+  public getDiceRequirements(role: string) {
+    // return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
+    // return this.apiServ.get("requirement/postedInLastDays");
+    if (role === 'Team Leader Sales' || role == 'Sales Manager' || role == 'Super Administrator') {
+      return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
+    } else if (role === 'Recruiter' || role === 'Team Leader Recruiting' || role === 'Recruiting Manager') {
+      return this.apiServ.get("requirement/postedInLastDays");
+    } else {
+      // Handle other roles or return a default value
+      return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
+    }
    }
+
+   public getDiceRequirementss() {
+ return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
+   }
+
     public getEmployeeName() {
      return this.apiServ.get("dashboard/getBanchSalesEmps");
     }

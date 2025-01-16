@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  ChangeDetectorRef,
   Component,
   OnInit,
-  ViewChild,
   inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,12 +10,7 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginator,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-  PageEvent,
-} from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule, PageEvent, } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DialogService } from 'src/app/services/dialog.service';
@@ -34,6 +26,9 @@ import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.servi
 import { Subject, takeUntil } from 'rxjs';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { RequirementInfoComponent } from 'src/app/usit/components/recruitment/requirement-list/requirement-info/requirement-info.component';
+import { PurchaseOrderInfoComponent } from './purchase-order-info/purchase-order-info.component';
 
 @Component({
   selector: 'app-purchase-order-list',
@@ -52,7 +47,8 @@ import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
     RouterModule
   ],
   templateUrl: './purchase-order-list.component.html',
-  styleUrls: ['./purchase-order-list.component.scss']
+  styleUrls: ['./purchase-order-list.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class PurchaseOrderListComponent implements OnInit {
 
@@ -71,12 +67,10 @@ export class PurchaseOrderListComponent implements OnInit {
     'NetTerm',
     'PayRate',
     'PayToconsultant',
-    'RecruiterName',
-    'RecruiterEmail',
-    'RecruiterContactNumber',
-    'AccountPersonName',
-    'AccountPersonEmail',
-    'AccountPersonContactNumber',
+
+    // 'AccountPersonName',
+    // 'AccountPersonEmail',
+    // 'AccountPersonContactNumber',
     // 'Status',
     'Action',
   ];
@@ -98,29 +92,58 @@ export class PurchaseOrderListComponent implements OnInit {
   private purchaseOrderServ = inject(PurchaseOrderService);
   private destroyed$ = new Subject<void>();
   private snackBarServ = inject(SnackBarService);
+  sortField = 'updateddate';
+  sortOrder = 'desc';
+
+
+
 
   ngOnInit(): void {
-    this.getAll();
+    this.getAllPurchaseOrders();
   }
 
-  getAll() {
-    this.purchaseOrderServ.getAllPos()
-      .pipe(takeUntil(this.destroyed$)).subscribe(
-        (response: any) => {
-          // this.entity = response.data.content;
-          this.dataSource.data = response.data;
-          this.totalItems = response.data.totalElements;
-          // for serial-num {}
+
+
+
+  getAllPurchaseOrders(currentPageIndex = 1) {
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+    const pagObj = {
+      pageNumber: currentPageIndex,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    };
+
+    return this.purchaseOrderServ
+      .getAllPos(pagObj)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+
+          this.dataSource.data = response.data.content;
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
           });
-        }
-      )
+          this.totalItems = response.data.totalElements;
+        },
+        error: (err) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          dataToBeSentToSnackBar.message = err.message;
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
   }
 
   generateSerialNumber(index: number): number {
-    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
-    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    const serialNumber = this.currentPageIndex * this.itemsPerPage + index + 1;
     return serialNumber;
   }
 
@@ -140,7 +163,7 @@ export class PurchaseOrderListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
         //this.currentPageIndex + 1
-        this.getAll();
+        this.getAllPurchaseOrders();
       }
     })
   }
@@ -162,14 +185,14 @@ export class PurchaseOrderListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
         // this.getAllData(this.currentPageIndex + 1);
-        this.getAll();
+        this.getAllPurchaseOrders();
       }
     })
   }
 
 
   deletePO(po: any) {
-    const dataToBeSentToDailog : Partial<IConfirmDialogData> = {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to delete?',
       confirmText: 'Yes',
@@ -185,7 +208,7 @@ export class PurchaseOrderListComponent implements OnInit {
     const dialogRef = this.dialogServ.openDialogWithComponent(ConfirmComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe({
-      next: () =>{
+      next: () => {
         if (dialogRef.componentInstance.allowAction) {
           const dataToBeSentToSnackBar: ISnackBarData = {
             message: '',
@@ -205,7 +228,7 @@ export class PurchaseOrderListComponent implements OnInit {
                     dataToBeSentToSnackBar
                   );
                   // call get api after deleting a role
-                  this.getAll();
+                  this.getAllPurchaseOrders();
                 } else {
                   dataToBeSentToSnackBar.message = resp.message;
                   this.snackBarServ.openSnackBarFromComponent(
@@ -223,4 +246,93 @@ export class PurchaseOrderListComponent implements OnInit {
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+
+
+  /**
+  * handle page event - pagination
+  * @param endor
+  */
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      const currentPageIndex = event.pageIndex;
+      this.currentPageIndex = currentPageIndex;
+      this.getAllPurchaseOrders(event.pageIndex + 1);
+    }
+  }
+
+  /**
+    * Sort event
+    * @param event
+    */
+  onSort(event: Sort) {
+    this.sortField = event.active === 'SerialNum' ? 'updateddate' : event.active;
+    this.sortOrder = event.direction;
+
+    if (event.direction !== '') {
+      this.getAllPurchaseOrders();
+    }
+  }
+
+  applyFilter(event: any) {
+    const keyword = event.target.value;
+    this.field = keyword;
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+    const pagObj = {
+      pageNumber: 1,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    };
+
+    return this.purchaseOrderServ
+      .getAllPos(pagObj)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+
+          this.dataSource.data = response.data.content;
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        },
+        error: (err) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          dataToBeSentToSnackBar.message = err.message;
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
+    }
+
+    goToReqInfo(element: any){
+      // alert(JSON.stringify(element))
+      const actionData = {
+        
+        title: `${element.vendorname}`,
+        info: element,
+        actionName: 'po-info',
+      };
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '62dvw';
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = 'po-info';
+      dialogConfig.data = actionData;
+  
+     this.dialogServ.openDialogWithComponent(
+        PurchaseOrderInfoComponent,
+        dialogConfig
+      );
+    }
+
+
+
 }
