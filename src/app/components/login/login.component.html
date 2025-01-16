@@ -1,79 +1,114 @@
 <div class="login-container">
-  <mat-card class="login-card">
-      <div class="logo">
-          <img src="assets/images/singular-logo.png" alt="Logo">
-      </div>
-      <!-- <mat-card-header class="header-no-padding">
+    <mat-card class="login-card">
+        <div class="logo">
+            <img src="assets/images/singular-logo.png" alt="Logo">
+        </div>
+        <!-- <mat-card-header class="header-no-padding">
           <mat-card-title>Login to Your Account</mat-card-title>
       </mat-card-header> -->
 
-      <mat-tab-group class="custom-tabs">
-        <mat-tab label="Employer Login">
-            <mat-card-content class="no-padding">
-                <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Employee')">
-                    <mat-form-field class="full-width"  >
-                        <mat-label>Email</mat-label>
-                        <input matInput  type="email" formControlName="email" maxlength="50">
-                        <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
-                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email is required</mat-error>
-                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid email address</mat-error>
-                    </mat-form-field>
-      
-                    <mat-form-field class="full-width"  >
-                        <mat-label>Password</mat-label>
-                        <input matInput type="{{ hidePassword ? 'password' : 'text' }}"
-                            formControlName="password" maxlength="25">
+        <mat-tab-group class="custom-tabs" *ngIf="!otpFormVisible">
+            <mat-tab label="Employer Login">
+                <mat-card-content class="no-padding">
+                    <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Employee')">
+                        <mat-form-field class="full-width">
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" formControlName="email" maxlength="50">
+                            <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
+                            <mat-error
+                                *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email
+                                is required</mat-error>
+                            <mat-error
+                                *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid
+                                email address</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <mat-label>Password</mat-label>
+                            <input matInput type="{{ hidePassword ? 'password' : 'text' }}" formControlName="password"
+                                maxlength="25">
                             <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-                        <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
-                            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                        </button>
-                        <mat-error *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password is required</mat-error>
-                    </mat-form-field>
-      
-                    <div class="forgot-password">
-                        <a routerLink="/forgot-password">Forgot Password?</a>
-                    </div>
-      
-                    <button mat-raised-button color="primary" class="login-button">Login</button>
-                    <div class="create-account">
-                        <!-- No account? <a href="#">Create one!</a> -->
-                    </div>
-                </form>
-            </mat-card-content>
-        </mat-tab>
-        <mat-tab label="Employee Login">
-            <mat-card-content class="no-padding">
-                <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Consultant')">
-                    <mat-form-field class="full-width"  >
-                        <mat-label>Email</mat-label>
-                        <input matInput  type="email" formControlName="email" maxlength="50">
-                        <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
-                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email is required</mat-error>
-                        <mat-error *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid email address</mat-error>
-                    </mat-form-field>
-      
-                    <mat-form-field class="full-width"  >
-                        <mat-label>Password</mat-label>
-                        <input matInput type="{{ hidePassword ? 'password' : 'text' }}"
-                            formControlName="password" maxlength="25">
+                            <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
+                                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                            </button>
+                            <mat-error
+                                *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password
+                                is required</mat-error>
+                        </mat-form-field>
+
+                        <div class="forgot-password">
+                            <a routerLink="/forgot-password">Forgot Password?</a>
+                        </div>
+
+                        <button mat-raised-button color="primary" class="login-button">Login</button>
+                        <div class="create-account">
+                            <!-- No account? <a href="#">Create one!</a> -->
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-tab>
+            <mat-tab label="Employee Login">
+                <mat-card-content class="no-padding">
+                    <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Consultant')">
+                        <mat-form-field class="full-width">
+                            <mat-label>Email</mat-label>
+                            <input matInput type="email" formControlName="email" maxlength="50">
+                            <mat-icon matPrefix [style.color]="'#3f51b5'">email</mat-icon>
+                            <mat-error
+                                *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.required">Email
+                                is required</mat-error>
+                            <mat-error
+                                *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid
+                                email address</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="full-width">
+                            <mat-label>Password</mat-label>
+                            <input matInput type="{{ hidePassword ? 'password' : 'text' }}" formControlName="password"
+                                maxlength="25">
                             <mat-icon [style.color]="'#3f51b5'" matPrefix>lock</mat-icon>
-                        <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
-                            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                        </button>
-                        <mat-error *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password is required</mat-error>
-                    </mat-form-field>
-      
-                    <div class="forgot-password">
-                        <a routerLink="/forgot-password">Forgot Password?</a>
-                    </div>
-      
-                    <button mat-raised-button color="primary" class="login-button">Login</button>
-                    <div class="create-account">
-                        No account? <a routerLink="/consultant-register">Create one!</a>
-                    </div>
-                </form>
-            </mat-card-content>
-        </mat-tab>
-      </mat-tab-group>
-  </mat-card>
+                            <button mat-icon-button type="button" matSuffix (click)="hidePassword = !hidePassword;">
+                                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                            </button>
+                            <mat-error
+                                *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password
+                                is required</mat-error>
+                        </mat-form-field>
+
+                        <div class="forgot-password">
+                            <a routerLink="/forgot-password">Forgot Password?</a>
+                        </div>
+                        
+                        <button mat-raised-button color="primary" class="login-button">Login</button>
+                        <div class="create-account">
+                            No account? <a routerLink="/consultant-register">Create one!</a>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-tab>
+        </mat-tab-group>
+
+        
+<!-- OTP Verification Form -->
+<div *ngIf="otpFormVisible" class="otp-container">
+    <mat-card class="login-cards">
+      <mat-card-content class="no-padding">
+        <h3>Enter OTP</h3>
+        <form class="otp-form" [formGroup]="otpForm" (ngSubmit)="verifyPassword()">
+          <mat-form-field class="full-width">
+            <mat-label>OTP</mat-label>
+            <input matInput type="text" formControlName="otp" maxlength="6">
+            <mat-icon matPrefix [style.color]="'#3f51b5'">key</mat-icon>
+            <mat-error *ngIf="otpForm.controls.otp.errors?.required">OTP is required</mat-error>
+            <mat-error *ngIf="otpForm.controls.otp.errors?.pattern">OTP must be 6 digits</mat-error>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" class="otp-button">Verify OTP</button>
+          <!-- <button mat-raised-button color="warn" class="otp-button cancel-button" >Cancel</button> -->
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
+    </mat-card>
 </div>
