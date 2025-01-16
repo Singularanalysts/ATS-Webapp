@@ -1,0 +1,46 @@
+.otp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('../../../assets/images/login-background.jpg') center no-repeat;
+    background-size: cover;
+  }
+  
+  .otp-card {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    background-color: rgb(255, 255, 255);
+    padding: 16px;
+  }
+  
+  .center-logo {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .otp-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .otp-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .otp-button {
+    margin-top: 16px;
+  }
+  
+  img {
+    width: 150px;
+    height: auto;
+  }
+  

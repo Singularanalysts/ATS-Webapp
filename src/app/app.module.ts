@@ -21,6 +21,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
+import { OtpVerificationComponent } from './components/otp-verification/otp-verification.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
     FooterComponent,
     SidebarComponent,
     SideNavbarComponent,
-    RegisterConsultantComponent
+    RegisterConsultantComponent,
+    OtpVerificationComponent
   ],
   imports: [
     BrowserModule,

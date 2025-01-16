@@ -6,6 +6,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { CanLoadGuard } from './core/guards/can-load.guard';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
+import { OtpVerificationComponent } from './components/otp-verification/otp-verification.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'otp-verify',
+    component: OtpVerificationComponent
   },
   {
     path: 'forgot-password',
