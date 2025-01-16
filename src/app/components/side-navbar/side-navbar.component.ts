@@ -630,7 +630,8 @@ myRoles(){
       "roles":["Super Administrator"] 
     }
     ,
-  {  "test":"EMPLOYEE_LOGIN_JOB_REQUIREMENTS",
+  {  
+    "test":"EMPLOYEE_LOGIN_JOB_REQUIREMENTS",
     "text": "Job Requirements",
     "icon": "business_center",
     "children": [
@@ -650,6 +651,23 @@ myRoles(){
       }
     ]
   },
+  {
+      "test":"DOCSYNCH",
+      "text": "Docsync",
+      "icon": "folder",
+      "children": [
+      {
+        "test":"VIEW",
+        "text": "All Files",
+        "icon": "view_list",
+        "routerLink": "/docsync/all-files",
+        "roles":["Super Administrator"] 
+        }],
+      
+  }
+  
+  
+  ,
   {
     "test":"EMPLOYEE_LOGIN_APPLIED_JOBS",
     "text": "Applied Jobs",
@@ -680,6 +698,8 @@ myRoles(){
     "roles":["Super Administrator"] 
   }
 
+
+  
     ];
 
     // Replace static roles with dynamic roles

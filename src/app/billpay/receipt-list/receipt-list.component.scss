@@ -80,17 +80,12 @@
   }
   
   .mat-column-SerialNum,
-  .mat-column-InterviewId,
-  .mat-column-ConsultantName,
-  .mat-column-DateAndToI,
-  .mat-column-Round,
-  .mat-column-Mode,
-  .mat-column-Vendor,
-  .mat-column-ImplementationPartner,
-  .mat-column-Client,
-  .mat-column-DateOfSubmission,
-  .mat-column-EmployeerName,
-  .mat-column-InterviewStatus {
+  .mat-column-createddate,
+  .mat-column-vendor,
+  .mat-column-consultantname,
+  .mat-column-payment_date,
+  .mat-column-amount_received,
+  .mat-column-payment_mode {
     border-right: 1px solid lightgray;
   }
   
@@ -261,4 +256,15 @@
   .consultant-name, .employeer-name {
     cursor: pointer;
     color: #0275d8;
+  }
+
+
+  .table-wrapper {
+    flex: 1;
+    width: 100%;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
   }

@@ -110,3 +110,32 @@ mat-error{
 .custom-tabs .mat-tab-label {
   color: white; /* Set your desired text color */
 }
+.otp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.otp-container .login-cards {
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+  box-shadow: none;
+  // padding: 16px;
+}
+
+.otp-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.otp-button {
+  margin-top: 16px;
+}
+
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+  margin-top: 10px;
+}

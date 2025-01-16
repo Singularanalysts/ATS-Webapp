@@ -38,13 +38,11 @@ export class PurchaseOrderService {
     return this.apiServ.get("billpay/invoice/getById/"+ invoiceid);
   }
 
-  public getAllPos() {
-    return this.apiServ.get("billpay/po/all");
+  public getAllPos(request:any) {
+    return this.apiServ.post("billpay/po/allPurchaseOrders",request);
   }
 
-  public getAllIvoice() {
-    return this.apiServ.get("billpay/invoice/getAll");
-  }
+ 
 
   public getCompanies() {
    return this.apiServ.get("billpay/po/company/allcompanies");
@@ -76,17 +74,11 @@ export class PurchaseOrderService {
     return this.apiServ.delete("billpay/po/deletePo/" + id);
   }
 
-  deleteInvoice(id: number) {
-    return this.apiServ.delete("billpay/invoice/deleteInvoice/" + id);
-  }
+
 
   getSelectedConsultantInfo(cid: number, vid: number) {
     return this.apiServ.get("billpay/closure/consultantInfo/" + cid + "/" + vid);
   }
 
-  downloadInvoice(id: number): Observable<Blob> {
-    return this.http.get(`${this.apiServ.apiUrl}billpay/invoice/pdf/${id}`, {
-      responseType: 'blob',
-    });
-  }
+ 
 }

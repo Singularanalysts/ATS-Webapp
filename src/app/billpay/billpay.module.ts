@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BillpayRoutingModule } from './billpay-routing.module';
+import { PurchaseOrderInfoComponent } from './purchase-order-list/purchase-order-info/purchase-order-info.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+   
+  ],
   imports: [
     CommonModule,
-    BillpayRoutingModule
+    BillpayRoutingModule,
+    PurchaseOrderInfoComponent
   ]
 })
 export class BillpayModule { }

@@ -67,14 +67,16 @@ export class AddReceiptComponent {
     // 'Action'
   ];
   invoiceId: any;
+  invoiceValue!: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddReceiptComponent>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.invoiceId = this.data.receiptData.invoiceId
+    this.invoiceValue = Number(this.data.receiptData.invoiceValue);
     this.initializeReceiptForm(null);
     this.getPayments(this.invoiceId);
   }
@@ -82,6 +84,7 @@ export class AddReceiptComponent {
   private initializeReceiptForm(receiptData: any) {
     this.receiptForm = this.formBuilder.group({
       invId: [receiptData ? receiptData.invoiceid : this.invoiceId],
+      invStatus: [receiptData ? receiptData.invStatus : ''],
       paymentId: [receiptData ? receiptData.paymentId : ''],
       paymentDate: [receiptData ? receiptData.paymentDate : '', [Validators.required]],
       amountReceived: [receiptData ? receiptData.amountReceived : '', [Validators.required]],
@@ -111,6 +114,16 @@ export class AddReceiptComponent {
       return;
     }
     const saveReqObj = this.getSaveData();
+    const amountReceived = Number(this.receiptForm.get("amountReceived")?.value);
+
+    if (this.invoiceValue === amountReceived) {
+      saveReqObj.invStatus = 'PAID'; // Update status to 'PAID'
+    } else if (amountReceived > 0 && amountReceived < this.invoiceValue) {
+      saveReqObj.invStatus = 'PARTIALLY PAID'; // For partial payments
+    } else {
+      saveReqObj.invStatus = 'UNPAID'; // Default case if no amount is received
+    }
+
     this.receiptServ
       .addORUpdateReceipt(saveReqObj, this.data.actionName)
       .pipe(takeUntil(this.destroyed$))
@@ -154,12 +167,12 @@ export class AddReceiptComponent {
     };
   }
 
-  editReceipt(receipt: any){
+  editReceipt(receipt: any) {
 
   }
 
-  deleteReceipt(receipt: any){
-    
+  deleteReceipt(receipt: any) {
+
   }
 
   onCancel() {

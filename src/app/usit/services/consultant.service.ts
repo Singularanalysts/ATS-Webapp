@@ -193,4 +193,16 @@ export class ConsultantService {
     return this.http.get(`consultant/getByAddedby/${userid}`);
   }
 
+  getEmployee() {
+    return this.http.get("consultant/salesExecutivesList");
+  }
+
+  getRecruiters() {
+    return this.http.get("requirement/recruiterlist");
+  }
+
+  getAssignedRecruiter(id: number) {
+    return this.http.get("consultant/getSalesExecutiveById/" + id);
+  }    
+  
 }

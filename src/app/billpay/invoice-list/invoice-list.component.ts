@@ -11,12 +11,14 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { PurchaseOrderService } from 'src/app/usit/services/purchase-order.service';
 import { Subject, take, takeUntil } from 'rxjs';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { ComposemailComponent } from './composemail/composemail.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AddReceiptComponent } from '../receipt-list/add-receipt/add-receipt.component';
+import { InvoiceService } from '../services/invoice.service';
+import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { Sort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-invoice-list',
@@ -26,10 +28,13 @@ import { AddReceiptComponent } from '../receipt-list/add-receipt/add-receipt.com
     MatIconModule,
     MatTooltipModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   templateUrl: './invoice-list.component.html',
-  styleUrls: ['./invoice-list.component.scss']
+  styleUrls: ['./invoice-list.component.scss'],
+  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class InvoiceListComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
@@ -52,7 +57,7 @@ export class InvoiceListComponent implements OnInit {
   ];
   private router = inject(Router);
   private dialogServ = inject(DialogService);
-  private purchaseOrderServ = inject(PurchaseOrderService);
+  private invServ = inject(InvoiceService);
   private destroyed$ = new Subject<void>();
 
   page: number = 1;
@@ -69,22 +74,47 @@ export class InvoiceListComponent implements OnInit {
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
   private breakpointObserver = inject(BreakpointObserver);
+  sortField = 'updateddate';
+  sortOrder = 'desc';
 
   ngOnInit(): void {
-    this.getAll();
+    this.getAllInvoices();
   }
-  getAll() {
-    this.purchaseOrderServ.getAllIvoice()
-      .pipe(takeUntil(this.destroyed$)).subscribe(
-        (response: any) => {
-          this.dataSource.data = response.data;
-          this.totalItems = response.data.totalElements;
-          // for serial-num {}
+  getAllInvoices(currentPageIndex = 1) {
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+    const pagObj = {
+      pageNumber: currentPageIndex,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    };
+
+    return this.invServ
+      .getAllInvoice(pagObj)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+
+          this.dataSource.data = response.data.content;
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
           });
-        }
-      )
+          this.totalItems = response.data.totalElements;
+        },
+        error: (err) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          dataToBeSentToSnackBar.message = err.message;
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
   }
 
   generateSerialNumber(index: number): number {
@@ -108,8 +138,8 @@ export class InvoiceListComponent implements OnInit {
     const dialogRef = this.dialogServ.openDialogWithComponent(AddInvoiceComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(() => {
-      if (dialogRef.componentInstance.submitted) {
-        this.getAll();
+      if (dialogRef.componentInstance) {
+        this.getAllInvoices();
         //  this.getAll(this.currentPageIndex + 1);
       }
     })
@@ -129,14 +159,14 @@ export class InvoiceListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAll();
+        this.getAllInvoices();
         // this.getAllData(this.currentPageIndex + 1);
       }
     })
   }
 
   download(invoice: any) {
-    this.purchaseOrderServ
+    this.invServ
       .downloadInvoice(invoice.invoiceId)
       .subscribe(blob => {
         // if (items[1] == 'pdf' || items[1] == 'PDF') {
@@ -182,17 +212,17 @@ export class InvoiceListComponent implements OnInit {
             direction: 'above',
             panelClass: ['custom-snack-success'],
           };
-          this.purchaseOrderServ.deleteInvoice(invoice.invoiceId).pipe(takeUntil(this.destroyed$)).subscribe
+          this.invServ.deleteInvoice(invoice.invoiceId).pipe(takeUntil(this.destroyed$)).subscribe
             ({
               next: (resp: any) => {
                 if (resp.status == 'success') {
-                  dataToBeSentToSnackBar.message =
-                    'Invoice Deleted successfully';
+                  dataToBeSentToSnackBar.message =resp.message
+                   
                   this.snackBarServ.openSnackBarFromComponent(
                     dataToBeSentToSnackBar
                   );
                   // call get api after deleting a role
-                  this.getAll();
+                  this.getAllInvoices();
                 } else {
                   dataToBeSentToSnackBar.message = resp.message;
                   this.snackBarServ.openSnackBarFromComponent(
@@ -205,8 +235,51 @@ export class InvoiceListComponent implements OnInit {
       }
     })
   }
-  
+
   applyFilter(event: any) {
+    const keyword = event.target.value;
+    this.field = keyword;
+    const dataToBeSentToSnackBar: ISnackBarData = {
+      message: '',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+    const pagObj = {
+      pageNumber: 1,
+      pageSize: this.itemsPerPage,
+      sortField: this.sortField,
+      sortOrder: this.sortOrder,
+      keyword: this.field,
+    };
+
+    return this.invServ
+      .getAllInvoice(pagObj)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+
+          this.dataSource.data = response.data.content;
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+        },
+        error: (err) => {
+          dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          dataToBeSentToSnackBar.message = err.message;
+          this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+        },
+      });
+
+
+
+
+
+
+
 
   }
 
@@ -287,16 +360,48 @@ export class InvoiceListComponent implements OnInit {
 
       const dialogRef = this.dialogServ.openDialogWithComponent(AddReceiptComponent, dialogConfig);
       dialogRef.afterClosed().subscribe(() => {
-        if(dialogRef.componentInstance.submitted){
-          //  this.getAll(this.currentPageIndex + 1);
+        if (dialogRef.componentInstance) {
+          this.getAllInvoices();
         }
       });
     });
 
-    
+
   }
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
   }
+
+  /**
+ * handle page event - pagination
+ * @param endor
+ */
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      const currentPageIndex = event.pageIndex;
+      this.currentPageIndex = currentPageIndex;
+      this.getAllInvoices(event.pageIndex + 1);
+    }
+  }
+
+
+  /**
+    * Sort event
+    * @param event
+    */
+  onSort(event: Sort) {
+    this.sortField = event.active === 'SerialNum' ? 'updateddate' : event.active;
+    this.sortOrder = event.direction;
+
+    if (event.direction !== '') {
+      this.getAllInvoices();
+    }
+  }
+
+
+  
+  
+
 }
