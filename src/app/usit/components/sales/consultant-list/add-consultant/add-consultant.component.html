@@ -21,7 +21,7 @@
       <div class="form-column-left">
         <!-- First Name -->
         <mat-form-field appearance="fill">
-          <mat-label>First Name lax</mat-label>
+          <mat-label>First Name</mat-label>
           <input matInput formControlName="firstname" maxlength="50" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('firstname').hasError('required')">First
             Name is Required</mat-error>
@@ -169,7 +169,7 @@
         </mat-form-field>
 
 <!-- Assign consultant -->
-<mat-form-field appearance="fill" *ngIf="this.role !== 'Employee'">
+<mat-form-field appearance="fill" *ngIf="this.role !== 'Employee' && flag !== 'DomRecruiting'">
   <mat-label>Assign Consultant To</mat-label>
     <mat-chip-grid #chipGrid aria-label="Assign consultant" formControlName="empid">
       <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
