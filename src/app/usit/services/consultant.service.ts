@@ -197,6 +197,10 @@ export class ConsultantService {
     return this.http.get("consultant/salesExecutivesList");
   }
 
+  getDomEmployee() {
+    return this.http.get("consultant/domExecutivesList");
+  }
+
   getRecruiters() {
     return this.http.get("requirement/recruiterlist");
   }
