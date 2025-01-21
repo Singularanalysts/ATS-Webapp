@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 const modules = [
     MatProgressSpinnerModule,
@@ -42,7 +43,8 @@ const modules = [
     MatNativeDateModule,
     MatProgressBarModule,
     MatTabsModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatPaginatorModule
 ];
 @NgModule({
   declarations: [],

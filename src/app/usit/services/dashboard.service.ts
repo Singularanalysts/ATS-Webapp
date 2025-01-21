@@ -28,15 +28,28 @@ export class DashboardService {
     return this.apiServ.get("dashboard/closurecount/" + flag);
   }
 
-  public getDiceRequirements(role: string) {
+  public getDiceRequirements(role: string, empid:any) {
     // return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
     // return this.apiServ.get("requirement/postedInLastDays");
     if (role === 'Team Leader Sales' || role == 'Sales Manager' || role == 'Super Administrator') {
       return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
     } else if (role === 'Recruiter' || role === 'Team Leader Recruiting' || role === 'Recruiting Manager') {
       return this.apiServ.get("requirement/postedInLastDays");
-    } else {
+    }else if (role === 'Sales Executive') {
+      return this.apiServ.get("consultant/assignedDashboardConsultantsDataById/" +empid);
+    } 
+    else {
       // Handle other roles or return a default value
+      return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
+    }
+   }
+
+   public getDiceRequirementslax(role: any, actData : any) {
+    
+    if (role === 'Team Leader Sales' || role == 'Sales Manager' || role === 'Sales Executive') {
+      return this.apiServ.post("openreqs/dice/allEmpContractAllReqs",  actData);
+    }
+    else {
       return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
     }
    }

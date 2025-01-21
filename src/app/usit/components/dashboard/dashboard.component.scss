@@ -421,7 +421,6 @@ b {
     align-items: center;
   }
 
-
 }
 .date-picker-field {
   display: flex;
@@ -443,11 +442,9 @@ b {
   
 }
 
-
 .search {
   height: 35px;
   padding: 0px 8px;
-   
 }
 .header {
   display: flex;
@@ -476,3 +473,10 @@ b {
 .status {
   color: #0d6efd;
 }
+
+.mat-mdc-card.activity-card {
+  height: 760px;
+  padding: 15px;
+  overflow-y: auto;
+}
+

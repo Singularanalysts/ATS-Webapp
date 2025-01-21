@@ -279,8 +279,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   getEmployee() {
 
-    if(!(this.flag === 'Recruiting')){
+    if(!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')){
     this.consultantServ.getEmployee().subscribe(
+      (response: any) => {
+        this.empArr = response.data;
+        this.empArr.map((x: any) => x.selected = false);
+        this.prepopulateSelectedEmployees();
+      }
+    )
+  }
+  else if((this.flag === 'DomRecruiting')){
+    this.consultantServ.getDomEmployee().subscribe(
       (response: any) => {
         this.empArr = response.data;
         this.empArr.map((x: any) => x.selected = false);

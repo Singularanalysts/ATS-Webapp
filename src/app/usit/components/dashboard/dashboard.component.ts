@@ -29,19 +29,23 @@ import { utils, writeFile } from 'xlsx';
 import { EmpAppliedJobsListComponent } from './emp-applied-jobs-list/emp-applied-jobs-list.component';
 import { EmpSubmissionsListComponent } from './emp-submissions-list/emp-submissions-list.component';
 import { EmpInterviewsListComponent } from './emp-interviews-list/emp-interviews-list.component';
+import { JsonpInterceptor } from '@angular/common/http';
+import { PageEvent } from '@angular/material/paginator';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
+  imports: [CommonModule, MatPaginatorModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
   providers: [DatePipe]
 })
 export class DashboardComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   dataSourceDice = new MatTableDataSource([]);
+  dataSourceDicelax = new MatTableDataSource([]);
   dataSourceTech = new MatTableDataSource([]);
   dataSourceVendor = new MatTableDataSource([]);
   benchSalesEmployees: any = [];
@@ -142,6 +146,19 @@ export class DashboardComponent implements OnInit {
   endDateControl: FormControl | undefined;
   public dialog= inject(MatDialog);
 
+// pagination code
+page: number = 1;
+itemsPerPage = 50;
+AssignedPageNum !: any;
+totalItems: any;
+field = "empty";
+currentPageIndex = 0;
+pageEvent!: PageEvent;
+pageSize = 50;
+showPageSizeOptions = true;
+showFirstLastButtons = true;
+pageSizeOptions = [50, 75, 100];
+
   constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) { }
   refresh() {
     this.closureFlag = 'Monthly';
@@ -226,6 +243,7 @@ export class DashboardComponent implements OnInit {
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     if (this.department !== 'Consultant' && this.role !== 'Employee') {
       this.getDiceReqs(); 
+      this.getDiceReqss(1); 
       // this.getDiceReqss();
       this.getSourcingLeads();
       this.getReqVendorCount();
@@ -656,7 +674,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getDiceReqs() {
-    this.dashboardServ.getDiceRequirements(this.role).subscribe(
+    this.dashboardServ.getDiceRequirements(this.role, this.userid).subscribe(
       (response: any) => {
         //this.entity = response.data;
         this.dataSourceDice.data = response.data;
@@ -665,6 +683,45 @@ export class DashboardComponent implements OnInit {
         // });
       }
     );
+  }
+
+  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Title", sortOrder: any = "asc" , keyword: any = "empty") {
+    // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
+    const actData = {
+      pageNumber: pagIdx,
+      pageSize: pagesize,
+      sortField: sortField,
+      sortOrder: sortOrder,
+      keyword: keyword,
+      userid :this.userid
+    };
+
+    this.dashboardServ.getDiceRequirementslax(this.role, actData).subscribe(
+      (response: any) => {
+        //this.entity = response.data;
+        this.dataSourceDicelax.data = response.data.content;
+        this.totalItems = response.data.totalElements;
+        this.dataSourceDicelax.data.map((x: any, i) => {
+          // x.serialNum = i + 1;
+          x.serialNum = this.generateSerialNumber(i);
+        });
+      }
+    );
+  }
+
+  handlePageEvent(event: PageEvent) {
+    if (event) {
+      this.pageEvent = event;
+      this.currentPageIndex = event.pageIndex;
+      this.getDiceReqss(event.pageIndex + 1);
+    }
+    return;
+  }
+
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    const serialNumber = (pagIdx - 1) * 50 + index + 1;
+    return serialNumber;
   }
 
   // getDiceReqss() {
@@ -752,6 +809,7 @@ export class DashboardComponent implements OnInit {
   onDiceFilter(event: any) {
     this.dataSourceDice.filter = event.target.value;
   }
+
 
   onCategoryFilter(event: any) {
     this.dataSourceTech.filter = event.target.value;
