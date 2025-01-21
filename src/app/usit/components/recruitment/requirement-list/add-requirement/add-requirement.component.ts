@@ -157,6 +157,7 @@ export class AddRequirementComponent {
         }
       })
     );
+
     if (this.data.actionName === "edit-requirement") {
       this.initializeRequirementForm(new Requirements());
       this.requirementServ.getEntity(this.data.requirementData.requirementid).subscribe(
@@ -456,7 +457,7 @@ export class AddRequirementComponent {
     }
 
     if (this.requirementForm.invalid) {
-      this.isFormSubmitted = false
+      this.isFormSubmitted = false;
       this.displayFormErrors();
       this.isRadSelected = true;
       this.requirementForm.markAllAsTouched();
