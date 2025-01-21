@@ -109,6 +109,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   empArr: any = [];
   employees: any[] = [];
   employeedata: any = [];
+  userid!:any; 
 
   selectOptionObj = {
     interviewAvailability: IV_AVAILABILITY,
@@ -160,7 +161,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.getQualification();
     this.getCompanies();
     this.getFlag(this.data.flag.toLocaleLowerCase());
-   
+    this.userid = localStorage.getItem('userid');
     this.getEmployee();
 
     if (this.data.actionName === "edit-consultant") {
@@ -280,7 +281,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   getEmployee() {
 
     if(!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')){
-    this.consultantServ.getEmployee().subscribe(
+    this.consultantServ.getEmployee(this.userid).subscribe(
       (response: any) => {
         this.empArr = response.data;
         this.empArr.map((x: any) => x.selected = false);
