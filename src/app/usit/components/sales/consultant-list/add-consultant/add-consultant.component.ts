@@ -353,6 +353,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   initConsultantForm(consultantData: Consultantinfo) {
 
+
     if( this.flag ==='DomRecruiting' && this.role==='Team Leader Sales' || this.role==='Team Leader Recruiting'){
       
       this.consultantForm = this.formBuilder.group({
@@ -494,6 +495,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         addedby: localStorage.getItem('userid'),
         preSource: [0]
       });
+
     }
         
        
