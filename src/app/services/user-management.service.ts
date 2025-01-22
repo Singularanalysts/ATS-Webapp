@@ -16,17 +16,28 @@ export class UserManagementService {
 
   // login controller signin method
   login(user: Partial<Employee>): Observable<any> {
+    return this.http.post<any>(this.apiServ.apiUrl + 'auth/login/authantication', user,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }).pipe(map((resp) => {
+        return resp;
+      }));
+
+  }
+  loginWithData(user: Partial<Employee>): Observable<any> {
     return this.http.post<any>(this.apiServ.apiUrl + 'auth/login/signin', user,
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }).pipe(map((resp) => {
         return resp;
       }));
   }
 
+
   conLogin(user: Partial<Employee>): Observable<any> {
     return this.http.post<any>(this.apiServ.apiUrl + 'auth/conLogin/signin', user,
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }).pipe(map((resp) => {
         return resp;
       }));
+  }
+  otpVerification(user: any): Observable<any> {
+    return this.http.post<any>(this.apiServ.apiUrl + 'auth/login/authSignIn', user);
   }
 
   getUserName(): string {
@@ -75,7 +86,7 @@ export class UserManagementService {
   /**************ROLES SERVICES -  ENDS************* */
 
   /*** EMPOLOYEE SERVICES _ START */
-   //employee management
+  //employee management
   getRolesDropdown() {
     return this.http.get(this.apiServ.apiUrl + "auth/users/getroles");
   }
@@ -124,8 +135,8 @@ export class UserManagementService {
     return this.http.put(this.apiServ.apiUrl + "auth/users/update", entity);
   }
 
-   //Update Employee
-   public getAllTLBench() {
+  //Update Employee
+  public getAllTLBench() {
     return this.http.get(this.apiServ.apiUrl + "auth/users/teamleads");
   }
 

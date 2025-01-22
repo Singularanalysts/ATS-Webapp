@@ -92,7 +92,10 @@ export class OpenreqsComponent implements OnInit {
       { value: 'recruit.net', label: 'Recruit' },
       { value: 'techfetch', label: 'Tech Fetch' },
       { value: 'jobsora', label: 'Jobsora' },
-      { value: 'jobdiva', label: 'Jobdiva' }
+      { value: 'jobdiva', label: 'Jobdiva' },
+      { value: 'Simplyhired', label: 'Simply Hired' },
+      { value: 'Post Job Free', label: 'Post Job Free' },
+      { value: 'Joblift', label: 'Joblift' }
     ],
     'USA': [
       { value: 'all', label: 'All' },
@@ -102,7 +105,10 @@ export class OpenreqsComponent implements OnInit {
       { value: 'linkedin', label: 'LinkedIn' },
       { value: 'recruit.net', label: 'Recruit' },
       { value: 'techfetch', label: 'Tech Fetch' },
-      { value: 'jobdiva', label: 'Jobdiva' }
+      { value: 'jobdiva', label: 'Jobdiva' },
+      { value: 'Simplyhired', label: 'Simply Hired' },
+      { value: 'Post Job Free', label: 'Post Job Free' },
+      { value: 'Joblift', label: 'Joblift' }
     ],
     'UAE': [
       { value: 'all', label: 'All' },

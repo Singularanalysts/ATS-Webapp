@@ -202,6 +202,7 @@ export class ConsultantFulltimeOpenreqsComponent {
       title: `${element.job_title}`,
       id: element.id,
       actionName: 'job-description',
+      jobType: 'fulltime',
     };
 
     const dialogConfig = new MatDialogConfig();

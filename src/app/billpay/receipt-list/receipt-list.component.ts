@@ -46,6 +46,9 @@ export class ReceiptListComponent implements OnInit, OnDestroy {
   dataTableColumns: string[] = [
     'SerialNum',
     'createddate',
+    'invoiceNumber',
+    'vendor',
+    'consultantname',
     'payment_date',
     'amount_received',
     'payment_mode',

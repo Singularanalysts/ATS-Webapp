@@ -36,6 +36,27 @@
                     <td mat-cell *matCellDef="let element"> {{element.createddate | date:'MM-dd-yyyy' }} </td>
                 </ng-container>
 
+                  <!--Invoice Column -->
+                  <ng-container matColumnDef="invoiceNumber">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum">
+                        Invoice Number
+                    <td mat-cell *matCellDef="let element"> {{element.invoicenumber  }} </td>
+                </ng-container>
+
+                <!--Vendor Column -->
+                <ng-container matColumnDef="vendor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum">
+                        Vendor
+                    <td mat-cell *matCellDef="let element"> {{element.vendor  }} </td>
+                </ng-container>
+
+                  <!--Consultant Column -->
+                  <ng-container matColumnDef="consultantname">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum">
+                        Consultant
+                    <td mat-cell *matCellDef="let element"> {{element.consultantname }} </td>
+                </ng-container>
+
                 <!--Date of Payment Column -->
                 <ng-container matColumnDef="payment_date">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by SerialNum">Date

@@ -24,6 +24,10 @@ import { Employee } from 'src/app/usit/models/employee';
 })
 export class LoginComponent implements OnInit {
   hidePassword = true;
+  loggedInUserData: any;
+  otpFormVisible = false;
+  userType! : string;
+  otpId! : number;
   private userManagementServ = inject(UserManagementService);
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
@@ -31,16 +35,18 @@ export class LoginComponent implements OnInit {
   private permissionServ = inject(PermissionsService);
 
   form: any = FormGroup;
+  otpForm: any = FormGroup;
   protected isFormSubmitted = false;
   department!: string | null;
   ngOnInit(): void {
     this.initializeLoginForm();
+    this.initializeOtpForm();
   }
 
   private initializeLoginForm() {
     this.form = this.formBuilder.group({
       email: [
-       '', // remove later  saikiran@narveetech.com
+        '', // remove later  saikiran@narveetech.com
         [
           Validators.required,
           Validators.email,
@@ -104,66 +110,196 @@ export class LoginComponent implements OnInit {
       password: this.form.controls.password.value,
       loginAs: userType
     };
-
+    this.userType = userType;
     let loginObservable: Observable<any>;
-
     if (userType === 'Employee') {
       loginObservable = this.userManagementServ.login(userObj);
+      loginObservable.subscribe({
+        next: (result: any) => {
+          if (result.status == 'success') {
+            // this.loggedInUserData = result.data;
+       
+            this.otpId = result.data;
+  
+            // this.department = result.data.department;
+            this.otpFormVisible = true;
+            const message = "OTP has been sent to your email ID: " + userObj.email;
+            this.showErroNotification(message, 'success');
+            // alert("success");
+  
+            // this.permissionServ.login(this.loggedInUserData).subscribe((data) => {
+            //   this.router.navigate(['usit/dashboard']);
+            //   const message = 'You have logged in successfully!';
+            //   this.showErroNotification(message, 'success');
+            // });
+  
+          }
+          if (result.status == 'fail') {
+            // const message = "You're Account locked due to InActive for More Than 4 days";
+            this.showErroNotification(result.message);
+          }
+  
+          if (result.status == 'locked') {
+            const message = "You're Account locked due to InActive for More Than 4 days";
+            this.showErroNotification(message);
+          }
+  
+  
+        },
+        error: err => {
+          if (err.status == 401) {
+            const message = 'Invalid Credentials, Please try with valid credentials';
+            this.showErroNotification(message);
+          }
+          else if (err.error.status == 'locked') {
+            const message = err.error.message;
+            this.showErroNotification(message);
+          } else if (err.error.status == 'inactive') {
+            const message = err.error.message;
+            this.showErroNotification(message);
+          }
+          // else {
+          //   //const message = result.includes('Unauthorized') ? 'Invalid Credentials, Please try with valid credentials' : result;
+          //   this.showErroNotification(result);
+          // }
+          else {
+            const message = 'Failed to connect Server';
+            this.showErroNotification(message);
+          }
+        }
+      });
     } else if (userType === 'Consultant') {
       loginObservable = this.userManagementServ.conLogin(userObj);
+      loginObservable.subscribe({
+        next: (result: any) => {
+          if (result.status == 'success') {
+            this.loggedInUserData = result.data;
+       
+            // this.otpId = result.data;
+  
+            this.department = result.data.department;
+            // this.otpFormVisible = true;
+            // alert("success");
+  
+            this.permissionServ.login(this.loggedInUserData).subscribe((data) => {
+              this.router.navigate(['usit/dashboard']);
+              const message = 'You have logged in successfully!';
+              this.showErroNotification(message, 'success');
+            });
+  
+          }
+          if (result.status == 'fail') {
+            // const message = "You're Account locked due to InActive for More Than 4 days";
+            this.showErroNotification(result.message);
+          }
+  
+          if (result.status == 'locked') {
+            const message = "You're Account locked due to InActive for More Than 4 days";
+            this.showErroNotification(message);
+          }
+  
+  
+        },
+        error: err => {
+          if (err.status == 401) {
+            const message = 'Invalid Credentials, Please try with valid credentials';
+            this.showErroNotification(message);
+          }
+          else if (err.error.status == 'locked') {
+            const message = err.error.message;
+            this.showErroNotification(message);
+          } else if (err.error.status == 'inactive') {
+            const message = err.error.message;
+            this.showErroNotification(message);
+          }
+          // else {
+          //   //const message = result.includes('Unauthorized') ? 'Invalid Credentials, Please try with valid credentials' : result;
+          //   this.showErroNotification(result);
+          // }
+          else {
+            const message = 'Failed to connect Server';
+            this.showErroNotification(message);
+          }
+        }
+      });
     } else {
       console.error('Invalid user type');
       return;
     }
-    loginObservable.subscribe({
-      next: (result: any) => {
-        if (result.status == 'success') {
-          const loggedInUserData = result.data;
-          this.department = result.data.department;
-          this.permissionServ.login(loggedInUserData).subscribe((data) => {
-            this.router.navigate(['usit/dashboard']);
-            const message = 'You have logged in successfully!';
-            this.showErroNotification(message, 'success');
-          });
-        }
-        if (result.status == 'fail') {
-          // const message = "You're Account locked due to InActive for More Than 4 days";
-          this.showErroNotification(result.message);
-        }
 
-        if (result.status == 'locked') {
-          const message = "You're Account locked due to InActive for More Than 4 days";
-          this.showErroNotification(message);
-        }
-
-
-      },
-      error: err => {
-        if (err.status == 401) {
-          const message = 'Invalid Credentials, Please try with valid credentials';
-          this.showErroNotification(message);
-        }
-        else if (err.error.status == 'locked') {
-          const message = err.error.message;
-          this.showErroNotification(message);
-        } else if (err.error.status == 'inactive') {
-          const message = err.error.message;
-          this.showErroNotification(message);
-        }
-        // else {
-        //   //const message = result.includes('Unauthorized') ? 'Invalid Credentials, Please try with valid credentials' : result;
-        //   this.showErroNotification(result);
-        // }
-        else {
-          const message = 'Failed to connect Server';
-          this.showErroNotification(message);
-        }
-      }
-
-    });
 
   }
+  verifyPassword() {
+    if(this.otpForm.valid){
+      let loginObservable : Observable<any>;
+      const userObj = {
+        email: this.form.controls.email.value,
+        password: this.form.controls.password.value,
+        loginAs: this.userType,
+        otpId : this.otpId,
+        otp : this.otpForm.value.otp
+      };
+      loginObservable = this.userManagementServ.loginWithData(userObj);
+      this.userManagementServ.otpVerification(userObj).subscribe(
+        (response) => {
+          if (response.status === 'success') {
+    
+           loginObservable.subscribe({
+            next: (result: any) => {
+              if (result.status == 'success') {
+                this.loggedInUserData = result.data;
+                this.department = result.data.department;
+                this.permissionServ.login(this.loggedInUserData).subscribe((data) => {
+                  this.router.navigate(['usit/dashboard']);
+                  const message = 'You have logged in successfully!';
+                  this.showErroNotification(message, 'success');
+                });
+              }
+              if (result.status == 'fail') {
+                // const message = "You're Account locked due to InActive for More Than 4 days";
+                this.showErroNotification(result.message);
+              }
+              if (result.status == 'locked') {
+                const message = "You're Account locked due to InActive for More Than 4 days";
+                this.showErroNotification(message);
+              }
+            },
+            error: err => {
+              if (err.status == 401) {
+                const message = 'Invalid Credentials, Please try with valid credentials';
+                this.showErroNotification(message);
+              }
+              else if (err.error.status == 'locked') {
+                const message = err.error.message;
+                this.showErroNotification(message);
+              } else if (err.error.status == 'inactive') {
+                const message = err.error.message;
+                this.showErroNotification(message);
+              }
+              // else {
+              //   //const message = result.includes('Unauthorized') ? 'Invalid Credentials, Please try with valid credentials' : result;
+              //   this.showErroNotification(result);
+              // }
+              else {
+                const message = 'Failed to connect Server';
+                this.showErroNotification(message);
+              }
+            }
+          });
 
+          } else {
+              this.showErroNotification(response.message);
+          }
+        },
+        (error) => {
+          // Handle HTTP errors or server errors
+          console.error('An error occurred during OTP verification:', error);
+        }
+      );
+    }else{
+      console.log("not verified");
+    }
+  }
   private showErroNotification(message: string, errorType = 'failure'): void {
     let dataToBeSentToSnackBar: ISnackBarData = {
       message: message,
@@ -175,4 +311,11 @@ export class LoginComponent implements OnInit {
     };
     this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
   }
+
+  private initializeOtpForm() {
+    this.otpForm = this.formBuilder.group({
+      otp: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+    });
+  }
+
 }

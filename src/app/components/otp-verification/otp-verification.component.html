@@ -1,0 +1,26 @@
+<div class="otp-container">
+    <mat-card class="otp-card">
+      <div class="center-logo">
+        <img src="assets/images/singular-logo.png" alt="Logo">
+      </div>
+      <mat-card-content class="otp-content">
+        <form class="otp-form" [formGroup]="otpForm" (ngSubmit)="submitOtp()">
+          <mat-form-field class="full-width">
+            <mat-label>Enter OTP</mat-label>
+            <input matInput type="text" formControlName="otp" maxlength="6">
+            <mat-icon matPrefix [style.color]="'#3f51b5'">lock</mat-icon>
+            <mat-error *ngIf="isFormSubmitted && otpForm.controls['otp'].errors?.['required']">
+              OTP is required
+            </mat-error>
+            <mat-error *ngIf="isFormSubmitted && otpForm.controls['otp'].errors?.['maxlength']">
+              OTP must be 6 digits
+            </mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="otp-button" type="submit">Submit</button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+  
+  
