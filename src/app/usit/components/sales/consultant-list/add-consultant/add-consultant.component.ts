@@ -349,96 +349,176 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.flag = 'DomRecruiting';
     }
   }
+  
+
   initConsultantForm(consultantData: Consultantinfo) {
-    this.consultantForm = this.formBuilder.group({
-      consultantid: [consultantData ? consultantData.consultantid : ''],
-      consultantno: [consultantData ? consultantData.consultantno : ''],
-      salesmaxno: [consultantData ? consultantData.salesmaxno : ''],
-      dommaxno: [consultantData ? consultantData.dommaxno : ''],
-      recmaxno: [consultantData ? consultantData.recmaxno : ''],
-      h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
-      resume: [consultantData ? consultantData.resume : ''],
-      dlcopy: [consultantData ? consultantData.dlcopy : ''],
-      // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
-      firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
-      lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
-      consultantemail: [
-        consultantData ? consultantData.consultantemail : '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+
+    if( this.flag ==='DomRecruiting' && this.role==='Team Leader Sales' || this.role==='Team Leader Recruiting'){
+      
+      this.consultantForm = this.formBuilder.group({
+        consultantid: [consultantData ? consultantData.consultantid : ''],
+        consultantno: [consultantData ? consultantData.consultantno : ''],
+        salesmaxno: [consultantData ? consultantData.salesmaxno : ''],
+        dommaxno: [consultantData ? consultantData.dommaxno : ''],
+        recmaxno: [consultantData ? consultantData.recmaxno : ''],
+        h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
+        resume: [consultantData ? consultantData.resume : ''],
+        dlcopy: [consultantData ? consultantData.dlcopy : ''],
+        // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
+        firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
+        lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
+        consultantemail: [
+          consultantData ? consultantData.consultantemail : '',
+          [
+            Validators.required,
+            Validators.email,
+            Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+          ],
         ],
-      ],
-      contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
-      linkedin: [consultantData ? consultantData.linkedin : ''],
-      projectavailabity: [
-        consultantData ? consultantData.projectavailabity : '',
-        [Validators.required, Validators.pattern('^[0-9]*$')],
-      ],
-      visa: [consultantData ? consultantData.visa : '', Validators.required],
-      availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
-      priority: [consultantData ? consultantData.priority : ''],
-      company: [consultantData ? consultantData.company : '', Validators.required],
-      position: [consultantData ? consultantData.position : '', Validators.required],
-      status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
-      // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
-      experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
-      skills: [consultantData ? consultantData.skills : ''],
-      ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
-      technology: [consultantData ? consultantData.technology : '', Validators.required],
-      currentlocation: [consultantData ? consultantData.currentlocation : '', Validators.required],
-      summary: [consultantData ? consultantData.summary : ''],
-      qualification: [consultantData ? consultantData.qualification : '', Validators.required],
-      university: [consultantData ? consultantData.university : ''],
-      yop: [consultantData ? consultantData.yop : ''],
-      emprefname: [consultantData ? consultantData.emprefname : ''],
-      //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
-      emprefemail: [consultantData ? consultantData.emprefemail : ''],
-      //emprefcont: new FormControl(consultantData ? consultantData.emprefcont : ''),
-      emprefcont: [consultantData ? consultantData.emprefcont : ''],
-      companyname: [consultantData ? consultantData.companyname : ''],
-      refname: [consultantData ? consultantData.refname : ''],
-      // refemail: new FormControl(consultantData ? consultantData.refemail : ''),
-      refemail: [consultantData ? consultantData.refemail : ''],
-      //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
-      refcont: [consultantData ? consultantData.refcont : ''],
-      // // number: ['', Validators.required],
-      empid: [consultantData ? consultantData.empid : '', Validators.required],
-      // empid:[this.consultantForm.empid, Validators.required],
-      // empid: [this.consultantForm.empid : '', Validators.required],
-      relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
-      relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
-      consultantflg: this.data.flag.toLocaleLowerCase(),
-      /* requirements: this.formBuilder.group({
-         requirementid: id
-       }),
-       */
-      addedby: localStorage.getItem('userid'),
-      preSource: [0]
-    });
-
-    if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
-      this.clrValidators();
+        contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
+        linkedin: [consultantData ? consultantData.linkedin : ''],
+        projectavailabity: [
+          consultantData ? consultantData.projectavailabity : '',
+          [Validators.required, Validators.pattern('^[0-9]*$')],
+        ],
+        visa: [consultantData ? consultantData.visa : '', Validators.required],
+        availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
+        priority: [consultantData ? consultantData.priority : ''],
+        company: [consultantData ? consultantData.company : '', Validators.required],
+        position: [consultantData ? consultantData.position : '', Validators.required],
+        status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
+        // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
+        experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
+        hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
+        skills: [consultantData ? consultantData.skills : ''],
+        ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
+        technology: [consultantData ? consultantData.technology : '', Validators.required],
+        currentlocation: [consultantData ? consultantData.currentlocation : '', Validators.required],
+        summary: [consultantData ? consultantData.summary : ''],
+        qualification: [consultantData ? consultantData.qualification : '', Validators.required],
+        university: [consultantData ? consultantData.university : ''],
+        yop: [consultantData ? consultantData.yop : ''],
+        emprefname: [consultantData ? consultantData.emprefname : ''],
+        //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
+        emprefemail: [consultantData ? consultantData.emprefemail : ''],
+        //emprefcont: new FormControl(consultantData ? consultantData.emprefcont : ''),
+        emprefcont: [consultantData ? consultantData.emprefcont : ''],
+        companyname: [consultantData ? consultantData.companyname : ''],
+        refname: [consultantData ? consultantData.refname : ''],
+        // refemail: new FormControl(consultantData ? consultantData.refemail : ''),
+        refemail: [consultantData ? consultantData.refemail : ''],
+        //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
+        refcont: [consultantData ? consultantData.refcont : ''],
+        // // number: ['', Validators.required],
+        empid: [consultantData ? consultantData.empid : ''],
+        // empid:[this.consultantForm.empid, Validators.required],
+        // empid: [this.consultantForm.empid : '', Validators.required],
+        relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
+        relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
+        consultantflg: this.data.flag.toLocaleLowerCase(),
+        /* requirements: this.formBuilder.group({
+           requirementid: id
+         }),
+         */
+        addedby: localStorage.getItem('userid'),
+        preSource: [0]
+      });
+    
+    }else{
+    
+      this.consultantForm = this.formBuilder.group({
+        consultantid: [consultantData ? consultantData.consultantid : ''],
+        consultantno: [consultantData ? consultantData.consultantno : ''],
+        salesmaxno: [consultantData ? consultantData.salesmaxno : ''],
+        dommaxno: [consultantData ? consultantData.dommaxno : ''],
+        recmaxno: [consultantData ? consultantData.recmaxno : ''],
+        h1bcopy: [consultantData ? consultantData.h1bcopy : ''],
+        resume: [consultantData ? consultantData.resume : ''],
+        dlcopy: [consultantData ? consultantData.dlcopy : ''],
+        // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
+        firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
+        lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
+        consultantemail: [
+          consultantData ? consultantData.consultantemail : '',
+          [
+            Validators.required,
+            Validators.email,
+            Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+          ],
+        ],
+        contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
+        linkedin: [consultantData ? consultantData.linkedin : ''],
+        projectavailabity: [
+          consultantData ? consultantData.projectavailabity : '',
+          [Validators.required, Validators.pattern('^[0-9]*$')],
+        ],
+        visa: [consultantData ? consultantData.visa : '', Validators.required],
+        availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
+        priority: [consultantData ? consultantData.priority : ''],
+        company: [consultantData ? consultantData.company : '', Validators.required],
+        position: [consultantData ? consultantData.position : '', Validators.required],
+        status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
+        // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
+        experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
+        hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
+        skills: [consultantData ? consultantData.skills : ''],
+        ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
+        technology: [consultantData ? consultantData.technology : '', Validators.required],
+        currentlocation: [consultantData ? consultantData.currentlocation : '', Validators.required],
+        summary: [consultantData ? consultantData.summary : ''],
+        qualification: [consultantData ? consultantData.qualification : '', Validators.required],
+        university: [consultantData ? consultantData.university : ''],
+        yop: [consultantData ? consultantData.yop : ''],
+        emprefname: [consultantData ? consultantData.emprefname : ''],
+        //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
+        emprefemail: [consultantData ? consultantData.emprefemail : ''],
+        //emprefcont: new FormControl(consultantData ? consultantData.emprefcont : ''),
+        emprefcont: [consultantData ? consultantData.emprefcont : ''],
+        companyname: [consultantData ? consultantData.companyname : ''],
+        refname: [consultantData ? consultantData.refname : ''],
+        // refemail: new FormControl(consultantData ? consultantData.refemail : ''),
+        refemail: [consultantData ? consultantData.refemail : ''],
+        //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
+        refcont: [consultantData ? consultantData.refcont : ''],
+        // // number: ['', Validators.required],
+        empid: [consultantData ? consultantData.empid : '', Validators.required],
+        // empid:[this.consultantForm.empid, Validators.required],
+        // empid: [this.consultantForm.empid : '', Validators.required],
+        relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
+        relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
+        consultantflg: this.data.flag.toLocaleLowerCase(),
+        /* requirements: this.formBuilder.group({
+           requirementid: id
+         }),
+         */
+        addedby: localStorage.getItem('userid'),
+        preSource: [0]
+      });
     }
-
-    if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
-      this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
-        (technology: any) => {
-          if (technology && technology.data) {
-            this.techid = technology.data[0].id;
-            this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
-          }
-        },
-        (error: any) => {
-          console.error('Error fetching consultant details:', error);
+        
+       
+        if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
+          this.clrValidators();
         }
-      );
-    }
+    
+        if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
+          this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
+            (technology: any) => {
+              if (technology && technology.data) {
+                this.techid = technology.data[0].id;
+                this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
+              }
+            },
+            (error: any) => {
+              console.error('Error fetching consultant details:', error);
+            }
+          );
+        }
+    
+        this.validateControls();
+      }
 
-    this.validateControls();
-  }
+
   private validateControls() {
     if (this.kiran !== "edit" && (this.flag === 'Recruiting' || this.flag === 'sales')) {
       // alert()
