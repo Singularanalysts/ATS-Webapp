@@ -353,7 +353,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   initConsultantForm(consultantData: Consultantinfo) {
 
-    if( this.flag ==='DomRecruiting' && this.role==='Team Leader Sales' || this.role==='Team Leader Recruiting'){
+    if( this.flag ==='DomRecruiting' || this.role==='Sales Executive' || this.role==='Recruiter'){
       
       this.consultantForm = this.formBuilder.group({
         consultantid: [consultantData ? consultantData.consultantid : ''],
