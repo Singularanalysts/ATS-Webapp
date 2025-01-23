@@ -354,7 +354,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   initConsultantForm(consultantData: Consultantinfo) {
 
 
-    if( this.flag ==='DomRecruiting' || this.role==='Sales Executive' || this.role==='Recruiter'){
+    if( this.flag ==='DomRecruiting' || this.role==='Sales Executive' || this.role==='Recruiter' || this.role==='Super Administrator' || this.role==='Recruiting Manager'){
 
       
       this.consultantForm = this.formBuilder.group({
