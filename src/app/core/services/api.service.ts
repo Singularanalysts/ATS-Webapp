@@ -11,8 +11,8 @@ import { HttpErrors } from '../models/http-errors';
 })
 export class ApiService {
   // readonly apiUrl = 'http://69.216.19.140:1122/';
-  //  readonly apiUrl = 'http://localhost:1122/';
-   readonly apiUrl = 'http://104.176.8.173:1122/';
+   readonly apiUrl = 'http://localhost:1122/';
+  //  readonly apiUrl = 'http://104.176.8.173:1122/';
   // readonly apiUrl = 'http://23.81.209.229:1122/';
   // readonly apiUrl = 'http://50.28.107.39:1122/'
   constructor(private http: HttpClient) {}
@@ -109,7 +109,7 @@ export class ApiService {
         return `Resource not found`;
       }
       case 422: {
-        return ` Invalid data provided`
+        return ` Invalid data provided`;
       }
       case 500:
       case 501:
@@ -118,7 +118,7 @@ export class ApiService {
         return `An internal server error occurred`;
       }
       case -1: {
-        return `You appear to be offline. Please check your internet connection and try again`
+        return `You appear to be offline. Please check your internet connection and try again`;
       }
       case 0: {
         return `CORS Error, Check the endpoints and domain`;
