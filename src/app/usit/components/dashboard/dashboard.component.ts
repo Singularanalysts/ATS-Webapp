@@ -685,7 +685,7 @@ pageSizeOptions = [50, 75, 100];
     );
   }
 
-  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Title", sortOrder: any = "asc" , keyword: any = "empty") {
+  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Postedon", sortOrder: any = "desc" , keyword: any = "empty") {
     // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
     const actData = {
       pageNumber: pagIdx,
@@ -732,6 +732,11 @@ pageSizeOptions = [50, 75, 100];
   //   );
   // }
 
+  openLink(url: string): void {
+    if (url) {
+      window.open(url, '_blank');
+    }
+  }
 
   sourcingPop(element: any, condition: any) {
     const actionData = {
