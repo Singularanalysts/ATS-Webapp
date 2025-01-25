@@ -1025,58 +1025,62 @@
             <hr>
             <section class="table-style-dice mat-elevation-z8" style="height:450px; overflow-Y: scroll;overflow-x: scroll">
               <table mat-table [dataSource]="dataSourceDicelax" class="responsive-table;">
-                <!-- Posted Date Column -->
-                <ng-container matColumnDef="PostedDate">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> job_title
-                 
-                  </th>
-                  <td mat-cell *matCellDef="let element" nowrap> {{element?.job_title }} </td>
-                </ng-container>
-    
-                <!-- Job Title Column -->
-                <ng-container matColumnDef="JobTitle">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> job_location
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                {{element?.job_location}} </td>
-                </ng-container>
-    
-                <!-- Job Location Column -->
-                <ng-container matColumnDef="JobLocation">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> category_skill
-                   
-                  </th>
-                  <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
-                </ng-container>
-    
-                <!-- Vendor Column -->
-                <ng-container matColumnDef="Vendor">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
-                    job_source </th>
-                    
-                  <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
-                    target="_blank">{{element?.job_source}}</a></td>
-                </ng-container>
-    
-                <!-- Owner Column -->
-                <ng-container matColumnDef="TaggedDate">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> postedon
-                    
-                  </th>
-                  <td mat-cell *matCellDef="let element" nowrap> {{element.posted_on | date:'MM-dd-yyyy' }} </td>
-                </ng-container>
-    
-                <!-- Track Column -->
-                <ng-container matColumnDef="TaggedBy">
-                  <th mat-header-cell *matHeaderCellDef> employment_type </th>
-                  <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
-                </ng-container>
-    
-                <ng-container matColumnDef="TCount">
-                  <th mat-header-cell *matHeaderCellDef> vendor </th>
-                  <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
-                </ng-container> 
-    
+
+<!-- Posted Date Column -->
+<ng-container matColumnDef="PostedDate">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted
+    Date
+  </th>
+  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+</ng-container>
+
+<!-- Job Title Column -->
+<ng-container matColumnDef="JobTitle">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+  </th>
+  <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+</ng-container>
+
+<!-- Job Location Column -->
+<ng-container matColumnDef="JobLocation">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
+   
+  </th>
+  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+</ng-container>
+
+<!-- Vendor Column -->
+<ng-container matColumnDef="Vendor">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+    Category Skill </th>
+  <td mat-cell *matCellDef="let element">{{element.category_skill}}</td>
+</ng-container>
+
+<!-- Owner Column -->
+<ng-container matColumnDef="TaggedDate">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job Source
+   
+  </th>
+  <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
+    target="_blank">{{element?.job_source}}</a></td> -->
+
+    <td mat-cell *matCellDef="let element">
+      <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
+        Link
+      </button>
+    </td>
+</ng-container>
+
+<!-- Track Column -->
+<ng-container matColumnDef="TaggedBy">
+  <th mat-header-cell *matHeaderCellDef> Employment Type </th>
+  <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
+</ng-container>
+
+<ng-container matColumnDef="TCount">
+  <th mat-header-cell *matHeaderCellDef> Vendor </th>
+  <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+</ng-container>    
     
                 <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
@@ -1546,58 +1550,64 @@
             <hr>
             <section class="table-style-dice mat-elevation-z8" style="height:450px; overflow-Y: scroll;overflow-x: scroll">
               <table mat-table [dataSource]="dataSourceDicelax" class="responsive-table;">
+
+
+
                 <!-- Posted Date Column -->
                 <ng-container matColumnDef="PostedDate">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> job_title
-                 
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted
+                    Date
                   </th>
-                  <td mat-cell *matCellDef="let element" nowrap> {{element?.job_title }} </td>
+                  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
                 </ng-container>
     
                 <!-- Job Title Column -->
                 <ng-container matColumnDef="JobTitle">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> job_location
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
                   </th>
-                  <td mat-cell *matCellDef="let element">
-                {{element?.job_location}} </td>
+                  <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
                 </ng-container>
     
                 <!-- Job Location Column -->
                 <ng-container matColumnDef="JobLocation">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> category_skill
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
                    
                   </th>
-                  <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
                 </ng-container>
     
                 <!-- Vendor Column -->
                 <ng-container matColumnDef="Vendor">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
-                    job_source </th>
-                    
-                  <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
-                    target="_blank">{{element?.job_source}}</a></td>
+                    Category Skill </th>
+                  <td mat-cell *matCellDef="let element">{{element.category_skill}}</td>
                 </ng-container>
     
                 <!-- Owner Column -->
                 <ng-container matColumnDef="TaggedDate">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> postedon
-                    
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job Source
+                   
                   </th>
-                  <td mat-cell *matCellDef="let element" nowrap> {{element.posted_on | date:'MM-dd-yyyy' }} </td>
+                  <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
+                    target="_blank">{{element?.job_source}}</a></td> -->
+
+                    <td mat-cell *matCellDef="let element">
+                      <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
+                        Link
+                      </button>
+                    </td>
                 </ng-container>
     
                 <!-- Track Column -->
                 <ng-container matColumnDef="TaggedBy">
-                  <th mat-header-cell *matHeaderCellDef> employment_type </th>
+                  <th mat-header-cell *matHeaderCellDef> Employment Type </th>
                   <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
                 </ng-container>
     
                 <ng-container matColumnDef="TCount">
-                  <th mat-header-cell *matHeaderCellDef> vendor </th>
+                  <th mat-header-cell *matHeaderCellDef> Vendor </th>
                   <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
-                </ng-container> 
-    
+                </ng-container>
     
                 <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
@@ -2330,58 +2340,62 @@
                 <hr>
                 <section class="table-style-dice mat-elevation-z8" style="height:450px; overflow-Y: scroll;overflow-x: scroll">
                   <table mat-table [dataSource]="dataSourceDicelax" class="responsive-table;">
+
                     <!-- Posted Date Column -->
-                    <ng-container matColumnDef="PostedDate">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> job_title
-                     
-                      </th>
-                      <td mat-cell *matCellDef="let element" nowrap> {{element?.job_title }} </td>
-                    </ng-container>
-        
-                    <!-- Job Title Column -->
-                    <ng-container matColumnDef="JobTitle">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> job_location
-                      </th>
-                      <td mat-cell *matCellDef="let element">
-                    {{element?.job_location}} </td>
-                    </ng-container>
-        
-                    <!-- Job Location Column -->
-                    <ng-container matColumnDef="JobLocation">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> category_skill
-                       
-                      </th>
-                      <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
-                    </ng-container>
-        
-                    <!-- Vendor Column -->
-                    <ng-container matColumnDef="Vendor">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
-                        job_source </th>
-                        
-                      <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
-                        target="_blank">{{element?.job_source}}</a></td>
-                    </ng-container>
-        
-                    <!-- Owner Column -->
-                    <ng-container matColumnDef="TaggedDate">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> postedon
-                        
-                      </th>
-                      <td mat-cell *matCellDef="let element" nowrap> {{element.posted_on | date:'MM-dd-yyyy' }} </td>
-                    </ng-container>
-        
-                    <!-- Track Column -->
-                    <ng-container matColumnDef="TaggedBy">
-                      <th mat-header-cell *matHeaderCellDef> employment_type </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
-                    </ng-container>
-        
-                    <ng-container matColumnDef="TCount">
-                      <th mat-header-cell *matHeaderCellDef> vendor </th>
-                      <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
-                    </ng-container> 
-        
+                <ng-container matColumnDef="PostedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted
+                    Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+                </ng-container>
+    
+                <!-- Job Title Column -->
+                <ng-container matColumnDef="JobTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+                </ng-container>
+    
+                <!-- Job Location Column -->
+                <ng-container matColumnDef="JobLocation">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
+                   
+                  </th>
+                  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+                </ng-container>
+    
+                <!-- Vendor Column -->
+                <ng-container matColumnDef="Vendor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+                    Category Skill </th>
+                  <td mat-cell *matCellDef="let element">{{element.category_skill}}</td>
+                </ng-container>
+    
+                <!-- Owner Column -->
+                <ng-container matColumnDef="TaggedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job Source
+                   
+                  </th>
+                  <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
+                    target="_blank">{{element?.job_source}}</a></td> -->
+
+                    <td mat-cell *matCellDef="let element">
+                      <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
+                        Link
+                      </button>
+                    </td>
+                </ng-container>
+    
+                <!-- Track Column -->
+                <ng-container matColumnDef="TaggedBy">
+                  <th mat-header-cell *matHeaderCellDef> Employment Type </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="TCount">
+                  <th mat-header-cell *matHeaderCellDef> Vendor </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+                </ng-container>
         
                     <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
