@@ -52,6 +52,10 @@ export class ReportsService {
     return this.apiServ.post("report/callRecords/banterReport", entity);
   }
 
+  public getCommentReport(entity: any) {
+    return this.apiServ.post("report/reqReport", entity);
+  }
+
   public getEmployeeByDeparment(department: string) {
     return this.apiServ.get(`auth/users/user/${department}`)
   }
