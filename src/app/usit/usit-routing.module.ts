@@ -63,6 +63,7 @@ import { SourcingComponent } from './components/pre-sourcing/sourcing/sourcing.c
 import { PasswordChangeComponent } from '../components/password-change/password-change.component';
 import { EmailConfigurationComponent } from './components/email-configuration/email-configuration.component';
 import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-fulltime-openreqs/consultant-fulltime-openreqs.component';
+import { TimeSheetsComponent } from './components/time-sheets/time-sheets.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -133,6 +134,7 @@ const routes: Routes = [
   { path: 'qualification', component: QualificationListComponent },
   { path: 'companies', component: CompaniesListComponent },
   { path: 'technology-tag', component: TechnologyTagListComponent },
+  {path : 'time-sheets', component : TimeSheetsComponent },
   {
     path: 'rec-requirements',
     component: RequirementListComponent,
