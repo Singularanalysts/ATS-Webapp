@@ -39,7 +39,6 @@ import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
     NgxGpAutocompleteModule,
     MatSelectModule,
     MatInputModule,
-    NgxMatIntlTelInputComponent,
     NgxMatInputTelComponent
   ],
   providers: [
@@ -147,7 +146,7 @@ export class AddActiveComponent implements OnInit {
       employeementype: [h1bData ? h1bData.employeementype : '', Validators.required],
       permReferenceNumber: [h1bData ? h1bData.permReferenceNumber : ''],
       i140ReceiptNumber: [h1bData ? h1bData.i140ReceiptNumber : ''],
-      terminationorloadate: [ h1bData ? h1bData.terminationorloadate : ''],
+      terminationandloadate: [ h1bData ? h1bData.terminationandloadate : ''],
       physicaladdress: [h1bData ? h1bData.physicaladdress : '', Validators.required],
       addedby: [h1bData && h1bData.addedby ? h1bData.addedby : this.userid],
       updatedby: [this.data.actionName === "edit-active" ? this.userid : null]
@@ -156,13 +155,13 @@ export class AddActiveComponent implements OnInit {
     this.h1bForm.get('status').valueChanges.subscribe((status: string) => {
       if (status === 'Leave of Absence' || status === 'Terminated') {
         this.h1bForm.get('reason').setValidators(Validators.required);
-        this.h1bForm.get('terminationorloadate').setValidators(Validators.required);
+        this.h1bForm.get('terminationandloadate').setValidators(Validators.required);
       } else {
         this.h1bForm.get('reason').clearValidators();
-        this.h1bForm.get('terminationorloadate').clearValidators();
+        this.h1bForm.get('terminationandloadate').clearValidators();
       }
       this.h1bForm.get('reason').updateValueAndValidity();
-      this.h1bForm.get('terminationorloadate').updateValueAndValidity();
+      this.h1bForm.get('terminationandloadate').updateValueAndValidity();
     });
 
   }

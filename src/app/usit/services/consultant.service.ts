@@ -193,8 +193,12 @@ export class ConsultantService {
     return this.http.get(`consultant/getByAddedby/${userid}`);
   }
 
-  getEmployee() {
-    return this.http.get("consultant/salesExecutivesList");
+  getEmployee(userid: any) {
+    return this.http.get(`consultant/salesExecutivesList/${userid}`);
+  }
+
+  getDomEmployee() {
+    return this.http.get("consultant/domExecutivesList");
   }
 
   getRecruiters() {

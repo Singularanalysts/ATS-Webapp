@@ -1016,102 +1016,186 @@
             </mat-card>
           </div>
         </div>
+        
+          <div class="table-container-dice table-wrapper" *ngIf="!sourcingLead">
+            <div class="header-container-leading-resources">
+              <span class="header-text">Assigned consultants Requirements</span>
+            </div>
+            
+            <hr>
+            <section class="table-style-dice mat-elevation-z8" style="height:450px; overflow-Y: scroll;overflow-x: scroll">
+              <table mat-table [dataSource]="dataSourceDicelax" class="responsive-table;">
 
-        <div>
-          <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
-            <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
-              </h3>
-              <div class="activity" *ngFor="let data of datarr">
-                <div class="time">
-                  {{data.trtime}}
-                </div>
-                <div class="activity-content" *ngIf="data.flg=='VMS'">
-                  <b> <a (click)="goToUserInfo(data.userid)"
-                      class="bold-text name consultant-id">{{data.pseudoname}}</a>&nbsp;
-                    <span
-                      [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
-                      <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
-                      <ng-template #rejected>
-                        <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
-                      </ng-template>
-                      <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
-                      </ng-template>
-                    </span>
-                    &nbsp;
-                    {{data.company}}
-                  </b>
-                </div>
-                <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
-                  <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
-                  {{data.status}} <b>
-                    <a (click)="goToConsultantInfo(data.consultantid)"
-                      class="bold-text consultant-id">{{data.consultantname}}</a>
-                  </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
-                    <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
-                    <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
-                  </b> on
-                  <b class="bold-text">{{data.emptype}}</b>
-                  <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
-                      *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
-                </div>
-  
-                <div class="activity-content" *ngIf="data.flg=='SUB-recruiting' || data.flg=='SUB-Recruiting'">
-                  <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
-                  {{data.status}} <b>
-                    <a (click)="goToConsultantInfo(data.consultantid)"
-                      class="bold-text consultant-id">{{data.consultantname}}</a>
-                  </b>
-                  Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
-                    <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
-                  </b> on
-                  <b class="bold-text">{{data.emptype}}</b>
-                  <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text">, {{data.endclient}}(client)</span> <span
-                      *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> </b>
-                </div>
-  
-                <div class="activity-content" *ngIf="data.flg=='SUB-domrecruiting'">
-                  <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
-                  {{data.status}} <b>
-                    <a (click)="goToConsultantInfo(data.consultantid)"
-                      class="bold-text consultant-id">{{data.consultantname}}</a>
-                  </b>
-                  Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
-                    <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
-                  </b>
-                  <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
-                  </b>
-                </div>
+<!-- Posted Date Column -->
+<ng-container matColumnDef="PostedDate">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted
+    Date
+  </th>
+  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+</ng-container>
 
-                <div class="activity-content" *ngIf="data.flg=='submission'">
-                  {{data.status | titlecase}} Your Profile for <b class="bold-text"><span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
-                  </b>
-                  on
-                  <b class="bold-text">{{data.emptype}}</b>
-                  <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+<!-- Job Title Column -->
+<ng-container matColumnDef="JobTitle">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+  </th>
+  <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+</ng-container>
+
+<!-- Job Location Column -->
+<ng-container matColumnDef="JobLocation">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
+   
+  </th>
+  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+</ng-container>
+
+<!-- Vendor Column -->
+<ng-container matColumnDef="Vendor">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+    Category Skill </th>
+  <td mat-cell *matCellDef="let element">{{element.category_skill}}</td>
+</ng-container>
+
+<!-- Owner Column -->
+<ng-container matColumnDef="TaggedDate">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job Source
+   
+  </th>
+  <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
+    target="_blank">{{element?.job_source}}</a></td> -->
+
+    <td mat-cell *matCellDef="let element">
+      <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
+        Link
+      </button>
+    </td>
+</ng-container>
+
+<!-- Track Column -->
+<ng-container matColumnDef="TaggedBy">
+  <th mat-header-cell *matHeaderCellDef> Employment Type </th>
+  <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
+</ng-container>
+
+<ng-container matColumnDef="TCount">
+  <th mat-header-cell *matHeaderCellDef> Vendor </th>
+  <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+</ng-container>    
+    
+                <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+              </table>
+              
+              <hr>
+              <p class="no-data-found" *ngIf="!dataSourceDicelax.filteredData.length">{{'No matching data found'}}</p>
+            </section>
+            <div class="paginator" *ngIf="dataSourceDicelax.filteredData.length">
+              <!-- paginator -->
+              <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+                  [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                  [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+              </mat-paginator>
+            </div>
+          </div>
+
+        
+      </div>
+      <div class="right-div">
+      <div>
+        <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
+          <div class="card-body">
+            <h3 class="card-title bold-text">Recent Activity
+            </h3>
+            <div class="activity" *ngFor="let data of datarr">
+              <div class="time">
+                {{data.trtime}}
+              </div>
+              <div class="activity-content" *ngIf="data.flg=='VMS'">
+                <b> <a (click)="goToUserInfo(data.userid)"
+                    class="bold-text name consultant-id">{{data.pseudoname}}</a>&nbsp;
+                  <span
+                    [ngClass]="{'approved': (data.status =='Approved' ) ,'added': (data.status =='Added') ,'rejected': (data.status =='Rejected' )}">
+                    <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
+                    <ng-template #rejected>
+                      <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
+                        class="bold-text">{{data.status}}</span>
+                    </ng-template>
+                    <ng-template #normal>
+                      <span class="bold-text">{{data.status}}</span>
+                    </ng-template>
+                  </span>
+                  &nbsp;
+                  {{data.company}}
+                </b>
+              </div>
+              <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
+                <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+                {{data.status}} <b>
+                  <a (click)="goToConsultantInfo(data.consultantid)"
+                    class="bold-text consultant-id">{{data.consultantname}}</a>
+                </b>
+                Profile to <b class="bold-text">{{data.company}}(V)
+                  <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
+                  <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
+                </b> on
+                <b class="bold-text">{{data.emptype}}</b>
+                <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
                     *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
-                </div>
+              </div>
 
-                <div class="activity-content" *ngIf="data.flg=='interview'">
-                  {{data.status | titlecase}} Your Profile for <b class="bold-text"><span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
-                  </b>
-                  on
-                  <b class="bold-text">{{data.emptype}}</b>
-                  <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
-                    *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
-                </div>
+              <div class="activity-content" *ngIf="data.flg=='SUB-recruiting' || data.flg=='SUB-Recruiting'">
+                <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+                {{data.status}} <b>
+                  <a (click)="goToConsultantInfo(data.consultantid)"
+                    class="bold-text consultant-id">{{data.consultantname}}</a>
+                </b>
+                Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
+                    class="bold-text">{{data.company}}(V),</span>
+                  <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
+                </b> on
+                <b class="bold-text">{{data.emptype}}</b>
+                <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text">, {{data.endclient}}(client)</span> <span
+                    *ngIf="data.implpartner !== null" class="bold-text">, {{data.implpartner}}(IMPL)</span> </b>
+              </div>
+
+              <div class="activity-content" *ngIf="data.flg=='SUB-domrecruiting'">
+                <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a> </b>
+                {{data.status}} <b>
+                  <a (click)="goToConsultantInfo(data.consultantid)"
+                    class="bold-text consultant-id">{{data.consultantname}}</a>
+                </b>
+                Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
+                    class="bold-text">{{data.company}} (V),</span>
+                  <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
+                </b>
+                <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
+                </b>
+              </div>
+
+              <div class="activity-content" *ngIf="data.flg=='submission'">
+                {{data.status | titlecase}} Your Profile for <b class="bold-text"><span *ngIf="data.company !== 'NULL'"
+                    class="bold-text">{{data.company}} (V),</span>
+                </b>
+                on
+                <b class="bold-text">{{data.emptype}}</b>
+                <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+                  *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
+              </div>
+
+              <div class="activity-content" *ngIf="data.flg=='interview'">
+                {{data.status | titlecase}} Your Profile for <b class="bold-text"><span *ngIf="data.company !== 'NULL'"
+                    class="bold-text">{{data.company}} (V),</span>
+                </b>
+                on
+                <b class="bold-text">{{data.emptype}}</b>
+                <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
+                  *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
               </div>
             </div>
-          </mat-card>
-        </div>
+          </div>
+        </mat-card>
       </div>
+    </div>
     </div>
   </div>
 </div>
@@ -1454,11 +1538,100 @@
               <hr>
               <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
             </section>
-    
-          </div>
+     </div>
        
+     
+     <div style="width:1590px">
+          <div class="table-container-dice table-wrapper" *ngIf="!sourcingLead">
+            <div class="header-container-leading-resources">
+              <span class="header-text">Assigned consultants Requirements</span>
+            </div>
+            
+            <hr>
+            <section class="table-style-dice mat-elevation-z8" style="height:450px; overflow-Y: scroll;overflow-x: scroll">
+              <table mat-table [dataSource]="dataSourceDicelax" class="responsive-table;">
+
+
+
+                <!-- Posted Date Column -->
+                <ng-container matColumnDef="PostedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted
+                    Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+                </ng-container>
+    
+                <!-- Job Title Column -->
+                <ng-container matColumnDef="JobTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+                </ng-container>
+    
+                <!-- Job Location Column -->
+                <ng-container matColumnDef="JobLocation">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
+                   
+                  </th>
+                  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+                </ng-container>
+    
+                <!-- Vendor Column -->
+                <ng-container matColumnDef="Vendor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+                    Category Skill </th>
+                  <td mat-cell *matCellDef="let element">{{element.category_skill}}</td>
+                </ng-container>
+    
+                <!-- Owner Column -->
+                <ng-container matColumnDef="TaggedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job Source
+                   
+                  </th>
+                  <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
+                    target="_blank">{{element?.job_source}}</a></td> -->
+
+                    <td mat-cell *matCellDef="let element">
+                      <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
+                        Link
+                      </button>
+                    </td>
+                </ng-container>
+    
+                <!-- Track Column -->
+                <ng-container matColumnDef="TaggedBy">
+                  <th mat-header-cell *matHeaderCellDef> Employment Type </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="TCount">
+                  <th mat-header-cell *matHeaderCellDef> Vendor </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+              </table>
+              
+              <hr>
+              <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+            </section>
+            <div class="paginator" *ngIf="dataSourceDicelax.filteredData.length">
+              <!-- paginator -->
+              <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+                  [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                  [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+              </mat-paginator>
+            </div>
+          </div>
+</div>
+
+         <div>
+           
+         </div>
+
         </div>
-        <div class="right-div">
+        <div class="right-div" style="height:950px">
           <div class="sourcing-card">
             <mat-card *ngIf="privilegeServ.hasPrivilege('SOURCING_LEADS_REPORT')">
               <div class="card">
@@ -1596,6 +1769,114 @@
             </mat-card>
           </div>
         </div>
+        <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')">
+          <div class="header mat-elevation-z1">
+            <span class="header-text">
+                Daily Requirements(Tagged Count) &nbsp;&nbsp;&nbsp;
+            </span></div>
+        <form [formGroup]="myForm" >
+          <div class="table-container-dice table-wrapper" style="margin-bottom: 120px;" *ngIf="sourcingLead">
+            <div class="header-container-leading-resources" style="padding-right: 6px;">
+              <span class="header-text" style="font-size: 14px;margin-top: 0.1rem;"></span>
+              
+          <div style=" margin-right: 1rem;">
+            <label for="startDate" style="font-size: 12px;font-weight: bold;">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" style="width: 8rem; background-color: #eae9e9; border: 1px solid #ccc;height:0.3rem; padding: 8px;"formControlName="startDate"  >
+        </div>
+        
+        <div style=" margin-right: 1rem;">
+            <label for="endDate" style="font-size: 12px;font-weight: bold">End Date:</label>
+            <input type="date" id="endDate" name="endDate" style="width: 8rem; background-color: #eae9e9; border: 1px solid #ccc; height:0.3rem;padding: 8px;"[formControl]="myForm.get('endDate')">
+        </div>
+             <div style=" margin-right: 1rem; width: 10rem;">
+        
+          <select id="benchSalesEmployees"  style="background-color: #eae9e9;height: 1.7rem;" (change)="onEmployeeChange($event.target)"  >
+            <option value="" disabled selected hidden> Employee Name</option>
+              <option *ngFor="let option of benchSalesEmployees" [value]="option[0]">{{ option[1] }}</option>
+          </select>
+        </div>
+        
+        
+            
+              <div class="btn">
+              <button mat-raised-button color="primary" style="width:2rem;height:35px;" (click)="refreshData()">Refresh</button>
+            </div>
+            <button  *ngIf="showReport"  class="search" mat-raised-button color="primary" style="height:35px" (click)="handleExport()" >Excel Import</button>
+              <!-- </form> -->
+              <div class="vendor-actions">
+                <div class="search-vendor">
+                  <input matInput type="text" class="search dice" placeholder="search ..." (keyup)="onDiceFilter($event)" >
+                </div>
+              </div>
+        
+            </div>
+            <hr>
+            <section class="table-style-dice mat-elevation-z8" style="height: 630px; overflow-Y: scroll;">
+              <table mat-table [dataSource]="dataSourceDice" class="responsive-table">
+                <!-- Posted Date Column -->
+                <ng-container matColumnDef="PostedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+                </ng-container>
+        
+                <!-- Job Title Column -->
+                <ng-container matColumnDef="JobTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+                  </th>
+                  <td mat-cell *matCellDef="let element"> <a href="{{ element.job_source }}"
+                      target="_blank">{{element?.job_title|titlecase}}</a> </td>
+                </ng-container>
+        
+                <!-- Category Column -->
+                <ng-container matColumnDef="Category">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category </th>
+                  <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
+                </ng-container>
+        
+                <!-- Job Location Column -->
+                <ng-container matColumnDef="JobLocation">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job
+                    Location
+                  </th>
+                  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+                </ng-container>
+        
+                <!-- Vendor Column -->
+                <ng-container matColumnDef="Vendor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+                    Vendor </th>
+                  <td mat-cell *matCellDef="let element">{{element.vendor|titlecase}}</td>
+                </ng-container>
+        
+                <!-- Owner Column -->
+                <ng-container matColumnDef="TaggedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Tagged Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" nowrap> {{element.taggeddate | date:'MM-dd-yyyy' }} </td>
+                </ng-container>
+        
+                <!-- Track Column -->
+                <ng-container matColumnDef="TaggedBy" >
+                  <th mat-header-cell *matHeaderCellDef> Tagged By </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.pseudoname }} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="TCount">
+                  <th mat-header-cell *matHeaderCellDef> Tagged Count </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.taggedcount }} </td>
+                </ng-container>
+        
+        
+                <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+              </table>
+              <hr>
+              <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+            </section>
+          </div>
+        </form>
+      </div>
       </div>
     
       <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')">
@@ -1709,7 +1990,7 @@
     </div>
   </div>    
 
-    <!-- sales Team Leads dashboard view -->
+    <!-- sales Team manager dashboard view -->
     <div *ngIf="department == 'Bench Sales' && role == 'Sales Manager' ">
       <div class="overall-container">
         <div class="container">
@@ -1741,9 +2022,9 @@
                         <p class="dashboard">Sales : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="subPop('Sales','admin')"> {{ subcount }} </span>
                         </p>
-                        <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                        <!-- <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="subPop('Recruiting','admin')"> {{ reccount }}
-                          </span></p>
+                          </span></p> -->
                       </div>
                     </div>
                   </mat-card-content>
@@ -1774,9 +2055,9 @@
                       <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                         <p class="dashboard">Sales :<span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="intPop('Sales','admin')">{{sintcount}}</span></p>
-                        <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                        <!-- <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="intPop('Recruiting','admin')">{{rintcount}}</span>
-                        </p>
+                        </p> -->
                       </div>
                     </div>
                   </mat-card-content>
@@ -1807,16 +2088,16 @@
                       <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                         <p class="dashboard">Sales :<span style="color: rgb(25,135,84); font-weight: bold; cursor: pointer"
                             (click)="closurePop('Sales','admin')">{{sclosecount}}</span></p>
-                        <p class="dashboard">Recruiting :<span
+                        <!-- <p class="dashboard">Recruiting :<span
                             style="color: rgb(25,135,84); font-weight: bold; cursor: pointer"
-                            (click)="closurePop('Recruiting','admin')">{{rclosecount}}</span></p>
+                            (click)="closurePop('Recruiting','admin')">{{rclosecount}}</span></p> -->
                       </div>
                     </div>
                   </mat-card-content>
                 </mat-card>
               </div>
             </div>
-      
+  
             <div class="left-div-inner-cards" *ngIf="individualCounts">
               <div class="card-1">
                 <mat-card>
@@ -1843,9 +2124,9 @@
                         <p class="dashboard">Sales : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="subPop('Sales','emp')"> {{ subcountIndividual }} </span>
                         </p>
-                        <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                        <!-- <p class="dashboard">Recruiting : <span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="subPop('Recruiting','emp')"> {{ reccountIndividual }}
-                          </span></p>
+                          </span></p> -->
                       </div>
                     </div>
                   </mat-card-content>
@@ -1875,9 +2156,9 @@
                       <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                         <p class="dashboard">Sales :<span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="intPop('Sales','emp')">{{sintcountIndividual}}</span></p>
-                        <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold; cursor: pointer"
+                        <!-- <p class="dashboard">Recruiting :<span style="color: #4154f1; font-weight: bold; cursor: pointer"
                             (click)="intPop('Recruiting','emp')">{{rintcountIndividual}}</span>
-                        </p>
+                        </p> -->
                       </div>
                     </div>
                   </mat-card-content>
@@ -1907,16 +2188,16 @@
                       <div style="width: 60%; display: flex; flex-direction: column; justify-content: center;">
                         <p class="dashboard">Sales :<span style="color: rgb(25,135,84); font-weight: bold; cursor: pointer"
                             (click)="closurePop('Sales','emp')">{{sclosecountIndividual}}</span></p>
-                        <p class="dashboard">Recruiting :<span
+                        <!-- <p class="dashboard">Recruiting :<span
                             style="color: rgb(25,135,84); font-weight: bold; cursor: pointer"
-                            (click)="closurePop('Recruiting','emp')">{{rclosecountIndividual}}</span></p>
+                            (click)="closurePop('Recruiting','emp')">{{rclosecountIndividual}}</span></p> -->
                       </div>
                     </div>
                   </mat-card-content>
                 </mat-card>
               </div>
             </div>
-
+      
             <!-- <div class="left-div-inner-table" (*ngIf="sourcingLead") (*ngIf="privilegeServ.hasPrivilege('SOURCING_LEADS_DATA')")> -->
               <div class="left-div-inner-table" *ngIf="sourcingLead && privilegeServ.hasPrivilege('SOURCING_LEADS_DATA')">
     
@@ -2049,9 +2330,94 @@
               </section>
       
             </div>
-         
+       
+            <div style="width:1590px">
+              <div class="table-container-dice table-wrapper" *ngIf="!sourcingLead">
+                <div class="header-container-leading-resources">
+                  <span class="header-text">Assigned consultants Requirements</span>
+                </div>
+                
+                <hr>
+                <section class="table-style-dice mat-elevation-z8" style="height:450px; overflow-Y: scroll;overflow-x: scroll">
+                  <table mat-table [dataSource]="dataSourceDicelax" class="responsive-table;">
+
+                    <!-- Posted Date Column -->
+                <ng-container matColumnDef="PostedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted
+                    Date
+                  </th>
+                  <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+                </ng-container>
+    
+                <!-- Job Title Column -->
+                <ng-container matColumnDef="JobTitle">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+                </ng-container>
+    
+                <!-- Job Location Column -->
+                <ng-container matColumnDef="JobLocation">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job Location
+                   
+                  </th>
+                  <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+                </ng-container>
+    
+                <!-- Vendor Column -->
+                <ng-container matColumnDef="Vendor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+                    Category Skill </th>
+                  <td mat-cell *matCellDef="let element">{{element.category_skill}}</td>
+                </ng-container>
+    
+                <!-- Owner Column -->
+                <ng-container matColumnDef="TaggedDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job Source
+                   
+                  </th>
+                  <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
+                    target="_blank">{{element?.job_source}}</a></td> -->
+
+                    <td mat-cell *matCellDef="let element">
+                      <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
+                        Link
+                      </button>
+                    </td>
+                </ng-container>
+    
+                <!-- Track Column -->
+                <ng-container matColumnDef="TaggedBy">
+                  <th mat-header-cell *matHeaderCellDef> Employment Type </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="TCount">
+                  <th mat-header-cell *matHeaderCellDef> Vendor </th>
+                  <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+                </ng-container>
+        
+                    <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+                  </table>
+                  
+                  <hr>
+                  <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+                </section>
+                <div class="paginator" *ngIf="dataSourceDicelax.filteredData.length">
+                  <!-- paginator -->
+                  <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
+                      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                      [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+                  </mat-paginator>
+                </div>
+              </div>
+    </div>
+
+           <div></div>
+  
           </div>
-          <div class="right-div">
+          <div class="right-div" style="height:950px">
             <div class="sourcing-card">
               <mat-card *ngIf="privilegeServ.hasPrivilege('SOURCING_LEADS_REPORT')">
                 <div class="card">
@@ -2189,6 +2555,114 @@
               </mat-card>
             </div>
           </div>
+          <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')">
+            <div class="header mat-elevation-z1">
+              <span class="header-text">
+                  Daily Requirements(Tagged Count) &nbsp;&nbsp;&nbsp;
+              </span></div>
+          <form [formGroup]="myForm" >
+            <div class="table-container-dice table-wrapper" style="margin-bottom: 120px;" *ngIf="sourcingLead">
+              <div class="header-container-leading-resources" style="padding-right: 6px;">
+                <span class="header-text" style="font-size: 14px;margin-top: 0.1rem;"></span>
+                
+            <div style=" margin-right: 1rem;">
+              <label for="startDate" style="font-size: 12px;font-weight: bold;">Start Date:</label>
+              <input type="date" id="startDate" name="startDate" style="width: 8rem; background-color: #eae9e9; border: 1px solid #ccc;height:0.3rem; padding: 8px;"formControlName="startDate"  >
+          </div>
+          
+          <div style=" margin-right: 1rem;">
+              <label for="endDate" style="font-size: 12px;font-weight: bold">End Date:</label>
+              <input type="date" id="endDate" name="endDate" style="width: 8rem; background-color: #eae9e9; border: 1px solid #ccc; height:0.3rem;padding: 8px;"[formControl]="myForm.get('endDate')">
+          </div>
+               <div style=" margin-right: 1rem; width: 10rem;">
+          
+            <select id="benchSalesEmployees"  style="background-color: #eae9e9;height: 1.7rem;" (change)="onEmployeeChange($event.target)"  >
+              <option value="" disabled selected hidden> Employee Name</option>
+                <option *ngFor="let option of benchSalesEmployees" [value]="option[0]">{{ option[1] }}</option>
+            </select>
+          </div>
+          
+          
+              
+                <div class="btn">
+                <button mat-raised-button color="primary" style="width:2rem;height:35px;" (click)="refreshData()">Refresh</button>
+              </div>
+              <button  *ngIf="showReport"  class="search" mat-raised-button color="primary" style="height:35px" (click)="handleExport()" >Excel Import</button>
+                <!-- </form> -->
+                <div class="vendor-actions">
+                  <div class="search-vendor">
+                    <input matInput type="text" class="search dice" placeholder="search ..." (keyup)="onDiceFilter($event)" >
+                  </div>
+                </div>
+          
+              </div>
+              <hr>
+              <section class="table-style-dice mat-elevation-z8" style="height: 630px; overflow-Y: scroll;">
+                <table mat-table [dataSource]="dataSourceDice" class="responsive-table">
+                  <!-- Posted Date Column -->
+                  <ng-container matColumnDef="PostedDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by PostedDate"> Posted Date
+                    </th>
+                    <td mat-cell *matCellDef="let element" nowrap> {{element?.posted_on | date:'MM-dd-yyyy' }} </td>
+                  </ng-container>
+          
+                  <!-- Job Title Column -->
+                  <ng-container matColumnDef="JobTitle">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job Title
+                    </th>
+                    <td mat-cell *matCellDef="let element"> <a href="{{ element.job_source }}"
+                        target="_blank">{{element?.job_title|titlecase}}</a> </td>
+                  </ng-container>
+          
+                  <!-- Category Column -->
+                  <ng-container matColumnDef="Category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Category"> Category </th>
+                    <td mat-cell *matCellDef="let element"> {{element.category_skill}} </td>
+                  </ng-container>
+          
+                  <!-- Job Location Column -->
+                  <ng-container matColumnDef="JobLocation">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobLocation"> Job
+                      Location
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.job_location}} </td>
+                  </ng-container>
+          
+                  <!-- Vendor Column -->
+                  <ng-container matColumnDef="Vendor">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Vendor">
+                      Vendor </th>
+                    <td mat-cell *matCellDef="let element">{{element.vendor|titlecase}}</td>
+                  </ng-container>
+          
+                  <!-- Owner Column -->
+                  <ng-container matColumnDef="TaggedDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Tagged Date
+                    </th>
+                    <td mat-cell *matCellDef="let element" nowrap> {{element.taggeddate | date:'MM-dd-yyyy' }} </td>
+                  </ng-container>
+          
+                  <!-- Track Column -->
+                  <ng-container matColumnDef="TaggedBy" >
+                    <th mat-header-cell *matHeaderCellDef> Tagged By </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.pseudoname }} </td>
+                  </ng-container>
+          
+                  <ng-container matColumnDef="TCount">
+                    <th mat-header-cell *matHeaderCellDef> Tagged Count </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.taggedcount }} </td>
+                  </ng-container>
+          
+          
+                  <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+                </table>
+                <hr>
+                <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+              </section>
+            </div>
+          </form>
+        </div>
         </div>
       
         <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')">
@@ -2300,7 +2774,7 @@
       </form>
     </div>
       </div>
-    </div>    
+    </div>  
 
       <!-- Recruiting Recruiter dashboard view -->
       <div *ngIf="department == 'Recruiting' && role == 'Recruiter'">
