@@ -1,0 +1,136 @@
+<div class="update-timesheet-dialog-container">
+  <div class="header">
+    <h2 mat-dialog-title>{{data.title}}</h2>
+    <hr>
+    <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <div class="content" mat-dialog-content>
+    <form class="add-timesheet-form" [formGroup]="timesheetForm" name="technology-form">
+      <input type="hidden" formControlName="id">
+      <mat-form-field class="vendor-type-field">
+        <mat-label>Vendor</mat-label>
+        <mat-select formControlName="vendor">
+          <!-- Dynamically populate the dropdown options -->
+          <mat-option *ngFor="let vendor of vendorsArr" [value]="vendor.vendorid">
+            {{ vendor.company }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="time-type-field">
+        <mat-label>Select Time Type</mat-label>
+        <mat-select formControlName="timeType">
+          <mat-option value="weekly">Weekly</mat-option>
+          <mat-option value="15days">15 Days</mat-option>
+          <mat-option value="monthly">Monthly</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- New Fields -->
+      <mat-form-field class="start-date-field">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" required>
+        <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="end-date-field">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" required>
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="hours-field">
+        <mat-label>Number of Hours</mat-label>
+        <input matInput type="number" formControlName="hours" required>
+      </mat-form-field>
+
+      <mat-form-field class="attachments-field">
+        <mat-label>Attachments</mat-label>
+        <div class="upload-inp-container">
+          <input  matInput readonly name="attachmentsName"   class="file-input" [value]="getAttachmentNames()" />
+          <label for="attachments" class="browse-button-label">
+            <button type="button" mat-icon-button (click)="attachmentsInput.click()">
+              <mat-icon>upload_file</mat-icon>
+            </button>
+          </label>
+
+          <input type="file" #attachmentsInput id="attachments" (change)="onFileChange($event)" name="attachmentsUploadFile" style="display: none;" multiple />
+        </div>
+        <mat-hint *ngIf="attachmentsError" style="color: #f44336; font-size: 12px;">
+          Attachment size should be less than 1MB
+        </mat-hint>
+        <mat-hint *ngIf="attachmentsFileNameLength" style="color: #f44336; font-size: 12px;">
+          File name should be 40 characters or less
+        </mat-hint>
+      </mat-form-field>
+
+    </form>
+        <!-- Move attachments table outside of the form field -->
+        <div *ngIf="data.actionName === 'update-timesheet'"  class="attachments-table-container">
+          <div class="attachments-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Attachment</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let attachment of existingAttachments; let i = index">
+                  <td>{{ attachment.attachmentName }}</td>
+                  <td>
+                    <button mat-icon-button color="warn" (click)="deleteAttachment(attachment.id)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    <div class="actions">
+      <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
+      <button type="submit" mat-raised-button color="primary" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
+    </div>
+  </div>
+</div>
+
+
+     <!-- <mat-form-field class="attachments-field">
+        <mat-label for="attachments">Attachments</mat-label>
+        <div class="upload-inp-container">
+          <input matInput readonly name="attachmentsName" class="file-input" [value]="getAttachmentNames()" />
+
+          <label for="attachments" class="browse-button-label">
+            <button type="button" mat-icon-button (click)="attachmentsInput.click()">
+              <mat-icon>upload_file</mat-icon>
+            </button>
+          </label>
+
+          <input type="file" #attachmentsInput id="attachments" (change)="onFileChange($event)"
+            name="attachmentsUploadFile" style="display: none;" multiple />
+        </div>
+        <table class="attachments-table">
+          <tr *ngFor="let attachment of existingAttachments">
+            <td>
+              <a class="download-file-link" [style.cursor]="'pointer'" (click)="viewAttachment(attachment)">
+                {{ attachment.attachmentName }}
+              </a>
+            </td>
+            <td width="6%">
+              <button mat-icon-button class="action-button-ed" (click)="deleteAttachment(attachment.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </table>
+        <mat-hint *ngIf="attachmentsError" style="color: #f44336; font-size: 12px;">
+          Attachment size should be less than 1MB
+        </mat-hint>
+        <mat-hint *ngIf="attachmentsFileNameLength" style="color: #f44336; font-size: 12px;">
+          File name should be 20 characters or less
+        </mat-hint>
+      </mat-form-field> -->
