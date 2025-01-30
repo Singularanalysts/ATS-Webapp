@@ -584,6 +584,13 @@ myRoles(){
           "icon": "receipt",
           "routerLink": "/billpay/receipts",
           "roles":["Super Administrator"]  
+        },
+        {
+          "test": "Time_Sheets",
+          "text": "Time Sheets",
+          "icon": "receipt",
+          "routerLink": "/usit/time-sheets",
+          "roles":["Super Administrator"]  
         }
       ]
     },
