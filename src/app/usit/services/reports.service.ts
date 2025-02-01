@@ -53,7 +53,7 @@ export class ReportsService {
   }
 
   public getCommentReport(entity: any) {
-    return this.apiServ.post("report/reqReport", entity);
+    return this.apiServ.post("report/ReqCommentsReport", entity);
   }
 
   public getEmployeeByDeparment(department: string) {

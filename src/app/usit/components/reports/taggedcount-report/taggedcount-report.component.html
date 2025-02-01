@@ -164,8 +164,17 @@
 
                   <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
                   <tr mat-row *matRowDef="let row; columns: dataTableColumns"></tr>
-</table>    
+</table>  
+<p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>  
+ 
 </section>
+ <!-- paginator -->
+ <div class="paginator" *ngIf="dataSource.filteredData.length">
+  <mat-paginator (page)="pageChanged($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
+    [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+    [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+  </mat-paginator>
+</div>
             </div>
         </mat-card-content>
         </mat-card>
