@@ -36,6 +36,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatCheckboxModule,
     MatMenuModule
   ],
+
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
   templateUrl: './email-extraction.component.html',
   styleUrls: ['./email-extraction.component.scss']
@@ -146,13 +147,14 @@ updateDeleteButtonVisibility(): void {
 
   applyFilter(event: any) {
     const keyword = event.target.value;
+    this.field = keyword;
     if (keyword != '') {
       const pagObj = {
         pageNumber: 1,
         pageSize: this.itemsPerPage,
         sortField: this.sortField,
         sortOrder: this.sortOrder,
-        keyword: keyword,
+        keyword: this.field,
       }
       return this.service.emailEXtractionByPaginationSortandFilter(pagObj).subscribe(
         ((response: any) => {
@@ -168,9 +170,15 @@ updateDeleteButtonVisibility(): void {
         })
       );
     }
+    if (keyword == '') {
+
+    
+    }
     return this.getAll(this.currentPageIndex + 1)
   }
-
+  navigateBack(){
+    this.router.navigate(['/usit/email-configuration']);
+  }
   processEmailsForKeys(obj: any, keys: string[]) {
     keys.forEach(key => {
       if (obj[key]) {
