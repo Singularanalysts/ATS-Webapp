@@ -204,6 +204,17 @@ tbody {
   width: 100%;
 }
 
+.status-in-progress {
+  color: green;
+  font-weight: bold;
+}
+
+.status-completed {
+  color: red;
+  font-weight: 400;
+}
+
+
 @media screen and (max-width: 768px) {
   .responsive-table {
     table-layout: auto;

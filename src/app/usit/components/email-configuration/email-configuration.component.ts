@@ -543,13 +543,15 @@ export class EmailConfigurationComponent {
    this.statusCallMethod(element.email);
     return this.openServ.extractEmails(extractEmail).subscribe({
       next: (response: any) => {
+        // alert(JSON.stringify(response));
         if (response.status === 'Success') {
           this.dataToBeSentToSnackBar.message = response.message;
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
           this.snackBarServ.openSnackBarFromComponent(
             this.dataToBeSentToSnackBar
           );
-          this.router.navigate(['usit/email-extraction-list']);
+          // window.location.reload(); // Reload the entire page
+          // this.router.navigate(['usit/email-extraction-list']);
           this.checkExistingDetails();
         }  else if (response.status === 'failed') {
           this.dataToBeSentToSnackBar.message = 'Oops! It seems there are no new emails at the moment';
