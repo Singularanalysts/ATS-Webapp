@@ -1,4 +1,4 @@
-<ng-container *ngIf="role !== 'Super Administrator'">
+<ng-container *ngIf="role == 'Super'">
   <div class="container">
     <mat-card>
       <mat-card-title class="title">{{ buttonText }} Email Configuration</mat-card-title>
@@ -125,7 +125,7 @@
 
   </div>
 </ng-container>
-<ng-container *ngIf="role === 'Super Administrator'">
+<ng-container *ngIf="role !== 'Super'">
   <div class="hot-list-container">
     <div class="header-container mat-elevation-z1">
       <span class="header-text">
