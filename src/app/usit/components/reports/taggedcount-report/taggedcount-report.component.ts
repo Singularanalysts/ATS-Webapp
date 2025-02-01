@@ -64,6 +64,7 @@ export class TaggedcountReportComponent {
   
   dataTableColumns: string[] = [
     'SerialNum',
+    'Title',
     'BanterNo',
     'EmployeeName',
     'PsuedoName',
