@@ -521,6 +521,13 @@ myRoles(){
               "icon": "contact_page",
               "routerLink": "/usit/candidate-reports",
               "roles":["Super Administrator"]  
+            },
+            {
+              "test": "TaggedCount_Report",
+              "text": "Comments Report",
+              "icon": "contact_page",
+              "routerLink": "/usit/taggedcount-report",
+              "roles":["Super Administrator"]  
             }
           ]
         },
@@ -576,6 +583,13 @@ myRoles(){
           "text": "Receipts",
           "icon": "receipt",
           "routerLink": "/billpay/receipts",
+          "roles":["Super Administrator"]  
+        },
+        {
+          "test": "Time_Sheets",
+          "text": "Time Sheets",
+          "icon": "receipt",
+          "routerLink": "/usit/time-sheets",
           "roles":["Super Administrator"]  
         }
       ]

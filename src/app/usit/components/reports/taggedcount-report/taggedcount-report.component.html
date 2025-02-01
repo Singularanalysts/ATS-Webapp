@@ -1,0 +1,184 @@
+<div class="banter-container">
+<ul class="breadcrumb">
+    <li><a (click)="navigateToDashboard()">Home</a></li>
+    <li class="last">Comments Report</li>
+</ul>
+<div class="banter-inner-container" style="display: block">
+    <div class="banter-search-container">
+        <form [formGroup]="taggedreport" (ngSubmit)="onSubmit()">
+
+            <mat-card>
+                <mat-card-content
+                style="display: flex; align-items: center; justify-content: center; gap: 10px"
+              >
+                <mat-form-field color="accent">
+                  <mat-label>Choose Starting Date</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="picker1"
+                    class="form-control"
+                    formControlName="startDate"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker1"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                  <mat-error
+                    *ngIf="taggedreport.get('startDate')!.hasError('required')"
+                    >Starting Date is required</mat-error
+                  >
+                </mat-form-field>
+      
+                <mat-form-field color="accent">
+                  <mat-label>Choose Ending Date</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="picker2"
+                    class="form-control"
+                    formControlName="endDate"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker2"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 color="primary"></mat-datepicker>
+                  <mat-error
+                    *ngIf="taggedreport.get('endDate')!.hasError('required')"
+                    >Ending Date is required</mat-error
+                  >
+                </mat-form-field>
+      
+                <!-- <mat-form-field>
+                  <mat-label>Select</mat-label>
+                  <mat-select formControlName="groupby" (selectionChange)="onDepartmentChange($event)">
+                    <mat-option value="Bench sales">######</mat-option>
+                    <mat-option value="Recruiting">######</mat-option>
+                    <mat-option value="Sourcing">######</mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="taggedreport.get('groupby')!.hasError('required')"
+                    >Department is required</mat-error
+                  >
+                </mat-form-field> -->
+    
+                <!-- <mat-form-field appearance="fill">
+                  <mat-label>Select Employee</mat-label>
+                  <mat-select formControlName="employee">
+                    <mat-option *ngFor="let employee of employees" [value]="employee[0]">
+                      {{ employee[1] }}
+                    </mat-option>
+                  </mat-select> 
+                </mat-form-field> -->
+    
+                <button mat-raised-button color="primary">Submit</button>
+                <button mat-raised-button color="warn" (click)="reset()">Reset</button
+                >
+    
+                <!-- <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
+                (click)="excelImport()">Excel Export</button> -->
+              </mat-card-content>
+              </mat-card>
+
+        </form>
+    </div>
+
+    <div class="banter-table" >
+        <mat-card>
+        <mat-card-content>
+            <div class="table-wrapper"> 
+  <section>
+    <table
+    mat-table
+    [dataSource]="dataSource"
+  >
+
+ <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+  
+ <!-- Department -->
+ <ng-container matColumnDef="SerialNum">
+  <th mat-header-cell *matHeaderCellDef  style="width: 26%">Job Title</th>
+  <td mat-cell *matCellDef="let element">{{ element.job_Title }} </td>
+</ng-container>
+
+                <!-- Serial Number -->
+                <ng-container matColumnDef="BanterNo">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                   
+                      style="width: 15%"
+                    >
+                    consultant Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.consultantname }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Banter No -->
+                  <ng-container matColumnDef="EmployeeName">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                     
+                      style="width: 2%"
+                    >
+                    Commented By
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.fullname }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Employee Name -->
+                  <ng-container matColumnDef="Department">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                     
+                      style="width: 15%"
+                    >
+                   Issue Type
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.issue_type }}
+                    </td>
+                  </ng-container>
+    
+                  <!-- Psuedo Name -->
+                  <ng-container matColumnDef="PsuedoName">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    
+                      style="width: 15%"
+                    >
+                    Comment
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.comment }}
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: dataTableColumns"></tr>
+</table>  
+<p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>  
+ 
+</section>
+ <!-- paginator -->
+ <div class="paginator" *ngIf="dataSource.filteredData.length">
+  <mat-paginator (page)="pageChanged($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
+    [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+    [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+  </mat-paginator>
+</div>
+            </div>
+        </mat-card-content>
+        </mat-card>
+    </div>
+
+</div>
+</div>

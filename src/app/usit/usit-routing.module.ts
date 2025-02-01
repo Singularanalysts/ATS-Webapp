@@ -64,6 +64,11 @@ import { PasswordChangeComponent } from '../components/password-change/password-
 import { EmailConfigurationComponent } from './components/email-configuration/email-configuration.component';
 import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-fulltime-openreqs/consultant-fulltime-openreqs.component';
 
+import { TimeSheetsComponent } from './components/time-sheets/time-sheets.component';
+
+import { TaggedcountReportComponent } from './components/reports/taggedcount-report/taggedcount-report.component';
+
+
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
   {
@@ -133,6 +138,7 @@ const routes: Routes = [
   { path: 'qualification', component: QualificationListComponent },
   { path: 'companies', component: CompaniesListComponent },
   { path: 'technology-tag', component: TechnologyTagListComponent },
+  {path : 'time-sheets', component : TimeSheetsComponent },
   {
     path: 'rec-requirements',
     component: RequirementListComponent,
@@ -244,6 +250,9 @@ const routes: Routes = [
   },
   {
     path: 'sourcing-report', component: SourcingReportsComponent
+  },
+  {
+    path: 'taggedcount-report', component: TaggedcountReportComponent
   },
   {
     path: 'open-reqs-report', component: OpenRequirementsReportsComponent
