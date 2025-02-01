@@ -229,6 +229,24 @@ export class LoginComponent implements OnInit {
 
 
   }
+  resendOtp() {
+     this.isFormSubmitted = false;  // Reset validation state
+    const userObj = {
+      email: this.form.controls.email.value,
+      password: this.form.controls.password.value,
+      loginAs: this.userType
+    };
+    this.userManagementServ.login(userObj).subscribe({
+      next: (result: any) => {
+        if (result.status === 'success') {
+          this.otpId = result.data;
+          this.showErroNotification("OTP has been resent to your email", "success");
+        }
+      },
+      error: (err) => this.showErroNotification("Failed to resend OTP", "error")
+    });
+  }
+  
   verifyPassword() {
     if(this.otpForm.valid){
       let loginObservable : Observable<any>;

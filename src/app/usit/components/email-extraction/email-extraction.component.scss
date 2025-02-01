@@ -53,6 +53,14 @@ table {
 tbody {
   text-align: left;
 }
+.settings-icon {
+  cursor: pointer;
+  font-size: 24px; /* Adjust size if needed */
+  color: #007bff; /* Change color if needed */
+}
+.settings-icon:hover {
+  color: #0056b3; /* Darker shade on hover */
+}
 
 .mat-sort-header-arrow {
   color: #1a1717;

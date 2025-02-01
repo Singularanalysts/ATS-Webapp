@@ -133,6 +133,25 @@ mat-error{
 .otp-button {
   margin-top: 16px;
 }
+.resend-otp-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.resend-otp {
+  margin: 10px 0px;
+  font-size: 14px;
+  color: rgb(85, 26, 139);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none; // Remove underline
+}
+
+.resend-otp:hover {
+  text-decoration: none; // Ensure no underline on hover
+  color: rgb(85, 26, 139);
+}
 
 .cancel-button {
   background-color: #f44336;
