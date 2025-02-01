@@ -23,15 +23,11 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { Recruiter } from 'src/app/usit/models/recruiter';
 import { utils, writeFile } from 'xlsx';
 
-
 @Component({
   selector: 'app-taggedcount-report',
   templateUrl: './taggedcount-report.component.html',
   styleUrls: ['./taggedcount-report.component.scss'],
-  providers: [
-    DatePipe,
-    { provide: MatPaginatorIntl, useClass: PaginatorIntlService },
-  ],
+  providers: [DatePipe],
   standalone: true,
   imports: [
     MatTableModule,
@@ -48,55 +44,48 @@ import { utils, writeFile } from 'xlsx';
 })
 
 export class TaggedcountReportComponent {
-onSort($event: Sort) {
-throw new Error('Method not implemented.');
-}
-
-  
-router: any;
-taggedreport!: FormGroup;
-// employees: any;
-submitted = false;
+  router: any;
+  taggedreport!: FormGroup;
+  submitted = false;
   showReport = false;
-  headings: any[] = [];
   c_data: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
   payload: any;
-
-
+  totalItems: number = 0;
+  totalPages: number = 0; // To store total pages
+  
+  // Paginator settings
+  pageSize = 50; // Items per page
+  currentPageIndex = 0; // Always start from page 0
+  pageSizeOptions = [50]; // Fixed at 50 records per page
+  showFirstLastButtons = true;
+  pageEvent!: PageEvent;
+  department: string | null | undefined;
+  
   dataTableColumns: string[] = [
     'SerialNum',
+    'Title',
     'BanterNo',
     'EmployeeName',
     'PsuedoName',
     'Department',
   ];
-
-  dataTableColumnss: string[] = [
-    'Job Title',
-    'Consultant Name',
-    'Fullname',
-    'Issue Type',
-    'comment',
-  ];
-
+showPageSizeOptions: any;
+ 
 
   constructor(
-     private formBuilder: FormBuilder,  private service: ReportsService,
-     private datePipe: DatePipe ) { }
+    private formBuilder: FormBuilder,
+    private service: ReportsService,
+    private datePipe: DatePipe
+  ) {}
 
-     ngOnInit() {
-      this.department = localStorage.getItem('department');
-      this.taggedreport = this.formBuilder.group({
-        startDate: ['', Validators.required],
-        endDate: ['', Validators.required]
-      });
-    }
-
-    get f() {
-      return this.taggedreport.controls;
-    }
-    department!: any;
+  ngOnInit() {
+    this.department = localStorage.getItem('department');
+    this.taggedreport = this.formBuilder.group({
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+    });
+  }
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
@@ -111,24 +100,43 @@ submitted = false;
       this.showReport = true;
     }
 
-    const startDateControl = this.taggedreport.get('startDate');
-    const endDateControl = this.taggedreport.get('endDate');
-    const formattedStartDate = this.datePipe.transform(
-      startDateControl!.value,
+    const startDate = this.datePipe.transform(
+      this.taggedreport.get('startDate')!.value,
       'yyyy-MM-dd'
     );
-    const formattedEndDate = this.datePipe.transform(
-      endDateControl?.value,
+    const endDate = this.datePipe.transform(
+      this.taggedreport.get('endDate')!.value,
       'yyyy-MM-dd'
     );
+
+    // Reset pagination to first page when new data is requested
+    this.currentPageIndex = 0; 
 
     this.payload = {
-      startDate: formattedStartDate,
-      endDate: formattedEndDate,
+      pageNumber: this.currentPageIndex + 1, // Page numbers start from 1 for API
+      pageSize: this.pageSize,
+      sortField: "fullname",
+      sortOrder: "desc",
+      keyword: "empty",
+      startDate: startDate,
+      endDate: endDate,
     };
 
+    this.fetchReportData();
+  }
+
+  fetchReportData() {
     this.service.getCommentReport(this.payload).subscribe((res: any) => {
-      this.dataSource.data = res.data;
+      if (res.data) {
+        this.c_data = res.data.content;
+        this.dataSource.data = res.data.content;
+        this.totalItems = res.data.totalElements;
+        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
+        });
+      }
     });
   }
 
@@ -136,6 +144,18 @@ submitted = false;
     this.taggedreport.reset();
     this.showReport = false;
     this.dataSource.data = [];
+    this.currentPageIndex = 0;
   }
-  
+
+  pageChanged(event: PageEvent) {
+    this.currentPageIndex = event.pageIndex;
+    this.payload.pageNumber = this.currentPageIndex + 1;
+    this.payload.pageSize = event.pageSize;
+
+    this.fetchReportData();
+  }
+
+  generateSerialNumber(index: number): number {
+    return this.currentPageIndex * this.pageSize + index + 1;
+  }
 }
