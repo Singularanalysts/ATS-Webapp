@@ -35,7 +35,7 @@
                                 *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password
                                 is required</mat-error>
                         </mat-form-field>
-
+                        
                         <div class="forgot-password">
                             <a routerLink="/forgot-password">Forgot Password?</a>
                         </div>
@@ -61,7 +61,6 @@
                                 *ngIf="isFormSubmitted && loginFrom.email.errors && loginFrom.email.errors.email">Invalid
                                 email address</mat-error>
                         </mat-form-field>
-
                         <mat-form-field class="full-width">
                             <mat-label>Password</mat-label>
                             <input matInput type="{{ hidePassword ? 'password' : 'text' }}" formControlName="password"
@@ -74,11 +73,9 @@
                                 *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password
                                 is required</mat-error>
                         </mat-form-field>
-
                         <div class="forgot-password">
                             <a routerLink="/forgot-password">Forgot Password?</a>
                         </div>
-                        
                         <button mat-raised-button color="primary" class="login-button">Login</button>
                         <div class="create-account">
                             No account? <a routerLink="/consultant-register">Create one!</a>
@@ -88,27 +85,32 @@
             </mat-tab>
         </mat-tab-group>
 
-        
-<!-- OTP Verification Form -->
-<div *ngIf="otpFormVisible" class="otp-container">
-    <mat-card class="login-cards">
-      <mat-card-content class="no-padding">
-        <h3>Enter OTP</h3>
-        <form class="otp-form" [formGroup]="otpForm" (ngSubmit)="verifyPassword()">
-          <mat-form-field class="full-width">
-            <mat-label>OTP</mat-label>
-            <input matInput type="text" formControlName="otp" maxlength="6">
-            <mat-icon matPrefix [style.color]="'#3f51b5'">key</mat-icon>
-            <mat-error *ngIf="otpForm.controls.otp.errors?.required">OTP is required</mat-error>
-            <mat-error *ngIf="otpForm.controls.otp.errors?.pattern">OTP must be 6 digits</mat-error>
-          </mat-form-field>
-  
-          <button mat-raised-button color="primary" class="otp-button">Verify OTP</button>
-          <!-- <button mat-raised-button color="warn" class="otp-button cancel-button" >Cancel</button> -->
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
+        <!-- OTP Verification Form -->
+        <div *ngIf="otpFormVisible" class="otp-container">
+            <mat-card class="login-cards">
+                <mat-card-content class="no-padding">
+                    <h3>Enter OTP</h3>
+                    <form class="otp-form" [formGroup]="otpForm" (ngSubmit)="verifyPassword()">
+                        <mat-form-field class="full-width">
+                            <mat-label>OTP</mat-label>
+                            <input matInput type="text" formControlName="otp" maxlength="6">
+                            <mat-icon matPrefix [style.color]="'#3f51b5'">key</mat-icon>
+                            <mat-error *ngIf="otpForm.controls.otp.errors?.required">OTP is required</mat-error>
+                            <mat-error *ngIf="otpForm.controls.otp.errors?.pattern">OTP must be 6 digits</mat-error>
+                        </mat-form-field>
+
+                        <button mat-raised-button color="primary" class="otp-button">Verify OTP</button>
+                        <!-- <button mat-raised-button color="warn" class="otp-button cancel-button" >Cancel</button> -->
+                        <!-- Resend OTP Button -->
+                        <!-- <button mat-button color="accent" type="button" class="otp-button" (click)="resendOtp()">Resend OTP</button> -->
+                        <div class="resend-otp-container">
+                            <span class="resend-otp" (click)="resendOtp()">Resend OTP</span>
+                        </div>
+
+
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </mat-card>
 </div>
