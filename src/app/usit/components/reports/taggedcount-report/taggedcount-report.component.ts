@@ -69,6 +69,7 @@ export class TaggedcountReportComponent {
     'EmployeeName',
     'PsuedoName',
     'Department',
+    'Commented Date',
   ];
 showPageSizeOptions: any;
  
@@ -115,7 +116,7 @@ showPageSizeOptions: any;
     this.payload = {
       pageNumber: this.currentPageIndex + 1, // Page numbers start from 1 for API
       pageSize: this.pageSize,
-      sortField: "fullname",
+      sortField: "createddate",
       sortOrder: "desc",
       keyword: "empty",
       startDate: startDate,
