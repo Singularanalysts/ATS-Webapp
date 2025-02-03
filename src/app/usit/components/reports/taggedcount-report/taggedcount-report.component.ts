@@ -48,20 +48,13 @@ export class TaggedcountReportComponent {
   taggedreport!: FormGroup;
   submitted = false;
   showReport = false;
-  c_data: any[] = [];
   dataSource = new MatTableDataSource<any>([]);
   payload: any;
-  totalItems: number = 0;
-  totalPages: number = 0; // To store total pages
-  
-  // Paginator settings
-  pageSize = 50; // Items per page
-  currentPageIndex = 0; // Always start from page 0
-  pageSizeOptions = [50]; // Fixed at 50 records per page
-  showFirstLastButtons = true;
-  pageEvent!: PageEvent;
-  department: string | null | undefined;
-  
+
+  c_data: any[] = [];
+  pageSize = 50;
+  currentPageIndex = 0;
+
   dataTableColumns: string[] = [
     'SerialNum',
     'Title',
@@ -71,8 +64,6 @@ export class TaggedcountReportComponent {
     'Department',
     'Commented Date',
   ];
-showPageSizeOptions: any;
- 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -81,11 +72,14 @@ showPageSizeOptions: any;
   ) {}
 
   ngOnInit() {
-    this.department = localStorage.getItem('department');
     this.taggedreport = this.formBuilder.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
     });
+  }
+
+  get f() {
+    return this.taggedreport.controls;
   }
 
   navigateToDashboard() {
@@ -101,62 +95,72 @@ showPageSizeOptions: any;
       this.showReport = true;
     }
 
-    const startDate = this.datePipe.transform(
-      this.taggedreport.get('startDate')!.value,
+    const startDateControl = this.taggedreport.get('startDate');
+    const endDateControl = this.taggedreport.get('endDate');
+    const formattedStartDate = this.datePipe.transform(
+      startDateControl!.value,
       'yyyy-MM-dd'
     );
-    const endDate = this.datePipe.transform(
-      this.taggedreport.get('endDate')!.value,
+    const formattedEndDate = this.datePipe.transform(
+      endDateControl?.value,
       'yyyy-MM-dd'
     );
-
-    // Reset pagination to first page when new data is requested
-    this.currentPageIndex = 0; 
 
     this.payload = {
-      pageNumber: this.currentPageIndex + 1, // Page numbers start from 1 for API
-      pageSize: this.pageSize,
-      sortField: "createddate",
-      sortOrder: "desc",
-      keyword: "empty",
-      startDate: startDate,
-      endDate: endDate,
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
     };
 
-    this.fetchReportData();
+    this.service.getCommentReport(this.payload).subscribe((res: any) => {
+      this.c_data = res.data;
+      this.dataSource.data = res.data;
+
+      this.dataSource.data.map((x: any, i) => {
+        x.serialNum = this.generateSerialNumber(i);
+      });
+
+    });
   }
 
-  fetchReportData() {
-    this.service.getCommentReport(this.payload).subscribe((res: any) => {
-      if (res.data) {
-        this.c_data = res.data.content;
-        this.dataSource.data = res.data.content;
-        this.totalItems = res.data.totalElements;
-        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = this.generateSerialNumber(i);
-        });
-      }
-    });
+  generateSerialNumber(index: number): number {
+    return this.currentPageIndex * this.pageSize + index + 1;
   }
 
   reset() {
     this.taggedreport.reset();
     this.showReport = false;
     this.dataSource.data = [];
-    this.currentPageIndex = 0;
   }
 
-  pageChanged(event: PageEvent) {
-    this.currentPageIndex = event.pageIndex;
-    this.payload.pageNumber = this.currentPageIndex + 1;
-    this.payload.pageSize = event.pageSize;
+  
+  headings: any[] = [];
+  excelData: any[] = [];
+  excelImport() {
+    this.headings = [[
+      'SerialNum',
+      'Job Title',
+      'Consultant Name',
+      'Pseudoname',
+      'Issue Type',
+      'Comment',
+      'Commented Date',
+    ]];
 
-    this.fetchReportData();
+    this.excelData = this.c_data.map(c => [
+      c.serialNum,
+      c.job_Title,
+      c.consultantname,
+      c.fullname,
+      c.issue_type,
+      c.comment,
+     this.datePipe.transform(c.createddate, 'MM-dd-yyyy HH:mm') || ''
+    ]);
+    const wb = utils.book_new();
+    const ws: any = utils.json_to_sheet([]);
+    utils.sheet_add_aoa(ws, this.headings);
+    utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
+    utils.book_append_sheet(wb, ws, 'data');
+    writeFile(wb, 'Banter-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
   }
 
-  generateSerialNumber(index: number): number {
-    return this.currentPageIndex * this.pageSize + index + 1;
-  }
 }
