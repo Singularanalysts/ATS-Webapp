@@ -48,6 +48,7 @@ export class TimeSheetsComponent {
   // flag: any;
   consultant: any;
   entity: any;
+
   // pagination code
   page: number = 1;
   pageSize = 50;
@@ -62,12 +63,6 @@ export class TimeSheetsComponent {
   field = "empty";
   pageEvent!: PageEvent;
   showPageSizeOptions = true;
-
-
-
-
-
-
 
   dataSource = new MatTableDataSource<any>([]);
   protected privilegeServ = inject(PrivilegesService);
@@ -186,6 +181,7 @@ export class TimeSheetsComponent {
   }
 
   private destroyed$ = new Subject<void>();
+  
   deleteTimeSheet(timesheetId: number) {
     const dataToBeSentToDialog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
@@ -263,6 +259,7 @@ export class TimeSheetsComponent {
       }
     });
   }
+
   onSort(event: Sort) {
     if (event.active == 'SerialNum')
       this.sortField = 'time_sheet_type'
