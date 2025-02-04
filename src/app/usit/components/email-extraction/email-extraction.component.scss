@@ -295,3 +295,31 @@ ul.breadcrumb li:last-child {
   cursor: pointer;
 }
 
+button {
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position the tooltip above the button */
+  left: 50%;
+  margin-left: -60px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+button:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}

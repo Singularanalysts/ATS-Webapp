@@ -8,9 +8,11 @@
             Email Extraction
         </span>
         <div class="hot-list-actions">
-            <!-- <button mat-raised-button color="warn" class="block-email" (click)="blockEmail()" *ngIf="showBlockButton">
-                Block Email
-            </button> -->
+              
+            <button *ngIf="showBlockButton" mat-icon-button color="warn" (click)="blockEmail()" matTooltip="Block Email" matTooltipPosition="left">
+                <mat-icon>block</mat-icon>
+              </button>
+              
             <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
                 <mat-icon>delete</mat-icon>
             </button>

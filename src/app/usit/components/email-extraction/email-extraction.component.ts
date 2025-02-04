@@ -69,6 +69,7 @@ export class EmailExtractionComponent implements OnInit {
   itemsPerPage = 50;
   totalItems: number = 0;
   field = 'empty';
+  payload: any;
   private router = inject(Router);
   userid!: any;
   dataToBeSentToSnackBar: ISnackBarData = {
@@ -386,17 +387,108 @@ export class EmailExtractionComponent implements OnInit {
       },
     });
   }
-  // blockEmail(): void {
-  //   if (this.selection.selected.length === 1) {
-  //     const selectedEmail = this.selection.selected[0];  // Get the selected email
-  //     alert(JSON.stringify(selectedEmail));
-  //     console.log((JSON.stringify(selectedEmail)));
-  //     // Here you can call the actual block email API integration once it's ready
-  //   } else {
-  //     // If no email or multiple emails are selected, you can show a message or do nothing
-  //     alert('Please select exactly one email to block.');
-  //   }
-  // }
+  blockEmail(): void{
+    if (this.selection.selected.length === 1) {
+
+      const dataToBeSentToDialog: Partial<IConfirmDialogData> = {
+        title: 'Confirmation',
+        message: 'Are you sure you want to block the selected email?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "400px";
+      dialogConfig.height = "auto";
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = "delete-confirmation";
+      dialogConfig.data = dataToBeSentToDialog;
+    
+      const dialogRef = this.dialogServ.openDialogWithComponent(EmailsDeleteConfirmComponent, dialogConfig);
+
+      const selectedEmail = this.selection.selected[0];  // Get the selected email
+      this.payload = {
+        userid : this.userid ,
+        email: this.removeQuotes(selectedEmail.sender)
+      };
+
+      dialogRef.afterClosed().subscribe({
+        next: () => {
+          if (dialogRef.componentInstance.allowAction) {
+            
+            this.service.blockVendorMail(this.payload).subscribe({
+              next: (response: any) => {
+            if (response.status === 'Success') {
+            this.selection.clear();
+           this.showDeleteButton=false;
+           this.showBlockButton=false;
+            this.getAll();
+            this.dataToBeSentToSnackBar.message = "Mail Blocked Successfully";
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          }
+              },
+              error: (error: any) => {
+                this.dataToBeSentToSnackBar.message = error.message || 'Failed to block email';
+                this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+                this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+              }
+            });
+          }
+        },
+        error: (err: any) => {
+          console.error('Dialog closed with error:', err);
+        }
+      });
+
+      //  this.service.blockVendorMail(this.payload).subscribe({
+      //   next: (response: any) => {
+      //     if (response.status === 'Success') {
+      //       this.selection.clear();
+      //      this.showDeleteButton=false;
+      //      this.showBlockButton=false;
+      //       this.getAll();
+      //       this.dataToBeSentToSnackBar.message = "Mail Blocked Successfully";
+      //       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+      //       this.snackBarServ.openSnackBarFromComponent(
+      //         this.dataToBeSentToSnackBar
+      //       );
+      //     } else if (response.status === 'Failed') {
+      //       this.dataToBeSentToSnackBar.message = response.message;
+      //       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      //       this.snackBarServ.openSnackBarFromComponent(
+      //         this.dataToBeSentToSnackBar
+      //       );
+      //     } else {
+      //       this.dataToBeSentToSnackBar.message = response.message;
+      //       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      //       this.snackBarServ.openSnackBarFromComponent(
+      //         this.dataToBeSentToSnackBar
+      //       );
+      //     }
+      //   },
+      //   error: (err: any) => {
+      //     this.dataToBeSentToSnackBar.message = err.message;
+      //     this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      //     this.snackBarServ.openSnackBarFromComponent(
+      //       this.dataToBeSentToSnackBar
+      //     );
+      //   },
+      // });
+    } else {
+      // If no email or multiple emails are selected, you can show a message or do nothing
+      alert('Please select exactly one email to block.');
+    }
+  }
+
+  removeQuotes(str: string): string {
+    if (str.startsWith('"') && str.endsWith('"')) {
+      return str.slice(1, -1);
+    }
+    return str;
+  }
 
   // bulkDelete(): void {
   //   const selectedEmails = this.selection.selected;
