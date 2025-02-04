@@ -65,7 +65,7 @@ export class EmailConfigurationComponent {
     'SerialNum',
     'Technology',
     'Email',
-    'Password',
+    // 'Password',
     'ReceivedDate',
     'StopExtraction',
     'Status',
@@ -518,8 +518,8 @@ export class EmailConfigurationComponent {
     });
   }
 
-  stopExtraction(element : string){
-    this.openServ.stopTheExtraction(element).subscribe({
+  stopExtraction(id : Number){
+    this.openServ.stopTheExtraction(id).subscribe({
       next: (response: any) => {
         // alert(JSON.stringify(response.status));
         if (response.status === 'success') {

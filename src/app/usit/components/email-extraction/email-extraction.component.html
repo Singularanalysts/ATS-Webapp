@@ -8,6 +8,9 @@
             Email Extraction
         </span>
         <div class="hot-list-actions">
+            <!-- <button mat-raised-button color="warn" class="block-email" (click)="blockEmail()" *ngIf="showBlockButton">
+                Block Email
+            </button> -->
             <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
                 <mat-icon>delete</mat-icon>
             </button>
@@ -18,6 +21,7 @@
             <div>
                 <mat-icon class="settings-icon" (click)="navigateBack()">settings</mat-icon>
             </div>
+
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search" (keyup)="applyFilter($event)">
             </div>
@@ -115,19 +119,23 @@
                         </mat-menu>
                     </td>
                 </ng-container>
-
-                <!-- Subject Column-->
+                <!-- Subject Column -->
                 <ng-container matColumnDef="Subject">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Subject">
-                        Subject</th>
+                        Subject
+                    </th>
                     <td mat-cell *matCellDef="let element">
-                        <span class="subject-text" [matTooltip]="element?.subject | titlecase"
-                            matTooltipPosition="above">
-                            {{ (element?.subject | titlecase) | slice:0:32 }}<ng-container
-                                *ngIf="(element?.subject | titlecase).length > 32">...</ng-container>
+                        <span class="subject-text" *ngIf="element?.subject; else noSubject"
+                            [matTooltip]="element.subject | titlecase" matTooltipPosition="above">
+                            {{ (element.subject | titlecase) | slice:0:32 }}
+                            <ng-container *ngIf="(element.subject | titlecase).length > 32">...</ng-container>
                         </span>
+                        <ng-template #noSubject>
+                            <span class="subject-text">N/A</span>
+                        </ng-template>
                     </td>
                 </ng-container>
+
 
                 <!-- Received Date Column-->
                 <ng-container matColumnDef="ReceivedDate">
