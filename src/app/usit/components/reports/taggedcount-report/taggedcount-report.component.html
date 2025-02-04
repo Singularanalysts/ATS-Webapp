@@ -167,6 +167,22 @@
                     </td>
                   </ng-container>
 
+                   <!-- Psuedo Name -->
+                   <ng-container matColumnDef="Commented Date">
+                    <th
+                      mat-header-cell
+                      *matHeaderCellDef
+                    
+                      style="width: 10%"
+                    >
+                    Commented Date
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <!-- {{ element.createddate }} -->
+                      {{element?.createddate | date:'MM-dd-yyyy HH:mm' }} 
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
                   <tr mat-row *matRowDef="let row; columns: dataTableColumns"></tr>
 </table>  

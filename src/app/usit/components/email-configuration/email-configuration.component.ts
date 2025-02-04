@@ -65,7 +65,7 @@ export class EmailConfigurationComponent {
     'SerialNum',
     'Technology',
     'Email',
-    'Password',
+    // 'Password',
     'ReceivedDate',
     'StopExtraction',
     'Status',
@@ -115,38 +115,40 @@ export class EmailConfigurationComponent {
 //   });
 // }
   checkExistingDetails() {
-    if (this.userid && this.role !== "Super Administrator") {
-      this.OpenReqServ.getConfiguredEmailById(this.userid).subscribe({
-        next: (response: any) => {
-          if (response && response.status == "Success") {
-            this.buttonText = 'Update';
-            this.showOldPasswordField = true;
-            this.otpSent = false;
-            this.emailValidationId = response.data[0].id;
-            this.emailForm.get('oldpassword')!.clearValidators();
-            this.emailForm.get('password')!.clearValidators();
-            this.emailForm.get('conformpassword')!.clearValidators();
+    // alert("ttt")
+    // if (this.userid && this.role !== "Super Administrator") {
+    //   this.OpenReqServ.getConfiguredEmailById(this.userid).subscribe({
+    //     next: (response: any) => {
+    //       if (response && response.status == "Success") {
+    //         this.buttonText = 'Update';
+    //         this.showOldPasswordField = true;
+    //         this.otpSent = false;
+    //         this.emailValidationId = response.data[0].id;
+    //         this.emailForm.get('oldpassword')!.clearValidators();
+    //         this.emailForm.get('password')!.clearValidators();
+    //         this.emailForm.get('conformpassword')!.clearValidators();
 
-            this.emailForm.get('oldpassword')!.updateValueAndValidity();
-            this.emailForm.get('password')!.updateValueAndValidity();
-            this.emailForm.get('conformpassword')!.updateValueAndValidity();
-            this.emailForm.patchValue({
-              email: response.data[0].email,
-              oldpassword: '',
-              password: '',
-              conformpassword: '',
-            });
-          } else {
-            this.buttonText = 'Save';
-            this.showOldPasswordField = false;
-            this.emailForm.get('oldpassword')?.setValidators(null);
-          }
-        },
-        error: (err: any) => {
-          console.error(err);
-        }
-      });
-    } else {
+    //         this.emailForm.get('oldpassword')!.updateValueAndValidity();
+    //         this.emailForm.get('password')!.updateValueAndValidity();
+    //         this.emailForm.get('conformpassword')!.updateValueAndValidity();
+    //         this.emailForm.patchValue({
+    //           email: response.data[0].email,
+    //           oldpassword: '',
+    //           password: '',
+    //           conformpassword: '',
+    //         });
+    //       } else {
+    //         this.buttonText = 'Save';
+    //         this.showOldPasswordField = false;
+    //         this.emailForm.get('oldpassword')?.setValidators(null);
+    //       }
+    //     },
+    //     error: (err: any) => {
+    //       console.error(err);
+    //     }
+    //   });
+    // } else {
+     
       this.OpenReqServ.getConfiguredEmailById(this.userid)
       .pipe(takeUntil(this.destroyed$)).subscribe(
         (response: any) => {
@@ -154,7 +156,7 @@ export class EmailConfigurationComponent {
           this.dataSource.data = response.data;
 
           
-          console.log("hello"+JSON.stringify(this.dataSource.data));
+          // console.log("hello"+JSON.stringify(this.dataSource.data));
           // this.totalItems = response.data.totalElements;
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
@@ -163,7 +165,7 @@ export class EmailConfigurationComponent {
         }
       )
     }
-  }
+  
 
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
@@ -516,8 +518,8 @@ export class EmailConfigurationComponent {
     });
   }
 
-  stopExtraction(element : string){
-    this.openServ.stopTheExtraction(element).subscribe({
+  stopExtraction(id : Number){
+    this.openServ.stopTheExtraction(id).subscribe({
       next: (response: any) => {
         // alert(JSON.stringify(response.status));
         if (response.status === 'success') {
