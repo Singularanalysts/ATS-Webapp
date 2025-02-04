@@ -54,6 +54,7 @@ export class TaggedcountReportComponent {
   c_data: any[] = [];
   pageSize = 50;
   currentPageIndex = 0;
+  protected privilegeServ = inject(PrivilegesService);
 
   dataTableColumns: string[] = [
     'SerialNum',
@@ -132,7 +133,7 @@ export class TaggedcountReportComponent {
     this.dataSource.data = [];
   }
 
-  
+
   headings: any[] = [];
   excelData: any[] = [];
   excelImport() {
