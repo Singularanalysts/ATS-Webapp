@@ -117,8 +117,8 @@ export class OpenreqService {
   callTheStatus(email : string){
     return this.http.get("mail/status"+`/${email}`)
   }
-  stopTheExtraction(email : any){
-    return this.http.get("mail/stop"+`/${email}`);
+  stopTheExtraction(id : any){
+    return this.http.get("mail/stop"+`/${id}`);
   }
   showBody(id : string){
     return this.http.get("mail/body"+`/${id}`);

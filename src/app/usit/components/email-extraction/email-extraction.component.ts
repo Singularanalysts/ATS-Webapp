@@ -21,6 +21,7 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatMenuModule } from '@angular/material/menu';
+import { EmailsDeleteConfirmComponent } from 'src/app/dialogs/emails-delete-confirm/emails-delete-confirm.component';
 
 @Component({
   selector: 'app-email-extraction',
@@ -79,11 +80,13 @@ export class EmailExtractionComponent implements OnInit {
     panelClass: ['custom-snack-success'],
   };
   private snackBarServ = inject(SnackBarService);
+
   entity: any;
   private dialogServ = inject(DialogService);
   protected privilegeServ = inject(PrivilegesService);
   selection = new SelectionModel<any>(true, []);
   showDeleteButton = false;
+  showBlockButton = false;
   role!: string | null;
 
   ngOnInit(): void {
@@ -120,30 +123,31 @@ export class EmailExtractionComponent implements OnInit {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
-}
-
-isIndeterminate() {
-    return this.selection.hasValue() && !this.isAllSelected();
-}
-
-selectAll(event: MatCheckboxChange): void {
-  if (event.checked) {
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  } else {
-      this.selection.clear();
   }
-  this.updateDeleteButtonVisibility();
-}
+
+  isIndeterminate() {
+    return this.selection.hasValue() && !this.isAllSelected();
+  }
+
+  selectAll(event: MatCheckboxChange): void {
+    if (event.checked) {
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    } else {
+      this.selection.clear();
+    }
+    this.updateDeleteButtonVisibility();
+  }
 
 
-toggleSelection(element: any) {
+  toggleSelection(element: any) {
     this.selection.toggle(element);
     this.updateDeleteButtonVisibility();
-}
+  }
 
-updateDeleteButtonVisibility(): void {
-  this.showDeleteButton = this.selection.selected.length > 0;
-}
+  updateDeleteButtonVisibility(): void {
+    this.showDeleteButton = this.selection.selected.length > 0;
+    this.showBlockButton = this.selection.selected.length === 1;
+  }
 
   applyFilter(event: any) {
     const keyword = event.target.value;
@@ -172,11 +176,11 @@ updateDeleteButtonVisibility(): void {
     }
     if (keyword == '') {
 
-    
+
     }
     return this.getAll(this.currentPageIndex + 1)
   }
-  navigateBack(){
+  navigateBack() {
     this.router.navigate(['/usit/email-configuration']);
   }
   processEmailsForKeys(obj: any, keys: string[]) {
@@ -184,7 +188,7 @@ updateDeleteButtonVisibility(): void {
       if (obj[key]) {
         const emailArray = obj[key].split(',').map((email: any) => email.trim());
         const filteredEmails = emailArray.filter((email: any, index: any) => email !== '' || index !== emailArray.length - 1);
-        
+
         obj[`${key}_displayedEmail`] = filteredEmails[0] || '';
         obj[`${key}_remainingEmails`] = filteredEmails.slice(1);
         obj[`${key}_remainingEmailsCount`] = filteredEmails.length > 1 ? filteredEmails.length - 1 : 0;
@@ -193,12 +197,12 @@ updateDeleteButtonVisibility(): void {
     });
     return obj;
   }
-  
+
 
   toggleEmailList(element: any, key: string) {
     element[`${key}_showRemainingEmails`] = !element[`${key}_showRemainingEmails`];
   }
-  
+
 
   sortField = 'ReceivedDate';
   sortOrder = 'desc';
@@ -281,7 +285,7 @@ updateDeleteButtonVisibility(): void {
     dialogConfig.panelClass = 'delete-email';
     dialogConfig.data = dataToBeSentToDailog;
     const dialogRef = this.dialogServ.openDialogWithComponent(
-      ConfirmComponent,
+      EmailsDeleteConfirmComponent,
       dialogConfig
     );
 
@@ -381,38 +385,100 @@ updateDeleteButtonVisibility(): void {
         );
       },
     });
-   
   }
+  // blockEmail(): void {
+  //   if (this.selection.selected.length === 1) {
+  //     const selectedEmail = this.selection.selected[0];  // Get the selected email
+  //     alert(JSON.stringify(selectedEmail));
+  //     console.log((JSON.stringify(selectedEmail)));
+  //     // Here you can call the actual block email API integration once it's ready
+  //   } else {
+  //     // If no email or multiple emails are selected, you can show a message or do nothing
+  //     alert('Please select exactly one email to block.');
+  //   }
+  // }
 
+  // bulkDelete(): void {
+  //   const selectedEmails = this.selection.selected;
+  //   const idsToDelete = selectedEmails.map(email => email.id);
+  //   const delObj = {
+  //     ids: idsToDelete
+  //   }
+
+  //   if (idsToDelete.length) {
+  //     this.service.deleteEmails(delObj)
+  //       .subscribe({
+  //         next: (response: any) => {
+  //           this.dataToBeSentToSnackBar.message = response.message;
+  //           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+  //           this.snackBarServ.openSnackBarFromComponent(
+  //             this.dataToBeSentToSnackBar
+  //           );
+  //           this.getAll();
+  //           this.selection.clear();
+  //           this.updateDeleteButtonVisibility();
+  //         },
+  //         error: (error: any) => {
+  //           this.dataToBeSentToSnackBar.message = error.message;
+  //           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+  //           this.snackBarServ.openSnackBarFromComponent(
+  //             this.dataToBeSentToSnackBar
+  //           );
+  //         }
+  //       });
+  //   }
+  // }
   bulkDelete(): void {
     const selectedEmails = this.selection.selected;
     const idsToDelete = selectedEmails.map(email => email.id);
-    const delObj = {
-      ids: idsToDelete
+  
+    if (!idsToDelete.length) {
+      return; // Exit if no items are selected
     }
-
-    if (idsToDelete.length) {
-      this.service.deleteEmails(delObj)
-        .subscribe({
-          next: (response: any) => {
-            this.dataToBeSentToSnackBar.message = response.message;
-            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
-            this.snackBarServ.openSnackBarFromComponent(
-              this.dataToBeSentToSnackBar
-            );
-            this.getAll();
-            this.selection.clear();
-            this.updateDeleteButtonVisibility();
-          },
-          error: (error: any) => {
-            this.dataToBeSentToSnackBar.message = error.message;
-            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-            this.snackBarServ.openSnackBarFromComponent(
-              this.dataToBeSentToSnackBar
-            );
-          }
-        });
-    }
+  
+    const dataToBeSentToDialog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete the selected emails?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+    };
+  
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "400px";
+    dialogConfig.height = "auto";
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = "delete-confirmation";
+    dialogConfig.data = dataToBeSentToDialog;
+  
+    const dialogRef = this.dialogServ.openDialogWithComponent(EmailsDeleteConfirmComponent, dialogConfig);
+  
+    dialogRef.afterClosed().subscribe({
+      next: () => {
+        if (dialogRef.componentInstance.allowAction) {
+          const delObj = { ids: idsToDelete };
+          
+          this.service.deleteEmails(delObj).subscribe({
+            next: (response: any) => {
+              this.dataToBeSentToSnackBar.message = response.message || 'Emails deleted successfully';
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+              
+              this.getAll();
+              this.selection.clear();
+              this.updateDeleteButtonVisibility();
+            },
+            error: (error: any) => {
+              this.dataToBeSentToSnackBar.message = error.message || 'Failed to delete emails';
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+            }
+          });
+        }
+      },
+      error: (err: any) => {
+        console.error('Dialog closed with error:', err);
+      }
+    });
   }
-
+  
 }
