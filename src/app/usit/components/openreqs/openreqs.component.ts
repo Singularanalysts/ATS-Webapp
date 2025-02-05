@@ -71,7 +71,8 @@ export class OpenreqsComponent implements OnInit {
   pageSizeOptions = [50, 75, 100];
   isCompanyExist: any;
   source = 'all';
-  tabs = ['All', 'USA', 'UAE'];
+  // tabs = ['All', 'USA', 'UAE'];
+  tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 

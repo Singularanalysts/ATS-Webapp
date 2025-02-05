@@ -111,7 +111,8 @@ export class RecruiterListComponent implements OnInit {
   AssignedPageNum!: any;
   field = 'empty';
   companyType: string = '';
-  tabs = ['All', 'USA', 'UAE'];
+  // tabs = ['All', 'USA', 'UAE'];
+  tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 

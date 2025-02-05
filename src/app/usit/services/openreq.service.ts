@@ -71,6 +71,10 @@ export class OpenreqService {
     return this.http.post("mail/read", data);
   }
 
+  blockVendorMail(data: any) {
+    return this.http.post("mail/saveBlockedDomains", data);
+  }
+
   getConsultantOpenReqsByPaginationSortandFilter(data: any) {
     return this.http.post("openreqs/dice/allEmpContractReqs", data);
   }

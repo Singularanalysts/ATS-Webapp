@@ -45,13 +45,13 @@
       
               <!-- First Level Vendor Column -->
               <ng-container matColumnDef="FirstLevelVendor">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by FirstLevelVendor"> 1st Level Vendor </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by FirstLevelVendor">Implementation Partner</th>
                 <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.first_level_Vendor | titlecase}} </td>
               </ng-container>
       
               <!-- Second Level Vendor Column -->
               <ng-container matColumnDef="SecondLevelVendor">
-                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by SecondLevelVendor"  mat-sort-header> 2nd Level Vendor</th>
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by SecondLevelVendor"  mat-sort-header>1st Level Vendor</th>
                 <td mat-cell *matCellDef="let element"> {{element.second_Level_Vendor | titlecase}} </td>
               </ng-container>
       
