@@ -183,4 +183,12 @@ export class OpenreqService {
     return this.http.get(`openreqs/dice/getComment/${reqId}`);
   }
 
+  blockedEmailsList(id:number) {
+    return this.http.get("mail/getBlockedDomains/"+id);
+  }
+
+  unblockingEmailWithId(id:number) {
+    return this.http.delete("mail/unblockEmails/"+id);
+  }
+
 }

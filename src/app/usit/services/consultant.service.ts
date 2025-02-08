@@ -11,7 +11,7 @@ export class ConsultantService {
   constructor(private http: ApiService, private ht: HttpClient) { }
 
   public duplicatecheck(phonenumber: string) {
-    return this.http.get("consultant/duplicatecheck/" + phonenumber);
+    return this.http.get("consultant/duplicatecheck/" + phonenumber);  
   }
 
   public duplicatecheckEmail(email: string) {
@@ -160,8 +160,8 @@ export class ConsultantService {
     return this.http.get("consultant/hotlist/" + page + "/" + size + "/" + field);
   }
 
-  getSalesAllHotList() {
-    return this.http.get("consultant/hotlist/empty");
+  getSalesAllHotListWithUserid(id: any) {
+    return this.http.get("consultant/getAssginConsultantList/"+id);
   }
 
   getOptCptList(page: any, size: any, field: any, sortField: any, sortOrder: any) {
@@ -209,4 +209,8 @@ export class ConsultantService {
     return this.http.get("consultant/getSalesExecutiveById/" + id);
   }    
   
+  public getTLdropdown(id: number) {
+    return this.http.get("consultant/technology/getskillsbyid/" + id);
+  }
+
 }

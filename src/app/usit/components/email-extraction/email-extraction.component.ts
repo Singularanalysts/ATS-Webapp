@@ -43,8 +43,10 @@ import { EmailsDeleteConfirmComponent } from 'src/app/dialogs/emails-delete-conf
   styleUrls: ['./email-extraction.component.scss']
 })
 export class EmailExtractionComponent implements OnInit {
+
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
+  //  'stared',
     'select',
     'SerialNum',
     'To',
@@ -72,6 +74,8 @@ export class EmailExtractionComponent implements OnInit {
   payload: any;
   private router = inject(Router);
   userid!: any;
+  showBlockMails=true;
+
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -89,6 +93,8 @@ export class EmailExtractionComponent implements OnInit {
   showDeleteButton = false;
   showBlockButton = false;
   role!: string | null;
+  blockedEmails: any; // Initialize as an empty array
+  blockedEmailss: any=[];
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
@@ -573,4 +579,75 @@ export class EmailExtractionComponent implements OnInit {
     });
   }
   
+  blockEmails() {
+    this.service.blockedEmailsList(this.userid).subscribe({
+      next: (response: any) => {
+        console.log("Blocked Emails Response:", response.data);
+  
+        // Store the response data properly
+        this.blockedEmails = response.data;
+  
+        // Format & Alert the response in a readable way
+  
+        // alert(`Blocked Emails:\n${formattedResponse}`);
+      },
+      error: (error: any) => {
+        console.error("Error fetching blocked emails:", error);
+        alert("Error fetching blocked emails.");
+      }
+    });
+  }
+
+  unblockEmails(id:any) {
+
+  const dataToBeSentToDialog: Partial<IConfirmDialogData> = {
+    title: 'Confirmation',
+    message: 'Are you sure you want to Un-block the selected email?',
+    confirmText: 'Yes',
+    cancelText: 'No',
+  };
+
+  const dialogConfig = new MatDialogConfig();
+  dialogConfig.width = "400px";
+  dialogConfig.height = "auto";
+  dialogConfig.disableClose = false;
+  dialogConfig.panelClass = "delete-confirmation";
+  dialogConfig.data = dataToBeSentToDialog;
+
+  const dialogRef = this.dialogServ.openDialogWithComponent(EmailsDeleteConfirmComponent, dialogConfig);
+
+  dialogRef.afterClosed().subscribe({
+    next: () => {
+      if (dialogRef.componentInstance.allowAction) {
+        
+        this.service.unblockingEmailWithId(id).subscribe({
+          next: (response: any) => {
+        if (response.status === 'Success') {
+        this.selection.clear();
+       this.showDeleteButton=false;
+       this.showBlockButton=false;
+        this.getAll();
+        this.dataToBeSentToSnackBar.message = "Mail Un-Blocked Successfully";
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataToBeSentToSnackBar
+        );
+      }
+          },
+          error: (error: any) => {
+            this.dataToBeSentToSnackBar.message = error.message || 'Failed to block email';
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+          }
+        });
+      }
+    },
+    error: (err: any) => {
+      console.error('Dialog closed with error:', err);
+    }
+  });
+  
+  }
+  
+
 }

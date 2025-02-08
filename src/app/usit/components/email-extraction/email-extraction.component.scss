@@ -323,3 +323,56 @@ button:hover .tooltip {
   visibility: visible;
   opacity: 1;
 }
+
+.blacked-mails-list {
+  margin: 10em;
+}
+
+.button-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between button and menu */
+}
+
+////////////////////////////////////////////////////////////////////
+
+.blacked-mails-list {
+  margin: 15em;
+}
+
+.blocked-mails-menu {
+  width: 300px;  /* Set menu width */
+  padding: 10px;
+}
+
+.menu-content {
+  background: rgb(247, 244, 244);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(241, 239, 239, 0.884);
+  color: rgb(15, 15, 15);
+  width: 200px;
+  
+}
+
+/* Flexbox to align email text and button side by side */
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid black;
+}
+
+/* Adjust button size */
+.menu-item button {
+  font-size: 2px;
+  padding: 4px 8px;
+  color: white;
+  background-color: rgb(185, 35, 35);
+  border-radius: 10px;
+}
+
+.mat-mdc-button .mat-mdc-button-touch-target{
+  font-size: 0px;
+}

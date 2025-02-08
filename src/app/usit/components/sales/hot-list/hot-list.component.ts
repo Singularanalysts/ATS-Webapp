@@ -163,7 +163,8 @@ export class HotListComponent implements OnInit {
   }
 
   getAllData() {
-    this.consultantServ.getSalesAllHotList().subscribe(
+    const userid=localStorage.getItem('userid');
+    this.consultantServ.getSalesAllHotListWithUserid(userid).subscribe(
       (response: any) => {
         this.dataSource.data = response.data;
         this.dataSource.data.map((x: any, i) => {
