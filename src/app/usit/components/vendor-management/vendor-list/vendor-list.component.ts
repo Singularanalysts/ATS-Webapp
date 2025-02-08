@@ -117,7 +117,8 @@ export class VendorListComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
-  tabs = ['All', 'USA', 'UAE'];
+  // tabs = ['All', 'USA', 'UAE'];
+  tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 

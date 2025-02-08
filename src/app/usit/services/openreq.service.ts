@@ -71,6 +71,10 @@ export class OpenreqService {
     return this.http.post("mail/read", data);
   }
 
+  blockVendorMail(data: any) {
+    return this.http.post("mail/saveBlockedDomains", data);
+  }
+
   getConsultantOpenReqsByPaginationSortandFilter(data: any) {
     return this.http.post("openreqs/dice/allEmpContractReqs", data);
   }
@@ -177,6 +181,14 @@ export class OpenreqService {
 
   jobComments(reqId: number) {
     return this.http.get(`openreqs/dice/getComment/${reqId}`);
+  }
+
+  blockedEmailsList(id:number) {
+    return this.http.get("mail/getBlockedDomains/"+id);
+  }
+
+  unblockingEmailWithId(id:number) {
+    return this.http.delete("mail/unblockEmails/"+id);
   }
 
 }

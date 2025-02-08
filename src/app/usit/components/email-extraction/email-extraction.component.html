@@ -8,9 +8,35 @@
             Email Extraction
         </span>
         <div class="hot-list-actions">
-            <!-- <button mat-raised-button color="warn" class="block-email" (click)="blockEmail()" *ngIf="showBlockButton">
-                Block Email
-            </button> -->
+            
+<!-- Container for Button and Menu -->
+<div class="button-menu-container">
+    <!-- Mail Button to Open Menu -->
+    <button class="blacked-mails-list" *ngIf="showBlockMails" mat-icon-button color="warn" (click)="blockEmails()"
+            [matMenuTriggerFor]="blockedMailsMenu" matTooltip="Blocked Emails" matTooltipPosition="left">
+      <mat-icon>mail</mat-icon>
+    </button>
+  
+    <!-- The Hidden Menu (Appears on Hover) -->
+    <mat-menu #blockedMailsMenu="matMenu" class="blocked-mails-menu">
+      <div class="menu-content">
+        <div class="menu-item" *ngFor="let email of blockedEmails">
+         
+          <button mat-button style="background-color: #04AA6D;font-size: 10px;" (click)="unblockEmails(email.blokedDomainId)">
+            <mat-icon>lock_open</mat-icon>
+            </button>
+           <span style="font-size: 15px;margin-left:20px">{{ email.email }}</span>
+          <!-- <a [href]="email" target="_blank" matTooltip="Unblock" matTooltipPosition="left" style="font-size: 15px; margin-left: 20px; text-decoration: none;">
+            {{ email }}
+          </a> -->
+        </div>
+      </div>
+    </mat-menu>
+  </div>
+            <button *ngIf="showBlockButton" mat-icon-button color="warn" (click)="blockEmail()" matTooltip="Block Email" matTooltipPosition="left">
+                <mat-icon>block</mat-icon>
+              </button>
+              
             <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
                 <mat-icon>delete</mat-icon>
             </button>
@@ -35,6 +61,20 @@
                 <!--- Note that these columns can be defined in any order.
                         The actual rendered columns are set as a property on the row definition" -->
 
+  <!-- Table Column for Individual Star Selection -->
+  <!-- <ng-container matColumnDef="stared">
+    <th mat-header-cell *matHeaderCellDef style="width: 1%">
+      Priority
+    </th>
+    <td mat-cell *matCellDef="let element" style="width: 1%">
+      <button mat-icon-button matTooltip="Toggle Star" matTooltipPosition="left">
+        <mat-icon [color]="element.isStarred ? 'accent' : 'primary'">
+          {{ element.isStarred ? 'star' : 'star_border' }}
+        </mat-icon>
+      </button>
+    </td>
+  </ng-container> -->
+  
                 <!-- Select Column-->
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef style="width: 5%">
