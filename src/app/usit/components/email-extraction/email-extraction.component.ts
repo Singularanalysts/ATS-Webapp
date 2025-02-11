@@ -8,7 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EmailBodyComponent } from './email-body/email-body.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddEmailExtractionComponent } from './add-email-extraction/add-email-extraction.component';
@@ -22,6 +22,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatMenuModule } from '@angular/material/menu';
 import { EmailsDeleteConfirmComponent } from 'src/app/dialogs/emails-delete-confirm/emails-delete-confirm.component';
+import { UnBlockingEmailsComponent } from 'src/app/dialogs/un-blocking-emails/un-blocking-emails.component';
 
 @Component({
   selector: 'app-email-extraction',
@@ -88,6 +89,7 @@ export class EmailExtractionComponent implements OnInit {
 
   entity: any;
   private dialogServ = inject(DialogService);
+  private dialog = inject(MatDialog);
   protected privilegeServ = inject(PrivilegesService);
   selection = new SelectionModel<any>(true, []);
   showDeleteButton = false;
@@ -435,6 +437,17 @@ export class EmailExtractionComponent implements OnInit {
               this.dataToBeSentToSnackBar
             );
           }
+         else if (response.status === 'Saving failed') {
+            this.selection.clear();
+           this.showDeleteButton=false;
+           this.showBlockButton=false;
+            this.getAll();
+            this.dataToBeSentToSnackBar.message = "Already this Blocked";
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          }
               },
               error: (error: any) => {
                 this.dataToBeSentToSnackBar.message = error.message || 'Failed to block email';
@@ -579,21 +592,29 @@ export class EmailExtractionComponent implements OnInit {
     });
   }
   
-  blockEmails() {
+  unblockEmail() {
     this.service.blockedEmailsList(this.userid).subscribe({
       next: (response: any) => {
-        console.log("Blocked Emails Response:", response.data);
   
         // Store the response data properly
         this.blockedEmails = response.data;
-  
+        const attachments = response.data;
         // Format & Alert the response in a readable way
   
         // alert(`Blocked Emails:\n${formattedResponse}`);
+
+        // Configure the dialog with the fetched data
+        const dialogConfig = {
+          width: '600px',
+          data: { attachments } // Pass the fetched attachments to the dialog
+        };
+
+        // Open the dialog with the attachments data
+        this.dialog.open(UnBlockingEmailsComponent, dialogConfig);
+
       },
       error: (error: any) => {
-        console.error("Error fetching blocked emails:", error);
-        alert("Error fetching blocked emails.");
+      
       }
     });
   }
