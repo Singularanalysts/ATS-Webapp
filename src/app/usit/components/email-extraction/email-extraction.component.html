@@ -12,13 +12,13 @@
 <!-- Container for Button and Menu -->
 <div class="button-menu-container">
     <!-- Mail Button to Open Menu -->
-    <button class="blacked-mails-list" *ngIf="showBlockMails" mat-icon-button color="warn" (click)="blockEmails()"
-            [matMenuTriggerFor]="blockedMailsMenu" matTooltip="Blocked Emails" matTooltipPosition="left">
+    <button class="blacked-mails-list" *ngIf="showBlockMails" mat-icon-button color="warn" (click)="unblockEmail()"
+             matTooltip="Blocked Emails" matTooltipPosition="left">
       <mat-icon>mail</mat-icon>
-    </button>
+    </button> 
   
     <!-- The Hidden Menu (Appears on Hover) -->
-    <mat-menu #blockedMailsMenu="matMenu" class="blocked-mails-menu">
+    <!-- <mat-menu #blockedMailsMenu="matMenu" class="blocked-mails-menu">
       <div class="menu-content">
         <div class="menu-item" *ngFor="let email of blockedEmails">
          
@@ -26,12 +26,13 @@
             <mat-icon>lock_open</mat-icon>
             </button>
            <span style="font-size: 15px;margin-left:20px">{{ email.email }}</span>
-          <!-- <a [href]="email" target="_blank" matTooltip="Unblock" matTooltipPosition="left" style="font-size: 15px; margin-left: 20px; text-decoration: none;">
-            {{ email }}
-          </a> -->
+          
         </div>
       </div>
-    </mat-menu>
+    </mat-menu> -->
+    <!-- <a [href]="email" target="_blank" matTooltip="Unblock" matTooltipPosition="left" style="font-size: 15px; margin-left: 20px; text-decoration: none;">
+            {{ email }}
+          </a> -->
   </div>
             <button *ngIf="showBlockButton" mat-icon-button color="warn" (click)="blockEmail()" matTooltip="Block Email" matTooltipPosition="left">
                 <mat-icon>block</mat-icon>
