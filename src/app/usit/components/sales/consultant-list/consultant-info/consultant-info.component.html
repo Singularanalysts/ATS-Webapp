@@ -57,8 +57,15 @@
                   </tr>
                   <tr>
                     <td><span class="table-header-text">Linked In</span></td>
-                    <td><a href="{{entity.linkedin}}"
-                      target="_blank">{{entity.linkedin}}</a></td>
+                    <td>
+                      <!-- <a href="{{entity.linkedin}}" target="_blank">{{entity.linkedin}}</a> -->
+
+                      <a href="{{ entity.linkedin.startsWith('http') ? entity.linkedin : 'https://' + entity.linkedin }}" 
+                      target="_blank">
+                      {{ entity.linkedin }}
+                   </a>
+
+                    </td>
                   </tr>
                   <tr>
                     <td>
@@ -81,7 +88,7 @@
             </div>
           </div>
 
-          <div class="header-text">Work Details</div>
+          <div class="header-text">Work Details</div> 
 
           <table class="table">
             <tbody>

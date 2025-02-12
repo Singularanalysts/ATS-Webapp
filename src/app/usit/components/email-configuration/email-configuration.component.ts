@@ -547,8 +547,12 @@ export class EmailConfigurationComponent {
       id: element.id,
       email : element.email
     }
+
     window.location.reload(); // Reload the entire page
    this.statusCallMethod(element.email);
+
+  //  this.statusCallMethod(element.email);
+
     return this.openServ.extractEmails(extractEmail).subscribe({
       next: (response: any) => {
         // alert(JSON.stringify(response));
@@ -596,20 +600,20 @@ export class EmailConfigurationComponent {
       },
     });
    
-  }
-  statusCallMethod(element: string): void {
-    this.openServ.callTheStatus(element).subscribe({
-      next: (response: any) => {
-        if (response.response === 'success') {
-          console.log('It is calling');
-        } else {
-          console.log('Not calling');
-        }
-      },
-      error: (err: any) => {
-        console.error('Error occurred while calling the status:', err);
-      }
-    });
+  // }
+  // statusCallMethod(element: string): void {
+  //   this.openServ.callTheStatus(element).subscribe({
+  //     next: (response: any) => {
+  //       if (response.response === 'success') {
+  //         console.log('It is calling');
+  //       } else {
+  //         console.log('Not calling');
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       console.error('Error occurred while calling the status:', err);
+  //     }
+  //   });
   }
   
 }
