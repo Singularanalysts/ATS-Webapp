@@ -522,10 +522,15 @@ export class EmailConfigurationComponent {
     this.openServ.stopTheExtraction(id).subscribe({
       next: (response: any) => {
         // alert(JSON.stringify(response.status));
-        if (response.status === 'success') {
+        if (response.status === 'Success') {
           console.log('stop extraction');
           window.location.reload(); // Reload the entire page
-        } else {
+        }
+        else if (response.status === 'failed') {
+          console.log('stop extraction');
+          window.location.reload(); // Reload the entire page
+        }  
+        else {
           console.log('stop not calling');
          
         }
@@ -542,7 +547,12 @@ export class EmailConfigurationComponent {
       id: element.id,
       email : element.email
     }
+
+    window.location.reload(); // Reload the entire page
+   this.statusCallMethod(element.email);
+
   //  this.statusCallMethod(element.email);
+
     return this.openServ.extractEmails(extractEmail).subscribe({
       next: (response: any) => {
         // alert(JSON.stringify(response));

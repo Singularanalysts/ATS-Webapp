@@ -1,0 +1,42 @@
+<div class="dialog-container">
+
+    <!-- Header -->
+    <div class="header">
+        <h2 mat-dialog-title>Emails to Un-block</h2>
+        <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <!-- Content -->
+    <div class="content" mat-dialog-content>
+        <div class="attachments-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Emails</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let attachment of attachments">
+                        <td>
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="toggleSelection(attachment.blokedDomainId, $event.checked)"
+                                [checked]="selectedAttachments.includes(attachment.blokedDomainId)">
+                            </mat-checkbox>
+                        </td>
+                        <td>{{ attachment.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p *ngIf="attachments?.length === 0" class="no-data">No Emails found to unblock</p>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions" mat-dialog-actions *ngIf="attachments?.length === 0": hidden>
+        <button style="justify-items: center;"  mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Un-Block</button>
+    </div>
+
+</div>

@@ -187,8 +187,8 @@ export class OpenreqService {
     return this.http.get("mail/getBlockedDomains/"+id);
   }
 
-  unblockingEmailWithId(id:number) {
-    return this.http.delete("mail/unblockEmails/"+id);
+  unblockingEmailWithId(id:any) {
+    return this.http.post("mail/unblockEmails",id);
   }
 
 }
