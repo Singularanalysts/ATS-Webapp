@@ -161,7 +161,7 @@ export class TaggedcountReportComponent {
     utils.sheet_add_aoa(ws, this.headings);
     utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
     utils.book_append_sheet(wb, ws, 'data');
-    writeFile(wb, 'Banter-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
+    writeFile(wb, 'Open-Reqs-Comments-Report@' + this.payload.startDate + ' TO ' + this.payload.endDate + '.xlsx');
   }
 
 }
