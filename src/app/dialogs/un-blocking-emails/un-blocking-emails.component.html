@@ -35,8 +35,8 @@
     </div>
 
     <!-- Actions -->
-    <div class="actions" mat-dialog-actions *ngIf="attachments?.length === 0": hidden>
-        <button style="justify-items: center;"  mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Un-Block</button>
+    <div class="actions" mat-dialog-actions [hidden]="attachments.length === 0">
+        <button style="justify-items: center;" [hidden]="attachments.length === 0" mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Un-Block</button>
     </div>
 
 </div>
