@@ -442,7 +442,7 @@ export class EmailExtractionComponent implements OnInit {
            this.showDeleteButton=false;
            this.showBlockButton=false;
             this.getAll();
-            this.dataToBeSentToSnackBar.message = "Already this Blocked";
+            this.dataToBeSentToSnackBar.message = "Already This mail got blocked";
             this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
             this.snackBarServ.openSnackBarFromComponent(
               this.dataToBeSentToSnackBar

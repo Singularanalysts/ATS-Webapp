@@ -14,7 +14,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Check</th>
+                        <th>Select</th>
                         <th>Emails</th>
                     </tr>
                 </thead>
@@ -30,12 +30,13 @@
                     </tr>
                 </tbody>
             </table>
-            <p *ngIf="attachments?.length === 0" class="no-data">No attachments found</p>
+            <p *ngIf="attachments?.length === 0" class="no-data">No Emails found to unblock</p>
         </div>
     </div>
 
     <!-- Actions -->
-    <div class="actions" mat-dialog-actions>
-        <button style="justify-items: center;" mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Un-Block</button>
+    <div class="actions" mat-dialog-actions *ngIf="attachments?.length === 0": hidden>
+        <button style="justify-items: center;"  mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Un-Block</button>
     </div>
+
 </div>
