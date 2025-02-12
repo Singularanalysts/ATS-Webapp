@@ -118,9 +118,9 @@ export class OpenreqService {
   extractEmails(data: any) {
     return this.http.post("mail/fetch", data);
   }
-  callTheStatus(email : string){
-    return this.http.get("mail/status"+`/${email}`)
-  }
+  // callTheStatus(email : string){
+  //   return this.http.get("mail/status"+`/${email}`)
+  // }
   stopTheExtraction(id : any){
     return this.http.get("mail/stop"+`/${id}`);
   }
