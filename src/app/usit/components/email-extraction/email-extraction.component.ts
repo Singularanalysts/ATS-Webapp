@@ -443,7 +443,7 @@ export class EmailExtractionComponent implements OnInit {
            this.showBlockButton=false;
             this.getAll();
             this.dataToBeSentToSnackBar.message = "Already This mail got blocked";
-            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
             this.snackBarServ.openSnackBarFromComponent(
               this.dataToBeSentToSnackBar
             );
