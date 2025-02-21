@@ -30,6 +30,7 @@ import { FileUploadValidators } from '@iplab/ngx-file-upload';
   styleUrls: ['./upload-documents.component.scss']
 })
 export class UploadDocumentsComponent {
+ 
   uploadFilesForm!: FormGroup;
   isFormSubmitted: boolean = false;
   submitted = false;
@@ -48,7 +49,9 @@ export class UploadDocumentsComponent {
   private formBuilder= inject(FormBuilder);
   public animation: boolean = false;
   public multiple: boolean = true;
-  private filesControl = new FormControl<File[]>([],FileUploadValidators.filesLimit(6));
+  private filesControl = new FormControl<File[]>([]);
+  formData: FormData = new FormData();
+  userid!: string | null;
   
   constructor(
     public dialogRef: MatDialogRef<UploadDocumentsComponent>,
@@ -56,36 +59,18 @@ export class UploadDocumentsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.initUploadFilesForm(this.data.folderData);
-    if (this.data.actionName === "edit-folder") {
-      this.bindFormControlValueOnEdit();
-    }
+    console.log(this.data);
+    this.userid = localStorage.getItem('userid');
+    this.initUploadFilesForm(null);
   }
 
   private initUploadFilesForm(folderData: any) {
     this.uploadFilesForm = this.formBuilder.group({
       files: this.filesControl,
       userid: [folderData && folderData.userid ? folderData.userid : localStorage.getItem('userid')],
-      updatedBy: [this.data.actionName === "edit-folder" ? localStorage.getItem('userid') : null]
     });
-
-    if (this.data.actionName === 'edit-folder') {
-      this.uploadFilesForm.addControl('id', this.formBuilder.control(folderData ? folderData.id : ''));
-    }
   }
 
-  private bindFormControlValueOnEdit() {
-    // Implement API call to fetch data if needed
-    // Example:
-    // this.openReqServ.getFolderById(this.data.folderData.id).subscribe({
-    //   next: (response) => {
-    //     this.initFolderForm(response.data);
-    //   },
-    //   error: (err) => {
-    //     // Handle error
-    //   }
-    // });
-  }
 
   onSubmit() {
     this.submitted = true;
@@ -95,19 +80,26 @@ export class UploadDocumentsComponent {
       return;
     }
     this.isFormSubmitted = true;
-    const saveReqObj = this.getSaveData();
+    const formValues = this.uploadFilesForm.value;
+      this.formData = new FormData();
+
+      const files = formValues.files;
+      if (files && files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          this.formData.append(`files`, files[i]);
+        }
+      } else {
+        console.warn('No attachments found.');
+      }
 
     this.allFilesServ
-      .addORUpdateFolderOrFileName(saveReqObj, this.data.actionName)
+      .uploadFiles(this.data.parentId, this.userid, this.formData)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (resp: any) => {
-          if (resp.status == 'sucess') {
-            this.dataToBeSentToSnackBar.message =
-              this.data.actionName === 'add-folder'
-                ? 'Folder Name saved successfully'
-                : 'Folder Name updated successfully';
-              this.dialogRef.close();
+          if (resp.status == 'success') {
+            this.dataToBeSentToSnackBar.message = 'Files Uploaded successfully';
+            this.dialogRef.close();
           } else {
             this.isFormSubmitted = false;
             this.dataToBeSentToSnackBar.message =resp.message;
@@ -116,50 +108,15 @@ export class UploadDocumentsComponent {
         },
         error: (err: any) => {
           this.isFormSubmitted = false;
-          this.dataToBeSentToSnackBar.message =
-            this.data.actionName === 'add-folder'
-              ? 'Folder Name addition is failed'
-              : 'Folder Name updation is failed';
+          this.dataToBeSentToSnackBar.message = 'Files Upload failed';
           this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         },
       });
   }
 
-  getSaveData() {
-    this.trimSpacesFromFormValues();
-
-    if (!this.folderObj) {
-      this.folderObj = {};
-    }
-
-    // Fill folderObj based on actionName
-    if (this.data.actionName === "edit-folder") {
-      this.folderObj.name = this.uploadFilesForm.value.name;
-      this.folderObj.userid = this.uploadFilesForm.value.userid;
-      this.folderObj.filepath = this.uploadFilesForm.value.filepath;
-      this.folderObj.updatedBy = localStorage.getItem('userid');
-    } else {
-      // Add additional field if actionName is not "edit-folder"
-      this.folderObj = {
-        ...this.uploadFilesForm.value,
-        filepath: '' // Add the field and its value here
-      };
-    }
-
-    return this.folderObj;
-  }
-
-  trimSpacesFromFormValues() {
-    Object.keys(this.uploadFilesForm.controls).forEach((controlName: string) => {
-      const control = this.uploadFilesForm.get(controlName);
-      if (control!.value && typeof control!.value === 'string') {
-        control!.setValue(control!.value.trim());
-      }
-    });
-  }
-
   closeDialog(): void {
     this.dialogRef.close();
   }
+
 }
