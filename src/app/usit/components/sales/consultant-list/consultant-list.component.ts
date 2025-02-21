@@ -21,7 +21,7 @@ import {
 } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Consultantinfo } from 'src/app/usit/models/consultantinfo';
 import {
   ISnackBarData,
@@ -44,6 +44,11 @@ import { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from 'src/app/core/services/api.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatChipInputEvent } from '@angular/material/chips';
+import {MatChipsModule} from '@angular/material/chips';
+import {_MatAutocompleteBase, MatAutocompleteModule} from '@angular/material/autocomplete';
+import { FormsModule } from '@angular/forms'; // ✅ Import FormsModule
+
 @Component({
   selector: 'app-consultant-list',
   standalone: true,
@@ -60,7 +65,9 @@ import { MatSelectModule } from '@angular/material/select';
     CommonModule,
     MatTooltipModule,
     ReactiveFormsModule,
-
+    MatChipsModule,
+    MatAutocompleteModule,
+    FormsModule
   ],
   templateUrl: './consultant-list.component.html',
   styleUrls: ['./consultant-list.component.scss'],
@@ -112,6 +119,7 @@ export class ConsultantListComponent
     'Status',
     'Action',
   ];
+
   dataSource = new MatTableDataSource<any>([]);
   // paginator
   totalItems = 0;
@@ -136,8 +144,16 @@ export class ConsultantListComponent
   //lavanya
   priority: [string, string] = ['', ''];
   h1bForm: any = FormGroup;
+
+  filteredLocations: any[] = []; // Array to hold filtered locations
+
   ///private h1bServ = inject(H1bImmigrantService);
   private api = inject(ApiService);
+
+  locations: any[] = [];
+  positions: any[] = [];
+  searchCompanyOptions$!: Observable<any>;
+
   visadata: any = [];
   experiences: string[] = [];
   experienceForm: FormGroup | undefined;
@@ -160,6 +176,7 @@ export class ConsultantListComponent
   filterRequest: any;
   size: any;
   filterApply!: boolean;
+
   constructor(private formBuilder: FormBuilder) {
     this.experienceForm = this.formBuilder.group({
       experience: ['']
@@ -184,6 +201,7 @@ export class ConsultantListComponent
   page: number = 1;
   move2sales = false;
   ngOnInit(): void {
+    this.filteredLocations = this.visadata; // Initialize with all locations
     const mvt = this.privilegeServ.hasPrivilege('MOVETOSALES_PRESALES');
     if (mvt) {
       this.move2sales = true;
@@ -194,10 +212,13 @@ export class ConsultantListComponent
     this.getFlag();
     
     this.getAllData();
+
     //lavanya
     this.getvisa();
     this.generateExperienceRanges();
     this.myForm = this.formBuilder.group({
+      position: [null],
+      location: [null],
       visa: [null], // Set default value if needed
       priority: [null], // Set default value if needed
       experience: [null] // Set default value if needed
@@ -205,7 +226,6 @@ export class ConsultantListComponent
 
   }
 
-  
   filterData(request: any,page:any) {
   this.filterApply=true
     return this.consultantServ.getFilteredConsults(page,this.pageSize ,request).subscribe(
@@ -240,12 +260,20 @@ export class ConsultantListComponent
     //   );
    
   }
+
+  getLocations() {
+    this.consultantServ.getLocation().subscribe((response: any) => {
+      this.locations = response.data;
+    });
+  }
+
   //lavanya
   getvisa() {
     this.consultantServ.getvisa().subscribe((response: any) => {
       this.visadata = response.data;
     });
   }
+  
   //
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -322,7 +350,8 @@ export class ConsultantListComponent
       pageSize: this.pageSize,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      keyword: this.field,
+      // keyword: this.field,
+      keyword: "empty",
       flag: this.flag,
       role: this.role,
       userId: this.userid,
@@ -396,6 +425,7 @@ export class ConsultantListComponent
     }
     return this.getAllData(this.currentPageIndex + 1);
   }
+
   /**
    * Sort
    * @param event
@@ -712,10 +742,14 @@ export class ConsultantListComponent
       this.pageEvent = event;
       this.currentPageIndex = event.pageIndex;
       if(this.filterApply){
+        const position = this.myForm.get('position').value;
+        const location = this.myForm.get('location').value;
         const visa = this.myForm.get('visa').value;
         const priority = this.myForm.get('priority').value;
         const experience = this.myForm.get('experience').value;
         const consultantflg = this.flag;
+        this.request.position = position; 
+        this.request.location = location;
         this.request.visaStatus = visa;
         this.request.priority = priority;
         this.request.experience = experience;
@@ -753,11 +787,15 @@ export class ConsultantListComponent
   //lavanya
   request = new FilterRequest();
   onExperienceChange(event: any): void {
+    const position = this.myForm.get('position').value;
+    const location = this.myForm.get('location').value;
     const visa = this.myForm.get('visa').value;
     const priority = this.myForm.get('priority').value;
     const experience = this.myForm.get('experience').value;
     const consultantflg =this.flag;
     
+    this.request.position = position;
+    this.request.location = location;
     this.request.visaStatus = visa;
     this.request.priority = priority;
     this.request.experience = experience;
@@ -779,20 +817,28 @@ export class ConsultantListComponent
     return value.replace(/[^0-9]/g, '');
   }
 
+    // Method to filter locations based on user input
+    filterLocations(searchTerm: any): void {
+      if (!searchTerm) {
+        this.filteredLocations = this.locations; // Reset to all locations if search term is empty
+      } else {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase();
+        this.filteredLocations = this.locations.filter(option => 
+          option[1].toLowerCase().includes(lowerCaseSearchTerm) // Filter based on the display name
+        );
+      }
+    }
 
 }
 
 export class FilterRequest {
+  position: any;
+  location: any;
   visaStatus: any;
   priority: any;
   experience: any;
   consultantflg:any;
-
 }
-
-
-
-
 
 export interface ReportVo {
   startDate: any;
