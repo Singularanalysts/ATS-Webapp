@@ -16,6 +16,7 @@
             <mat-form-field appearance="outline" class="project-name-field">
                 <mat-label>Folder Name</mat-label>
                 <input matInput formControlName="name"/>
+                <span *ngIf="this.data.actionName === 'rename-file'" matTextSuffix style="padding-left: 10px">.{{ this.extension }}</span>
                 <mat-error *ngIf="folderForm.get('name')!.hasError('required')">Folder Name
                     is Required
                 </mat-error>

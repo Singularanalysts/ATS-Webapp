@@ -2,7 +2,24 @@
 
     <!-- Header -->
     <div class="header">
-        <h2 mat-dialog-title>Emails to Un-block</h2>
+        <h2 mat-dialog-title>Share Files To</h2>
+
+        <!-- <div class="search-hot-list">
+            <input matInput type="text" class="search" placeholder="search">
+            (keyup)="applyFilter($event)"
+        </div> -->
+        <div class="search-hot-list">
+            <input 
+              matInput 
+              type="text" 
+              class="search" 
+              placeholder="Search by email" 
+              [(ngModel)]="searchTerm" 
+              (keyup)="applyFilter()"
+            >
+          </div>
+          
+
         <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
             <mat-icon>close</mat-icon>
         </button>
@@ -19,10 +36,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let attachment of attachments">
+                    <tr *ngFor="let attachment of filteredAttachments">
                         <td>
                             <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="toggleSelection(attachment.blokedDomainId, $event.checked)"
+                                (change)="toggleSelection(attachment.blokedDomainId, $event.checked, attachment.email)"
                                 [checked]="selectedAttachments.includes(attachment.blokedDomainId)">
                             </mat-checkbox>
                         </td>
@@ -30,13 +47,13 @@
                     </tr>
                 </tbody>
             </table>
-            <p *ngIf="attachments?.length === 0" class="no-data">No Emails found to unblock</p>
+            <p *ngIf="attachments?.length === 0" class="no-data">No Emails found to share</p>
         </div>
     </div>
 
     <!-- Actions -->
     <div class="actions" mat-dialog-actions [hidden]="attachments.length === 0">
-        <button style="justify-items: center;" [hidden]="attachments.length === 0" mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Un-Block</button>
+        <button style="justify-items: center;" [hidden]="attachments.length === 0" mat-raised-button mat-dialog-close (click)="unblockEmails(selectedAttachments)">Share</button>
     </div>
 
 </div>
