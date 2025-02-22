@@ -16,17 +16,19 @@
                     <tr>
                         <th>Select</th>
                         <th>Emails</th>
+                        <th>BlockedBy</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let attachment of attachments">
-                        <td>
+                        <td style="width: 10px;">
                             <mat-checkbox (click)="$event.stopPropagation()"
                                 (change)="toggleSelection(attachment.blokedDomainId, $event.checked)"
                                 [checked]="selectedAttachments.includes(attachment.blokedDomainId)">
                             </mat-checkbox>
                         </td>
-                        <td>{{ attachment.email }}</td>
+                        <td style="max-width: 150px;" class="wrap-text">{{ attachment.email }}</td>
+                        <td class="wrap-text">{{ attachment.blokedByuser }}</td>
                     </tr>
                 </tbody>
             </table>

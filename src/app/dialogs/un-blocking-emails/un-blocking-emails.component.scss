@@ -74,3 +74,10 @@
     border-bottom: 1px solid #dcdde3;
     height: 20px;
 }
+
+.wrap-text {
+  max-width: 200px; /* Adjust width as needed */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
