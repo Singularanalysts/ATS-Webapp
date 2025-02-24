@@ -138,6 +138,11 @@ tbody{
     height: 32px;
     padding: 0px 8px;
   }
+  .positionsearch{
+    height: 42px;
+    padding: 0px 8px;
+  }
+
 }
 .navlink {
   cursor: pointer;
@@ -341,3 +346,11 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   overflow: unset;
   display: block;
 }
+
+.mat-mdc-text-field-wrapper {
+  height: 80px;
+  flex: auto;
+  margin-top: 20px;
+  
+}
+

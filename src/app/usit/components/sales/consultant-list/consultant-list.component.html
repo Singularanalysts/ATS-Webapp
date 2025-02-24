@@ -10,14 +10,15 @@
     </span>
     <form [formGroup]="myForm">
       <div class="consultant-actions">
-        <!-- <button mat-icon-button class="add-user" (click)="uploadVendor()">
-        <mat-icon class="item-icon">upload</mat-icon>
-      </button> -->
-        <div class="form-container">
+    
+        <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position" style="width:140px;border-radius:30px;" class="positionsearch" placeholder="Search Position" (keyup)="onExperienceChange($event)">
+        <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="width:140px;border-radius:30px;margin-left:1rem;" class="positionsearch" placeholder="Search Location" (keyup)="onExperienceChange($event)">
+      
+        <div class="form-container" style="border-radius:30px">
           <ng-container *ngIf="flag !== 'presales'  && flag !== 'DomRecruiting'">
             <mat-form-field appearance="fill" style="width:8rem;margin-left:6rem;">
               <mat-label class="bold-label">Visa</mat-label>
-              <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)">
+              <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)" class="visa-select">
                 <mat-option *ngFor="let option of visadata" [value]="option[0]">
                   {{ option[1] }}
                 </mat-option>
@@ -36,9 +37,10 @@
             </mat-select>
           </mat-form-field>
         </ng-container>
+      
         <div>
           <ng-container *ngIf="flag !== 'presales' ">
-            <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right:25rem;width: 10rem;">
+            <mat-form-field appearance="fill" style="margin-top: 0.5rem; margin-right: 5rem; width: 10rem;"> <!-- Adjusted margin-top -->
               <mat-label class="bold-label">Experience</mat-label>
               <mat-select formControlName="experience" (selectionChange)="onExperienceChange($event)">
                 <mat-option *ngFor="let exp of experiences" [value]="exp">{{ exp }}</mat-option>
@@ -46,6 +48,7 @@
             </mat-form-field>
           </ng-container>
         </div>
+
         <button type="button" mat-raised-button color="primary" (click)="refreshForm()"
           *ngIf="flag !== 'presales'">Refresh</button>
       
@@ -68,8 +71,6 @@
       (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
       <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_PRESALES')}">add_circle</mat-icon>
     </button>
-
-
 
         <div class="search-consultant">
           <!-- <mat-icon class="item-icon">person_search</mat-icon> -->

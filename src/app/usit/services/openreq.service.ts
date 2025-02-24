@@ -125,7 +125,8 @@ export class OpenreqService {
     return this.http.get("mail/stop"+`/${id}`);
   }
   showBody(id : string){
-    return this.http.get("mail/body"+`/${id}`);
+    // return this.http.get("mail/body"+`/${id}`);
+    return this.http.get(`mail/body/${id}`);
   }
   saveConfiguredEmail(data: any) {
     return this.http.post("mail/emailcredentials/save", data);
@@ -190,5 +191,10 @@ export class OpenreqService {
   unblockingEmailWithId(id:any) {
     return this.http.post("mail/unblockEmails",id);
   }
+
+  blockedEmailsLists() {
+    return this.http.get("auth/users/getAllActiveUsersEmails");
+  }
+
 
 }

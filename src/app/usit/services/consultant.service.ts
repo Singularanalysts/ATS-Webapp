@@ -101,6 +101,11 @@ export class ConsultantService {
   public getrequirements() {
     return this.http.get("requirement/getrequirements");
   }
+
+  public getLocation() {
+    return this.http.get("consultant/visa/visas");
+  }
+
   public getvisa() {
     return this.http.get("consultant/visa/visas");
   }
@@ -177,6 +182,10 @@ export class ConsultantService {
   }
 
   //both
+  // getFilteredConsults(pageno: any, pagesize: any, request:any) {
+  //   return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
+  // }
+
   getFilteredConsults(pageno: any, pagesize: any, request:any) {
     return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
   }
@@ -209,8 +218,12 @@ export class ConsultantService {
     return this.http.get("consultant/getSalesExecutiveById/" + id);
   }    
   
-  public getTLdropdown(id: number) {
-    return this.http.get("consultant/technology/getskillsbyid/" + id);
+  public getTeamLeadersDropdown() {
+    return this.http.get("auth/roles/getroles");
+  }
+
+  public getExecutivesDropdown(id: any) {
+    return this.http.get("auth/users/TlDropDown/"+id);
   }
 
 }
