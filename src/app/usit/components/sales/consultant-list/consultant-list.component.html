@@ -49,7 +49,9 @@
           </ng-container>
         </div>
 
-        <button type="button" mat-raised-button color="primary" (click)="refreshForm()"
+        <button type="search" mat-raised-button color="accent" class="btn-spacing" (click)="handleExport()" *ngIf="privilegeServ.hasPrivilege('REQ_CON_EXPORT')">Export</button>
+
+        <button type="search" mat-raised-button color="primary" (click)="refreshForm()"
           *ngIf="flag !== 'presales'">Refresh</button>
       
         <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')"  *ngIf="flag === 'sales'" mat-icon-button class="add-user"

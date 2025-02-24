@@ -48,6 +48,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import {MatChipsModule} from '@angular/material/chips';
 import {_MatAutocompleteBase, MatAutocompleteModule} from '@angular/material/autocomplete';
 import { FormsModule } from '@angular/forms'; // ✅ Import FormsModule
+import { utils, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-consultant-list',
@@ -153,6 +154,9 @@ export class ConsultantListComponent
   locations: any[] = [];
   positions: any[] = [];
   searchCompanyOptions$!: Observable<any>;
+
+
+
 
   visadata: any = [];
   experiences: string[] = [];
@@ -829,7 +833,89 @@ export class ConsultantListComponent
       }
     }
 
+
+
+    handleExport() {
+      this.filterApply = true;
+      if (JSON.stringify(this.request) !== '{}') { 
+      return this.consultantServ.getFilteredConsults(1, 1000, this.request).subscribe(
+        (response: any) => {
+          this.consultant = response.data.content;
+          this.dataSource.data = response.data.content;
+          this.dataSource.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+          this.totalItems = response.data.totalElements;
+    
+          const currentDate = new Date();
+          const chicagoDate = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'America/Chicago',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+          }).format(currentDate);
+    
+          const headings = [[
+            'Date',
+            'Name',
+            'Email',
+            'Contact Number',
+            'Visa',
+            'Location',
+            'Position',
+            'Experience',
+            'Relocation',
+            'Rate',
+            'Addedby'
+          ]];
+    
+          const excelData = this.dataSource.data.map(c => [
+            c.createddate,
+            c.consultantname,
+            c.consultantemail,
+            c.contactnumber,
+            c.visa_status,
+            c.currentlocation,
+            c.position,
+            c.experience,
+            c.relocation,
+            c.hourlyrate,
+            c.pseudoname
+          ]);
+    
+          const wb = utils.book_new();
+          const ws: any = utils.json_to_sheet([]);
+          utils.sheet_add_aoa(ws, headings);
+          utils.sheet_add_json(ws, excelData, { origin: 'A2', skipHeader: true });
+          utils.book_append_sheet(wb, ws, 'data');
+          writeFile(wb, 'Recruitment-Consultants@' + chicagoDate + '.xlsx');
+        }
+      ); // <-- Missing closing parenthesis added here
+    
+
+  }else{
+
+    this.dataToBeSentToSnackBar.panelClass = [
+      'custom-snack-failure',
+    ];
+    this.dataToBeSentToSnackBar.message ='Filter Data Not Selected';
+
+    this.snackBarServ.openSnackBarFromComponent(
+      this.dataToBeSentToSnackBar
+    );
+    return null;
+  }
+   
 }
+
+
+
+  }
+
 
 export class FilterRequest {
   position: any;

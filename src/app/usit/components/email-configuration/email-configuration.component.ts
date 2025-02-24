@@ -549,7 +549,7 @@ export class EmailConfigurationComponent {
     }
 
     window.location.reload(); // Reload the entire page
-   this.statusCallMethod(element.email);
+  //  this.statusCallMethod(element.email);
 
   //  this.statusCallMethod(element.email);
 
