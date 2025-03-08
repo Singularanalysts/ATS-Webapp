@@ -321,7 +321,7 @@ export class ConsultantListComponent
       ||
       this.flag.toLocaleLowerCase() === 'domrecruiting'
     ) {
-      this.dataTableColumns.splice(15, 0, 'AddedBy');
+      this.dataTableColumns.splice(13, 0, 'AddedBy');
     }
     if (
       this.flag.toLocaleLowerCase() === 'recruiting' ||
@@ -332,6 +332,11 @@ export class ConsultantListComponent
         this.dataTableColumns.splice(priorityIndex, 1);
       }
     }
+
+    if (this.flag.toLocaleLowerCase() === 'sales') {
+      this.dataTableColumns.splice(this.dataTableColumns.length - 2, 0, 'AssignTo'); 
+    }
+
   }
 
   /**

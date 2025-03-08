@@ -104,6 +104,10 @@ export class EmailExtractionComponent implements OnInit {
     this.getAll();
   }
 
+  refresh() {
+    this.getAll();
+  }
+
   getAll(pagIdx = 1) {
     const pagObj = {
       pageNumber: pagIdx,

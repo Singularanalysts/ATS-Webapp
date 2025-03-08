@@ -163,9 +163,11 @@ tbody {
   top: 0;
   overflow: hidden;
   background-color: rgb(228, 231, 234);
+  width: 100%;
 }
 
 .header-text {
+  white-space: nowrap;
   padding-left: 8px;
   font-weight: 600;
 }
@@ -375,4 +377,12 @@ ul.breadcrumb li:last-child {
 
 .edit-icon {
   color: rgb(99, 98, 98);
+}
+
+.back-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; /* Center vertically if needed */
+  margin-left: 50px; /* Adjust this value to move it slightly right */
 }

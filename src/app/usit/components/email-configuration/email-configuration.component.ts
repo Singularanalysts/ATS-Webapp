@@ -544,6 +544,11 @@ export class EmailConfigurationComponent {
     });
   }
 
+
+  goBack(): void {
+    this.router.navigate(['/usit/email-extraction-list']);
+  }
+
   extractEmails(element: any) {
     const extractEmail = {
       userid: this.userid,
