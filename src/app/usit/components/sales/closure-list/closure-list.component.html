@@ -136,6 +136,12 @@
                             <th mat-header-cell *matHeaderCellDef> Project Start Date </th>
                             <td mat-cell *matCellDef="let element"> {{element?.projectstartdate}} </td>
                         </ng-container>
+
+                         <!-- Project Start Date Column -->
+                         <ng-container matColumnDef="ProjectEndDate">
+                            <th mat-header-cell *matHeaderCellDef> Project End Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element?.projectendtdate}} </td>
+                        </ng-container>
     
                         <!-- Vendor AR Contact Column -->
                         <ng-container matColumnDef="VendorArContact">

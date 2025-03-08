@@ -49,6 +49,7 @@ export class HotListComponent implements OnInit {
     'Relocation',
     'Phone',
     'Email',
+    'AssignTo'
   ];
 
   //lavanya
@@ -124,7 +125,7 @@ export class HotListComponent implements OnInit {
     this.getAllData();
 
      //lavanya
-     this.getvisa();
+    //  this.getvisa();
      this.generateExperienceRanges();
      this.myForm = this.formBuilder.group({
        visa: [null], // Set default value if needed
@@ -253,6 +254,10 @@ export class HotListComponent implements OnInit {
           case 'Email':
           return (
             (isAsc ? 1 : -1) * (a.consultantemail || '').localeCompare(b.consultantemail || '')
+          );
+          case 'AssignTo':
+          return (
+            (isAsc ? 1 : -1) * (a.assignto || '').localeCompare(b.assignto || '')
           );
         default:
           return 0;

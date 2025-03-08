@@ -398,7 +398,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
         this.vendorObj.companytype = formVal.companytype;
         this.vendorObj.tyretype = formVal.tyretype;
         this.vendorObj.client = formVal.client;
-        this.vendorObj.addedby = localStorage.getItem('userid');;
+        this.vendorObj.addedby = this.data.vendorData.addedby ;
         this.vendorObj.email = formVal.email;
         this.vendorObj.updatedby = localStorage.getItem('userid');
         this.vendorObj.headquerter = formVal.headquerter;

@@ -45,6 +45,7 @@ export class ClosureListComponent implements OnInit, OnDestroy {
     'BillingCycle',
     'PaymentCycle',
     'ProjectStartDate',
+    'ProjectEndDate',
     'VendorArContact'
   ];
   flag!: string;
