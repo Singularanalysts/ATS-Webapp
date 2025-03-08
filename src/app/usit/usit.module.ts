@@ -8,6 +8,11 @@ import { AddFulltimeResumeComponent } from './components/consultant-components/c
 
 @NgModule({
   declarations: [
+  
+    
+  
+    
+  
   ],
   imports: [
     CommonModule,

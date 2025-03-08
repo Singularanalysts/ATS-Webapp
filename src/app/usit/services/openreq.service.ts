@@ -62,6 +62,9 @@ export class OpenreqService {
   getOpenReqsById(id:number) {
     return this.http.get("openreqs/dice/getByReqId/"+id);
   }
+  getreportemail(id:any){
+    return this.http.get("mail/getEmailExtractionReport/"+id)
+  }
 
   getOpenFulltimeReqsById(id:number) {
     return this.http.get("openreqs/dice/getByFulltimeReqId/"+id);

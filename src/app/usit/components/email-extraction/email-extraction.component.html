@@ -50,9 +50,12 @@
                 *ngIf="this.role !== 'Super Administrator'">
                 Extract Emails
             </button> -->
+            
             <div>
                 <mat-icon class="settings-icon" (click)="navigateBack()">settings</mat-icon>
             </div>
+      
+           
 
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search" (keyup)="applyFilter($event)">

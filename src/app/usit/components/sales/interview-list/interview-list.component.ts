@@ -59,13 +59,13 @@ export class InterviewListComponent implements OnInit, OnDestroy{
     'InterviewId',
     'ConsultantName',
     'DateAndToI',
-    'Round',
     'Mode',
     'Vendor',
     'ImplementationPartner',
     'Client',
     'DateOfSubmission',
     'EmployeerName',
+    'Round',
     'InterviewStatus',
     'Action',
   ];
@@ -85,6 +85,7 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   ser: number = 1;
   userid!: any;
   field = "empty";
+  intridList:any
   currentPageIndex = 0;
   pageEvent!: PageEvent;
   pageSize = 50;
@@ -125,23 +126,30 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   }
 
 
-  getAll(pagIdx=1 ) {
+ 
+  feedbackData: { [key: number]: string } = {}; 
+
+  getAll(pagIdx = 1) {
     this.userid = localStorage.getItem('userid');
-    this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, this.field,
-      this.sortField,
-      this.sortOrder)
-    .pipe(takeUntil(this.destroyed$)).subscribe(
-      (response: any) => {
+    this.interviewServ.getPaginationlist(
+      this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, 
+      this.field, this.sortField, this.sortOrder
+    )
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((response: any) => {
         this.entity = response.data.content;
         this.dataSource.data = response.data.content;
-        this.totalItems = response.data.totalElements;
-        // for serial-num {}
-        this.dataSource.data.map((x: any, i) => {
+  
+        this.dataSource.data.forEach((x: any, i) => {
           x.serialNum = this.generateSerialNumber(i);
+          this.feedbackData[x.intrid] = x.feedback || "No feedback available"; 
         });
-      }
-    )
+  
+        this.totalItems = response.data.totalElements;
+    });
   }
+  
+
 
   addInterview() {
     const actionData = {
