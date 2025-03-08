@@ -166,7 +166,10 @@ export class EmailConfigurationComponent {
       )
     }
   
-
+    reportemail(){
+      this.router.navigate(['/usit/report-email']);
+  
+    }
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;

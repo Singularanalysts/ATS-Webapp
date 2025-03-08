@@ -192,6 +192,7 @@ export class EmailExtractionComponent implements OnInit {
   navigateBack() {
     this.router.navigate(['/usit/email-configuration']);
   }
+ 
   processEmailsForKeys(obj: any, keys: string[]) {
     keys.forEach(key => {
       if (obj[key]) {

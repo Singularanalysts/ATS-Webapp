@@ -67,6 +67,8 @@ import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-com
 import { TimeSheetsComponent } from './components/time-sheets/time-sheets.component';
 
 import { TaggedcountReportComponent } from './components/reports/taggedcount-report/taggedcount-report.component';
+import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
+import { ReportEmailComponent } from './components/email-extraction/report-email/report-email.component';
 
 
 const routes: Routes = [
@@ -254,6 +256,7 @@ const routes: Routes = [
   {
     path: 'taggedcount-report', component: TaggedcountReportComponent
   },
+  {path:'executive-ratings',component:ExecutiveRatingsComponent},
   {
     path: 'open-reqs-report', component: OpenRequirementsReportsComponent
   },
@@ -327,6 +330,7 @@ const routes: Routes = [
   {
     path: 'candidate-reports', component: CandidateReportComponent,
   },
+  {path:'report-email',component:ReportEmailComponent},
   // {
   //   path: 'tcvr', component: ClientInformationComponent,
   // },
