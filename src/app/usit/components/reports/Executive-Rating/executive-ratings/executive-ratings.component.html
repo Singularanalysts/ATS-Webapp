@@ -1,0 +1,91 @@
+<div class="submission-container">
+    <ul class="breadcrumb">
+        <li><a (click)="navigateToDashboard()">Home</a></li>
+        <li class="last">Executive Ratings</li>
+    </ul>
+    <div class="header-container mat-elevation-z1">
+        <span class="header-text">
+            Executive Ratings
+        </span>
+        <div class="submission-actions">
+            <button *ngIf="privilegeServ.hasPrivilege('ADD_RATINGS')" 
+            mat-icon-button matTooltip="Add" matTooltipPosition="left" 
+            class="add-submission" 
+            (click)="addRating()">
+        <mat-icon class="custom-icon">add_circle</mat-icon>
+    </button>
+    
+            <div class="search-submission">
+                <input matInput type="text" class="search" placeholder="search Ratings" (keyup)="applyFilter($event)">
+            </div>
+
+        </div>
+    </div>
+    <div id="table-container" class="table-wrapper">
+        <section class="mat-elevation-z8 interview-table-style"   *ngIf="privilegeServ.hasPrivilege('LIST_RATINGS')" >
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
+                <ng-container matColumnDef="SerialNum">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number">
+                        S.No </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Rating">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Rating">
+                        Rating </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.rating}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Feedback">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Feedback">
+                        Feedback </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.remarks}} </td>
+                </ng-container>
+                <ng-container matColumnDef="RatedTo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by RatedTo">
+                        RatedTo</th>
+                    <td mat-cell *matCellDef="let element"> {{element?.rated_to}} </td>
+                </ng-container>
+                <ng-container matColumnDef="RatedBy">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by RatedBy">
+                        RatedBy </th>
+                    <td mat-cell *matCellDef="let element"> {{element?.rated_by}} </td>
+                </ng-container>
+              
+                <!-- Action Column -->
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let rating">
+
+                        <button  *ngIf="privilegeServ.hasPrivilege('EDIT_RATINGS')"  mat-icon-button (click)="editRating(rating.id)" class="action-button-ed">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button  *ngIf="privilegeServ.hasPrivilege('DELETE_RATINGS')"  mat-icon-button (click)="deleteRating(rating.id)" class="action-button-ed">
+                            <mat-icon class="delete-icon">delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+            </table>
+            <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+
+        </section>
+        <hr>
+    </div>
+    <div class="paginator">
+    
+        <mat-paginator 
+    (page)="handlePageEvent($event)" 
+    [length]="totalItems" 
+    [pageSize]="itemsPerPage" 
+    [showFirstLastButtons]="showFirstLastButtons"
+    [pageSizeOptions]="pageSizeOptions"
+    [hidePageSize]="false"
+    [pageIndex]="currentPageIndex" 
+    aria-label="Select page">
+</mat-paginator>
+
+    </div>
+</div>

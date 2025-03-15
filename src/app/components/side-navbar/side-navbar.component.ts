@@ -494,6 +494,7 @@ myRoles(){
               "routerLink": "/usit/employee-report",
               "roles":["Super Administrator"]  
             },
+            
             {
               "test": "Sourcing Reports",
               "text": "Sourcing Reports",
@@ -528,6 +529,13 @@ myRoles(){
               "icon": "contact_page",
               "routerLink": "/usit/taggedcount-report",
               "roles":["Super Administrator"]  
+            },
+            {
+              "test": "Employee Reports",
+              "text": "Executive Ratings",
+              "icon": "star",
+              "routerLink": "/usit/executive-ratings",
+              "roles": ["Super Administrator"]
             }
           ]
         },
@@ -746,6 +754,8 @@ myRoles(){
     }
 
   });
+  console.log(this.menuData,'menudata');
+  
 
     this.menuData = menuData;
     // console.log("Lak final data-----------"+JSON.stringify(this.menuData));

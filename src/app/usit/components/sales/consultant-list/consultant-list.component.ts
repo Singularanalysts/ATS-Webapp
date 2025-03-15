@@ -43,7 +43,7 @@ import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from 'src/app/core/services/api.service';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatChipInputEvent } from '@angular/material/chips';
 import {MatChipsModule} from '@angular/material/chips';
 import {_MatAutocompleteBase, MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -173,6 +173,38 @@ export class ConsultantListComponent
     { code: 'P9', desc: 'P9 - 3rd party consultant' },
     { code: 'P10', desc: 'P10' },
   ]
+  selectedPriorityOptions = new Set<string>();
+
+  onPriorityChange(event: any): void {
+    const selectedValues = event.value;
+    this.selectedPriorityOptions = new Set(selectedValues); // Track selected values
+  
+    // If all checkboxes are unchecked, call getAllData
+    if (this.selectedPriorityOptions.size === 0) {
+      this.getAllData(1);
+      return;
+    }
+  
+    // Get other form values
+    const position = this.myForm.get('position')?.value;
+    const location = this.myForm.get('location')?.value;
+    const visa = this.myForm.get('visa')?.value;
+    const experience = this.myForm.get('experience')?.value;
+    const consultantflg = this.flag;
+  
+    // Prepare request payload
+    this.request = {
+      position,
+      location,
+      visaStatus: visa,
+      priority: Array.from(this.selectedPriorityOptions), // Convert Set to Array
+      experience,
+      consultantflg
+    };
+  
+    this.filterData(this.request, this.page);
+  }
+  
   http: any;
   filteredConsultants: any;
   myForm: any;
@@ -187,7 +219,14 @@ export class ConsultantListComponent
     });
 
   }
+  // generateExperienceRanges() {
+  //   for (let i = 0; i <= 30; i += 5) {
+  //     const range = `${i}-${i + 5}`;
+  //     this.experiences.push(range);
+  //   }
+  // }
   generateExperienceRanges() {
+    this.experiences = [];
     for (let i = 0; i <= 30; i += 5) {
       const range = `${i}-${i + 5}`;
       this.experiences.push(range);
@@ -207,6 +246,8 @@ export class ConsultantListComponent
   ngOnInit(): void {
     this.filteredLocations = this.visadata; // Initialize with all locations
     const mvt = this.privilegeServ.hasPrivilege('MOVETOSALES_PRESALES');
+     console.log(mvt,'mvtttttt');
+     
     if (mvt) {
       this.move2sales = true;
     }
@@ -235,6 +276,8 @@ export class ConsultantListComponent
     return this.consultantServ.getFilteredConsults(page,this.pageSize ,request).subscribe(
       ((response: any) => {
         this.consultant = response.data.content;
+        console.log(this.consultant,'consultantttt');
+        
         this.dataSource.data = response.data.content;
         this.dataSource.data.map((x: any, i) => {
           x.serialNum = this.generateSerialNumber(i);
@@ -244,24 +287,6 @@ export class ConsultantListComponent
     );
 
 
-    
-    // this.consultantServ.getFilteredConsults(request,1,this.pageSize )
-    //   .subscribe(
-    //     (response: any) => {
-          
-    //       this.dataSource.data = response.data.content;
-    //       // Reassign serial numbers after filtering
-    //       this.dataSource.data.map((item: any, index: number) => {
-    //         item.serialNum = index + 1;
-    //         return item;
-    //       });
-          
-    //     },
-    //     (error: any) => {
-    //       // Handle errors here
-    //       console.error('An error occurred:', error);
-    //     }
-    //   );
    
   }
 
@@ -277,6 +302,47 @@ export class ConsultantListComponent
       this.visadata = response.data;
     });
   }
+  selectedVisaOptions = new Set<string>(); // Store selected visa options
+
+  onVisaChange(event: MatSelectChange): void {
+    this.selectedVisaOptions = new Set(event.value); // Update selected options
+  
+    // Update form control with selected values
+    this.myForm.get('visa')?.setValue(Array.from(this.selectedVisaOptions));
+  
+    if (this.selectedVisaOptions.size === 0) {
+      // If no visa options are selected, fetch all data
+      this.getAllData(1);
+    } else {
+      // Otherwise, call the filter API
+      this.triggerFilterAPI();
+    }
+  }
+  
+
+triggerFilterAPI(): void {
+  const request = {
+    position: this.myForm.get('position')?.value,
+    location: this.myForm.get('location')?.value,
+    visaStatus: Array.from(this.selectedVisaOptions), // Pass selected visa values
+    priority: this.myForm.get('priority')?.value,
+    experience: this.myForm.get('experience')?.value,
+    consultantflg: this.flag
+  };
+
+  this.filterApply = true;
+  this.consultantServ.getFilteredConsults(this.page, this.pageSize, request).subscribe((response: any) => {
+    this.consultant = response.data.content;
+    console.log(this.consultant, 'consultantttt');
+
+    this.dataSource.data = response.data.content;
+    this.dataSource.data.forEach((x: any, i: number) => {
+      x.serialNum = this.generateSerialNumber(i);
+    });
+    this.totalItems = response.data.totalElements;
+  });
+}
+
   
   //
   ngAfterViewInit() {
@@ -795,23 +861,57 @@ export class ConsultantListComponent
   }
   //lavanya
   request = new FilterRequest();
-  onExperienceChange(event: any): void {
-    const position = this.myForm.get('position').value;
-    const location = this.myForm.get('location').value;
-    const visa = this.myForm.get('visa').value;
-    const priority = this.myForm.get('priority').value;
-    const experience = this.myForm.get('experience').value;
-    const consultantflg =this.flag;
+  // onExperienceChange(event: any): void {
+  //   const position = this.myForm.get('position').value;
+  //   const location = this.myForm.get('location').value;
+  //   const visa = this.myForm.get('visa').value;
+  //   const priority = this.myForm.get('priority').value;
+  //   const experience = this.myForm.get('experience').value;
+  //   const consultantflg =this.flag;
     
-    this.request.position = position;
-    this.request.location = location;
-    this.request.visaStatus = visa;
-    this.request.priority = priority;
-    this.request.experience = experience;
-    this.request.consultantflg=consultantflg;
+  //   this.request.position = position;
+  //   this.request.location = location;
+  //   this.request.visaStatus = visa;
+  //   this.request.priority = priority;
+  //   this.request.experience = experience;
+  //   this.request.consultantflg=consultantflg;
 
-    this.filterData(this.request,this.page);
+  //   this.filterData(this.request,this.page);
+  // }
+  selectedExperienceOptions = new Set<string>();
+
+  onExperienceChange(event: any): void {
+    const selectedValues = event.value;
+    this.selectedExperienceOptions = new Set(selectedValues); // Track selected values
+  
+    // If all checkboxes are unchecked, call getAllData
+    if (this.selectedExperienceOptions.size === 0) {
+      this.getAllData(1);
+      return;
+    }
+  
+    // Get other form values
+    const position = this.myForm.get('position')?.value;
+    const location = this.myForm.get('location')?.value;
+    const visa = this.myForm.get('visa')?.value;
+    const priority = this.myForm.get('priority')?.value;
+    const consultantflg = this.flag;
+  
+    // Prepare request payload
+    this.request = {
+      position,
+      location,
+      visaStatus: visa,
+      priority,
+      experience: Array.from(this.selectedExperienceOptions), // Convert Set to Array
+      consultantflg
+    };
+  
+    this.filterData(this.request, this.page);
   }
+  
+
+
   
   refreshForm(): void {
     this.myForm.reset(); // Reset all form controls

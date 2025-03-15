@@ -215,7 +215,7 @@ ul.breadcrumb li a:hover {
 }
 
 .sourcing-card {
-  padding-bottom: 10px;
+  padding-bottom: 24px;
 }
 
 .sourcing-card .card {
@@ -300,13 +300,13 @@ mat-typography p {
 }
 
 .mat-mdc-card.activity-card-individual {
-  height: 548px;
+  height: 389px;
   padding: 15px;
   overflow-y: auto;
 }
 
 .mat-mdc-card.activity-card {
-  height: 678px;
+  height: 710px;
   padding: 15px;
   overflow-y: auto;
 }
@@ -475,8 +475,102 @@ b {
 }
 
 .mat-mdc-card.activity-card {
-  height: 760px;
+  height: 598px;
   padding: 15px;
   overflow-y: auto;
 }
+
+.rating-card {
+  margin-bottom: 7px;
+  position: relative;
+  bottom: 11px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between; /* Positions menuSub dropdown to the right */
+  align-items: center;
+}
+.performanceratingcard{
+  height: 140px;
+    }
+.no-data{
+  text-align: center;
+    padding: 25px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.ratingcontent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rating-layout {
+  display: flex;
+  align-items: center;
+  gap: 25px; 
+}
+
+.rating-icon {
+  font-size: 43px;
+  background: #d2f7d9;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #3cdf86;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  margin-left: 10px;
+}
+
+.rating-details {
+  text-align: left;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+}
+
+.stars {
+  display: flex;
+}
+
+.ratingstar {
+  color: #FDCC0D;
+  font-size: 23px;
+  margin-right: 3px;
+}
+
+.rating-value {
+  font-size: 18px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.ratingname {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.87);
+  margin-bottom: 2px;
+  font-size: 13px;
+
+}
+.best-performer-text {
+  font-size: 12px;
+  font-weight: bold;
+  color: #161616;
+  background-color: #74e1b8;
+  padding: 6px 4px;
+  border-radius: 12px;
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  margin-right: 7px;
+}
+
+
 
