@@ -91,7 +91,6 @@ export class DashboardComponent implements OnInit {
   interviewFlag = 'daily';
   submissionFlag = 'daily';
   sourcingFlag = 'daily';
-
   closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
   submissionFlagInd = 'daily';
@@ -145,7 +144,36 @@ export class DashboardComponent implements OnInit {
   startDateControl: FormControl | undefined;
   endDateControl: FormControl | undefined;
   public dialog= inject(MatDialog);
-
+  ratingflag: string = 'Monthly'; // Default selection
+  selectedFilter: string = 'monthly'; // Default API filter
+  performanceData: any = null; // Holds the fetched data
+  
+  sourcingCountRating(filterType: string, displayName: string) {
+    this.ratingflag = displayName; // Update UI label
+    this.selectedFilter = filterType; // Update API filter
+    
+    this.getPerformanceRatings(filterType);
+  }
+  
+  getPerformanceRatings(filter?: string) {
+    this.privilegeServ.getPerformanceRatings(filter).subscribe({
+      next: (response: any) => {
+        this.performanceData = response.data;
+        this.calculateStars(response.data.avg_rating);
+      },
+      error: (error: any) => {
+        console.error('Error fetching ratings:', error);
+      }
+    });
+  }
+  fullStars:any
+  halfStar:any
+  // Compute full and half stars
+  calculateStars(avgRating: number) {
+    const fullStarsCount = Math.floor(avgRating);
+    this.fullStars = Array(fullStarsCount).fill(0); // Array of full stars
+    this.halfStar = avgRating % 1 !== 0; // Show half star if needed
+  }
 // pagination code
 page: number = 1;
 itemsPerPage = 50;
@@ -218,7 +246,14 @@ pageSizeOptions = [50, 75, 100];
   department!: any;
   sourcingLead = true;
   ngOnInit(): void {
+    this.getPerformanceRatings(this.ratingflag)
+const previlage= localStorage.getItem('privileges')
+console.log(previlage,'previlage');
+
     const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
+
+    console.log(shoWresult,'shoWresult');
+    
     if (shoWresult) {
       this.showReport = true;
     } else {

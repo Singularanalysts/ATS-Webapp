@@ -110,7 +110,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   dom_interview: any[] = [];
   dom_closures: any[] = [];
   talentpool: any[] = [];
-
   projects: any[] = [];
   tcvr: any[] = [];
   view_employee_profile: any[] = [];
@@ -125,6 +124,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   excel_export: any[] = [];
 
   docsynch: any[] = [];
+  ratings:any[]=[]
 
   // snackbaran
   dataToBeSentToSnackBar: ISnackBarData = {
@@ -237,7 +237,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.excel_export = response.data.excel_export;
              
         this.docsynch = response.data.docsynch;
-
+        this.ratings=response.data.ratings
         this.selecedPrivileges();
         this.mapResponseData();
         // this.selecedPrivileges();
@@ -612,6 +612,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.reports.every((priv: any) => priv.selected === true)
           : false,
       },
+
      
       {
         title: 'View Employee Profile',
@@ -679,7 +680,14 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         isSelected: this.docsynch
           ? this.docsynch.every((priv: any) => priv.selected === true)
           : false,
-      }
+      },
+      {
+        title: 'Ratings',
+        privileges: this.ratings,
+        isSelected: this.ratings
+          ? this.ratings.every((priv: any) => priv.selected === true)
+          : false,
+      },
 
     );
     
@@ -1423,6 +1431,17 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         if (this.docsynch != null) {
           this.docsynch.forEach((ele) => {
             response.data.docsynch.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+        if (this.ratings != null) {
+          this.ratings.forEach((ele) => {
+            response.data.ratings.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;

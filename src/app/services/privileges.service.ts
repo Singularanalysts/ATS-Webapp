@@ -33,7 +33,12 @@ export class PrivilegesService {
   addPrevilegeToRole(entity: any) {
     return this.apiServ.post("auth/priviliges/addprevtorole", entity);
   }
-
+addratings(payload:any){
+  return this.apiServ.post("report/rating/saveRatings",payload)
+}
+getratingsbyId(id:any){
+  return this.apiServ.get ("report/rating/getRatingsbyid/" +id)
+}
   hasPrivilege(priv: string): boolean {
     let privilagesArr: string[] = [];
     const arr = localStorage.getItem('privileges');
@@ -42,5 +47,20 @@ export class PrivilegesService {
     }
     return privilagesArr.includes(priv);
   }
+ getRateddata(payload:any){
+  return this.apiServ.post("report/rating/getRatings",payload)
+ }
+ deleteRating(id:any){
+  return this.apiServ.delete("report/rating/deleteRatings/" + id)
+ }
+ getdropdownmanager(id:any){
+  return this.apiServ.get("report/rating/getTlsDropdown/" +id)
+ }
+ getdropdownexecutive(tlId:any){
+  return this.apiServ.get("report/rating/getExicutivesDropdown/" +tlId)
 
+ }
+ getPerformanceRatings(data:any){
+  return this.apiServ.get("report/rating/getBestPerformer/" + data)
+ }
 }

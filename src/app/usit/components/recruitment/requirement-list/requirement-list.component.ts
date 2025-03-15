@@ -116,15 +116,42 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     this.getFlag();
     this.getAllData();
   }
-
-  getFlag(){
+  getFlag() {
     const routeData = this.activatedRoute.snapshot.data;
     if (routeData['isRecRequirement']) {
       this.flag = "Recruiting";
     } else {
       this.flag = "Domrecruiting";
     }
+  
+    console.log(this.flag, 'flagggggg');
+  
+    // Dynamically set columns based on flag
+    this.setTableColumns();
   }
+  
+  setTableColumns() {
+    this.dataTableColumns = [
+      'SerialNum',
+      'RequirementNumber',
+      'Date',
+      'JobTitle',
+      'Location',
+      'IPVendor',
+      'EmployementType',
+      'AddedBy',
+      'Submitted',
+      'Status',
+      'Action',
+    ];
+  
+    if (this.flag === "Recruiting") {
+      this.dataTableColumns.splice(7, 0, 'AssignedTo'); // Add "AssignedTo" at the correct index
+    }
+  
+    console.log(this.dataTableColumns, 'Updated Columns');
+  }
+  
 
   getAllData(currentPageIndex = 1) {
     const dataToBeSentToSnackBar: ISnackBarData = {

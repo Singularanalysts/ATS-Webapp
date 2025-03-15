@@ -233,6 +233,8 @@ export class AddRequirementComponent {
     } else {
       this.flag = 'Domrecruiting';
     }
+    console.log(this.flag,'flagform')
+    
   }
 
   private initializeRequirementForm(requirementData: any) {
@@ -249,7 +251,10 @@ export class AddRequirementComponent {
       jobdescription: [requirementData ? requirementData.jobdescription : '', Validators.required],
       duration: [requirementData ? requirementData.duration : '', Validators.required],
       technology: [requirementData ? requirementData.technology : '', [Validators.required, , this.techSelectionValidator()]],
-      empid: [requirementData ? requirementData.empid : '', Validators.required],
+      empid: [
+        requirementData ? requirementData.empid : '',
+        this.data.flag === 'Recruiting' ? Validators.required : []
+      ],
       recruiter: [requirementData ? requirementData.recruiter : '', [Validators.required]],
       pocphonenumber: [requirementData ? requirementData.pocphonenumber : ''],
       pocemail: [requirementData ? requirementData.pocemail : ''],
@@ -298,8 +303,18 @@ export class AddRequirementComponent {
         }
       );
     }
+    this.updateEmpidValidation();
 
   }
+  private updateEmpidValidation() {
+    if (this.data.flag === 'Recruiting') {
+      this.requirementForm.get('empid')?.setValidators(Validators.required);
+    } else {
+      this.requirementForm.get('empid')?.clearValidators();
+    }
+    this.requirementForm.get('empid')?.updateValueAndValidity();
+  }
+  
 
   techSelectionValidator() {
     return (control: AbstractControl) => {
@@ -444,6 +459,12 @@ export class AddRequirementComponent {
 
   onSubmit() {
     this.submitted = true;
+    if (this.data.flag === 'Recruiting' && (!this.requirementForm.get('empid')?.value || this.requirementForm.get('empid')?.value.length === 0)) {
+      this.requirementForm.get('empid')?.setErrors({ required: true });
+    } else {
+      this.requirementForm.get('empid')?.setErrors(null);
+    }
+    
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 2500,
@@ -486,6 +507,8 @@ export class AddRequirementComponent {
                this.data.actionName === 'add-requirement'
                  ? 'Requirement added successfully'
                  : 'Requirement updated successfully';
+                 console.log(resp,'requremrntdata');
+                 
              this.dialogRef.close();
            } else {
              dataToBeSentToSnackBar.message = resp.message ? resp.message : 'Requirement already Exists';
