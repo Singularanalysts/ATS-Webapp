@@ -61,14 +61,31 @@
               >
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <!-- <mat-form-field appearance="fill">
               <mat-label>Select Employee</mat-label>
               <mat-select formControlName="employee">
                 <mat-option *ngFor="let employee of employees" [value]="employee[0]">
                   {{ employee[1] }}
                 </mat-option>
               </mat-select> 
+            </mat-form-field> -->
+            <mat-form-field appearance="fill">
+              <mat-label>Select Employee</mat-label>
+              <input 
+                type="text"
+                matInput
+                [formControl]="employeeSearchControl"
+                [matAutocomplete]="auto"
+                placeholder="Search Employee"
+              />
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onEmployeeSelected($event)">
+                <mat-option *ngFor="let employee of filteredEmployees" [value]="employee">
+                  {{ employee[1] }}
+                </mat-option>
+              </mat-autocomplete>
             </mat-form-field>
+            
+            
 
             <button mat-raised-button color="primary">Submit</button>
             <button mat-raised-button color="warn" (click)="reset()">Reset</button

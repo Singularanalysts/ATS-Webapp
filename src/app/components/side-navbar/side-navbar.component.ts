@@ -530,8 +530,10 @@ myRoles(){
               "routerLink": "/usit/taggedcount-report",
               "roles":["Super Administrator"]  
             },
+      
+            
             {
-              "test": "Employee Reports",
+              "test": "Ratings",
               "text": "Executive Ratings",
               "icon": "star",
               "routerLink": "/usit/executive-ratings",
@@ -641,6 +643,7 @@ myRoles(){
           "icon": "assignment",
           "routerLink": "/usit/quiz-result",
          "roles":["Super Administrator"] 
+         
         }
       ]
     },
