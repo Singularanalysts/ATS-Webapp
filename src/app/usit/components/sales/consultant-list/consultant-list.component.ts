@@ -861,23 +861,23 @@ triggerFilterAPI(): void {
   }
   //lavanya
   request = new FilterRequest();
-  // onExperienceChange(event: any): void {
-  //   const position = this.myForm.get('position').value;
-  //   const location = this.myForm.get('location').value;
-  //   const visa = this.myForm.get('visa').value;
-  //   const priority = this.myForm.get('priority').value;
-  //   const experience = this.myForm.get('experience').value;
-  //   const consultantflg =this.flag;
+  ondataChange(event: any): void {
+    const position = this.myForm.get('position').value;
+    const location = this.myForm.get('location').value;
+    const visa = this.myForm.get('visa').value;
+    const priority = this.myForm.get('priority').value;
+    const experience = this.myForm.get('experience').value;
+    const consultantflg =this.flag;
     
-  //   this.request.position = position;
-  //   this.request.location = location;
-  //   this.request.visaStatus = visa;
-  //   this.request.priority = priority;
-  //   this.request.experience = experience;
-  //   this.request.consultantflg=consultantflg;
+    this.request.position = position;
+    this.request.location = location;
+    this.request.visaStatus = visa;
+    this.request.priority = priority;
+    this.request.experience = experience;
+    this.request.consultantflg=consultantflg;
 
-  //   this.filterData(this.request,this.page);
-  // }
+    this.filterData(this.request,this.page);
+  }
   selectedExperienceOptions = new Set<string>();
 
   onExperienceChange(event: any): void {
