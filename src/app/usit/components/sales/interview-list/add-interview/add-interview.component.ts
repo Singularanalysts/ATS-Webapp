@@ -102,6 +102,17 @@ export class AddInterviewComponent implements OnInit {
     return this.interviewForm.controls;
   }
 
+  
+
+  getFlag(type: string) {
+    if (type === 'sales') {
+      this.flag = 'sales';
+    } else if (type === 'recruiting') {
+      this.flag = "Recruiting";
+    } else {
+      this.flag = 'Domrecruiting';
+    }
+  }
   ngOnInit(): void {
     this.getFlag(this.data.flag.toLocaleLowerCase());
     this.getsubdetails(this.flag);
@@ -120,6 +131,8 @@ export class AddInterviewComponent implements OnInit {
       this.initializeInterviewForm(new InterviewInfo());
       this.interviewServ.getEntity(this.data.interviewData.intrid).subscribe(
         (response: any) => {
+          console.log(response,'response');
+          
           // const ctc = response.data.submission.ratetype;
           // if((ctc=='1099' || ctc=='W2') && this.flag != 'sales'){
           //   this.paymentwithctc = "Pay Rate To Consultant";
@@ -143,17 +156,6 @@ export class AddInterviewComponent implements OnInit {
       this.initializeInterviewForm(new InterviewInfo());
     }
   }
-
-  getFlag(type: string) {
-    if (type === 'sales') {
-      this.flag = 'sales';
-    } else if (type === 'recruiting') {
-      this.flag = "Recruiting";
-    } else {
-      this.flag = 'Domrecruiting';
-    }
-  }
-
   private initializeInterviewForm(interviewData: any) {
     this.interviewForm = this.formBuilder.group({
       submission: [interviewData ? interviewData.submission : '', [Validators.required]],

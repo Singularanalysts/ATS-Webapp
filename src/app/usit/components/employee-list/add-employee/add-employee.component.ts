@@ -335,6 +335,8 @@ export class AddEmployeeComponent {
         next: (response: any) => {
           this.rolearr = response.data;
           this.roleOptions = response.data;
+          console.log(this.roleOptions,'roleoptionss');
+          
         },
         error: (err) => {
           this.dataTobeSentToSnackBarService.message = err.message;

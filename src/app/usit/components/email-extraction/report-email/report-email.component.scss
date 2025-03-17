@@ -1,4 +1,4 @@
-.hot-list-container {
+.submission-container {
     display: flex;
     flex-direction: column;
     height: calc(100vh - 68px);
@@ -43,14 +43,19 @@
   
   table {
     width: 100%;
+  
   }
   
   .mat-mdc-header-row {
     background-color: rgb(213, 231, 231);
-
+    position: sticky;
     top: 0;
   }
-
+  
+  thead {
+    position: sticky;
+    top: 0;
+  }
   
   tbody {
     text-align: left;
@@ -66,27 +71,27 @@
   
   .mat-column-Designation {
     width: 32px;
-    border-right: 1px solid lightgray;
+    border-right: 1px solid lightgray !important;
     padding-right: 24px;
   }
   
   .mat-column-Name {
-    border-right: 1px solid lightgray;
+    border-right: 1px solid lightgray !important;
   }
   
   .mat-column-SerialNum,
-  .mat-column-Name,
-  .mat-column-Technology,
-  .mat-column-Visa,
-  .mat-column-Experience,
-  .mat-column-Rate,
-  .mat-column-Priority,
-  .mat-column-CurrentLocation,
-  .mat-column-Relocation,
-  .mat-column-Phone,
-  .mat-column-Email,
-  .mat-column-AssignTo {
-    border-right: 1px solid lightgray;
+  .mat-column-InterviewId,
+  .mat-column-ConsultantName,
+  .mat-column-DateAndToI,
+  .mat-column-Round,
+  .mat-column-Mode,
+  .mat-column-Vendor,
+  .mat-column-ImplementationPartner,
+  .mat-column-Client,
+  .mat-column-DateOfSubmission,
+  .mat-column-EmployeerName,
+  .mat-column-InterviewStatus {
+    border-right: 1px solid lightgray !important;
   }
   
   .header-container {
@@ -107,12 +112,11 @@
     font-weight: 600;
   }
   
-  .add-hot-list {
+  .add-submission {
     cursor: pointer;
   }
   
-  .hot-list-actions {
-    gap: 10px;
+  .submission-actions {
     display: flex;
     align-items: center;
   
@@ -121,8 +125,12 @@
       padding: 0px 8px;
     }
   }
+  .mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 4px 0 4px;
+    border-right: 1px solid lightgray !important;
+}
   
-  .hot-list-table-style {
+  .interview-table-style {
     // padding: 0 2px;
     width: 100%;
     // max-height: calc(100% - 3px);
@@ -171,13 +179,41 @@
     }
   }
   
-  // @media screen and (min-width: 1850px) {
-  //   .hot-list-table-style {
-  //     width: 100%;
-  //     height: calc(100% - 8px);
-  //     overflow: auto;
-  //   }
-  // }
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    // height: 43px;
+  }
+  
+  .filter-vendors {
+    display: flex;
+    column-gap: 5px;
+  }
+  
+
+  
+  .recruiting-companies {
+    color: #f44336;
+  }
+  
+  .bench-sales-recruiter {
+    color: #3f51b5;
+  }
+  
+  .both {
+    color: black;
+  }
+  
+  .edit-icon, .delete-icon {
+    color: rgb(99, 98, 98);
+  }
+  
+  td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.mat-mdc-cell.mdc-data-table__cell.ng-star-inserted {
+    display: flex;
+    column-gap: 5px;
+    height: 49px;
+    align-items: center;
+  }
   
   .mat-mdc-header-row {
     height: 30px !important;
@@ -192,20 +228,53 @@
     height: 25px;
   }
   
+  .approve-reject-buttons {
+    width: fit-content;
+    height: auto;
+  }
+  
   ul.breadcrumb li:last-child {
     color: black;
     pointer-events: none;
   }
 
-  //lavanya
-.form-container {
-  margin-right: 7rem;
-  /* Adjust as needed */
-  margin-top: 1rem;
-  width: 10rem;
+  .employeer-name {
+    cursor: pointer;
+    color: #0275d8;
+  }
 
-}
+  .consultant-id{
+    cursor: pointer;
+    color:#0275d8
+  }
 
-.bold-label {
-  font-weight: bold;
-}
+  .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-state-layer-size: 24px;
+    width: var(--mdc-icon-button-state-layer-size);
+    height: var(--mdc-icon-button-state-layer-size);
+    padding: 0px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .custom-icon {
+    color: #3f51b5;
+  }
+  .hot-list-actions {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+  
+    .search {
+      height: 32px;
+      padding: 0px 8px;
+    }
+  }

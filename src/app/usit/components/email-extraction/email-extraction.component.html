@@ -41,13 +41,21 @@
             <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
                 <mat-icon>delete</mat-icon>
             </button>
-            <button mat-raised-button color="primary" class="add-email" (click)="extractEmails()"
+
+            <button mat-icon-button (click)="refresh()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+
+            <!-- <button mat-raised-button color="primary" class="add-email" (click)="extractEmails()"
                 *ngIf="this.role !== 'Super Administrator'">
                 Extract Emails
-            </button>
+            </button> -->
+            
             <div>
                 <mat-icon class="settings-icon" (click)="navigateBack()">settings</mat-icon>
             </div>
+      
+           
 
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search" (keyup)="applyFilter($event)">

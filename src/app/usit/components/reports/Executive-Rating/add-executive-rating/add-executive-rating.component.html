@@ -1,0 +1,116 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+      {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-card class="center-card">
+    <form [formGroup]="ratingForm" class="vendor-form">
+      <div class="form">
+        <!-- Left Column (3 Fields) -->
+        <div class="form-column-left">
+          <div class="fg-div">
+            <div class="fg-div" *ngIf="!hideTeamLeadField">
+              <mat-form-field appearance="fill">
+                <mat-label>Select TeamLead</mat-label>
+                <input 
+                  matInput 
+                  formControlName="teamLead"  
+                  [matAutocomplete]="managerAutoCmp"
+                  [value]="getPseudoName(ratingForm.value.teamLead, managerList)"
+                >
+                <mat-autocomplete #managerAutoCmp="matAutocomplete" 
+                                  [displayWith]="displayTeamleadName" 
+                                  (optionSelected)="onTeamLeadSelected($event.option.value)">
+                  <mat-option *ngFor="let option of (searchTeamLeadOptions$ | async)" 
+                              [value]="option.id">
+                    {{ option.pseudoName }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="ratingForm.get('teamLead')?.hasError('required')">
+                  TeamLead selection is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            
+            
+            
+          </div>
+          <div class="fg-div">
+            <mat-form-field appearance="fill">
+              <mat-label>Select Executive</mat-label>
+              <input 
+                matInput 
+                formControlName="ratedTo"
+                [matAutocomplete]="executiveAutoCmp"
+                [disabled]="!!ratingForm.get('ratedTo')?.disabled"
+                
+                >
+                
+              <mat-autocomplete #executiveAutoCmp="matAutocomplete" 
+                                [displayWith]="displayExecutiveName" 
+                                (optionSelected)="onExecutiveSelected($event.option.value)">
+                <mat-option *ngFor="let option of (searchExecutiveOptions$ | async)" 
+                            [value]="option.id">
+                  {{ option.pseudoName }}
+                </mat-option>
+              </mat-autocomplete>
+            
+              <mat-error *ngIf="ratingForm.get('ratedTo')?.hasError('required')">
+                Executive selection is required
+              </mat-error>
+            </mat-form-field>
+            
+          </div>
+          <div class="fg-div">
+            <mat-form-field appearance="fill">
+              <mat-label>Report Type</mat-label>
+              <input 
+                matInput 
+                formControlName="ratingType"
+                [matAutocomplete]="reportTypeAutoCmp"
+              >
+              <mat-autocomplete #reportTypeAutoCmp="matAutocomplete" 
+                                (optionSelected)="onReportTypeSelected($event.option.value)">
+                <mat-option *ngFor="let option of reportTypes" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="ratingForm.get('ratingType')?.hasError('required')">
+                Report Type is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+  
+        <!-- Right Column (2 Fields) -->
+        <div class="form-column-right">
+          <mat-form-field appearance="fill">
+            <mat-label>Rating</mat-label>
+            <input matInput formControlName="rating">
+            <mat-error *ngIf="ratingForm.get('rating')?.hasError('required')">
+              Rating is required
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="fill">
+            <mat-label>Feedback</mat-label>
+            <input matInput formControlName="feedBack">
+            <mat-error *ngIf="ratingForm.get('feedBack')?.hasError('required')">
+              Feedback are required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+      </div>
+  </mat-card>
+  
+

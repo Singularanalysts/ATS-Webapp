@@ -38,7 +38,6 @@ import { Recruiter } from 'src/app/usit/models/recruiter';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
     NgxMatIntlTelInputComponent
   ],
@@ -111,20 +110,23 @@ export class AddRecruiterComponent implements OnInit {
         email: [recruiterData ? recruiterData.email : '', [Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')]],
         usnumber: [recruiterData ? recruiterData.usnumber : ''],
         contactnumber: [recruiterData ? recruiterData.contactnumber : ''],
+        extension: [recruiterData ? recruiterData.extension : ''],
         alternatecontactnumber: [recruiterData ? recruiterData.alternatecontactnumber : ''],
         recruitertype: [recruiterData ? recruiterData.recruitertype : '', Validators.required],
         details: [recruiterData ? recruiterData.details : ''],
-        addedby: [recruiterData ? recruiterData.addedby : ''],
-        updatedby: [recruiterData ? recruiterData.updatedby : ''],
+        addedby: [this.data.actionName !== "edit-recruiter" ? localStorage.getItem('userid') : recruiterData.addedby],
+        updatedby: [this.data.actionName === "edit-recruiter" ? localStorage.getItem('userid') : null],
         vendor: this.formBuilder.group({
-          vmsid: [recruiterData ? recruiterData.vendor.vmsid : ''],
-          company: [recruiterData ? recruiterData.vendor.company : '', Validators.required],
+        vmsid: [recruiterData ? recruiterData.vendor.vmsid : ''],
+        company: [recruiterData ? recruiterData.vendor.company : '', Validators.required],
         }),
-        user: localStorage.getItem('userid'),
+        user: [this.data.actionName !== "edit-recruiter" ? localStorage.getItem('userid') : recruiterData.user],
+         
         country: [recruiterData ? recruiterData.country : '', Validators.required],
       }
     );
     if (this.data.actionName === 'edit-recruiter') {
+      this.recruiterForm.addControl('updatedby', this.formBuilder.control(recruiterData ? recruiterData.recid : ''));
       this.recruiterForm.addControl('recid', this.formBuilder.control(recruiterData ? recruiterData.recid : ''));
       this.recruiterForm.addControl('status', this.formBuilder.control(recruiterData ? recruiterData.status : ''));
       this.recruiterForm.addControl('remarks', this.formBuilder.control(recruiterData ? recruiterData.remarks : ''));

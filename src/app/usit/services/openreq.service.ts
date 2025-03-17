@@ -62,6 +62,9 @@ export class OpenreqService {
   getOpenReqsById(id:number) {
     return this.http.get("openreqs/dice/getByReqId/"+id);
   }
+  getreportemail(id:any){
+    return this.http.get("mail/getEmailExtractionReport/"+id)
+  }
 
   getOpenFulltimeReqsById(id:number) {
     return this.http.get("openreqs/dice/getByFulltimeReqId/"+id);
@@ -118,9 +121,9 @@ export class OpenreqService {
   extractEmails(data: any) {
     return this.http.post("mail/fetch", data);
   }
-  callTheStatus(email : string){
-    return this.http.get("mail/status"+`/${email}`)
-  }
+  // callTheStatus(email : string){
+  //   return this.http.get("mail/status"+`/${email}`)
+  // }
   stopTheExtraction(id : any){
     return this.http.get("mail/stop"+`/${id}`);
   }

@@ -111,7 +111,55 @@
      
       </div>
       <div class="right-div">
-  
+        <div>
+          <div class="rating-card">
+            <mat-card class="performanceratingcard">
+              <div class="card-header" style="padding-left: 6px;">
+                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menuSub="matMenu">
+                  <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                  <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                  <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                </mat-menu>
+              </div>
+          
+              <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                <div class="rating-layout">
+                  <!-- Left Side: StarPurple500Rounded Icon -->
+                  <mat-icon class="rating-icon">stars</mat-icon>
+              
+                  <!-- Right Side: Name & Rating -->
+                  <div class="rating-details">
+                    <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+              
+                    <div class="rating-container">
+                      <div class="stars">
+                        <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                        <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                      </div>
+                      <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                    </div>
+                  </div>
+                  <div class="best-performer-text">
+                    Best Performer of this {{ ratingflag }}
+                  </div>
+                </div>
+            
+              </mat-card-content>
+              
+              <ng-template #noRatings>
+                <div>
+                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                </div>
+              </ng-template>
+            </mat-card>
+          </div>
+          
+    
+        </div>
         <div>
           <mat-card class="activity-card-employee">
             <div class="card-body">
@@ -602,7 +650,55 @@
             </mat-card-content>
           </mat-card>
         </div>
-  
+        <div>
+          <div class="rating-card">
+            <mat-card class="performanceratingcard">
+              <div class="card-header" style="padding-left: 6px;">
+                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menuSub="matMenu">
+                  <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                  <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                  <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                </mat-menu>
+              </div>
+          
+              <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                <div class="rating-layout">
+                  <!-- Left Side: StarPurple500Rounded Icon -->
+                  <mat-icon class="rating-icon">stars</mat-icon>
+              
+                  <!-- Right Side: Name & Rating -->
+                  <div class="rating-details">
+                    <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+              
+                    <div class="rating-container">
+                      <div class="stars">
+                        <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                        <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                      </div>
+                      <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                    </div>
+                  </div>
+                  <div class="best-performer-text">
+                    Best Performer of this {{ ratingflag }}
+                  </div>
+                </div>
+            
+              </mat-card-content>
+              
+              <ng-template #noRatings>
+                <div>
+                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                </div>
+              </ng-template>
+            </mat-card>
+          </div>
+          
+    
+        </div>
         <div>
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
@@ -1101,6 +1197,55 @@
         
       </div>
       <div class="right-div">
+        <div>
+          <div class="rating-card">
+            <mat-card class="performanceratingcard">
+              <div class="card-header" style="padding-left: 6px;">
+                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menuSub="matMenu">
+                  <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                  <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                  <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                </mat-menu>
+              </div>
+          
+              <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                <div class="rating-layout">
+                  <!-- Left Side: StarPurple500Rounded Icon -->
+                  <mat-icon class="rating-icon">stars</mat-icon>
+              
+                  <!-- Right Side: Name & Rating -->
+                  <div class="rating-details">
+                    <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+              
+                    <div class="rating-container">
+                      <div class="stars">
+                        <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                        <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                      </div>
+                      <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                    </div>
+                  </div>
+                  <div class="best-performer-text">
+                    Best Performer of this {{ ratingflag }}
+                  </div>
+                </div>
+            
+              </mat-card-content>
+              
+              <ng-template #noRatings>
+                <div>
+                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                </div>
+              </ng-template>
+            </mat-card>
+          </div>
+          
+    
+        </div>
       <div>
         <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
           <div class="card-body">
@@ -1632,7 +1777,7 @@
          </div>
 
         </div>
-        <div class="right-div" style="height:950px">
+        <div class="right-div" style="height:850px">
           <div class="sourcing-card">
             <mat-card *ngIf="privilegeServ.hasPrivilege('SOURCING_LEADS_REPORT')">
               <div class="card">
@@ -1674,7 +1819,55 @@
               </mat-card-content>
             </mat-card>
           </div>
-    
+          <div>
+            <div class="rating-card">
+              <mat-card class="performanceratingcard">
+                <div class="card-header" style="padding-left: 6px;">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                  <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                    <mat-icon>more_horiz</mat-icon>
+                  </button>
+                  <mat-menu #menuSub="matMenu">
+                    <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                    <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                    <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                  </mat-menu>
+                </div>
+            
+                <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                  <div class="rating-layout">
+                    <!-- Left Side: StarPurple500Rounded Icon -->
+                    <mat-icon class="rating-icon">stars</mat-icon>
+                
+                    <!-- Right Side: Name & Rating -->
+                    <div class="rating-details">
+                      <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+                
+                      <div class="rating-container">
+                        <div class="stars">
+                          <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                          <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                        </div>
+                        <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                      </div>
+                    </div>
+                    <div class="best-performer-text">
+                      Best Performer of this {{ ratingflag }}
+                    </div>
+                  </div>
+              
+                </mat-card-content>
+                
+                <ng-template #noRatings>
+                  <div>
+                    <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  </div>
+                </ng-template>
+              </mat-card>
+            </div>
+            
+      
+          </div>
           <div>
             <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
               <div class="card-body">
@@ -2420,7 +2613,7 @@
            <div></div>
   
           </div>
-          <div class="right-div" style="height:950px">
+          <div class="right-div" style="height:850px">
             <div class="sourcing-card">
               <mat-card *ngIf="privilegeServ.hasPrivilege('SOURCING_LEADS_REPORT')">
                 <div class="card">
@@ -2461,8 +2654,59 @@
                   </div>
                 </mat-card-content>
               </mat-card>
+            </div>  
+         
+          <div>
+            <div class="rating-card">
+              <mat-card class="performanceratingcard">
+                <div class="card-header" style="padding-left: 6px;">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                  <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                    <mat-icon>more_horiz</mat-icon>
+                  </button>
+                  <mat-menu #menuSub="matMenu">
+                    <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                    <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                    <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                  </mat-menu>
+                </div>
+            
+                <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                  <div class="rating-layout">
+                    <!-- Left Side: StarPurple500Rounded Icon -->
+                    <mat-icon class="rating-icon">stars</mat-icon>
+                
+                    <!-- Right Side: Name & Rating -->
+                    <div class="rating-details">
+                      <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+                
+                      <div class="rating-container">
+                        <div class="stars">
+                          <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                          <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                        </div>
+                        <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                      </div>
+                    </div>
+                    <div class="best-performer-text">
+                      Best Performer of this {{ ratingflag }}
+                    </div>
+                  </div>
+              
+                </mat-card-content>
+                
+                <ng-template #noRatings>
+                  <div>
+                    <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  </div>
+                </ng-template>
+              </mat-card>
             </div>
+            
       
+          </div>
+
+
             <div>
               <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
                 <div class="card-body">
@@ -3165,7 +3409,55 @@
                   </mat-card-content>
                 </mat-card>
               </div>
-        
+              <div>
+                <div class="rating-card">
+                  <mat-card class="performanceratingcard">
+                    <div class="card-header" style="padding-left: 6px;">
+                      <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                      <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                        <mat-icon>more_horiz</mat-icon>
+                      </button>
+                      <mat-menu #menuSub="matMenu">
+                        <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                        <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                        <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                      </mat-menu>
+                    </div>
+                
+                    <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                      <div class="rating-layout">
+                        <!-- Left Side: StarPurple500Rounded Icon -->
+                        <mat-icon class="rating-icon">stars</mat-icon>
+                    
+                        <!-- Right Side: Name & Rating -->
+                        <div class="rating-details">
+                          <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+                    
+                          <div class="rating-container">
+                            <div class="stars">
+                              <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                              <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                            </div>
+                            <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                          </div>
+                        </div>
+                        <div class="best-performer-text">
+                          Best Performer of this {{ ratingflag }}
+                        </div>
+                      </div>
+                  
+                    </mat-card-content>
+                    
+                    <ng-template #noRatings>
+                      <div>
+                        <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                      </div>
+                    </ng-template>
+                  </mat-card>
+                </div>
+                
+          
+              </div>
               <div>
                 <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
                   <div class="card-body">
@@ -3760,7 +4052,55 @@
             </mat-card-content>
           </mat-card>
         </div>
-  
+        <div>
+          <div class="rating-card">
+            <mat-card class="performanceratingcard">
+              <div class="card-header" style="padding-left: 6px;">
+                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menuSub="matMenu">
+                  <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                  <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                  <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                </mat-menu>
+              </div>
+          
+              <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                <div class="rating-layout">
+                  <!-- Left Side: StarPurple500Rounded Icon -->
+                  <mat-icon class="rating-icon">stars</mat-icon>
+              
+                  <!-- Right Side: Name & Rating -->
+                  <div class="rating-details">
+                    <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+              
+                    <div class="rating-container">
+                      <div class="stars">
+                        <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                        <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                      </div>
+                      <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                    </div>
+                  </div>
+                  <div class="best-performer-text">
+                    Best Performer of this {{ ratingflag }}
+                  </div>
+                </div>
+            
+              </mat-card-content>
+              
+              <ng-template #noRatings>
+                <div>
+                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                </div>
+              </ng-template>
+            </mat-card>
+          </div>
+          
+    
+        </div>
         <div>
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
@@ -4255,7 +4595,55 @@
                     </mat-card-content>
                   </mat-card>
                 </div>
-          
+                <div>
+                  <div class="rating-card">
+                    <mat-card class="performanceratingcard">
+                      <div class="card-header" style="padding-left: 6px;">
+                        <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                        <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                          <mat-icon>more_horiz</mat-icon>
+                        </button>
+                        <mat-menu #menuSub="matMenu">
+                          <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                          <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                          <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                        </mat-menu>
+                      </div>
+                  
+                      <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                        <div class="rating-layout">
+                          <!-- Left Side: StarPurple500Rounded Icon -->
+                          <mat-icon class="rating-icon">stars</mat-icon>
+                      
+                          <!-- Right Side: Name & Rating -->
+                          <div class="rating-details">
+                            <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+                      
+                            <div class="rating-container">
+                              <div class="stars">
+                                <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                                <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                              </div>
+                              <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                            </div>
+                          </div>
+                          <div class="best-performer-text">
+                            Best Performer of this {{ ratingflag }}
+                          </div>
+                        </div>
+                    
+                      </mat-card-content>
+                      
+                      <ng-template #noRatings>
+                        <div>
+                          <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                        </div>
+                      </ng-template>
+                    </mat-card>
+                  </div>
+                  
+            
+                </div>
                 <div>
                   <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
                     <div class="card-body">
@@ -4848,7 +5236,55 @@
             </mat-card-content>
           </mat-card>
         </div>
-  
+        <div>
+          <div class="rating-card">
+            <mat-card class="performanceratingcard">
+              <div class="card-header" style="padding-left: 6px;">
+                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                <button mat-icon-button [matMenuTriggerFor]="menuSub">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menuSub="matMenu">
+                  <button mat-menu-item (click)="sourcingCountRating('daily','Daily')">Daily</button>
+                  <button mat-menu-item (click)="sourcingCountRating('weekly','Weekly')">Weekly</button>
+                  <button mat-menu-item (click)="sourcingCountRating('monthly', 'Monthly')">Monthly</button>
+                </mat-menu>
+              </div>
+          
+              <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
+                <div class="rating-layout">
+                  <!-- Left Side: StarPurple500Rounded Icon -->
+                  <mat-icon class="rating-icon">stars</mat-icon>
+              
+                  <!-- Right Side: Name & Rating -->
+                  <div class="rating-details">
+                    <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
+              
+                    <div class="rating-container">
+                      <div class="stars">
+                        <mat-icon *ngFor="let star of fullStars" class="ratingstar">star</mat-icon>
+                        <mat-icon *ngIf="halfStar" class="ratingstar">star_half</mat-icon>
+                      </div>
+                      <span class="rating-value">{{ performanceData.avg_rating }}</span>
+                    </div>
+                  </div>
+                  <div class="best-performer-text">
+                    Best Performer of this {{ ratingflag }}
+                  </div>
+                </div>
+            
+              </mat-card-content>
+              
+              <ng-template #noRatings>
+                <div>
+                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                </div>
+              </ng-template>
+            </mat-card>
+          </div>
+          
+    
+        </div>
         <div>
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' " *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">

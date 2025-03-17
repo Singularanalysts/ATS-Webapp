@@ -166,7 +166,10 @@ export class EmailConfigurationComponent {
       )
     }
   
-
+    reportemail(){
+      this.router.navigate(['/usit/report-email']);
+  
+    }
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
@@ -541,14 +544,23 @@ export class EmailConfigurationComponent {
     });
   }
 
+
+  goBack(): void {
+    this.router.navigate(['/usit/email-extraction-list']);
+  }
+
   extractEmails(element: any) {
     const extractEmail = {
       userid: this.userid,
       id: element.id,
       email : element.email
     }
+
     window.location.reload(); // Reload the entire page
-   this.statusCallMethod(element.email);
+  //  this.statusCallMethod(element.email);
+
+  //  this.statusCallMethod(element.email);
+
     return this.openServ.extractEmails(extractEmail).subscribe({
       next: (response: any) => {
         // alert(JSON.stringify(response));
@@ -596,20 +608,20 @@ export class EmailConfigurationComponent {
       },
     });
    
-  }
-  statusCallMethod(element: string): void {
-    this.openServ.callTheStatus(element).subscribe({
-      next: (response: any) => {
-        if (response.response === 'success') {
-          console.log('It is calling');
-        } else {
-          console.log('Not calling');
-        }
-      },
-      error: (err: any) => {
-        console.error('Error occurred while calling the status:', err);
-      }
-    });
+  // }
+  // statusCallMethod(element: string): void {
+  //   this.openServ.callTheStatus(element).subscribe({
+  //     next: (response: any) => {
+  //       if (response.response === 'success') {
+  //         console.log('It is calling');
+  //       } else {
+  //         console.log('Not calling');
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       console.error('Error occurred while calling the status:', err);
+  //     }
+  //   });
   }
   
 }

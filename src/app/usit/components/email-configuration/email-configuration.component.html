@@ -2,6 +2,7 @@
   <div class="container">
     <mat-card>
       <mat-card-title class="title">{{ buttonText }} Email Configuration</mat-card-title>
+    
       <mat-card-content>
         <form [formGroup]="emailForm" autocomplete="off">
 
@@ -131,7 +132,15 @@
       <span class="header-text">
         Email Configuration
       </span>
+      <div class="back-button-container">
+        <button mat-raised-button color="primary" (click)="goBack()" >Back</button>
+      </div>
+     
       <div class="hot-list-actions">
+        <div>
+          <mat-icon class="report-icon"(click)="reportemail()">report</mat-icon> 
+
+      </div>
         <button mat-icon-button color="primary" class="add-email" matToolTip="Add" (click)="addEmail()">
           <mat-icon class="item-icon">add_circle</mat-icon>
         </button>
@@ -141,7 +150,9 @@
           <!-- (keyup)="applyFilter($event)" -->
         </div>
       </div>
+      
     </div>
+   
 
     <div id="table-container" class="table-wrapper">
       <section class="mat-elevation-z8 hot-list-table-style">
