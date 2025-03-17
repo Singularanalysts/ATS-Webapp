@@ -49,6 +49,12 @@ interface Select {
   providers: [DatePipe]
 })
 export class EmployeeReportsComponent {
+  searchQuery: string = '';
+
+clearSearch() {
+  this.searchQuery = '';
+}
+
   excutivewiseSales: string[] = [
     '#',
     'Consultant/Employee/Vendor',
@@ -343,7 +349,10 @@ export class EmployeeReportsComponent {
     private reportservice: ReportsService,
     private datePipe: DatePipe,
     private dialog: MatDialog
-  ) { }
+  ) { 
+    this.filteredData = [...this.c_data]; // Initialize filtered data with all data
+
+  }
 
   ngOnInit(): void {
     this.employeeReport = this.formBuilder.group({
@@ -386,6 +395,22 @@ export class EmployeeReportsComponent {
     return;
   }
   grpby = '';
+  filteredData: any[] = [];
+
+  filterData() {
+    if (!this.searchQuery) {
+      this.filteredData = [...this.c_data];
+      return;
+    }
+
+    const query = this.searchQuery.toLowerCase().trim();
+
+    this.filteredData = this.c_data.filter(data => 
+      (data.pseudoname && data.pseudoname.toLowerCase().includes(query)) || 
+      (data.consultantname && data.consultantname.toLowerCase().includes(query)) ||
+      (data.company && data.company.toLowerCase().includes(query))
+    );
+  }
   onSubmit() {
 
     const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
@@ -448,6 +473,10 @@ export class EmployeeReportsComponent {
     this.reportservice.consultant_report(this.employeeReport.value)
       .subscribe((data: any) => {
         this.c_data = data.data;
+        this.filteredData = this.c_data; // Ensure initial full data
+
+        console.log(this.filteredData,'reportsdata');
+        
         this.subTotal = this.c_data.reduce((a, b) => a + b.submission, 0);
         this.intTotal = this.c_data.reduce((a, b) => a + b.interview, 0);
         this.scheduleTotal = this.c_data.reduce((a, b) => a + b.schedule, 0);
