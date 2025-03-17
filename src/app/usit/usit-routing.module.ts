@@ -67,8 +67,9 @@ import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-com
 import { TimeSheetsComponent } from './components/time-sheets/time-sheets.component';
 
 import { TaggedcountReportComponent } from './components/reports/taggedcount-report/taggedcount-report.component';
-import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
+
 import { ReportEmailComponent } from './components/email-extraction/report-email/report-email.component';
+import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
 
 
 const routes: Routes = [
