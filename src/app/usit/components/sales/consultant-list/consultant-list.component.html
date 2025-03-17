@@ -12,9 +12,10 @@
       <div class="consultant-actions" >
 
   <button type="search" mat-raised-button color="accent" class="btn-spacing" (click)="handleExport()" *ngIf="flag === 'Recruiting' && privilegeServ.hasPrivilege('REQ_CON_EXPORT')">Export</button>
-
+<!-- 
         <button type="search" mat-raised-button color="primary" (click)="refreshForm()"
-          *ngIf="flag !== 'presales'"  style="margin-left: 4px;" >Refresh</button>
+          *ngIf="flag !== 'presales'"  style="margin-left: 4px;" >Refresh</button> -->
+     
         
 
           <div class="form-container" style="border-radius:30px">
@@ -63,8 +64,8 @@
           </div>
        
         <div class="search-consultant">
-          <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position" style="" class="search" placeholder="Search Position" (keyup)="onExperienceChange($event)">
-          <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" (keyup)="onExperienceChange($event)" >
+          <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position" style="" class="search" placeholder="Search Position" (keyup)="ondataChange($event)">
+          <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" (keyup)="ondataChange($event)" >
           <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
           <input matInput type="search" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
         </div>
@@ -86,6 +87,9 @@
     <button [disabled]="!privilegeServ.hasPrivilege('ADD_PRESALES')"  *ngIf="flag === 'presales'" mat-icon-button class="add-user"
     (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
     <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_PRESALES')}">add_circle</mat-icon>
+  </button>   
+    <button mat-icon-button   *ngIf="flag !== 'presales'" color="primary"  (click)="refreshForm()">
+    <mat-icon>refresh</mat-icon>
   </button>
       </div>
     </form>

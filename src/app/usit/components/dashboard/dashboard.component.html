@@ -144,7 +144,10 @@
                     </div>
                   </div>
                   <div class="best-performer-text">
-                    Best Performer of this {{ ratingflag }}
+                    Highest-Rated Employee of the 
+                    <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                    <span *ngIf="ratingflag === 'weekly'">Week</span>
+                    <span *ngIf="ratingflag === 'daily'">Day</span>
                   </div>
                 </div>
             
@@ -152,7 +155,7 @@
               
               <ng-template #noRatings>
                 <div>
-                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  <p  class="no-data">Currently no ratings available.</p>
                 </div>
               </ng-template>
             </mat-card>
@@ -683,7 +686,10 @@
                     </div>
                   </div>
                   <div class="best-performer-text">
-                    Best Performer of this {{ ratingflag }}
+                    Highest-Rated Employee of the 
+                    <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                    <span *ngIf="ratingflag === 'weekly'">Week</span>
+                    <span *ngIf="ratingflag === 'daily'">Day</span>
                   </div>
                 </div>
             
@@ -691,8 +697,11 @@
               
               <ng-template #noRatings>
                 <div>
-                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  <p  class="no-data">Currently no ratings available.
+                    
+                  </p>
                 </div>
+           
               </ng-template>
             </mat-card>
           </div>
@@ -1230,7 +1239,10 @@
                     </div>
                   </div>
                   <div class="best-performer-text">
-                    Best Performer of this {{ ratingflag }}
+                    Highest-Rated Employee of the 
+                    <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                    <span *ngIf="ratingflag === 'weekly'">Week</span>
+                    <span *ngIf="ratingflag === 'daily'">Day</span>
                   </div>
                 </div>
             
@@ -1238,7 +1250,7 @@
               
               <ng-template #noRatings>
                 <div>
-                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  <p  class="no-data">Currently no ratings available.</p>
                 </div>
               </ng-template>
             </mat-card>
@@ -1852,7 +1864,10 @@
                       </div>
                     </div>
                     <div class="best-performer-text">
-                      Best Performer of this {{ ratingflag }}
+                      Highest-Rated Employee of the 
+                      <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                      <span *ngIf="ratingflag === 'weekly'">Week</span>
+                      <span *ngIf="ratingflag === 'daily'">Day</span>
                     </div>
                   </div>
               
@@ -1860,7 +1875,7 @@
                 
                 <ng-template #noRatings>
                   <div>
-                    <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                    <p  class="no-data">Currently no ratings available.</p>
                   </div>
                 </ng-template>
               </mat-card>
@@ -2689,7 +2704,10 @@
                       </div>
                     </div>
                     <div class="best-performer-text">
-                      Best Performer of this {{ ratingflag }}
+                      Highest-Rated Employee of the 
+                      <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                      <span *ngIf="ratingflag === 'weekly'">Week</span>
+                      <span *ngIf="ratingflag === 'daily'">Day</span>
                     </div>
                   </div>
               
@@ -2697,7 +2715,7 @@
                 
                 <ng-template #noRatings>
                   <div>
-                    <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                    <p  class="no-data">Currently no ratings available.</p>
                   </div>
                 </ng-template>
               </mat-card>
@@ -3442,7 +3460,10 @@
                           </div>
                         </div>
                         <div class="best-performer-text">
-                          Best Performer of this {{ ratingflag }}
+                          Highest-Rated Employee of the 
+                          <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                          <span *ngIf="ratingflag === 'weekly'">Week</span>
+                          <span *ngIf="ratingflag === 'daily'">Day</span>
                         </div>
                       </div>
                   
@@ -3450,7 +3471,7 @@
                     
                     <ng-template #noRatings>
                       <div>
-                        <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                        <p  class="no-data">Currently no ratings available.</p>
                       </div>
                     </ng-template>
                   </mat-card>
@@ -4085,7 +4106,10 @@
                     </div>
                   </div>
                   <div class="best-performer-text">
-                    Best Performer of this {{ ratingflag }}
+                    Highest-Rated Employee of the 
+                    <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                    <span *ngIf="ratingflag === 'weekly'">Week</span>
+                    <span *ngIf="ratingflag === 'daily'">Day</span>
                   </div>
                 </div>
             
@@ -4093,7 +4117,7 @@
               
               <ng-template #noRatings>
                 <div>
-                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  <p  class="no-data">Currently no ratings available.</p>
                 </div>
               </ng-template>
             </mat-card>
@@ -4628,7 +4652,10 @@
                             </div>
                           </div>
                           <div class="best-performer-text">
-                            Best Performer of this {{ ratingflag }}
+                            Highest-Rated Employee of the 
+                            <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                            <span *ngIf="ratingflag === 'weekly'">Week</span>
+                            <span *ngIf="ratingflag === 'daily'">Day</span>
                           </div>
                         </div>
                     
@@ -4636,7 +4663,7 @@
                       
                       <ng-template #noRatings>
                         <div>
-                          <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                          <p  class="no-data">Currently no ratings available.</p>
                         </div>
                       </ng-template>
                     </mat-card>
@@ -5269,7 +5296,10 @@
                     </div>
                   </div>
                   <div class="best-performer-text">
-                    Best Performer of this {{ ratingflag }}
+                    Highest-Rated Employee of the 
+                    <span *ngIf="ratingflag === 'Monthly'">Month</span>
+                    <span *ngIf="ratingflag === 'weekly'">Week</span>
+                    <span *ngIf="ratingflag === 'daily'">Day</span>
                   </div>
                 </div>
             
@@ -5277,7 +5307,7 @@
               
               <ng-template #noRatings>
                 <div>
-                  <p  class="no-data">No ratings available for  this  {{ ratingflag }}.</p>
+                  <p  class="no-data">Currently no ratings available.</p>
                 </div>
               </ng-template>
             </mat-card>
