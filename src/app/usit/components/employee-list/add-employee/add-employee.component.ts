@@ -83,6 +83,7 @@ export class AddEmployeeComponent {
     'HR Team'
   ];
   roleOptions: any[] = [];
+  companyOptions: any[] = [];
   managerOptions: any[] = [];
   teamLeadOptions: any[] = [];
   filteredDepartmentOptions!: Observable<string[]>;
@@ -92,6 +93,7 @@ export class AddEmployeeComponent {
   employeeForm: any = FormGroup;
   submitted = false;
   rolearr: any = [];
+  companyarr: any = [];
   message!: string;
   managerflg = false;
   teamleadflg = false;
@@ -128,7 +130,11 @@ export class AddEmployeeComponent {
   protected isFormSubmitted: boolean = false;
   showOtherDetails: boolean = false;
 
+  isCompanyToDisplay: boolean = false;
+
   ngOnInit(): void {
+    this.checkCompany(localStorage.getItem('companyid'));
+    this.getCompanies();
     this.getRoles();
     this.getManager();
     if (this.data.actionName === 'edit-employee') {
@@ -157,7 +163,17 @@ export class AddEmployeeComponent {
           }
         })
     } else {
-      this.initilizeAddEmployeeForm(null);
+    //     if(this.isCompanyToDisplay){
+    //     this.initilizeAddEmployeeFormValidation(null);
+    //      this.validateControls();
+    //   this.toggleOtherDetails(false);
+    //     }
+    //     else{
+    //   this.initilizeAddEmployeeForm(null);
+    //   this.validateControls();
+    //   this.toggleOtherDetails(false);
+    // }
+    this.initilizeAddEmployeeForm(null);
       this.validateControls();
       this.toggleOtherDetails(false);
     }
@@ -218,6 +234,11 @@ export class AddEmployeeComponent {
         ]),
       }),
       banterno: [employeeData ? employeeData.banterno : ''],
+
+      added: [localStorage.getItem('userid')] ,
+
+      companyid: [employeeData ? employeeData.companyid : '', 
+        this.isCompanyToDisplay ? [Validators.required] : []],
     });
 
   this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
@@ -228,6 +249,73 @@ export class AddEmployeeComponent {
   });
 
   }
+
+  // private initilizeAddEmployeeFormValidation(employeeData: any) {
+  //   this.employeeForm = this.formBuilder.group({
+  //     fullname: [
+  //       employeeData ? employeeData.fullname : '',
+  //       [
+  //         Validators.required,
+  //         Validators.minLength(5),
+  //         Validators.maxLength(100),
+  //       ],
+  //     ],
+  //     pseudoname: [employeeData ? employeeData.pseudoname : ''],
+  //     email: [
+  //       employeeData ? employeeData.email : '',
+  //       [
+  //         Validators.required,
+  //         Validators.email,
+  //         Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+  //       ],
+  //     ],
+  //     personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
+  //     companycontactnumber: [employeeData && employeeData.companycontactnumber ? employeeData.companycontactnumber : ''],
+  //     designation: [employeeData ? employeeData.designation : ''],
+  //     department: [employeeData ? employeeData.department : '', Validators.required],
+  //     joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
+  //     relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
+  //     personalemail: [
+  //       employeeData ? employeeData.personalemail : '',
+  //       [
+  //         Validators.required,
+  //         Validators.email,
+  //         Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+  //       ],
+  //     ],
+  //     manager: [employeeData ? employeeData.manager : ''],
+  //     aadharno: [
+  //       employeeData ? employeeData.aadharno : ''
+  //     ],
+
+  //     panno: [
+  //       employeeData ? employeeData.panno : ''
+  //     ],
+  //     bankname: [employeeData ? employeeData.bankname : ''],
+  //     accno: [employeeData ? employeeData.accno : ''],
+  //     ifsc: [
+  //       employeeData ? employeeData.ifsc : ''
+  //     ],
+  //     branch: [employeeData ? employeeData.branch : ''],
+  //     teamlead: [employeeData ? employeeData.teamlead : ''],
+  //     role: this.formBuilder.group({
+  //       roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [
+  //         Validators.required
+  //       ]),
+  //     }),
+  //     banterno: [employeeData ? employeeData.banterno : ''],
+
+  //     companyid: [employeeData ? employeeData.companyid : ''],
+  //   });
+
+  // this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
+  //   if (value) {
+  //     const banterNumber = value.slice(-10);
+  //     this.employeeForm.get('banterno').setValue(banterNumber);
+  //   }
+  // });
+
+  // }
 
   validateControls() {
     this.employeeForm.get('department').valueChanges.subscribe((res: any) => {
@@ -350,6 +438,51 @@ export class AddEmployeeComponent {
       });
   }
 
+  getCompanies() {
+    this.empManagementServ
+      .getCompaniesDropdown()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.companyarr = response.data;
+          this.companyOptions = response.data;
+          console.log(this.roleOptions,'roleoptionss');
+          
+        },
+        error: (err) => {
+          this.dataTobeSentToSnackBarService.message = err.message;
+          this.dataTobeSentToSnackBarService.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataTobeSentToSnackBarService
+          );
+        },
+      });
+  }
+
+checkCompany(companyid:any){
+
+  this.empManagementServ
+  .getValidDateCompanyGiven(companyid)
+  .pipe(takeUntil(this.destroyed$))
+  .subscribe({
+    next: (response: any) => {
+      this.isCompanyToDisplay = response.data;
+    },
+    error: (err) => {
+      this.dataTobeSentToSnackBarService.message = err.message;
+      this.dataTobeSentToSnackBarService.panelClass = [
+        'custom-snack-failure',
+      ];
+      this.snackBarServ.openSnackBarFromComponent(
+        this.dataTobeSentToSnackBarService
+      );
+    },
+  });
+
+}
+
   getManager() {
     this.empManagementServ
       .getManagerDropdown()
@@ -402,7 +535,8 @@ export class AddEmployeeComponent {
   onSubmit() {
     this.submitted = true;
     const joiningDateFormControl = this.employeeForm.get('joiningdate');
-    const relievingDateFormControl = this.employeeForm.get('relievingdate')
+    const relievingDateFormControl = this.employeeForm.get('relievingdate');
+    const compId = this.employeeForm.get('companyid');
     if (joiningDateFormControl.value) {
       const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
       const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl.value, 'yyyy-MM-dd');
@@ -416,8 +550,12 @@ export class AddEmployeeComponent {
     }
     else{
       this.isFormSubmitted = true
-    }
-    // updates employee object form values
+    } 
+   
+  this.employeeForm.patchValue({
+    added: localStorage.getItem('userid') 
+  });
+
     if (this.data.actionName === "edit-employee") {
       [this.employeeForm.value].forEach((formVal, idx) => {
         this.empObj.aadharno = formVal.aadharno;
@@ -442,6 +580,8 @@ export class AddEmployeeComponent {
         this.empObj.teamlead = formVal.teamlead;
         this.empObj.role = formVal.role;
         this.empObj.banterno = formVal.banterno;
+        this.empObj.companyid = formVal.companyid;
+        this.empObj.added=localStorage.getItem('userid');
       })
     }
     this.trimSpacesFromFormValues();

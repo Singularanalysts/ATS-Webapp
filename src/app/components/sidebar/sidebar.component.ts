@@ -129,6 +129,7 @@ export class SidebarComponent implements OnInit {
     localStorage.removeItem('rnum');
     localStorage.removeItem('vnum');
     localStorage.removeItem('privileges');
+    localStorage.removeItem('companyid');
     //alertify.warning("Token expired please login");
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: 'You have signed out!',

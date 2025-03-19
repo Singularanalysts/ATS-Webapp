@@ -11,12 +11,20 @@ export class EmployeeManagementService {
   private apiServ = inject(ApiService);
    /*** EMPOLOYEE SERVICES _ START */
    //employee management
-   getRolesDropdown() {
+   getRolesDropdown() { 
     return this.apiServ.get("auth/roles/getroles");
+  }
+
+  getCompaniesDropdown() {
+    return this.apiServ.get("auth/company/all");
   }
 
   getManagerDropdown() {
     return this.apiServ.get("auth/users/manageDropDown");
+  }
+
+  getValidDateCompanyGiven(companyid:any) {
+    return this.apiServ.get("auth/users/companyCheck/"+companyid);
   }
 
   getTLdropdown(id: number) {
@@ -29,8 +37,8 @@ export class EmployeeManagementService {
 
   }
   //used for get the resource
-  getAllEmployees(status: any) {
-    return this.apiServ.get(`auth/users/all/${status}`);
+  getAllEmployees(status: any, companyid:any) {
+    return this.apiServ.get(`auth/users/all/${status}/${companyid}`);
   }
 
   deleteEmployeeById(id: number) {

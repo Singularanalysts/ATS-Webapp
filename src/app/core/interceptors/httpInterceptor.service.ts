@@ -155,6 +155,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     localStorage.removeItem('rnum');
     localStorage.removeItem('vnum');
     localStorage.removeItem('privileges');
+    localStorage.removeItem('companyid');
     this.router.navigate(['/']);
     //alertify.warning("Token expired please login");
   }
