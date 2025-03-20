@@ -7,60 +7,36 @@
         <span class="header-text">
             Email Extraction
         </span>
-        <div class="hot-list-actions">
+        <div class="button-menu-container">
+            <button class="delete-button" *ngIf="showDeleteButton" mat-icon-button (click)="bulkDelete()" >
+                <mat-icon class="delete-button">delete</mat-icon>
+              </button>
+              <button *ngIf="showBlockButton" mat-icon-button (click)="blockEmail()"
+              matTooltip="Block Email" matTooltipPosition="left">
+        <mat-icon class="delete-button">block</mat-icon>
+      </button>
             
-<!-- Container for Button and Menu -->
-<div class="button-menu-container">
-    <!-- Mail Button to Open Menu -->
-    <button class="blacked-mails-list" *ngIf="showBlockMails" mat-icon-button color="warn" (click)="unblockEmail()"
-             matTooltip="Blocked Emails" matTooltipPosition="left">
-      <mat-icon>mail</mat-icon>
-    </button> 
-  
-    <!-- The Hidden Menu (Appears on Hover) -->
-    <!-- <mat-menu #blockedMailsMenu="matMenu" class="blocked-mails-menu">
-      <div class="menu-content">
-        <div class="menu-item" *ngFor="let email of blockedEmails">
-         
-          <button mat-button style="background-color: #04AA6D;font-size: 10px;" (click)="unblockEmails(email.blokedDomainId)">
-            <mat-icon>lock_open</mat-icon>
-            </button>
-           <span style="font-size: 15px;margin-left:20px">{{ email.email }}</span>
+            <button *ngIf="showBlockMails" mat-icon-button (click)="unblockEmail()"
+                    matTooltip="Blocked Emails" matTooltipPosition="left">
+              <mat-icon class="icon-design">mail</mat-icon>
+            </button> 
           
-        </div>
-      </div>
-    </mat-menu> -->
-    <!-- <a [href]="email" target="_blank" matTooltip="Unblock" matTooltipPosition="left" style="font-size: 15px; margin-left: 20px; text-decoration: none;">
-            {{ email }}
-          </a> -->
-  </div>
-            <button *ngIf="showBlockButton" mat-icon-button color="warn" (click)="blockEmail()" matTooltip="Block Email" matTooltipPosition="left">
-                <mat-icon>block</mat-icon>
-              </button>
-              
-            <button *ngIf="showDeleteButton" mat-icon-button color="warn" (click)="bulkDelete()">
-                <mat-icon>delete</mat-icon>
-            </button>
-
-            <button mat-icon-button (click)="refresh()">
-                <mat-icon>refresh</mat-icon>
-              </button>
-
-            <!-- <button mat-raised-button color="primary" class="add-email" (click)="extractEmails()"
-                *ngIf="this.role !== 'Super Administrator'">
-                Extract Emails
-            </button> -->
-            
-            <div>
-                <mat-icon class="settings-icon" (click)="navigateBack()">settings</mat-icon>
-            </div>
-      
            
-
+          
+           
+            <button  mat-icon-button (click)="refresh()">
+              <mat-icon class="icon-design">refresh</mat-icon>
+            </button>
+          
+            <button  mat-icon-button (click)="navigateBack()">
+              <mat-icon class="icon-design">settings</mat-icon>
+            </button>
+          
             <div class="search-hot-list">
-                <input matInput type="text" class="search" placeholder="search" (keyup)="applyFilter($event)">
+              <input matInput type="text" class="search" placeholder="Search" (keyup)="applyFilter($event)">
             </div>
-        </div>
+          </div>
+          
     </div>
 
     <div id="table-container" class="table-wrapper">

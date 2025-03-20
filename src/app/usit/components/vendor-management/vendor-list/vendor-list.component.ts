@@ -633,14 +633,25 @@ export class VendorListComponent implements OnInit {
   }
 
   moveVendorToCpvOrFpv(vendor: any) {
-    const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
-      title: 'Confirmation',
-      message: 'Are you sure you want to move Vendor to CPV/FPV/Blacklisted ?',
-      radioButtons: ['Current Primary Vendor', 'Future Primary Vendor', 'Blacklisted'],
-      confirmText: 'Yes',
-      cancelText: 'No',
-      actionData: vendor,
-    };
+      // Define available options
+      let message = 'Are you sure you want to move Vendor to CPV/FPV/Blacklisted ?';
+      let radioButtons = ['Current Primary Vendor', 'Future Primary Vendor', 'Blacklisted'];
+    
+      // If the vendor status is "Initiated", only show the "Blacklisted" option and update the message
+      if (vendor.vms_stat === 'Initiated') {
+        message = 'Are you sure you want to move Vendor to Blacklisted?';
+        radioButtons = ['Blacklisted']; // Remove CPV & FPV options
+      }
+
+  const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
+    title: 'Confirmation',
+    message: message,
+    radioButtons: radioButtons,  // Use the dynamically adjusted options
+    confirmText: 'Yes',
+    cancelText: 'No',
+    actionData: vendor,
+  };
+  
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = 'fit-content';
