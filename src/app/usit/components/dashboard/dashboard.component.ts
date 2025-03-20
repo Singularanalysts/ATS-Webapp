@@ -589,6 +589,7 @@ console.log(totalRecords,'totalrecords');
 
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
+      console.log('sourceleads');
       
       this.getSourcingLeads();
     }
@@ -783,7 +784,7 @@ console.log(totalRecords,'totalrecords');
         const totalRecords = response.data.totalElements;
         console.log(totalRecords, 'Total Records');
   
-        this.totalPages = Math.ceil(totalRecords / this.pageSize);
+        this.totalPagesdice = Math.ceil(totalRecords / this.pageSize);
       }
     );
   }
@@ -796,8 +797,10 @@ console.log(totalRecords,'totalrecords');
   }
   
   nextPagedice() {
-    if (this.currentPagedice < this.totalPages) {
+    if (this.currentPagedice < this.totalPagesdice) {
       this.currentPagedice++;
+      console.log('dailyrequireents');
+
       this.getDiceReqs();
     }
   }
@@ -810,8 +813,8 @@ console.log(totalRecords,'totalrecords');
   // Function to display only 4 pages at a time
   getPageNumbersdice(): number[] {
     const maxPagesToShow = 4;
-    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+    let startPage = Math.max(1, this.currentPagedice - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPagesdice, startPage + maxPagesToShow - 1);
   
     return Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
   }
