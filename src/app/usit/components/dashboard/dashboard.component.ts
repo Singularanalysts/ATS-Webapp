@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnInit, inject ,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { DashboardService } from 'src/app/usit/services/dashboard.service';
@@ -32,13 +32,15 @@ import { EmpInterviewsListComponent } from './emp-interviews-list/emp-interviews
 import { JsonpInterceptor } from '@angular/common/http';
 import { PageEvent } from '@angular/material/paginator';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
+  imports: [CommonModule,MatAutocompleteModule, MatPaginatorModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
   providers: [DatePipe]
 })
@@ -182,7 +184,7 @@ totalItems: any;
 field = "empty";
 currentPageIndex = 0;
 pageEvent!: PageEvent;
-pageSize = 50;
+// pageSize = 50;
 showPageSizeOptions = true;
 showFirstLastButtons = true;
 pageSizeOptions = [50, 75, 100];
@@ -281,9 +283,9 @@ console.log(previlage,'previlage');
       this.getDiceReqss(1); 
       // this.getDiceReqss();
       this.getSourcingLeads();
-      this.getReqVendorCount();
-      this.getReqCatergoryCount();
-      this.getEmployeeNames();
+      // this.getReqVendorCount();
+      // this.getReqCatergoryCount();
+      // this.getEmployeeNames();
       this.dashboardServ.vmstransactions().subscribe(
         ((response: any) => {
           this.datarr = response.data;
@@ -542,17 +544,70 @@ console.log(previlage,'previlage');
     );
   }
 
+  // getSourcingLeads() {
+  //   this.dashboardServ.getSourcingLeads(this.userid).subscribe(
+  //     (response: any) => {
+  //       //this.entity = response.data;
+  //       this.dataSource.data = response.data;
+  //       // this.dataSource.data.map((x: any, i) => {
+  //       //   x.serialNum = i + 1;
+  //       // });
+  //     }
+  //   )
+  // }
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  currentPage = 1;
+  pageSize = 13;
+  totalPages = 1;
+  
   getSourcingLeads() {
-    this.dashboardServ.getSourcingLeads(this.userid).subscribe(
+    const payload = {
+      pageNumber: this.currentPage,
+      pageSize: this.pageSize,
+      userId: this.userid
+    };
+  
+    this.dashboardServ.getSourcingLeads(payload).subscribe(
       (response: any) => {
-        //this.entity = response.data;
-        this.dataSource.data = response.data;
-        // this.dataSource.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
+        this.dataSource.data = response.data.content;
+        const totalRecords = response.data.totalElements;
+console.log(totalRecords,'totalrecords'); 
+        this.totalPages = Math.ceil(totalRecords / this.pageSize);
       }
-    )
+    );
   }
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getSourcingLeads();
+    }
+  }
+  
+  nextPage() {
+    console.log('nextpage');
+
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      
+      this.getSourcingLeads();
+    }
+  }
+  
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.getSourcingLeads();
+  }
+  
+  // Function to display only 4 pages at a time
+  getPageNumbers(): number[] {
+    const maxPagesToShow = 4;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+  
+    return Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
+  }
+  
   // for executive and lead
 
 
@@ -708,41 +763,133 @@ console.log(previlage,'previlage');
     this.router.navigate(['usit/user-info', 'dashboard', id])
   }
 
+  currentPagedice = 1;
+  pageSizedice = 13;
+  totalPagesdice = 1;
+  
   getDiceReqs() {
-    this.dashboardServ.getDiceRequirements(this.role, this.userid).subscribe(
+    const payload = {
+      pageNumber: this.currentPagedice,
+      pageSize: this.pageSizedice,
+      userId: 0,
+      role:this.role
+    };
+  
+    this.dashboardServ.getDiceRequirements(payload).subscribe(
       (response: any) => {
-        //this.entity = response.data;
-        this.dataSourceDice.data = response.data;
-        // this.dataSourceDice.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
+        this.dataSourceDice.data = response.data.content;
+        console.log(this.dataSourceDice.data, 'this.dataSourceDice.data');
+  
+        const totalRecords = response.data.totalElements;
+        console.log(totalRecords, 'Total Records');
+  
+        this.totalPages = Math.ceil(totalRecords / this.pageSize);
       }
     );
   }
+  
+  prevPagedice() {
+    if (this.currentPagedice > 1) {
+      this.currentPagedice--;
+      this.getDiceReqs();
+    }
+  }
+  
+  nextPagedice() {
+    if (this.currentPagedice < this.totalPages) {
+      this.currentPagedice++;
+      this.getDiceReqs();
+    }
+  }
+  
+  goToPagedice(page: number) {
+    this.currentPagedice = page;
+    this.getDiceReqs();
+  }
+  
+  // Function to display only 4 pages at a time
+  getPageNumbersdice(): number[] {
+    const maxPagesToShow = 4;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+  
+    return Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
+  }
+  
+  // allData: any = []; // Stores full data
+  // pageSizedata = 20; // Number of items per load
+  // currentPage = 1; // Tracks the page number
+  // getDiceReqs() {
+  //   this.dashboardServ.getDiceRequirements(this.role, this.userid).subscribe((response: any) => {
+  //     this.allData = response.data;
+      
+  //     this.loadMore();
+  //   });
+  // }
+  // displayedColumns: string[] = ['PostedDate', 'JobTitle', 'Category', 'JobLocation', 'Vendor', 'TaggedDate', 'TaggedBy', 'TCount'];
 
-  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Postedon", sortOrder: any = "desc" , keyword: any = "empty") {
-    // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
+  // loadMore() {
+  //   const nextData = this.allData.slice(0, this.currentPage * this.pageSizedata);
+  //   this.dataSourceDice.data = nextData;
+  //   console.log( this.dataSourceDice.data ,' this.dataSourceDice.data ');
+    
+  //   this.currentPage++;
+  // }
+
+  // getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Postedon", sortOrder: any = "desc" , keyword: any = "empty") {
+  //   // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
+  //   const actData = {
+  //     pageNumber: pagIdx,
+  //     pageSize: pagesize,
+  //     sortField: sortField,
+  //     sortOrder: sortOrder,
+  //     keyword: keyword,
+  //     userid :this.userid
+  //   };
+
+  //   this.dashboardServ.getDiceRequirementslax(this.role, actData).subscribe(
+  //     (response: any) => {
+  //       //this.entity = response.data;
+  //       this.dataSourceDicelax.data = response.data.content;
+  //       console.log( this.dataSourceDicelax.data,'other same data');
+        
+  //       this.totalItems = response.data.totalElements;
+  //       this.dataSourceDicelax.data.map((x: any, i) => {
+  //         // x.serialNum = i + 1;
+  //         x.serialNum = this.generateSerialNumber(i);
+  //       });
+  //     }
+  //   );
+  // }
+  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any = "Postedon", sortOrder: any = "desc", keyword: any = "empty") {
     const actData = {
       pageNumber: pagIdx,
       pageSize: pagesize,
       sortField: sortField,
       sortOrder: sortOrder,
       keyword: keyword,
-      userid :this.userid
+      userid: this.userid
     };
-
-    this.dashboardServ.getDiceRequirementslax(this.role, actData).subscribe(
-      (response: any) => {
-        //this.entity = response.data;
-        this.dataSourceDicelax.data = response.data.content;
-        this.totalItems = response.data.totalElements;
-        this.dataSourceDicelax.data.map((x: any, i) => {
-          // x.serialNum = i + 1;
-          x.serialNum = this.generateSerialNumber(i);
-        });
-      }
-    );
+  
+    const apiCall = this.dashboardServ.getDiceRequirementslax(this.role, actData);
+  
+    if (apiCall) { // Only make API call if apiCall is not null
+      apiCall.subscribe(
+        (response: any) => {
+          this.dataSourceDicelax.data = response.data.content;
+          console.log(this.dataSourceDicelax.data, 'other same data');
+  
+          this.totalItems = response.data.totalElements;
+          this.dataSourceDicelax.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      );
+    } else {
+      console.log("No API call required for this role.");
+    }
   }
+  
 
   handlePageEvent(event: PageEvent) {
     if (event) {
@@ -855,28 +1002,64 @@ console.log(previlage,'previlage');
     this.dataSourceTech.filter = event.target.value;
   }
   //lavanya
-  getEmployeeNames() {
+  // benchSalesEmployees: any[] = []; // Store employees
+
+  // Remove this from ngOnInit()
+  // ngOnInit() { this.getEmployeeNames(); }  ❌ Remove this
+  
+  getEmployeeNames(): void {
+    if (this.benchSalesEmployees.length > 0) return; // Prevent multiple API calls
+  
     this.dashboardServ.getEmployeeName().subscribe({
       next: (response: any) => {
-        // Assuming the API response contains an array of objects with 'name' property for each employee
-        this.benchSalesEmployees = response.data;
+        this.benchSalesEmployees = response.data; // Store employee names
       },
       error: (error: any) => {
         console.error('Error fetching employee names:', error);
       }
-    }
-    );
+    });
   }
-
-  onEmployeeChange(event: any): void {
+  
+  onEmployeeChange(selectedOption: any): void {
+    if (!selectedOption) return;
+  
+    this.selectedEmployeeName = selectedOption.value[1]; // Set name for display
+    const empId = selectedOption.value[0]; // Get ID for API
+  
     const fromDate = this.myForm.get('startDate').value;
     const toDate = this.myForm.get('endDate').value;
-    const empId = event.value;
-    const formatedStartDate = this.formatDate(fromDate);
-    const formatedEndDate = this.formatDate(toDate);
-    this.filterData(formatedStartDate, formatedEndDate, empId);
-
+    const formattedStartDate = this.formatDate(fromDate);
+    const formattedEndDate = this.formatDate(toDate);
+  
+    this.filterData(formattedStartDate, formattedEndDate, empId);
   }
+  
+
+  // onEmployeeChange(event: any): void {
+  //   const fromDate = this.myForm.get('startDate').value;
+  //   const toDate = this.myForm.get('endDate').value;
+  //   const empId = event.value;
+  //   const formatedStartDate = this.formatDate(fromDate);
+  //   const formatedEndDate = this.formatDate(toDate);
+  //   this.filterData(formatedStartDate, formatedEndDate, empId);
+
+  // }
+  employeeControl = new FormControl('');
+
+  selectedEmployeeName:any
+  // onEmployeeChange(selectedOption: any): void {
+  //   if (!selectedOption) return;
+
+  //   this.selectedEmployeeName = selectedOption.value[1]; // Set the name for display
+  //   const empId = selectedOption.value[0]; // Get ID for API
+
+  //   const fromDate = this.myForm.get('startDate').value;
+  //   const toDate = this.myForm.get('endDate').value;
+  //   const formatedStartDate = this.formatDate(fromDate);
+  //   const formatedEndDate = this.formatDate(toDate);
+
+  //   this.filterData(formatedStartDate, formatedEndDate, empId);
+  // }
   formatDate(date: string): string {
     const selectedDate = new Date(date);
     const year = selectedDate.getFullYear();
@@ -884,34 +1067,36 @@ console.log(previlage,'previlage');
     const day = ("0" + selectedDate.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
-  filterData(startDate: any, endDate: any, empId: any) {
-
-    this.dashboardServ.getFilteredEmployee(startDate, endDate, empId)
+  filterData(fromDate: any, toDate: any, userId: any) {
+    const payload = { fromDate, toDate, userId,
+      pageNumber: this.currentPagedice,  // Include pagination
+      pageSize: this.pageSizedice
+     }; // Send data in the request body
+  
+    this.dashboardServ.getFilteredEmployee(payload)
       .subscribe(
         (response: any) => {
-          // Check if response contains data property
           if (response && response.data) {
-            // Assign the response data to the dataSource for displaying filtered data
-            this.dataSourceDice.data = response.data;
-            // Reassign serial numbers after filtering
+            this.dataSourceDice.data = response.data.content;
+  
+            // Assign serial numbers after filtering
             this.dataSourceDice.data.forEach((item: any, index: number) => {
               item.serialNum = index + 1;
             });
           } else {
-            // Handle empty or invalid response
             console.error('Invalid response:', response);
           }
         },
         (error: any) => {
-          // Handle errors here
           console.error('An error occurred:', error);
         }
       );
   }
-
+  
   refreshData() {
     this.myForm.reset();
     this.getDiceReqs();
+    this.employeeControl.setValue('')
     const endDateControl = this.myForm.get('endDate');
     if (!endDateControl.value) {
       const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');

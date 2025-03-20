@@ -144,8 +144,12 @@ ul.breadcrumb li a:hover {
 .table-container {
   // padding-top: 10px;
   flex: 1;
-}
+  min-height: 400px; /* Adjust based on your layout */
 
+}
+.table-data{
+  min-height: 560px !important;
+}
 .table-container-dice {
   padding-top: 10px;
   flex: 1;
@@ -521,8 +525,8 @@ b {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 70px;
-  height: 70px;
+  width: 78px;
+  height: 64px;
   margin-left: 10px;
 }
 
@@ -574,3 +578,57 @@ b {
 
 
 
+.icon-design{
+  color: #3f51b5 !important; /* Danger color for delete icon */
+  font-size: 24px !important; 
+}
+.load-more-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.custom-pagination {
+  position: sticky;
+  bottom: 0;
+  right: 20px; 
+  background: white;
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  justify-content: flex-end; 
+}
+
+.custom-pagination button {
+  border: none;
+  background: #0D6EFD;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 10px; 
+  margin: 0;
+  border-radius: 4px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px; 
+  height: 30px; 
+}
+
+.custom-pagination button.active {
+  font-weight: bold;
+  background: #0056b3; 
+}
+
+.custom-pagination mat-icon {
+  font-size: 20px;
+  color: white;
+  width: 20px;
+  height: 20px;
+}
