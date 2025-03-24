@@ -166,7 +166,7 @@
         <div>
           <mat-card class="activity-card-employee">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -750,8 +750,8 @@
         <div>
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
-            <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+            <div class="card-body  ">
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -1390,7 +1390,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -2029,7 +2029,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -3023,7 +3023,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -3919,7 +3919,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -4640,7 +4640,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -5259,7 +5259,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
@@ -5976,7 +5976,7 @@
           <mat-card [ngClass]=" individualCounts ? 'activity-card' : 'activity-card-individual' "
             *ngIf="privilegeServ.hasPrivilege('RECENT_ACTIVITY_DATA')">
             <div class="card-body">
-              <h3 class="card-title bold-text">Recent Activity
+              <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
               <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
