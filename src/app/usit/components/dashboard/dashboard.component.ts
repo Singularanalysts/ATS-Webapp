@@ -279,7 +279,7 @@ console.log(previlage,'previlage');
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     if (this.department !== 'Consultant' && this.role !== 'Employee') {
-      this.getDiceReqs(); 
+      // this.getDiceReqs(); 
       this.getDiceReqss(1); 
       // this.getDiceReqss();
       this.getSourcingLeads();
@@ -767,7 +767,14 @@ console.log(totalRecords,'totalrecords');
   currentPagedice = 1;
   pageSizedice = 13;
   totalPagesdice = 1;
-  
+    showTable = false;  // Initially hide the table
+
+  toggleTable() {
+    this.showTable = !this.showTable;
+    if (this.showTable && this.dataSourceDice.data.length === 0) {
+      this.getDiceReqs(); // Fetch data only when table is first opened
+    }
+  }
   getDiceReqs() {
     const payload = {
       pageNumber: this.currentPagedice,
