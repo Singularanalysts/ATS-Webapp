@@ -672,3 +672,12 @@ button {
 //   border-top: 1px solid #ddd;
 // }
 
+.sticky-activity {
+  position: sticky !important;
+  top: 0;
+  background-color: white; /* Ensures it stays white */
+  z-index: 1000; /* Keeps it above other elements */
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Adds a subtle separator */
+  top: -21px;
+}
