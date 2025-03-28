@@ -1,6 +1,7 @@
 import { Component, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -70,8 +71,8 @@ export class AddExecutiveRatingComponent {
       id: [null], 
       teamLead: ['', [Validators.required]],
       ratedTo: [{ value: null, disabled: true }, Validators.required], 
-      rating: ['', Validators.required],
-      feedBack: ['', Validators.required],
+      rating: ['', [Validators.required, Validators.min(0), Validators.max(5)]],
+      feedBack: ['', [Validators.required, Validators.maxLength(500), this.noWhitespaceValidator]],
       ratedBy: [this.userId, Validators.required],
       manager:[this.userId],
       ratingType: ['', Validators.required], // <-- Added Report Type field
@@ -87,6 +88,13 @@ export class AddExecutiveRatingComponent {
       this.fetchRatingById(data.interviewData.id); 
     }
   }
+  noWhitespaceValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (control.value?.trim().length === 0) {
+      return { whitespace: true };
+    }
+    return null;
+  }
+  
   reportTypes: string[] = ['WEEKLY', 'MONTHLY', 'DAILY'];
 
 onReportTypeSelected(value: string): void {
@@ -171,10 +179,56 @@ ngOnInit(): void {
       map(value => (typeof value === 'string' ? this.filterTeamLead(value) : this.managerList))
     );
   
+    // this.searchExecutiveOptions$ = this.ratingForm.get('ratedTo')!.valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => (typeof value === 'string' ? this.filterExecutives(value) : this.executiveList))
+    // );
     this.searchExecutiveOptions$ = this.ratingForm.get('ratedTo')!.valueChanges.pipe(
       startWith(''),
       map(value => (typeof value === 'string' ? this.filterExecutives(value) : this.executiveList))
     );
+    this.ratingForm.get('ratedTo')!.valueChanges.subscribe(value => {
+      const isValidSelection = this.executiveList.some(exec => exec.id === value);
+    
+      if (userRole !== 'Recruiting Manager' && userRole !== 'Sales Manager') {
+        if (!isValidSelection) {
+          this.ratingForm.get('ratedTo')?.setErrors({ invalidSelection: true });
+        } else {
+          this.ratingForm.get('ratedTo')?.setErrors(null);
+        }
+      } else {
+        if (value && !isValidSelection) {
+          this.ratingForm.get('ratedTo')?.setErrors({ invalidSelection: true });
+        } else {
+          this.ratingForm.get('ratedTo')?.setErrors(null);
+        }
+      }
+    });
+    
+    
+    this.ratingForm.get('teamLead')!.valueChanges.subscribe(value => {
+      const isValidSelection = this.managerList.some(manager => manager.id === value);
+      const userRole = localStorage.getItem('role');
+    
+      if (userRole === 'Recruiting Manager' || userRole === 'Sales Manager') {
+        if (!isValidSelection) {
+          this.ratingForm.get('teamLead')?.setErrors({ invalidSelection: true });
+        } else {
+          this.ratingForm.get('teamLead')?.setErrors(null);
+        }
+      } else {
+        this.ratingForm.get('teamLead')?.setErrors(null);
+      }
+    });
+    this.ratingForm.get('ratingType')!.valueChanges.subscribe(value => {
+      if (!this.reportTypes.includes(value)) {
+        this.ratingForm.get('ratingType')?.setErrors({ invalidSelection: true });
+      } else {
+        this.ratingForm.get('ratingType')?.setErrors(null);
+      }
+    });
+    
+    
   }  
   
   
@@ -192,19 +246,38 @@ ngOnInit(): void {
   }
 
 
+  // getExecutiveDropdown(teamLeadId?: number) {
+  //   this.privilegeServ.getdropdownexecutive(teamLeadId).subscribe({
+  //     next: (response: any) => {
+  //       this.executiveList = response.data || [];
+  //       console.log(this.executiveList, 'executiveList');
+
+  //       this.searchExecutiveOptions$ = of(this.executiveList);
+
+  //       this.ratingForm.get('ratedTo')?.setValue(this.ratingForm.get('ratedTo')!.value || '');
+  //     },
+  //     error: (err: any) => console.error('Error fetching executives:', err)
+  //   });
+  // }
   getExecutiveDropdown(teamLeadId?: number) {
     this.privilegeServ.getdropdownexecutive(teamLeadId).subscribe({
       next: (response: any) => {
         this.executiveList = response.data || [];
         console.log(this.executiveList, 'executiveList');
-
-        this.searchExecutiveOptions$ = of(this.executiveList);
-
+  
+        // Reinitialize observable for search functionality
+        this.searchExecutiveOptions$ = this.ratingForm.get('ratedTo')!.valueChanges.pipe(
+          startWith(''),
+          map(value => (typeof value === 'string' ? this.filterExecutives(value) : this.executiveList))
+        );
+  
+        // Set default value if necessary
         this.ratingForm.get('ratedTo')?.setValue(this.ratingForm.get('ratedTo')!.value || '');
       },
       error: (err: any) => console.error('Error fetching executives:', err)
     });
   }
+  
   getPseudoName(id: number, list: any[]): string {
     const item = list.find(entry => entry.id === id);
     return item ? item.pseudoName : '';
@@ -221,38 +294,73 @@ ngOnInit(): void {
   }
 
 
+  // private filterExecutives(value: string): any[] {
+  //   console.log('Search Input:', value);
+
+  //   if (!this.executiveList || !Array.isArray(this.executiveList)) {
+  //     console.warn('Executive list is empty or not an array');
+  //     return [];
+  //   }
+
+  //   const filterValue = value.toLowerCase();
+  //   const executivelistdata = this.executiveList.filter(executive =>
+  //     executive?.pseudoName?.toLowerCase().includes(filterValue)
+  //   );
+
+  //   console.log('Filtered Executives:', executivelistdata);
+  //   return executivelistdata;
+  // }
   private filterExecutives(value: string): any[] {
     console.log('Search Input:', value);
-
+  
     if (!this.executiveList || !Array.isArray(this.executiveList)) {
       console.warn('Executive list is empty or not an array');
       return [];
     }
-
+  
     const filterValue = value.toLowerCase();
-    const executivelistdata = this.executiveList.filter(executive =>
-      executive?.pseudoName?.toLowerCase().includes(filterValue)
+    return this.executiveList.filter(executive =>
+      executive.pseudoName.toLowerCase().includes(filterValue)
     );
-
-    console.log('Filtered Executives:', executivelistdata);
-    return executivelistdata;
   }
+  
 
+  // displayExecutiveName = (id: number): string => {
+  //   const executive = this.executiveList.find(exec => exec.id === id);
+  //   return executive ? executive.pseudoName : '';
+  // };
   displayExecutiveName = (id: number): string => {
     const executive = this.executiveList.find(exec => exec.id === id);
     return executive ? executive.pseudoName : '';
   };
+
   
   displayTeamleadName = (id: number): string => {
     const teamlead = this.managerList.find(teamlead => teamlead.id === id);
     return teamlead ? teamlead.pseudoName : '';
   }
+  // onExecutiveSelected(userId: number) {
+  //   const selectedExecutive = this.executiveList.find(executive => executive.id === userId);
+  //   if (selectedExecutive) {
+  //     this.ratingForm.get('ratedTo')?.setValue(selectedExecutive.id); 
+  //   }
+  // }
+  // onExecutiveSelected(userId: number) {
+  //   const selectedExecutive = this.executiveList.find(executive => executive.id === userId);
+  //   if (selectedExecutive) {
+  //     this.ratingForm.get('ratedTo')?.setValue(selectedExecutive.id);
+  //   }
+  // }
   onExecutiveSelected(userId: number) {
     const selectedExecutive = this.executiveList.find(executive => executive.id === userId);
     if (selectedExecutive) {
-      this.ratingForm.get('ratedTo')?.setValue(selectedExecutive.id); 
+      this.ratingForm.get('ratedTo')?.setValue(selectedExecutive.id);
+    } else {
+      this.ratingForm.get('ratedTo')?.setErrors({ invalidSelection: true });
     }
   }
+  
+
   onTeamLeadSelected(teamLeadId: number) {
     const selectedTeamLead = this.managerList.find(manager => manager.id === teamLeadId);
     if (selectedTeamLead) {
@@ -292,7 +400,7 @@ ngOnInit(): void {
     };
   
     if (isTeamLead) {
-      payload.teamLead = Number(userIdFromLocalStorage); // Override teamLead field
+      payload.teamLead = Number(userIdFromLocalStorage);
     }
   
     if (this.ratingForm.get('id')?.value) {

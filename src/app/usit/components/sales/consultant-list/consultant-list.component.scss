@@ -432,6 +432,90 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   font-weight: var(--mat-form-field-container-text-weight);
   margin-left: 17px !important;
 }
-.consultant-actions {
-  
+.consultant-action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px; /* Space between elements */
+  width: 100%;
+}
+@media screen and (max-width: 1440px) {
+  .dropdownpriority{
+    width:80% !important
+  }
+  .dropdownvisa{
+    width:80% !important
+  }
+  .dropdownexperience{
+    width: 80% !important;
+  }
+  .consultant-action {
+    width: 30%; /* Reduce width */
+  }
+
+  .custom-mat-select,
+  .search,
+  .positionsearch {
+    width: 30%; /* Ensure consistent width */
+    font-size: 14px;
+  }
+}
+
+/* Further reduce width and adjust height for 1024px screens */
+@media screen and (max-width: 1024px) {
+  .dropdownpriority{
+    width:80% !important
+  }
+  .dropdownvisa{
+    width:80% !important
+  }
+  .dropdownexperience{
+    width: 80% !important;
+  }
+  .consultant-action {
+    width: 30%;
+  }
+
+  .custom-mat-select,
+  .search,
+  .positionsearch {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  .search {
+    height: 32px;
+    padding: 0px 8px;
+  }
+
+  .positionsearch {
+    height: 42px;
+    padding: 0px 8px;
+  }
+}
+
+/* Stack inputs in column layout for 768px and below */
+@media screen and (max-width: 768px) {
+  .dropdownpriority{
+    width:80% !important
+  }
+  .dropdownvisa{
+    width:80% !important
+  }
+  .dropdownexperience{
+    width: 80% !important;
+  }
+  .consultant-action {
+    flex-direction: column; /* Stack elements */
+    align-items: center;
+    width:30%;
+  }
+
+  /* Force full width for small screens */
+  .custom-mat-select,
+  .search,
+  .positionsearch {
+    width: 90%;
+    font-size: 12px;
+  }
 }

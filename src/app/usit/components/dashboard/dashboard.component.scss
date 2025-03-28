@@ -524,14 +524,16 @@ b {
 .rating-icon {
   font-size: 43px;
   background: #d2f7d9;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 50%; /* Ensures round shape */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 50% opacity */
   color: #3cdf86;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 78px;
+  width: 64px; /* Ensure width and height are equal */
   height: 64px;
+  min-width: 64px;
+  min-height: 64px;
   margin-left: 10px;
 }
 

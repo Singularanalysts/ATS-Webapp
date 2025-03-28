@@ -8,10 +8,16 @@ import { AddFulltimeResumeComponent } from './components/consultant-components/c
 
 @NgModule({
   declarations: [
+
+
+
+
+
+
+
   
     
   
-    
   
   ],
   imports: [
@@ -19,7 +25,9 @@ import { AddFulltimeResumeComponent } from './components/consultant-components/c
     UsitRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ReactiveFormsModule,
+   
   ]
 })
 export class UsitModule { }

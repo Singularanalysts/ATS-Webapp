@@ -20,7 +20,7 @@
 
           <div class="form-container" style="border-radius:30px">
             <ng-container *ngIf="flag !== 'presales'  && flag !== 'DomRecruiting'">
-              <mat-form-field class="custom-mat-select visa ">
+              <mat-form-field class="custom-mat-select visa  dropdownvisa ">
                 <mat-label>Visa</mat-label> <!-- ✅ Added mat-label -->
                 <mat-select formControlName="visa" multiple (selectionChange)="onVisaChange($event)" class="visa-select">
                   <mat-option *ngFor="let option of visadata" [value]="option[0]">
@@ -34,7 +34,7 @@
             </ng-container>
           </div>
           <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting' && flag !== 'DomRecruiting'">
-            <mat-form-field class="custom-mat-select experience">
+            <mat-form-field class="custom-mat-select experience dropdownpriority">
               <mat-label>Priority</mat-label>
               <mat-select formControlName="priority" multiple (selectionChange)="onPriorityChange($event)">
                 <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
@@ -49,7 +49,7 @@
         
           <div>
             <ng-container *ngIf="flag !== 'presales'">
-              <mat-form-field class="custom-mat-select experience">
+              <mat-form-field class="custom-mat-select experience dropdownexperience">
                 <mat-label>Experience</mat-label> <!-- Added mat-label -->
                 <mat-select formControlName="experience" multiple (selectionChange)="onExperienceChange($event)">
                   <mat-option *ngFor="let exp of experiences" [value]="exp">

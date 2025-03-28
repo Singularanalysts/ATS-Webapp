@@ -316,6 +316,16 @@ console.log(previlage,'previlage');
     }
 
   }
+  goToCompany(companyName: string) {
+    this.router.navigate(['/usit/vendors'], { queryParams: { company: companyName } });
+    console.log(companyName,'companyname');
+    
+  }
+  navigateToRecruiters(vendorName: string) {
+    this.router.navigate(['/usit/recruiters'], { queryParams: { company: vendorName } });
+    console.log(vendorName,'vendornameee');
+    
+  }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
     if (this.intervalSubscription) {

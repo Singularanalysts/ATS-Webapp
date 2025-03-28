@@ -37,4 +37,8 @@ export class TechnologyTagService {
   addOrUpdateTechnology(entity: any, action: string) {
     return action === "update-technology" ? this.updateTechnology(entity) : this.addTechnology(entity);
   }
+  AddSkills(payload:any){
+    return this.apiServ.post("openreqs/skills/createSkill", payload);
+
+  }
 }

@@ -37,6 +37,7 @@ import { Recruiter } from 'src/app/usit/models/recruiter';
 import { RecruiterService } from 'src/app/usit/services/recruiter.service';
 import { AddRecruiterComponent } from './add-recruiter/add-recruiter.component';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-recruiter-list',
@@ -115,14 +116,18 @@ export class RecruiterListComponent implements OnInit {
   tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.role = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
     this.AssignedPageNum = localStorage.getItem('rnum');
-    this.getAllRecruiters();
     this.getemph();
+    this.route.queryParams.subscribe(params => {
+      const companyName = params['company'] ;
+      this.getAllRecruiters(1, 'all', companyName); // Send companyName if available
+    });
   }
 
   getemph() {
@@ -141,7 +146,7 @@ export class RecruiterListComponent implements OnInit {
    * get all recruiter data
    * @returns recruiter data
    */
-  getAllRecruiters(pageNumber = 1, status: string = 'all') {
+  getAllRecruiters(pageNumber = 1, status: string = 'all',companyName?: string) {
     const pagObj = {
       pageNumber: pageNumber,
       pageSize: this.itemsPerPage,
@@ -151,6 +156,9 @@ export class RecruiterListComponent implements OnInit {
       role: this.role,
       userid: this.loginId,
       country: this.status
+    }
+    if (companyName) {
+      pagObj.keyword = companyName;
     }
     return this.recruiterServ
       .getAllRecruitersPagination(
