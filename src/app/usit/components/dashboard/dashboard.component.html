@@ -187,8 +187,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
-                  </b>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>                  </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
@@ -197,7 +196,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -214,7 +213,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -230,7 +229,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <!-- <b class="bold-text">{{data.emptype}}</b> -->
@@ -241,8 +240,7 @@
 
                 <div class="activity-content" *ngIf="data.flag=='submission'">
                   <b class="bold-text status">{{data.status | titlecase}}</b> Your Profile for <b
-                    class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}}
-                      (V),</span>
+                    class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
                   <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
@@ -254,8 +252,7 @@
                     date:'HH:mm' }} {{ data.time_zone }}, </b>
                   <b class="bold-text ">{{ data.round| titlecase }}</b> round <b class="bold-text ">({{ data.mode}}),
                   </b>
-                  <b class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}}
-                      (V),</span>
+                  <b class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
                   <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
@@ -772,7 +769,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -782,7 +779,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -799,7 +796,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -815,7 +812,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -824,7 +821,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -834,7 +831,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1311,7 +1308,11 @@
 
               <ng-container matColumnDef="TCount">
                 <th mat-header-cell *matHeaderCellDef> Vendor </th>
-                <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+                <td mat-cell *matCellDef="let element">
+                  <a (click)="navigateToRecruiters(element.vendor)" class="vendor-link" style="cursor:pointer">
+                    {{ element.vendor }}
+                  </a>
+                </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
@@ -1411,7 +1412,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -1421,7 +1422,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -1438,7 +1439,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1454,7 +1455,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -1463,7 +1464,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1473,7 +1474,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1820,10 +1821,13 @@
                 <th mat-header-cell *matHeaderCellDef> Employment Type </th>
                 <td mat-cell *matCellDef="let element"> {{ element.employment_type }} </td>
               </ng-container>
-
               <ng-container matColumnDef="TCount">
                 <th mat-header-cell *matHeaderCellDef> Vendor </th>
-                <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+                <td mat-cell *matCellDef="let element">
+                  <a (click)="navigateToRecruiters(element.vendor)" class="vendor-link" style="cursor:pointer">
+                    {{ element.vendor }}
+                  </a>
+                </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
@@ -2050,7 +2054,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -2060,7 +2064,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -2077,7 +2081,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -2093,7 +2097,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -2102,7 +2106,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -2112,7 +2116,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -2816,8 +2820,13 @@
 
               <ng-container matColumnDef="TCount">
                 <th mat-header-cell *matHeaderCellDef> Vendor </th>
-                <td mat-cell *matCellDef="let element"> {{ element.vendor }} </td>
+                <td mat-cell *matCellDef="let element">
+                  <a (click)="navigateToRecruiters(element.vendor)" class="vendor-link" style="cursor:pointer">
+                    {{ element.vendor }}
+                  </a>
+                </td>
               </ng-container>
+              
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
@@ -3044,7 +3053,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -3054,7 +3063,8 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V)</a>
+
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -3071,7 +3081,10 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text">
+                        <a (click)="goToCompany(data.company)" class="bold-text" style="color:green; cursor: pointer;">{{ data.company }}(V)</a>
+                      
+                      </span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3087,7 +3100,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V)</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -3096,7 +3109,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3106,7 +3119,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3940,7 +3953,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -3950,7 +3963,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -3967,7 +3980,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3983,7 +3996,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -3992,7 +4005,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4002,7 +4015,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4661,7 +4674,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -4671,7 +4684,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -4688,7 +4701,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4704,7 +4717,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -4713,7 +4726,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4723,7 +4736,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5280,7 +5293,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -5290,7 +5303,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -5307,7 +5320,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5323,7 +5336,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -5332,7 +5345,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5342,7 +5355,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5997,7 +6010,7 @@
                       </ng-template>
                     </span>
                     &nbsp;
-                    {{data.company}}
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
@@ -6007,7 +6020,7 @@
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text">{{data.company}}(V)
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -6024,7 +6037,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}}(V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -6040,7 +6053,7 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text">{{data.company}} (V),</span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -6049,7 +6062,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -6059,7 +6072,7 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text">{{data.company}} (V),</span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>

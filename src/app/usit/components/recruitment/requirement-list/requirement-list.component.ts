@@ -409,4 +409,10 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+  Assignedrequirements(){
+    this.router.navigate(['/usit/assigned-requirements']);
+    console.log('routinggggg');
+    
+
+  }
 }
