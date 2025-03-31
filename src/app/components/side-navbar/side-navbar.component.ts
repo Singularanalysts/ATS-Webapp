@@ -201,41 +201,41 @@ myRoles(){
         "routerLink": "/usit/pre-sales",
         "roles":["Super Administrator"]  
       },
-    {
-      "test": "SOURCING",
-      "text": "Sourcing",
-      "icon": "local_offer",
-      "children": [
-        {
-          "test": "Sourcing",
-          "text": "Sourcing",
-          "icon": "flash_on",
-          "routerLink": "/usit/sourcing",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "Pursuing",
-          "text": "Pursuing",
-          "icon": "person",
-          "routerLink": "/usit/pursuing",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "OnBoarding",
-          "text": "OnBoarding",
-          "icon": "assignment",
-          "routerLink": "/usit/onboarding",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "Closures",
-          "text": "Closures",
-          "icon": "check_circle",
-          "routerLink": "/usit/sourcing-closures",
-          "roles":["Super Administrator"]  
-        }
-      ]
-    },
+    // {
+    //   "test": "SOURCING",
+    //   "text": "Sourcing",
+    //   "icon": "local_offer",
+    //   "children": [
+    //     {
+    //       "test": "Sourcing",
+    //       "text": "Sourcing",
+    //       "icon": "flash_on",
+    //       "routerLink": "/usit/sourcing",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "Pursuing",
+    //       "text": "Pursuing",
+    //       "icon": "person",
+    //       "routerLink": "/usit/pursuing",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "OnBoarding",
+    //       "text": "OnBoarding",
+    //       "icon": "assignment",
+    //       "routerLink": "/usit/onboarding",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "Closures",
+    //       "text": "Closures",
+    //       "icon": "check_circle",
+    //       "routerLink": "/usit/sourcing-closures",
+    //       "roles":["Super Administrator"]  
+    //     }
+    //   ]
+    // },
     {
       "test": "SALES",
       "text": "Sales",

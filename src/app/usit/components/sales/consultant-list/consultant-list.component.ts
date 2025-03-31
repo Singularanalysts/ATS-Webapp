@@ -273,7 +273,7 @@ export class ConsultantListComponent
 
   filterData(request: any,page:any) {
   this.filterApply=true
-    return this.consultantServ.getFilteredConsults(page,this.pageSize ,request).subscribe(
+    return this.consultantServ.getFilteredConsultant(page,this.pageSize,request).subscribe(
       ((response: any) => {
         this.consultant = response.data.content;
         console.log(this.consultant,'consultantttt');
@@ -327,11 +327,12 @@ triggerFilterAPI(): void {
     visaStatus: Array.from(this.selectedVisaOptions), // Pass selected visa values
     priority: this.myForm.get('priority')?.value,
     experience: this.myForm.get('experience')?.value,
-    consultantflg: this.flag
+    consultantflg: this.flag,
+    // companyId: localStorage.getItem('companyid')
   };
 
   this.filterApply = true;
-  this.consultantServ.getFilteredConsults(this.page, this.pageSize, request).subscribe((response: any) => {
+  this.consultantServ.getFilteredConsultant(this.page, this.pageSize, request).subscribe((response: any) => {
     this.consultant = response.data.content;
     console.log(this.consultant, 'consultantttt');
 
@@ -431,6 +432,7 @@ triggerFilterAPI(): void {
       role: this.role,
       userId: this.userid,
       preSource: 0,
+      companyId:localStorage.getItem('companyid')
     }
 
     return this.consultantServ
@@ -482,6 +484,7 @@ triggerFilterAPI(): void {
         role: this.role,
         userId: this.userid,
         preSource: 0,
+        companyId: localStorage.getItem('companyid')
       }
       return this.consultantServ.getAllConsultantData(pagObj).subscribe(
           ((response: any) => {
@@ -943,7 +946,7 @@ triggerFilterAPI(): void {
     handleExport() {
       this.filterApply = true;
       if (JSON.stringify(this.request) !== '{}') { 
-      return this.consultantServ.getFilteredConsults(1, 1000, this.request).subscribe(
+      return this.consultantServ.getFilteredConsultant(1, 1000, this.request).subscribe(
         (response: any) => {
           this.consultant = response.data.content;
           this.dataSource.data = response.data.content;

@@ -199,5 +199,8 @@ export class OpenreqService {
     return this.http.get("auth/users/getAllActiveUsersEmails");
   }
 
+  allactiveUserEmails(){
+    return this.http.get("auth/users/getAllActiveUsersEmails");
+  }
 
 }

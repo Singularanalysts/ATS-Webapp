@@ -150,7 +150,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   getAllData(pageIndex = 1 ) {
     this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, pageIndex, this.pageSize, this.field,
       this.sortField,
-      this.sortOrder).subscribe(
+      this.sortOrder, localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.entity = response.data.content;
         this.dataSource.data =  response.data.content;
@@ -172,7 +172,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     if (keyword != '') {
       return this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
         this.sortField,
-        this.sortOrder).subscribe(
+        this.sortOrder, localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.totalItems = response.data.totalElements;

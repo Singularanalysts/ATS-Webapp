@@ -165,8 +165,8 @@ export class ConsultantService {
     return this.http.get("consultant/hotlist/" + page + "/" + size + "/" + field);
   }
 
-  getSalesAllHotListWithUserid(id: any) {
-    return this.http.get("consultant/getAssginConsultantList/"+id);
+  getSalesAllHotListWithUserid(id: any, company: any) {
+    return this.http.get("consultant/getAssginConsultantList/"+id+"/"+company);
   }
 
   getOptCptList(page: any, size: any, field: any, sortField: any, sortOrder: any) {
@@ -187,6 +187,10 @@ export class ConsultantService {
   // }
 
   getFilteredConsults(pageno: any, pagesize: any, request:any) {
+    return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
+  }
+
+  getFilteredConsultant(pageno: any, pagesize: any, request:any) {
     return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
   }
 
