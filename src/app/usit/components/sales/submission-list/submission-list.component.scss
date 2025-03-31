@@ -384,3 +384,7 @@ ul.breadcrumb li:last-child {
   width: 24px !important;
   height: 24px !important;
 }
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 0 4px 0 4px;
+  border-right: 1px solid lightgray !important;
+}

@@ -71,6 +71,7 @@ import { TaggedcountReportComponent } from './components/reports/taggedcount-rep
 import { ReportEmailComponent } from './components/email-extraction/report-email/report-email.component';
 import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
 
+import { AssignedRequirementsComponent } from './components/recruitment/assigned-requirements/assigned-requirements.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -331,7 +332,10 @@ const routes: Routes = [
   {
     path: 'candidate-reports', component: CandidateReportComponent,
   },
+
   {path:'report-email',component:ReportEmailComponent},
+  {path:'assigned-requirements',component:AssignedRequirementsComponent},
+  
   // {
   //   path: 'tcvr', component: ClientInformationComponent,
   // },
@@ -353,6 +357,8 @@ const routes: Routes = [
   // {
   //   path: 'email-configuration', component: EmailConfigurationComponent
   // }
+  // {path:'assigned-requirements',component: },
+
   {
     path: 'tcvr',
     loadComponent: () => import('../usit/components/vendor-management/client-information/client-information.component').then(m => m.ClientInformationComponent)

@@ -56,11 +56,9 @@ tbody {
 .settings-icon {
   cursor: pointer;
   font-size: 24px; /* Adjust size if needed */
-  color: #007bff; /* Change color if needed */
+  color: #3f51b5; /* Change color if needed */
 }
-.settings-icon:hover {
-  color: #0056b3; /* Darker shade on hover */
-}
+
 
 
 .mat-sort-header-arrow {
@@ -376,4 +374,23 @@ button:hover .tooltip {
 
 .mat-mdc-button .mat-mdc-button-touch-target{
   font-size: 0px;
+}
+.icondesign{
+  color: #3f51b5;
+}
+.button-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust spacing between buttons */
+}
+
+
+
+.icon-design{
+  color: #3f51b5 !important; /* Danger color for delete icon */
+  font-size: 24px !important; /* Ensures all icons are the same size */
+}
+.delete-button {
+  color: #d32f2f !important; /* Danger color for delete icon */
+  font-size: 24px !important; /* Ensures all icons are the same size */
 }

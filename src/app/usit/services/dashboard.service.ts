@@ -28,42 +28,52 @@ export class DashboardService {
     return this.apiServ.get("dashboard/closurecount/" + flag);
   }
 
-  public getDiceRequirements(role: string, empid:any) {
-    // return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
-    // return this.apiServ.get("requirement/postedInLastDays");
-    if (role === 'Team Leader Sales' || role == 'Sales Manager' || role == 'Super Administrator') {
-      return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
-    } else if (role === 'Recruiter' || role === 'Team Leader Recruiting' || role === 'Recruiting Manager') {
+  // public getDiceRequirements(role: any, empid:any) {
+  //   const requestData = { empid: empid }; // Sending empid in POST request
+  //   // return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
+  //   // return this.apiServ.get("requirement/postedInLastDays");
+  //   if (role === 'Team Leader Sales' || role == 'Sales Manager' || role == 'Super Administrator') {
+  //     return this.apiServ.post("dashboard/getTaggedcounts/empty/empty/0", requestData);
+  //   } else if (role === 'Recruiter' || role === 'Team Leader Recruiting' || role === 'Recruiting Manager') {
+  //     return this.apiServ.get("requirement/postedInLastDays");
+  //   }else if (role === 'Sales Executive') {
+  //     return this.apiServ.get("consultant/assignedDashboardConsultantsDataById/" +empid);
+  //   } 
+  //   else {
+  //     // Handle other roles or return a default value
+  //     return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
+  //   }
+  //  }
+  public getDiceRequirements(payload: { role: any; userId: any; pageNumber: any; pageSize: any }) {
+    if (payload.role === 'Team Leader Sales' || payload.role == 'Sales Manager' || payload.role == 'Super Administrator') {
+      return this.apiServ.post("dashboard/getTaggedcounts", payload);
+    } else if (payload.role === 'Recruiter' || payload.role === 'Team Leader Recruiting' || payload.role === 'Recruiting Manager') {
       return this.apiServ.get("requirement/postedInLastDays");
-    }else if (role === 'Sales Executive') {
-      return this.apiServ.get("consultant/assignedDashboardConsultantsDataById/" +empid);
-    } 
-    else {
-      // Handle other roles or return a default value
+    } else if (payload.role === 'Sales Executive') {
+      return this.apiServ.get("consultant/assignedDashboardConsultantsDataById/" + payload.userId);
+    } else {
       return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
     }
-   }
-
+  }
+  
    public getDiceRequirementslax(role: any, actData : any) {
     
     if (role === 'Team Leader Sales' || role == 'Sales Manager' || role === 'Sales Executive') {
       return this.apiServ.post("openreqs/dice/allEmpContractAllReqs",  actData);
     }
-    else {
-      return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
-    }
+  return null
    }
 
-   public getDiceRequirementss() {
- return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0");
-   }
+//    public getDiceRequirementss() {
+//  return this.apiServ.get("dashboard/getTaggedcounts");
+//    }
 
     public getEmployeeName() {
      return this.apiServ.get("dashboard/getBanchSalesEmps");
     }
 
-  public getSourcingLeads(id: any) {
-    return this.apiServ.get("dashboard/all/" + id);
+  public getSourcingLeads(data: any) {
+    return this.apiServ.post("dashboard/all" , data);
   }
 
   // for executive and lead
@@ -118,9 +128,13 @@ export class DashboardService {
     return this.apiServ.get("dashboard/reqCounts/" + search + "/" +flag + "/" + type + "/" + date);
   }
   
-  getFilteredEmployee(startDate:any ,endDate:any ,id:any){
-    return this.apiServ.get("dashboard/getTaggedcounts/"+startDate+"/"+endDate+"/"+id)
+  // getFilteredEmployee(startDate:any ,endDate:any ,id:any){
+  //   return this.apiServ.get("dashboard/getTaggedcounts/"+startDate+"/"+endDate+"/"+id)
+  // }
+  getFilteredEmployee(payload: { fromDate: any; toDate: any; userId: any ;pageNumber: number; pageSize: number }) {
+    return this.apiServ.post("dashboard/getTaggedcounts", payload);
   }
+  
 
   getVendorAndCategoryAnalysisCountByDate(date: any, type: any) {
     return this.apiServ.get("dashboard/reqCountsWithDate/" + date + "/" + type);

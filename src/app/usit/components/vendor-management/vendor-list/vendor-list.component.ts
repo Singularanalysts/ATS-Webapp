@@ -41,6 +41,7 @@ import { UploadVmsExcelComponent } from '../recruiter-list/upload-vms-excel/uplo
 import { ConfirmWithRadioButtonComponent } from 'src/app/dialogs/confirm-with-radio-button/confirm-with-radio-button.component';
 import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-with-radio-data';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-list',
@@ -121,19 +122,23 @@ export class VendorListComponent implements OnInit {
   tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.role = localStorage.getItem('role');
     this.loginId = localStorage.getItem('userid');
     this.department = localStorage.getItem('department');
-    this.getAllData();
+    this.route.queryParams.subscribe(params => {
+      const companyName = params['company']; // Get company name from URL
+      this.getAllData(1, 'all', companyName); // Pass companyName for filtering
+    });
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
 
-  getAllData(pageNumber = 1, status: string = 'all') {
+  getAllData(pageNumber = 1, status: string = 'all',companyName?: string) {
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
       duration: 1500,
@@ -150,8 +155,13 @@ export class VendorListComponent implements OnInit {
       keyword: this.field,
       role: this.role,
       userid: this.loginId,
-      country: this.status
+      country: this.status,
+
     }
+    if (companyName) {
+      pagObj.keyword = companyName;
+    }
+  
     return this.vendorServ
       .getAllVendorsByPagination(
         pagObj
@@ -161,6 +171,7 @@ export class VendorListComponent implements OnInit {
         next: (response: any) => {
           this.datarr = response.data.content;
           this.dataSource.data = response.data.content;
+          
           // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
@@ -633,14 +644,25 @@ export class VendorListComponent implements OnInit {
   }
 
   moveVendorToCpvOrFpv(vendor: any) {
-    const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
-      title: 'Confirmation',
-      message: 'Are you sure you want to move Vendor to CPV/FPV/Blacklisted ?',
-      radioButtons: ['Current Primary Vendor', 'Future Primary Vendor', 'Blacklisted'],
-      confirmText: 'Yes',
-      cancelText: 'No',
-      actionData: vendor,
-    };
+      // Define available options
+      let message = 'Are you sure you want to move Vendor to CPV/FPV/Blacklisted ?';
+      let radioButtons = ['Current Primary Vendor', 'Future Primary Vendor', 'Blacklisted'];
+    
+      // If the vendor status is "Initiated", only show the "Blacklisted" option and update the message
+      if (vendor.vms_stat === 'Initiated') {
+        message = 'Are you sure you want to move Vendor to Blacklisted?';
+        radioButtons = ['Blacklisted']; // Remove CPV & FPV options
+      }
+
+  const dataToBeSentToDailog: Partial<IConfirmRadioDialogData> = {
+    title: 'Confirmation',
+    message: message,
+    radioButtons: radioButtons,  // Use the dynamically adjusted options
+    confirmText: 'Yes',
+    cancelText: 'No',
+    actionData: vendor,
+  };
+  
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = 'fit-content';

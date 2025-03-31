@@ -8,6 +8,8 @@
       Technology Tag
     </span>
     <div class="hot-list-actions">
+      <button  class="search"  mat-raised-button color="primary" (click)="openskill()">Skills</button>
+
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_TECHNOLOGY_TAG')" mat-icon-button class="add-user"
         (click)="addTechnology()" matTooltip="Add Technology" matTooltipPosition="left">
         <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_TECHNOLOGY_TAG')}">add_circle</mat-icon>

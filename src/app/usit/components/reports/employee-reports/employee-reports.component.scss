@@ -411,3 +411,20 @@ ul.breadcrumb li:last-child {
     z-index: 99999;
     
   }
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.searchconsultant{
+  height: 36px;
+  margin: 12px;
+  width: 186px;
+}
+::ng-deep input::placeholder {
+  color: gray; /* Change placeholder color */
+  font-size: 14px; /* Adjust font size */
+  opacity: 1; /* Ensure full visibility */
+  padding: 22px !important;
+}

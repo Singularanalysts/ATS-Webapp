@@ -198,9 +198,19 @@ export class OpenreqService {
   blockedEmailsLists() {
     return this.http.get("auth/users/getAllActiveUsersEmails");
   }
+assignedrequirements(payload:any){
+  return this.http.post("requirement/getAssignedRequirementUsers",payload);
+
+
+}
+Requirementsreport(payload:any){
+  return this.http.post("requirement/getAssignedRequirementsPopup",payload);
+
+}
 
   allactiveUserEmails(){
     return this.http.get("auth/users/getAllActiveUsersEmails");
   }
+
 
 }

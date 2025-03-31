@@ -58,7 +58,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     'Dos',
     'Id',
     'Consultant',
-    'Requirement',
+    'Position',
     'Vendor',
     'ImplementationPartner',
     'EndClient',
@@ -372,7 +372,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
   goToReqInfo(element: any) {
     const actionData = {
-      title: `${element.reqnumber}`,
+      title: `${element.subno}`,
       id: element.reqid,
       actionName: 'sub-req-info',
     };
