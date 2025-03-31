@@ -201,10 +201,16 @@ export class OpenreqService {
 assignedrequirements(payload:any){
   return this.http.post("requirement/getAssignedRequirementUsers",payload);
 
+
 }
 Requirementsreport(payload:any){
   return this.http.post("requirement/getAssignedRequirementsPopup",payload);
 
 }
+
+  allactiveUserEmails(){
+    return this.http.get("auth/users/getAllActiveUsersEmails");
+  }
+
 
 }

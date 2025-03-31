@@ -141,7 +141,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
    * @returns employee data
    */
   getAllEmployees(status: string = 'all') {
-    return this.empManagementServ.getAllEmployees(status).pipe(takeUntil(this.destroyed$)).subscribe({
+    return this.empManagementServ.getAllEmployees(status,localStorage.getItem('companyid')).pipe(takeUntil(this.destroyed$)).subscribe({
       next: (response: any) => {
         if (response.data) {
           this.dataSource.data = response.data;

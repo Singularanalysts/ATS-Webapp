@@ -169,6 +169,7 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       keyword: this.field,
+      companyId:localStorage.getItem('companyid')
     }
 
     return this.requirementServ
@@ -210,6 +211,7 @@ export class RequirementListComponent implements OnInit, OnDestroy {
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         keyword: keyword,
+        companyId:localStorage.getItem('companyid')
       }
       return this.requirementServ
       .getAllRequirementData(pagObj)

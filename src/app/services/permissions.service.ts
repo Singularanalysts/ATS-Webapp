@@ -47,6 +47,7 @@ export class PermissionsService {
     localStorage.setItem('userid', user.userid);
     localStorage.setItem('designation', user.designation);
     localStorage.setItem('privileges', user.rolePrivileges);
+    localStorage.setItem('companyid', user.companyid);
     //this.setUserPrivileges(user.rolePrivileges);
     //rolePrivileges
     this.id = user.roleno;
@@ -85,6 +86,7 @@ export class PermissionsService {
     localStorage.removeItem('rnum');
     localStorage.removeItem('vnum');
     localStorage.removeItem('privileges');
+    localStorage.removeItem('companyid');
 
   }
   signout() {
@@ -98,6 +100,7 @@ export class PermissionsService {
     localStorage.removeItem('rnum');
     localStorage.removeItem('vnum');
     localStorage.removeItem('privileges');
+    localStorage.removeItem('companyid');
     //alertify.warning("Token expired please login");
     this.router.navigate(['/']);
     //this.router.navigateByUrl('signin');
