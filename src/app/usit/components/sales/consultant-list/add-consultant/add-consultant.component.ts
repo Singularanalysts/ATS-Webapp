@@ -41,6 +41,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
+import { EmployeeManagementService } from 'src/app/usit/services/employee-management.service';
 
 @Component({
   selector: 'app-add-consultant',
@@ -110,6 +111,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   employees: any[] = [];
   employeedata: any = [];
   userid!:any; 
+  private empManagementServ = inject(EmployeeManagementService);
 
   selectOptionObj = {
     interviewAvailability: IV_AVAILABILITY,
@@ -118,6 +120,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     radioOptions: RADIO_OPTIONS
 
   };
+
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 2500,
@@ -144,6 +147,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   searchTechOptions$!: Observable<any>;
   technologyOptions!: any;
   isTechnologyDataAvailable: boolean = false;
+  isCompanyToDisplay: boolean = false;
 
   constructor(
 
@@ -154,6 +158,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   kiran!:any;
   ngOnInit(): void {
+    this.checkCompany(localStorage.getItem('companyid'));
     this.role = localStorage.getItem('role');
     // below apis are common for add / update consultant
     this.getvisa();
@@ -188,6 +193,28 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     } else {
       this.initConsultantForm(new Consultantinfo());
     }
+  }
+
+  checkCompany(companyid:any){
+
+    this.empManagementServ
+    .getValidDateCompanyGiven(companyid)
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe({
+      next: (response: any) => {
+        this.isCompanyToDisplay = response.data;
+      },
+      error: (err) => {
+        this.dataToBeSentToSnackBar.message = err.message;
+        this.dataToBeSentToSnackBar.panelClass = [
+          'custom-snack-failure',
+        ];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataToBeSentToSnackBar
+        );
+      },
+    });
+  
   }
 
   get controls() {
@@ -385,7 +412,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         visa: [consultantData ? consultantData.visa : '', Validators.required],
         availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
         priority: [consultantData ? consultantData.priority : ''],
-        company: [consultantData ? consultantData.company : '', Validators.required],
         position: [consultantData ? consultantData.position : '', Validators.required],
         status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
@@ -400,6 +426,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         university: [consultantData ? consultantData.university : ''],
         yop: [consultantData ? consultantData.yop : ''],
         emprefname: [consultantData ? consultantData.emprefname : ''],
+        company: [consultantData ? consultantData.company : '', 
+          this.isCompanyToDisplay ? [Validators.required] : []],
         //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
         emprefemail: [consultantData ? consultantData.emprefemail : ''],
         //emprefcont: new FormControl(consultantData ? consultantData.emprefcont : ''),
@@ -456,7 +484,9 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         visa: [consultantData ? consultantData.visa : '', Validators.required],
         availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
         priority: [consultantData ? consultantData.priority : ''],
-        company: [consultantData ? consultantData.company : '', Validators.required],
+        // company: [consultantData ? consultantData.company : '', Validators.required],
+        company: [consultantData ? consultantData.company : '', 
+          this.isCompanyToDisplay ? [Validators.required] : []],
         position: [consultantData ? consultantData.position : '', Validators.required],
         status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
