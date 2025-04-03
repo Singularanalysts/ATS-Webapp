@@ -1,4 +1,6 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 
 @Injectable({
@@ -206,5 +208,11 @@ Requirementsreport(payload:any){
   return this.http.post("requirement/getAssignedRequirementsPopup",payload);
 
 }
+private apiUrl = 'openreqs/resume/getReq'; // API endpoint
+
+resumeupload(formData: FormData, params: HttpParams): Observable<any> {
+  return this.http.post(this.apiUrl, formData, { params }); // Include params in options
+}
+
 
 }

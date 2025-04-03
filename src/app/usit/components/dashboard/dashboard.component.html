@@ -859,7 +859,7 @@
    <div *ngIf="showTable" style="margin-top:20px;">
       <div class="header mat-elevation-z1">
         <span class="header-text">
-          Daily Requirements(Tagged Count) &nbsp;&nbsp;&nbsp;
+          Daily Requirements(Tagged Count)&nbsp;&nbsp;&nbsp;
         </span>
       </div>
       <form [formGroup]="myForm">
@@ -954,7 +954,7 @@
                   Title
                 </th>
                 <td mat-cell *matCellDef="let element"> <a href="{{ element.job_source }}"
-                    target="_blank">{{element?.job_title|titlecase}}</a> </td>
+                    target="_blank" >{{element?.job_title|titlecase}}</a> </td>
               </ng-container>
 
               <!-- Category Column -->
@@ -1293,7 +1293,7 @@
                 <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
     target="_blank">{{element?.job_source}}</a></td> -->
 
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element"  (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
@@ -1809,7 +1809,7 @@
                 <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
         target="_blank">{{element?.job_source}}</a></td> -->
 
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
@@ -2805,7 +2805,7 @@
                 <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
           target="_blank">{{element?.job_source}}</a></td> -->
 
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>

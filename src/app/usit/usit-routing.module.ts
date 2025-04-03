@@ -71,6 +71,8 @@ import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating
 import { ReportEmailComponent } from './components/email-extraction/report-email/report-email.component';
 
 import { AssignedRequirementsComponent } from './components/recruitment/assigned-requirements/assigned-requirements.component';
+import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
+import { ResumeDescriptionComponent } from './components/openreqs/resume-description/resume-description.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -331,7 +333,12 @@ const routes: Routes = [
   {
     path: 'candidate-reports', component: CandidateReportComponent,
   },
-
+  {
+    path: 'resume-upload', component: ResumeUploaderComponent,
+  },
+  {
+    path: 'resume-description', component: ResumeDescriptionComponent,
+  },
   {path:'report-email',component:ReportEmailComponent},
   {path:'assigned-requirements',component:AssignedRequirementsComponent},
   
