@@ -34,6 +34,7 @@ import { PageEvent } from '@angular/material/paginator';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginator } from '@angular/material/paginator';
+import { OpenreqService } from '../../services/openreq.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -315,6 +316,14 @@ console.log(previlage,'previlage');
       endDateControl.setValue(currentDate);
     }
 
+  }
+    private service = inject(OpenreqService);
+  
+  empTag(id: number) {
+    this.service.openReqsEmpTagging(id, this.userid).subscribe(
+      (response: any) => {
+
+      })
   }
   goToCompany(companyName: string) {
     this.router.navigate(['/usit/vendors'], { queryParams: { company: companyName } });
@@ -748,6 +757,7 @@ console.log(totalRecords,'totalrecords');
       'Tagged Name'
     ]];
     const excelData = this.dataSourceDice.data.map((c: any) => [
+      c.id,
       c.posted_on,
       c.job_title,
       c.category_skill,

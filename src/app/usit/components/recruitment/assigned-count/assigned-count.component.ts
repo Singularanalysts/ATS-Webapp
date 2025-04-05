@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -16,30 +16,34 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import {  MatDialogRef } from '@angular/material/dialog';
-
+import * as XLSX from 'xlsx';
+import { PrivilegesService } from 'src/app/services/privileges.service';
+import { Router } from '@angular/router';
+import { SubmissionReportComponent } from '../submission-report/submission-report.component';
+import { DialogService } from 'src/app/services/dialog.service';
 @Component({
-  selector: 'app-requirementreport',
-  standalone:true,
-    imports: [
-      MatTableModule,
-      CommonModule,
-      MatIconModule,
-      MatButtonModule,
-      MatCardModule,
-      MatSortModule,
-      MatPaginatorModule,
-      MatInputModule,
-      MatFormFieldModule,
-      MatSelectModule,
-      FormsModule,
-      MaterialModule,
-  ReactiveFormsModule,
-    ],
-  templateUrl: './requirementreport.component.html',
-  styleUrls: ['./requirementreport.component.scss']
+  selector: 'app-assigned-count',
+    standalone:true,
+      imports: [
+        MatTableModule,
+        CommonModule,
+        MatIconModule,
+        MatButtonModule,
+        MatCardModule,
+        MatSortModule,
+        MatPaginatorModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        FormsModule,
+        MaterialModule,
+    ReactiveFormsModule,
+      ],
+  templateUrl: './assigned-count.component.html',
+  styleUrls: ['./assigned-count.component.scss']
 })
-export class RequirementreportComponent {
-  totalItems: number = 0;
+export class AssignedCountComponent {
+ totalItems: number = 0;
   length = 50;
   pageIndex = 0;
   pageSize = 25; // items per page
@@ -48,16 +52,31 @@ export class RequirementreportComponent {
   pageEvent!: PageEvent;
   showPageSizeOptions = true;
   showFirstLastButtons = true;
+    private dialogServ = inject(DialogService);
+  
   hidePageSize = false;
+      protected privilegeServ = inject(PrivilegesService);
     private destroyed$ = new Subject<void>();
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-  public dialogRef: MatDialogRef<RequirementreportComponent>,
-) {
-    console.log('Received Data:', data);
-  }
-    private service = inject(OpenreqService);
-    ngOnInit(){
-      this.getrequirementdata()
+    data: any = {}; // Store received data
+pseudoname:any
+    constructor(private router: Router) {
+      console.log('Received Data from Routing:', history.state.data);
+      if (history.state.data) {
+        this.data = history.state.data;
+        this.pseudoname=history.state.data.pseudoname
+        console.log(this.pseudoname,'pseudonammeee');
+        
+      }
+    }
+  
+    ngOnInit(): void {
+      if (!this.data || !this.data.userid) {
+        console.warn('No valid data received');
+        return;
+      }
+  
+      // Call your API with the received data
+      this.getrequirementdata();
     }
       dataSource = new MatTableDataSource<any>([]);
       dataTableColumns: string[] = [
@@ -70,9 +89,30 @@ export class RequirementreportComponent {
         'Status'
     
       ];
+      private service = inject(OpenreqService);
+
       currentPage: number = 1; // Start from page 1
       totalPages: number = 0;
-      
+      submissionreport(element:any){
+        const actionData = {
+          title: 'Requirement Report',
+          reqnumber: element.reqnumber,
+         
+          actionName: 'requirement-report'
+        };     
+          const dialogConfig = new MatDialogConfig();
+            dialogConfig.width = '70vw';
+            dialogConfig.disableClose = false;
+            dialogConfig.panelClass = 'add-interview';
+            dialogConfig.data = actionData; 
+          
+            const dialogRef = this.dialogServ.openDialogWithComponent(SubmissionReportComponent, dialogConfig);
+          
+            dialogRef.afterClosed().subscribe((result: { success: any }) => {
+              if (result?.success) {  
+              }
+            });
+       }
       getrequirementdata() {
         if (!this.data?.userid) {
           console.error("User ID is missing");
@@ -106,14 +146,29 @@ export class RequirementreportComponent {
             }
           });
       }
-      
-      // Go to specific page
+      exportExcel(): void {
+        const exportData = this.dataSource.data.map(item => ({
+          'S.No': item.serialNum,
+          'Requirement Number': item.reqnumber,
+          'Employee Type': item.employmenttype,
+          'Job Title': item.jobtitle,
+          'Location': item.location,
+          'Posted On': item.postedon,
+          'Status': item.status
+        }));
+    
+        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    
+        const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'RequirementsReport');
+    
+        XLSX.writeFile(workbook, 'RequirementsReport.xlsx');
+      }
       goToPage(page: number) {
         this.currentPage = page;
         this.getrequirementdata();
       }
       
-      // Next Page
       nextPage() {
         if (this.currentPage < this.totalPages) {
           this.currentPage++;
@@ -121,7 +176,6 @@ export class RequirementreportComponent {
         }
       }
       
-      // Previous Page
       prevPage() {
         if (this.currentPage > 1) {
           this.currentPage--;
@@ -129,16 +183,15 @@ export class RequirementreportComponent {
         }
       }
       
-      // Generate array of page numbers
       getPageNumbers(): any[] {
-        const visiblePages = 4; // Range of 4 in the middle
+        const visiblePages = 4; 
         const pageNumbers: any[] = [];
       
         if (this.totalPages <= 6) {
           return Array.from({ length: this.totalPages }, (_, i) => i + 1);
         }
       
-        pageNumbers.push(1); // Always show first page
+        pageNumbers.push(1); 
       
         let start = Math.max(2, this.currentPage - Math.floor(visiblePages / 2));
         let end = Math.min(this.totalPages - 1, start + visiblePages - 1);
@@ -152,10 +205,10 @@ export class RequirementreportComponent {
         }
       
         if (end < this.totalPages - 1) {
-          pageNumbers.push("..."); // Show ellipsis if there are more pages
+          pageNumbers.push("..."); 
         }
       
-        pageNumbers.push(this.totalPages); // Always show last page
+        pageNumbers.push(this.totalPages); 
       
         return pageNumbers;
       }
@@ -165,10 +218,7 @@ export class RequirementreportComponent {
       this.destroyed$.next();
       this.destroyed$.complete();
     }
-    onCancel(){
-      this.dialogRef.close();
-
-    }
+   
     getStatusClass(status: string): string {
       switch (status?.toLowerCase()) {
         case 'active':
@@ -181,5 +231,7 @@ export class RequirementreportComponent {
           return '';
       }
     }
-    
+    goback(){
+      this.router.navigate(['/usit/assigned-requirements'])
+    }
 }

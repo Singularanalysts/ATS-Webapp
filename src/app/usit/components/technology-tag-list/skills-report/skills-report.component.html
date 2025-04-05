@@ -8,26 +8,26 @@
     </div>
 
     <div class="content" mat-dialog-content>
-        <form class="add-technology-form" [formGroup]="skillform" name="technology-form" >
-      
-            <mat-form-field class="technologyname-field">
-                <mat-label>Skills</mat-label>
-                <textarea matInput formControlName="skills"></textarea>
-              
-              </mat-form-field>
-              <mat-error class="error-message"  *ngIf="skillform.get('skills')?.touched && skillform.get('skills')?.hasError('required')">
-                Skills are  Required
-              </mat-error>
-              
-        </form>
-      
-        <div class="actions">
-          <button mat-raised-button (click)="onCancel()">Cancel</button>
-          <button type="submit" mat-raised-button color="primary"  (click)="submitdata()">
-            Submit
-          </button>
-          
-        </div>
+      <form class="add-technology-form" [formGroup]="skillform" name="technology-form">
+        <mat-hint class="custom-hint">
+          Note: Each skill must be separated by commas.eg:Java,Phython,React
+        </mat-hint>   
+        <mat-form-field class="technologyname-field">
+          <mat-label>Skills</mat-label>
+          <textarea matInput formControlName="skills"></textarea>
+           
+          </mat-form-field>
+        <mat-error class="error-message" *ngIf="skillform.get('skills')?.touched && skillform.get('skills')?.hasError('required')">
+          Skills are Required
+        </mat-error>
+      </form>
+      <div class="actions">
+        <button mat-raised-button (click)="onCancel()">Cancel</button>
+        <button type="submit" mat-raised-button color="primary" (click)="submitdata()">
+          Submit
+        </button>
       </div>
+    </div>
+    
       
 </div>

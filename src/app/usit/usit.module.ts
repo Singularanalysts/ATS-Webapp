@@ -5,6 +5,7 @@ import { MaterialModule } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConsultantFulltimeOpenreqsComponent } from './components/consultant-components/consultant-openreqs/consultant-fulltime-openreqs/consultant-fulltime-openreqs.component';
 import { AddFulltimeResumeComponent } from './components/consultant-components/consultant-openreqs/add-fulltime-resume/add-fulltime-resume.component';
+import { ResumeDescriptionComponent } from './components/openreqs/resume-description/resume-description.component';
 
 @NgModule({
   declarations: [
@@ -15,10 +16,13 @@ import { AddFulltimeResumeComponent } from './components/consultant-components/c
 
 
 
-  
-    
-  
-  
+
+
+
+
+
+
+    ResumeDescriptionComponent,
   ],
   imports: [
     CommonModule,
@@ -27,7 +31,7 @@ import { AddFulltimeResumeComponent } from './components/consultant-components/c
     FormsModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
-   
+
   ]
 })
 export class UsitModule { }

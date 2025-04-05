@@ -411,6 +411,13 @@ myRoles(){
               "roles":["Super Administrator"]  
             },
             {
+              "test": "Portal Requirements",
+              "text": "Apply With Resume",
+              "icon": "group",
+              "routerLink": "/usit/resume-upload",
+              "roles":["Super Administrator"]  
+            },
+            {
               "test": "cpv portal requirements",
               "text": "CPV Portal Requirements",
               "icon": "group",
