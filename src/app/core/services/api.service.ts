@@ -10,11 +10,13 @@ import { HttpErrors } from '../models/http-errors';
   providedIn: 'root',
 })
 export class ApiService {
-  // readonly apiUrl = 'http://69.216.19.140:1122/';
-   readonly apiUrl = 'http://localhost:1122/';
+  readonly apiUrl = 'http://69.216.19.140:1122/';
+  //  readonly apiUrl = 'http://localhost:1122/';
   //  readonly apiUrl = 'http://104.176.8.173:1122/';
   // readonly apiUrl = 'http://23.81.209.229:1122/';
   // readonly apiUrl = 'http://50.28.107.39:1122/'
+  // readonly apiUrl = 'http://192.168.0.167:1122/'
+//  
   constructor(private http: HttpClient) {}
  
   get(url: string) {
@@ -25,8 +27,8 @@ export class ApiService {
     );
   }
 
-  post(url: string, data: any) {
-    return this.http.post(this.apiUrl + url, data).pipe(
+  post(url: string, data: any , options?:any ) {
+    return this.http.post(this.apiUrl + url, data,options).pipe(
       map((x) => x),
 
       catchError(x=> of({message: this.handleHttpError(x)}))
