@@ -327,10 +327,38 @@ export class OpenreqsComponent implements OnInit {
   
   @ViewChild('fileInputdata') fileInputdata!: ElementRef;
 
-  triggerFileUpload(element: any): void {
-  // Store the selected element (requirement)
-  this.selectedElement = element;
-  this.fileInputdata.nativeElement.click(); // trigger hidden input
+//   triggerFileUpload(element: any): void {
+//   // Store the selected element (requirement)
+//   this.selectedElement = element;
+//   this.fileInputdata.nativeElement.click(); // trigger hidden input
+// }
+
+// onFileSelectedata(event: any, element: any): void {
+//   const file = event.target.files[0];
+//   if (!file) return;
+
+//   const formData = new FormData();
+//   formData.append('resume', file); // field name 'resume' should match backend
+//   formData.append('requirementId', element.id); // assuming 'id' is requirement ID
+
+//   this.service.ResumeUpload(formData).subscribe({
+//     next: (res: any) => {
+//       // Assuming response contains 'percentage'
+//       element.percentage = res?.data || '100';
+//     },
+//     error: (err) => {
+//       console.error('Upload failed', err);
+//     }
+//   });
+
+//   // Reset file input
+//   event.target.value = null;
+// }
+
+  
+
+triggerFileUpload(fileInput: HTMLInputElement): void {
+  fileInput.click(); // now specific to the clicked row
 }
 
 onFileSelectedata(event: any, element: any): void {
@@ -338,12 +366,11 @@ onFileSelectedata(event: any, element: any): void {
   if (!file) return;
 
   const formData = new FormData();
-  formData.append('resume', file); // field name 'resume' should match backend
-  formData.append('requirementId', element.id); // assuming 'id' is requirement ID
+  formData.append('resume', file);
+  formData.append('requirementId', element.id); // now correct ID
 
   this.service.ResumeUpload(formData).subscribe({
     next: (res: any) => {
-      // Assuming response contains 'percentage'
       element.percentage = res?.data || '100';
     },
     error: (err) => {
@@ -351,11 +378,7 @@ onFileSelectedata(event: any, element: any): void {
     }
   });
 
-  // Reset file input
   event.target.value = null;
 }
-
-  
-
 
 }

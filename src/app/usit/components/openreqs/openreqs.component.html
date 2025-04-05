@@ -132,18 +132,19 @@
                     <ng-container matColumnDef="ResumeUpload">
                         <th mat-header-cell *matHeaderCellDef style="width: 3%">Resume Upload</th>
                         <td mat-cell *matCellDef="let element" nowrap style="width: 3%">
-                          <button mat-icon-button (click)="triggerFileUpload(element)">
+                          <button mat-icon-button (click)="triggerFileUpload(fileInputRef)">
                             <mat-icon>upload</mat-icon>
                           </button>
                       
-                          <!-- Hidden File Input -->
+                          <!-- Hidden File Input (One per row) -->
                           <input type="file"
-                                 #fileInputdata
+                                 #fileInputRef
                                  accept=".pdf,.doc,.docx"
                                  style="display: none"
                                  (change)="onFileSelectedata($event, element)" />
                         </td>
                       </ng-container>
+                      
                       
                       <ng-container matColumnDef="Percentage">
                         <th mat-header-cell *matHeaderCellDef style="width: 3%">Percentage</th>
