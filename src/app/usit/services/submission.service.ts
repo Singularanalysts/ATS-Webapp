@@ -72,4 +72,7 @@ export class SubmissionService {
   public getConsultantSubmissionDataPagination(data: any) {
     return this.apiServ.post("submission/getEmployeeSubmissions", data);
   }
+ 
+  
+
 }

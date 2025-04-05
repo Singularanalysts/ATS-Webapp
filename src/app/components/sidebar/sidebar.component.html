@@ -26,6 +26,9 @@
         </div>
       </button>
     </mat-menu>
+    <button mat-icon-button matTooltip="Refresh" (click)="globalRefresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
     <button mat-icon-button class="profile-icon" aria-label="profile-icon" [matMenuTriggerFor]="menu">
       <mat-icon>account_circle</mat-icon>
       <span class="profile-user-name">{{ userManagementServ.getUserName() }}</span>

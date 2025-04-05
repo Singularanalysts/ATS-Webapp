@@ -49,6 +49,11 @@ export class SidebarComponent implements OnInit {
   notificationArr: any[] = [];
   department: string | null | undefined;
   
+  globalRefresh(): void {
+    window.location.reload();
+
+ 
+  }
   ngOnInit() {
     this.role  = localStorage.getItem('role');
     this.department  = localStorage.getItem('department');

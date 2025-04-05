@@ -16,12 +16,12 @@ import { ResumeDescriptionComponent } from './components/openreqs/resume-descrip
 
 
 
-  
-    
-  
-  
-  
-  
+
+
+
+
+
+
     ResumeDescriptionComponent,
   ],
   imports: [
@@ -31,7 +31,7 @@ import { ResumeDescriptionComponent } from './components/openreqs/resume-descrip
     FormsModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
-   
+
   ]
 })
 export class UsitModule { }

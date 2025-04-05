@@ -150,4 +150,51 @@ export class AddTechnologyTagComponent {
   onAction(type: string) {
     this.dialogRef.close();
   }
+  duplicateTechErrorMessage: string = '';
+
+  DuplicateTechnologyCheck() {
+    const techControl = this.technologyForm.get('technologyarea');
+    const technologyarea = techControl?.value?.trim();
+  
+    if (!technologyarea) {
+      this.displayFormErrors();
+      return;
+    }
+  
+    this.techTagServ.DuplicateCheckTechnology(technologyarea).subscribe({
+      next: (res: any) => {
+
+
+        if (res?.status === 'success' && res?.data === true) {
+          this.duplicateTechErrorMessage = '';
+          techControl?.setErrors(null);
+          techControl?.updateValueAndValidity();
+          
+        } else if (res?.status === 'failed' && res?.data === false) {
+          this.duplicateTechErrorMessage = res.message || 'Technology already exists';
+          techControl?.setErrors({ duplicate: true });
+          techControl?.markAsTouched();        
+
+        }
+      },
+      error: (err) => {
+        console.log('ERROR RESPONSE:', err);
+  
+        const backend = err?.error;
+  
+        if (backend?.message) {
+          this.duplicateTechErrorMessage = backend.message;
+          techControl?.setErrors({ duplicate: true }); 
+        } else {
+          this.duplicateTechErrorMessage = 'Something went wrong. Please try again.';
+          techControl?.setErrors({ duplicate: true });
+        }
+      }
+    });
+  }
+  
+  
+  
+  
+  
 }

@@ -73,7 +73,9 @@ import { ReportEmailComponent } from './components/email-extraction/report-email
 import { AssignedRequirementsComponent } from './components/recruitment/assigned-requirements/assigned-requirements.component';
 import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
 import { ResumeDescriptionComponent } from './components/openreqs/resume-description/resume-description.component';
-
+import { SubmissionReportComponent } from './components/recruitment/submission-report/submission-report.component';
+import { RequirementReportComponent } from './components/reports/employee-reports/requirement-report/requirement-report.component';
+import { AssignedCountComponent } from './components/recruitment/assigned-count/assigned-count.component';
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
   {
@@ -341,7 +343,8 @@ const routes: Routes = [
   },
   {path:'report-email',component:ReportEmailComponent},
   {path:'assigned-requirements',component:AssignedRequirementsComponent},
-  
+  {path:'submission-report',component:SubmissionReportComponent},
+  {path:'requirement-reportdata',component:AssignedCountComponent},
   // {
   //   path: 'tcvr', component: ClientInformationComponent,
   // },
