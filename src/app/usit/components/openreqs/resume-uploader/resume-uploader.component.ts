@@ -17,6 +17,7 @@ import { DialogService } from 'src/app/services/dialog.service';
 import { ResumeDescriptionComponent } from '../resume-description/resume-description.component';
 import { ResumeApplicationComponent } from '../resume-application/resume-application.component';
 import { HttpParams } from '@angular/common/http';
+import { ResumeVendorComponent } from '../resume-vendor/resume-vendor.component';
 
 
 @Component({
@@ -120,6 +121,7 @@ export class ResumeUploaderComponent {
             job_location: item.job_location,
             vendor: item.vendor,
             source: item.source,
+            job_source:item.job_source
           }));
   
           this.totalElements = this.allData.length; // Total records
@@ -132,16 +134,43 @@ export class ResumeUploaderComponent {
       }
     );
   }
+    goToReqInfo(element: any) {
+      const actionData = {
+        title: `${element.vendor}`,
+        id: element.vendor,
+        isExist: element.isexist,
+        actionName: 'req-info',
+      };
   
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '62dvw';
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = 'req-info';
+      dialogConfig.data = actionData;
   
+      this.dialogServ.openDialogWithComponent(
+        ResumeVendorComponent,
+        dialogConfig
+      );
+    }
+  
+  empTag(id: number) {
+    this.service.openReqsEmpTagging(id, this.userid).subscribe(
+      (response: any) => {
+
+      })
+  }  
   updatePageData() {
     const startIndex = this.currentPageIndex * this.pageSize;
     const endIndex = startIndex + this.pageSize;
   
     this.dataSource.data = this.allData.slice(startIndex, endIndex);
   }
-  
-  
+  userid!: any;
+
+  ngOnInit(): void {
+    this.userid = localStorage.getItem('userid');
+  }
   
   handlePageEvent(event: PageEvent) {
     this.currentPageIndex = event.pageIndex;
