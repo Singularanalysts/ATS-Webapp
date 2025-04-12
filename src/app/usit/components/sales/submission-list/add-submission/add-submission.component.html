@@ -7,28 +7,28 @@
     </button>
 </div>
 <mat-card class="center-card">
-    <form [formGroup]="submissionForm"  class="vendor-form">
+    <form [formGroup]="submissionForm" class="vendor-form">
         <div class="form">
             <div class="form-column-left">
-                <input id="flg" name="flg"  type="hidden" formControlName="flg">
+                <input id="flg" name="flg" type="hidden" formControlName="flg">
                 <input type="hidden" formControlName="user">
                 <input name="submissionid" type="hidden" formControlName="submissionid">
                 <input name="updatedby" type="hidden" formControlName="updatedby">
                 <!-- <input name="status" type="hidden" formControlName="status" > -->
-                <input name="remarks" type="hidden" formControlName="remarks" >
-                <input name="substatus" type="hidden" formControlName="substatus" >
+                <input name="remarks" type="hidden" formControlName="remarks">
+                <input name="substatus" type="hidden" formControlName="substatus">
 
                 <div class="fg-div" *ngIf="this.flag !== 'sales'">
                     <mat-form-field appearance="fill">
                         <mat-label>Select Requirement</mat-label>
-                        <mat-select formControlName="requirement"  (selectionChange)="requirements($event)">
+                        <mat-select formControlName="requirement" (selectionChange)="requirements($event)">
                             <mat-option *ngFor="let obj of requirementdata" [value]="obj[0]">
-                                      {{obj[3]}} - {{obj[1]}} ({{obj[2]}})
+                                {{obj[3]}} - {{obj[1]}} ({{obj[2]}})
                             </mat-option>
                         </mat-select>
                         <mat-error *ngIf="submissionForm?.get('requirement')?.hasError('required')">Requirement
                             is Required
-                          </mat-error>
+                        </mat-error>
                     </mat-form-field>
                 </div>
 
@@ -61,47 +61,56 @@
                     </mat-form-field>
                 </div> -->
 
-                <div class="fg-div" >
+                <div class="fg-div">
                     <mat-form-field appearance="fill">
                         <mat-label>Select Consultant</mat-label>
-                        <input matInput formControlName="consultant" [matAutocomplete]="consultantAutoCmp" >
+                        <input matInput formControlName="consultant" [matAutocomplete]="consultantAutoCmp">
                         <mat-autocomplete #consultantAutoCmp="matAutocomplete">
                             <mat-option *ngFor="let option of (searchConsultantOptions$ | async)"
-                                [value]="option.consultantname">
-                                {{option.consultantname}}
+                                [value]="option.consultantname" (onSelectionChange)="onConsultantSelected(option)">
+                                {{ option.consultantname }}
                             </mat-option>
                         </mat-autocomplete>
-                        <mat-hint *ngIf="isConsultantDataAvailable" style="color: red;">Please Select Available Consultant</mat-hint>
+
+                        <mat-hint *ngIf="isConsultantDataAvailable" style="color: red;">Please Select Available
+                            Consultant</mat-hint>
                         <mat-error *ngIf="submissionForm.get('consultant')!.hasError('required')">Consultant is Required
                         </mat-error>
                     </mat-form-field>
-                </div>     
+                </div>
+                <div class="fg-div">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Select Company</mat-label>
+                        <input matInput formControlName="vendor" [matAutocomplete]="companyAutoCmp">
+                        <mat-autocomplete #companyAutoCmp="matAutocomplete">
+                            <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company"
+                                (click)="recruiterList(option);setSelectedCompany(option)">
+                                {{option.company}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button type="button" matSuffix mat-icon-button
+                            (click)="addVendor()"><mat-icon>add</mat-icon></button>
+                        <mat-hint *ngIf="isCompanyDataAvailable" style="color: red;">Please Select Available
+                            Company</mat-hint>
+                        <mat-error *ngIf="submissionForm.get('vendor')!.hasError('required')">Vendor Company
+                            is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Position Title</mat-label>
-                    <input matInput formControlName="position" maxlength="150" (input)="camelCase($event)">
-                    <mat-error *ngIf="submissionForm.get('position')!.hasError('required')"> Position Title is Required</mat-error>
-                </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Project Location</mat-label>
-                    <input matInput formControlName="projectlocation" ngx-gp-autocomplete [options]='options' (onAddressChange)="handleAddressChange($event)">
-                    <mat-error *ngIf="submissionForm.get('projectlocation')!.hasError('required')"> Location is Required</mat-error>
-                </mat-form-field>
+
 
                 <div style="width: 80%;">
                     <mat-label>Rate Type</mat-label><br>
                     <mat-radio-group formControlName="ratetype" aria-label="Select an option">
-                      <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.rate"  [value]="opt.value" (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
-                      <mat-error *ngIf="submissionForm.get('ratetype')!.hasError('required') && isRadSelected"> Rate Type is Required</mat-error>
+                        <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.rate" [value]="opt.value"
+                            (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
+                        <mat-error *ngIf="submissionForm.get('ratetype')!.hasError('required') && isRadSelected"> Rate
+                            Type is Required</mat-error>
                     </mat-radio-group>
                 </div>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Submission Rate</mat-label>
-                    <input matInput  formControlName="submissionrate" maxlength="5" (keypress)="onlyNumberKey($event)">
-                    <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('required')">Submission Rate is Required</mat-error>
-                </mat-form-field>
 
                 <mat-form-field appearance="fill">
                     <mat-label>End Client</mat-label>
@@ -111,6 +120,53 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Implementation Partner</mat-label>
                     <input matInput formControlName="implpartner" maxlength="120" (input)="camelCase($event)">
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Submission Rate</mat-label>
+                    <input matInput formControlName="submissionrate" maxlength="5" (keypress)="onlyNumberKey($event)">
+
+                    <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('required')">
+                        Submission Rate is Required
+                    </mat-error>
+
+                    <!-- Show required fields error -->
+                    <mat-hint *ngIf="showSubmissionRateError" style="color: red; font-size: 12px;">
+                        Please fill Consultant, Company, Rate Type before entering Submission Rate.
+                    </mat-hint>
+
+                    <!-- Dynamic API error message -->
+                    <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('invalidRate')">
+                        {{ submissionRateErrorMessage }}
+                    </mat-error>
+                </mat-form-field>
+        
+                <div *ngIf="!isRateValid && submissionForm.get('submissionrate')?.value"
+                    style="margin-left: 27rem; margin-top: 0px;">
+                    <div style="
+                        display: inline-block;
+                        background-color: #3F51B5;
+                        padding: 8px 12px;
+                        border-radius: 6px;
+                        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+                      ">
+                        <a href="#" (click)="onRaiseRequest($event)" style="
+                          text-decoration: none;
+                          font-size: 14px;
+                          color: white;
+                          font-weight: 500;
+                        ">
+                            Raise Request
+                        </a>
+                    </div>
+                </div>
+
+                <mat-form-field appearance="fill" style="margin-top: 24px;">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="empmail" maxlength="50" readonly />
+                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('required')">Email is Required</mat-error>
+                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('pattern')">Invalid Email
+                        Address</mat-error>
                 </mat-form-field>
             </div>
 
@@ -132,34 +188,29 @@
                     </mat-form-field>
                 </div> -->
 
-                <div class="fg-div">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Select Company</mat-label>
-                        <input matInput formControlName="vendor" [matAutocomplete]="companyAutoCmp">
-                        <mat-autocomplete #companyAutoCmp="matAutocomplete">
-                            <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company"
-                            (click)="recruiterList(option)">
-                                {{option.company}}
-                            </mat-option>
-                        </mat-autocomplete>
-                        <button type="button" matSuffix mat-icon-button (click)="addVendor()"><mat-icon>add</mat-icon></button>
-                        <mat-hint *ngIf="isCompanyDataAvailable" style="color: red;">Please Select Available Company</mat-hint>
-                        <mat-error *ngIf="submissionForm.get('vendor')!.hasError('required')">Vendor Company
-                            is Required
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
+                <mat-form-field appearance="fill">
+                    <mat-label>Position Title</mat-label>
+                    <input matInput formControlName="position" maxlength="150" (input)="camelCase($event)">
+                    <mat-error *ngIf="submissionForm.get('position')!.hasError('required')"> Position Title is
+                        Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Project Location</mat-label>
+                    <input matInput formControlName="projectlocation" ngx-gp-autocomplete [options]='options'
+                        (onAddressChange)="handleAddressChange($event)">
+                    <mat-error *ngIf="submissionForm.get('projectlocation')!.hasError('required')"> Location is
+                        Required</mat-error>
+                </mat-form-field>
                 <div class="fg-div">
                     <mat-form-field appearance="fill">
                         <mat-label>Select Recruiter</mat-label>
-                        <mat-select formControlName="recruiter"  (selectionChange)="recruiterContact($event)">
-                            <mat-option *ngFor="let obj of recruiterName"
-                                      [value]="obj.id">
-                                      {{obj.recruiter}}
+                        <mat-select formControlName="recruiter" (selectionChange)="recruiterContact($event)">
+                            <mat-option *ngFor="let obj of recruiterName" [value]="obj.id">
+                                {{obj.recruiter}}
                             </mat-option>
                         </mat-select>
-                        <button type="button" matSuffix mat-icon-button (click)="addRecruiter()"><mat-icon>add</mat-icon></button>
+                        <button type="button" matSuffix mat-icon-button
+                            (click)="addRecruiter()"><mat-icon>add</mat-icon></button>
                         <mat-error *ngIf="submissionForm.get('recruiter')!.hasError('required')">Recruiter
                             is Required
                         </mat-error>
@@ -168,15 +219,10 @@
 
                 <mat-form-field appearance="fill">
                     <mat-label>Contact Number</mat-label>
-                    <input matInput formControlName="empcontact" maxlength="15" readonly/>
+                    <input matInput formControlName="empcontact" maxlength="15" readonly />
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="empmail" maxlength="50" readonly/>
-                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('required')">Email is Required</mat-error>
-                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('pattern')">Invalid Email Address</mat-error>
-                </mat-form-field>
+
 
                 <mat-form-field appearance="fill">
                     <mat-label>Select Source</mat-label>
@@ -196,7 +242,8 @@
                         <mat-option value="Account Manager">Account Manager</mat-option>
                         <mat-option value="Client">Client</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="submissionForm.get('status')!.hasError('required')">Submitted to is Required</mat-error>
+                    <mat-error *ngIf="submissionForm.get('status')!.hasError('required')">Submitted to is
+                        Required</mat-error>
                 </mat-form-field>
 
             </div>
@@ -208,3 +255,26 @@
         <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
     </div>
 </mat-card>
+<ng-template #approvalDialog>
+    <div style="padding: 20px; max-width: 400px;">
+        <h2 mat-dialog-title style="color: #1976d2; font-weight: 600; margin-bottom: 10px;">
+            🔒 Approval Required
+        </h2>
+
+        <mat-dialog-content style="font-size: 15px; color: #444; padding: 10px 0 20px;">
+            <p style="margin: 0;">
+                This submission needs <strong style="color: #d32f2f;">manager approval</strong>.
+                Would you like to raise a request for it?
+            </p>
+        </mat-dialog-content>
+
+        <mat-dialog-actions align="end" style="gap: 10px;">
+            <button mat-stroked-button color="warn" (click)="dialogRefdata.close(false)">
+                Cancel
+            </button>
+            <button mat-flat-button color="primary" (click)="dialogRefdata.close(true)">
+                Raise Request
+            </button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

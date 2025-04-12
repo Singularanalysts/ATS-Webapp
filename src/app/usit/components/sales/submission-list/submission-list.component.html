@@ -34,7 +34,12 @@
 
             <div class="search-submission">
                 <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
+                <form [formGroup]="filterForm">
+                <input matInput  type="search" formControlName="position" style="" class="search" placeholder="Search Position" >
+                <input matInput  type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" >
                 <input matInput type="text" class="search" placeholder="search submissions" (keyup)="applyFilter($event)">
+
+                </form>
             </div>
         </div>
     </div>

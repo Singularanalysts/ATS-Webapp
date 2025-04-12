@@ -47,7 +47,7 @@ export class TechnologyTagListComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
   dataSource = new MatTableDataSource<any>([]);
 
-  dataTableColumns: string[] = ['SerialNum', 'Technology', 'Skills', 'Actions'];
+  dataTableColumns: string[] = ['SerialNum', 'Technology', 'TechnicalSkills', 'FunctionalSkills','Actions'];
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
@@ -149,7 +149,7 @@ export class TechnologyTagListComponent implements OnInit {
       actionName: 'add-technology'
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "450px";
+    dialogConfig.width = "700px";
     dialogConfig.height = "auto";
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = "add-technology";

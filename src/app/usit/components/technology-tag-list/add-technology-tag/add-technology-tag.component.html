@@ -37,7 +37,7 @@
       
 
       <mat-form-field class="description-field">
-        <mat-label>Skills</mat-label>
+        <mat-label>Technical Skills</mat-label>
         <textarea
           maxlength="2000"
           matInput
@@ -53,7 +53,23 @@
           >Skills are Required</mat-error
         >
       </mat-form-field>
-
+      <mat-form-field class="description-field">
+        <mat-label>Functional Skills</mat-label>
+        <textarea
+          maxlength="2000"
+          matInput
+          formControlName="functionalSkills"
+        ></textarea>
+        <!-- errors -->
+        <mat-error
+          class="error-message"
+          *ngIf="
+            controls['functionalSkills'].errors &&
+            controls['functionalSkills'].errors['required']
+          "
+          >Functional Skills are Required</mat-error
+        >
+      </mat-form-field>
       <mat-form-field class="description-field">
         <mat-label>Comments</mat-label>
         <textarea

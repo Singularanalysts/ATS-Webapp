@@ -48,7 +48,7 @@ export class OpenreqsComponent implements OnInit {
     'SerialNum',
     'posted_on',
     'job_title',
-    'category_skill',
+    // 'category_skill',
     'employment_type',
     'job_location',
     'vendor',

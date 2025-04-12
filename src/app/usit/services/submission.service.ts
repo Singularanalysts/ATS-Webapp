@@ -73,6 +73,13 @@ export class SubmissionService {
     return this.apiServ.post("submission/getEmployeeSubmissions", data);
   }
  
-  
-
+  SubmissionCheck(payload:any){
+   return this.apiServ.post("submission/submissionApproval",payload)
+  }
+  raiseApprovalRequest(payload:any){
+    return this.apiServ.post("submission/requestSubmissionApproval",payload)
+  }
+filterSubmission(payload:any){
+  return this.apiServ.post("submission/getSubmissionsFilter",payload)
+}
 }
