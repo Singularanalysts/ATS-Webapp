@@ -38,7 +38,7 @@ export class EmployeeManagementService {
   }
   //used for get the resource
   getAllEmployees(status: any, companyid:any) {
-    return this.apiServ.get(`auth/users/all/${status}/${companyid}`);
+    return this.apiServ.get(`auth/users/all/${status}`);
   }
 
   deleteEmployeeById(id: number) {
