@@ -100,7 +100,7 @@ export class AssignedRequirementsComponent {
     'SerialNum',
     'ExecutiveName',
     'RequirementCount',
-
+     'ServedCount'
   ];
 
 
@@ -123,6 +123,8 @@ export class AssignedRequirementsComponent {
             serialNum: index + 1,
             pseudoname: item.pseudoname,
             requirementsCount: item.requirementsCount,
+            served_count: item.served_count,
+
             userid:item.userid
           }));
         }
