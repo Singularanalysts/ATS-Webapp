@@ -19,7 +19,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { DialogService } from 'src/app/services/dialog.service';
@@ -32,6 +32,7 @@ import {
 import { SubmissionService } from 'src/app/usit/services/submission.service';
 import { AddSubmissionComponent } from './add-submission/add-submission.component';
 import { SubmissionRequirementInfoComponent } from './submission-requirement-info/submission-requirement-info.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-submission-list',
@@ -42,6 +43,7 @@ import { SubmissionRequirementInfoComponent } from './submission-requirement-inf
     MatCardModule,
     MatInputModule,
     MatFormFieldModule,
+    ReactiveFormsModule,
     MatSortModule,
     MatPaginatorModule,
     CommonModule,
@@ -106,6 +108,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
   userid: any;
   page: number = 1;
+  filterForm!: FormGroup;
 
   ngOnInit(): void {
 
@@ -125,9 +128,23 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.getAllData();
+    this.filterForm = this.fb.group({
+      position: [''],
+      location: ['']
+    });
 
+    // Trigger API on user typing
+    this.filterForm.valueChanges
+      .pipe(
+        debounceTime(300),          // wait 300ms after typing stops
+        distinctUntilChanged()      // only trigger if value actually changes
+      )
+      .subscribe(() => {
+        this.getfiltersubmission();
+      });
 
   }
+  constructor(private fb: FormBuilder ) {}
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -212,7 +229,47 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   goToSubmissionDrillDownReport(element: any, flag: any) {
 
   }
-
+  pageNumberfilter = 1;
+  pageSizefilter = 50;
+  sortFieldfilter = 'position';
+  sortOrderfilter = 'asc';
+  getfiltersubmission(): void {
+    const position = this.filterForm.get('position')?.value?.trim();
+    const location = this.filterForm.get('location')?.value?.trim();
+  
+    // If both filters are empty, load all data
+    if (!position && !location) {
+      this.getAllData(this.pageNumberfilter);
+      return;
+    }
+  
+    const payload = {
+      position: position,
+      location: location,
+      pageNumber: this.pageNumberfilter,
+      pageSize: this.pageSizefilter,
+      sortField: this.sortFieldfilter,
+      sortOrder: this.sortOrderfilter
+    };
+  
+    this.submissionServ.filterSubmission(payload).subscribe({
+      next: (res: any) => {
+        this.entity = res.data.content;
+        this.dataSource.data = res.data.content;
+        this.totalItems = res.data.totalElements;
+  
+        // Serial numbers
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching filtered submissions:', err);
+      }
+    });
+  }
+  
+  
   addSubmission() {
     const actionData = {
       title: 'Add Submission',

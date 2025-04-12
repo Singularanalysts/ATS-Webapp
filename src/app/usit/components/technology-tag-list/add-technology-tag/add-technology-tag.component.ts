@@ -65,6 +65,7 @@ export class AddTechnologyTagComponent {
     this.technologyForm = this.formBuilder.group({
       technologyarea: [data ? data.technologyarea : '', Validators.required],
       listofkeyword: [data ? data.listofkeyword : '', Validators.required],
+      functionalSkills: [data ? data.functionalSkills : '', Validators.required],
       comments: [data ? data.comments : ''],
       id: [data ? data.id : ''],
       addedby: [this.data.actionName === "update-technology" ? data?.addedby : localStorage.getItem('userid')],
@@ -99,6 +100,8 @@ export class AddTechnologyTagComponent {
     const addObj = {
       technologyarea: this.technologyForm.get('technologyarea')!.value.trim(),
       listofkeyword: this.technologyForm.get('listofkeyword')!.value,
+      functionalSkills: this.technologyForm.get('functionalSkills')!.value,
+
       comments: this.technologyForm.get('comments')!.value,
       id: this.technologyForm.get('id')!.value,
       addedby: localStorage.getItem('userid'),
@@ -108,6 +111,7 @@ export class AddTechnologyTagComponent {
       ...this.data.technologyData,
       technologyarea: this.technologyForm.get('technologyarea')!.value.trim(),
       listofkeyword: this.technologyForm.get('listofkeyword')!.value,
+      functionalSkills: this.technologyForm.get('functionalSkills')!.value,
       comments: this.technologyForm.get('comments')!.value,
       id: this.technologyForm.get('id')!.value,
       updatedby: localStorage.getItem('userid')

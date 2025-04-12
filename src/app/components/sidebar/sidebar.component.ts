@@ -8,6 +8,7 @@ import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { LoaderService } from 'src/app/services/loader.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
+import { PrivilegesService } from 'src/app/services/privileges.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { UserManagementService } from 'src/app/services/user-management.service';
 import { WebsocketService } from 'src/app/usit/services/websocket.service';
@@ -48,13 +49,44 @@ export class SidebarComponent implements OnInit {
   unseenNotificationCount: number | undefined;
   notificationArr: any[] = [];
   department: string | null | undefined;
+  submissions: any[] = [];
+  pendingSubmissionsCount: number = 0;
+  isManager: boolean = false;
+
+  getsubmissions() {
+    this.permissionServ.getsubmission().subscribe((res: any) => {
+      console.log('Submissions:', res);
+      this.submissions = res.data || [];
   
+      // Filter count for new submissions not approved or rejected
+      this.pendingSubmissionsCount = this.submissions.filter(
+        (submission: any) => submission.status !== 'Approved' && submission.status !== 'Rejected'
+      ).length;
+    });
+  }
+  
+// In your component.ts
+approve(submissionId: number) {
+  this.permissionServ.updatesubmission(submissionId, 'Approved').subscribe((res) => {
+    console.log('Approved successfully', res);
+    this.getsubmissions(); // Refresh data after update
+  });
+}
+
+reject(submissionId: number) {
+  this.permissionServ.updatesubmission(submissionId, 'Rejected').subscribe((res) => {
+    console.log('Rejected successfully', res);
+    this.getsubmissions(); // Refresh data after update
+  });
+}
+
   globalRefresh(): void {
     window.location.reload();
 
  
   }
   ngOnInit() {
+    this.getsubmissions()
     this.role  = localStorage.getItem('role');
     this.department  = localStorage.getItem('department');
     this.websocketService.connect();
@@ -122,6 +154,7 @@ export class SidebarComponent implements OnInit {
 
 
   }
+    protected privilegeServ = inject(PrivilegesService);
 
   clearLocalStorageItemsOnLogOut() {
     localStorage.removeItem('userName');
@@ -146,4 +179,30 @@ export class SidebarComponent implements OnInit {
     };
     this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
   }
+  approveSubmission() {
+    // You can replace this with real logic
+    console.log('Submission approved');
+    this.snackBarServ.openSnackBarFromComponent({
+      message: 'Submission Approved',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success']
+    });
+  }
+  
+  rejectSubmission() {
+    // Replace this with actual rejection logic
+    console.log('Submission rejected');
+    this.snackBarServ.openSnackBarFromComponent({
+      message: 'Submission Rejected',
+      duration: 1500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-error']
+    });
+  }
+  
 }
