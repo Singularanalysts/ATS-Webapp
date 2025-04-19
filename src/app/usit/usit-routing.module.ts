@@ -77,6 +77,8 @@ import { ResumeDescriptionComponent } from './components/openreqs/resume-descrip
 import { SubmissionReportComponent } from './components/recruitment/submission-report/submission-report.component';
 import { RequirementReportComponent } from './components/reports/employee-reports/requirement-report/requirement-report.component';
 import { AssignedCountComponent } from './components/recruitment/assigned-count/assigned-count.component';
+import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
+import { SubmissionTrashComponent } from './components/sales/submission-trash/submission-trash.component';
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
   {
@@ -346,6 +348,23 @@ const routes: Routes = [
   {path:'assigned-requirements',component:AssignedRequirementsComponent},
   {path:'submission-report',component:SubmissionReportComponent},
   {path:'requirement-reportdata',component:AssignedCountComponent},
+  {path:'h1b-vendor',component:H1BVendorsComponent},
+  {
+    path: 'sales-submissionsTrash',
+    component: SubmissionTrashComponent,
+    data: { isSalesSubmission: true },
+  },
+  {
+    path: 'Recruitment-submissionsTrash',
+    component: SubmissionTrashComponent,
+    data: { isRecSubmission: true },
+  },
+  {
+    path: 'Dom-submissionTrash',
+    component: SubmissionTrashComponent,
+    data: { isDomSub: true },
+  },
+
   // {
   //   path: 'tcvr', component: ClientInformationComponent,
   // },

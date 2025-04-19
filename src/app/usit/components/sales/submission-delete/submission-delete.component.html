@@ -1,0 +1,32 @@
+<div class="dialog-container">
+
+
+
+    <div class="header">
+      <h2 mat-dialog-title>{{data.title}}</h2>
+      <hr>
+      <button mat-icon-button (click)="onAction('SAFE_CLOSE')" >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
+    <div class="content" mat-dialog-content>
+      {{data.message}}
+   
+    </div>
+    <div>
+           
+          <mat-form-field appearance="outline" class="remarks-field">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput     [(ngModel)]="remarks" rows="3" placeholder="Please enter a Remarks" class="remarks"></textarea>
+          </mat-form-field>
+          <mat-error *ngIf="showError" class="remarksdelete">Please provide a reason in the remarks.</mat-error>
+
+    </div>
+    <div class="actions" mat-dialog-actions  >
+        <button mat-raised-button (click)="onAction('NO')">{{data.cancelText}}</button>
+        <button mat-raised-button color="primary" (click)="onAction('YES')">{{data.confirmText}}</button>
+    </div>
+    
+    </div>
+    

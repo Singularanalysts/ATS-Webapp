@@ -33,6 +33,7 @@ import { SubmissionService } from 'src/app/usit/services/submission.service';
 import { AddSubmissionComponent } from './add-submission/add-submission.component';
 import { SubmissionRequirementInfoComponent } from './submission-requirement-info/submission-requirement-info.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SubmissionDeleteComponent } from '../submission-delete/submission-delete.component';
 
 @Component({
   selector: 'app-submission-list',
@@ -151,7 +152,10 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   }
   subFlag!:any;
   getFlag(){
+    
     const routeData = this.activatedRoute.snapshot.data;
+    console.log(routeData,'routeData');
+
     if (routeData['isSalesSubmission']) {
       this.flag = "Sales";
       this.subFlag = 'sales-submission';
@@ -321,21 +325,23 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
       actionData: submission,
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = 'fit-content';
+    dialogConfig.width = '500px';
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'delete-submission';
     dialogConfig.data = dataToBeSentToDailog;
     const dialogRef = this.dialogServ.openDialogWithComponent(
-      ConfirmComponent,
+      SubmissionDeleteComponent,
       dialogConfig
     );
 
     // call delete api after  clicked 'Yes' on dialog click
 
     dialogRef.afterClosed().subscribe({
-      next: (resp) => {
+      next: (remarks: string) => {
         if (dialogRef.componentInstance.allowAction) {
+          const userId = localStorage.getItem('userid') || '';
+
           const dataToBeSentToSnackBar: ISnackBarData = {
             message: '',
             duration: 1500,
@@ -345,7 +351,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
             panelClass: ['custom-snack-success'],
           };
 
-          this.submissionServ.deletesubmission(submission.submissionid).pipe(takeUntil(this.destroyed$))
+          this.submissionServ.deletesubmission(submission.submissionid,remarks,userId).pipe(takeUntil(this.destroyed$))
           .subscribe({next:(response: any) => {
             if (response.status == 'Success') {
               this.getAllData();
@@ -449,5 +455,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     // Use regular expression to replace non-numeric characters with an empty string
     return value.replace(/[^0-9]/g, '');
   }
-  
+ 
 }
+

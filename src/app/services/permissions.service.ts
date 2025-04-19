@@ -1,7 +1,7 @@
 import { Injectable,inject } from '@angular/core';
 import { Observable, delay, of, tap } from 'rxjs';
 import { Employee } from '../usit/models/employee';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PrivilegesService } from './privileges.service';
 import { RoleService } from './role.service';
@@ -154,8 +154,13 @@ export class PermissionsService {
     return this.http.get(this.apiServ.apiUrl + "submission/getAll")
   }
 // In your submission.service.ts
-updatesubmission(id: number, status: string) {
-  return this.http.put(this.apiServ.apiUrl + `submission/updateSubmission/${id}/${status}`, {});
+updatesubmission(id: number, status: string): Observable<any> {
+  const userId = localStorage.getItem('userid') || '';
+  const url = `${this.apiServ.apiUrl}submission/updateSubmission/${id}/${status}/${userId}`;
+
+  return this.http.post(url, {});
 }
+
+
 
 }

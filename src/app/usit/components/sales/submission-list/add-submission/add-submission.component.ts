@@ -163,21 +163,22 @@ duplicateSubmissionCheck(rate: number) {
         this.isRateValid = true;
         this.submissionRateErrorMessage = '';
         this.submissionForm.get('submissionrate')?.setErrors(null);
-
+      
         const dataToBeSentToSnackBar: ISnackBarData = {
-          message:
-            this.data.actionName === 'add-submission'
+          message: response.message || // fallback if response.message is undefined
+            (this.data.actionName === 'add-submission'
               ? 'Submission Approved successfully'
-              : 'Submission updated successfully',
+              : 'Submission updated successfully'),
           duration: 1500,
           verticalPosition: 'top',
           horizontalPosition: 'center',
           direction: 'above',
           panelClass: ['custom-snack-success']
         };
-
+      
         this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-      } else {
+      }
+       else {
         this.isFormSubmitted = false;
         this.isRateValid = false;
         this.submissionRateErrorMessage =
@@ -209,6 +210,7 @@ duplicateSubmissionCheck(rate: number) {
 }
 onRaiseRequest(event: Event) {
   event.preventDefault();
+  if (this.flag !== 'sales') return; // Only allow raise request in Sales
 
   const rate = this.submissionForm.get('submissionrate')?.value;
 
@@ -239,7 +241,7 @@ raiseApprovalRequest(payload: any) {
   this.submissionServ.raiseApprovalRequest(payload).subscribe({
     next: (res: any) => {
       const data: ISnackBarData = {
-        message: 'Approval request sent successfully.',
+        message: res.message || 'Approval request sent successfully.',
         duration: 2000,
         verticalPosition: 'top',
         horizontalPosition: 'center',
@@ -250,7 +252,7 @@ raiseApprovalRequest(payload: any) {
     },
     error: (err) => {
       const data: ISnackBarData = {
-        message: 'Failed to send approval request.',
+        message: err?.error?.message || 'Failed to send approval request.',
         duration: 2000,
         verticalPosition: 'top',
         horizontalPosition: 'center',
@@ -261,6 +263,7 @@ raiseApprovalRequest(payload: any) {
     }
   });
 }
+
 getsubmissions() {
   this.permissionServ.getsubmission().subscribe((res: any) => {
     console.log('Submissions:', res);
@@ -319,16 +322,19 @@ showSubmissionRateError = false;
       const requiredFieldsFilled = this.selectedConsultantId &&
         this.selectedCompany?.vmsid &&
         this.submissionForm.get('ratetype')?.value;
-        
   
       if (!requiredFieldsFilled) {
-        // Show your error message here
-        this.showSubmissionRateError = true; // use this boolean to show message in HTML
+        this.showSubmissionRateError = true;
       } else {
         this.showSubmissionRateError = false;
-        this.duplicateSubmissionCheck(rate);
+  
+        // Perform rate validation only for 'sales'
+        if (this.flag === 'sales') {
+          this.duplicateSubmissionCheck(rate);
+        }
       }
     });
+  
   
   }
 

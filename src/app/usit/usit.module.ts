@@ -9,6 +9,7 @@ import { ResumeDescriptionComponent } from './components/openreqs/resume-descrip
 import { ResumeVendorComponent } from './components/openreqs/resume-vendor/resume-vendor.component';
 import { AddResumeVendorComponent } from './components/openreqs/add-resume-vendor/add-resume-vendor.component';
 import { AddResumeRecruiterComponent } from './components/openreqs/add-resume-recruiter/add-resume-recruiter.component';
+import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AddResumeRecruiterComponent } from './components/openreqs/add-resume-re
 
 
     ResumeDescriptionComponent,
+                              H1BVendorsComponent,
   ],
   imports: [
     CommonModule,
