@@ -28,18 +28,16 @@
       <mat-list-item class="nav-list-item" [routerLink]="submenu.routerLink" *ngFor="let submenu of menu.children"
         routerLinkActive="is-active" [routerLinkActiveOptions]="{exact:
                 true}" [matTooltip]="submenu.text" matTooltipPosition="right">
-        <!-- <div class="nav-list-item">
-          <mat-icon class="item-icon">{{submenu.icon}}</mat-icon><span>
-          {{submenu.text}}</span>
-
-        </div> -->
+       
         <mat-icon matListItemIcon class="item-icon">{{submenu.icon}}</mat-icon>
 
         <span matListItemTitle>
           {{submenu.text}}</span>
 
       </mat-list-item>
-
+      
+      
+    
     <!-- </mat-nav-list> -->
 
   </mat-expansion-panel>

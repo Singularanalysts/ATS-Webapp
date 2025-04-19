@@ -31,6 +31,7 @@ const keyFrames = [
   ]
 })
 export class SidebarComponent implements OnInit {
+  protected privilegeServ = inject(PrivilegesService);
 
   private snackBarServ = inject(SnackBarService);
   protected permissionServ = inject(PermissionsService);
@@ -154,7 +155,6 @@ reject(submissionId: number) {
 
 
   }
-    protected privilegeServ = inject(PrivilegesService);
 
   clearLocalStorageItemsOnLogOut() {
     localStorage.removeItem('userName');

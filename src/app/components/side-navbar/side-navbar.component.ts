@@ -128,7 +128,14 @@ myRoles(){
             "icon": "handshake",
             "routerLink": "/usit/tcvr",
             "roles":["Super Administrator"]  
-          }
+          },
+          // {
+          //   "test": "TCVR",
+          //   "text": "H1B Vendors",
+          //   "icon": "handshake",
+          //   "routerLink": "/usit/h1b-vendor",
+          //   "roles":["Super Administrator"]  
+          // }
         ]
       },
       {
@@ -201,41 +208,41 @@ myRoles(){
         "routerLink": "/usit/pre-sales",
         "roles":["Super Administrator"]  
       },
-    {
-      "test": "SOURCING",
-      "text": "Sourcing",
-      "icon": "local_offer",
-      "children": [
-        {
-          "test": "Sourcing",
-          "text": "Sourcing",
-          "icon": "flash_on",
-          "routerLink": "/usit/sourcing",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "Pursuing",
-          "text": "Pursuing",
-          "icon": "person",
-          "routerLink": "/usit/pursuing",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "OnBoarding",
-          "text": "OnBoarding",
-          "icon": "assignment",
-          "routerLink": "/usit/onboarding",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "Closures",
-          "text": "Closures",
-          "icon": "check_circle",
-          "routerLink": "/usit/sourcing-closures",
-          "roles":["Super Administrator"]  
-        }
-      ]
-    },
+    // {
+    //   "test": "SOURCING",
+    //   "text": "Sourcing",
+    //   "icon": "local_offer",
+    //   "children": [
+    //     {
+    //       "test": "Sourcing",
+    //       "text": "Sourcing",
+    //       "icon": "flash_on",
+    //       "routerLink": "/usit/sourcing",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "Pursuing",
+    //       "text": "Pursuing",
+    //       "icon": "person",
+    //       "routerLink": "/usit/pursuing",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "OnBoarding",
+    //       "text": "OnBoarding",
+    //       "icon": "assignment",
+    //       "routerLink": "/usit/onboarding",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "Closures",
+    //       "text": "Closures",
+    //       "icon": "check_circle",
+    //       "routerLink": "/usit/sourcing-closures",
+    //       "roles":["Super Administrator"]  
+    //     }
+    //   ]
+    // },
     {
       "test": "SALES",
       "text": "Sales",
@@ -275,6 +282,13 @@ myRoles(){
           "text": "Closures",
           "icon": "check_circle",
           "routerLink": "/usit/sales-closures",
+          "roles":["Super Administrator"]  
+        },
+        {
+          "test": "SALES_TRASH_BIN",
+          "text": "Submission Trash Bin",
+          "icon": "check_circle",
+          "routerLink": "/usit/sales-submissionsTrash",
           "roles":["Super Administrator"]  
         }
       ]
@@ -318,6 +332,13 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/rec-closures",
           "roles":["Super Administrator"] 
+        },
+        {
+          "test":"RECRUITING_TRASH_BIN",
+          "text": "Submission Trash Bin",
+          "icon": "check_circle",
+          "routerLink": "/usit/Recruitment-submissionsTrash",
+          "roles":["Super Administrator"] 
         }
       ]
     },
@@ -359,6 +380,13 @@ myRoles(){
           "text": "Closures",
           "icon": "check_circle",
           "routerLink": "/usit/dom-closures",
+          "roles":["Super Administrator"]  
+        },
+        {
+          "test":"DOM_TRASH_BIN",
+          "text": "Submission Trash Bin",
+          "icon": "check_circle",
+          "routerLink": "/usit/Dom-submissionTrash",
           "roles":["Super Administrator"]  
         }
       ]

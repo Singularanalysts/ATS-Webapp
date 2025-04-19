@@ -130,10 +130,10 @@
                         Submission Rate is Required
                     </mat-error>
 
-                    <!-- Show required fields error -->
-                    <mat-hint *ngIf="showSubmissionRateError" style="color: red; font-size: 12px;">
+                    <mat-hint *ngIf="flag === 'sales' && showSubmissionRateError" style="color: red; font-size: 12px;">
                         Please fill Consultant, Company, Rate Type before entering Submission Rate.
-                    </mat-hint>
+                      </mat-hint>
+                      
 
                     <!-- Dynamic API error message -->
                     <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('invalidRate')">

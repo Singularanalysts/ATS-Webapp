@@ -7,6 +7,7 @@ import { CanLoadGuard } from './core/guards/can-load.guard';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { RegisterConsultantComponent } from './components/register-consultant/register-consultant.component';
 import { OtpVerificationComponent } from './components/otp-verification/otp-verification.component';
+// import { ManagementregisterComponent } from './components/managementregister/managementregister.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
     path: 'forgot-password',
     component: ForgotPasswordComponent
   },
+
   {
     path: 'sign-up',
     component: SignUpComponent
@@ -34,16 +36,16 @@ const routes: Routes = [
     path: 'consultant-register',
     component: RegisterConsultantComponent
   },
+
+ 
+  // {path:'managementregister',component:ManagementregisterComponent},
+
   {
     path: 'usit',
     loadChildren: () => import('./usit/usit.module').then(m => m.UsitModule),
     canLoad: [CanLoadGuard]
   },
-  {
-    path: 'task-management',
-    loadChildren: () => import('./taskmodule/task.module').then(n => n.TaskModule),
-    canLoad: [CanLoadGuard]
-  },
+ 
   {
     path: 'docsync',
     loadChildren: () => import('./docsync/docsync.module').then(n => n.DocsyncModule),

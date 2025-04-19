@@ -5,6 +5,7 @@ body {
   font-family: sans-serif;
   height: 100%;
   --mat-paginator-container-size: 24px;
+  overflow: hidden !important;
 }
 
 *,
