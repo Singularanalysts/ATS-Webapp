@@ -136,6 +136,7 @@ departmentOptions: string[] = [
   isCompanyToDisplay: boolean = false;
 
   ngOnInit(): void {
+  
     this.checkCompany(localStorage.getItem('companyid'));
     this.getCompanies();
     this.getRoles();
@@ -185,73 +186,66 @@ departmentOptions: string[] = [
 
   private initilizeAddEmployeeForm(employeeData: any) {
     this.employeeForm = this.formBuilder.group({
-      fullname: [
-        employeeData ? employeeData.fullname : '',
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(100),
+        fullname: [
+            employeeData ? employeeData.fullname : '',
+            [
+                Validators.required,
+                Validators.minLength(5),
+                Validators.maxLength(100),
+            ],
         ],
-      ],
-      pseudoname: [employeeData ? employeeData.pseudoname : '',  Validators.required],
-      email: [
-        employeeData ? employeeData.email : '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+        pseudoname: [employeeData ? employeeData.pseudoname : '', Validators.required],
+        email: [
+            employeeData ? employeeData.email : '',
+            [
+                Validators.required,
+                Validators.email,
+                Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+            ],
         ],
-      ],
-      personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
-      companycontactnumber: [employeeData && employeeData.companycontactnumber ? employeeData.companycontactnumber : ''],
-      designation: [employeeData ? employeeData.designation : ''],
-      department: [employeeData ? employeeData.department : '', Validators.required],
-      joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
-      relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
-      personalemail: [
-        employeeData ? employeeData.personalemail : '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+        personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
+        companycontactnumber: [employeeData && employeeData.companycontactnumber ? employeeData.companycontactnumber : ''],
+        designation: [employeeData ? employeeData.designation : ''],
+        department: [employeeData ? employeeData.department : '', ],
+        joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
+        relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
+        personalemail: [
+            employeeData ? employeeData.personalemail : '',
+            [
+                Validators.required,
+                Validators.email,
+                Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+            ],
         ],
-      ],
-      manager: [employeeData ? employeeData.manager : ''],
-      aadharno: [
-        employeeData ? employeeData.aadharno : ''
-      ],
-
-      panno: [
-        employeeData ? employeeData.panno : ''
-      ],
-      bankname: [employeeData ? employeeData.bankname : ''],
-      accno: [employeeData ? employeeData.accno : ''],
-      ifsc: [
-        employeeData ? employeeData.ifsc : ''
-      ],
-      branch: [employeeData ? employeeData.branch : ''],
-      teamlead: [employeeData ? employeeData.teamlead : ''],
-     role: this.formBuilder.group({
-            roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [
-              Validators.required
-            ]),
-          }),  
-      banterno: [employeeData ? employeeData.banterno : ''],
-
-      added: [localStorage.getItem('userid')] ,
-
-      companyid: [employeeData ? employeeData.companyid : '', 
-        this.isCompanyToDisplay ? [Validators.required] : []],
+        manager: [employeeData ? employeeData.manager : ''],
+        aadharno: [
+            employeeData ? employeeData.aadharno : ''
+        ],
+        panno: [
+            employeeData ? employeeData.panno : ''
+        ],
+        bankname: [employeeData ? employeeData.bankname : ''],
+        accno: [employeeData ? employeeData.accno : ''],
+        ifsc: [
+            employeeData ? employeeData.ifsc : ''
+        ],
+        branch: [employeeData ? employeeData.branch : ''],
+        teamlead: [employeeData ? employeeData.teamlead : ''],
+        role: this.formBuilder.group({
+          roleid: new FormControl(employeeData ? employeeData.role.roleid : 1, [Validators.required]), // Set default value to 1
+      }),
+        banterno: [employeeData ? employeeData.banterno : ''],
+        added: [localStorage.getItem('userid')],
+        companyid: [this.data.cmpId, this.isCompanyToDisplay ? [Validators.required] : []], // Set companyid dynamically
     });
 
-  this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
-    if (value) {
-      const banterNumber = value.slice(-10);
-      this.employeeForm.get('banterno').setValue(banterNumber);
-    }
-  });
-
-  }
+    this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
+        if (value) {
+            const banterNumber = value.slice(-10);
+            this.employeeForm.get('banterno').setValue(banterNumber);
+        }
+    });
+}
 
   // private initilizeAddEmployeeFormValidation(employeeData: any) {
   //   this.employeeForm = this.formBuilder.group({

@@ -43,7 +43,7 @@
           <td mat-cell *matCellDef="let element" style="width: 35%">
             <button
               mat-button
-              (click)="openCompanyLink(element.companyname)" matTooltip="Add SuperAdmin"
+              (click)="openCompanyLink(element.companyname,element.companyid)" matTooltip="Add SuperAdmin"
               style="text-decoration: none;"
             >
               {{ element.companyname }}

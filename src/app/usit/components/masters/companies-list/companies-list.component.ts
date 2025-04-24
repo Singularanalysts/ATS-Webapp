@@ -300,12 +300,13 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
     return dialogConfig;
   }
 
-  openCompanyLink(url: string): void {
+  openCompanyLink(url: string, companyId: any): void {
 
       const dataToBeSentToDailog = {
           title: 'Add SuperAdmin',
           empployeeData: null,
           actionName: 'add-employee',
+          cmpId: companyId
         };
     
         const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });

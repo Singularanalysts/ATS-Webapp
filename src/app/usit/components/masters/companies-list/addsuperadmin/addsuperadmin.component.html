@@ -89,7 +89,7 @@
             <mat-error *ngIf="employeeForm.controls.joiningdate.hasError('required')">Joining Date Required</mat-error>
           </mat-form-field>
           <!-- Releiving Date -->
-          <mat-form-field appearance="fill">
+          <!-- <mat-form-field appearance="fill">
             <mat-label>Releiving Date</mat-label>
             <input matInput [matDatepicker]="datepicker2" formControlName="relievingdate">
             <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
@@ -97,7 +97,7 @@
             </mat-datepicker>
             <mat-error *ngIf="employeeForm.controls.relievingdate.hasError('relievingBeforeJoining')">Relieving date
               cannot be earlier than joining date.</mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
   
           <div style="display: flex;" class="other-details-div">
             <!-- Other Details Checkbox -->
@@ -165,7 +165,7 @@
             </div> -->
             <!-- Select Role with MatSelect -->
             <!-- <div formGroupName="company" class="select-role-field"> -->
-              <div class="select-role-field" *ngIf="isCompanyToDisplay">
+              <!-- <div class="select-role-field" *ngIf="isCompanyToDisplay">
                 <mat-form-field appearance="fill">
                     <mat-label>Select Company</mat-label>
                     <mat-select name="company" formControlName="companyid">
@@ -175,13 +175,16 @@
                     </mat-select>
                     <mat-error *ngIf="isCompanyToDisplay && employeeForm.get('companyid').hasError('required')">Company is required</mat-error>
                 </mat-form-field>
-            </div>
+            </div> -->
   
+<!-- Select Company (Hidden) -->
+<input type="hidden" formControlName="companyid" [value]="data.cmpId">
+
           <!-- Designation -->
-          <mat-form-field appearance="fill">
+          <!-- <mat-form-field appearance="fill">
             <mat-label>Designation</mat-label>
             <input matInput formControlName="designation" maxlength="25" (input)="camelCase($event)">
-          </mat-form-field>
+          </mat-form-field> -->
           <!--Select Department -->
           <mat-form-field appearance="fill">
             <mat-label>Select Department</mat-label>
@@ -195,7 +198,7 @@
               Deparment</mat-error>
           </mat-form-field>
         
-          <div formGroupName="role" class="select-role-field" *ngIf="false">
+          <!-- <div formGroupName="role" class="select-role-field" *ngIf="false">
             <mat-form-field appearance="fill" >
               <mat-label>Select Role</mat-label>
               <input matInput formControlName="rolename" [matAutocomplete]="roleAuto">
@@ -207,9 +210,9 @@
               <mat-error *ngIf="employeeForm.get('role.rolename').hasError('required')">Role is
                 Required</mat-error>
             </mat-form-field>
-            </div>
+            </div> -->
             <!-- Select Role with MatSelect -->
-            <div formGroupName="role" class="select-role-field">
+            <!-- <div formGroupName="role" class="select-role-field">
               <mat-form-field appearance="fill">
                 <mat-label>Select Role</mat-label>
                 <mat-select name="role" formControlName="roleid">
@@ -220,7 +223,10 @@
                 <mat-error *ngIf="employeeForm.get('role.roleid').hasError('required')">Role is
                   Required</mat-error>
               </mat-form-field>
-            </div>
+            </div> -->
+
+            <!-- Select role (Hidden) -->
+<input type="hidden" formControlName="roleid" [value]="1">
 
           <!-- Manager with MatAutoComplete-->
           <mat-form-field *ngIf="false" appearance="fill">
