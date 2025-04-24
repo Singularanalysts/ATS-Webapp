@@ -16,7 +16,7 @@ export class EmployeeManagementService {
   }
 
   getCompaniesDropdown() {
-    return this.apiServ.get("auth/company/all");
+    return this.apiServ.get("auth/company/getCompanysDropDown");
   }
 
   getManagerDropdown() {

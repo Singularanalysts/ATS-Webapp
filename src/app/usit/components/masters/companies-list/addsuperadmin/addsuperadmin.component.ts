@@ -45,33 +45,36 @@ import { HttpClient } from '@angular/common/http';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'app-add-employee',
-  templateUrl: './add-employee.component.html',
-  styleUrls: ['./add-employee.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    SearchPipe,
-    NgxMatIntlTelInputComponent,
-    MatTableModule,
-    MatCheckboxModule
-  ],
-  providers: [DatePipe],
+  selector: 'app-addsuperadmin',
+  templateUrl: './addsuperadmin.component.html',
+  styleUrls: ['./addsuperadmin.component.scss'],
 
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+   standalone: true,
+    imports: [
+      CommonModule,
+      FormsModule,
+      ReactiveFormsModule,
+      MatFormFieldModule,
+      MatAutocompleteModule,
+      MatInputModule,
+      MatIconModule,
+      MatButtonModule,
+      MatDatepickerModule,
+      MatNativeDateModule,
+      MatSelectModule,
+      SearchPipe,
+      NgxMatIntlTelInputComponent,
+      MatTableModule,
+      MatCheckboxModule
+    ],
+    providers: [DatePipe],
+  
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
 })
-export class  AddEmployeeComponent {
-  departmentOptions: string[] = [
+export class AddsuperadminComponent {
+
+departmentOptions: string[] = [
     'Administration',
     'Recruiting',
     'Software',
@@ -123,7 +126,7 @@ export class  AddEmployeeComponent {
   private datePipe = inject(DatePipe);
   private http = inject(HttpClient);
   data = inject(MAT_DIALOG_DATA);
-  dialogRef = inject(MatDialogRef<AddEmployeeComponent>);
+  dialogRef = inject(MatDialogRef<AddsuperadminComponent>);
   private fileServ = inject(FileManagementService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
@@ -190,7 +193,7 @@ export class  AddEmployeeComponent {
           Validators.maxLength(100),
         ],
       ],
-      pseudoname: [employeeData ? employeeData.pseudoname : ''],
+      pseudoname: [employeeData ? employeeData.pseudoname : '',  Validators.required],
       email: [
         employeeData ? employeeData.email : '',
         [
@@ -228,11 +231,11 @@ export class  AddEmployeeComponent {
       ],
       branch: [employeeData ? employeeData.branch : ''],
       teamlead: [employeeData ? employeeData.teamlead : ''],
-      role: this.formBuilder.group({
-        roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [
-          Validators.required
-        ]),
-      }),
+     role: this.formBuilder.group({
+            roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [
+              Validators.required
+            ]),
+          }),  
       banterno: [employeeData ? employeeData.banterno : ''],
 
       added: [localStorage.getItem('userid')] ,
@@ -1055,7 +1058,9 @@ checkCompany(companyid:any){
       }
     });
   }
+
 }
+
 
 export class FileData {
   docid!: number;

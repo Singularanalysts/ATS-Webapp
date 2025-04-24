@@ -20,6 +20,15 @@ import { DialogService } from 'src/app/services/dialog.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RoleManagementService } from '../../services/role-management.service';
 import { Role } from '../../models/role';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input'; // Optional if using matInput elsewhere
+import { MatError } from '@angular/material/form-field'; 
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { EmployeeManagementService } from '../../services/employee-management.service';
+import { MatSelectChange } from '@angular/material/select';
+
 
 @Component({
   selector: 'app-privilege-list',
@@ -31,6 +40,12 @@ import { Role } from '../../models/role';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatInputModule,
+    ReactiveFormsModule
+
   ],
   templateUrl: './privilege-list.component.html',
   styleUrls: ['./privilege-list.component.scss'],
@@ -42,6 +57,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   flg: boolean = false;
   id!: number;
   RoleName!: string;
+  companyId:any ;
   entity = new Privilege();
   role: any[] = [];
   type: string[] = [];
@@ -71,8 +87,6 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   privilegResp: any[] = [];
   company: any[] = [];
   cards: any[] = [];
-
-
 
   dashboard: any[] = [];
   search: any[] = [];
@@ -124,9 +138,28 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   excel_export: any[] = [];
 
   docsynch: any[] = [];
-  ratings:any[]=[]
+  ratings:any[]=[];
+
+  isCompanyToDisplay: boolean = false;
+  companyOptions: any[] = [];
+private empManagementServ = inject(EmployeeManagementService);
+companyarr: any = [];
+selectedOptions='';
+assignedCompaniesData: any = [];
+selectedRole: string = '';
+ dropdownOptions: any[]=[];
+ othercompaniessuperadmin: any[]=[];
+// dataTobeSentToSnackBarService: ISnackBarData = {
+//   message: '',
+//   duration: 2500,
+//   verticalPosition: 'top',
+//   horizontalPosition: 'center',
+//   direction: 'above',
+//   panelClass: ['custom-snack-success'],
+// };
 
   // snackbaran
+
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -144,15 +177,20 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   private dialogServ = inject(DialogService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
+  formArray: FormArray;
 
-  constructor(private route: ActivatedRoute, private roleManagementServ: RoleManagementService) {}
-
+  constructor(private route: ActivatedRoute, private roleManagementServ: RoleManagementService, private fb: FormBuilder) {
+  this.formArray = this.fb.array([]);
+}
   ngOnInit(): void {
-        // Retrieve the rolename from the route parameter
-        this.rolename = this.route.snapshot.paramMap.get('rolename')!;
-
+   
+    this.getCompanysDropDown();
+    // Retrieve the rolename from the route parameter
+    this.rolename = this.route.snapshot.paramMap.get('rolename')!;
+    this.companyId = this.route.snapshot.paramMap.get('companyid')!;
     this.id = this.activatedRoute.snapshot.params['id'];
-    this.entity.roleId = +this.id;
+    this.entity.roleId = +this.id
+    this.entity.companyId = +this.companyId
     this.getAll();
     
   }
@@ -237,13 +275,25 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
         this.excel_export = response.data.excel_export;
              
         this.docsynch = response.data.docsynch;
-        this.ratings=response.data.ratings
+        this.ratings=response.data.ratings;
+        this.othercompaniessuperadmin= response.data.othercompaniessuperadmin;
+
         this.selecedPrivileges();
+
+         // Initialize formArray based on the number of privilege cards
+         this.formArray.clear(); // Clear existing controls
+         this.privilegResp.forEach(() => {
+             this.formArray.push(this.fb.group({
+                 selectedCompanies: new FormControl([]) // Initialize with an empty array
+             }));
+         });
+
         this.mapResponseData();
         // this.selecedPrivileges();
       });
   }
 
+  
   private mapResponseData() {
 
 
@@ -688,11 +738,17 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           ? this.ratings.every((priv: any) => priv.selected === true)
           : false,
       },
+      {
+        title: 'SuperAdmins',
+        privileges: this.othercompaniessuperadmin,
+        isSelected: this.othercompaniessuperadmin
+          ? this.othercompaniessuperadmin.every((priv: any) => priv.selected === true)
+          : false,
+      },
 
     );
     
   }
-
 
 
   /**
@@ -700,7 +756,8 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
    */
   selecedPrivileges() {
     this.privilegServ
-      .getPrivilegesById(+this.id)
+      // .getPrivilegesById(+this.id)
+      .getPrivilegesById(+this.id,this.companyId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe((response: any) => {
 
@@ -1451,6 +1508,18 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
           });
         }
 
+        if (this.othercompaniessuperadmin != null) {
+          this.othercompaniessuperadmin.forEach((role) => {
+            response.data.othercompaniessuperadmin.forEach((userresp: any) => {
+              if (role.id === userresp.id) {
+                this.entity.privilegeIds.push(userresp.id);
+                role.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+
       });
   }
 
@@ -1716,7 +1785,11 @@ privilegResp?.forEach((care:any) => {
   /**
    * save
    */
+
   savePrivileges() {
+
+    // this.companyId =localStorage.getItem('companyid')
+    
     //console.log("Save Privileges Object", this.entity)
     this.privilegServ
       .addPrevilegeToRole(this.entity)
@@ -1748,6 +1821,63 @@ privilegResp?.forEach((care:any) => {
       );
   }
 
+  // getSelectedCompaniesControl(index: number): FormControl {
+  //   return this.formArray.at(index).get('selectedCompanies') as FormControl;
+  // }
+  
+  assignCompaniesToCards() {
+    const selectedCompanyMap = Array.from(this.itsToSave.entries()).map(
+      ([privilegeKey, selectedCompanies]) => {
+        // privilegeKey format: "privilegeId_cardId" as a string key
+        const [privilegeId, cardId] = privilegeKey.split('_').map(Number);
+        return {
+          privilegeId,
+          cardId,
+          selectedCompanies,
+        };
+      }
+    );
+  
+    console.log(
+      'Selected Companies Per Card:',
+      JSON.stringify(selectedCompanyMap, null, 2)
+    );
+  
+    this.privilegServ
+      .addPrevilegeToRoles(selectedCompanyMap)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(
+        (result) => {
+          this.dataToBeSentToSnackBar.message = 'lax added successfully!';
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+          this.router.navigate(['/usit/roles']);
+        },
+        (error: any) => {
+          this.dataToBeSentToSnackBar.message = 'lax addition is failed!';
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        }
+      );
+  }
+  
+  
+
+  itsToSave: Map<string, number[]> = new Map(); // Key is "privilegeId_cardId"
+
+onCompanySelectChange(event: MatSelectChange, privs: any, cardId: number) {
+  const selectedCompanyIds = event.value;
+  const privId = privs[0].id;
+
+  console.log(`Card ${cardId}, Privilege ${privId}, Companies:`, selectedCompanyIds);
+
+  const key = `${privId}_${cardId}`;
+  this.itsToSave.set(key, selectedCompanyIds);
+}
+
+
   onCancel() {
     this.router.navigate(['/usit/roles']);
   }
@@ -1762,10 +1892,60 @@ privilegResp?.forEach((care:any) => {
     this.destroyed$.next(undefined);
     this.destroyed$.complete();
   }
+
+  getCompanies() {
+    this.empManagementServ  
+      .getCompaniesDropdown()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+
+        
+        next: (response: any) => {
+          this.dropdownOptions = response.data;
+
+          
+        }
+        ,
+        error: (err) => {
+          this.dataToBeSentToSnackBar.message = err.message;
+          this.dataToBeSentToSnackBar.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        },
+      });
+  }
+
+  
+  
+  getCompanysDropDown() {
+    this.privilegServ
+      .getCompanysDropDown()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+        
+          this.dropdownOptions= response.data; 
+        },
+        error: (err) => {
+          this.dataToBeSentToSnackBar.message = err.message;
+          this.dataToBeSentToSnackBar.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataToBeSentToSnackBar
+          );
+        },
+      });
+  }
+
 }
 
 export class Privilege {
   roleId!: number;
   privilegeIds: any[] = [];
   cardIds: any[] = [];
+  companyId!: number;
 }

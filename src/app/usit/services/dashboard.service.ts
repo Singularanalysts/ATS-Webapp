@@ -8,24 +8,24 @@ export class DashboardService {
 
   private apiServ = inject(ApiService);
 
-  public vmstransactions() {
-    return this.apiServ.get("dashboard/dailyvmsTrack");
+  public vmstransactions(companyId: any) {
+    return this.apiServ.get("dashboard/dailyvmsTrack/"+companyId);
   }
 
   public getUserTrack(id: number) {
     return this.apiServ.get("dashboard/getUserTrack/" + id);
   }
 
-  public getsubmissionCount(flag: string) {
-    return this.apiServ.get("dashboard/submissionscount/" + flag);
+  public getsubmissionCount(flag: string, company: any) {
+    return this.apiServ.get("dashboard/submissionscount/" + flag +"/"+company);
   }
 
-  public getInterviewCount(flag: string) {
-    return this.apiServ.get("dashboard/interviewscount/" + flag);
+  public getInterviewCount(flag: string, companyId: any) {
+    return this.apiServ.get("dashboard/interviewscount/" + flag +"/" +companyId);
   }
 
-  public getClosureCount(flag: string) {
-    return this.apiServ.get("dashboard/closurecount/" + flag);
+  public getClosureCount(flag: string, companyId: any) {
+    return this.apiServ.get("dashboard/closurecount/" + flag +"/"+companyId);
   }
 
   // public getDiceRequirements(role: any, empid:any) {
@@ -78,15 +78,15 @@ export class DashboardService {
 
   // for executive and lead
   public getClosureCountForExAndLead(flag: string, userid: number) {
-    return this.apiServ.get("dashboard/closurecount/" + flag + "/" + userid);
+    return this.apiServ.get("dashboard/closurecountboardreport/" + flag + "/" + userid);
   }
 
   public getsubmissionCountForExAndLead(flag: string, userid: number) {
-    return this.apiServ.get("dashboard/submissionscount/" + flag + "/" + userid);
+    return this.apiServ.get("dashboard/submissionsdashboardreport/" + flag + "/" + userid);
   }
 
   public getInterviewCountForExAndLead(flag: string, userid: number) {
-    return this.apiServ.get("dashboard/interviewscount/" + flag + "/" + userid);
+    return this.apiServ.get("dashboard/interviewscountboardreport/" + flag + "/" + userid);
   }
 
   // for count pop ups
@@ -116,8 +116,8 @@ export class DashboardService {
     return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration+"/"+userid);
   }
 
-  public getsourcingCount(flag: string) {
-    return this.apiServ.get("dashboard/sourcingCount/" + flag);
+  public getsourcingCount(flag: string, companyId: any) {
+    return this.apiServ.get("dashboard/sourcingCount/" + flag+"/"+companyId);
   }
 
   public getSourcingCountPopup(flag: string, duration: string) {

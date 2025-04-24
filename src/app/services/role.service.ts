@@ -33,9 +33,7 @@ export class RoleService {
     return this.http.get(this.baseUrl + "priviliges/getPrivileges/");
   }
 
-  public restapi(entity: any) {
-    return this.http.post(this.baseUrl + "priviliges/addprevtorole", entity);
-  }
+
 
   public dummy() {
     return this.http.get(this.baseUrl + "priviliges/all");

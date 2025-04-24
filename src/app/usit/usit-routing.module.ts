@@ -72,6 +72,7 @@ import { ReportEmailComponent } from './components/email-extraction/report-email
 import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
 
 import { AssignedRequirementsComponent } from './components/recruitment/assigned-requirements/assigned-requirements.component';
+import { OthercompaniessuperadminsComponent } from './components/masters/othercompaniessuperadmins/othercompaniessuperadmins.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -388,7 +389,10 @@ const routes: Routes = [
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
   },
   {
-     path: 'privileges/:id/:rolename', component: PrivilegeListComponent ,
+     path: 'privileges/:id/:rolename/:companyid', component: PrivilegeListComponent ,
+  },
+  { 
+    path: 'othercompaniessupderadmindata', component: OthercompaniessuperadminsComponent,
   },
 ];
 

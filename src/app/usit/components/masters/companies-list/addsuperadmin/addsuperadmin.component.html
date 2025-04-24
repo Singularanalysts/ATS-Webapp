@@ -1,0 +1,281 @@
+<!-- top header container -->
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+      {{data.title}}
+    </span>
+    <button mat-icon-button  (click)="onCancel()" class="btn-close" id="btnClose">
+      <mat-icon>close</mat-icon>
+    </button>
+  </section>
+  <!-- matcard starts-->
+  <mat-card class="card" id="empCard">
+    <!-- form starts-->
+    <form [formGroup]="employeeForm" class="employee-form" id="empForm">
+      <!-- form input controls -->
+      <section class="form-container">
+        <div class="form-column-left" *ngIf="employeeForm.controls">
+          <!-- Full Name -->
+          <mat-form-field appearance="fill">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullname" maxlength="50" (input)="camelCase($event)">
+            <mat-error *ngIf="employeeForm.get('fullname').hasError('required')">Full
+              Name is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('fullname').hasError('minlength')">Full Name must be at least 6
+              characters</mat-error>
+            <mat-error *ngIf="employeeForm.get('fullname').hasError('maxlength')">Full Name must not exceed 100
+              characters</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="pseudoname" maxlength="50" (input)="camelCase($event)">
+            <mat-error *ngIf="employeeForm.get('pseudoname').hasError('required')">Psudo
+              Name is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('pseudoname').hasError('minlength')">Psudo Name must be at least 6
+              characters</mat-error>
+            <mat-error *ngIf="employeeForm.get('pseudoname').hasError('maxlength')">Psudo Name must not exceed 100
+              characters</mat-error>
+          </mat-form-field>
+         
+      
+
+          <!-- Official Email -->
+          <mat-form-field appearance="fill">
+            <mat-label>Official Email</mat-label>
+            <input matInput formControlName="email" maxlength="50" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)">
+            <mat-error *ngIf="employeeForm.get('email')!.hasError('required')">Email is
+              required</mat-error>
+            <mat-error *ngIf="employeeForm.get('email')!.hasError('email')">Invalid email
+              address</mat-error>
+          </mat-form-field>
+          <!-- Personal Email -->
+          <mat-form-field appearance="fill">
+            <mat-label>Personal Email</mat-label>
+            <input matInput formControlName="personalemail" maxlength="50" (input)="convertToLowerCase($event)">
+            <mat-error *ngIf="employeeForm.get('personalemail').hasError('required')">Email
+              is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('personalemail').hasError('email')">Invalid
+              email address</mat-error>
+          </mat-form-field>
+          <!-- Personal Contact -->
+          <mat-form-field appearance="fill">
+            <mat-label>Personal Contact Number </mat-label>
+            <ngx-mat-intl-tel-input class="intl-input"
+              formControlName="personalcontactnumber"
+              name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb (keypress)="onlyNumberKey($event)">
+            </ngx-mat-intl-tel-input>
+            <mat-error *ngIf="employeeForm.get('personalcontactnumber').hasError('required')">Personal
+              Contact
+              Number is required</mat-error>
+          </mat-form-field>
+          
+          <!-- company contact -->
+          <mat-form-field appearance="fill">
+            <mat-label>Company Contact Number</mat-label>
+            <ngx-mat-intl-tel-input
+              formControlName="companycontactnumber"
+              name="companycontactnumber" id="intlInputCompany" #companycontactnumber (keypress)="onlyNumberKey($event)">
+            </ngx-mat-intl-tel-input>
+          </mat-form-field>
+  
+          
+          <!-- Joining Date -->
+          <mat-form-field appearance="fill">
+            <mat-label>Joining Date</mat-label>
+            <input matInput [matDatepicker]="datepicker" formControlName="joiningdate" placeholder="MM/DD/YYYY">
+            <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker>
+            </mat-datepicker>
+            <mat-error *ngIf="employeeForm.controls.joiningdate.hasError('required')">Joining Date Required</mat-error>
+          </mat-form-field>
+          <!-- Releiving Date -->
+          <mat-form-field appearance="fill">
+            <mat-label>Releiving Date</mat-label>
+            <input matInput [matDatepicker]="datepicker2" formControlName="relievingdate">
+            <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
+            <mat-datepicker #datepicker2>
+            </mat-datepicker>
+            <mat-error *ngIf="employeeForm.controls.relievingdate.hasError('relievingBeforeJoining')">Relieving date
+              cannot be earlier than joining date.</mat-error>
+          </mat-form-field>
+  
+          <div style="display: flex;" class="other-details-div">
+            <!-- Other Details Checkbox -->
+            <div class="other-details-inner-div">
+              <!-- <mat-checkbox class="custom-checkbox" (change)="toggleOtherDetails($event.checked)">Other Details</mat-checkbox> -->
+            </div>
+          </div>
+  
+          <!-- Aadhar -->
+          <mat-form-field appearance="fill" *ngIf="showOtherDetails">
+            <mat-label>Aadhar Number</mat-label>
+            <input matInput formControlName="aadharno" maxlength="12" (keypress)="onlyNumberKey($event)">
+            <mat-error *ngIf="employeeForm.get('aadharno').hasError('required')">Aadhar Number is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('aadharno').hasError('pattern')">Aadhar Number must be exactly 12
+              digits</mat-error>
+          </mat-form-field>
+          <!-- PAN -->
+          <mat-form-field appearance="fill" *ngIf="showOtherDetails">
+            <mat-label>PAN Number</mat-label>
+            <input matInput formControlName="panno" placeholder="Ex: ABCDE1234F" maxlength="10"
+              (keypress)="onlyAlphanumericKey($event)">
+            <mat-error *ngIf="employeeForm.get('panno').hasError('required')">PAN Number is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('panno').hasError('pattern')">Invalid PAN Number</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-column-right">
+          <!-- BANK -->
+          <mat-form-field appearance="fill" *ngIf="showOtherDetails">
+            <mat-label>Bank Name</mat-label>
+            <input matInput formControlName="bankname" maxlength="100" (input)="camelCase($event)">
+            <mat-error *ngIf="employeeForm.get('bankname').hasError('required')">Bank Name is required</mat-error>
+          </mat-form-field>
+          <!-- AC NUMBER -->
+          <mat-form-field appearance="fill" *ngIf="showOtherDetails">
+            <mat-label>Account Number</mat-label>
+            <input matInput formControlName="accno" maxlength="15" (keypress)="onlyNumberKey($event)">
+            <mat-error *ngIf="employeeForm.get('accno').hasError('required')">Account Number is required</mat-error>
+          </mat-form-field>
+          <!-- IFSC -->
+          <mat-form-field appearance="fill" *ngIf="showOtherDetails">
+            <mat-label>IFSC Code</mat-label>
+            <input matInput formControlName="ifsc" maxlength="11" (keypress)="onlyAlphanumericKey($event)">
+            <mat-error *ngIf="employeeForm.get('ifsc').hasError('required')">IFSC Code is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('ifsc').hasError('pattern')">Invalid IFSC Code</mat-error>
+          </mat-form-field>
+          <!-- Branch -->
+          <mat-form-field appearance="fill" *ngIf="showOtherDetails">
+            <mat-label>Branch Name</mat-label>
+            <input matInput formControlName="branch" maxlength="50" (input)="camelCase($event)">
+            <mat-error *ngIf="employeeForm.get('branch').hasError('required')">Branch Name is required</mat-error>
+          </mat-form-field>
+  
+          <!-- <div formGroupName="role" class="select-role-field" *ngIf="false">
+            <mat-form-field appearance="fill" >
+              <mat-label>Select Company</mat-label>
+              <input matInput formControlName="rolename" [matAutocomplete]="companyAuto">
+              <mat-autocomplete #companyAuto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredRoleOptions | async" [value]="option.rolename">
+                  {{ option.rolename }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="employeeForm.get('role.rolename').hasError('required')">Role is
+                Required</mat-error>
+            </mat-form-field>
+            </div> -->
+            <!-- Select Role with MatSelect -->
+            <!-- <div formGroupName="company" class="select-role-field"> -->
+              <div class="select-role-field" *ngIf="isCompanyToDisplay">
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Company</mat-label>
+                    <mat-select name="company" formControlName="companyid">
+                        <mat-option *ngFor="let option of companyOptions" [value]="option.companyid">
+                            {{ option.companyname }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="isCompanyToDisplay && employeeForm.get('companyid').hasError('required')">Company is required</mat-error>
+                </mat-form-field>
+            </div>
+  
+          <!-- Designation -->
+          <mat-form-field appearance="fill">
+            <mat-label>Designation</mat-label>
+            <input matInput formControlName="designation" maxlength="25" (input)="camelCase($event)">
+          </mat-form-field>
+          <!--Select Department -->
+          <mat-form-field appearance="fill">
+            <mat-label>Select Department</mat-label>
+            <input matInput formControlName="department" [matAutocomplete]="departmentAuto">
+            <mat-autocomplete #departmentAuto="matAutocomplete">
+              <mat-option *ngFor="let option of filteredDepartmentOptions | async" [value]="option">
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="employeeForm.get('department').hasError('required')">Choose
+              Deparment</mat-error>
+          </mat-form-field>
+        
+          <div formGroupName="role" class="select-role-field" *ngIf="false">
+            <mat-form-field appearance="fill" >
+              <mat-label>Select Role</mat-label>
+              <input matInput formControlName="rolename" [matAutocomplete]="roleAuto">
+              <mat-autocomplete #roleAuto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredRoleOptions | async" [value]="option.rolename">
+                  {{ option.rolename }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="employeeForm.get('role.rolename').hasError('required')">Role is
+                Required</mat-error>
+            </mat-form-field>
+            </div>
+            <!-- Select Role with MatSelect -->
+            <div formGroupName="role" class="select-role-field">
+              <mat-form-field appearance="fill">
+                <mat-label>Select Role</mat-label>
+                <mat-select name="role" formControlName="roleid">
+                  <mat-option *ngFor="let option of roleOptions" [value]="option.roleid">
+                    {{ option.rolename }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="employeeForm.get('role.roleid').hasError('required')">Role is
+                  Required</mat-error>
+              </mat-form-field>
+            </div>
+
+          <!-- Manager with MatAutoComplete-->
+          <mat-form-field *ngIf="false" appearance="fill">
+            <mat-label>Select Manager</mat-label>
+            <input matInput formControlName="manager" [matAutocomplete]="roleAuto">
+            <mat-autocomplete #roleAuto="matAutocomplete">
+              <mat-option *ngFor="let option of managerOptions" (onSelectionChange)="managerid(option[0])"
+                [value]="option[0]">
+                {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="employeeForm.get('manager').hasError('required')">Manager
+              is Required</mat-error>
+          </mat-form-field>
+          <!-- Manager with MatSelect-->
+          <mat-form-field *ngIf="managerflg" appearance="fill">
+            <mat-label>Select Manager</mat-label>
+            <mat-select formControlName="manager" (selectionChange)="managerid($event)">
+              <mat-option *ngFor="let option of managerOptions" [value]="option[0]">
+                {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
+              </mat-option>
+            </mat-select>
+            <!-- </mat-autocomplete> -->
+            <mat-error *ngIf="employeeForm.get('manager').hasError('required')">Manager
+              is Required
+            </mat-error>
+          </mat-form-field>
+          <!-- Team Lead  -->
+          <mat-form-field *ngIf="false" appearance="fill">
+            <mat-label>Select Team Lead</mat-label>
+            <input matInput formControlName="teamlead" [matAutocomplete]="roleAuto">
+            <mat-autocomplete #roleAuto="matAutocomplete">
+              <mat-option *ngFor="let option of teamLeadOptions" [value]="option[0]">
+                {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field *ngIf="teamleadflg" appearance="fill">
+            <mat-label>Select Team Lead</mat-label>
+            <mat-select formControlName="teamlead">
+              <mat-option *ngFor="let option of teamLeadOptions" [value]="option[0]">
+                {{ option[1] }} {{option[2] ? ('- ' + option[2]) : ''}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </section>
+      <!--form upload controls -->
+    </form>
+    <!-- form ends-->
+    <!-- Bottom Action Buttons -->
+    <div class="action-btns">
+      <button class="btn-cancel" mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+      <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+  </mat-card>
+  <!-- matcard ends-->
+  

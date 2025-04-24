@@ -37,10 +37,26 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="Company">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company"
-            style="width: 35%"> Company </th>
-          <td mat-cell *matCellDef="let element" style="width: 35%"> {{ element.companyname }} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company" style="width: 35%">
+            Company
+          </th>
+          <td mat-cell *matCellDef="let element" style="width: 35%">
+            <button
+              mat-button
+              (click)="openCompanyLink(element.companyname)" matTooltip="Add SuperAdmin"
+              style="text-decoration: none;"
+            >
+              {{ element.companyname }}
+            </button>
+            <!-- <button [disabled]="!privilegeServ.hasPrivilege('ADD_COMPANY')" mat-icon-button class="add-user"
+        (click)="openCompanyLink(element.companyname)" matTooltip="Add SuperAdmin" matTooltipPosition="left">
+        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_COMPANY')}"
+          class="item-icon">add_circle</mat-icon>
+      </button> -->
+          </td>
         </ng-container>
+        
+        
 
         <!-- Domain Column -->
         <ng-container matColumnDef="Domain">

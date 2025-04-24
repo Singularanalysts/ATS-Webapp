@@ -25,6 +25,10 @@ import { Router } from '@angular/router';
 import { ManagePrivilegeComponent } from '../privilege-list/manage-privilege/manage-privilege.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { RouterModule } from '@angular/router';
+import { EmployeeManagementService } from '../../services/employee-management.service';
+import { ObservableInput, Subject, takeUntil } from 'rxjs';
+import { MatSelectChange } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-roles-list',
@@ -42,30 +46,35 @@ standalone: true,
     MatSortModule,
     MatPaginatorModule,
     CommonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RolesListComponent implements OnInit , AfterViewInit{
   private roleManagementServ = inject(RoleManagementService);
   form: any = FormGroup;
+  companyId:any
   private dialogServ = inject(DialogService);
   private snackBarServ = inject(SnackBarService);
   protected privilegeServ = inject(PrivilegesService);
   private router = inject(Router);
   displayedColumns: string[] = ['RoleName', 'Actions'];
   dataSource = new MatTableDataSource([]);
-
+  isCompanyToDisplay: boolean = false;
+ private empManagementServ = inject(EmployeeManagementService);
+  
   @ViewChild(MatSort) sort!: MatSort;
   roleList: Role[]= [];
-  ngOnInit(): void {
-    this.getAllRoles()
-  }
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
-  private getAllRoles() {
-    return this.roleManagementServ.getAllRoles().subscribe(
+  private destroyed$ = new Subject<void>();
+  selectedRole: string = '';
+
+  dropdownOptions: any[]=[];
+  
+  onDropdownChange(event: MatSelectChange) {
+    console.log('Selected Value:', event.value);
+    this.companyId=event.value
+    return this.roleManagementServ.getAllRolesBasedOnCompanyWiseWithCompany(event.value).subscribe(
       {
         next:(response: any) => {
           this.roleList = response.data;
@@ -74,6 +83,96 @@ export class RolesListComponent implements OnInit , AfterViewInit{
         error: (err)=> console.log(err)
       }
     );
+
+  }
+
+  ngOnInit(): void {
+    this.companyId=localStorage.getItem('companyid')
+
+    this.checkCompany(localStorage.getItem('companyid'));
+    this.getCompanies();
+    this.getAllRoles();
+  }
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  dataTobeSentToSnackBarService: ISnackBarData = {
+    message: '',
+    duration: 2500,
+    verticalPosition: 'top',
+    horizontalPosition: 'center',
+    direction: 'above',
+    panelClass: ['custom-snack-success'],
+  };
+
+   checkCompany(companyid:any){
+  
+      this.empManagementServ
+      .getValidDateCompanyGiven(companyid)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.isCompanyToDisplay = response.data;
+        },
+        error: (err) => {
+          this.dataTobeSentToSnackBarService.message = err.message;
+          this.dataTobeSentToSnackBarService.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataTobeSentToSnackBarService
+          );
+        },
+      });
+    
+    }
+
+    getCompanies() {
+      this.empManagementServ
+        .getCompaniesDropdown()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
+          next: (response: any) => {
+            this.dropdownOptions = response.data;
+
+          },
+          error: (err) => {
+            this.dataTobeSentToSnackBarService.message = err.message;
+            this.dataTobeSentToSnackBarService.panelClass = [
+              'custom-snack-failure',
+            ];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataTobeSentToSnackBarService
+            );
+          },
+        });
+    }
+
+  private getAllRoles() {
+  //   if(this.isCompanyToDisplay){
+    return this.roleManagementServ.getAllRolesBasedOnCompanyWise(localStorage.getItem('companyid')).subscribe(
+      {
+        next:(response: any) => {
+          this.roleList = response.data;
+          this.dataSource.data = response.data;
+        },
+        error: (err)=> console.log(err)
+      }
+    );
+  // }
+  // else{
+    // return this.roleManagementServ.getAllRoles().subscribe(
+    //   {
+    //     next:(response: any) => {
+    //       this.roleList = response.data;
+    //       this.dataSource.data = response.data;
+    //     },
+    //     error: (err)=> console.log(err)
+    //   }
+    // );
+  // }
+
   }
   // add
   addRole(){
@@ -81,7 +180,8 @@ export class RolesListComponent implements OnInit , AfterViewInit{
       title: 'New Role',
       buttonCancelText: 'Cancel',
       buttonSubmitText: 'Submit',
-      actionName: 'add-role'
+      actionName: 'add-role',
+      companyId:this.companyId
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = "450px";
@@ -127,7 +227,7 @@ export class RolesListComponent implements OnInit , AfterViewInit{
   editRole(role: Role){
     const actionData = {
       title: 'Update Role',
-      buttonCancelText: 'Cancel',
+      buttonCancelText: 'cancel',
       buttonSubmitText: 'Submit',
       actionName: 'update-role',
       roleData: role
@@ -174,7 +274,7 @@ export class RolesListComponent implements OnInit , AfterViewInit{
             direction: 'above',
             panelClass: ['custom-snack-success'],
           };
-          this.roleManagementServ.deleteRole(role.roleid).subscribe
+          this.roleManagementServ.deleteRoleCompanyWise(role.roleid).subscribe
             ({
               next: (resp: any) => {
                 if (resp.status == 'success') {
@@ -245,7 +345,7 @@ export class RolesListComponent implements OnInit , AfterViewInit{
    */
 
   goToPrivilegeScreen(role: Role){
-this.router.navigate(['/usit/privileges', role.roleid, role.rolename])
+this.router.navigate(['/usit/privileges', role.roleid, role.rolename,role.companyid])
   }
 
   }

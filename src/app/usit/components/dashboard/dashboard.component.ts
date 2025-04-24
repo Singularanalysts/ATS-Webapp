@@ -158,7 +158,7 @@ export class DashboardComponent implements OnInit {
   }
   
   getPerformanceRatings(filter?: string) {
-    this.privilegeServ.getPerformanceRatings(filter).subscribe({
+    this.privilegeServ.getPerformanceRatings(filter, localStorage.getItem('companyid')).subscribe({
       next: (response: any) => {
         this.performanceData = response.data;
         this.calculateStars(response.data.avg_rating);
@@ -234,7 +234,7 @@ pageSizeOptions = [50, 75, 100];
         this.countCallingHigherRole();
       }
   
-      this.dashboardServ.vmstransactions().subscribe(
+      this.dashboardServ.vmstransactions(localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.datarr = response.data;
         })
@@ -286,7 +286,7 @@ console.log(previlage,'previlage');
       // this.getReqVendorCount();
       // this.getReqCatergoryCount();
       // this.getEmployeeNames();
-      this.dashboardServ.vmstransactions().subscribe(
+      this.dashboardServ.vmstransactions(localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.datarr = response.data;
         })
@@ -333,7 +333,7 @@ console.log(previlage,'previlage');
     }
   }
   countCallingHigherRole() {
-    this.dashboardServ.getClosureCount('monthly').subscribe(
+    this.dashboardServ.getClosureCount('monthly', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -346,7 +346,7 @@ console.log(previlage,'previlage');
         });
       })
     );
-    this.dashboardServ.getInterviewCount('daily').subscribe(
+    this.dashboardServ.getInterviewCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -359,7 +359,7 @@ console.log(previlage,'previlage');
         });
       })
     );
-    this.dashboardServ.getsubmissionCount('daily').subscribe(
+    this.dashboardServ.getsubmissionCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -372,7 +372,7 @@ console.log(previlage,'previlage');
         });
       })
     );
-    this.dashboardServ.getsourcingCount('daily').subscribe(
+    this.dashboardServ.getsourcingCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.sourcingcountArr = response.data;
         this.sourcingVerifiedcount = response.data.verified;
@@ -429,7 +429,7 @@ console.log(previlage,'previlage');
     this.subcount = 0;
     this.reccount = 0;
     this.submissionFlag = flg;
-    this.dashboardServ.getsubmissionCount(flag).subscribe(
+    this.dashboardServ.getsubmissionCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -466,7 +466,7 @@ console.log(previlage,'previlage');
     this.interviewFlag = flg;
     this.sintcount = 0;
     this.rintcount = 0;
-    this.dashboardServ.getInterviewCount(flag).subscribe(
+    this.dashboardServ.getInterviewCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -503,7 +503,7 @@ console.log(previlage,'previlage');
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-    this.dashboardServ.getClosureCount(flag).subscribe(
+    this.dashboardServ.getClosureCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -543,7 +543,7 @@ console.log(previlage,'previlage');
     this.sourcingCompletedcount = 0;
     this.sourcingVerifiedcount = 0;
     this.sourcingMoveToSalescount = 0;
-    this.dashboardServ.getsourcingCount(flag).subscribe(
+    this.dashboardServ.getsourcingCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.sourcingcountArr = response.data;
         this.sourcingVerifiedcount = response.data.verified;

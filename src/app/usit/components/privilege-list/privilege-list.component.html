@@ -4,10 +4,12 @@
     <li class="breadcrumb-item-active"  routerLinkActive>Privileges</li>
   </ul>
     <mat-card class="mat-elevation-z8 main-card">
-      <section class="main-header">
+      <section class="main-header" style="height: 75px;">
       <mat-card-header class="main-card-header">
         {{ rolename }}
       </mat-card-header>
+
+      
       <button mat-icon-button class="add-privilege" (click)="addPrivilege()" matTooltip="Add Privilege" matTooltipPosition="above">
         <mat-icon class="item-icon">enhanced_encryption</mat-icon>
       </button>
@@ -15,11 +17,30 @@
       <mat-card-content class="main-card-content"> 
         <ng-container *ngFor="let card of privilegResp; let cardId = index"> 
           <mat-card class="card" *ngIf="card.privileges?.length > 0">
-       
   
-  <mat-card-header class="card-header"><div class="my-checkbx"><span style="color: white; font-size: 12px;"> 
-    </span> </div>
+ <ng-container *ngIf="isCompanyToDisplay; else noCompanyHeader">
+  <mat-card-header class="card-headers">
+    <!-- <div class="my-checkbx">
+      <mat-form-field class="custom-form-field">
+        <mat-label>Select Companies</mat-label>
+        <mat-select formControlName="custom-select" multiple (selectionChange)="onCompanySelectChange($event, card.privileges, cardId)">
+          <mat-option *ngFor="let option of companyOptions" [value]="option.companyid">
+                      {{ option.companyname }}
+                    </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div> -->
   </mat-card-header>
+</ng-container>
+
+<ng-template #noCompanyHeader>
+  <mat-card-header class="card-headers">
+    <div class="my-checkbx">
+      <span style="color: white; font-size: 12px;"></span>
+    </div>
+  </mat-card-header>
+</ng-template>
+
 
         <mat-card-content class="card-content" *ngIf="card.privileges?.length">
           <ng-container *ngFor="let priv of card.privileges; let privId=index;">
@@ -39,6 +60,7 @@
     <mat-card-actions class="main-card-actions">
         <button mat-raised-button color="primary" (click)="onCancel()"><mat-icon class="edit-icon" style="font-size: 20px;">arrow_backward</mat-icon></button>
         <button mat-raised-button color="primary" (click)="savePrivileges()">Save</button>
+        <!-- <button mat-raised-button color="primary" (click)="assignCompaniesToCards()">Save company</button> -->
     </mat-card-actions>
   </mat-card>
 </div>
