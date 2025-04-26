@@ -64,9 +64,7 @@ import { AddVendorComponent } from '../../../vendor-management/vendor-list/add-v
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
     MatRadioModule,
     MatCheckboxModule
@@ -206,7 +204,8 @@ export class AddSubmissionComponent implements OnInit {
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
     });
     if (this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
-      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant).subscribe(
+      const companyId = localStorage.getItem('companyid');
+      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant,companyId).subscribe(
         (consultant: any) => {
           if (consultant && consultant.data[0].consultantname) {
             this.obj = consultant.data[0].consultantid;
@@ -318,7 +317,8 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getConsultant(flg: string) {
-    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0).pipe(
+    const companyId = localStorage.getItem('companyid');
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0,companyId).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {

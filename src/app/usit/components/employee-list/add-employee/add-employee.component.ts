@@ -61,7 +61,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     NgxMatIntlTelInputComponent,
     MatTableModule,
     MatCheckboxModule
@@ -1038,7 +1037,8 @@ checkCompany(companyid:any){
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    this.empManagementServ.emailDuplicateCheck(email).subscribe((response: any) => {
+    const companyId = localStorage.getItem('companyid');
+    this.empManagementServ.emailDuplicateCheck(email,companyId).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {

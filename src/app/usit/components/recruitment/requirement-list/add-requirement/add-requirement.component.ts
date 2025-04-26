@@ -507,7 +507,7 @@ export class AddRequirementComponent {
                this.data.actionName === 'add-requirement'
                  ? 'Requirement added successfully'
                  : 'Requirement updated successfully';
-                 console.log(resp,'requremrntdata');
+                //  console.log(resp,'requremrntdata');
                  
              this.dialogRef.close();
            } else {

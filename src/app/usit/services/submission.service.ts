@@ -8,9 +8,9 @@ export class SubmissionService {
 
   constructor(private apiServ: ApiService) { }
 
-  getConsultantDropdown(flg: string,id:number) {
+  getConsultantDropdown(flg: string,id:number,companyId:any) {
    // getconsultInfo
-    return this.apiServ.get("submission/getconsultInfo/" + flg+"/"+id);
+    return this.apiServ.get(`submission/getconsultInfo/${flg}/${id}/${companyId}`);
     //return this.apiServ.get("submission/consultantinfo/" + flg);
   }
 

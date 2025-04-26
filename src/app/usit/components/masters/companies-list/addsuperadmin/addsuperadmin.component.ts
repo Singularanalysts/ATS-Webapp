@@ -138,7 +138,6 @@ departmentOptions: string[] = [
   ngOnInit(): void {
   
     this.checkCompany(localStorage.getItem('companyid'));
-    this.getCompanies();
     this.getRoles();
     this.getManager();
     if (this.data.actionName === 'edit-employee') {
@@ -435,28 +434,7 @@ departmentOptions: string[] = [
       });
   }
 
-  getCompanies() {
-    this.empManagementServ
-      .getCompaniesDropdown()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          this.companyarr = response.data;
-          this.companyOptions = response.data;
-          console.log(this.roleOptions,'roleoptionss');
-          
-        },
-        error: (err) => {
-          this.dataTobeSentToSnackBarService.message = err.message;
-          this.dataTobeSentToSnackBarService.panelClass = [
-            'custom-snack-failure',
-          ];
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataTobeSentToSnackBarService
-          );
-        },
-      });
-  }
+ 
 
 checkCompany(companyid:any){
 
@@ -1035,7 +1013,8 @@ checkCompany(companyid:any){
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    this.empManagementServ.emailDuplicateCheck(email).subscribe((response: any) => {
+    const companyId = localStorage.getItem('companyid');
+    this.empManagementServ.emailDuplicateCheck(email,companyId).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {
