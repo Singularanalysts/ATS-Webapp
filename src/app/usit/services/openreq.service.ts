@@ -1,6 +1,4 @@
-import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 
 @Injectable({
@@ -208,17 +206,6 @@ assignedrequirements(payload:any){
 Requirementsreport(payload:any){
   return this.http.post("requirement/getAssignedRequirementsPopup",payload);
 
-}
-private apiUrl = 'openreqs/resume/getReq'; // API endpoint
-
-resumeupload(formData: FormData, params: HttpParams): Observable<any> {
-  return this.http.post(this.apiUrl, formData, { params }); // Include params in options
-}
-submissiondata(reqNumber: string) {
-  return this.http.get(`requirement/getSubmissions/${reqNumber}`);
-}
-ResumeUpload(payload:any){
-  return this.http.post(`openreqs/resume/getPercentage`,payload);
 }
 
   allactiveUserEmails(){

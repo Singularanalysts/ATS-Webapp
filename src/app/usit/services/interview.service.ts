@@ -26,16 +26,15 @@ export class InterviewService {
 
     //used for get the resource
     getPaginationlist(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string, company: any) {
-      return this.apiServ.get("interview/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder
-      );
+      return this.apiServ.get("interview/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company);
     }
 
   getsubmissions(flg: string,id:any,role:string) {
     return this.apiServ.get("interview/submissiondetails/" + flg+"/"+id+"/"+role);
   }
 
-  getsubmissionsDropDown(flg: string,id:any,role:string, subid:number,companyId:any) {
-    return this.apiServ.get("interview/subdetails/" + flg+"/"+id+"/"+role+"/"+subid+"/"+companyId);
+  getsubmissionsDropDown(flg: string,id:any,role:string, subid:number) {
+    return this.apiServ.get("interview/subdetails/" + flg+"/"+id+"/"+role+"/"+subid);
   }
 
   //used for delete the resource
@@ -60,7 +59,7 @@ export class InterviewService {
   }
 
   getOnboardedDetails(flg: string, company: any) {
-    return this.apiServ.get("interview/getOnboardedDetails/" + flg);
+    return this.apiServ.get("interview/getOnboardedDetails/" + flg+'/'+company);
   }
 
   public getConsultantInterviewDataPagination(data: any) {

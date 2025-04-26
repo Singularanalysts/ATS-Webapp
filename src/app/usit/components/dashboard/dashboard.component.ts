@@ -317,14 +317,6 @@ console.log(previlage,'previlage');
     }
 
   }
-    private service = inject(OpenreqService);
-  
-  empTag(id: number) {
-    this.service.openReqsEmpTagging(id, this.userid).subscribe(
-      (response: any) => {
-
-      })
-  }
   goToCompany(companyName: string) {
     this.router.navigate(['/usit/vendors'], { queryParams: { company: companyName } });
     console.log(companyName,'companyname');
@@ -587,7 +579,7 @@ console.log(previlage,'previlage');
       userId: this.userid
     };
   
-    this.dashboardServ.getSourcingLeads(payload).subscribe(
+    this.dashboardServ.getSourcingLeads(payload, localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         const totalRecords = response.data.totalElements;
@@ -757,7 +749,6 @@ console.log(totalRecords,'totalrecords');
       'Tagged Name'
     ]];
     const excelData = this.dataSourceDice.data.map((c: any) => [
-      c.id,
       c.posted_on,
       c.job_title,
       c.category_skill,
@@ -803,7 +794,7 @@ console.log(totalRecords,'totalrecords');
       role:this.role
     };
   
-    this.dashboardServ.getDiceRequirements(payload).subscribe(
+    this.dashboardServ.getDiceRequirements(payload, localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.dataSourceDice.data = response.data.content;
         console.log(this.dataSourceDice.data, 'this.dataSourceDice.data');
@@ -1040,7 +1031,7 @@ console.log(totalRecords,'totalrecords');
   getEmployeeNames(): void {
     if (this.benchSalesEmployees.length > 0) return; // Prevent multiple API calls
   
-    this.dashboardServ.getEmployeeName().subscribe({
+    this.dashboardServ.getEmployeeName(localStorage.getItem('companyid')).subscribe({
       next: (response: any) => {
         this.benchSalesEmployees = response.data; // Store employee names
       },
@@ -1103,7 +1094,7 @@ console.log(totalRecords,'totalrecords');
       pageSize: this.pageSizedice
      }; // Send data in the request body
   
-    this.dashboardServ.getFilteredEmployee(payload)
+    this.dashboardServ.getFilteredEmployee(payload, localStorage.getItem('companyid'))
       .subscribe(
         (response: any) => {
           if (response && response.data) {
