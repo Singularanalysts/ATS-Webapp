@@ -166,7 +166,7 @@ export class ConsultantService {
   }
 
   getSalesAllHotListWithUserid(id: any, company: any) {
-    return this.http.get("consultant/getAssginConsultantList/"+id+"/"+company);
+    return this.http.get("consultant/getAssginConsultantList/"+id);
   }
 
   getOptCptList(page: any, size: any, field: any, sortField: any, sortOrder: any) {

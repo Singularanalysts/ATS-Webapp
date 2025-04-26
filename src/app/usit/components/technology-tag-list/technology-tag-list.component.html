@@ -43,9 +43,13 @@
           <td mat-cell *matCellDef="let element" style="width: 20%"> {{ element.technologyarea|titlecase }} </td>
         </ng-container>
         <!-- Technology Column-->
-        <ng-container matColumnDef="Skills">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company" style="width: 73%"> Skills </th>
+        <ng-container matColumnDef="TechnicalSkills">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company" style="width: 73%"> Technical Skills </th>
           <td mat-cell *matCellDef="let element" style="width: 73%"> {{ element.listofkeyword }} </td>
+        </ng-container>
+        <ng-container matColumnDef="FunctionalSkills">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company" style="width: 73%"> Functional Skills </th>
+          <td mat-cell *matCellDef="let element" style="width: 73%"> {{ element.functionalSkills }} </td>
         </ng-container>
         <!-- Priority Column-->
           <!-- actions -->

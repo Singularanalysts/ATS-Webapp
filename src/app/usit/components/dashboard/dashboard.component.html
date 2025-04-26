@@ -111,11 +111,13 @@
 
       </div>
       <div class="right-div">
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -126,12 +128,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -155,8 +156,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -168,7 +173,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -180,23 +186,25 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>                  </b>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a> </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+                 <span class="deletestatus"> {{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -213,7 +221,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -229,7 +238,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <!-- <b class="bold-text">{{data.emptype}}</b> -->
@@ -240,7 +250,9 @@
 
                 <div class="activity-content" *ngIf="data.flag=='submission'">
                   <b class="bold-text status">{{data.status | titlecase}}</b> Your Profile for <b
-                    class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                    class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text"><a
+                        (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                        data.company }}(V),</a></span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
                   <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
@@ -252,7 +264,9 @@
                     date:'HH:mm' }} {{ data.time_zone }}, </b>
                   <b class="bold-text ">{{ data.round| titlecase }}</b> round <b class="bold-text ">({{ data.mode}}),
                   </b>
-                  <b class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                  <b class="bold-text"><span *ngIf="data.company !== 'NULL'" class="bold-text"><a
+                        (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                        data.company }}(V),</a></span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
                   <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
@@ -491,7 +505,7 @@
             </div>
             <hr>
             <section class="table-style mat-elevation-z8">
-             
+
               <table mat-table [dataSource]="dataSource" class="responsive-table table-data">
                 <ng-container matColumnDef="Name">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Name"> Name </th>
@@ -538,33 +552,31 @@
               </table>
               <hr>
               <div class="custom-pagination">
-                              
+
                 <!-- Previous Page Button -->
                 <button mat-icon-button (click)="prevPage()" [disabled]="currentPage === 1">
                   <mat-icon>chevron_left</mat-icon>
                 </button>
-              
+
                 <!-- Page Numbers -->
-                <button 
-                  *ngFor="let page of getPageNumbers()" 
-                  (click)="goToPage(page)" 
+                <button *ngFor="let page of getPageNumbers()" (click)="goToPage(page)"
                   [class.active]="currentPage === page">
                   {{ page }}
                 </button>
-              
+
                 <!-- Next Page Button -->
                 <button mat-icon-button (click)="nextPage()" [disabled]="currentPage === totalPages">
                   <mat-icon>chevron_right</mat-icon>
                 </button>
-                
+
               </div>
-                            
-                            
+
+
               <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
             </section>
-         
+
           </div>
-         
+
         </div>
 
         <div class="table-container-dice table-wrapper" *ngIf="!sourcingLead">
@@ -640,7 +652,7 @@
 
             </table>
             <hr>
-           
+
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
           </section>
 
@@ -689,11 +701,13 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -704,12 +718,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -733,7 +746,8 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
 
                   </p>
                 </div>
@@ -750,7 +764,8 @@
             <div class="card-body  ">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -762,24 +777,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus" >{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+                 <span class="deletestatus">{{data.status}} </span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -796,7 +813,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -812,7 +830,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -821,7 +840,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -831,35 +851,37 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
                   <b> <span *ngIf="data.endclient!=='NULL'" class="bold-text">, {{data.endclient}}(client) </span><span
                       *ngIf="data.implpartner!=='NULL'">, {{data.implpartner}}(IMPL)</span> </b>
                 </div>
-            
+
               </div>
 
-         
+
             </div>
           </mat-card>
         </div>
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
-    
-   <div *ngIf="showTable" style="margin-top:20px;">
+
+    <div *ngIf="showTable" style="margin-top:20px;">
       <div class="header mat-elevation-z1">
         <span class="header-text">
-          Daily Requirements(Tagged Count) &nbsp;&nbsp;&nbsp;
+          Daily Requirements(Tagged Count)&nbsp;&nbsp;&nbsp;
         </span>
       </div>
       <form [formGroup]="myForm">
@@ -867,50 +889,27 @@
           <div class="header-container-leading-resources" style="padding-right: 6px;">
             <span class="header-text" style="font-size: 14px;margin-top: 0.1rem;"></span>
 
-         
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-                (focus)="getEmployeeNames()"  
-
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" (focus)="getEmployeeNames()" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -918,9 +917,9 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-            
-            
-            
+
+
+
 
 
 
@@ -1003,32 +1002,31 @@
               <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
 
             </table>
-            <div class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">  
-            <span> {{'No matching data found'}} </span> </div>
+            <div class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">
+              <span> {{'No matching data found'}} </span>
+            </div>
 
             <hr>
             <div class="custom-pagination">
-                              
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
-      
+
           </section>
         </div>
       </form>
@@ -1293,7 +1291,7 @@
                 <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
     target="_blank">{{element?.job_source}}</a></td> -->
 
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
@@ -1335,11 +1333,13 @@
 
       </div>
       <div class="right-div">
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -1350,12 +1350,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -1379,8 +1378,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -1393,7 +1396,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -1405,24 +1409,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+                <span class="deletestatus"> {{data.status}}</span>  <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -1439,7 +1445,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1455,7 +1462,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -1464,7 +1472,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1474,7 +1483,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -1809,7 +1819,7 @@
                 <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
         target="_blank">{{element?.job_source}}</a></td> -->
 
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
@@ -1977,11 +1987,13 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -1992,12 +2004,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -2021,8 +2032,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -2035,7 +2050,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -2047,24 +2063,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+                <span class="deletestatus"> {{data.status}}</span>  <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -2081,7 +2099,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -2097,7 +2116,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -2106,7 +2126,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -2116,7 +2137,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -2129,11 +2151,12 @@
         </div>
       </div>
       <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-        <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+        <div class="header mat-elevation-z1" (click)="toggleTable()"
+          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
           <span class="header-text">
             Daily Requirements
           </span>
-          <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+          <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
         </div>
       </div>
       <div *ngIf="showTable" style="margin-top:20px;">
@@ -2147,48 +2170,27 @@
             <div class="header-container-leading-resources" style="padding-right: 6px;">
               <span class="header-text" style="font-size: 14px;margin-top: 0.1rem;"></span>
 
-         
+
               <mat-form-field color="accent" style="margin-top: 14px;">
                 <mat-label>Choose Starting Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker1"
-                  class="form-control"
-                  formControlName="startDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker1"
-                ></mat-datepicker-toggle>
+                <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
               </mat-form-field>
-              
-        
+
+
               <mat-form-field color="accent" style="margin-top: 14px;">
                 <mat-label>Choose Ending Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker2"
-                  class="form-control"
-                  formControlName="endDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker2"
-                ></mat-datepicker-toggle>
+                <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
               </mat-form-field>
-    
-  
+
+
               <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
                 <mat-label>Employee Name</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [formControl]="employeeControl"
-                  [matAutocomplete]="auto"
-                  [value]="selectedEmployeeName"
-                />
+                <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                  [value]="selectedEmployeeName" />
                 <mat-icon matSuffix>arrow_drop_down</mat-icon>
                 <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                   <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -2282,25 +2284,23 @@
               <hr>
               <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
               <div class="custom-pagination">
-                              
+
                 <!-- Previous Page Button -->
                 <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                   <mat-icon>chevron_left</mat-icon>
                 </button>
-              
+
                 <!-- Page Numbers -->
-                <button 
-                  *ngFor="let page of getPageNumbersdice()" 
-                  (click)="goToPagedice(page)" 
+                <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                   [class.active]="currentPagedice === page">
                   {{ page }}
                 </button>
-              
+
                 <!-- Next Page Button -->
                 <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                   <mat-icon>chevron_right</mat-icon>
                 </button>
-                
+
               </div>
             </section>
           </div>
@@ -2308,11 +2308,12 @@
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
     <div *ngIf="showTable" style="margin-top:20px;">
@@ -2326,48 +2327,27 @@
           <div class="header-container-leading-resources" style="padding-right: 6px;">
             <span class="header-text" style="font-size: 14px;margin-top: 0.1rem;"></span>
 
-          
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -2459,26 +2439,24 @@
             <hr>
 
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
-               <div class="custom-pagination">
-                              
+            <div class="custom-pagination">
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
           </section>
         </div>
@@ -2805,7 +2783,7 @@
                 <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
           target="_blank">{{element?.job_source}}</a></td> -->
 
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
@@ -2826,7 +2804,7 @@
                   </a>
                 </td>
               </ng-container>
-              
+
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
@@ -2974,11 +2952,13 @@
           </mat-card>
         </div>
 
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -2989,12 +2969,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -3018,8 +2997,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -3034,7 +3017,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -3046,24 +3030,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+                 <span class="deletestatus"> {{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V)</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V)</a>
 
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
@@ -3082,9 +3068,10 @@
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
                       class="bold-text">
-                        <a (click)="goToCompany(data.company)" class="bold-text" style="color:green; cursor: pointer;">{{ data.company }}(V)</a>
-                      
-                      </span>
+                      <a (click)="goToCompany(data.company)" class="bold-text" style="color:green; cursor: pointer;">{{
+                        data.company }}(V)</a>
+
+                    </span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3100,7 +3087,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V)</a></span>
+                      class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V)</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -3109,7 +3097,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"> <a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3119,7 +3108,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"> <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"> <a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3132,11 +3122,12 @@
         </div>
       </div>
       <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-        <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+        <div class="header mat-elevation-z1" (click)="toggleTable()"
+          style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
           <span class="header-text">
             Daily Requirements
           </span>
-          <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+          <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
         </div>
       </div>
       <div *ngIf="showTable" style="margin-top:20px;">
@@ -3152,45 +3143,24 @@
 
               <mat-form-field color="accent" style="margin-top: 14px;">
                 <mat-label>Choose Starting Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker1"
-                  class="form-control"
-                  formControlName="startDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker1"
-                ></mat-datepicker-toggle>
+                <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
               </mat-form-field>
-              
-        
+
+
               <mat-form-field color="accent" style="margin-top: 14px;">
                 <mat-label>Choose Ending Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker2"
-                  class="form-control"
-                  formControlName="endDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker2"
-                ></mat-datepicker-toggle>
+                <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+                <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
               </mat-form-field>
-    
-  
+
+
               <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
                 <mat-label>Employee Name</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  [formControl]="employeeControl"
-                  [matAutocomplete]="auto"
-                  [value]="selectedEmployeeName"
-                />
+                <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                  [value]="selectedEmployeeName" />
                 <mat-icon matSuffix>arrow_drop_down</mat-icon>
                 <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                   <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -3284,25 +3254,23 @@
               <hr>
               <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
               <div class="custom-pagination">
-                              
+
                 <!-- Previous Page Button -->
                 <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                   <mat-icon>chevron_left</mat-icon>
                 </button>
-              
+
                 <!-- Page Numbers -->
-                <button 
-                  *ngFor="let page of getPageNumbersdice()" 
-                  (click)="goToPagedice(page)" 
+                <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                   [class.active]="currentPagedice === page">
                   {{ page }}
                 </button>
-              
+
                 <!-- Next Page Button -->
                 <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                   <mat-icon>chevron_right</mat-icon>
                 </button>
-                
+
               </div>
             </section>
           </div>
@@ -3310,11 +3278,12 @@
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
     <div *ngIf="showTable" style="margin-top:20px;">
@@ -3330,45 +3299,24 @@
 
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -3378,7 +3326,7 @@
             </mat-form-field>
 
 
-           
+
             <button *ngIf="showReport" class="search" mat-raised-button color="primary" style="height:35px"
               (click)="handleExport()">Excel Import</button>
             <!-- </form> -->
@@ -3459,25 +3407,23 @@
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
             <div class="custom-pagination">
-                              
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
           </section>
         </div>
@@ -3876,11 +3822,13 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -3891,12 +3839,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -3920,8 +3867,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -3934,7 +3885,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -3946,24 +3898,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+            <span class="deletestatus">{{data.status}} </span>      <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -3980,7 +3934,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -3996,7 +3951,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -4005,7 +3961,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4015,7 +3972,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4029,11 +3987,12 @@
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
     <div *ngIf="showTable" style="margin-top:20px;">
@@ -4049,45 +4008,24 @@
 
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -4095,11 +4033,11 @@
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>
-            
 
 
 
-       
+
+
             <button *ngIf="showReport" class="search" mat-raised-button color="primary" style="height:35px"
               (click)="handleExport()">Excel Import</button>
             <!-- </form> -->
@@ -4180,25 +4118,23 @@
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
             <div class="custom-pagination">
-                              
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
           </section>
         </div>
@@ -4597,11 +4533,13 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -4612,12 +4550,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -4641,8 +4578,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -4655,7 +4596,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -4667,24 +4609,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+               <span class="deletestatus">{{data.status}}</span>    <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -4701,7 +4645,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4717,7 +4662,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -4726,7 +4672,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4736,7 +4683,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -4750,11 +4698,12 @@
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
     <div *ngIf="showTable" style="margin-top:20px;">
@@ -4770,45 +4719,24 @@
 
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -4818,7 +4746,7 @@
             </mat-form-field>
 
 
-          
+
             <button *ngIf="showReport" class="search" mat-raised-button color="primary" style="height:35px"
               (click)="handleExport()">Excel Import</button>
             <!-- </form> -->
@@ -4827,7 +4755,7 @@
                 <input matInput type="text" class="search dice" placeholder="search ..." (keyup)="onDiceFilter($event)">
               </div>
             </div>
-  <button mat-icon-button (click)="refreshData()">
+            <button mat-icon-button (click)="refreshData()">
               <mat-icon class="icon-design">refresh</mat-icon>
             </button>
           </div>
@@ -4899,25 +4827,23 @@
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
             <div class="custom-pagination">
-                              
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
           </section>
         </div>
@@ -5216,11 +5142,13 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -5231,12 +5159,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -5260,8 +5187,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -5274,7 +5205,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -5286,24 +5218,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+                <span class="deletestatus">{{data.status}}</span>   <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -5320,7 +5254,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5336,7 +5271,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -5345,7 +5281,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5355,7 +5292,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -5369,11 +5307,12 @@
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
     <div *ngIf="showTable" style="margin-top:20px;">
@@ -5387,48 +5326,27 @@
           <div class="header-container-leading-resources" style="padding-right: 6px;">
             <span class="header-text" style="font-size: 14px;margin-top: 0.1rem;"></span>
 
-        
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -5437,7 +5355,7 @@
               </mat-autocomplete>
             </mat-form-field>
 
-         
+
             <button *ngIf="showReport" class="search" mat-raised-button color="primary" style="height:35px"
               (click)="handleExport()">Excel Import</button>
             <!-- </form> -->
@@ -5518,25 +5436,23 @@
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
             <div class="custom-pagination">
-                              
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
           </section>
         </div>
@@ -5933,11 +5849,13 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <div>
+        <div style="margin-bottom: 20px;">
           <div class="rating-card">
             <mat-card class="performanceratingcard">
-              <div class="card-header" style="padding-left: 6px;">
-                <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+              <div class="card-header">
+                <div class="header-title">
+                  <mat-card-title>Ratings <span>| {{ ratingflag }}</span></mat-card-title>
+                </div>
                 <button mat-icon-button [matMenuTriggerFor]="menuSub">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
@@ -5948,12 +5866,11 @@
                 </mat-menu>
               </div>
 
+
               <mat-card-content *ngIf="performanceData; else noRatings" class="ratingcontent">
                 <div class="rating-layout">
-                  <!-- Left Side: StarPurple500Rounded Icon -->
                   <mat-icon class="rating-icon">stars</mat-icon>
 
-                  <!-- Right Side: Name & Rating -->
                   <div class="rating-details">
                     <h3 class="ratingname">{{ performanceData.rated_to }}</h3>
 
@@ -5977,8 +5894,12 @@
 
               <ng-template #noRatings>
                 <div>
-                  <p class="no-data">Currently no ratings available.</p>
+                  <p class="no-data" style="    text-align: center;
+    font-weight: 600;">Currently no ratings available.
+
+                  </p>
                 </div>
+
               </ng-template>
             </mat-card>
           </div>
@@ -5991,7 +5912,8 @@
             <div class="card-body">
               <h3 class="card-title bold-text sticky-activity">Recent Activity
               </h3>
-              <div class="activity" *ngFor="let data of datarr" [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
+              <div class="activity" *ngFor="let data of datarr"
+                [ngClass]="{'vms': data.flg == 'VMS', 'sub-sales': data.flg == 'SUB-sales', 'sub-recruiting': data.flg == 'SUB-recruiting' || data.flg == 'SUB-Recruiting', 'sub-domrecruiting': data.flg == 'SUB-domrecruiting', 'submission': data.flg == 'submission', 'interview': data.flg == 'interview'}">
                 <div class="time">
                   {{data.trtime}}
                 </div>
@@ -6003,24 +5925,26 @@
                       <ng-container *ngIf="data.status=='Rejected'; then rejected else normal"></ng-container>
                       <ng-template #rejected>
                         <span data-bs-toggle="modal" data-bs-target="#rejectedreason" data-dismiss="modal" #closeModal
-                          class="bold-text">{{data.status}}</span>
+                          class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text">{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
-                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                    <a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{
+                      data.company }}(V),</a>
                   </b>
                 </div>
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                  {{data.status}} <b>
+               <span class="deletestatus">{{data.status}} </span>   <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
-                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
+                  Profile to <b class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                      style="color:green;cursor: pointer;">{{ data.company }}(V),</a>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                     <!-- <span *ngIf="data.submissionrate!==null" bold-text >, {{data.submissionrate}}($/hr),</span> -->
                   </b> on
@@ -6037,7 +5961,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}}(Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}($/hr),</span>
                   </b> on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -6053,7 +5978,8 @@
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
                   Profile for <b class="bold-text">{{data.reqnumber}} (Req No),<span *ngIf="data.company !== 'NULL'"
-                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text"
+                        style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                     <span *ngIf="data.submissionrate !== null" class="bold-text"> {{data.submissionrate}}(₹/LPA),</span>
                   </b>
                   <b> <span *ngIf="data.endclient !== 'NULL'" class="bold-text"> {{data.endclient}} (client)</span>
@@ -6062,7 +5988,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='submission'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -6072,7 +5999,8 @@
 
                 <div class="activity-content" *ngIf="data.flg=='interview'">
                   {{data.status | titlecase}} Your Profile for <b class="bold-text"><span
-                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)" class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
+                      *ngIf="data.company !== 'NULL'" class="bold-text"><a (click)="goToCompany(data.company)"
+                        class="bold-text" style="color:green;cursor: pointer;">{{ data.company }}(V),</a></span>
                   </b>
                   on
                   <b class="bold-text">{{data.emptype}}</b>
@@ -6086,11 +6014,12 @@
       </div>
     </div>
     <div *ngIf="privilegeServ.hasPrivilege('REQUIREMENTS_TAGGED_DATA')" class="col-12 card" style="margin-top:13px;">
-      <div class="header mat-elevation-z1" (click)="toggleTable()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+      <div class="header mat-elevation-z1" (click)="toggleTable()"
+        style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
         <span class="header-text">
           Daily Requirements
         </span>
-        <mat-icon>arrow_drop_down</mat-icon>  <!-- Dropdown icon -->
+        <mat-icon>arrow_drop_down</mat-icon> <!-- Dropdown icon -->
       </div>
     </div>
     <div *ngIf="showTable" style="margin-top:20px;">
@@ -6106,45 +6035,24 @@
 
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Starting Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker1"
-                class="form-control"
-                formControlName="startDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker1"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
-            
-      
+
+
             <mat-form-field color="accent" style="margin-top: 14px;">
               <mat-label>Choose Ending Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker2"
-                class="form-control"
-                formControlName="endDate"
-              />
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker2"
-              ></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+              <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
             </mat-form-field>
-  
+
 
             <mat-form-field appearance="outline" style="width: 14rem;margin-right: 1rem;margin-top: 1rem;">
               <mat-label>Employee Name</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="employeeControl"
-                [matAutocomplete]="auto"
-                [value]="selectedEmployeeName"
-              />
+              <input type="text" matInput [formControl]="employeeControl" [matAutocomplete]="auto"
+                [value]="selectedEmployeeName" />
               <mat-icon matSuffix>arrow_drop_down</mat-icon>
               <mat-autocomplete #auto (optionSelected)="onEmployeeChange($event.option)">
                 <mat-option *ngFor="let option of benchSalesEmployees" [value]="option">
@@ -6155,7 +6063,7 @@
 
 
 
-           
+
             <button *ngIf="showReport" class="search" mat-raised-button color="primary" style="height:35px"
               (click)="handleExport()">Excel Import</button>
             <!-- </form> -->
@@ -6236,25 +6144,23 @@
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
             <div class="custom-pagination">
-                              
+
               <!-- Previous Page Button -->
               <button mat-icon-button (click)="prevPagedice()" [disabled]="currentPagedice === 1">
                 <mat-icon>chevron_left</mat-icon>
               </button>
-            
+
               <!-- Page Numbers -->
-              <button 
-                *ngFor="let page of getPageNumbersdice()" 
-                (click)="goToPagedice(page)" 
+              <button *ngFor="let page of getPageNumbersdice()" (click)="goToPagedice(page)"
                 [class.active]="currentPagedice === page">
                 {{ page }}
               </button>
-            
+
               <!-- Next Page Button -->
               <button mat-icon-button (click)="nextPagedice()" [disabled]="currentPagedice === totalPagesdice">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              
+
             </div>
           </section>
         </div>

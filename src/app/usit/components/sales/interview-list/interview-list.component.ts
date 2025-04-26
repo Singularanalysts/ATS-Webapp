@@ -60,9 +60,10 @@ export class InterviewListComponent implements OnInit, OnDestroy{
     'ConsultantName',
     'DateAndToI',
     'Mode',
-    'Vendor',
-    'ImplementationPartner',
     'Client',
+    'ImplementationPartner',
+
+    'Vendor',
     'DateOfSubmission',
     'EmployeerName',
     'Round',

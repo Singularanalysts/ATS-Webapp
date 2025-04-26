@@ -1,38 +1,97 @@
 <div class="update-technology-dialog-container">
-    <div class="header">
-      <h2 mat-dialog-title>{{data.title}}</h2>
-      <hr>
-      <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
-        <mat-icon>close</mat-icon>
+  <div class="header">
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <hr />
+    <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="content" mat-dialog-content>
+    <form
+      class="add-technology-form"
+      [formGroup]="technologyForm"
+      name="technology-form"
+    >
+      <input type="hidden" formControlName="id" />
+      <mat-form-field class="technologyname-field">
+        <mat-label>Technology</mat-label>
+        <input
+          matInput
+          formControlName="technologyarea"
+          maxlength="75"
+          (blur)="DuplicateTechnologyCheck()"
+        />
+      
+        <!-- Required error -->
+        <mat-error *ngIf="controls['technologyarea'].hasError('required')">
+          Technology is Required
+        </mat-error>
+      
+        <!-- Duplicate error -->
+        <mat-error *ngIf="controls['technologyarea'].hasError('duplicate')">
+          {{ duplicateTechErrorMessage }}
+        </mat-error>
+      
+      </mat-form-field>
+      
+
+      <mat-form-field class="description-field">
+        <mat-label>Technical Skills</mat-label>
+        <textarea
+          maxlength="2000"
+          matInput
+          formControlName="listofkeyword"
+        ></textarea>
+        <!-- errors -->
+        <mat-error
+          class="error-message"
+          *ngIf="
+            controls['listofkeyword'].errors &&
+            controls['listofkeyword'].errors['required']
+          "
+          >Skills are Required</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field class="description-field">
+        <mat-label>Functional Skills</mat-label>
+        <textarea
+          maxlength="2000"
+          matInput
+          formControlName="functionalSkills"
+        ></textarea>
+        <!-- errors -->
+        <mat-error
+          class="error-message"
+          *ngIf="
+            controls['functionalSkills'].errors &&
+            controls['functionalSkills'].errors['required']
+          "
+          >Functional Skills are Required</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field class="description-field">
+        <mat-label>Comments</mat-label>
+        <textarea
+          maxlength="250"
+          matInput
+          formControlName="comments"
+        ></textarea>
+      </mat-form-field>
+    </form>
+    <div class="actions">
+      <button mat-raised-button (click)="onAction('CANCEL')">
+        {{ data.buttonCancelText }}
+      </button>
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        [disabled]="isFormSubmitted"
+        (click)="onSubmit()"
+      >
+        {{ data.buttonSubmitText }}
       </button>
     </div>
-
-    <div class="content" mat-dialog-content>
-      <form class="add-technology-form" [formGroup]="technologyForm" name="technology-form">
-        <input type="hidden" formControlName="id">
-        <mat-form-field class="technologyname-field">
-          <mat-label>Technology</mat-label>
-          <input title="" matInput formControlName="technologyarea" maxlength="75">
-          <!-- errors -->
-          <mat-error class="error-message" *ngIf="controls['technologyarea'].errors && controls['technologyarea'].errors['required']"> Technology is Required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="description-field">
-          <mat-label>Skills</mat-label>
-          <textarea maxlength="2000" matInput formControlName="listofkeyword"></textarea>
-          <!-- errors -->
-          <mat-error class="error-message" *ngIf="controls['listofkeyword'].errors && controls['listofkeyword'].errors['required']">Skills are Required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="description-field">
-            <mat-label>Comments</mat-label>
-            <textarea maxlength="250" matInput formControlName="comments"></textarea>
-          </mat-form-field>
-
-      </form>
-      <div class="actions">
-        <button mat-raised-button (click)="onAction('CANCEL')">{{data.buttonCancelText}}</button>
-        <button type="submit" mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">{{data.buttonSubmitText}}</button>
-      </div>
-    </div>
+  </div>
 </div>

@@ -128,7 +128,14 @@ myRoles(){
             "icon": "handshake",
             "routerLink": "/usit/tcvr",
             "roles":["Super Administrator"]  
-          }
+          },
+          // {
+          //   "test": "TCVR",
+          //   "text": "H1B Vendors",
+          //   "icon": "handshake",
+          //   "routerLink": "/usit/h1b-vendor",
+          //   "roles":["Super Administrator"]  
+          // }
         ]
       },
       {
@@ -276,6 +283,13 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/sales-closures",
           "roles":["Super Administrator"]  
+        },
+        {
+          "test": "SALES_TRASH_BIN",
+          "text": "Submission Trash Bin",
+          "icon": "check_circle",
+          "routerLink": "/usit/sales-submissionsTrash",
+          "roles":["Super Administrator"]  
         }
       ]
     } ,
@@ -318,6 +332,13 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/rec-closures",
           "roles":["Super Administrator"] 
+        },
+        {
+          "test":"RECRUITING_TRASH_BIN",
+          "text": "Submission Trash Bin",
+          "icon": "check_circle",
+          "routerLink": "/usit/Recruitment-submissionsTrash",
+          "roles":["Super Administrator"] 
         }
       ]
     },
@@ -359,6 +380,13 @@ myRoles(){
           "text": "Closures",
           "icon": "check_circle",
           "routerLink": "/usit/dom-closures",
+          "roles":["Super Administrator"]  
+        },
+        {
+          "test":"DOM_TRASH_BIN",
+          "text": "Submission Trash Bin",
+          "icon": "check_circle",
+          "routerLink": "/usit/Dom-submissionTrash",
           "roles":["Super Administrator"]  
         }
       ]
@@ -408,6 +436,13 @@ myRoles(){
               "text": "Portal Requirements",
               "icon": "group",
               "routerLink": "/usit/portalreqs",
+              "roles":["Super Administrator"]  
+            },
+            {
+              "test": "Portal Requirements",
+              "text": "Apply With Resume",
+              "icon": "group",
+              "routerLink": "/usit/resume-upload",
               "roles":["Super Administrator"]  
             },
             {

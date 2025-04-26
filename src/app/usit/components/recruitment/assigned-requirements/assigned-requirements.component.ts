@@ -18,8 +18,10 @@ import { MaterialModule } from 'src/app/material.module';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { RequirementReportComponent } from '../../reports/employee-reports/requirement-report/requirement-report.component';
 import { DialogService } from 'src/app/services/dialog.service';
-import { RequirementreportComponent } from '../requirementreport/requirementreport.component';
 import { Router } from '@angular/router';
+import * as XLSX from 'xlsx';
+import { PrivilegesService } from 'src/app/services/privileges.service';
+import { AssignedCountComponent } from '../assigned-count/assigned-count.component';
 
 @Component({
   selector: 'app-assigned-requirements',
@@ -45,6 +47,7 @@ ReactiveFormsModule,
 export class AssignedRequirementsComponent {
   RequirementReport!: FormGroup;
   private dialogServ = inject(DialogService);
+    protected privilegeServ = inject(PrivilegesService);
 
   private router = inject(Router);
 
@@ -56,6 +59,18 @@ export class AssignedRequirementsComponent {
       endDate: [null,[Validators.required]]
     });
   }
+  // onSubmit() {
+  //   const fromDate = this.RequirementReport.value.startDate;
+  //   const toDate = this.RequirementReport.value.endDate;
+  
+  //   if (!fromDate || !toDate) {
+  //     this.RequirementReport.markAllAsTouched();
+  //     console.error("Both start and end dates are required");
+  //     return;
+  //   }
+  
+  //   this.getAssignedRequirements(fromDate, toDate);
+  // }
   onSubmit() {
     const fromDate = this.RequirementReport.value.startDate;
     const toDate = this.RequirementReport.value.endDate;
@@ -66,15 +81,26 @@ export class AssignedRequirementsComponent {
       return;
     }
   
-    this.getAssignedRequirements(fromDate, toDate);
+    const formattedFromDate = this.formatDate(fromDate);
+    const formattedToDate = this.formatDate(toDate);
+  
+    this.getAssignedRequirements(formattedFromDate, formattedToDate);
   }
+  
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
   
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
     'ExecutiveName',
     'RequirementCount',
-
+     'ServedCount'
   ];
 
 
@@ -97,11 +123,31 @@ export class AssignedRequirementsComponent {
             serialNum: index + 1,
             pseudoname: item.pseudoname,
             requirementsCount: item.requirementsCount,
+            served_count: item.served_count,
+
             userid:item.userid
           }));
         }
       });
   }
+  exportExcel(): void {
+    // Map data to exclude the 'userid' field
+    const exportData = this.dataSource.data.map(item => ({
+      SerialNum: item.serialNum,
+      ExecutiveName: item.pseudoname,
+      RequirementCount: item.requirementsCount
+    }));
+
+    // Generate a worksheet from the mapped data
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    // Create a new workbook and add the worksheet
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'AssignedRequirements');
+
+    // Export the workbook to an Excel file
+    XLSX.writeFile(workbook, 'AssignedRequirements.xlsx');
+  }
+
   reset(){
     this.RequirementReport.reset();
     this.getAssignedRequirements(null, null); 
@@ -111,31 +157,27 @@ export class AssignedRequirementsComponent {
     this.destroyed$.next();
     this.destroyed$.complete();
   }
+  
+ 
   requirementreportdata(element: any) {
-    const fromDate = this.RequirementReport.value.startDate || null;
-    const toDate = this.RequirementReport.value.endDate || null;
+    const fromDate = this.RequirementReport.value.startDate ? this.formatDate(this.RequirementReport.value.startDate) : null;
+    const toDate = this.RequirementReport.value.endDate ? this.formatDate(this.RequirementReport.value.endDate) : null;
   
     const actionData = {
       title: 'Requirement Report',
       userid: element.userid,
-      fromDate: fromDate, 
+      pseudoname: element.pseudoname,
+      fromDate: fromDate,
       toDate: toDate,
       actionName: 'requirement-report'
     };
   
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '70vw';
-    dialogConfig.disableClose = false;
-    dialogConfig.panelClass = 'add-interview';
-    dialogConfig.data = actionData; 
-  
-    const dialogRef = this.dialogServ.openDialogWithComponent(RequirementreportComponent, dialogConfig);
-  
-    dialogRef.afterClosed().subscribe((result: { success: any }) => {
-      if (result?.success) {  
-      }
-    });
+    this.router.navigate(['/usit/requirement-reportdata'], { state: { data: actionData } });
   }
+
+  
+  
+  
   refreshForm(){
     this.RequirementReport.reset();
    this.getAssignedRequirements(null, null); 

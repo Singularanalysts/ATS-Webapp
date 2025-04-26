@@ -54,9 +54,10 @@ export class InterviewCountListComponent {
     'DateAndToI',
     'Round',
     'Mode',
-    'Vendor',
-    'ImplementationPartner',
     'Client',
+    'ImplementationPartner',
+
+    'Vendor',
     'DateOfSubmission',
     'EmployeerName',
     'InterviewStatus',

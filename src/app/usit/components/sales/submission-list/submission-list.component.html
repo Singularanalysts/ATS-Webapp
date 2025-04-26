@@ -34,26 +34,32 @@
 
             <div class="search-submission">
                 <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
+                <form [formGroup]="filterForm">
+                <input matInput  type="search" formControlName="position" style="" class="search" placeholder="Search Position" >
+                <input matInput  type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" >
                 <input matInput type="text" class="search" placeholder="search submissions" (keyup)="applyFilter($event)">
+
+                </form>
             </div>
         </div>
     </div>
     <div id="table-container" class="table-wrapper">
         <section class="mat-elevation-z8" [ngClass]="{'dom-submission-table-style': flag === 'Domrecruiting', 'submission-table-style': flag !== 'Domrecruiting'}">
-            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false "       class="sticky-table"
+            >
 
                 <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
 
                 <!-- SNo Column mat-sort-header-->
                 <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" mat-sort-header sticky> 
                         S.No </th>
                     <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
                 </ng-container>
                 <!-- Date-->
                 <ng-container matColumnDef="Dos">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Date" mat-sort-header> DOS
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Date" mat-sort-header sticky> DOS
                     </th>
                     <td mat-cell *matCellDef="let element" nowrap> {{element?.createddate | date:'MM-dd-yyyy HH:mm'}} </td>
                 </ng-container>
@@ -67,10 +73,10 @@
                     </td>
                 </ng-container> -->
                 <ng-container matColumnDef="Id">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Id" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Id" mat-sort-header sticky>
                         Submission ID
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <!-- <td mat-cell *matCellDef="let element">
                         <ng-container *ngIf="this.flag == 'Recruiting'; then trueCondition else elseTemplate"></ng-container>
                         <ng-container *ngIf="this.flag === 'Domrecruiting'; then anotherCondition"></ng-container>
                         <ng-template #trueCondition>
@@ -84,11 +90,17 @@
                         <ng-template #elseTemplate>
                             {{ element?.position | titlecase}}
                         </ng-template>
+                    </td> -->
+                    <td mat-cell *matCellDef="let element">
+                        <span class="consultant-id"
+                        (click)="goToReqInfo(element)">{{ element?.subno }}
+                    </span>
+                      
                     </td>
                 </ng-container>
                 <!-- Name-->
                 <ng-container matColumnDef="Consultant">
-                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Consultant" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Consultant" mat-sort-header sticky>
                         Consultant </th>
                     <td mat-cell *matCellDef="let element">
                         <span class="consultant-id"
@@ -135,28 +147,28 @@
                 </ng-container> -->
                 <ng-container matColumnDef="Position">
                     <th mat-header-cell *matHeaderCellDef 
-                        sortActionDescription="Sort by Position" mat-sort-header> Position</th>
+                        sortActionDescription="Sort by Position" mat-sort-header sticky> Position</th>
                     <td mat-cell *matCellDef="let element"> {{element?.position|titlecase}}
                     </td>
                 </ng-container>
                   <!-- Vendor Location -->
                   <ng-container matColumnDef="Vendor">
                     <th mat-header-cell *matHeaderCellDef 
-                        sortActionDescription="Sort by Current Vendor" mat-sort-header> Third Party Vendor </th>
+                        sortActionDescription="Sort by Current Vendor" mat-sort-header sticky> Third Party Vendor </th>
                     <td mat-cell *matCellDef="let element"> {{element?.vendor|titlecase}}
                     </td>
                 </ng-container>
 
                 <!-- Implementation Partner-->
                 <ng-container matColumnDef="ImplementationPartner">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ImplementationPartner" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ImplementationPartner" mat-sort-header sticky>
                         IP / Vendor </th>
                     <td mat-cell *matCellDef="let element"> {{element?.implpartner | titlecase}}
                     </td>
                 </ng-container>
                 <!-- End Client-->
                 <ng-container matColumnDef="EndClient">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by EndClient" mat-sort-header> End
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by EndClient" mat-sort-header sticky> End
                         Client </th>
                     <td mat-cell *matCellDef="let element"> {{element?.endclient | titlecase}}
                     </td>
@@ -171,7 +183,7 @@
                     </td>
                 </ng-container>-->
                 <ng-container matColumnDef="SubRate">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubRate" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubRate" mat-sort-header sticky>
                       Sub Rate
                     </th>
                     <td mat-cell *matCellDef="let element">  
@@ -183,14 +195,14 @@
                   
                 <!-- Project Location Column -->
                 <ng-container matColumnDef="ProjectLocation">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ProjectLocation" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ProjectLocation" mat-sort-header sticky>
                         Project Location</th>
                     <td mat-cell *matCellDef="let element"> {{element.projectlocation | titlecase}} </td>
                 </ng-container>
 
                 <!-- Submitted By Column -->
                 <ng-container matColumnDef="SubmittedBy">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubmittedBy" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubmittedBy" mat-sort-header sticky>
                         Submitted By
                     </th>
                     <td mat-cell *matCellDef="let element"> 
@@ -209,7 +221,7 @@
 
                  <!-- Status Column -->
                  <ng-container matColumnDef="Status">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Status" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by Status" mat-sort-header sticky>
                         Status
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element.substatus | titlecase}} </td>
@@ -217,7 +229,7 @@
 
                 <!-- Sub Status Column -->
                 <ng-container matColumnDef="SubStatus">
-                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubStatus" mat-sort-header>
+                    <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by SubStatus" mat-sort-header sticky>
                         Sub Status
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element.status | titlecase}} </td>
@@ -225,7 +237,7 @@
 
                 <!-- Action Column -->
                 <ng-container matColumnDef="Action">
-                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <th mat-header-cell *matHeaderCellDef sticky> Action </th>
                     <td mat-cell *matCellDef="let submission">
                         <span class="action-buttons">
 

@@ -1,96 +1,84 @@
 <div class="submission-container">
-    <div class="header-container mat-elevation-z1">
-
-        <span class="header-text">
-            <mat-icon style="vertical-align: middle; cursor: pointer; font-size: 24px;   color: #3F51B5;" (click)="goback()">arrow_back</mat-icon>
-            Assigned Requirements Report
-          </span>
-          
-        <button mat-icon-button   color="primary"  (click)="refreshForm()">
-            <mat-icon>refresh</mat-icon>
-            </button>
-     </div>
-     <div class="candidate-search-container">
-        <form [formGroup]="RequirementReport" >
-          <mat-card>
-            <mat-card-content
-              style="display: flex; align-items: center; justify-content: center; gap: 10px"
-            >
-              <mat-form-field color="accent">
-                <mat-label>Choose Starting Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker1"
-                  class="form-control"
-                  formControlName="startDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker1"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-                <mat-error
-                  *ngIf="RequirementReport.get('startDate')!.hasError('required')"
-                  >Starting Date is required</mat-error
-                >
-              </mat-form-field>
-    
-              <mat-form-field color="accent">
-                <mat-label>Choose Ending Date</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker2"
-                  class="form-control"
-                  formControlName="endDate"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker2"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #picker2 color="primary"></mat-datepicker>
-                <mat-error
-                  *ngIf="RequirementReport.get('endDate')!.hasError('required')"
-                  >Ending Date is required</mat-error
-                >
-              </mat-form-field>
-  
-              <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
-              <button mat-raised-button color="warn" (click)="reset()">Reset</button>
-             
-              
-            </mat-card-content>
-          </mat-card>
-        </form>
-      </div>
-    
-    <div id="table-container" class="table-wrapper">
-        <section class="mat-elevation-z8 interview-table-style">
-            <table mat-table [dataSource]="dataSource" oncopy="return false">
-                <ng-container matColumnDef="SerialNum">
-                    <th mat-header-cell *matHeaderCellDef>
-                        S.No </th>
-                    <td mat-cell *matCellDef="let element"> {{ element?.serialNum }} </td>
-                </ng-container>
-                <ng-container matColumnDef="ExecutiveName">
-                    <th mat-header-cell *matHeaderCellDef >
-                        Executive Name</th>
-                    <td mat-cell *matCellDef="let element"> {{ element?.pseudoname }} </td>
-                </ng-container>
-                <ng-container matColumnDef="RequirementCount">
-                    <th mat-header-cell *matHeaderCellDef> Requirement Count </th>
-                    <td mat-cell *matCellDef="let element" (click)="requirementreportdata(element)" class="requirementcount">
-                        {{ element?.requirementsCount }}
-                    </td>
-                </ng-container>
-                
-              
-                <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
-            </table>
-            <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
-
-        </section>
-        <hr>
+  <div class="header-container mat-elevation-z1" style="display: flex; align-items: center; justify-content: space-between;">
+    <div class="left-header">
+      <span class="header-text">
+        <mat-icon style="vertical-align: middle; cursor: pointer; font-size: 24px; color: #3F51B5;" (click)="goback()">arrow_back</mat-icon>
+        Assigned Requirements Report
+      </span>
     </div>
+    <div class="right-header">
+      <button class="search" mat-raised-button color="primary" style="margin-bottom: 9px;" (click)="exportExcel()" *ngIf="privilegeServ.hasPrivilege('ASSIGNED_REQ_COUNT')" >Excel Export</button>
+      <button mat-icon-button color="primary" (click)="refreshForm()" style="position:relative;top: 8px;">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div class="candidate-search-container">
+    <form [formGroup]="RequirementReport">
+      <mat-card>
+        <mat-card-content style="display: flex; align-items: center; justify-content: center; gap: 10px">
+          <mat-form-field color="accent">
+            <mat-label>Choose Starting Date</mat-label>
+            <input matInput [matDatepicker]="picker1" class="form-control" formControlName="startDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-error *ngIf="RequirementReport.get('startDate')!.hasError('required')">Starting Date is
+              required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field color="accent">
+            <mat-label>Choose Ending Date</mat-label>
+            <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 color="primary"></mat-datepicker>
+            <mat-error *ngIf="RequirementReport.get('endDate')!.hasError('required')">Ending Date is
+              required</mat-error>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+          <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+
+
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </div>
+
+  <div id="table-container" class="table-wrapper">
+    <section class="mat-elevation-z8 interview-table-style">
+      <table mat-table [dataSource]="dataSource" oncopy="return false">
+        <ng-container matColumnDef="SerialNum">
+          <th mat-header-cell *matHeaderCellDef>
+            S.No </th>
+          <td mat-cell *matCellDef="let element"> {{ element?.serialNum }} </td>
+        </ng-container>
+        <ng-container matColumnDef="ExecutiveName">
+          <th mat-header-cell *matHeaderCellDef>
+            Executive Name</th>
+          <td mat-cell *matCellDef="let element"> {{ element?.pseudoname }} </td>
+        </ng-container>
+        <ng-container matColumnDef="RequirementCount">
+          <th mat-header-cell *matHeaderCellDef> Requirement Count </th>
+          <td mat-cell *matCellDef="let element" (click)="requirementreportdata(element)" class="requirementcount" style="text-align: center;">
+            {{ element?.requirementsCount }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="ServedCount">
+          <th mat-header-cell *matHeaderCellDef> Served Count </th>
+          <td mat-cell *matCellDef="let element"   style="text-align: center;">
+            {{ element?.served_count }}
+          </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+      </table>
+      <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+
+    </section>
+    <hr>
+  </div>
 
 </div>

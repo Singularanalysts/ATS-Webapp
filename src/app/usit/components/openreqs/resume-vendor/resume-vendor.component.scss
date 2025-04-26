@@ -1,0 +1,151 @@
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    background-color: whitesmoke;
+    z-index: 99999;
+    top: 0;
+    overflow: hidden;
+    list-style: none;
+    //padding: 0;
+    font-size: 12px;
+   
+  }
+  
+  .close-btn {
+    overflow: hidden !important;
+  }
+  
+  .header-text {
+    padding-left: -2.7rem;
+    font-weight: 600;
+    font-size: larger;
+  }
+  
+  .card {
+    margin: 0 auto;
+  
+    //height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-mdc-header-row {
+    background-color: rgb(213, 231, 231);
+    position: sticky;
+    top: 0;
+  }
+  
+  .mdc-data-table__cell,
+  .mdc-data-table__header-cell {
+    padding: 0 4px 0 4px;
+  }
+  
+  .mat-mdc-header-row {
+    height: 30px !important;
+  }
+  
+  .mat-mdc-row {
+    height: 30px !important;
+  }
+  
+  thead {
+    position: sticky;
+    top: 0;
+  }
+  
+  .mat-sort-header-arrow {
+    color: #1a1717;
+  }
+  
+  .mat-mdc-column {
+    border-right: 1px solid currentColor;
+  }
+  
+  .mat-column-RecruiterName,
+  .mat-column-PhoneNumber,
+  .mat-column-Email,
+  .mat-column-Address,
+  .mat-column-AddedOn {
+    border-right: 1px solid lightgrey;
+    padding-right: 24px;
+  }
+  
+  .mat-column-RecruiterName {
+    border-left: 1px solid lightgrey;
+  }
+  
+  .company-infor-table {
+    padding: 0 2px;
+    width: 100%;
+    // max-height: calc(100% - 2px);
+    height: 50dvh;
+    overflow: auto;
+    display: block;
+  }
+  
+  .no-data-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 64px;
+  }
+  
+  .static-label {
+    font-weight: bold;
+  }
+  .table-container {
+    margin-top: 20px;
+  }
+  
+  .mat-table {
+    width: 100%;
+    border-collapse: collapse;
+    
+  }
+  
+  .mat-header-cell,
+  .mat-cell {
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .mat-header-row {
+    background-color: #f2f2f2;
+  }
+  
+  .mat-row:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .mat-row:hover {
+    background-color: #ddd;
+  }
+  .table-container {
+    margin-top: 5px;
+    max-height: 300px;
+  }
+  .table-container table {
+    border-collapse: collapse;
+  }
+  
+  .table-container th, .table-container td {
+    border-right: 1px solid #ddd; /* Adjust the color and thickness as needed */
+  }
+  
+  /* Optional: If you want to remove the border for the last column */
+  .table-container th:last-child, .table-container td:last-child {
+    border-right: none;
+  }
+  .slash {
+    margin: 0 10px; /* Adjust spacing as needed */
+  }

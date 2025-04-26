@@ -41,12 +41,18 @@ export class SubmissionService {
   }
 
   public getsubmissiondataPagination(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string, company: any) {
-    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company);
+    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
   }
- 
-  deletesubmission(id: number) {
-    return this.apiServ.delete("submission/delete/" + id);
+  public getdeletesubmissiontrash(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string) {
+    return this.apiServ.get("submission/getAllTrashBinSubmissions/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
   }
+  // deletesubmission(id: number) {
+  //   return this.apiServ.delete("submission/delete/" + id);
+  // }
+deletesubmission(id: number, remarks: string,userId:any) {
+  const encodedRemarks = encodeURIComponent(remarks); // important to safely send in URL
+  return this.apiServ.delete(`submission/delete/${id}/${encodedRemarks}/${userId}`);
+}
 
   //used for get one resource
   getsubdetailsbyid(id: number) {
@@ -72,4 +78,14 @@ export class SubmissionService {
   public getConsultantSubmissionDataPagination(data: any) {
     return this.apiServ.post("submission/getEmployeeSubmissions", data);
   }
+ 
+  SubmissionCheck(payload:any){
+   return this.apiServ.post("submission/submissionApproval",payload)
+  }
+  raiseApprovalRequest(payload:any){
+    return this.apiServ.post("submission/requestSubmissionApproval",payload)
+  }
+filterSubmission(payload:any){
+  return this.apiServ.post("submission/getSubmissionsFilter",payload)
+}
 }
