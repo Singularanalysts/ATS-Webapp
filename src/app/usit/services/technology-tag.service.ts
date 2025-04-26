@@ -41,4 +41,7 @@ export class TechnologyTagService {
     return this.apiServ.post("openreqs/skills/createSkill", payload);
 
   }
+  DuplicateCheckTechnology(technologyarea:any){
+    return this.apiServ.get(`auth/technology/duplicatecheck/${technologyarea}`)
+  }
 }

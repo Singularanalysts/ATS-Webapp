@@ -70,7 +70,7 @@ export class ClosureCountListComponent {
   ngOnInit(): void {
     const userid = localStorage.getItem('userid');
     if (this.data.condition == 'admin') {
-      this.dashboardServ.getClosureCountPopup(this.data.flag, this.data.duration, localStorage.getItem('companyid')).subscribe(
+      this.dashboardServ.getClosureCountPopup(this.data.flag, this.data.duration).subscribe(
         ((response: any) => {
           this.dataSource.data = response.data;
           this.dataSource.data.map((x: any, i) => {

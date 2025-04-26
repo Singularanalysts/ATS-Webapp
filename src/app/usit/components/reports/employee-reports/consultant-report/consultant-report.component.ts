@@ -106,7 +106,7 @@ export class ConsultantReportComponent {
       this.showReport = false;
     }
     if (this.vo.vo) {
-      this.reportservice.consultant_DrillDown_report(this.vo.vo, localStorage.getItem('companyid')).subscribe(
+      this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
         (response: any) => {
           this.consultant = response.data;
           this.consultantname = this.vo.additionalValue1;

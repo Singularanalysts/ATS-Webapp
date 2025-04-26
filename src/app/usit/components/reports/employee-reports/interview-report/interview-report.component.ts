@@ -192,7 +192,7 @@ export class InterviewReportComponent {
     }
 
     if (this.vo.vo) {
-      this.reportservice.consultant_DrillDown_report(this.vo.vo, localStorage.getItem('companyid')).subscribe(
+      this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
         (response: any) => {
           this.consultant = response.data;
           this.executive = this.vo.additionalValue1;
