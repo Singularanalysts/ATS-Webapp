@@ -308,7 +308,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   getEmployee() {
 
     if(!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')){
-    this.consultantServ.getEmployee(this.userid).subscribe(
+      const companyId=localStorage.getItem('companyid');
+    this.consultantServ.getEmployee(this.userid,companyId).subscribe(
       (response: any) => {
         this.empArr = response.data;
         this.empArr.map((x: any) => x.selected = false);
@@ -943,8 +944,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-
-    this.consultantServ.duplicatecheckEmail(email,localStorage.getItem('companyid')).subscribe((response: any) => {
+    const companyId = localStorage.getItem('companyid');
+    this.consultantServ.duplicatecheckEmail(email,companyId).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {
