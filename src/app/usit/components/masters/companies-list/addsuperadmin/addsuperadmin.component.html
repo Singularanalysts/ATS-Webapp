@@ -178,7 +178,7 @@
             </div> -->
   
 <!-- Select Company (Hidden) -->
-<input type="hidden" formControlName="companyid" [value]="data.cmpId">
+<input type="hidden" formControlName="cid" [value]="data.cmpId">
 
           <!-- Designation -->
           <!-- <mat-form-field appearance="fill">
@@ -194,7 +194,7 @@
                 {{ option }}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="employeeForm.get('department').hasError('required')">Choose
+            <mat-error *ngIf="employeeForm.get('department').hasError('required')">Choose 
               Deparment</mat-error>
           </mat-form-field>
         

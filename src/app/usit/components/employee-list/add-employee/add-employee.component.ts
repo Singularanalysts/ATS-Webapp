@@ -236,8 +236,11 @@ export class  AddEmployeeComponent {
 
       added: [localStorage.getItem('userid')] ,
 
-      companyid: [employeeData ? employeeData.companyid : '', 
-        this.isCompanyToDisplay ? [Validators.required] : []],
+      cid: [
+        employeeData ? this.getCompanyByCid(employeeData.cid) : null,
+        this.isCompanyToDisplay ? [Validators.required] : []
+      ],
+      
     });
 
   this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
@@ -248,7 +251,12 @@ export class  AddEmployeeComponent {
   });
 
   }
-
+  getCompanyByCid(cid: string): any {
+    console.log(cid,'ciddddddddddddddddddddddd');
+    
+    return this.companyOptions.find((c) => c.cid === cid);
+  }
+  
   // private initilizeAddEmployeeFormValidation(employeeData: any) {
   //   this.employeeForm = this.formBuilder.group({
   //     fullname: [
@@ -436,7 +444,7 @@ export class  AddEmployeeComponent {
         },
       });
   }
-
+  companyOptionsdata:any
   getCompanies() {
     this.empManagementServ
       .getCompaniesDropdown()
@@ -445,7 +453,7 @@ export class  AddEmployeeComponent {
         next: (response: any) => {
           this.companyarr = response.data;
           this.companyOptions = response.data;
-          console.log(this.roleOptions,'roleoptionss');
+      
           
         },
         error: (err) => {
@@ -459,7 +467,12 @@ export class  AddEmployeeComponent {
         },
       });
   }
-
+  displayCompanyName(company: any): string {
+    console.log(company,);
+    
+    return company && company.companyName ? company.companyName : '';
+  }
+  
 checkCompany(companyid:any){
 
   this.empManagementServ
@@ -545,6 +558,8 @@ checkCompany(companyid:any){
     if (this.employeeForm.invalid) {
       this.displayFormErrors();
       this.isFormSubmitted = false
+      console.log(this.employeeForm.value,'submitformmmm');
+      
       return;
     }
     else{
@@ -556,6 +571,9 @@ checkCompany(companyid:any){
   });
 
     if (this.data.actionName === "edit-employee") {
+   console.log("ttttttt");
+   
+ 
       [this.employeeForm.value].forEach((formVal, idx) => {
         this.empObj.aadharno = formVal.aadharno;
         this.empObj.accno = formVal.accno;
@@ -579,13 +597,26 @@ checkCompany(companyid:any){
         this.empObj.teamlead = formVal.teamlead;
         this.empObj.role = formVal.role;
         this.empObj.banterno = formVal.banterno;
-        this.empObj.companyid = formVal.companyid;
+        this.empObj.cid = formVal.cid?.cid;
         this.empObj.added=localStorage.getItem('userid');
       })
     }
     this.trimSpacesFromFormValues();
-    const saveObj = this.data.actionName === "edit-employee" ? this.empObj : this.employeeForm.value;
-    this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
+    let saveObj: any;
+
+    if (this.data.actionName === "edit-employee") {
+      saveObj = this.empObj;
+    } else {
+      
+      saveObj = { ...this.employeeForm.value };
+    
+      // overwrite 'cid' field to be only cid string
+      saveObj.cid = saveObj.cid?.cid ;
+    }
+    
+
+
+ this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
       next: (data: any) => {
         if (data.status == 'success') {
           this.submit(data.data.userid);
@@ -1037,8 +1068,8 @@ checkCompany(companyid:any){
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    const companyId = localStorage.getItem('companyid');
-    this.empManagementServ.emailDuplicateCheck(email,companyId).subscribe((response: any) => {
+    
+    this.empManagementServ.emailDuplicateCheck(email,localStorage.getItem('companyid')).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {

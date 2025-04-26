@@ -62,7 +62,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
       MatDatepickerModule,
       MatNativeDateModule,
       MatSelectModule,
-      SearchPipe,
       NgxMatIntlTelInputComponent,
       MatTableModule,
       MatCheckboxModule
@@ -138,6 +137,7 @@ departmentOptions: string[] = [
   ngOnInit(): void {
   
     this.checkCompany(localStorage.getItem('companyid'));
+    this.getCompanies();
     this.getRoles();
     this.getManager();
     if (this.data.actionName === 'edit-employee') {
@@ -235,7 +235,7 @@ departmentOptions: string[] = [
       }),
         banterno: [employeeData ? employeeData.banterno : ''],
         added: [localStorage.getItem('userid')],
-        companyid: [this.data.cmpId, this.isCompanyToDisplay ? [Validators.required] : []], // Set companyid dynamically
+        cid: [this.data.cmpId, this.isCompanyToDisplay ? [Validators.required] : []], // Set companyid dynamically
     });
 
     this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
@@ -434,7 +434,28 @@ departmentOptions: string[] = [
       });
   }
 
- 
+  getCompanies() {
+    this.empManagementServ
+      .getCompaniesDropdown()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.companyarr = response.data;
+          this.companyOptions = response.data;
+          console.log(this.roleOptions,'roleoptionss');
+          
+        },
+        error: (err) => {
+          this.dataTobeSentToSnackBarService.message = err.message;
+          this.dataTobeSentToSnackBarService.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataTobeSentToSnackBarService
+          );
+        },
+      });
+  }
 
 checkCompany(companyid:any){
 
@@ -555,7 +576,7 @@ checkCompany(companyid:any){
         this.empObj.teamlead = formVal.teamlead;
         this.empObj.role = formVal.role;
         this.empObj.banterno = formVal.banterno;
-        this.empObj.companyid = formVal.companyid;
+        this.empObj.cid = formVal.cid;
         this.empObj.added=localStorage.getItem('userid');
       })
     }
@@ -1013,8 +1034,7 @@ checkCompany(companyid:any){
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    const companyId = localStorage.getItem('companyid');
-    this.empManagementServ.emailDuplicateCheck(email,companyId).subscribe((response: any) => {
+    this.empManagementServ.emailDuplicateCheck(email,localStorage.getItem('companyid')).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {

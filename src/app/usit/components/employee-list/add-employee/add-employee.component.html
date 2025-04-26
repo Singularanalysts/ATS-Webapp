@@ -143,32 +143,24 @@
           <mat-error *ngIf="employeeForm.get('branch').hasError('required')">Branch Name is required</mat-error>
         </mat-form-field>
 
-        <!-- <div formGroupName="role" class="select-role-field" *ngIf="false">
-          <mat-form-field appearance="fill" >
-            <mat-label>Select Company</mat-label>
-            <input matInput formControlName="rolename" [matAutocomplete]="companyAuto">
-            <mat-autocomplete #companyAuto="matAutocomplete">
-              <mat-option *ngFor="let option of filteredRoleOptions | async" [value]="option.rolename">
-                {{ option.rolename }}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="employeeForm.get('role.rolename').hasError('required')">Role is
-              Required</mat-error>
-          </mat-form-field>
-          </div> -->
-          <!-- Select Role with MatSelect -->
-          <!-- <div formGroupName="company" class="select-role-field"> -->
-            <div class="select-role-field" *ngIf="isCompanyToDisplay">
-              <mat-form-field appearance="fill">
-                  <mat-label>Select Company</mat-label>
-                  <mat-select name="company" formControlName="companyid">
-                      <mat-option *ngFor="let option of companyOptions" [value]="option.companyid">
-                          {{ option.companyname }}
-                      </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="isCompanyToDisplay && employeeForm.get('companyid').hasError('required')">Company is required</mat-error>
-              </mat-form-field>
-          </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Select Company</mat-label>
+          <input
+            matInput
+            formControlName="cid"
+            [matAutocomplete]="companyAuto">
+            
+          <mat-autocomplete #companyAuto="matAutocomplete" [displayWith]="displayCompanyName">
+            <mat-option *ngFor="let option of companyOptions" [value]="option">
+              {{ option.companyName }}
+            </mat-option>
+          </mat-autocomplete>
+        
+          <mat-error *ngIf="employeeForm.get('cid').hasError('required')">
+            Choose Company is required
+          </mat-error>
+        </mat-form-field>
+        
 
         <!-- Designation -->
         <mat-form-field appearance="fill">
@@ -441,7 +433,7 @@
   <!-- Bottom Action Buttons -->
   <div class="action-btns">
     <button class="btn-cancel" mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    <button mat-raised-button color="primary"  (click)="onSubmit()">Submit</button>
   </div>
 </mat-card>
 <!-- matcard ends-->

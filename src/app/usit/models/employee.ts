@@ -41,6 +41,6 @@ export class Employee {
   alternatenumber!: any;
   loginAs!: any;
   banterno!: string;
-  companyid!:any;
+  cid!:any;
   added!:any;
 }

@@ -470,7 +470,7 @@ clearSearch() {
     else {
       this.flag2 = false;
     }
-    this.reportservice.consultant_report(this.employeeReport.value)
+    this.reportservice.consultant_report(this.employeeReport.value, localStorage.getItem('companyid'))
       .subscribe((data: any) => {
         this.c_data = data.data;
         this.filteredData = this.c_data; // Ensure initial full data
