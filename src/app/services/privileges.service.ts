@@ -61,14 +61,14 @@ getratingsbyId(id:any){
     }
     return privilagesArr.includes(priv);
   }
- getRateddata(payload:any){
-  return this.apiServ.post("report/rating/getRatings",payload)
+ getRateddata(payload:any, companyId:any){
+  return this.apiServ.post(`report/rating/getRatings/${companyId}`,payload)
  }
  deleteRating(id:any){
   return this.apiServ.delete("report/rating/deleteRatings/" + id)
  }
- getdropdownmanager(id:any){
-  return this.apiServ.get("report/rating/getTlsDropdown/" +id)
+ getdropdownmanager(id:any, companyId: any){
+  return this.apiServ.get("report/rating/getTlsDropdown/" +id + "/" +companyId)
  }
  getdropdownexecutive(tlId:any){
   return this.apiServ.get("report/rating/getExicutivesDropdown/" +tlId)

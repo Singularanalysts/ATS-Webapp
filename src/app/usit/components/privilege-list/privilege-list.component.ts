@@ -77,7 +77,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   immigration: any[] = [];
   users: any[] = [];
 
-  // sourcing_reports: any[] = [];
+  sourcing_reports: any[] = [];
   us_reports: any[] = [];
   vc_cx_profiles: any[] = [];
   Open_reqs_job_application: any[] = [];
@@ -102,7 +102,7 @@ export class PrivilegeListComponent implements OnInit, OnDestroy {
   people: any[] = [];
   masters: any[] = []; 
   billpay: any[] = []; 
-  // sourcing: any[] = []; 
+  sourcing: any[] = []; 
   onboarding: any[] = []; 
   open_requirements: any[] = [];
   reports: any[] = [];
@@ -222,7 +222,7 @@ selectedRole: string = '';
         this.technology_tags = response.data.technology_tag;
         this.immigration = response.data.immigration;
 
-        // this.sourcing_reports = response.data.sourcing_reports;
+        this.sourcing_reports = response.data.sourcing_reports;
         this.us_reports = response.data.us_reports;
         this.dashboard = response.data.dashboard;
 
@@ -241,7 +241,7 @@ selectedRole: string = '';
         this.people = response.data.people;
         this.masters = response.data.masters;
         this.billpay = response.data.billpay;
-        // this.sourcing = response.data.sourcing;
+        this.sourcing = response.data.sourcing;
         this.onboarding = response.data.onboarding;
         this.open_requirements = response.data.open_requirements;
         this.reports = response.data.reports;
@@ -565,13 +565,13 @@ selectedRole: string = '';
           : false,
       },
 
-      // {
-      //   title: 'Sourcing Reports',
-      //   privileges: this.sourcing_reports,
-      //   isSelected: this.sourcing_reports
-      //     ? this.sourcing_reports.every((priv: any) => priv.selected === true)
-      //     : false,
-      // },
+      {
+        title: 'Sourcing Reports',
+        privileges: this.sourcing_reports,
+        isSelected: this.sourcing_reports
+          ? this.sourcing_reports.every((priv: any) => priv.selected === true)
+          : false,
+      },
       {
         title: 'S&R Reports',
         privileges: this.us_reports,
@@ -634,13 +634,13 @@ selectedRole: string = '';
           ? this.billpay.every((priv: any) => priv.selected === true)
           : false,
       },
-      // {
-      //   title: 'sourcing',
-      //   privileges: this.sourcing,
-      //   isSelected: this.sourcing
-      //     ? this.sourcing.every((priv: any) => priv.selected === true)
-      //     : false,
-      // },
+      {
+        title: 'sourcing',
+        privileges: this.sourcing,
+        isSelected: this.sourcing
+          ? this.sourcing.every((priv: any) => priv.selected === true)
+          : false,
+      },
       {
         title: 'onboarding',
         privileges: this.onboarding,
@@ -1173,17 +1173,17 @@ selectedRole: string = '';
           });
         }
 
-        // if (this.sourcing_reports != null) {
-        //   this.sourcing_reports.forEach((ele) => {
-        //     response.data.sourcing_reports.forEach((resp: any) => {
-        //       if (ele.id === resp.id) {
-        //         this.entity.privilegeIds.push(resp.id);
-        //         ele.selected = true;
-        //         this.flg = true;
-        //       }
-        //     });
-        //   });
-        // }
+        if (this.sourcing_reports != null) {
+          this.sourcing_reports.forEach((ele) => {
+            response.data.sourcing_reports.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
 
         if (this.dashboard != null) {
           this.dashboard.forEach((ele) => {
@@ -1341,17 +1341,17 @@ selectedRole: string = '';
           });
         }
 
-        // if (this.sourcing != null) {
-        //   this.sourcing.forEach((ele) => {
-        //     response.data.sourcing.forEach((resp: any) => {
-        //       if (ele.id === resp.id) {
-        //         this.entity.privilegeIds.push(resp.id);
-        //         ele.selected = true;
-        //         this.flg = true;
-        //       }
-        //     });
-        //   });
-        // }
+        if (this.sourcing != null) {
+          this.sourcing.forEach((ele) => {
+            response.data.sourcing.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
 
         if (this.onboarding != null) {
           this.onboarding.forEach((ele) => {
