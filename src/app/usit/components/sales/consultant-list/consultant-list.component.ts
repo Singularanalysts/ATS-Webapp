@@ -561,7 +561,7 @@ triggerFilterAPI(): void {
     };
 
     return this.consultantServ
-      .consultant_DrillDown_report(drilldownReportObj)
+      .consultant_DrillDown_report(drilldownReportObj,localStorage.getItem('companyid'))
       .subscribe((response: any) => {
         this.consultant_data = response.data;
       });
