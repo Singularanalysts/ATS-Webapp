@@ -13,21 +13,7 @@ import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors
 
 @NgModule({
   declarations: [
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ResumeDescriptionComponent,
-                              H1BVendorsComponent,
+    ResumeDescriptionComponent,H1BVendorsComponent,
   ],
   imports: [
     CommonModule,

@@ -65,9 +65,7 @@ import { PermissionsService } from 'src/app/services/permissions.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
     MatRadioModule,
     MatCheckboxModule,
@@ -388,7 +386,8 @@ showSubmissionRateError = false;
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
     });
     if (this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
-      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant).subscribe(
+      const companyId = localStorage.getItem('companyid');
+      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant,companyId).subscribe(
         (consultant: any) => {
           if (consultant && consultant.data[0].consultantname) {
             this.obj = consultant.data[0].consultantid;
@@ -500,7 +499,8 @@ showSubmissionRateError = false;
   }
 
   getConsultant(flg: string) {
-    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0).pipe(
+    const companyId = localStorage.getItem('companyid');
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0,companyId).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {

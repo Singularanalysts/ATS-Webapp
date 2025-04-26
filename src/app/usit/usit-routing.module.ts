@@ -72,6 +72,9 @@ import { ReportEmailComponent } from './components/email-extraction/report-email
 import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
 
 import { AssignedRequirementsComponent } from './components/recruitment/assigned-requirements/assigned-requirements.component';
+
+import { OthercompaniessuperadminsComponent } from './components/masters/othercompaniessuperadmins/othercompaniessuperadmins.component';
+
 import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
 import { ResumeDescriptionComponent } from './components/openreqs/resume-description/resume-description.component';
 import { SubmissionReportComponent } from './components/recruitment/submission-report/submission-report.component';
@@ -79,6 +82,7 @@ import { RequirementReportComponent } from './components/reports/employee-report
 import { AssignedCountComponent } from './components/recruitment/assigned-count/assigned-count.component';
 import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
 import { SubmissionTrashComponent } from './components/sales/submission-trash/submission-trash.component';
+
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
   {
@@ -417,7 +421,10 @@ const routes: Routes = [
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
   },
   {
-     path: 'privileges/:id/:rolename', component: PrivilegeListComponent ,
+     path: 'privileges/:id/:rolename/:companyid', component: PrivilegeListComponent ,
+  },
+  { 
+    path: 'othercompaniessupderadmindata', component: OthercompaniessuperadminsComponent,
   },
 ];
 

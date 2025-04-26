@@ -21,6 +21,8 @@ import { CompanyService } from 'src/app/usit/services/company.service';
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { Subject, takeUntil } from 'rxjs';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
+import { AddEmployeeComponent } from '../../employee-list/add-employee/add-employee.component';
+import { AddsuperadminComponent } from './addsuperadmin/addsuperadmin.component';
 
 @Component({
   selector: 'app-companies-list',
@@ -287,4 +289,39 @@ export class CompaniesListComponent implements OnInit, AfterViewInit, OnDestroy 
     const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
     return serialNumber;
   }
+
+  private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = action.edit || action.add ? '62dvw' : action.delete ? 'fit-content' : "400px";
+    dialogConfig.height = 'auto';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = dataToBeSentToDailog.actionName;
+    dialogConfig.data = dataToBeSentToDailog;
+    return dialogConfig;
+  }
+
+  openCompanyLink(url: string, companyId: any): void {
+
+      const dataToBeSentToDailog = {
+          title: 'Add SuperAdmin',
+          empployeeData: null,
+          actionName: 'add-employee',
+          cmpId: companyId
+        };
+    
+        const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: false, edit: false, add: true });
+        const dialogRef = this.dialogServ.openDialogWithComponent(AddsuperadminComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(() => {
+          if (dialogRef.componentInstance.submitted) {
+            // this.getAllEmployees()
+          }
+        })
+
+    // window.open(url, '_blank');
+  }
+
+//   openCompanyLinks(): void {
+//     this.router.navigate(['/othercompaniessupderadmindata']);
+// }
+  
 }

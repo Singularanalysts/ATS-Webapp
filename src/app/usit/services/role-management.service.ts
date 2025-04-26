@@ -13,8 +13,8 @@ export class RoleManagementService {
   /**************ROLES SERVICES -  STARTS************* */
   // roles management
   //register role
-  addRole(entity: any) {
-    return this.apiServ.post("auth/roles/save", entity);
+  addRole(entity: any,companyId:any) {
+    return this.apiServ.post(`auth/roles/save/${companyId}`, entity);
   }
 
   //used for get one resource
@@ -23,30 +23,40 @@ export class RoleManagementService {
   }
 
   //update role
-  updateRole(entity: any) {
-    return this.apiServ.put("auth/roles/updaterole", entity);
+  updateRole(entity: any,companyId:any) {
+    return this.apiServ.put(`auth/roles/updaterole/${companyId}`, entity);
   }
   // get all roles
   getAllRoles() {
     return this.apiServ.get("auth/roles/all");
   }
+
+  getAllRolesBasedOnCompanyWise(company: any) {
+    return this.apiServ.get("auth/roles/all/"+company);
+  }
+
+  getAllRolesBasedOnCompanyWiseWithCompany(companyid: any) {
+    return this.apiServ.get("auth/roles/allRoles/"+companyid);
+  }
+
   // get roles based on page num
   getRolesBasedOnPageNum(page: any, size: any) {
     return this.apiServ.get("auth/roles/all2/"+page+"/"+size);
   }
 
-  // delete role
-  deleteRole(id: number) {
-    return this.apiServ.delete("auth/roles/delete/" + id);
+  // delete role companywise
+  deleteRoleCompanyWise(id: number) {
+    return this.apiServ.delete("auth/roles/delete/"+id);
   }
+
   //used for delete the resource
   updateRoleStatus(entity: any) {
     return this.apiServ.patch("auth/roles/status", entity);
   }
 
   // add or update role bases on action edit => update; add=> add
-  addOrUpdateRole(entity: any, action: string){
-    return action === "update-role" ? this.updateRole(entity) : this.addRole(entity);
+  addOrUpdateRole(entity: any, action: string,companyId:any){
+    return action === "update-role" ? this.updateRole(entity,companyId) : this.addRole(entity,companyId);
   }
   /**************ROLES SERVICES -  ENDS************* */
 

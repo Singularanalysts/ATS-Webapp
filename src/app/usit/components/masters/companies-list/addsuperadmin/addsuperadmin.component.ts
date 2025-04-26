@@ -45,32 +45,36 @@ import { HttpClient } from '@angular/common/http';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
-  selector: 'app-add-employee',
-  templateUrl: './add-employee.component.html',
-  styleUrls: ['./add-employee.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    NgxMatIntlTelInputComponent,
-    MatTableModule,
-    MatCheckboxModule
-  ],
-  providers: [DatePipe],
+  selector: 'app-addsuperadmin',
+  templateUrl: './addsuperadmin.component.html',
+  styleUrls: ['./addsuperadmin.component.scss'],
 
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+   standalone: true,
+    imports: [
+      CommonModule,
+      FormsModule,
+      ReactiveFormsModule,
+      MatFormFieldModule,
+      MatAutocompleteModule,
+      MatInputModule,
+      MatIconModule,
+      MatButtonModule,
+      MatDatepickerModule,
+      MatNativeDateModule,
+      MatSelectModule,
+      SearchPipe,
+      NgxMatIntlTelInputComponent,
+      MatTableModule,
+      MatCheckboxModule
+    ],
+    providers: [DatePipe],
+  
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
 })
-export class  AddEmployeeComponent {
-  departmentOptions: string[] = [
+export class AddsuperadminComponent {
+
+departmentOptions: string[] = [
     'Administration',
     'Recruiting',
     'Software',
@@ -122,7 +126,7 @@ export class  AddEmployeeComponent {
   private datePipe = inject(DatePipe);
   private http = inject(HttpClient);
   data = inject(MAT_DIALOG_DATA);
-  dialogRef = inject(MatDialogRef<AddEmployeeComponent>);
+  dialogRef = inject(MatDialogRef<AddsuperadminComponent>);
   private fileServ = inject(FileManagementService);
   // to clear subscriptions
   private destroyed$ = new Subject<void>();
@@ -132,8 +136,8 @@ export class  AddEmployeeComponent {
   isCompanyToDisplay: boolean = false;
 
   ngOnInit(): void {
+  
     this.checkCompany(localStorage.getItem('companyid'));
-    this.getCompanies();
     this.getRoles();
     this.getManager();
     if (this.data.actionName === 'edit-employee') {
@@ -181,73 +185,66 @@ export class  AddEmployeeComponent {
 
   private initilizeAddEmployeeForm(employeeData: any) {
     this.employeeForm = this.formBuilder.group({
-      fullname: [
-        employeeData ? employeeData.fullname : '',
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(100),
+        fullname: [
+            employeeData ? employeeData.fullname : '',
+            [
+                Validators.required,
+                Validators.minLength(5),
+                Validators.maxLength(100),
+            ],
         ],
-      ],
-      pseudoname: [employeeData ? employeeData.pseudoname : ''],
-      email: [
-        employeeData ? employeeData.email : '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+        pseudoname: [employeeData ? employeeData.pseudoname : '', Validators.required],
+        email: [
+            employeeData ? employeeData.email : '',
+            [
+                Validators.required,
+                Validators.email,
+                Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+            ],
         ],
-      ],
-      personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
-      companycontactnumber: [employeeData && employeeData.companycontactnumber ? employeeData.companycontactnumber : ''],
-      designation: [employeeData ? employeeData.designation : ''],
-      department: [employeeData ? employeeData.department : '', Validators.required],
-      joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
-      relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
-      personalemail: [
-        employeeData ? employeeData.personalemail : '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+        personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
+        companycontactnumber: [employeeData && employeeData.companycontactnumber ? employeeData.companycontactnumber : ''],
+        designation: [employeeData ? employeeData.designation : ''],
+        department: [employeeData ? employeeData.department : '', ],
+        joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
+        relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
+        personalemail: [
+            employeeData ? employeeData.personalemail : '',
+            [
+                Validators.required,
+                Validators.email,
+                Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+            ],
         ],
-      ],
-      manager: [employeeData ? employeeData.manager : ''],
-      aadharno: [
-        employeeData ? employeeData.aadharno : ''
-      ],
-
-      panno: [
-        employeeData ? employeeData.panno : ''
-      ],
-      bankname: [employeeData ? employeeData.bankname : ''],
-      accno: [employeeData ? employeeData.accno : ''],
-      ifsc: [
-        employeeData ? employeeData.ifsc : ''
-      ],
-      branch: [employeeData ? employeeData.branch : ''],
-      teamlead: [employeeData ? employeeData.teamlead : ''],
-      role: this.formBuilder.group({
-        roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [
-          Validators.required
-        ]),
+        manager: [employeeData ? employeeData.manager : ''],
+        aadharno: [
+            employeeData ? employeeData.aadharno : ''
+        ],
+        panno: [
+            employeeData ? employeeData.panno : ''
+        ],
+        bankname: [employeeData ? employeeData.bankname : ''],
+        accno: [employeeData ? employeeData.accno : ''],
+        ifsc: [
+            employeeData ? employeeData.ifsc : ''
+        ],
+        branch: [employeeData ? employeeData.branch : ''],
+        teamlead: [employeeData ? employeeData.teamlead : ''],
+        role: this.formBuilder.group({
+          roleid: new FormControl(employeeData ? employeeData.role.roleid : 1, [Validators.required]), // Set default value to 1
       }),
-      banterno: [employeeData ? employeeData.banterno : ''],
-
-      added: [localStorage.getItem('userid')] ,
-
-      companyid: [employeeData ? employeeData.companyid : '', 
-        this.isCompanyToDisplay ? [Validators.required] : []],
+        banterno: [employeeData ? employeeData.banterno : ''],
+        added: [localStorage.getItem('userid')],
+        companyid: [this.data.cmpId, this.isCompanyToDisplay ? [Validators.required] : []], // Set companyid dynamically
     });
 
-  this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
-    if (value) {
-      const banterNumber = value.slice(-10);
-      this.employeeForm.get('banterno').setValue(banterNumber);
-    }
-  });
-
-  }
+    this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
+        if (value) {
+            const banterNumber = value.slice(-10);
+            this.employeeForm.get('banterno').setValue(banterNumber);
+        }
+    });
+}
 
   // private initilizeAddEmployeeFormValidation(employeeData: any) {
   //   this.employeeForm = this.formBuilder.group({
@@ -437,28 +434,7 @@ export class  AddEmployeeComponent {
       });
   }
 
-  getCompanies() {
-    this.empManagementServ
-      .getCompaniesDropdown()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          this.companyarr = response.data;
-          this.companyOptions = response.data;
-          console.log(this.roleOptions,'roleoptionss');
-          
-        },
-        error: (err) => {
-          this.dataTobeSentToSnackBarService.message = err.message;
-          this.dataTobeSentToSnackBarService.panelClass = [
-            'custom-snack-failure',
-          ];
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataTobeSentToSnackBarService
-          );
-        },
-      });
-  }
+ 
 
 checkCompany(companyid:any){
 
@@ -1055,7 +1031,9 @@ checkCompany(companyid:any){
       }
     });
   }
+
 }
+
 
 export class FileData {
   docid!: number;

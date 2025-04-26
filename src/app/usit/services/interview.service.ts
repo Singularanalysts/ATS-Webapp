@@ -34,8 +34,8 @@ export class InterviewService {
     return this.apiServ.get("interview/submissiondetails/" + flg+"/"+id+"/"+role);
   }
 
-  getsubmissionsDropDown(flg: string,id:any,role:string, subid:number) {
-    return this.apiServ.get("interview/subdetails/" + flg+"/"+id+"/"+role+"/"+subid);
+  getsubmissionsDropDown(flg: string,id:any,role:string, subid:number,companyId:any) {
+    return this.apiServ.get("interview/subdetails/" + flg+"/"+id+"/"+role+"/"+subid+"/"+companyId);
   }
 
   //used for delete the resource

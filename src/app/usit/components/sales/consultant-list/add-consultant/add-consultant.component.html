@@ -131,7 +131,7 @@
         </mat-form-field>
 
         <!-- company   -->
-        <div class="company-select-field">
+        <div class="company-select-field" *ngIf="isCompanyToDisplay">
           <mat-form-field appearance="fill">
             <mat-label>Select Company</mat-label>
             <mat-select formControlName="company">
@@ -141,7 +141,7 @@
             </mat-select>
             <button matSuffix mat-icon-button
               (click)="onAddCompany();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-            <mat-error *ngIf="consultantForm.get('company')!.hasError('required')">Company is
+            <mat-error *ngIf="isCompanyToDisplay && consultantForm.get('company')!.hasError('required')">Company is
               Required
             </mat-error>
           </mat-form-field>
@@ -495,7 +495,7 @@
             <input type="file" #h1b id="resume" (change)="uploadH1B($event)" name="resumeUploadFile"
               accept=".jpg,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               style="display: none;" />
-          </div>
+          </div>  
         </mat-form-field>
       </div>
       <div class="form-column-right">

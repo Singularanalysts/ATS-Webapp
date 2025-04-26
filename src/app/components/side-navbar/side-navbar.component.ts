@@ -601,6 +601,13 @@ myRoles(){
           "icon": "business",
           "routerLink": "/usit/companies",
           "roles":["Super Administrator"]  
+        },
+        {
+          "test": "SUPERADMINS",
+          "text": "SuperAdmins Data",
+          "icon": "people",
+          "routerLink": "/usit/othercompaniessupderadmindata",
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -724,10 +731,7 @@ myRoles(){
         "roles":["Super Administrator"] 
         }],
       
-  }
-  
-  
-  ,
+  },
   {
     "test":"EMPLOYEE_LOGIN_APPLIED_JOBS",
     "text": "Applied Jobs",

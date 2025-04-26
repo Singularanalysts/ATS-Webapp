@@ -191,7 +191,8 @@ export class ConsultantListComponent
     const visa = this.myForm.get('visa')?.value;
     const experience = this.myForm.get('experience')?.value;
     const consultantflg = this.flag;
-  
+    const companyId= localStorage.getItem('companyid');
+
     // Prepare request payload
     this.request = {
       position,
@@ -199,7 +200,9 @@ export class ConsultantListComponent
       visaStatus: visa,
       priority: Array.from(this.selectedPriorityOptions), // Convert Set to Array
       experience,
-      consultantflg
+      consultantflg,
+      companyId
+      
     };
   
     this.filterData(this.request, this.page);
@@ -305,6 +308,7 @@ export class ConsultantListComponent
   selectedVisaOptions = new Set<string>(); // Store selected visa options
 
   onVisaChange(event: MatSelectChange): void {
+  
     this.selectedVisaOptions = new Set(event.value); // Update selected options
   
     // Update form control with selected values
@@ -328,7 +332,7 @@ triggerFilterAPI(): void {
     priority: this.myForm.get('priority')?.value,
     experience: this.myForm.get('experience')?.value,
     consultantflg: this.flag,
-    // companyId: localStorage.getItem('companyid')
+    companyId: localStorage.getItem('companyid')
   };
 
   this.filterApply = true;
@@ -832,6 +836,7 @@ triggerFilterAPI(): void {
         this.request.priority = priority;
         this.request.experience = experience;
         this.request.consultantflg=consultantflg;
+        this.request.companyId=localStorage.getItem('companyid');
         this.filterData(this.request,this.currentPageIndex+1 );
         
       }else{
@@ -878,6 +883,7 @@ triggerFilterAPI(): void {
     this.request.priority = priority;
     this.request.experience = experience;
     this.request.consultantflg=consultantflg;
+    this.request.companyId=localStorage.getItem('companyid');
 
     this.filterData(this.request,this.page);
   }
@@ -899,7 +905,8 @@ triggerFilterAPI(): void {
     const visa = this.myForm.get('visa')?.value;
     const priority = this.myForm.get('priority')?.value;
     const consultantflg = this.flag;
-  
+    const companyId=localStorage.getItem('companyid');
+
     // Prepare request payload
     this.request = {
       position,
@@ -907,7 +914,8 @@ triggerFilterAPI(): void {
       visaStatus: visa,
       priority,
       experience: Array.from(this.selectedExperienceOptions), // Convert Set to Array
-      consultantflg
+      consultantflg,
+      companyId
     };
   
     this.filterData(this.request, this.page);
@@ -1032,6 +1040,7 @@ export class FilterRequest {
   priority: any;
   experience: any;
   consultantflg:any;
+  companyId: any;
 }
 
 export interface ReportVo {

@@ -6,8 +6,23 @@
   <div class="role-header-container mat-elevation-z1">
     <span class="header-text">
       Roles
-    </span>
+    </span> 
+
+     <!-- Dropdown Menu -->
+
+      <mat-form-field appearance="fill" style="width: 200px;height: 95px; margin: 10px;" *ngIf="isCompanyToDisplay">
+        <mat-select style="width: 200px;height: 35px; margin-top: 10px;"
+          placeholder="Select Company"
+          [(value)]="selectedRole"
+          (selectionChange)="onDropdownChange($event)">
+          <mat-option *ngFor="let option of dropdownOptions" [value]="option.companyId">
+            {{ option.companyName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
     <div class="role-actions">
+
       <!-- <button mat-icon-button class="add-user" (click)="addPrivilege()" matTooltip="Add Privilege" matTooltipPosition="above">
       <mat-icon class="item-icon">enhanced_encryption</mat-icon>
     </button>[disabled]="!privilegeServ.hasPrivilege('ADD_ROLES')" -->

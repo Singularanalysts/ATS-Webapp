@@ -14,8 +14,8 @@ export class ConsultantService {
     return this.http.get("consultant/duplicatecheck/" + phonenumber);  
   }
 
-  public duplicatecheckEmail(email: string) {
-    return this.http.get("consultant/duplicateMail/" + email);
+  public duplicatecheckEmail(email: string, companyId:any) {
+    return this.http.get(`consultant/duplicateMail/${email}/${companyId}`);
   }
 
   public duplicatecheckedit(phonenumber: number, id: number) {
@@ -206,8 +206,8 @@ export class ConsultantService {
     return this.http.get(`consultant/getByAddedby/${userid}`);
   }
 
-  getEmployee(userid: any) {
-    return this.http.get(`consultant/salesExecutivesList/${userid}`);
+  getEmployee(userid: any,companyId: any) {
+    return this.http.get(`consultant/salesExecutivesList/${userid}/${companyId}`);
   }
 
   getDomEmployee() {

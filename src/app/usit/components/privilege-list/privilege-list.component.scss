@@ -50,6 +50,7 @@ ul.breadcrumb li:nth-child(2) {
   align-items: center;
   justify-content: space-between;
   background-color: whitesmoke;
+  height: 50px;
 }
 .add-privilege{
   margin-right: 20px;
@@ -85,6 +86,7 @@ ul.breadcrumb li:nth-child(2) {
   font-weight: 500;
   font-size: large;
   color: white;
+  height: 100px;
 }
 
 .card-content{
@@ -117,4 +119,39 @@ ul.breadcrumb li:nth-child(2) {
 .mat-mdc-card-content:last-child {
   padding-bottom: 16px;
   margin-left: 50px;
+}
+
+.custom-form-field {
+  width: 250px;
+  height: 80px;
+}
+
+.custom-select {
+  height: 50px;
+  line-height: 0px;
+}
+
+
+.card-header[_ngcontent-ng-c3997600598] {
+  background-color: #5767cd;
+  font-weight: 500;
+  font-size: large;
+  color: white;
+  /* height: 100px; */
+}
+
+.card-header[_ngcontent-ng-c3997600598] {
+  background-color: #5767cd;
+  font-weight: 500;
+  font-size: large;
+  color: white;
+  /* height: 100px; */
+}
+
+.card-headers{
+  background-color: #5767cd;
+  font-weight: 500;
+  font-size: large;
+  color: white;
+
 }

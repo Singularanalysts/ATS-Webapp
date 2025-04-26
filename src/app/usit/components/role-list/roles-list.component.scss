@@ -46,7 +46,7 @@ thead {
   align-items: center;
   justify-content: space-between;
 
-  height: 48px;
+  height: 68px;
 
   background-color: white;
   position: sticky;
@@ -156,4 +156,6 @@ ul.breadcrumb li a:hover {
   // padding-left: 30px;
   }
 
-  
+  mat-select placeholder{
+    text-align: center;
+  }

@@ -53,9 +53,7 @@ import { Closure } from 'src/app/usit/models/closure';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
     MatRadioModule
   ],
@@ -190,7 +188,9 @@ export class AddInterviewComponent implements OnInit {
     });
 
     if (this.data.actionName === "edit-interview" && interviewData && interviewData.submission) {
-      this.interviewServ.getsubmissionsDropDown(this.flag, this.userid, this.role, interviewData.submission).subscribe(
+      const companyId = localStorage.getItem('companyid');
+
+      this.interviewServ.getsubmissionsDropDown(this.flag, this.userid, this.role, interviewData.submission,companyId).subscribe(
         (submission: any) => {
           if (submission && submission.data.length>0) {
             this.submissionid = submission.data[0].subid;
@@ -260,9 +260,10 @@ export class AddInterviewComponent implements OnInit {
   userid!: any;
   role!: any;
   getsubdetails(flg: string) {
+    const companyId = localStorage.getItem('companyid');
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');
-    this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0).pipe(
+    this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0,companyId).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
