@@ -11,8 +11,8 @@ export class EmployeeManagementService {
   private apiServ = inject(ApiService);
    /*** EMPOLOYEE SERVICES _ START */
    //employee management
-   getRolesDropdown() { 
-    return this.apiServ.get("auth/roles/getroles");
+   getRolesDropdown(companyId:any) { 
+    return this.apiServ.get(`auth/roles/getroles/${companyId}`);
   }
 
   getCompaniesDropdown() {

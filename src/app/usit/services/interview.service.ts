@@ -26,8 +26,7 @@ export class InterviewService {
 
     //used for get the resource
     getPaginationlist(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string, company: any) {
-      return this.apiServ.get("interview/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder
-      );
+      return this.apiServ.get("interview/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company );
     }
 
   getsubmissions(flg: string,id:any,role:string) {
@@ -60,7 +59,7 @@ export class InterviewService {
   }
 
   getOnboardedDetails(flg: string, company: any) {
-    return this.apiServ.get("interview/getOnboardedDetails/" + flg);
+    return this.apiServ.get("interview/getOnboardedDetails/" + flg+"/"+company);
   }
 
   public getConsultantInterviewDataPagination(data: any) {

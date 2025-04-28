@@ -145,7 +145,7 @@ totalItems = 0; // Start with 0 and update dynamically
         keyword: this.field || '', // If empty, fetch all data
       };
     
-      this.privilegeServ.getRateddata(pagObj)
+      this.privilegeServ.getRateddata(pagObj,localStorage.getItem('companyid'))
         .pipe(takeUntil(this.destroyed$))
         .subscribe((response: any) => {
           if (response && response.data) {

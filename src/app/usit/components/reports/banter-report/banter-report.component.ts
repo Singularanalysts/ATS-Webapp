@@ -150,7 +150,7 @@ export class BanterReportComponent {
     this.sourcingreport.get('employee')?.enable();
 
     if (department) {
-      this.service.getEmployeeByDeparment(department.value).subscribe((res: any) => {
+      this.service.getEmployeeByDeparment(department.value,localStorage.getItem('companyid')).subscribe((res: any) => {
         this.employees = res.data;
         this.filteredEmployees = res.data; 
       });
@@ -215,7 +215,7 @@ export class BanterReportComponent {
       id: empid
     };
 
-    this.service.getBanterReport(this.payload).subscribe((res: any) => {
+    this.service.getBanterReport(this.payload,localStorage.getItem('companyid')).subscribe((res: any) => {
       this.c_data = res.data;
       this.dataSource.data = res.data;
       this.dataSource.data.map((x: any, i) => {

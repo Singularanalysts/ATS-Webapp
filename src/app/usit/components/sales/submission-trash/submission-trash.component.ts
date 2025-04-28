@@ -77,7 +77,7 @@ export class SubmissionTrashComponent {
     if (keyword != '') {
       return this.submissionServ.getdeletesubmissiontrash(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
         this.sortField,
-        this.sortOrder).subscribe(
+        this.sortOrder,localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.totalItems = response.data.totalElements;
@@ -169,7 +169,7 @@ export class SubmissionTrashComponent {
   getdeletesubmission(pageIndex = 1 ) {
     this.submissionServ.getdeletesubmissiontrash(this.flag, this.hasAcces, this.userid, pageIndex, this.pageSize, this.field,
       this.sortField,
-      this.sortOrder).subscribe(
+      this.sortOrder,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.entity = response.data.content;
         this.dataSource.data =  response.data.content;

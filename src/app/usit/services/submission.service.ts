@@ -41,10 +41,10 @@ export class SubmissionService {
   }
 
   public getsubmissiondataPagination(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string, company: any) {
-    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company);
   }
-  public getdeletesubmissiontrash(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string) {
-    return this.apiServ.get("submission/getAllTrashBinSubmissions/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+  public getdeletesubmissiontrash(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string,company:any) {
+    return this.apiServ.get("submission/getAllTrashBinSubmissions/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company);
   }
   // deletesubmission(id: number) {
   //   return this.apiServ.delete("submission/delete/" + id);

@@ -67,7 +67,7 @@ export class InterviewCountListComponent {
   ngOnInit(): void {
     const userid = localStorage.getItem('userid');
     if (this.data.condition == 'admin') {
-    this.dashboardServ.getInterviewCountPopup(this.data.flag, this.data.duration).subscribe(
+    this.dashboardServ.getInterviewCountPopup(this.data.flag, this.data.duration,localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.dataSource.data = response.data;
         this.dataSource.data.map((x: any, i) => {
