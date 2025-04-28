@@ -150,8 +150,8 @@ export class PermissionsService {
   consultantRegistration(consultantdata: any) {
     return this.http.post(this.apiServ.apiUrl + "auth/conLogin/consultantRegistration", consultantdata);
   }
-  getsubmission(){
-    return this.http.get(this.apiServ.apiUrl + "submission/getAll")
+  getsubmission(companyId:any){
+    return this.http.get(this.apiServ.apiUrl + `submission/getAll/${companyId}`)
   }
 // In your submission.service.ts
 updatesubmission(id: number, status: string): Observable<any> {

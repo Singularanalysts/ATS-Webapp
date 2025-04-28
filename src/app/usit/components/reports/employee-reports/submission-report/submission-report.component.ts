@@ -237,7 +237,7 @@ export class SubmissionReportComponent {
       this.showReport = false;
     }
     if (this.vo.vo) {
-      this.reportservice.consultant_DrillDown_report(this.vo.vo).subscribe(
+      this.reportservice.consultant_DrillDown_report(this.vo.vo,localStorage.getItem('companyid')).subscribe(
         (response: any) => {
           this.consultant = response.data;
           this.executive = this.vo.additionalValue1;

@@ -120,7 +120,7 @@ export class CandidateReportComponent {
       startDate: formattedJoiningDate
     };
 
-    this.reportService.candidateReport(this.payload).subscribe((res: any) => {
+    this.reportService.candidateReport(this.payload,localStorage.getItem('companyid')).subscribe((res: any) => {
       this.c_data = res.data;
       this.dataSource.data = res.data;
       this.dataSource.data.map((x: any, i) => {

@@ -44,7 +44,6 @@ export class DashboardService {
   //     return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
   //   }
   //  }
-
   public getDiceRequirements(payload: { role: any; userId: any; pageNumber: any; pageSize: any }, companyId: any) {
     if (payload.role === 'Team Leader Sales' || payload.role == 'Sales Manager' || payload.role == 'Super Administrator') {
       return this.apiServ.post(`dashboard/getTaggedcounts/${companyId}`, payload);
@@ -57,10 +56,6 @@ export class DashboardService {
     }
   }
   
-  getFilteredEmployee(payload: { fromDate: any; toDate: any; userId: any ;pageNumber: number; pageSize: number }, companyId: any) {
-    return this.apiServ.post(`dashboard/getTaggedcounts/${companyId}`, payload);
-  }
-
    public getDiceRequirementslax(role: any, actData : any) {
     
     if (role === 'Team Leader Sales' || role == 'Sales Manager' || role === 'Sales Executive') {
@@ -73,12 +68,12 @@ export class DashboardService {
 //  return this.apiServ.get("dashboard/getTaggedcounts");
 //    }
 
-    public getEmployeeName(companyId: any) {
-     return this.apiServ.get("dashboard/getBanchSalesEmps/"+companyId);
+    public getEmployeeName() {
+     return this.apiServ.get("dashboard/getBanchSalesEmps");
     }
 
-  public getSourcingLeads(data: any, companyId: any) {
-    return this.apiServ.post("dashboard/all" , data + "/" +companyId);
+  public getSourcingLeads(data: any, comapnyId:any) {
+    return this.apiServ.post(`dashboard/all/${comapnyId}` , data);
   }
 
   // for executive and lead
@@ -95,16 +90,18 @@ export class DashboardService {
   }
 
   // for count pop ups
-  public getClosureCountPopup(flag: string, duration: string, companyId: any) {
-    return this.apiServ.get("dashboard/dashboardclosurespopUp/" + flag + "/" + duration + "/" +companyId);
+  public getClosureCountPopup(flag: string, duration: string,companyId:any) {
+    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration + "/" + companyId);
   }
 
-  public getsubmissionCountPopup(flag: string, duration: string, companyId: any) {
-    return this.apiServ.get("dashboard/dashboardsubpopups/" + flag + "/" + duration +"/"+companyId);
+  public getsubmissionCountPopup(flag: string, duration: string,companyId: any) {
+    return this.apiServ.get("dashboard/dashboardsubpopups/" + flag + "/" + duration+"/" + companyId);
   }
 
-  public getInterviewCountPopup(flag: string, duration: string, companyId: any) {
-    return this.apiServ.get("dashboard/dashboardinterviewpopUp/" + flag + "/" + duration +"/" +companyId);
+
+
+  public getInterviewCountPopup(flag: string, duration: string,companyId:any) {
+    return this.apiServ.get("dashboard/dashboardinterviewpopUp/" + flag + "/" + duration+"/" + companyId);
   }
 
   public getsubmissionCountPopupemp(flag: string, duration: string, userid:any) {
@@ -116,15 +113,15 @@ export class DashboardService {
   }
 
   public getClosureCountPopupEmp(flag: string, duration: string, userid:any) {
-    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration+"/"+userid);
+    return this.apiServ.get("dashboard/dashboardclosurespopUp/" + flag + "/" + duration+"/"+userid);
   }
 
   public getsourcingCount(flag: string, companyId: any) {
     return this.apiServ.get("dashboard/sourcingCount/" + flag+"/"+companyId);
   }
 
-  public getSourcingCountPopup(flag: string, duration: string, companyId: any) {
-    return this.apiServ.get("dashboard/sourcingCountPopup/" + flag + "/" + duration +"/" +companyId);
+  public getSourcingCountPopup(flag: string, duration: string,companyId:any) {
+    return this.apiServ.get("dashboard/sourcingCountPopup/" + flag + "/" + duration+"/"+companyId);
   }
 
   public getReqCounts(search: string,flag: string, type: string, date: any) {
@@ -134,6 +131,10 @@ export class DashboardService {
   // getFilteredEmployee(startDate:any ,endDate:any ,id:any){
   //   return this.apiServ.get("dashboard/getTaggedcounts/"+startDate+"/"+endDate+"/"+id)
   // }
+  getFilteredEmployee(payload: { fromDate: any; toDate: any; userId: any ;pageNumber: number; pageSize: number },companyid:any) {
+    return this.apiServ.post(`dashboard/getTaggedcounts/${companyid}`, payload);
+  }
+  
 
   getVendorAndCategoryAnalysisCountByDate(date: any, type: any) {
     return this.apiServ.get("dashboard/reqCountsWithDate/" + date + "/" + type);

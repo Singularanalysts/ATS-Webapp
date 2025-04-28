@@ -93,7 +93,7 @@ export class SourcingReportsComponent {
     this.eddate = this.vo.endDate;
 
     // Make an API call using the service to fetch data
-    this.service.sources_report(this.sourcingreport.value)
+    this.service.sources_report(this.sourcingreport.value,localStorage.getItem('companyid'))
       .pipe(
         catchError((error: any) => {
           console.error('An error occurred during the API call:', error);
@@ -155,7 +155,7 @@ export class SourcingReportsComponent {
     this.vo.flg = 'presales';
     this.vo.status = status;
     // alert(JSON.stringify(this.vo))
-    return this.service.sourcing_DrillDown_report(this.vo).subscribe(
+    return this.service.sourcing_DrillDown_report(this.vo,localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.consultant = response.data;
       })

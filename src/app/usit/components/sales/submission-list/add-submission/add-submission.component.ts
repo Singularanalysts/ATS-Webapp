@@ -263,8 +263,7 @@ raiseApprovalRequest(payload: any) {
 }
 
 getsubmissions() {
-  this.permissionServ.getsubmission().subscribe((res: any) => {
-    console.log('Submissions:', res);
+  this.permissionServ.getsubmission(localStorage.getItem('companyid')).subscribe((res: any) => {
   });
 }
 selectedCompany: any = null;

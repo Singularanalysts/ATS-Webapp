@@ -413,7 +413,7 @@ departmentOptions: string[] = [
 
   getRoles() {
     this.empManagementServ
-      .getRolesDropdown()
+      .getRolesDropdown(localStorage.getItem('companyid'))
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (response: any) => {

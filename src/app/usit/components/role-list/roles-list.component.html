@@ -15,7 +15,7 @@
           placeholder="Select Company"
           [(value)]="selectedRole"
           (selectionChange)="onDropdownChange($event)">
-          <mat-option *ngFor="let option of dropdownOptions" [value]="option.companyId">
+          <mat-option *ngFor="let option of dropdownOptions" [value]="option.cid">
             {{ option.companyName }}
           </mat-option>
         </mat-select>

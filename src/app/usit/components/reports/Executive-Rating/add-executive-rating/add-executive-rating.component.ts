@@ -234,7 +234,7 @@ ngOnInit(): void {
   
 
  getTeamLeadDropdown() {
-    this.privilegeServ.getdropdownmanager(this.userId).subscribe({
+    this.privilegeServ.getdropdownmanager(this.userId,localStorage.getItem('companyid')).subscribe({
       next: (response: any) => {
         this.managerList = response.data || [];
         console.log(this.managerList, 'managerList');

@@ -68,7 +68,7 @@ writeFile(wb, this.excelName);
   
     ngOnInit(): void {
       if (this.vo.vo) {
-        this.reportservice.sourcing_DrillDown_report(this.vo.vo).subscribe(
+        this.reportservice.sourcing_DrillDown_report(this.vo.vo,localStorage.getItem('companyid')).subscribe(
          (response: any) => {
            this.consultant = response.data;
            this.exname = this.vo.additionalValue1;
