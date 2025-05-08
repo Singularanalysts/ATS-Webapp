@@ -363,11 +363,13 @@ triggerFileUpload(fileInput: HTMLInputElement): void {
 
 onFileSelectedata(event: any, element: any): void {
   const file = event.target.files[0];
+  const userId = String(localStorage.getItem('userid'));
   if (!file) return;
 
   const formData = new FormData();
   formData.append('resume', file);
   formData.append('requirementId', element.id); // now correct ID
+  formData.append('userId',userId); 
 
   this.service.ResumeUpload(formData).subscribe({
     next: (res: any) => {

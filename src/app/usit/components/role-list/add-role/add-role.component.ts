@@ -141,7 +141,7 @@ options: any[] = [];
     };
     const saveObj = this.data.actionName === "update-role" ? updateObj : addObj;
 
-    this.roleManagementServ.addOrUpdateRole(saveObj, this.data.actionName,this.companyId).subscribe(
+    this.roleManagementServ.addOrUpdateRole(saveObj, this.data.actionName,localStorage.getItem('companyid')).subscribe(
       {
       next:(data: any) => {
 

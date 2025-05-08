@@ -176,6 +176,7 @@ export class ConsultantListComponent
   selectedPriorityOptions = new Set<string>();
 
   onPriorityChange(event: any): void {
+    this.isFilter=true  
     const selectedValues = event.value;
     this.selectedPriorityOptions = new Set(selectedValues); // Track selected values
   
@@ -192,6 +193,8 @@ export class ConsultantListComponent
     const experience = this.myForm.get('experience')?.value;
     const consultantflg = this.flag;
     const companyId= localStorage.getItem('companyid');
+    const sortField= this.sortField;
+    const sortOrder= this.sortOrder;
 
     // Prepare request payload
     this.request = {
@@ -201,7 +204,11 @@ export class ConsultantListComponent
       priority: Array.from(this.selectedPriorityOptions), // Convert Set to Array
       experience,
       consultantflg,
-      companyId
+      companyId,
+      sortOrder,
+      sortField
+      
+
       
     };
   
@@ -279,7 +286,6 @@ export class ConsultantListComponent
     return this.consultantServ.getFilteredConsultant(page,this.pageSize,request).subscribe(
       ((response: any) => {
         this.consultant = response.data.content;
-        console.log(this.consultant,'consultantttt');
         
         this.dataSource.data = response.data.content;
         this.dataSource.data.map((x: any, i) => {
@@ -308,6 +314,7 @@ export class ConsultantListComponent
   selectedVisaOptions = new Set<string>(); // Store selected visa options
 
   onVisaChange(event: MatSelectChange): void {
+    this.isFilter=true
   
     this.selectedVisaOptions = new Set(event.value); // Update selected options
   
@@ -332,13 +339,15 @@ triggerFilterAPI(): void {
     priority: this.myForm.get('priority')?.value,
     experience: this.myForm.get('experience')?.value,
     consultantflg: this.flag,
-    companyId: localStorage.getItem('companyid')
+    companyId: localStorage.getItem('companyid'),
+    sortField: this.sortField,
+    sortOrder: this.sortOrder
+
   };
 
   this.filterApply = true;
   this.consultantServ.getFilteredConsultant(this.page, this.pageSize, request).subscribe((response: any) => {
     this.consultant = response.data.content;
-    console.log(this.consultant, 'consultantttt');
 
     this.dataSource.data = response.data.content;
     this.dataSource.data.forEach((x: any, i: number) => {
@@ -523,9 +532,38 @@ triggerFilterAPI(): void {
 
     this.sortOrder = event.direction;
 
-    if (event.direction != '') {
-      this.getAllData();
-    }
+if(this.isFilter){
+  if (event.direction != '') {
+
+    const position = this.myForm.get('position').value;
+    const location = this.myForm.get('location').value;
+    const visa = this.myForm.get('visa').value;
+    const priority = this.myForm.get('priority').value;
+    const experience = this.myForm.get('experience').value;
+    const consultantflg = this.flag;
+
+    const sortField = this.sortField
+    const sortOrder = this.sortOrder;
+    this.request.sortOrder = sortOrder; 
+    this.request.sortField = sortField;
+    this.request.position = position; 
+    this.request.location = location;
+    this.request.visaStatus = visa;
+    this.request.priority = priority;
+    this.request.experience = experience;
+    this.request.consultantflg=consultantflg;
+    this.request.companyId=localStorage.getItem('companyid');
+    this.filterData(this.request,this.page );
+  }
+
+}else{
+
+  if (event.direction != '') {
+    this.getAllData();
+  }
+}
+    
+   
   }
 
   navTo(to: string, id: any) {
@@ -830,6 +868,11 @@ triggerFilterAPI(): void {
         const priority = this.myForm.get('priority').value;
         const experience = this.myForm.get('experience').value;
         const consultantflg = this.flag;
+
+        const sortField = this.sortField
+        const sortOrder = this.sortOrder;
+        this.request.sortOrder = sortOrder; 
+        this.request.sortField = sortField;
         this.request.position = position; 
         this.request.location = location;
         this.request.visaStatus = visa;
@@ -876,7 +919,13 @@ triggerFilterAPI(): void {
     const priority = this.myForm.get('priority').value;
     const experience = this.myForm.get('experience').value;
     const consultantflg =this.flag;
+    const sortField =this.sortField;
+    const sortOrder =this.sortOrder;
+
+
     
+     this.request.sortOrder = sortOrder;
+    this.request.sortField = sortField;
     this.request.position = position;
     this.request.location = location;
     this.request.visaStatus = visa;
@@ -889,7 +938,9 @@ triggerFilterAPI(): void {
   }
   selectedExperienceOptions = new Set<string>();
 
+   isFilter!:boolean
   onExperienceChange(event: any): void {
+    this.isFilter=true
     const selectedValues = event.value;
     this.selectedExperienceOptions = new Set(selectedValues); // Track selected values
   
@@ -907,6 +958,9 @@ triggerFilterAPI(): void {
     const consultantflg = this.flag;
     const companyId=localStorage.getItem('companyid');
 
+    const sortField = this.sortField;
+    const sortOrder=this.sortOrder;
+
     // Prepare request payload
     this.request = {
       position,
@@ -915,7 +969,10 @@ triggerFilterAPI(): void {
       priority,
       experience: Array.from(this.selectedExperienceOptions), // Convert Set to Array
       consultantflg,
-      companyId
+      companyId,
+      sortField,
+      sortOrder
+
     };
   
     this.filterData(this.request, this.page);
@@ -1041,6 +1098,10 @@ export class FilterRequest {
   experience: any;
   consultantflg:any;
   companyId: any;
+  sortOrder: any;
+  sortField: any;
+
+
 }
 
 export interface ReportVo {

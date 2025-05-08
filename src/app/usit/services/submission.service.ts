@@ -32,8 +32,8 @@ export class SubmissionService {
   }
 
   // supporting drop down apis
-  public getRequirements(flg: string) {
-    return this.apiServ.get("submission/getrequirements/"+ flg);
+  public getRequirements(flg: string,companyId: any) {
+    return this.apiServ.get("submission/getrequirements/"+ flg+"/"+companyId);
   }
 
   public getsubmissiondata(flg: string,access:string,userid:number) {
@@ -85,7 +85,7 @@ deletesubmission(id: number, remarks: string,userId:any) {
   raiseApprovalRequest(payload:any){
     return this.apiServ.post("submission/requestSubmissionApproval",payload)
   }
-filterSubmission(payload:any){
-  return this.apiServ.post("submission/getSubmissionsFilter",payload)
+filterSubmission(payload:any,companyId:any){
+  return this.apiServ.post(`submission/getSubmissionsFilter/${companyId}`,payload)
 }
 }

@@ -358,6 +358,7 @@ showSubmissionRateError = false;
 
 
   private initilizeSubmissionForm(submissionData: any) {
+
     this.submissionForm = this.formBuilder.group({
       // user:  [submissionData ? submissionData?.user : this.userid],
       user: [this.data.actionName === "edit-submission" ? submissionData?.user : localStorage.getItem('userid')],
@@ -383,6 +384,7 @@ showSubmissionRateError = false;
       remarks: [submissionData ? submissionData.remarks : ''],
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
+     
     });
     if (this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
       const companyId = localStorage.getItem('companyid');
@@ -468,7 +470,9 @@ showSubmissionRateError = false;
   }
 
   getRequirements(flg: string) {
-    this.submissionServ.getRequirements(flg).subscribe(
+
+
+    this.submissionServ.getRequirements(flg,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.requirementdata = response.data;
       }
@@ -783,7 +787,11 @@ isRateValid: boolean = true;
     }
     else {
       this.isFormSubmitted = true
+      
     }
+         
+
+    
     this.submitted = true;
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
@@ -865,6 +873,8 @@ isRateValid: boolean = true;
     if (this.data.actionName === 'edit-submission') {
       return { ...this.entity, ...this.submissionForm.value }
     }
+    console.log(this.submissionForm.value,'submissionvalueee');
+    
     return this.submissionForm.value;
   }
 
