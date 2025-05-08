@@ -91,7 +91,7 @@ export class DashboardService {
 
   // for count pop ups
   public getClosureCountPopup(flag: string, duration: string,companyId:any) {
-    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration + "/" + companyId);
+    return this.apiServ.get("dashboard/dashboardclosurespopUp/" + flag + "/" + duration + "/" + companyId);
   }
 
   public getsubmissionCountPopup(flag: string, duration: string,companyId: any) {

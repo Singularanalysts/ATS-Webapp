@@ -102,8 +102,9 @@ export class ResumeUploaderComponent {
     // Create FormData for file upload
     const formData = new FormData();
     formData.append('resume', this.selectedFile);
+    const userId = String(localStorage.getItem('userid'));
   
-    const params = new HttpParams().set('percentage', this.percentage.toString());
+    const params = new HttpParams().set('percentage', this.percentage.toString()).set('userId',userId);
   
     this.service.resumeupload(formData, params).subscribe(
       (response: any) => {
