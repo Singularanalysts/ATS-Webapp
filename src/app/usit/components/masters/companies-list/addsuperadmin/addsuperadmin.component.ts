@@ -1034,7 +1034,7 @@ checkCompany(companyid:any){
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    this.empManagementServ.emailDuplicateCheck(email,localStorage.getItem('companyid')).subscribe((response: any) => {
+    this.empManagementServ.emailDuplicateCheck(email).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {
