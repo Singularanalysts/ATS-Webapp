@@ -543,11 +543,9 @@ myRoles(){
               "icon": "contact_page",
               "routerLink": "/usit/taggedcount-report",
               "roles":["Super Administrator"]  
-            },
-      
-            
+            },      
             {
-              "test": "Ratings",
+              "test": "RATINGS",
               "text": "Executive Ratings",
               "icon": "star",
               "routerLink": "/usit/executive-ratings",
