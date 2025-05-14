@@ -143,11 +143,11 @@
           <mat-error *ngIf="employeeForm.get('branch').hasError('required')">Branch Name is required</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>Select Company</mat-label>
           <input
             matInput
-            formControlName="cid"
+            formControlName="cid" multiple
             [matAutocomplete]="companyAuto">
             
           <mat-autocomplete #companyAuto="matAutocomplete" [displayWith]="displayCompanyName">
@@ -159,8 +159,32 @@
           <mat-error *ngIf="employeeForm.get('cid').hasError('required')">
             Choose Company is required
           </mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
         
+<!-- Select Company -->
+<!-- <mat-form-field appearance="fill">
+  <mat-label>Select Company</mat-label>
+  <mat-select formControlName="cid" multiple>
+    <mat-option *ngFor="let option of companyOptions" [value]="option">
+      {{ option.companyName }}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="employeeForm.get('cid').hasError('required')">
+    Choose Company is required
+  </mat-error>
+</mat-form-field> -->
+
+<mat-form-field appearance="fill" *ngIf="isCompanyToDisplay">
+  <mat-label>Select Company</mat-label>
+  <mat-select formControlName="cid" multiple>
+    <mat-option *ngFor="let option of companyOptions" [value]="option.cid">
+      {{ option.companyName }}
+    </mat-option>
+  </mat-select>             
+  <mat-error *ngIf="employeeForm.get('cid').hasError('required')">
+    Choose Company is required
+  </mat-error>
+</mat-form-field>
 
         <!-- Designation -->
         <mat-form-field appearance="fill">

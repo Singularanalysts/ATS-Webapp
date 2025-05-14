@@ -283,13 +283,6 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/sales-closures",
           "roles":["Super Administrator"]  
-        },
-        {
-          "test": "SALES_TRASH_BIN",
-          "text": "Submission Trash Bin",
-          "icon": "check_circle",
-          "routerLink": "/usit/sales-submissionsTrash",
-          "roles":["Super Administrator"]  
         }
       ]
     } ,
@@ -332,13 +325,6 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/rec-closures",
           "roles":["Super Administrator"] 
-        },
-        {
-          "test":"RECRUITING_TRASH_BIN",
-          "text": "Submission Trash Bin",
-          "icon": "check_circle",
-          "routerLink": "/usit/Recruitment-submissionsTrash",
-          "roles":["Super Administrator"] 
         }
       ]
     },
@@ -380,13 +366,6 @@ myRoles(){
           "text": "Closures",
           "icon": "check_circle",
           "routerLink": "/usit/dom-closures",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test":"DOM_TRASH_BIN",
-          "text": "Submission Trash Bin",
-          "icon": "check_circle",
-          "routerLink": "/usit/Dom-submissionTrash",
           "roles":["Super Administrator"]  
         }
       ]
@@ -564,11 +543,9 @@ myRoles(){
               "icon": "contact_page",
               "routerLink": "/usit/taggedcount-report",
               "roles":["Super Administrator"]  
-            },
-      
-            
+            },      
             {
-              "test": "Ratings",
+              "test": "RATINGS",
               "text": "Executive Ratings",
               "icon": "star",
               "routerLink": "/usit/executive-ratings",
