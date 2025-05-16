@@ -76,8 +76,8 @@ export class EmployeeManagementService {
    return action === "edit-employee" ? this.updateEmployee(entity) : this.registerEmployee(entity);
   }
 
-  emailDuplicateCheck(email: any) {
-    return this.apiServ.get(`auth/users/validate/${email}`);
+  emailDuplicateCheck(email: any,companyId: any) {
+    return this.apiServ.get(`auth/users/validate/${email}/${companyId}`);
   }
 
   /** EMPLOYEE SERVICES - END */

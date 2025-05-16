@@ -1040,7 +1040,7 @@ console.log(totalRecords,'totalrecords');
   getEmployeeNames(): void {
     if (this.benchSalesEmployees.length > 0) return; // Prevent multiple API calls
   
-    this.dashboardServ.getEmployeeName(localStorage.getItem('companyid')).subscribe({
+    this.dashboardServ.getEmployeeName().subscribe({
       next: (response: any) => {
         this.benchSalesEmployees = response.data; // Store employee names
       },
