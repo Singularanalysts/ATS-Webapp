@@ -68,8 +68,8 @@ export class DashboardService {
 //  return this.apiServ.get("dashboard/getTaggedcounts");
 //    }
 
-    public getEmployeeName(company: any) {
-     return this.apiServ.get("dashboard/getBanchSalesEmps/"+company);
+    public getEmployeeName() {
+     return this.apiServ.get("dashboard/getBanchSalesEmps");
     }
 
   public getSourcingLeads(data: any, comapnyId:any) {

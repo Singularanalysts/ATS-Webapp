@@ -130,7 +130,7 @@ export class  AddEmployeeComponent {
   showOtherDetails: boolean = false;
 
   isCompanyToDisplay: boolean = false;
-useriddata:any
+
   ngOnInit(): void {
     this.checkCompany(localStorage.getItem('companyid'));
     this.getCompanies();
@@ -144,9 +144,6 @@ useriddata:any
             this.empObj = response.data;
             this.filesArr = response.data.edoc;
             const managerId = response.data.manager;
-            this.useriddata=response.data.userid;
-            console.log(this.useriddata,'useriddataaaa');
-            
             this.getTeamLead(managerId);
             this.initilizeAddEmployeeForm(this.empObj);
             this.validateControls();
@@ -230,20 +227,17 @@ useriddata:any
       ],
       branch: [employeeData ? employeeData.branch : ''],
       teamlead: [employeeData ? employeeData.teamlead : ''],
-
       role: this.formBuilder.group({
-        roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [Validators.required]),}),
+        roleid: new FormControl(employeeData ? employeeData.role.roleid : '', [
+          Validators.required
+        ]),
+      }),
       banterno: [employeeData ? employeeData.banterno : ''],
 
       added: [localStorage.getItem('userid')] ,
 
-      // cid: [
-      //   employeeData ? this.getCompanyByCid(employeeData.cid) : null,
-      //   this.isCompanyToDisplay ? [Validators.required] : []
-      // ],
-
       cid: [
-        employeeData ? employeeData.cid : [], // Initialize as an array for multiple selections
+        employeeData ? this.getCompanyByCid(employeeData.cid) : null,
         this.isCompanyToDisplay ? [Validators.required] : []
       ],
       
@@ -258,7 +252,8 @@ useriddata:any
 
   }
   getCompanyByCid(cid: string): any {
-    alert("operation as required======"+this.companyOptions.find((c) => c.cid === cid));
+    console.log(cid,'ciddddddddddddddddddddddd');
+    
     return this.companyOptions.find((c) => c.cid === cid);
   }
   
@@ -549,35 +544,37 @@ checkCompany(companyid:any){
         },
       });
   }
-  userid:any
+
   onSubmit() {
     this.submitted = true;
     const joiningDateFormControl = this.employeeForm.get('joiningdate');
     const relievingDateFormControl = this.employeeForm.get('relievingdate');
-  
+    const compId = this.employeeForm.get('companyid');
     if (joiningDateFormControl.value) {
       const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
       const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl.value, 'yyyy-MM-dd');
       joiningDateFormControl.setValue(formattedJoiningDate);
       relievingDateFormControl.setValue(formattedRelievingDate);
     }
-  
     if (this.employeeForm.invalid) {
       this.displayFormErrors();
-      this.isFormSubmitted = false;
+      this.isFormSubmitted = false
+      console.log(this.employeeForm.value,'submitformmmm');
+      
       return;
-    } else {
-      this.isFormSubmitted = true;
     }
-  
-    this.employeeForm.patchValue({
-      added: localStorage.getItem('userid')
-    });
-  
-    let saveObj: any;
-  
-    if (this.data.actionName === "edit-employee") {
+    else{
+      this.isFormSubmitted = true
+    } 
+   
+  this.employeeForm.patchValue({
+    added: localStorage.getItem('userid') 
+  });
 
+    if (this.data.actionName === "edit-employee") {
+   console.log("ttttttt");
+   
+ 
       [this.employeeForm.value].forEach((formVal, idx) => {
         this.empObj.aadharno = formVal.aadharno;
         this.empObj.accno = formVal.accno;
@@ -602,30 +599,25 @@ checkCompany(companyid:any){
         this.empObj.role = formVal.role;
         this.empObj.banterno = formVal.banterno;
         this.empObj.cid = formVal.cid?.cid;
-        this.empObj.userid=this.useriddata
         this.empObj.added=localStorage.getItem('userid');
-        console.log(this.empObj.userid=this.useriddata,'this.empObj.userid=this.useriddata');
-        
-        console.log(this.employeeForm.value,'kkkkkkkkkkkupdateeee');
-        
       })
-      saveObj = { ...this.employeeForm.value };
-      saveObj.cid = saveObj.cid; 
-      saveObj.userid=this.useriddata;
-      console.log( saveObj.userid,' saveObj.userid');
-      
-      // saveObj = this.empObj;
-      // saveObj.cid = saveObj.cid;
-console.log(saveObj,'updateeuserobjecttttt');
-
-    } else {
-      console.log('');
-      
-      saveObj = { ...this.employeeForm.value };
-      saveObj.cid = saveObj.cid; // This will already be an array from the form
     }
-  
-    this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
+    this.trimSpacesFromFormValues();
+    let saveObj: any;
+
+    if (this.data.actionName === "edit-employee") {
+      saveObj = this.empObj;
+    } else {
+      
+      saveObj = { ...this.employeeForm.value };
+    
+      // overwrite 'cid' field to be only cid string
+      saveObj.cid = saveObj.cid?.cid ;
+    }
+    
+
+
+ this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
       next: (data: any) => {
         if (data.status == 'success') {
           this.submit(data.data.userid);
@@ -645,6 +637,7 @@ console.log(saveObj,'updateeuserobjecttttt');
           this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
         }
+
       },
       error: (err) => {
         this.dataTobeSentToSnackBarService.message =
@@ -729,7 +722,8 @@ console.log(saveObj,'updateeuserobjecttttt');
   multifilesFileNameLength: boolean = false;
 
 
-  @ViewChild('resume') resume: any = ElementRef;
+  @ViewChild('resume')
+  resume: any = ElementRef;
   resumeupload!: any;
   uploadResume(event: any) {
     this.resumeupload = event.target.files[0];
@@ -1076,7 +1070,7 @@ console.log(saveObj,'updateeuserobjecttttt');
   emailDuplicate(event: any) {
     const email = event.target.value;
     
-    this.empManagementServ.emailDuplicateCheck(email).subscribe((response: any) => {
+    this.empManagementServ.emailDuplicateCheck(email,localStorage.getItem('companyid')).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {
