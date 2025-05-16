@@ -131,7 +131,7 @@
         </mat-form-field>
 
         <!-- company   -->
-        <div class="company-select-field" *ngIf="isCompanyToDisplay && role == 'Super Administrator'">
+        <div class="company-select-field" *ngIf="isCompanyToDisplay">
           <mat-form-field appearance="fill">
             <mat-label>Select Company</mat-label>
             <mat-select formControlName="company">

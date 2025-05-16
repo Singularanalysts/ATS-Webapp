@@ -13,8 +13,8 @@ export class RoleManagementService {
   /**************ROLES SERVICES -  STARTS************* */
   // roles management
   //register role
-  addRole(entity: any) {
-    return this.apiServ.post(`auth/roles/save`, entity);
+  addRole(entity: any,companyId:any) {
+    return this.apiServ.post(`auth/roles/save/${companyId}`, entity);
   }
 
   //used for get one resource
@@ -23,8 +23,8 @@ export class RoleManagementService {
   }
 
   //update role
-  updateRole(entity: any) {
-    return this.apiServ.put(`auth/roles/updaterole`, entity);
+  updateRole(entity: any,companyId:any) {
+    return this.apiServ.put(`auth/roles/updaterole/${companyId}`, entity);
   }
   // get all roles
   getAllRoles() {
@@ -55,8 +55,8 @@ export class RoleManagementService {
   }
 
   // add or update role bases on action edit => update; add=> add
-  addOrUpdateRole(entity: any, action: string){
-    return action === "update-role" ? this.updateRole(entity) : this.addRole(entity);
+  addOrUpdateRole(entity: any, action: string,companyId:any){
+    return action === "update-role" ? this.updateRole(entity,companyId) : this.addRole(entity,companyId);
   }
   /**************ROLES SERVICES -  ENDS************* */
 

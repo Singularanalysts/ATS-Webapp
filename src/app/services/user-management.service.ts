@@ -67,8 +67,8 @@ export class UserManagementService {
   }
 
   //update role
-  updateRole(entity: any) {
-    return this.apiServ.put(`auth/roles/updaterole`, entity);
+  updateRole(entity: any,companyId:any) {
+    return this.apiServ.put(`auth/roles/updaterole/${companyId}`, entity);
   }
   // get all roles
   getAllRoles() {
