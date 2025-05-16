@@ -367,7 +367,7 @@ showSubmissionRateError = false;
       position: [submissionData ? submissionData.position : '', [Validators.required]],
       ratetype: [submissionData ? submissionData.ratetype : '', [Validators.required]],
       submissionrate: [submissionData ? submissionData.submissionrate : '', [Validators.required]],
-      
+      feedback:[submissionData ? submissionData.feedback : ''],
       endclient: [submissionData ? submissionData.endclient : ''],
       implpartner: [submissionData ? submissionData.implpartner : ''],
       vendor: [submissionData ? submissionData.vendor : ''],
