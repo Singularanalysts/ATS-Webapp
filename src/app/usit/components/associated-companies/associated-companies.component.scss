@@ -1,0 +1,101 @@
+/* Full viewport height for container with background */
+.container {
+  min-height: 100vh;       /* Make container fill full viewport height */
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: flex-start; /* align content to top vertically */
+  padding: 20px;
+  background-color: #f3f3f3;
+  box-sizing: border-box;
+}
+:host {
+  user-select: none;
+  outline: none;
+}
+
+:host * {
+  user-select: none;
+}
+
+/* Card Styling */
+mat-card {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  border-radius: 10px;
+  border: none;
+}
+.association-headings{
+  font-size: 16px;
+  font-weight: 600;
+}
+/* Title */
+.title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent; /* no extra background */
+}
+
+th,
+td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  text-align: left;
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Form field inside table cell */
+mat-form-field {
+  width: 100%;
+  margin: 0;
+}
+
+/* Action buttons container: single column alignment */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+/* Mat icon size */
+mat-icon {
+  font-size: 20px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  th,
+  td {
+    padding: 8px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .action-buttons {
+    flex-direction: row;
+    gap: 6px;
+  }
+}

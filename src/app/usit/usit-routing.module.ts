@@ -75,19 +75,25 @@ import { AssignedRequirementsComponent } from './components/recruitment/assigned
 
 import { OthercompaniessuperadminsComponent } from './components/masters/othercompaniessuperadmins/othercompaniessuperadmins.component';
 
-import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
+
 import { ResumeDescriptionComponent } from './components/openreqs/resume-description/resume-description.component';
 import { SubmissionReportComponent } from './components/recruitment/submission-report/submission-report.component';
 import { RequirementReportComponent } from './components/reports/employee-reports/requirement-report/requirement-report.component';
 import { AssignedCountComponent } from './components/recruitment/assigned-count/assigned-count.component';
 import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
 import { SubmissionTrashComponent } from './components/sales/submission-trash/submission-trash.component';
+import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
+import { AssociatedCompaniesComponent } from './components/associated-companies/associated-companies.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
   {
     path: 'dashboard',
     component: DashboardComponent,
+  },
+  {
+    path : 'associated-companies',
+    component : AssociatedCompaniesComponent
   },
   {
     path: 'privileges/:id',
@@ -105,6 +111,8 @@ const routes: Routes = [
     path: 'attempt-quiz',
     component: AttemptQuizComponent,
   },
+
+
   {
     path: 'quiz-result',
     component: QuizResultComponent,
@@ -420,6 +428,7 @@ const routes: Routes = [
     path: 'email-configuration',
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
   },
+
   {
      path: 'privileges/:id/:rolename/:companyid', component: PrivilegeListComponent ,
   },
