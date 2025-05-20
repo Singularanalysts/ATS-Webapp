@@ -315,7 +315,7 @@ export class AssociatedCompaniesComponent {
         } else {
           // alert('Failed to save company association.');
           const snackBarData: ISnackBarData = {
-            message: 'Failed to save company association.',
+            message: response.message,
             duration: 1500,
             verticalPosition: 'top',
             horizontalPosition: 'center',
@@ -326,7 +326,6 @@ export class AssociatedCompaniesComponent {
         }
       },
       error: (err) => {
-        console.error('Error saving company association:', err);
         // alert('Failed to save company association.');
         const snackBarData: ISnackBarData = {
           message: 'Failed to save company association.',
