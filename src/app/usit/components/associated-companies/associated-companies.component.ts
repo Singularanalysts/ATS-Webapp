@@ -284,7 +284,8 @@ export class AssociatedCompaniesComponent {
     }
 
     const payload = {
-      aCid: row.get('associatedCompany')?.value,
+      acid: row.get('associatedCompany')?.value,
+      addedBy: localStorage.getItem('userid'),
       company: {
         companyid: row.get('company')?.value,
       },
@@ -295,7 +296,7 @@ export class AssociatedCompaniesComponent {
         if (response.status === 'success') {
           // alert('Company association saved successfully');
           const snackBarData: ISnackBarData = {
-            message: 'Company association saved successfully',
+            message: response.message,
             duration: 3000,
             verticalPosition: 'top',
             horizontalPosition: 'center',
@@ -314,7 +315,7 @@ export class AssociatedCompaniesComponent {
         } else {
           // alert('Failed to save company association.');
           const snackBarData: ISnackBarData = {
-            message: 'Failed to save company association.',
+            message: response.message,
             duration: 1500,
             verticalPosition: 'top',
             horizontalPosition: 'center',
@@ -423,6 +424,8 @@ export class AssociatedCompaniesComponent {
             if (response.status === 'success') {
               this.savedData = this.savedData.filter(d => d.a_cid !== aCid);
               snackBarData.message = 'Association deleted successfully';
+              this.getAllCompanies();
+
             } else {
               snackBarData.panelClass = ['custom-snack-failure'];
               snackBarData.message = response.message || 'Failed to delete association.';

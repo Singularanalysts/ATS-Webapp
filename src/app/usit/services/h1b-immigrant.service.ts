@@ -19,7 +19,7 @@ saveCompanies(data : any){
   return this.apiServ.post("auth/company/saveAssociatedcompany" , data);
 }
 deleteCompany(id : any){
-  return this.apiServ.delete("auth/company/deleteAssociatedCompany/"+`${id}`)
+  return this.apiServ.delete(`auth/company/deleteAssociatedCompany/${id}`);
 }
   //to get visas
   getVisas() {
