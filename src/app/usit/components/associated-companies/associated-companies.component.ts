@@ -272,7 +272,7 @@ export class AssociatedCompaniesComponent {
       const snackBarData: ISnackBarData = {
         message:
           'Please select both Company and Associated Company before saving.',
-        duration: 1500,
+        duration: 3000,
         verticalPosition: 'top',
         horizontalPosition: 'center',
         direction: 'above', // If supported in your custom component
@@ -315,7 +315,7 @@ export class AssociatedCompaniesComponent {
         } else {
           // alert('Failed to save company association.');
           const snackBarData: ISnackBarData = {
-            message: response.message,
+            message: 'Failed to save company association.',
             duration: 1500,
             verticalPosition: 'top',
             horizontalPosition: 'center',
@@ -330,7 +330,7 @@ export class AssociatedCompaniesComponent {
         // alert('Failed to save company association.');
         const snackBarData: ISnackBarData = {
           message: 'Failed to save company association.',
-          duration: 1500,
+          duration: 3000,
           verticalPosition: 'top',
           horizontalPosition: 'center',
           direction: 'above',
@@ -412,7 +412,7 @@ export class AssociatedCompaniesComponent {
       if (dialogRef.componentInstance.allowAction) {
         const snackBarData: ISnackBarData = {
           message: '',
-          duration: 1500,
+          duration: 3000,
           verticalPosition: 'top',
           horizontalPosition: 'center',
           direction: 'above',

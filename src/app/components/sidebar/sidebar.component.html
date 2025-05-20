@@ -99,10 +99,11 @@
         <mat-icon class="icon">person</mat-icon>
       </button>
          <!-- User Settings -->
-      <button mat-menu-item *ngIf="role != 'Employee'" routerLink="usit/associated-companies">
-       User Settings
-        <mat-icon class="icon">person</mat-icon>
-      </button>
+<button mat-menu-item *ngIf="role != 'Employee'" routerLink="usit/associated-companies">
+  Manage Companies
+  <mat-icon class="icon">business</mat-icon>
+</button>
+
 
       <button mat-menu-item [matMenuTriggerFor]="accountSettingsMenu" *ngIf="role != 'Employee'">
         <mat-icon class="icon">settings</mat-icon>
