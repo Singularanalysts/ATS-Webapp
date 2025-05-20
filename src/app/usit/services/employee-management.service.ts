@@ -11,12 +11,20 @@ export class EmployeeManagementService {
   private apiServ = inject(ApiService);
    /*** EMPOLOYEE SERVICES _ START */
    //employee management
-   getRolesDropdown() {
-    return this.apiServ.get("auth/roles/getroles");
+   getRolesDropdown(companyId:any) { 
+    return this.apiServ.get(`auth/roles/getroles/${companyId}`);
+  }
+
+  getCompaniesDropdown() {
+    return this.apiServ.get("auth/company/getCompanysDropDown");
   }
 
   getManagerDropdown() {
     return this.apiServ.get("auth/users/manageDropDown");
+  }
+
+  getValidDateCompanyGiven(companyid:any) {
+    return this.apiServ.get("auth/users/companyCheck/"+companyid);
   }
 
   getTLdropdown(id: number) {
@@ -29,8 +37,8 @@ export class EmployeeManagementService {
 
   }
   //used for get the resource
-  getAllEmployees(status: any) {
-    return this.apiServ.get(`auth/users/all/${status}`);
+  getAllEmployees(status: any, companyid:any) {
+    return this.apiServ.get(`auth/users/all/${status}/${companyid}`);
   }
 
   deleteEmployeeById(id: number) {
@@ -68,8 +76,8 @@ export class EmployeeManagementService {
    return action === "edit-employee" ? this.updateEmployee(entity) : this.registerEmployee(entity);
   }
 
-  emailDuplicateCheck(email: any) {
-    return this.apiServ.get(`auth/users/validate/${email}`);
+  emailDuplicateCheck(email: any,companyId: any) {
+    return this.apiServ.get(`auth/users/validate/${email}/${companyId}`);
   }
 
   /** EMPLOYEE SERVICES - END */

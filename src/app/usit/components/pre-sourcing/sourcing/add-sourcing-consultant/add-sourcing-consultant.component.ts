@@ -575,7 +575,9 @@ export class AddSourcingConsultantComponent implements OnInit, OnDestroy {
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    this.consultantServ.duplicatecheckEmail(email).subscribe((response: any) => {
+    const companyId = localStorage.getItem('companyid');
+    
+    this.consultantServ.duplicatecheckEmail(email,companyId).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {

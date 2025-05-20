@@ -10,19 +10,19 @@ export class ReportsService {
 
   private apiServ = inject(ApiService);
 
-  consultant_report(value: any) {
-    return this.apiServ.post("report/creport", value);
+  consultant_report(value: any, compnayId: any) {
+    return this.apiServ.post(`report/creport/${compnayId}`, value);
   }
 
-  sources_report(value: any) {
-    return this.apiServ.post("report/sourcingreport", value)
+  sources_report(value: any, companyId: any) {
+    return this.apiServ.post(`report/sourcingreport/${companyId}`, value)
   }
 
-  public sourcing_DrillDown_report(vo: any) {
-    return this.apiServ.post("report/sourceleads", vo);
+  public sourcing_DrillDown_report(vo: any, companyId: any) {
+    return this.apiServ.post(`report/sourceleads/${companyId}`, vo);
   }
 
-  public consultant_DrillDown_report(vo: any) {
+  public consultant_DrillDown_report(vo: any, companyId: any) {
     if (!vo || typeof vo.status === 'undefined') {
       // Handle the case where 'vo' or 'vo.status' is undefined
       console.error('Invalid request data:', vo);
@@ -30,13 +30,13 @@ export class ReportsService {
     }
 
     if (vo.status == 'submission') {
-      return this.apiServ.post("report/popupSub", vo);
+      return this.apiServ.post(`report/popupSub/${companyId}`, vo);
     } else if (vo.status == 'interview') {
-      return this.apiServ.post("report/popupInt", vo);
+      return this.apiServ.post(`report/popupInt/${companyId}`, vo);
     } else if (vo.status == 'consultant') {
-      return this.apiServ.post("report/recruiterleads", vo);
+      return this.apiServ.post(`report/recruiterleads/${companyId}`, vo);
     } else {
-      return this.apiServ.post("report/popup", vo);
+      return this.apiServ.post(`report/popup/${companyId}`, vo);
     }
   }
 
@@ -48,16 +48,16 @@ export class ReportsService {
     return this.apiServ.post("report/getReqReport", entity);
   }
 
-  public getBanterReport(entity: any) {
-    return this.apiServ.post("report/callRecords/banterReport", entity);
+  public getBanterReport(entity: any, companyId: any) {
+    return this.apiServ.post(`report/callRecords/banterReport/${companyId}`, entity);
   }
 
-  public getCommentReport(entity: any) {
-    return this.apiServ.post("report/ReqCommentsReport", entity);
+  public getCommentReport(entity: any, companyId: any) {
+    return this.apiServ.post(`report/CommentsReport/${companyId}`, entity);
   }
 
-  public getEmployeeByDeparment(department: string) {
-    return this.apiServ.get(`auth/users/user/${department}`)
+  public getEmployeeByDeparment(department: string, companyId: any) {
+    return this.apiServ.get(`auth/users/user/${department}/${companyId}`)
   }
 
   public getEmployeeReport(entity: any) {
@@ -72,20 +72,20 @@ export class ReportsService {
     return this.apiServ.post("report/employeeIntervStatusPopups", data);
   }
 
-  public candidateReport(data: any) {
-    return this.apiServ.post("report/allEmployeesReport", data);
+  public candidateReport(data: any, companyId: any) {
+    return this.apiServ.post(`report/allEmployeesReport/${companyId}`, data);
   }
 
-  public candidateSubmissionPopup(data: any) {
-    return this.apiServ.post("report/employeeSubmissionPopup", data);
+  public candidateSubmissionPopup(data: any, companyId: any) {
+    return this.apiServ.post(`report/employeeSubmissionPopup/${companyId}`, data);
   }
 
-  public candidateInterviewPopup(data: any) {
-    return this.apiServ.post("report/employeeInterviewStatPopups", data);
+  public candidateInterviewPopup(data: any, companyId:any) {
+    return this.apiServ.post(`report/employeeInterviewStatPopups/${companyId}`, data);
   }
 
-  public candidateAppliedJobsPopup(data: any) {
-    return this.apiServ.post("report/employeeJobApplyCount", data);
+  public candidateAppliedJobsPopup(data: any, companyId: any) {
+    return this.apiServ.post(`report/employeeJobApplyCount/${companyId}`, data);
   }
 
   public requirementPopup(data: any) {

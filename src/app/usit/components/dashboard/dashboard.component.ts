@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, inject } from '@angular/core';
+import { Component, NgZone, OnInit, inject ,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { DashboardService } from 'src/app/usit/services/dashboard.service';
@@ -32,13 +32,16 @@ import { EmpInterviewsListComponent } from './emp-interviews-list/emp-interviews
 import { JsonpInterceptor } from '@angular/common/http';
 import { PageEvent } from '@angular/material/paginator';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatPaginator } from '@angular/material/paginator';
+import { OpenreqService } from '../../services/openreq.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
+  imports: [CommonModule,MatAutocompleteModule, MatPaginatorModule, MatSelectModule, ReactiveFormsModule, MatDatepickerModule,  MatTooltipModule, MatCardModule, MatTableModule, MatIconModule, MatButtonModule, MatStepperModule, MatMenuModule, MatInputModule
   ],
   providers: [DatePipe]
 })
@@ -91,7 +94,6 @@ export class DashboardComponent implements OnInit {
   interviewFlag = 'daily';
   submissionFlag = 'daily';
   sourcingFlag = 'daily';
-
   closureFlagInd = 'Monthly';
   interviewFlagInd = 'daily';
   submissionFlagInd = 'daily';
@@ -145,7 +147,36 @@ export class DashboardComponent implements OnInit {
   startDateControl: FormControl | undefined;
   endDateControl: FormControl | undefined;
   public dialog= inject(MatDialog);
-
+  ratingflag: string = 'Monthly'; // Default selection
+  selectedFilter: string = 'monthly'; // Default API filter
+  performanceData: any = null; // Holds the fetched data
+  
+  sourcingCountRating(filterType: string, displayName: string) {
+    this.ratingflag = displayName; // Update UI label
+    this.selectedFilter = filterType; // Update API filter
+    
+    this.getPerformanceRatings(filterType);
+  }
+  
+  getPerformanceRatings(filter?: string) {
+    this.privilegeServ.getPerformanceRatings(filter, localStorage.getItem('companyid')).subscribe({
+      next: (response: any) => {
+        this.performanceData = response.data;
+        this.calculateStars(response.data.avg_rating);
+      },
+      error: (error: any) => {
+        console.error('Error fetching ratings:', error);
+      }
+    });
+  }
+  fullStars:any
+  halfStar:any
+  // Compute full and half stars
+  calculateStars(avgRating: number) {
+    const fullStarsCount = Math.floor(avgRating);
+    this.fullStars = Array(fullStarsCount).fill(0); // Array of full stars
+    this.halfStar = avgRating % 1 !== 0; // Show half star if needed
+  }
 // pagination code
 page: number = 1;
 itemsPerPage = 50;
@@ -154,7 +185,7 @@ totalItems: any;
 field = "empty";
 currentPageIndex = 0;
 pageEvent!: PageEvent;
-pageSize = 50;
+// pageSize = 50;
 showPageSizeOptions = true;
 showFirstLastButtons = true;
 pageSizeOptions = [50, 75, 100];
@@ -204,7 +235,7 @@ pageSizeOptions = [50, 75, 100];
         this.countCallingHigherRole();
       }
   
-      this.dashboardServ.vmstransactions().subscribe(
+      this.dashboardServ.vmstransactions(localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.datarr = response.data;
         })
@@ -218,7 +249,14 @@ pageSizeOptions = [50, 75, 100];
   department!: any;
   sourcingLead = true;
   ngOnInit(): void {
+    this.getPerformanceRatings(this.ratingflag)
+const previlage= localStorage.getItem('privileges')
+console.log(previlage,'previlage');
+
     const shoWresult = this.privilegeServ.hasPrivilege('EXCEL_EXPORT')
+
+    console.log(shoWresult,'shoWresult');
+    
     if (shoWresult) {
       this.showReport = true;
     } else {
@@ -242,14 +280,14 @@ pageSizeOptions = [50, 75, 100];
     }
     this.role = localStorage.getItem('role');//Sales Executive   Team Leader Recruiting  Team Leader Sales  Recruiter
     if (this.department !== 'Consultant' && this.role !== 'Employee') {
-      this.getDiceReqs(); 
+      // this.getDiceReqs(); 
       this.getDiceReqss(1); 
       // this.getDiceReqss();
       this.getSourcingLeads();
-      this.getReqVendorCount();
-      this.getReqCatergoryCount();
-      this.getEmployeeNames();
-      this.dashboardServ.vmstransactions().subscribe(
+      // this.getReqVendorCount();
+      // this.getReqCatergoryCount();
+      // this.getEmployeeNames();
+      this.dashboardServ.vmstransactions(localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.datarr = response.data;
         })
@@ -279,6 +317,24 @@ pageSizeOptions = [50, 75, 100];
     }
 
   }
+    private service = inject(OpenreqService);
+  
+  empTag(id: number) {
+    this.service.openReqsEmpTagging(id, this.userid).subscribe(
+      (response: any) => {
+
+      })
+  }
+  goToCompany(companyName: string) {
+    this.router.navigate(['/usit/vendors'], { queryParams: { company: companyName } });
+    console.log(companyName,'companyname');
+    
+  }
+  navigateToRecruiters(vendorName: string) {
+    this.router.navigate(['/usit/recruiters'], { queryParams: { company: vendorName } });
+    console.log(vendorName,'vendornameee');
+    
+  }
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
     if (this.intervalSubscription) {
@@ -286,7 +342,7 @@ pageSizeOptions = [50, 75, 100];
     }
   }
   countCallingHigherRole() {
-    this.dashboardServ.getClosureCount('monthly').subscribe(
+    this.dashboardServ.getClosureCount('monthly', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -299,7 +355,7 @@ pageSizeOptions = [50, 75, 100];
         });
       })
     );
-    this.dashboardServ.getInterviewCount('daily').subscribe(
+    this.dashboardServ.getInterviewCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -312,7 +368,7 @@ pageSizeOptions = [50, 75, 100];
         });
       })
     );
-    this.dashboardServ.getsubmissionCount('daily').subscribe(
+    this.dashboardServ.getsubmissionCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -325,7 +381,7 @@ pageSizeOptions = [50, 75, 100];
         });
       })
     );
-    this.dashboardServ.getsourcingCount('daily').subscribe(
+    this.dashboardServ.getsourcingCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.sourcingcountArr = response.data;
         this.sourcingVerifiedcount = response.data.verified;
@@ -382,7 +438,7 @@ pageSizeOptions = [50, 75, 100];
     this.subcount = 0;
     this.reccount = 0;
     this.submissionFlag = flg;
-    this.dashboardServ.getsubmissionCount(flag).subscribe(
+    this.dashboardServ.getsubmissionCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -419,7 +475,7 @@ pageSizeOptions = [50, 75, 100];
     this.interviewFlag = flg;
     this.sintcount = 0;
     this.rintcount = 0;
-    this.dashboardServ.getInterviewCount(flag).subscribe(
+    this.dashboardServ.getInterviewCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -456,7 +512,7 @@ pageSizeOptions = [50, 75, 100];
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-    this.dashboardServ.getClosureCount(flag).subscribe(
+    this.dashboardServ.getClosureCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -496,7 +552,7 @@ pageSizeOptions = [50, 75, 100];
     this.sourcingCompletedcount = 0;
     this.sourcingVerifiedcount = 0;
     this.sourcingMoveToSalescount = 0;
-    this.dashboardServ.getsourcingCount(flag).subscribe(
+    this.dashboardServ.getsourcingCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.sourcingcountArr = response.data;
         this.sourcingVerifiedcount = response.data.verified;
@@ -507,17 +563,71 @@ pageSizeOptions = [50, 75, 100];
     );
   }
 
+  // getSourcingLeads() {
+  //   this.dashboardServ.getSourcingLeads(this.userid).subscribe(
+  //     (response: any) => {
+  //       //this.entity = response.data;
+  //       this.dataSource.data = response.data;
+  //       // this.dataSource.data.map((x: any, i) => {
+  //       //   x.serialNum = i + 1;
+  //       // });
+  //     }
+  //   )
+  // }
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  currentPage = 1;
+  pageSize = 13;
+  totalPages = 1;
+  
   getSourcingLeads() {
-    this.dashboardServ.getSourcingLeads(this.userid).subscribe(
+    const payload = {
+      pageNumber: this.currentPage,
+      pageSize: this.pageSize,
+      userId: this.userid
+    };
+  
+    this.dashboardServ.getSourcingLeads(payload,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
-        //this.entity = response.data;
-        this.dataSource.data = response.data;
-        // this.dataSource.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
+        this.dataSource.data = response.data.content;
+        const totalRecords = response.data.totalElements;
+console.log(totalRecords,'totalrecords'); 
+        this.totalPages = Math.ceil(totalRecords / this.pageSize);
       }
-    )
+    );
   }
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getSourcingLeads();
+    }
+  }
+  
+  nextPage() {
+    console.log('nextpage');
+
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      console.log('sourceleads');
+      
+      this.getSourcingLeads();
+    }
+  }
+  
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.getSourcingLeads();
+  }
+  
+  // Function to display only 4 pages at a time
+  getPageNumbers(): number[] {
+    const maxPagesToShow = 4;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+  
+    return Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
+  }
+  
   // for executive and lead
 
 
@@ -647,6 +757,7 @@ pageSizeOptions = [50, 75, 100];
       'Tagged Name'
     ]];
     const excelData = this.dataSourceDice.data.map((c: any) => [
+      c.id,
       c.posted_on,
       c.job_title,
       c.category_skill,
@@ -673,41 +784,142 @@ pageSizeOptions = [50, 75, 100];
     this.router.navigate(['usit/user-info', 'dashboard', id])
   }
 
+  currentPagedice = 1;
+  pageSizedice = 13;
+  totalPagesdice = 1;
+    showTable = false;  // Initially hide the table
+
+  toggleTable() {
+    this.showTable = !this.showTable;
+    if (this.showTable && this.dataSourceDice.data.length === 0) {
+      this.getDiceReqs(); // Fetch data only when table is first opened
+    }
+  }
   getDiceReqs() {
-    this.dashboardServ.getDiceRequirements(this.role, this.userid).subscribe(
+    const payload = {
+      pageNumber: this.currentPagedice,
+      pageSize: this.pageSizedice,
+      userId: 0,
+      role:this.role
+    };
+  
+    this.dashboardServ.getDiceRequirements(payload,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
-        //this.entity = response.data;
-        this.dataSourceDice.data = response.data;
-        // this.dataSourceDice.data.map((x: any, i) => {
-        //   x.serialNum = i + 1;
-        // });
+        this.dataSourceDice.data = response.data.content;
+        console.log(this.dataSourceDice.data, 'this.dataSourceDice.data');
+  
+        const totalRecords = response.data.totalElements;
+        console.log(totalRecords, 'Total Records');
+  
+        this.totalPagesdice = Math.ceil(totalRecords / this.pageSize);
       }
     );
   }
+  
+  prevPagedice() {
+    if (this.currentPagedice > 1) {
+      this.currentPagedice--;
+      this.getDiceReqs();
+    }
+  }
+  
+  nextPagedice() {
+    if (this.currentPagedice < this.totalPagesdice) {
+      this.currentPagedice++;
+      console.log('dailyrequireents');
 
-  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Postedon", sortOrder: any = "desc" , keyword: any = "empty") {
-    // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
+      this.getDiceReqs();
+    }
+  }
+  
+  goToPagedice(page: number) {
+    this.currentPagedice = page;
+    this.getDiceReqs();
+  }
+  
+  // Function to display only 4 pages at a time
+  getPageNumbersdice(): number[] {
+    const maxPagesToShow = 4;
+    let startPage = Math.max(1, this.currentPagedice - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPagesdice, startPage + maxPagesToShow - 1);
+  
+    return Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
+  }
+  
+  // allData: any = []; // Stores full data
+  // pageSizedata = 20; // Number of items per load
+  // currentPage = 1; // Tracks the page number
+  // getDiceReqs() {
+  //   this.dashboardServ.getDiceRequirements(this.role, this.userid).subscribe((response: any) => {
+  //     this.allData = response.data;
+      
+  //     this.loadMore();
+  //   });
+  // }
+  // displayedColumns: string[] = ['PostedDate', 'JobTitle', 'Category', 'JobLocation', 'Vendor', 'TaggedDate', 'TaggedBy', 'TCount'];
+
+  // loadMore() {
+  //   const nextData = this.allData.slice(0, this.currentPage * this.pageSizedata);
+  //   this.dataSourceDice.data = nextData;
+  //   console.log( this.dataSourceDice.data ,' this.dataSourceDice.data ');
+    
+  //   this.currentPage++;
+  // }
+
+  // getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Postedon", sortOrder: any = "desc" , keyword: any = "empty") {
+  //   // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
+  //   const actData = {
+  //     pageNumber: pagIdx,
+  //     pageSize: pagesize,
+  //     sortField: sortField,
+  //     sortOrder: sortOrder,
+  //     keyword: keyword,
+  //     userid :this.userid
+  //   };
+
+  //   this.dashboardServ.getDiceRequirementslax(this.role, actData).subscribe(
+  //     (response: any) => {
+  //       //this.entity = response.data;
+  //       this.dataSourceDicelax.data = response.data.content;
+  //       console.log( this.dataSourceDicelax.data,'other same data');
+        
+  //       this.totalItems = response.data.totalElements;
+  //       this.dataSourceDicelax.data.map((x: any, i) => {
+  //         // x.serialNum = i + 1;
+  //         x.serialNum = this.generateSerialNumber(i);
+  //       });
+  //     }
+  //   );
+  // }
+  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any = "Postedon", sortOrder: any = "desc", keyword: any = "empty") {
     const actData = {
       pageNumber: pagIdx,
       pageSize: pagesize,
       sortField: sortField,
       sortOrder: sortOrder,
       keyword: keyword,
-      userid :this.userid
+      userid: this.userid
     };
-
-    this.dashboardServ.getDiceRequirementslax(this.role, actData).subscribe(
-      (response: any) => {
-        //this.entity = response.data;
-        this.dataSourceDicelax.data = response.data.content;
-        this.totalItems = response.data.totalElements;
-        this.dataSourceDicelax.data.map((x: any, i) => {
-          // x.serialNum = i + 1;
-          x.serialNum = this.generateSerialNumber(i);
-        });
-      }
-    );
+  
+    const apiCall = this.dashboardServ.getDiceRequirementslax(this.role, actData);
+  
+    if (apiCall) { // Only make API call if apiCall is not null
+      apiCall.subscribe(
+        (response: any) => {
+          this.dataSourceDicelax.data = response.data.content;
+          console.log(this.dataSourceDicelax.data, 'other same data');
+  
+          this.totalItems = response.data.totalElements;
+          this.dataSourceDicelax.data.map((x: any, i) => {
+            x.serialNum = this.generateSerialNumber(i);
+          });
+        }
+      );
+    } else {
+      console.log("No API call required for this role.");
+    }
   }
+  
 
   handlePageEvent(event: PageEvent) {
     if (event) {
@@ -820,28 +1032,64 @@ pageSizeOptions = [50, 75, 100];
     this.dataSourceTech.filter = event.target.value;
   }
   //lavanya
-  getEmployeeNames() {
+  // benchSalesEmployees: any[] = []; // Store employees
+
+  // Remove this from ngOnInit()
+  // ngOnInit() { this.getEmployeeNames(); }  ❌ Remove this
+  
+  getEmployeeNames(): void {
+    if (this.benchSalesEmployees.length > 0) return; // Prevent multiple API calls
+  
     this.dashboardServ.getEmployeeName().subscribe({
       next: (response: any) => {
-        // Assuming the API response contains an array of objects with 'name' property for each employee
-        this.benchSalesEmployees = response.data;
+        this.benchSalesEmployees = response.data; // Store employee names
       },
       error: (error: any) => {
         console.error('Error fetching employee names:', error);
       }
-    }
-    );
+    });
   }
-
-  onEmployeeChange(event: any): void {
+  
+  onEmployeeChange(selectedOption: any): void {
+    if (!selectedOption) return;
+  
+    this.selectedEmployeeName = selectedOption.value[1]; // Set name for display
+    const empId = selectedOption.value[0]; // Get ID for API
+  
     const fromDate = this.myForm.get('startDate').value;
     const toDate = this.myForm.get('endDate').value;
-    const empId = event.value;
-    const formatedStartDate = this.formatDate(fromDate);
-    const formatedEndDate = this.formatDate(toDate);
-    this.filterData(formatedStartDate, formatedEndDate, empId);
-
+    const formattedStartDate = this.formatDate(fromDate);
+    const formattedEndDate = this.formatDate(toDate);
+  
+    this.filterData(formattedStartDate, formattedEndDate, empId);
   }
+  
+
+  // onEmployeeChange(event: any): void {
+  //   const fromDate = this.myForm.get('startDate').value;
+  //   const toDate = this.myForm.get('endDate').value;
+  //   const empId = event.value;
+  //   const formatedStartDate = this.formatDate(fromDate);
+  //   const formatedEndDate = this.formatDate(toDate);
+  //   this.filterData(formatedStartDate, formatedEndDate, empId);
+
+  // }
+  employeeControl = new FormControl('');
+
+  selectedEmployeeName:any
+  // onEmployeeChange(selectedOption: any): void {
+  //   if (!selectedOption) return;
+
+  //   this.selectedEmployeeName = selectedOption.value[1]; // Set the name for display
+  //   const empId = selectedOption.value[0]; // Get ID for API
+
+  //   const fromDate = this.myForm.get('startDate').value;
+  //   const toDate = this.myForm.get('endDate').value;
+  //   const formatedStartDate = this.formatDate(fromDate);
+  //   const formatedEndDate = this.formatDate(toDate);
+
+  //   this.filterData(formatedStartDate, formatedEndDate, empId);
+  // }
   formatDate(date: string): string {
     const selectedDate = new Date(date);
     const year = selectedDate.getFullYear();
@@ -849,34 +1097,36 @@ pageSizeOptions = [50, 75, 100];
     const day = ("0" + selectedDate.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
-  filterData(startDate: any, endDate: any, empId: any) {
-
-    this.dashboardServ.getFilteredEmployee(startDate, endDate, empId)
+  filterData(fromDate: any, toDate: any, userId: any) {
+    const payload = { fromDate, toDate, userId,
+      pageNumber: this.currentPagedice,  // Include pagination
+      pageSize: this.pageSizedice
+     }; // Send data in the request body
+  
+    this.dashboardServ.getFilteredEmployee(payload,localStorage.getItem('companyid'))
       .subscribe(
         (response: any) => {
-          // Check if response contains data property
           if (response && response.data) {
-            // Assign the response data to the dataSource for displaying filtered data
-            this.dataSourceDice.data = response.data;
-            // Reassign serial numbers after filtering
+            this.dataSourceDice.data = response.data.content;
+  
+            // Assign serial numbers after filtering
             this.dataSourceDice.data.forEach((item: any, index: number) => {
               item.serialNum = index + 1;
             });
           } else {
-            // Handle empty or invalid response
             console.error('Invalid response:', response);
           }
         },
         (error: any) => {
-          // Handle errors here
           console.error('An error occurred:', error);
         }
       );
   }
-
+  
   refreshData() {
     this.myForm.reset();
     this.getDiceReqs();
+    this.employeeControl.setValue('')
     const endDateControl = this.myForm.get('endDate');
     if (!endDateControl.value) {
       const currentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');

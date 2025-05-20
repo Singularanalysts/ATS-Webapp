@@ -53,9 +53,7 @@ import { Closure } from 'src/app/usit/models/closure';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
     MatRadioModule
   ],
@@ -102,6 +100,17 @@ export class AddInterviewComponent implements OnInit {
     return this.interviewForm.controls;
   }
 
+  
+
+  getFlag(type: string) {
+    if (type === 'sales') {
+      this.flag = 'sales';
+    } else if (type === 'recruiting') {
+      this.flag = "Recruiting";
+    } else {
+      this.flag = 'Domrecruiting';
+    }
+  }
   ngOnInit(): void {
     this.getFlag(this.data.flag.toLocaleLowerCase());
     this.getsubdetails(this.flag);
@@ -120,6 +129,8 @@ export class AddInterviewComponent implements OnInit {
       this.initializeInterviewForm(new InterviewInfo());
       this.interviewServ.getEntity(this.data.interviewData.intrid).subscribe(
         (response: any) => {
+          console.log(response,'response');
+          
           // const ctc = response.data.submission.ratetype;
           // if((ctc=='1099' || ctc=='W2') && this.flag != 'sales'){
           //   this.paymentwithctc = "Pay Rate To Consultant";
@@ -143,17 +154,6 @@ export class AddInterviewComponent implements OnInit {
       this.initializeInterviewForm(new InterviewInfo());
     }
   }
-
-  getFlag(type: string) {
-    if (type === 'sales') {
-      this.flag = 'sales';
-    } else if (type === 'recruiting') {
-      this.flag = "Recruiting";
-    } else {
-      this.flag = 'Domrecruiting';
-    }
-  }
-
   private initializeInterviewForm(interviewData: any) {
     this.interviewForm = this.formBuilder.group({
       submission: [interviewData ? interviewData.submission : '', [Validators.required]],
@@ -188,7 +188,9 @@ export class AddInterviewComponent implements OnInit {
     });
 
     if (this.data.actionName === "edit-interview" && interviewData && interviewData.submission) {
-      this.interviewServ.getsubmissionsDropDown(this.flag, this.userid, this.role, interviewData.submission).subscribe(
+      const companyId = localStorage.getItem('companyid');
+
+      this.interviewServ.getsubmissionsDropDown(this.flag, this.userid, this.role, interviewData.submission,companyId).subscribe(
         (submission: any) => {
           if (submission && submission.data.length>0) {
             this.submissionid = submission.data[0].subid;
@@ -258,9 +260,10 @@ export class AddInterviewComponent implements OnInit {
   userid!: any;
   role!: any;
   getsubdetails(flg: string) {
+    const companyId = localStorage.getItem('companyid');
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');
-    this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0).pipe(
+    this.searchSubmissionOptions$ = this.interviewServ.getsubmissionsDropDown(flg, this.userid, this.role, 0,companyId).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {

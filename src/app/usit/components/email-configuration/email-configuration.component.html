@@ -2,6 +2,7 @@
   <div class="container">
     <mat-card>
       <mat-card-title class="title">{{ buttonText }} Email Configuration</mat-card-title>
+    
       <mat-card-content>
         <form [formGroup]="emailForm" autocomplete="off">
 
@@ -131,7 +132,15 @@
       <span class="header-text">
         Email Configuration
       </span>
+      <div class="back-button-container">
+        <button mat-raised-button color="primary" (click)="goBack()" >Back</button>
+      </div>
+     
       <div class="hot-list-actions">
+        <div>
+          <mat-icon class="report-icon"(click)="reportemail()">report</mat-icon> 
+
+      </div>
         <button mat-icon-button color="primary" class="add-email" matToolTip="Add" (click)="addEmail()">
           <mat-icon class="item-icon">add_circle</mat-icon>
         </button>
@@ -141,7 +150,9 @@
           <!-- (keyup)="applyFilter($event)" -->
         </div>
       </div>
+      
     </div>
+   
 
     <div id="table-container" class="table-wrapper">
       <section class="mat-elevation-z8 hot-list-table-style">
@@ -194,36 +205,36 @@
               Extraxt Emails </th>
             <td mat-cell *matCellDef="let element" style=" width: 10% !important;">
               <button mat-raised-button color="primary" style="width: max-content; height: max-content"
-                (click)="extractEmails(element)" [disabled]="element.status === 'In Progress - Emails are processing !'">
+                (click)="extractEmails(element)" [disabled]="element.status === 'IN PROGRESS'">
                 Extract
               </button>
             </td>
           </ng-container>
 
-          <!-- Stop Extraction Column -->
-          <ng-container matColumnDef="StopExtraction">
-            <th mat-header-cell *matHeaderCellDef style="width: 10% !important;" nowrap>
-              Stop Extraction
-            </th>
-            <td mat-cell *matCellDef="let element" style="width: 10% !important;">
-              <button mat-raised-button color="warn" style="width: max-content; height: max-content"
-                (click)="stopExtraction(element.id)" [disabled]="element.status === 'No active emails processing / Completed'">
-                Stop
-              </button>
-            </td>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container matColumnDef="Status">
-            <th mat-header-cell *matHeaderCellDef> Status </th>
-            <td mat-cell *matCellDef="let element"
-            [ngClass]="{
-              'status-in-progress': element.status === 'In Progress - Emails are processing !',
-              'status-completed': element.status === 'No active emails processing / Completed'
-            }">
-              {{ element?.status || 'N/A' }}
-            </td>
-          </ng-container>
+                <!-- Stop Extraction Column -->
+                <ng-container matColumnDef="StopExtraction">
+                  <th mat-header-cell *matHeaderCellDef style="width: 10% !important;" nowrap>
+                    Stop Extraction
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="width: 10% !important;">
+                    <button mat-raised-button color="warn" style="width: max-content; height: max-content"
+                      (click)="stopExtraction(element.id)" [disabled]="element.status !== 'IN PROGRESS'">
+                      Stop
+                    </button>
+                  </td>
+                </ng-container>
+      
+                <!-- Status Column -->
+                <ng-container matColumnDef="Status">
+                  <th mat-header-cell *matHeaderCellDef> Status </th>
+                  <td mat-cell *matCellDef="let element"
+                  [ngClass]="{
+                    'status-in-progress': element.status === 'IN PROGRESS' || element.status === 'COMPLETED',
+                    'status-completed': element.status !== 'IN PROGRESS' && element.status !== 'COMPLETED'
+                  }">
+                    {{ element?.status || 'N/A' }}
+                  </td>
+                </ng-container>
 
           <!-- Action Column-->
           <ng-container matColumnDef="Action">

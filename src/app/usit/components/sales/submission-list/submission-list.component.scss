@@ -36,10 +36,14 @@ ul.breadcrumb li a:hover {
   text-decoration: underline;
 }
 
+// .table-wrapper {
+//   flex: 1;
+//   overflow: auto;
+//   // padding: 4px;
+// }
 .table-wrapper {
-  flex: 1;
-  overflow: auto;
-  // padding: 4px;
+  max-height: calc(100vh - 150px) !important; /* Or set a specific height */
+  overflow-y: auto;
 }
 
 table {
@@ -47,16 +51,18 @@ table {
 
 }
 
+
+
 .mat-mdc-header-row {
-  background-color: rgb(213, 231, 231);
-  position: sticky;
-  top: 0;
+  
+  background-color: rgb(213, 231, 231); /* Your preferred bg */
 }
 
-thead {
-  position: sticky;
-  top: 0;
-}
+// thead {
+//   position: sticky;
+//   top: 0;
+// }
+
 
 tbody {
   text-align: left;
@@ -87,23 +93,23 @@ tbody {
 
 }
 
-.mat-column-SerialNum,
-.mat-column-Dos,
-.mat-column-HeadQuarter,
-.mat-column-Id,
-.mat-column-Consultant,
-.mat-column-TrackSI,
-.mat-column-Requirement,
-.mat-column-ImplementationPartner,
-.mat-column-EndClient,
-.mat-column-Vendor,
-.mat-column-SubRate,
-.mat-column-ProjectLocation,
-.mat-column-SubmittedBy,
-.mat-column-Status,
-.mat-column-SubStatus {
-  border-right: 1px solid lightgray;
-}
+// .mat-column-SerialNum,
+// .mat-column-Dos,
+// .mat-column-HeadQuarter,
+// .mat-column-Id,
+// .mat-column-Consultant,
+// .mat-column-TrackSI,
+// .mat-column-Requirement,
+// .mat-column-ImplementationPartner,
+// .mat-column-EndClient,
+// .mat-column-Vendor,
+// .mat-column-SubRate,
+// .mat-column-ProjectLocation,
+// .mat-column-SubmittedBy,
+// .mat-column-Status,
+// .mat-column-SubStatus {
+//   border-right: 1px solid lightgray;
+// }
 
 .header-container {
   display: flex;
@@ -112,7 +118,7 @@ tbody {
   justify-content: space-between;
 
   height: 48px;
-
+padding: 15px;
   background-color: white;
   // position: sticky;
   // z-index: 9999999;
@@ -134,6 +140,7 @@ tbody {
 .submission-actions {
   display: flex;
   align-items: center;
+  float: right !important;
 
   .search {
     height: 32px;
@@ -141,22 +148,22 @@ tbody {
   }
 }
 
-.submission-table-style {
-  // padding: 0 2px;
-  width: 100%;
-  // max-height: calc(100% - 2px);
-  overflow: auto;
-  display: block;
-}
+// .submission-table-style {
+//   // padding: 0 2px;
+//   width: 100%;
+//   // max-height: calc(100% - 2px);
+//   overflow: auto;
+//   display: block;
+// }
 
-.mdc-data-table__cell,
-.mdc-data-table__header-cell {
-  padding: 0 4px 0 4px;
-}
+// .mdc-data-table__cell,
+// .mdc-data-table__header-cell {
+//   padding: 0 4px 0 4px;
+// }
 
-.mat-mdc-header-row {
-  z-index: 1000;
-}
+// .mat-mdc-header-row {
+//   z-index: 1000;
+// }
 
 .no-data-found {
   display: flex;
@@ -167,29 +174,29 @@ tbody {
 }
 
 
-.responsive-table {
-  width: 100%;
-  // table-layout: fixed;
-}
+// .responsive-table {
+//   width: 100%;
+//   // table-layout: fixed;
+// }
 
-@media screen and (max-width: 768px) {
-  .responsive-table {
-    table-layout: auto;
-  }
+// @media screen and (max-width: 768px) {
+//   .responsive-table {
+//     table-layout: auto;
+//   }
 
-  .mdc-data-table__cell,
-  .mdc-data-table__header-cell {
-    padding: 0px 2px;
-  }
-}
+//   .mdc-data-table__cell,
+//   .mdc-data-table__header-cell {
+//     padding: 0px 2px;
+//   }
+// }
 
-@media screen and (min-width: 768px) and (max-width: 1024px) {
+// @media screen and (min-width: 768px) and (max-width: 1024px) {
 
-  .mdc-data-table__cell,
-  .mdc-data-table__header-cell {
-    padding: 0px 2px;
-  }
-}
+//   .mdc-data-table__cell,
+//   .mdc-data-table__header-cell {
+//     padding: 0px 2px;
+//   }
+// }
 
 .action-buttons {
   display: flex;
@@ -198,42 +205,11 @@ tbody {
   // height: 43px;
 }
 
-// .action-buttons button {
-//   margin: 0;
-//   padding: 0;
-//   width: 30px;
-//   height: 30px;
-// }
-
-// ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-//   width: 30px !important;
-//   height: 30px !important;
-// }
-
-// ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-//   width: 30px !important;
-//   height: 30px !important;
-//   top: 10px;
-// }
 
 .filter-vendors {
   display: flex;
   column-gap: 5px;
 }
-
-// @media screen and (min-width: 2100px) {
-//   .submission-table-style {
-//     width: 100%;
-//     height: calc(100% - 8px);
-//     overflow: auto;
-//   }
-// }
-
-// @media screen and (min-width: 1500px) and (max-width: 2100px) {
-//   .submission-table-style {
-//     height: calc(100% - 4px);
-//   }
-// }
 
 .recruiting-companies {
   color: #f44336;
@@ -306,14 +282,6 @@ ul.breadcrumb li:last-child {
   display: block;
 }
 
-// @media screen and (min-width: 1900px) {
-//   .dom-submission-table-style {
-//     width: 100%;
-//     height: calc(100% - 8px);
-//     overflow: auto;
-//   }
-// }
-
 .consultant-id{
   cursor: pointer;
   color:#0275d8
@@ -351,22 +319,7 @@ ul.breadcrumb li:last-child {
   width: 24px;
 }
 
-// .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
-//   --mdc-icon-button-state-layer-size: 24px;
-//   width: var(--mdc-icon-button-state-layer-size);
-//   height: var(--mdc-icon-button-state-layer-size);
-//   padding: 0px !important;
-// }
 
-// ::ng-deep .action-button-ed .mat-mdc-button-touch-target {
-//   width: 24px !important;
-//   height: 24px !important;
-// }
-
-// ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
-//   width: 24px !important;
-//   height: 24px !important;
-// }
 
 .action-buttons .mat-mdc-icon-button.mat-mdc-button-base {
   --mdc-icon-button-state-layer-size: 24px;
@@ -383,4 +336,35 @@ ul.breadcrumb li:last-child {
 ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
   width: 24px !important;
   height: 24px !important;
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  padding: 0 4px 0 4px;
+  border-right: 1px solid lightgray !important;
+}
+.table-container {
+  max-height: 400px !important;      /* 👈 Must be set */
+  overflow-y: auto !important;       /* 👈 Scroll enabled */
+  display: block !important;         /* 👈 Required for sticky to work */
+}
+
+.mat-header-row,
+.mat-header-cell {
+  position: sticky !important;       /* 👈 Sticky magic */
+  top: 0 !important;                 /* 👈 Sticks to top */
+  z-index: 10 !important;            /* 👈 Above content */
+  background: white !important;      /* 👈 Required or it looks transparent */
+}
+::ng-deep .mat-header-cell {
+  position: sticky !important;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+.table-container {
+  max-height: 400px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
 }

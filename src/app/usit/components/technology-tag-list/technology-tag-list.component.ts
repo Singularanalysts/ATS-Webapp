@@ -19,6 +19,7 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
 import { TechnologyTagService } from '../../services/technology-tag.service';
 import { AddTechnologyTagComponent } from './add-technology-tag/add-technology-tag.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
+import { SkillsReportComponent } from './skills-report/skills-report.component';
 
 @Component({
   selector: 'app-technology-tag-list',
@@ -46,7 +47,7 @@ export class TechnologyTagListComponent implements OnInit {
   private snackBarServ = inject(SnackBarService);
   dataSource = new MatTableDataSource<any>([]);
 
-  dataTableColumns: string[] = ['SerialNum', 'Technology', 'Skills', 'Actions'];
+  dataTableColumns: string[] = ['SerialNum', 'Technology', 'TechnicalSkills', 'FunctionalSkills','Actions'];
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
@@ -148,7 +149,7 @@ export class TechnologyTagListComponent implements OnInit {
       actionName: 'add-technology'
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = "450px";
+    dialogConfig.width = "700px";
     dialogConfig.height = "auto";
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = "add-technology";
@@ -243,5 +244,25 @@ export class TechnologyTagListComponent implements OnInit {
         }
       }
     })
+  }
+  openskill(){
+    const actionData = {
+      title: 'Add Skills',
+    
+      actionName: 'add-technology'
+    };
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = "450px";
+    dialogConfig.height = "auto";
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = "add-skill";
+    dialogConfig.data = actionData;
+    const dialogRef = this.dialogServ.openDialogWithComponent(SkillsReportComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      if (dialogRef.componentInstance.allowAction) {
+      
+      }
+    })
+
   }
 }

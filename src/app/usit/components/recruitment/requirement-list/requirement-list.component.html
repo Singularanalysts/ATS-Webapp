@@ -8,7 +8,9 @@
     <span class="header-text"> Requirements </span>
 
     <div class="requirement-actions">
-
+      <button mat-icon-button (click)="Assignedrequirements()">
+        <mat-icon class="icon-design" style="color: #3F51B5;" >report</mat-icon>
+      </button>
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_REQUIREMENTS_DOM')" mat-icon-button class="add-user"
         *ngIf="flag=== 'Domrecruiting'" (click)="addRequirement()">
         <mat-icon [ngClass]="{

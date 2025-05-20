@@ -61,6 +61,7 @@
             Contact
             Number is required</mat-error>
         </mat-form-field>
+        
         <!-- company contact -->
         <mat-form-field appearance="fill">
           <mat-label>Company Contact Number</mat-label>
@@ -69,6 +70,8 @@
             name="companycontactnumber" id="intlInputCompany" #companycontactnumber (keypress)="onlyNumberKey($event)">
           </ngx-mat-intl-tel-input>
         </mat-form-field>
+
+        
         <!-- Joining Date -->
         <mat-form-field appearance="fill">
           <mat-label>Joining Date</mat-label>
@@ -139,6 +142,26 @@
           <input matInput formControlName="branch" maxlength="50" (input)="camelCase($event)">
           <mat-error *ngIf="employeeForm.get('branch').hasError('required')">Branch Name is required</mat-error>
         </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Select Company</mat-label>
+          <input
+            matInput
+            formControlName="cid"
+            [matAutocomplete]="companyAuto">
+            
+          <mat-autocomplete #companyAuto="matAutocomplete" [displayWith]="displayCompanyName">
+            <mat-option *ngFor="let option of companyOptions" [value]="option">
+              {{ option.companyName }}
+            </mat-option>
+          </mat-autocomplete>
+        
+          <mat-error *ngIf="employeeForm.get('cid').hasError('required')">
+            Choose Company is required
+          </mat-error>
+        </mat-form-field>
+        
+
         <!-- Designation -->
         <mat-form-field appearance="fill">
           <mat-label>Designation</mat-label>
@@ -410,7 +433,7 @@
   <!-- Bottom Action Buttons -->
   <div class="action-btns">
     <button class="btn-cancel" mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    <button mat-raised-button color="primary"  (click)="onSubmit()">Submit</button>
   </div>
 </mat-card>
 <!-- matcard ends-->

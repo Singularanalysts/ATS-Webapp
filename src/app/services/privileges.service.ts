@@ -23,17 +23,36 @@ export class PrivilegesService {
   }
 
   getAllPrivileges() {
-    return this.apiServ.get("auth/priviliges/getPrivileges/");
+    return this.apiServ.get("auth/priviliges/getPrivileges");
   }
 
-  getPrivilegesById(roleId: number) {
-    return this.apiServ.get("auth/priviliges/getPrivilegesById/" + roleId);
+  getAllPrivilegeCardsByCompany(company: any) {
+    return this.apiServ.get("auth/priviliges/getByCompany/"+company);
   }
 
-  addPrevilegeToRole(entity: any) {
-    return this.apiServ.post("auth/priviliges/addprevtorole", entity);
+  getCompanysDropDown() {
+    return this.apiServ.get("auth/company/getCompanysDropDown");
   }
 
+  getPrivilegesById(roleId: number,companyId:any) {
+    return this.apiServ.get("auth/priviliges/getPrivilegesById/" + roleId+"/"+companyId);
+  }
+
+
+  addPrevilegeToRole(entity: any ) {
+    return this.apiServ.post(`auth/priviliges/addprevtorole`, entity);
+  }
+
+  addPrevilegeToRoles(entity: any) {
+    return this.apiServ.put("auth/priviliges/update", entity);
+  }
+
+addratings(payload:any){
+  return this.apiServ.post("report/rating/saveRatings",payload)
+}
+getratingsbyId(id:any){
+  return this.apiServ.get ("report/rating/getRatingsbyid/" +id)
+}
   hasPrivilege(priv: string): boolean {
     let privilagesArr: string[] = [];
     const arr = localStorage.getItem('privileges');
@@ -42,5 +61,20 @@ export class PrivilegesService {
     }
     return privilagesArr.includes(priv);
   }
+ getRateddata(payload:any, companyId:any){
+  return this.apiServ.post(`report/rating/getRatings/${companyId}`,payload)
+ }
+ deleteRating(id:any){
+  return this.apiServ.delete("report/rating/deleteRatings/" + id)
+ }
+ getdropdownmanager(id:any, companyId: any){
+  return this.apiServ.get("report/rating/getTlsDropdown/" +id + "/" +companyId)
+ }
+ getdropdownexecutive(tlId:any){
+  return this.apiServ.get("report/rating/getExicutivesDropdown/" +tlId)
 
+ }
+ getPerformanceRatings(data:any, companyId:any){
+  return this.apiServ.get("report/rating/getBestPerformer/" + data+"/"+companyId)
+ }
 }

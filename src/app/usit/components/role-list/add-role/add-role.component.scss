@@ -1,37 +1,50 @@
-.update-role-dialog-container{
+.update-role-dialog-container {
   overflow: hidden !important;
   padding: 1rem;
-
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-
 }
-.content{
+
+.content {
   height: fit-content;
 }
-.add-role-form{
+
+.add-role-form {
   display: flex;
-  //align-items: flex-start;
+  align-items: flex-start;
   flex-direction: column;
-
-}
-.mat-form-field{
-  width: 100%;
+  gap: 1rem;
 }
 
- .actions{
+/* Apply full width to all mat-form-fields */
+.mat-form-field {
+  width: 100% !important;
+}
+
+.actions {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   gap: 16px;
-
-
 }
-::ng-deep .mat-mdc-form-field-error-wrapper{
+
+::ng-deep .mat-mdc-form-field-error-wrapper {
   padding: 0px !important;
+}
+
+.multiselect-field {
+  width: 100%; /* ✅ Ensure this field also respects 100% width */
+  margin-top: 1rem;
+}
+
+.rolename-field{
+  width: 100%;
+}
+
+.description-field{
+  width: 100%;
 }

@@ -68,7 +68,8 @@ export class LinkedprofilesComponent implements OnInit {
   };
   sortField = 'updateddate';
   sortOrder = 'desc';
-  tabs = ['All', 'USA', 'UAE'];
+  // tabs = ['All', 'USA', 'UAE'];
+  tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 

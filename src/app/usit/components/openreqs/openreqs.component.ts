@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,7 +48,7 @@ export class OpenreqsComponent implements OnInit {
     'SerialNum',
     'posted_on',
     'job_title',
-    'category_skill',
+    // 'category_skill',
     'employment_type',
     'job_location',
     'vendor',
@@ -56,6 +56,8 @@ export class OpenreqsComponent implements OnInit {
     'Comments',
     // 'Matching',
     'source',
+    'ResumeUpload',
+    'Percentage'
   ];
   // pagination code
   page: number = 1;
@@ -71,7 +73,8 @@ export class OpenreqsComponent implements OnInit {
   pageSizeOptions = [50, 75, 100];
   isCompanyExist: any;
   source = 'all';
-  tabs = ['All', 'USA', 'UAE'];
+  // tabs = ['All', 'USA', 'UAE'];
+  tabs = ['USA'];
   status = 'all';
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 
@@ -121,6 +124,7 @@ export class OpenreqsComponent implements OnInit {
   };
   consultantData: any[] = [];
   searchText: string = '';
+  selectedElement: any;
 
   constructor() {
     this.currentOptions = this.tabOptions['All'];
@@ -303,5 +307,80 @@ export class OpenreqsComponent implements OnInit {
       }
     })
   }
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
+  selectedFile: File | null = null;
+  percentage: number | null = null; // Store percentage value
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  clearFile() {
+    console.log('clearrrrrr')
+    this.selectedFile = null;
+    this.percentage = null; // Reset percentage
+    this.fileInput.nativeElement.value = ''; // Reset file input
+  }
   
+  @ViewChild('fileInputdata') fileInputdata!: ElementRef;
+
+//   triggerFileUpload(element: any): void {
+//   // Store the selected element (requirement)
+//   this.selectedElement = element;
+//   this.fileInputdata.nativeElement.click(); // trigger hidden input
+// }
+
+// onFileSelectedata(event: any, element: any): void {
+//   const file = event.target.files[0];
+//   if (!file) return;
+
+//   const formData = new FormData();
+//   formData.append('resume', file); // field name 'resume' should match backend
+//   formData.append('requirementId', element.id); // assuming 'id' is requirement ID
+
+//   this.service.ResumeUpload(formData).subscribe({
+//     next: (res: any) => {
+//       // Assuming response contains 'percentage'
+//       element.percentage = res?.data || '100';
+//     },
+//     error: (err) => {
+//       console.error('Upload failed', err);
+//     }
+//   });
+
+//   // Reset file input
+//   event.target.value = null;
+// }
+
+  
+
+triggerFileUpload(fileInput: HTMLInputElement): void {
+  fileInput.click(); // now specific to the clicked row
+}
+
+onFileSelectedata(event: any, element: any): void {
+  const file = event.target.files[0];
+  const userId = String(localStorage.getItem('userid'));
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('resume', file);
+  formData.append('requirementId', element.id); // now correct ID
+  formData.append('userId',userId); 
+
+  this.service.ResumeUpload(formData).subscribe({
+    next: (res: any) => {
+      element.percentage = res?.data || '100';
+    },
+    error: (err) => {
+      console.error('Upload failed', err);
+    }
+  });
+
+  event.target.value = null;
+}
+
 }

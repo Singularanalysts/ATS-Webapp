@@ -19,7 +19,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ConfirmComponent } from 'src/app/dialogs/confirm/confirm.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
 import { DialogService } from 'src/app/services/dialog.service';
@@ -32,6 +32,8 @@ import {
 import { SubmissionService } from 'src/app/usit/services/submission.service';
 import { AddSubmissionComponent } from './add-submission/add-submission.component';
 import { SubmissionRequirementInfoComponent } from './submission-requirement-info/submission-requirement-info.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SubmissionDeleteComponent } from '../submission-delete/submission-delete.component';
 
 @Component({
   selector: 'app-submission-list',
@@ -42,6 +44,7 @@ import { SubmissionRequirementInfoComponent } from './submission-requirement-inf
     MatCardModule,
     MatInputModule,
     MatFormFieldModule,
+    ReactiveFormsModule,
     MatSortModule,
     MatPaginatorModule,
     CommonModule,
@@ -58,10 +61,10 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     'Dos',
     'Id',
     'Consultant',
-    'Requirement',
+    'Position',
+    'Vendor',
     'ImplementationPartner',
     'EndClient',
-    'Vendor',
     'SubRate',
     'ProjectLocation',
     'SubmittedBy',
@@ -106,6 +109,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
   userid: any;
   page: number = 1;
+  filterForm!: FormGroup;
 
   ngOnInit(): void {
 
@@ -125,16 +129,33 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     this.hasAcces = localStorage.getItem('role');
     this.userid = localStorage.getItem('userid');
     this.getAllData();
+    this.filterForm = this.fb.group({
+      position: [''],
+      location: ['']
+    });
 
+    // Trigger API on user typing
+    this.filterForm.valueChanges
+      .pipe(
+        debounceTime(300),          // wait 300ms after typing stops
+        distinctUntilChanged()      // only trigger if value actually changes
+      )
+      .subscribe(() => {
+        this.getfiltersubmission();
+      });
 
   }
+  constructor(private fb: FormBuilder ) {}
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
   subFlag!:any;
   getFlag(){
+    
     const routeData = this.activatedRoute.snapshot.data;
+    console.log(routeData,'routeData');
+
     if (routeData['isSalesSubmission']) {
       this.flag = "Sales";
       this.subFlag = 'sales-submission';
@@ -150,7 +171,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   getAllData(pageIndex = 1 ) {
     this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, pageIndex, this.pageSize, this.field,
       this.sortField,
-      this.sortOrder).subscribe(
+      this.sortOrder, localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.entity = response.data.content;
         this.dataSource.data =  response.data.content;
@@ -172,7 +193,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     if (keyword != '') {
       return this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
         this.sortField,
-        this.sortOrder).subscribe(
+        this.sortOrder, localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.totalItems = response.data.totalElements;
@@ -193,6 +214,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
+
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -200,9 +222,19 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     
       this.sortOrder = event.direction;
     
+   if(this.getfilterSubmissions){
+    
+
     if (event.direction != ''){
-    this.getAllData();
-    }
+      this.getfiltersubmission();
+      }
+
+   }else{
+
+    if (event.direction != ''){
+      this.getAllData();
+      }
+   }
   }
 
   goToSubmissionInfo(element: any, flag: any) {
@@ -213,6 +245,49 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
   }
 
+  getfilterSubmissions!:boolean;
+
+ 
+  getfiltersubmission(pageIndex=this.page): void {
+    this.getfilterSubmissions=true;
+    const position = this.filterForm.get('position')?.value?.trim();
+    const location = this.filterForm.get('location')?.value?.trim();
+  
+    // If both filters are empty, load all data
+    if (!position && !location) {
+      this.getAllData(this.page);
+      return;
+    }
+  
+    const payload = {
+
+      position: position,
+      location: location,
+      pageNumber: pageIndex,
+      pageSize: this.pageSize,
+      sortField: this.sortField,
+      sortOrder:  this.sortOrder,
+      flag: this.flag
+    };
+
+    this.submissionServ.filterSubmission(payload,localStorage.getItem('companyid')).subscribe({
+      next: (res: any) => {
+        this.entity = res.data.content;
+        this.dataSource.data = res.data.content;
+        this.totalItems = res.data.totalElements;
+  
+        // Serial numbers
+        this.dataSource.data.map((x: any, i) => {
+          x.serialNum = this.generateSerialNumber(i);
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching filtered submissions:', err);
+      }
+    });
+  }
+  
+  
   addSubmission() {
     const actionData = {
       title: 'Add Submission',
@@ -264,21 +339,23 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
       actionData: submission,
     };
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = 'fit-content';
+    dialogConfig.width = '500px';
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = false;
     dialogConfig.panelClass = 'delete-submission';
     dialogConfig.data = dataToBeSentToDailog;
     const dialogRef = this.dialogServ.openDialogWithComponent(
-      ConfirmComponent,
+      SubmissionDeleteComponent,
       dialogConfig
     );
 
     // call delete api after  clicked 'Yes' on dialog click
 
     dialogRef.afterClosed().subscribe({
-      next: (resp) => {
+      next: (remarks: string) => {
         if (dialogRef.componentInstance.allowAction) {
+          const userId = localStorage.getItem('userid') || '';
+
           const dataToBeSentToSnackBar: ISnackBarData = {
             message: '',
             duration: 1500,
@@ -288,7 +365,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
             panelClass: ['custom-snack-success'],
           };
 
-          this.submissionServ.deletesubmission(submission.submissionid).pipe(takeUntil(this.destroyed$))
+          this.submissionServ.deletesubmission(submission.submissionid,remarks,userId).pipe(takeUntil(this.destroyed$))
           .subscribe({next:(response: any) => {
             if (response.status == 'Success') {
               this.getAllData();
@@ -320,11 +397,23 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     return serialNumber;
   }
   handlePageEvent(event: PageEvent) {
-    if (event) {
-      this.pageEvent = event;
-      this.currentPageIndex = event.pageIndex;
-      this.getAllData(event.pageIndex + 1)
+
+    if(this.getfilterSubmissions){
+      if (event) {
+        this.pageEvent = event;
+        this.currentPageIndex = event.pageIndex;
+        this.getfiltersubmission(event.pageIndex + 1)
+      }
+
+    }else{
+      if (event) {
+        this.pageEvent = event;
+        this.currentPageIndex = event.pageIndex;
+        this.getAllData(event.pageIndex + 1)
+      }
+
     }
+   
     return;
   }
 
@@ -372,7 +461,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
 
   goToReqInfo(element: any) {
     const actionData = {
-      title: `${element.reqnumber}`,
+      title: `${element.subno}`,
       id: element.reqid,
       actionName: 'sub-req-info',
     };
@@ -392,5 +481,6 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     // Use regular expression to replace non-numeric characters with an empty string
     return value.replace(/[^0-9]/g, '');
   }
-  
+ 
 }
+

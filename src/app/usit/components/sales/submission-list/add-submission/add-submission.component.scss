@@ -253,3 +253,12 @@ mat-mdc-menu-content{
 .intl-input{
   opacity: 1;
 }
+.custom-snack-failure {
+  background-color: #f44336 !important; /* Red color */
+  color: white !important;
+}
+.custom-snack-success{
+  background-color: green !important;
+  color: white !important;
+
+}

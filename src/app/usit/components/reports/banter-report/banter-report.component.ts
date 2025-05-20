@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
@@ -16,7 +16,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ReportsService } from 'src/app/usit/services/reports.service';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import {
+  map,
   Observable,
+  startWith,
 } from 'rxjs';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
@@ -115,28 +117,67 @@ export class BanterReportComponent {
   payload: any;
   departmentSelected: boolean = false;
 
+  // ngOnInit() {
+  //   this.department = localStorage.getItem('department');
+  //   this.sourcingreport = this.formBuilder.group({
+  //     startDate: ['', Validators.required],
+  //     endDate: ['', Validators.required],
+  //     groupby: ['', Validators.required],
+  //     employee: [],
+  //   });
+    
+  // }
+  employeeSearchControl = new FormControl('');
+  filteredEmployees: any[] = [];
   ngOnInit() {
-    this.department = localStorage.getItem('department');
     this.sourcingreport = this.formBuilder.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       groupby: ['', Validators.required],
       employee: [],
     });
+
+    this.employeeSearchControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this.filterEmployees(value || ''))
+    ).subscribe(filtered => {
+      this.filteredEmployees = filtered;
+    });
   }
 
   onDepartmentChange(department: any): void {
-    this.departmentSelected = true;
     this.sourcingreport.get('employee')?.reset();
     this.sourcingreport.get('employee')?.enable();
-    
+
     if (department) {
-      this.service.getEmployeeByDeparment(department.value).subscribe((res: any) => {
+      this.service.getEmployeeByDeparment(department.value,localStorage.getItem('companyid')).subscribe((res: any) => {
         this.employees = res.data;
-      })
+        this.filteredEmployees = res.data; 
+      });
     }
   }
 
+  private filterEmployees(value: string): any[] {
+    if (!this.employees || this.employees.length === 0) {
+      return [];
+    }
+  
+    const filterValue = typeof value === 'string' ? value.toLowerCase() : '';
+  
+    return this.employees.filter((employee: string[]) => 
+      employee[1].toLowerCase().includes(filterValue)
+    );
+  }
+  
+  
+  onEmployeeSelected(event: any) {
+    const selectedEmployee = event.option.value;
+    
+    this.sourcingreport.get('employee')?.setValue(selectedEmployee[0]);
+  
+    this.employeeSearchControl.setValue(selectedEmployee[1]);  
+  }
+  
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
@@ -174,7 +215,7 @@ export class BanterReportComponent {
       id: empid
     };
 
-    this.service.getBanterReport(this.payload).subscribe((res: any) => {
+    this.service.getBanterReport(this.payload,localStorage.getItem('companyid')).subscribe((res: any) => {
       this.c_data = res.data;
       this.dataSource.data = res.data;
       this.dataSource.data.map((x: any, i) => {
@@ -216,6 +257,8 @@ export class BanterReportComponent {
 
   reset() {
     this.sourcingreport.reset();
+    this.employeeSearchControl.setValue(''); 
+
   }
 
   navigateToDashboard() {

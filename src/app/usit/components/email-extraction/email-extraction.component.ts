@@ -8,7 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
-import { MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EmailBodyComponent } from './email-body/email-body.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddEmailExtractionComponent } from './add-email-extraction/add-email-extraction.component';
@@ -22,6 +22,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatMenuModule } from '@angular/material/menu';
 import { EmailsDeleteConfirmComponent } from 'src/app/dialogs/emails-delete-confirm/emails-delete-confirm.component';
+import { UnBlockingEmailsComponent } from 'src/app/dialogs/un-blocking-emails/un-blocking-emails.component';
 
 @Component({
   selector: 'app-email-extraction',
@@ -43,8 +44,10 @@ import { EmailsDeleteConfirmComponent } from 'src/app/dialogs/emails-delete-conf
   styleUrls: ['./email-extraction.component.scss']
 })
 export class EmailExtractionComponent implements OnInit {
+
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
+  //  'stared',
     'select',
     'SerialNum',
     'To',
@@ -69,8 +72,11 @@ export class EmailExtractionComponent implements OnInit {
   itemsPerPage = 50;
   totalItems: number = 0;
   field = 'empty';
+  payload: any;
   private router = inject(Router);
   userid!: any;
+  showBlockMails=true;
+
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -83,15 +89,22 @@ export class EmailExtractionComponent implements OnInit {
 
   entity: any;
   private dialogServ = inject(DialogService);
+  private dialog = inject(MatDialog);
   protected privilegeServ = inject(PrivilegesService);
   selection = new SelectionModel<any>(true, []);
   showDeleteButton = false;
   showBlockButton = false;
   role!: string | null;
+  blockedEmails: any; // Initialize as an empty array
+  blockedEmailss: any=[];
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.role = localStorage.getItem('role');
+    this.getAll();
+  }
+
+  refresh() {
     this.getAll();
   }
 
@@ -183,6 +196,7 @@ export class EmailExtractionComponent implements OnInit {
   navigateBack() {
     this.router.navigate(['/usit/email-configuration']);
   }
+ 
   processEmailsForKeys(obj: any, keys: string[]) {
     keys.forEach(key => {
       if (obj[key]) {
@@ -386,17 +400,119 @@ export class EmailExtractionComponent implements OnInit {
       },
     });
   }
-  // blockEmail(): void {
-  //   if (this.selection.selected.length === 1) {
-  //     const selectedEmail = this.selection.selected[0];  // Get the selected email
-  //     alert(JSON.stringify(selectedEmail));
-  //     console.log((JSON.stringify(selectedEmail)));
-  //     // Here you can call the actual block email API integration once it's ready
-  //   } else {
-  //     // If no email or multiple emails are selected, you can show a message or do nothing
-  //     alert('Please select exactly one email to block.');
-  //   }
-  // }
+  blockEmail(): void{
+    if (this.selection.selected.length === 1) {
+
+      const dataToBeSentToDialog: Partial<IConfirmDialogData> = {
+        title: 'Confirmation',
+        message: 'Are you sure you want to block the selected email?',
+        confirmText: 'Yes',
+        cancelText: 'No',
+      };
+
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "400px";
+      dialogConfig.height = "auto";
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = "delete-confirmation";
+      dialogConfig.data = dataToBeSentToDialog;
+    
+      const dialogRef = this.dialogServ.openDialogWithComponent(EmailsDeleteConfirmComponent, dialogConfig);
+
+      const selectedEmail = this.selection.selected[0];  // Get the selected email
+      this.payload = {
+        userid : this.userid ,
+        email: this.removeQuotes(selectedEmail.sender)
+      };
+
+      dialogRef.afterClosed().subscribe({
+        next: () => {
+          if (dialogRef.componentInstance.allowAction) {
+            
+            this.service.blockVendorMail(this.payload).subscribe({
+              next: (response: any) => {
+            if (response.status === 'Success') {
+            this.selection.clear();
+           this.showDeleteButton=false;
+           this.showBlockButton=false;
+            this.getAll();
+            this.dataToBeSentToSnackBar.message = "Mail Blocked Successfully";
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          }
+         else if (response.status === 'Saving failed') {
+            this.selection.clear();
+           this.showDeleteButton=false;
+           this.showBlockButton=false;
+            this.getAll();
+            this.dataToBeSentToSnackBar.message = "Already This mail got blocked";
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataToBeSentToSnackBar
+            );
+          }
+              },
+              error: (error: any) => {
+                this.dataToBeSentToSnackBar.message = error.message || 'Failed to block email';
+                this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+                this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+              }
+            });
+          }
+        },
+        error: (err: any) => {
+          console.error('Dialog closed with error:', err);
+        }
+      });
+
+      //  this.service.blockVendorMail(this.payload).subscribe({
+      //   next: (response: any) => {
+      //     if (response.status === 'Success') {
+      //       this.selection.clear();
+      //      this.showDeleteButton=false;
+      //      this.showBlockButton=false;
+      //       this.getAll();
+      //       this.dataToBeSentToSnackBar.message = "Mail Blocked Successfully";
+      //       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+      //       this.snackBarServ.openSnackBarFromComponent(
+      //         this.dataToBeSentToSnackBar
+      //       );
+      //     } else if (response.status === 'Failed') {
+      //       this.dataToBeSentToSnackBar.message = response.message;
+      //       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      //       this.snackBarServ.openSnackBarFromComponent(
+      //         this.dataToBeSentToSnackBar
+      //       );
+      //     } else {
+      //       this.dataToBeSentToSnackBar.message = response.message;
+      //       this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      //       this.snackBarServ.openSnackBarFromComponent(
+      //         this.dataToBeSentToSnackBar
+      //       );
+      //     }
+      //   },
+      //   error: (err: any) => {
+      //     this.dataToBeSentToSnackBar.message = err.message;
+      //     this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      //     this.snackBarServ.openSnackBarFromComponent(
+      //       this.dataToBeSentToSnackBar
+      //     );
+      //   },
+      // });
+    } else {
+      // If no email or multiple emails are selected, you can show a message or do nothing
+      alert('Please select exactly one email to block.');
+    }
+  }
+
+  removeQuotes(str: string): string {
+    if (str.startsWith('"') && str.endsWith('"')) {
+      return str.slice(1, -1);
+    }
+    return str;
+  }
 
   // bulkDelete(): void {
   //   const selectedEmails = this.selection.selected;
@@ -481,4 +597,83 @@ export class EmailExtractionComponent implements OnInit {
     });
   }
   
+  unblockEmail() {
+    this.service.blockedEmailsList(this.userid).subscribe({
+      next: (response: any) => {
+  
+        // Store the response data properly
+        this.blockedEmails = response.data;
+        const attachments = response.data;
+        // Format & Alert the response in a readable way
+  
+        // alert(`Blocked Emails:\n${formattedResponse}`);
+
+        // Configure the dialog with the fetched data
+        const dialogConfig = {
+          width: '600px',
+          data: { attachments } // Pass the fetched attachments to the dialog
+        };
+
+        // Open the dialog with the attachments data
+        this.dialog.open(UnBlockingEmailsComponent, dialogConfig);
+
+      },
+      error: (error: any) => {
+      
+      }
+    });
+  }
+
+  unblockEmails(id:any) {
+
+  const dataToBeSentToDialog: Partial<IConfirmDialogData> = {
+    title: 'Confirmation',
+    message: 'Are you sure you want to Un-block the selected email?',
+    confirmText: 'Yes',
+    cancelText: 'No',
+  };
+
+  const dialogConfig = new MatDialogConfig();
+  dialogConfig.width = "400px";
+  dialogConfig.height = "auto";
+  dialogConfig.disableClose = false;
+  dialogConfig.panelClass = "delete-confirmation";
+  dialogConfig.data = dataToBeSentToDialog;
+
+  const dialogRef = this.dialogServ.openDialogWithComponent(EmailsDeleteConfirmComponent, dialogConfig);
+
+  dialogRef.afterClosed().subscribe({
+    next: () => {
+      if (dialogRef.componentInstance.allowAction) {
+        
+        this.service.unblockingEmailWithId(id).subscribe({
+          next: (response: any) => {
+        if (response.status === 'Success') {
+        this.selection.clear();
+       this.showDeleteButton=false;
+       this.showBlockButton=false;
+        this.getAll();
+        this.dataToBeSentToSnackBar.message = "Mail Un-Blocked Successfully";
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataToBeSentToSnackBar
+        );
+      }
+          },
+          error: (error: any) => {
+            this.dataToBeSentToSnackBar.message = error.message || 'Failed to block email';
+            this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+            this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+          }
+        });
+      }
+    },
+    error: (err: any) => {
+      console.error('Dialog closed with error:', err);
+    }
+  });
+  
+  }
+  
+
 }

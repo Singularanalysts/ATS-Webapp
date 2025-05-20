@@ -9,72 +9,88 @@
       Consultants
     </span>
     <form [formGroup]="myForm">
-      <div class="consultant-actions">
-        <!-- <button mat-icon-button class="add-user" (click)="uploadVendor()">
-        <mat-icon class="item-icon">upload</mat-icon>
-      </button> -->
-        <div class="form-container">
-          <ng-container *ngIf="flag !== 'presales'  && flag !== 'DomRecruiting'">
-            <mat-form-field appearance="fill" style="width:8rem;margin-left:6rem;">
-              <mat-label class="bold-label">Visa</mat-label>
-              <mat-select formControlName="visa" (selectionChange)="onExperienceChange($event)">
-                <mat-option *ngFor="let option of visadata" [value]="option[0]">
-                  {{ option[1] }}
+      <div class="consultant-actions" >
+
+  <button type="search" mat-raised-button color="accent" class="btn-spacing" (click)="handleExport()" *ngIf="flag === 'Recruiting' && privilegeServ.hasPrivilege('REQ_CON_EXPORT')">Export</button>
+<!-- 
+        <button type="search" mat-raised-button color="primary" (click)="refreshForm()"
+          *ngIf="flag !== 'presales'"  style="margin-left: 4px;" >Refresh</button> -->
+     
+        
+
+          <div class="form-container" style="border-radius:30px">
+            <ng-container *ngIf="flag !== 'presales'  && flag !== 'DomRecruiting'">
+              <mat-form-field class="custom-mat-select visa  dropdownvisa ">
+                <mat-label>Visa</mat-label> <!-- ✅ Added mat-label -->
+                <mat-select formControlName="visa" multiple (selectionChange)="onVisaChange($event)" class="visa-select">
+                  <mat-option *ngFor="let option of visadata" [value]="option[0]">
+                    <mat-checkbox [checked]="selectedVisaOptions.has(option[0])">
+                      {{ option[1] }}
+                    </mat-checkbox>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+  
+            </ng-container>
+          </div>
+          <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting' && flag !== 'DomRecruiting'">
+            <mat-form-field class="custom-mat-select experience dropdownpriority">
+              <mat-label>Priority</mat-label>
+              <mat-select formControlName="priority" multiple (selectionChange)="onPriorityChange($event)">
+                <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
+                  <mat-checkbox [checked]="selectedPriorityOptions.has(option.code)">
+                    {{ option.code }}
+                  </mat-checkbox>
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            
           </ng-container>
-        </div>
-        <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting' && flag !== 'DomRecruiting'">
-          <mat-form-field appearance="fill" style="margin-top:1rem;margin-right:3rem;width:8rem;">
-            <mat-label class="bold-label">Priority</mat-label>
-            <!--<mat-select formControlName="priority"(selectionChange)="onPriority($event.value)">-->
-            <mat-select formControlName="priority" (selectionChange)="onExperienceChange($event)">
-              <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
-                {{option.code}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-        <div>
-          <ng-container *ngIf="flag !== 'presales' ">
-            <mat-form-field appearance="fill" style="margin-top: 1rem;margin-right:25rem;width: 10rem;">
-              <mat-label class="bold-label">Experience</mat-label>
-              <mat-select formControlName="experience" (selectionChange)="onExperienceChange($event)">
-                <mat-option *ngFor="let exp of experiences" [value]="exp">{{ exp }}</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </ng-container>
-        </div>
-        <button type="button" mat-raised-button color="primary" (click)="refreshForm()"
-          *ngIf="flag !== 'presales'">Refresh</button>
-      
-        <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')"  *ngIf="flag === 'sales'" mat-icon-button class="add-user"
-          (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
-          <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')}">add_circle</mat-icon>
-        </button>
-
-        <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_RECRUITING')"  *ngIf="flag === 'Recruiting'" mat-icon-button class="add-user"
-          (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
-          <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_RECRUITING')}">add_circle</mat-icon>
-        </button>
-
-        <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_DOM')"  *ngIf="flag === 'DomRecruiting'" mat-icon-button class="add-user"
-        (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
-        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_DOM')}">add_circle</mat-icon>
-      </button>
-
-      <button [disabled]="!privilegeServ.hasPrivilege('ADD_PRESALES')"  *ngIf="flag === 'presales'" mat-icon-button class="add-user"
-      (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
-      <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_PRESALES')}">add_circle</mat-icon>
-    </button>
-
-
-
+        
+          <div>
+            <ng-container *ngIf="flag !== 'presales'">
+              <mat-form-field class="custom-mat-select experience dropdownexperience">
+                <mat-label>Experience</mat-label> <!-- Added mat-label -->
+                <mat-select formControlName="experience" multiple (selectionChange)="onExperienceChange($event)">
+                  <mat-option *ngFor="let exp of experiences" [value]="exp">
+                    <mat-checkbox [checked]="selectedExperienceOptions.has(exp)">
+                      {{ exp }}
+                    </mat-checkbox>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+            
+          </div>
+       
         <div class="search-consultant">
+          <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position" style="" class="search" placeholder="Search Position" (keyup)="ondataChange($event)">
+          <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" (keyup)="ondataChange($event)" >
           <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
           <input matInput type="search" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
         </div>
+        <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')"  *ngIf="flag === 'sales'" mat-icon-button class="add-user"
+        (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
+        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')}">add_circle</mat-icon>
+      </button>
+
+      <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_RECRUITING')"  *ngIf="flag === 'Recruiting'" mat-icon-button class="add-user"
+        (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
+        <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_RECRUITING')}">add_circle</mat-icon>
+      </button>
+
+      <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_DOM')"  *ngIf="flag === 'DomRecruiting'" mat-icon-button class="add-user"
+      (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
+      <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_CONSULTANT_DOM')}">add_circle</mat-icon>
+    </button>
+
+    <button [disabled]="!privilegeServ.hasPrivilege('ADD_PRESALES')"  *ngIf="flag === 'presales'" mat-icon-button class="add-user"
+    (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">
+    <mat-icon [ngClass]="{'item-icon': privilegeServ.hasPrivilege('ADD_PRESALES')}">add_circle</mat-icon>
+  </button>   
+    <button mat-icon-button   *ngIf="flag !== 'presales'" color="primary"  (click)="refreshForm()">
+    <mat-icon>refresh</mat-icon>
+  </button>
       </div>
     </form>
   </div>
@@ -168,9 +184,9 @@
 
         <!-- Exp Column -->
         <ng-container matColumnDef="Experience">
-          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience" mat-sort-header style="width: 3%;"> Experience
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Experience" mat-sort-header style="width: 1%;"> Exp
           </th>
-          <td mat-cell *matCellDef="let element" class="text-align" style="width: 3%;"> {{element.experience}} </td>
+          <td mat-cell *matCellDef="let element" class="text-align" style="width: 1%;"> {{element.experience}} </td>
         </ng-container>
 
         <!-- Relocation Column -->
@@ -209,6 +225,14 @@
           <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
         </ng-container>
 
+        <!-- Priority Column -->
+        <ng-container matColumnDef="AssignTo" *ngIf="(flag.toLocaleLowerCase() == 'sales')">
+          <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by AssignTo" mat-sort-header >Assign To </th>
+          <td mat-cell *matCellDef="let element"> {{element.assignto}} </td>
+        </ng-container>
+
+
+        
         <!-- Status Column -->
         <ng-container matColumnDef="Status">
           <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Status" mat-sort-header> Status </th>

@@ -144,8 +144,12 @@ ul.breadcrumb li a:hover {
 .table-container {
   // padding-top: 10px;
   flex: 1;
-}
+  min-height: 400px; /* Adjust based on your layout */
 
+}
+.table-data{
+  min-height: 560px !important;
+}
 .table-container-dice {
   padding-top: 10px;
   flex: 1;
@@ -215,7 +219,7 @@ ul.breadcrumb li a:hover {
 }
 
 .sourcing-card {
-  padding-bottom: 10px;
+  padding-bottom: 24px;
 }
 
 .sourcing-card .card {
@@ -300,13 +304,13 @@ mat-typography p {
 }
 
 .mat-mdc-card.activity-card-individual {
-  height: 548px;
-  padding: 15px;
+  height: 389px;
+  padding: 20px;
   overflow-y: auto;
 }
 
 .mat-mdc-card.activity-card {
-  height: 678px;
+  height: 710px;
   padding: 15px;
   overflow-y: auto;
 }
@@ -327,6 +331,11 @@ a .name {
   flex-direction: row;
   padding-bottom: 5px;
   justify-content: space-between;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #fff;
+  transition: 0.3s ease-in-out;
 }
 
 .activity .activity-content {
@@ -475,8 +484,251 @@ b {
 }
 
 .mat-mdc-card.activity-card {
-  height: 760px;
+  height: 598px;
   padding: 15px;
   overflow-y: auto;
 }
+.ratingcontent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  padding-bottom: 4px !important;
+  width: 100%;
+}
 
+.rating-layout {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap; /* Allow wrapping */
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  bottom: 14px !important;
+}
+
+.rating-icon {
+  font-size: 43px;
+  background: #d2f7d9;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  color: #3cdf86;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 72px;
+  height: 72px;
+  min-width: 64px;
+  min-height: 64px;
+  margin-left: 10px;
+}
+
+.rating-details {
+  text-align: left;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stars {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ratingstar {
+  color: #FDCC0D;
+  font-size: 24px;
+  margin-right: 3px;
+}
+
+.rating-value {
+  font-size: 19px;
+  font-weight: bold;
+  margin-left: 18px;
+}
+
+.ratingname {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.87);
+  margin-bottom: 2px;
+  font-size: 17px;
+  text-align: center;
+}
+
+.best-performer-text {
+  font-size: 12px;
+  font-weight: bold;
+  color: #161616;
+  background-color: #74e1b8;
+  padding: 6px 4px;
+  border-radius: 12px;
+  display: inline-block;
+  text-align: center;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  margin-right: 7px;
+  position: relative;
+  bottom: 8px !important;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px; 
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.header-title mat-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.header-title mat-card-title span {
+  font-weight: normal;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .rating-layout {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .rating-details {
+    text-align: center;
+  }
+
+  .rating-container {
+    justify-content: center;
+  }
+
+  .ratingname {
+    font-size: 14px;
+  }
+
+  .rating-value {
+    font-size: 16px;
+  }
+
+  .rating-icon {
+    margin-left: 0;
+  }
+}
+
+
+
+.icon-design{
+  color: #3f51b5 !important; /* Danger color for delete icon */
+  font-size: 24px !important; 
+}
+.load-more-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.custom-pagination {
+  position: sticky;
+  bottom: 0;
+  right: 20px; 
+  background: white;
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  justify-content: flex-end; 
+}
+
+.custom-pagination button {
+  border: none;
+  background: #0D6EFD;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 10px; 
+  margin: 0;
+  border-radius: 4px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px; 
+  height: 30px; 
+}
+
+.custom-pagination button.active {
+  font-weight: bold;
+  background: #0056b3; 
+}
+
+.custom-pagination mat-icon {
+  font-size: 20px;
+  color: white;
+  width: 20px;
+  height: 20px;
+}
+.vms {
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.4); 
+}
+
+.sub-sales {
+  box-shadow: 0px 4px 10px rgba(40, 167, 69, 0.4); 
+}
+
+.sub-recruiting {
+  box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.4); 
+}
+
+.sub-domrecruiting {
+  box-shadow: 0px 4px 10px rgba(220, 53, 69, 0.4); 
+}
+
+.submission {
+  box-shadow: 0px 4px 10px rgba(108, 117, 125, 0.4); 
+}
+
+.interview {
+  box-shadow: 0px 4px 10px rgba(102, 16, 242, 0.4);
+}
+// .paginatorrecent {
+//   position: sticky;
+//   bottom: 0;
+//   width: 100%;
+//   background: white;
+//   display: flex;
+//   justify-content: flex-end; /* Aligns content to the right */
+//   align-items: center;
+//   padding: 10px;
+//   border-top: 1px solid #ddd;
+// }
+
+.sticky-activity {
+  position: sticky !important;
+  top: 0;
+  background-color: white; /* Ensures it stays white */
+  z-index: 1000; /* Keeps it above other elements */
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Adds a subtle separator */
+  top: -21px;
+}
+.deletestatus{
+  color: red;
+  padding: 6px;
+  font-weight: 600;
+}

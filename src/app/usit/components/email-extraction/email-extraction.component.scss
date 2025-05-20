@@ -56,11 +56,10 @@ tbody {
 .settings-icon {
   cursor: pointer;
   font-size: 24px; /* Adjust size if needed */
-  color: #007bff; /* Change color if needed */
+  color: #3f51b5; /* Change color if needed */
 }
-.settings-icon:hover {
-  color: #0056b3; /* Darker shade on hover */
-}
+
+
 
 .mat-sort-header-arrow {
   color: #1a1717;
@@ -295,3 +294,103 @@ ul.breadcrumb li:last-child {
   cursor: pointer;
 }
 
+button {
+  position: relative;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position the tooltip above the button */
+  left: 50%;
+  margin-left: -60px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+button:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.blacked-mails-list {
+  margin: 10em;
+}
+
+.button-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between button and menu */
+}
+
+////////////////////////////////////////////////////////////////////
+
+.blacked-mails-list {
+  margin: 15em;
+}
+
+.blocked-mails-menu {
+  width: 300px;  /* Set menu width */
+  padding: 10px;
+}
+
+.menu-content {
+  background: rgb(247, 244, 244);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(241, 239, 239, 0.884);
+  color: rgb(15, 15, 15);
+  width: 200px;
+  
+}
+
+/* Flexbox to align email text and button side by side */
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid black;
+}
+
+/* Adjust button size */
+.menu-item button {
+  font-size: 2px;
+  padding: 4px 8px;
+  color: white;
+  background-color: rgb(185, 35, 35);
+  border-radius: 10px;
+}
+
+.mat-mdc-button .mat-mdc-button-touch-target{
+  font-size: 0px;
+}
+.icondesign{
+  color: #3f51b5;
+}
+.button-menu-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust spacing between buttons */
+}
+
+
+
+.icon-design{
+  color: #3f51b5 !important; /* Danger color for delete icon */
+  font-size: 24px !important; /* Ensures all icons are the same size */
+}
+.delete-button {
+  color: #d32f2f !important; /* Danger color for delete icon */
+  font-size: 24px !important; /* Ensures all icons are the same size */
+}

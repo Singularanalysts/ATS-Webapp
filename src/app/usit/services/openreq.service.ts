@@ -1,4 +1,6 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 
 @Injectable({
@@ -62,6 +64,9 @@ export class OpenreqService {
   getOpenReqsById(id:number) {
     return this.http.get("openreqs/dice/getByReqId/"+id);
   }
+  getreportemail(id:any){
+    return this.http.get("mail/getEmailExtractionReport/"+id)
+  }
 
   getOpenFulltimeReqsById(id:number) {
     return this.http.get("openreqs/dice/getByFulltimeReqId/"+id);
@@ -69,6 +74,10 @@ export class OpenreqService {
 
   emailEXtractionByPaginationSortandFilter(data: any) {
     return this.http.post("mail/read", data);
+  }
+
+  blockVendorMail(data: any) {
+    return this.http.post("mail/saveBlockedDomains", data);
   }
 
   getConsultantOpenReqsByPaginationSortandFilter(data: any) {
@@ -114,14 +123,15 @@ export class OpenreqService {
   extractEmails(data: any) {
     return this.http.post("mail/fetch", data);
   }
-  callTheStatus(email : string){
-    return this.http.get("mail/status"+`/${email}`)
-  }
+  // callTheStatus(email : string){
+  //   return this.http.get("mail/status"+`/${email}`)
+  // }
   stopTheExtraction(id : any){
     return this.http.get("mail/stop"+`/${id}`);
   }
   showBody(id : string){
-    return this.http.get("mail/body"+`/${id}`);
+    // return this.http.get("mail/body"+`/${id}`);
+    return this.http.get(`mail/body/${id}`);
   }
   saveConfiguredEmail(data: any) {
     return this.http.post("mail/emailcredentials/save", data);
@@ -178,5 +188,42 @@ export class OpenreqService {
   jobComments(reqId: number) {
     return this.http.get(`openreqs/dice/getComment/${reqId}`);
   }
+
+  blockedEmailsList(id:number) {
+    return this.http.get("mail/getBlockedDomains/"+id);
+  }
+
+  unblockingEmailWithId(id:any) {
+    return this.http.post("mail/unblockEmails",id);
+  }
+
+  blockedEmailsLists() {
+    return this.http.get("auth/users/getAllActiveUsersEmails");
+  }
+assignedrequirements(payload:any){
+  return this.http.post("requirement/getAssignedRequirementUsers",payload);
+
+
+}
+Requirementsreport(payload:any){
+  return this.http.post("requirement/getAssignedRequirementsPopup",payload);
+
+}
+private apiUrl = 'openreqs/resume/getReq'; // API endpoint
+
+resumeupload(formData: FormData, params: HttpParams): Observable<any> {
+  return this.http.post(this.apiUrl, formData, { params }); // Include params in options
+}
+submissiondata(reqNumber: string) {
+  return this.http.get(`requirement/getSubmissions/${reqNumber}`);
+}
+ResumeUpload(payload:any){
+  return this.http.post(`openreqs/resume/getPercentage`,payload);
+}
+
+  allactiveUserEmails(){
+    return this.http.get("auth/users/getAllActiveUsersEmails");
+  }
+
 
 }

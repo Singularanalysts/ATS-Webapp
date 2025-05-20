@@ -8,9 +8,9 @@ export class SubmissionService {
 
   constructor(private apiServ: ApiService) { }
 
-  getConsultantDropdown(flg: string,id:number) {
+  getConsultantDropdown(flg: string,id:number,companyId:any) {
    // getconsultInfo
-    return this.apiServ.get("submission/getconsultInfo/" + flg+"/"+id);
+    return this.apiServ.get(`submission/getconsultInfo/${flg}/${id}/${companyId}`);
     //return this.apiServ.get("submission/consultantinfo/" + flg);
   }
 
@@ -32,21 +32,27 @@ export class SubmissionService {
   }
 
   // supporting drop down apis
-  public getRequirements(flg: string) {
-    return this.apiServ.get("submission/getrequirements/"+ flg);
+  public getRequirements(flg: string,companyId: any) {
+    return this.apiServ.get("submission/getrequirements/"+ flg+"/"+companyId);
   }
 
   public getsubmissiondata(flg: string,access:string,userid:number) {
     return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid);
   }
 
-  public getsubmissiondataPagination(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string) {
-    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder);
+  public getsubmissiondataPagination(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string, company: any) {
+    return this.apiServ.get("submission/all/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company);
   }
- 
-  deletesubmission(id: number) {
-    return this.apiServ.delete("submission/delete/" + id);
+  public getdeletesubmissiontrash(flg: string,access:string,userid:number, page: any, size: any, field: any, sortField:string,sortOrder:string,company:any) {
+    return this.apiServ.get("submission/getAllTrashBinSubmissions/" + flg+"/"+access+"/"+userid+ "/" + page + "/" + size + "/" + field+"/"+sortField+"/"+sortOrder+"/"+company);
   }
+  // deletesubmission(id: number) {
+  //   return this.apiServ.delete("submission/delete/" + id);
+  // }
+deletesubmission(id: number, remarks: string,userId:any) {
+  const encodedRemarks = encodeURIComponent(remarks); // important to safely send in URL
+  return this.apiServ.delete(`submission/delete/${id}/${encodedRemarks}/${userId}`);
+}
 
   //used for get one resource
   getsubdetailsbyid(id: number) {
@@ -72,4 +78,14 @@ export class SubmissionService {
   public getConsultantSubmissionDataPagination(data: any) {
     return this.apiServ.post("submission/getEmployeeSubmissions", data);
   }
+ 
+  SubmissionCheck(payload:any){
+   return this.apiServ.post("submission/submissionApproval",payload)
+  }
+  raiseApprovalRequest(payload:any){
+    return this.apiServ.post("submission/requestSubmissionApproval",payload)
+  }
+filterSubmission(payload:any,companyId:any){
+  return this.apiServ.post(`submission/getSubmissionsFilter/${companyId}`,payload)
+}
 }

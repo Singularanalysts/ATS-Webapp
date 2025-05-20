@@ -100,3 +100,25 @@ button[mat-menu-item] {
   max-height: 350px;
   overflow-y: auto;
 }
+::ng-deep .mat-mdc-menu-panel.custom-submission-menu{
+  --mat-menu-container-shape: 4px;
+  min-width: 112px;
+  max-width: 340px !important;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+  outline: 0;
+  border-radius: var(--mat-menu-container-shape);
+  background-color: var(--mat-menu-container-color);
+  will-change: transform, opacity;
+}
+.buttondata{
+  height: 30px !important;
+  margin-top: 7px !important;
+}
+
+::ng-deep .submission-badge .mat-badge-content {
+  top: 0px !important;
+  right: 0px !important;
+  font-size: 10px;
+}

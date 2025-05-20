@@ -66,7 +66,7 @@ export class SourcingCountListComponent implements OnInit {
 
   ngOnInit(): void {
     const userid = localStorage.getItem('userid');
-    this.dashboardServ.getSourcingCountPopup(this.data.duration, this.data.flag).subscribe(
+    this.dashboardServ.getSourcingCountPopup(this.data.duration, this.data.flag,localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.dataSource.data = response.data;
         this.dataSource.data.map((x: any, i) => {

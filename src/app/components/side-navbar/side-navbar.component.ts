@@ -128,7 +128,14 @@ myRoles(){
             "icon": "handshake",
             "routerLink": "/usit/tcvr",
             "roles":["Super Administrator"]  
-          }
+          },
+          // {
+          //   "test": "TCVR",
+          //   "text": "H1B Vendors",
+          //   "icon": "handshake",
+          //   "routerLink": "/usit/h1b-vendor",
+          //   "roles":["Super Administrator"]  
+          // }
         ]
       },
       {
@@ -201,41 +208,41 @@ myRoles(){
         "routerLink": "/usit/pre-sales",
         "roles":["Super Administrator"]  
       },
-    {
-      "test": "SOURCING",
-      "text": "Sourcing",
-      "icon": "local_offer",
-      "children": [
-        {
-          "test": "Sourcing",
-          "text": "Sourcing",
-          "icon": "flash_on",
-          "routerLink": "/usit/sourcing",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "Pursuing",
-          "text": "Pursuing",
-          "icon": "person",
-          "routerLink": "/usit/pursuing",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "OnBoarding",
-          "text": "OnBoarding",
-          "icon": "assignment",
-          "routerLink": "/usit/onboarding",
-          "roles":["Super Administrator"]  
-        },
-        {
-          "test": "Closures",
-          "text": "Closures",
-          "icon": "check_circle",
-          "routerLink": "/usit/sourcing-closures",
-          "roles":["Super Administrator"]  
-        }
-      ]
-    },
+    // {
+    //   "test": "SOURCING",
+    //   "text": "Sourcing",
+    //   "icon": "local_offer",
+    //   "children": [
+    //     {
+    //       "test": "Sourcing",
+    //       "text": "Sourcing",
+    //       "icon": "flash_on",
+    //       "routerLink": "/usit/sourcing",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "Pursuing",
+    //       "text": "Pursuing",
+    //       "icon": "person",
+    //       "routerLink": "/usit/pursuing",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "OnBoarding",
+    //       "text": "OnBoarding",
+    //       "icon": "assignment",
+    //       "routerLink": "/usit/onboarding",
+    //       "roles":["Super Administrator"]  
+    //     },
+    //     {
+    //       "test": "Closures",
+    //       "text": "Closures",
+    //       "icon": "check_circle",
+    //       "routerLink": "/usit/sourcing-closures",
+    //       "roles":["Super Administrator"]  
+    //     }
+    //   ]
+    // },
     {
       "test": "SALES",
       "text": "Sales",
@@ -276,7 +283,14 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/sales-closures",
           "roles":["Super Administrator"]  
-        }
+        },
+        // {
+        //   "test": "SALES_TRASH_BIN",
+        //   "text": "Submission Trash Bin",
+        //   "icon": "check_circle",
+        //   "routerLink": "/usit/sales-submissionsTrash",
+        //   "roles":["Super Administrator"]  
+        // }
       ]
     } ,
         {
@@ -318,7 +332,14 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/rec-closures",
           "roles":["Super Administrator"] 
-        }
+        },
+        // {
+        //   "test":"RECRUITING_TRASH_BIN",
+        //   "text": "Submission Trash Bin",
+        //   "icon": "check_circle",
+        //   "routerLink": "/usit/Recruitment-submissionsTrash",
+        //   "roles":["Super Administrator"] 
+        // }
       ]
     },
     {
@@ -360,7 +381,14 @@ myRoles(){
           "icon": "check_circle",
           "routerLink": "/usit/dom-closures",
           "roles":["Super Administrator"]  
-        }
+        },
+        // {
+        //   "test":"DOM_TRASH_BIN",
+        //   "text": "Submission Trash Bin",
+        //   "icon": "check_circle",
+        //   "routerLink": "/usit/Dom-submissionTrash",
+        //   "roles":["Super Administrator"]  
+        // }
       ]
     },
     {
@@ -408,6 +436,13 @@ myRoles(){
               "text": "Portal Requirements",
               "icon": "group",
               "routerLink": "/usit/portalreqs",
+              "roles":["Super Administrator"]  
+            },
+            {
+              "test": "Portal Requirements",
+              "text": "Apply With Resume",
+              "icon": "group",
+              "routerLink": "/usit/resume-upload",
               "roles":["Super Administrator"]  
             },
             {
@@ -494,6 +529,7 @@ myRoles(){
               "routerLink": "/usit/employee-report",
               "roles":["Super Administrator"]  
             },
+            
             {
               "test": "Sourcing Reports",
               "text": "Sourcing Reports",
@@ -528,6 +564,15 @@ myRoles(){
               "icon": "contact_page",
               "routerLink": "/usit/taggedcount-report",
               "roles":["Super Administrator"]  
+            },
+      
+            
+            {
+              "test": "Ratings",
+              "text": "Executive Ratings",
+              "icon": "star",
+              "routerLink": "/usit/executive-ratings",
+              "roles": ["Super Administrator"]
             }
           ]
         },
@@ -555,6 +600,13 @@ myRoles(){
           "text": "Companies",
           "icon": "business",
           "routerLink": "/usit/companies",
+          "roles":["Super Administrator"]  
+        },
+        {
+          "test": "SUPERADMINS",
+          "text": "SuperAdmins Data",
+          "icon": "people",
+          "routerLink": "/usit/othercompaniessupderadmindata",
           "roles":["Super Administrator"]  
         }
       ]
@@ -633,6 +685,7 @@ myRoles(){
           "icon": "assignment",
           "routerLink": "/usit/quiz-result",
          "roles":["Super Administrator"] 
+         
         }
       ]
     },
@@ -678,10 +731,7 @@ myRoles(){
         "roles":["Super Administrator"] 
         }],
       
-  }
-  
-  
-  ,
+  },
   {
     "test":"EMPLOYEE_LOGIN_APPLIED_JOBS",
     "text": "Applied Jobs",
@@ -746,6 +796,8 @@ myRoles(){
     }
 
   });
+  console.log(this.menuData,'menudata');
+  
 
     this.menuData = menuData;
     // console.log("Lak final data-----------"+JSON.stringify(this.menuData));

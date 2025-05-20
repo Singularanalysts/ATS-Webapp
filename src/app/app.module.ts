@@ -22,6 +22,10 @@ import { RegisterConsultantComponent } from './components/register-consultant/re
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { NgxMatInputTelComponent } from 'ngx-mat-input-tel';
 import { OtpVerificationComponent } from './components/otp-verification/otp-verification.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,7 @@ import { OtpVerificationComponent } from './components/otp-verification/otp-veri
     SidebarComponent,
     SideNavbarComponent,
     RegisterConsultantComponent,
-    OtpVerificationComponent
+    OtpVerificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,11 @@ import { OtpVerificationComponent } from './components/otp-verification/otp-veri
     CoreModule,
     HttpClientModule,
     NgxMatIntlTelInputComponent,
-    NgxMatInputTelComponent
+    NgxMatInputTelComponent, 
+      MatTabsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [
     {

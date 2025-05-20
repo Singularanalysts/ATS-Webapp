@@ -68,12 +68,32 @@ import { TimeSheetsComponent } from './components/time-sheets/time-sheets.compon
 
 import { TaggedcountReportComponent } from './components/reports/taggedcount-report/taggedcount-report.component';
 
+import { ReportEmailComponent } from './components/email-extraction/report-email/report-email.component';
+import { ExecutiveRatingsComponent } from './components/reports/Executive-Rating/executive-ratings/executive-ratings.component';
+
+import { AssignedRequirementsComponent } from './components/recruitment/assigned-requirements/assigned-requirements.component';
+
+import { OthercompaniessuperadminsComponent } from './components/masters/othercompaniessuperadmins/othercompaniessuperadmins.component';
+
+
+import { ResumeDescriptionComponent } from './components/openreqs/resume-description/resume-description.component';
+import { SubmissionReportComponent } from './components/recruitment/submission-report/submission-report.component';
+import { RequirementReportComponent } from './components/reports/employee-reports/requirement-report/requirement-report.component';
+import { AssignedCountComponent } from './components/recruitment/assigned-count/assigned-count.component';
+import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
+import { SubmissionTrashComponent } from './components/sales/submission-trash/submission-trash.component';
+import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
+import { AssociatedCompaniesComponent } from './components/associated-companies/associated-companies.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
   {
     path: 'dashboard',
     component: DashboardComponent,
+  },
+  {
+    path : 'associated-companies',
+    component : AssociatedCompaniesComponent
   },
   {
     path: 'privileges/:id',
@@ -91,6 +111,8 @@ const routes: Routes = [
     path: 'attempt-quiz',
     component: AttemptQuizComponent,
   },
+
+
   {
     path: 'quiz-result',
     component: QuizResultComponent,
@@ -254,6 +276,7 @@ const routes: Routes = [
   {
     path: 'taggedcount-report', component: TaggedcountReportComponent
   },
+  {path:'executive-ratings',component:ExecutiveRatingsComponent},
   {
     path: 'open-reqs-report', component: OpenRequirementsReportsComponent
   },
@@ -327,6 +350,33 @@ const routes: Routes = [
   {
     path: 'candidate-reports', component: CandidateReportComponent,
   },
+  {
+    path: 'resume-upload', component: ResumeUploaderComponent,
+  },
+  {
+    path: 'resume-description', component: ResumeDescriptionComponent,
+  },
+  {path:'report-email',component:ReportEmailComponent},
+  {path:'assigned-requirements',component:AssignedRequirementsComponent},
+  {path:'submission-report',component:SubmissionReportComponent},
+  {path:'requirement-reportdata',component:AssignedCountComponent},
+  {path:'h1b-vendor',component:H1BVendorsComponent},
+  {
+    path: 'sales-submissionsTrash',
+    component: SubmissionTrashComponent,
+    data: { isSalesSubmission: true },
+  },
+  {
+    path: 'Recruitment-submissionsTrash',
+    component: SubmissionTrashComponent,
+    data: { isRecSubmission: true },
+  },
+  {
+    path: 'Dom-submissionTrash',
+    component: SubmissionTrashComponent,
+    data: { isDomSub: true },
+  },
+
   // {
   //   path: 'tcvr', component: ClientInformationComponent,
   // },
@@ -348,6 +398,8 @@ const routes: Routes = [
   // {
   //   path: 'email-configuration', component: EmailConfigurationComponent
   // }
+  // {path:'assigned-requirements',component: },
+
   {
     path: 'tcvr',
     loadComponent: () => import('../usit/components/vendor-management/client-information/client-information.component').then(m => m.ClientInformationComponent)
@@ -376,8 +428,12 @@ const routes: Routes = [
     path: 'email-configuration',
     loadComponent: () => import('./components/email-configuration/email-configuration.component').then(m => m.EmailConfigurationComponent)
   },
+
   {
-     path: 'privileges/:id/:rolename', component: PrivilegeListComponent ,
+     path: 'privileges/:id/:rolename/:companyid', component: PrivilegeListComponent ,
+  },
+  { 
+    path: 'othercompaniessupderadmindata', component: OthercompaniessuperadminsComponent,
   },
 ];
 

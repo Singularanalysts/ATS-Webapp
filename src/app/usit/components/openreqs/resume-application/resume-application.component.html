@@ -1,0 +1,145 @@
+<section class="header-container" id="mainHeader">
+    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+        {{data.title}} - {{data.jobData.posted_on}}
+    </span>
+    <button mat-icon-button (click)="onCancel()" class="btn-close" id="btnClose">
+        <mat-icon>close</mat-icon>
+    </button>
+</section>
+<mat-card class="center-card">
+    <form [formGroup]="jobApplyCommentsForm" class="vendor-form">
+        <div class="form">
+            <div class="form-column-left">
+                <!-- Consultant -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Consultant</mat-label>
+                    <input matInput formControlName="consultantId" [matAutocomplete]="consultantAutoCmp">
+                    <mat-autocomplete #consultantAutoCmp="matAutocomplete">
+                        <mat-option *ngFor="let option of (searchConsultantOptions$ | async)"
+                            [value]="option.consultantname">
+                            {{ option.consultantname }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="jobApplyCommentsForm.get('consultantId').hasError('required')">Consultant is
+                        Required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Status -->
+                <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="issueType">
+                        <mat-option value="Applied">Applied</mat-option>
+                        <mat-option value="Expired">Expired</mat-option>
+                        <mat-option value="Full time">Full time</mat-option>
+                        <mat-option value="Only Locals">Only Locals</mat-option>
+                        <mat-option value="Submitted">Submitted </mat-option>
+                        <mat-option value="Skills Not Matching">Skills Not Matching</mat-option>
+                        <mat-option value="Visa is not matching">Visa is not matching</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="jobApplyCommentsForm.get('issueType').hasError('required')">Status is
+                        Required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
+                <!-- Feedback   -->
+                <mat-form-field class="description-field">
+                    <mat-label>Comments</mat-label>
+                    <textarea formControlName="comment" rows="4" maxlength="256" matInput></textarea>
+                    <mat-error *ngIf="jobApplyCommentsForm.get('comment')!.hasError('required')">Comments
+                        are Required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>
+
+<div id="table-container" class="table-wrapper">
+    <section class="mat-elevation-z8 job-apply-comments-table-style">
+        <table mat-table [dataSource]="dataSource" oncopy="return false">
+
+            <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- SNo Column -->
+            <ng-container matColumnDef="SerialNum">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Serial Number">
+                    S.No </th>
+                <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
+            </ng-container>
+
+            <!-- Consultant Name-->
+            <ng-container matColumnDef="consultantName">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by consultantName" mat-sort-header>
+                    Consultant Name </th>
+                <td mat-cell *matCellDef="let element" nowrap>
+                    {{element?.consultantname}}</td>
+            </ng-container>
+
+            <!-- Status -->
+            <ng-container matColumnDef="Status">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Status" mat-sort-header> Status
+                </th>
+                <td mat-cell *matCellDef="let element">{{element?.issue_type}} </td>
+            </ng-container>
+
+            <!-- Comment -->
+            <ng-container matColumnDef="Comment">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by Comment" mat-sort-header>
+                    Comments </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="comment-text" [matTooltip]="element?.comment" matTooltipPosition="above">
+                        {{ (element?.comment) | slice:0:64 }}<ng-container
+                            *ngIf="(element?.comment).length > 64">...</ng-container>
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- Commented By -->
+            <ng-container matColumnDef="CommentedBy">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by CommentedBy" mat-sort-header>
+                    Commented By </th>
+                <td mat-cell *matCellDef="let element"> {{element?.pseudoname }}
+                </td>
+            </ng-container>
+
+            <!-- Commented By -->
+            <ng-container matColumnDef="CommentedDate">
+                <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by CommentedDate" mat-sort-header>
+                    Commented Date </th>
+                <td mat-cell *matCellDef="let element"> {{element?.createddate | date:'MM-dd-yyyy HH:mm'}}
+                </td>
+            </ng-container>
+
+            
+                  <!-- Action Column -->
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let commnet" style="white-space: nowrap;">
+                      <span class="action-buttons">
+                        <button  mat-icon-button
+                          (click)="editComment(commnet)" class="action-button-ed">
+                          <mat-icon >edit</mat-icon>
+                        </button>
+                       
+                      </span>
+                    </td>
+                  </ng-container>
+            
+
+            <!-- table columns ends  -->
+            <!-- table ROW -->
+            <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+        </table>
+        <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
+    </section>
+    <hr>
+</div>

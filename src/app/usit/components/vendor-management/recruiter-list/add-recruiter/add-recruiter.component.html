@@ -68,6 +68,13 @@
 
         <!-- Company Contact Number -->
         <mat-form-field appearance="fill">
+          <mat-label>Extension Number</mat-label>
+          <input matInput formControlName="extension" maxlength="30" (input)="camelCase($event)"/>
+        </mat-form-field>
+     
+
+
+        <mat-form-field appearance="fill">
           <mat-label>Alternate Contact Number</mat-label>
           <ngx-mat-intl-tel-input  [preferredCountries]="['us','ae','in']" matInput class="intl-input" formControlName="alternatecontactnumber" [enablePlaceholder]="true"
             [enableSearch]="true" name="contactnumber" id="intlInput">

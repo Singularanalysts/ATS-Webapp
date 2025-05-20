@@ -150,7 +150,7 @@
         </div>
         
         <!-- Assign Recruiter -->
-        <mat-form-field appearance="fill">
+        <mat-form-field *ngIf="data.flag === 'Recruiting'" appearance="fill">
           <mat-label>Assign Recruiter</mat-label>
             <mat-chip-grid #chipGrid aria-label="Assign Recruiter" formControlName="empid">
               <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">

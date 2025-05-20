@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ISnackBarData,
@@ -47,6 +47,7 @@ import { SubmissionInfo } from 'src/app/usit/models/submissioninfo';
 import { DialogService } from 'src/app/services/dialog.service';
 import { AddRecruiterComponent } from '../../../vendor-management/recruiter-list/add-recruiter/add-recruiter.component';
 import { AddVendorComponent } from '../../../vendor-management/vendor-list/add-vendor/add-vendor.component';
+import { PermissionsService } from 'src/app/services/permissions.service';
 
 
 @Component({
@@ -64,12 +65,12 @@ import { AddVendorComponent } from '../../../vendor-management/vendor-list/add-v
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
     MatRadioModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule
+
   ],
   providers: [
     {
@@ -84,6 +85,7 @@ import { AddVendorComponent } from '../../../vendor-management/vendor-list/add-v
   styleUrls: ['./add-submission.component.scss']
 })
 export class AddSubmissionComponent implements OnInit {
+  
   protected isFormSubmitted: boolean = false;
   submissionForm: any = FormGroup;
   submitted = false;
@@ -95,6 +97,7 @@ export class AddSubmissionComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private snackBarServ = inject(SnackBarService);
+  protected permissionServ = inject(PermissionsService);
 
   searchObs$!: Observable<any>;
   selectOptionObj = {
@@ -119,16 +122,156 @@ export class AddSubmissionComponent implements OnInit {
   companyOptions: any = [];
   isCompanyDataAvailable: boolean = false;
   private dialogServ = inject(DialogService);
-
+  @ViewChild('approvalDialog') approvalDialog!: TemplateRef<any>;
+  dialogRefdata!: MatDialogRef<any>;
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
-    public dialogRef: MatDialogRef<AddSubmissionComponent>
+    public dialogRef: MatDialogRef<AddSubmissionComponent>,
+    private dialog: MatDialog, // ✅ Inject MatDialog here
+
   ) { }
 
   get frm() {
     return this.submissionForm.controls;
   }
   userid!: any;
+  selectedConsultantId: number | null = null;
+
+onConsultantSelected(option: any) {
+  this.selectedConsultantId = option.consultantid;
+  console.log('ffffff');
+  
+}
+duplicateSubmissionCheck(rate: number) {
+  const userId = Number(localStorage.getItem('userid'));
+
+  const payload = {
+    consultantId: this.selectedConsultantId,
+    userId: userId,
+    submissionRate: rate,
+    companyId: this.selectedCompany?.vmsid,
+    rateType: this.submissionForm.get('ratetype')?.value,
+    endClient: this.submissionForm.get('endclient')?.value,
+    implementationPartner: this.submissionForm.get('implpartner')?.value
+  };
+
+  this.submissionServ.SubmissionCheck(payload).subscribe({
+    next: (response: any) => {
+      if (response.status === 'success') {
+        this.isRateValid = true;
+        this.submissionRateErrorMessage = '';
+        this.submissionForm.get('submissionrate')?.setErrors(null);
+      
+        const dataToBeSentToSnackBar: ISnackBarData = {
+          message: response.message || // fallback if response.message is undefined
+            (this.data.actionName === 'add-submission'
+              ? 'Submission Approved successfully'
+              : 'Submission updated successfully'),
+          duration: 1500,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+          direction: 'above',
+          panelClass: ['custom-snack-success']
+        };
+      
+        this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+      }
+       else {
+        this.isFormSubmitted = false;
+        this.isRateValid = false;
+        this.submissionRateErrorMessage =
+          response.message || 'Submission already exists';
+        this.submissionForm.get('submissionrate')?.setErrors({ invalidRate: true });
+
+      
+      }
+
+      console.log('Submission check response', response);
+    },
+    error: (err) => {
+      console.error('Submission check error:', err);
+      this.isRateValid = false;
+      this.submissionRateErrorMessage = 'Something went wrong. Please try again.';
+      this.submissionForm.get('submissionrate')?.setErrors({ invalidRate: true });
+
+      const dataToBeSentToSnackBar: ISnackBarData = {
+        message: this.submissionRateErrorMessage,
+        duration: 2000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass: ['custom-snack-error']
+      };
+      this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+    }
+  });
+}
+onRaiseRequest(event: Event) {
+  event.preventDefault();
+  if (this.flag !== 'sales') return; // Only allow raise request in Sales
+
+  const rate = this.submissionForm.get('submissionrate')?.value;
+
+  const userId = Number(localStorage.getItem('userid'));
+
+  const payload = {
+    consultantId: this.selectedConsultantId,
+    userId: userId,
+    submissionRate: rate,
+    companyId: this.selectedCompany?.vmsid,
+    rateType: this.submissionForm.get('ratetype')?.value,
+    endClient: this.submissionForm.get('endclient')?.value,
+    implementationPartner: this.submissionForm.get('implpartner')?.value
+  };
+
+  this.dialogRefdata = this.dialog.open(this.approvalDialog);
+
+  this.dialogRefdata.afterClosed().subscribe(result => {
+    if (result === true) {
+      this.raiseApprovalRequest(payload);
+      this.getsubmissions(); 
+
+    }
+  });
+}
+
+raiseApprovalRequest(payload: any) {
+  this.submissionServ.raiseApprovalRequest(payload).subscribe({
+    next: (res: any) => {
+      const data: ISnackBarData = {
+        message: res.message || 'Approval request sent successfully.',
+        duration: 2000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass: ['custom-snack-success']
+      };
+      this.snackBarServ.openSnackBarFromComponent(data);
+    },
+    error: (err) => {
+      const data: ISnackBarData = {
+        message: err?.error?.message || 'Failed to send approval request.',
+        duration: 2000,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass: ['custom-snack-error']
+      };
+      this.snackBarServ.openSnackBarFromComponent(data);
+    }
+  });
+}
+
+getsubmissions() {
+  this.permissionServ.getsubmission(localStorage.getItem('companyid')).subscribe((res: any) => {
+  });
+}
+selectedCompany: any = null;
+setSelectedCompany(company: any): void {
+  this.selectedCompany = company; // store entire company object (with vmsid)
+}
+showSubmissionRateError = false;
+
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getCompany();
@@ -155,6 +298,41 @@ export class AddSubmissionComponent implements OnInit {
     } else {
       this.initilizeSubmissionForm(new SubmissionInfo());
     }
+    // this.submissionForm.get('submissionrate')?.valueChanges
+    // .pipe(
+    //   debounceTime(100), // wait for user to stop typing
+    //   distinctUntilChanged()
+    // )
+    // .subscribe((rate: number) => {
+    //   if (this.selectedConsultantId && rate) {
+    //     this.callSubmissionCheck(rate);
+    //     console.log('submissioncheckkkk');
+        
+    //   }
+    // });
+    this.submissionForm.get('submissionrate')?.valueChanges
+    .pipe(
+      debounceTime(600),
+      distinctUntilChanged()
+    )
+    .subscribe((rate: number) => {
+      const requiredFieldsFilled = this.selectedConsultantId &&
+        this.selectedCompany?.vmsid &&
+        this.submissionForm.get('ratetype')?.value;
+  
+      if (!requiredFieldsFilled) {
+        this.showSubmissionRateError = true;
+      } else {
+        this.showSubmissionRateError = false;
+  
+        // Perform rate validation only for 'sales'
+        if (this.flag === 'sales') {
+          this.duplicateSubmissionCheck(rate);
+        }
+      }
+    });
+  
+  
   }
 
   getFlag(type: string) {
@@ -180,6 +358,7 @@ export class AddSubmissionComponent implements OnInit {
 
 
   private initilizeSubmissionForm(submissionData: any) {
+
     this.submissionForm = this.formBuilder.group({
       // user:  [submissionData ? submissionData?.user : this.userid],
       user: [this.data.actionName === "edit-submission" ? submissionData?.user : localStorage.getItem('userid')],
@@ -188,6 +367,7 @@ export class AddSubmissionComponent implements OnInit {
       position: [submissionData ? submissionData.position : '', [Validators.required]],
       ratetype: [submissionData ? submissionData.ratetype : '', [Validators.required]],
       submissionrate: [submissionData ? submissionData.submissionrate : '', [Validators.required]],
+      feedback:[submissionData ? submissionData.feedback : ''],
       endclient: [submissionData ? submissionData.endclient : ''],
       implpartner: [submissionData ? submissionData.implpartner : ''],
       vendor: [submissionData ? submissionData.vendor : ''],
@@ -204,9 +384,11 @@ export class AddSubmissionComponent implements OnInit {
       remarks: [submissionData ? submissionData.remarks : ''],
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
+     
     });
     if (this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
-      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant).subscribe(
+      const companyId = localStorage.getItem('companyid');
+      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant,companyId).subscribe(
         (consultant: any) => {
           if (consultant && consultant.data[0].consultantname) {
             this.obj = consultant.data[0].consultantid;
@@ -288,7 +470,9 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getRequirements(flg: string) {
-    this.submissionServ.getRequirements(flg).subscribe(
+
+
+    this.submissionServ.getRequirements(flg,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.requirementdata = response.data;
       }
@@ -318,7 +502,8 @@ export class AddSubmissionComponent implements OnInit {
   }
 
   getConsultant(flg: string) {
-    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0).pipe(
+    const companyId = localStorage.getItem('companyid');
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0,companyId).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
@@ -332,6 +517,150 @@ export class AddSubmissionComponent implements OnInit {
     //     this.consultantdata = response.data;
     //   })
   }
+  // SubmissionCheck(){
+  //   this.submissionServ.SubmissionCheck()
+  // }
+  // callSubmissionCheck(rate: number) {
+  //   const userId = Number(localStorage.getItem('userid'));
+  
+  //   const payload = {
+  //     consultantId: this.selectedConsultantId,
+  //     userId: userId,
+  //     submissionRate: rate,
+  //     companyId: this.selectedCompany?.vmsid , // Send company ID
+  //     rateType: this.submissionForm.get('ratetype')?.value,  // send selected rateType
+  //     endClient: this.submissionForm.get('endclient')?.value,
+  //     implementationPartner: this.submissionForm.get('implpartner')?.value
+  //   };
+  
+  //   this.submissionServ.SubmissionCheck(payload).subscribe((response: any) => {
+  //     // Handle response here
+  //     console.log('Submission check response', response);
+  //   });
+  // }
+//   callSubmissionCheck(rate: number) {
+//   const userId = Number(localStorage.getItem('userid'));
+
+//   const payload = {
+//     consultantId: this.selectedConsultantId,
+//     userId: userId,
+//     submissionRate: rate,
+//     companyId: this.selectedCompany?.vmsid,
+//     rateType: this.submissionForm.get('ratetype')?.value,
+//     endClient: this.submissionForm.get('endclient')?.value,
+//     implementationPartner: this.submissionForm.get('implpartner')?.value
+//   };
+
+//   this.submissionServ.SubmissionCheck(payload).subscribe({
+//     next: (response: any) => {
+//       const dataToBeSentToSnackBar: ISnackBarData = {
+//         message: '',
+//         duration: 1500,
+//         verticalPosition: 'top',
+//         horizontalPosition: 'center',
+//         direction: 'above',
+//         panelClass: [],
+//       };
+
+//       if (response.status == 'success') {
+//         dataToBeSentToSnackBar.message =
+//           this.data.actionName === 'add-submission'
+//             ? 'Submission added successfully'
+//             : 'Submission updated successfully';
+//             dataToBeSentToSnackBar.panelClass = ['custom-snack-success']; // Red background class
+
+//         this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+//       } else {
+//         this.isFormSubmitted = false;
+//         dataToBeSentToSnackBar.message = response.message ? response.message : 'Submission already Exists';
+//         dataToBeSentToSnackBar.panelClass = ['custom-snack-failure']; // Red background class
+//         this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar); // <-- Don't forget this
+//       }
+      
+
+//       this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+//       console.log('Submission check response', response);
+//     },
+//     error: (err) => {
+//       console.error('Submission check error:', err);
+//       const dataToBeSentToSnackBar: ISnackBarData = {
+//         message: 'Something went wrong. Please try again.',
+//         duration: 2000,
+//         verticalPosition: 'top',
+//         horizontalPosition: 'center',
+//         direction: 'above',
+//         panelClass: ['custom-snack-error'],
+//       };
+//       this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+//     }
+//   });
+// }
+submissionRateErrorMessage: string = '';
+isRateValid: boolean = true;
+
+// callSubmissionCheck(rate: number) {
+//   const userId = Number(localStorage.getItem('userid'));
+
+//   const payload = {
+//     consultantId: this.selectedConsultantId,
+//     userId: userId,
+//     submissionRate: rate,
+//     companyId: this.selectedCompany?.vmsid,
+//     rateType: this.submissionForm.get('ratetype')?.value,
+//     endClient: this.submissionForm.get('endclient')?.value,
+//     implementationPartner: this.submissionForm.get('implpartner')?.value
+//   };
+
+//   this.submissionServ.SubmissionCheck(payload).subscribe({
+//     next: (response: any) => {
+//       if (response.status === 'success') {
+//         this.isRateValid = true;
+//         this.submissionRateErrorMessage = '';
+//         this.submissionForm.get('submissionrate')?.setErrors(null);
+    
+//         const dataToBeSentToSnackBar: ISnackBarData = {
+//           message:
+//             this.data.actionName === 'add-submission'
+//               ? 'Submission added successfully'
+//               : 'Submission updated successfully',
+//           duration: 1500,
+//           verticalPosition: 'top',
+//           horizontalPosition: 'center',
+//           direction: 'above',
+//           panelClass: ['custom-snack-success'],
+//         };
+    
+//         this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+//       } else {
+//         this.isFormSubmitted = false;
+//         this.isRateValid = false;
+//         this.submissionRateErrorMessage = response.message || 'Submission already exists';
+//         this.submissionForm.get('submissionrate')?.setErrors({ invalidRate: true });
+//         // ❌ Snackbar not shown here on failure
+//       }
+    
+//       console.log('Submission check response', response);
+//     },
+    
+//     error: (err) => {
+//       console.error('Submission check error:', err);
+//       this.isRateValid = false;
+//       this.submissionRateErrorMessage = 'Something went wrong. Please try again.';
+//       this.submissionForm.get('submissionrate')?.setErrors({ invalidRate: true });
+
+//       const dataToBeSentToSnackBar: ISnackBarData = {
+//         message: this.submissionRateErrorMessage,
+//         duration: 2000,
+//         verticalPosition: 'top',
+//         horizontalPosition: 'center',
+//         direction: 'above',
+//         panelClass: ['custom-snack-error'],
+//       };
+//       this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+//     }
+//   });
+// }
+
 
   getConsultantOptionsForAutoComplete(data: any) {
     this.consultantOptions = data;
@@ -458,7 +787,11 @@ export class AddSubmissionComponent implements OnInit {
     }
     else {
       this.isFormSubmitted = true
+      
     }
+         
+
+    
     this.submitted = true;
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
@@ -540,6 +873,8 @@ export class AddSubmissionComponent implements OnInit {
     if (this.data.actionName === 'edit-submission') {
       return { ...this.entity, ...this.submissionForm.value }
     }
+    console.log(this.submissionForm.value,'submissionvalueee');
+    
     return this.submissionForm.value;
   }
 

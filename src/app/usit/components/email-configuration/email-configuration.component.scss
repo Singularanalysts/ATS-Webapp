@@ -5,7 +5,16 @@
   height: calc(100vh - 68px);
   background-color: #edebeb;
 }
+.report-icon{
+  cursor: pointer;
+  font-size: 26px; /* Adjust size if needed */
+  color: #3f51b5; /* Change color if needed */
+  margin-right: 0px !important;
+}
+.report-icon:hover{
+  color: #3f51b5; /* Darker shade on hover */
 
+}
 mat-card {
   width: 400px;
   padding: 20px;
@@ -154,9 +163,11 @@ tbody {
   top: 0;
   overflow: hidden;
   background-color: rgb(228, 231, 234);
+  width: 100%;
 }
 
 .header-text {
+  white-space: nowrap;
   padding-left: 8px;
   font-weight: 600;
 }
@@ -205,6 +216,11 @@ tbody {
 }
 
 .status-in-progress {
+  color: green;
+  font-weight: bold;
+}
+
+.status-in-progr{
   color: green;
   font-weight: bold;
 }
@@ -361,4 +377,12 @@ ul.breadcrumb li:last-child {
 
 .edit-icon {
   color: rgb(99, 98, 98);
+}
+
+.back-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; /* Center vertically if needed */
+  margin-left: 50px; /* Adjust this value to move it slightly right */
 }
