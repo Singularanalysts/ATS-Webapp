@@ -26,6 +26,9 @@ export class OpenreqService {
     return this.http.get("openreqs/dice/allreqs/" + pageNo + "/" + pageSize + "/" + field + "/" + source + "/" + country);
   }
 
+  public getNewRequirementsAlertData(){
+    return this.http.get("openreqs/dice/getNewRequirements");
+  }
   public linkedinProfiles() {
     return this.http.get("openreqs/linked/all");
   }

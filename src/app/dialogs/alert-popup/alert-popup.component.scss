@@ -1,0 +1,126 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #f5f5f5;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+
+  .title-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .alert-icon {
+      color: #d32f2f;
+      font-size: 24px;
+    }
+
+    .title-text {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .record-count {
+      font-size: 20px;
+      font-weight: bold;
+      color: #d32f2f;
+      margin-left: 5px;
+    }
+  }
+
+  .close-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 160px;
+
+    .timer-text {
+      font-size: 15px;
+      color: #666;
+      min-width: 250px;
+      text-align: right;
+      visibility: hidden;
+    }
+
+    .timer-text.show {
+      visibility: visible;
+    }
+
+    button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+  }
+}
+
+
+/* --- Column Width Adjustments --- */
+.mat-column-SerialNum {
+  width: 50px;
+}
+
+.mat-column-posted_on {
+  width: 130px;
+}
+
+/* Reduce Job Title */
+.mat-column-job_title {
+  width: 150px !important;
+}
+
+/* Increase Emp Type */
+.mat-column-employment_type {
+  width: 240px !important;
+}
+
+/* Keep Location as is or adjust slightly */
+.mat-column-job_location {
+  width: 140px;
+}
+
+/* Keep Vendor */
+.mat-column-vendor {
+  width: 180px;
+}
+
+/* Increase Job Description */
+.mat-column-JobDescription {
+  width: 200px !important;
+  text-align: center;
+}
+
+/* Comments unchanged */
+.mat-column-Comments {
+  width: 120px;
+  text-align: center;
+}
+
+/* Keep or tweak source if needed */
+.mat-column-source {
+  width: 120px;
+}
+
+/* Increase Resume Upload */
+.mat-column-ResumeUpload {
+  width: 260px !important;
+  text-align: center;
+}
+
+/* Percentage unchanged */
+.mat-column-Percentage {
+  width: 100px;
+  text-align: center;
+}
+
+
+:host ::ng-deep .mat-mdc-table thead .mat-mdc-header-row,
+:host ::ng-deep .mat-mdc-table .mat-mdc-header-cell {
+  background-color: #e6f0fa !important; // light blue
+  color: #000 !important;
+  // font-weight: bold;
+  border-bottom: 1px solid #ccc;
+}
