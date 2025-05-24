@@ -64,8 +64,10 @@
           </div>
        
         <div class="search-consultant">
-          <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position"  class="search" placeholder="Search Position" (keyup)="ondataChange($event)">
-          <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" (keyup)="ondataChange($event)" >
+          <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position"  class="search" placeholder="Search Position" (keyup)="ondataChange($event)"   (keydown.enter)="preventSubmit($event)"
+>
+          <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" (keyup)="ondataChange($event)"   (keydown.enter)="preventSubmit($event)"
+>
           <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
 <input
   matInput

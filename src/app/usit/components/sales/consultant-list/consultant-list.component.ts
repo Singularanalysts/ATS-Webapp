@@ -944,7 +944,8 @@ if(this.isFilter){
     this.request.experience = experience;
     this.request.consultantflg=consultantflg;
     this.request.companyId=localStorage.getItem('companyid');
-
+event.preventDefault();
+  event.stopPropagation();
     this.filterData(this.request,this.page);
   }
   selectedExperienceOptions = new Set<string>();
