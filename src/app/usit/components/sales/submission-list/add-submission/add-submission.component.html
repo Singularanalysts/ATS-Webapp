@@ -132,15 +132,24 @@
 
                     <mat-hint *ngIf="flag === 'sales' && showSubmissionRateError" style="color: red; font-size: 12px;">
                         Please fill Consultant, Company, Rate Type before entering Submission Rate.
-                      </mat-hint>
-                      
+                    </mat-hint>
+
 
                     <!-- Dynamic API error message -->
                     <mat-error *ngIf="submissionForm.get('submissionrate')!.hasError('invalidRate')">
                         {{ submissionRateErrorMessage }}
                     </mat-error>
                 </mat-form-field>
-        
+                <mat-form-field appearance="fill">
+                    <mat-label>Select Source</mat-label>
+                    <mat-select formControlName="source">
+                        <mat-option *ngFor="let option of selectOptionObj.sourceType" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="submissionForm.get('source')!.hasError('required')">Choose Source
+                    </mat-error>
+                </mat-form-field>
                 <div *ngIf="!isRateValid && submissionForm.get('submissionrate')?.value"
                     style="margin-left: 27rem; margin-top: 0px;">
                     <div style="
@@ -161,13 +170,7 @@
                     </div>
                 </div>
 
-                <mat-form-field appearance="fill" style="margin-top: 24px;">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName="empmail" maxlength="50" readonly />
-                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('required')">Email is Required</mat-error>
-                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('pattern')">Invalid Email
-                        Address</mat-error>
-                </mat-form-field>
+
             </div>
 
             <div class="form-column-right">
@@ -217,6 +220,13 @@
                     </mat-form-field>
                 </div>
 
+                <mat-form-field appearance="fill" style="margin-top: 24px;">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="empmail" maxlength="50" readonly />
+                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('required')">Email is Required</mat-error>
+                    <mat-error *ngIf="submissionForm.get('empmail')!.hasError('pattern')">Invalid Email
+                        Address</mat-error>
+                </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Contact Number</mat-label>
                     <input matInput formControlName="empcontact" maxlength="15" readonly />
@@ -224,16 +234,7 @@
 
 
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Select Source</mat-label>
-                    <mat-select formControlName="source">
-                        <mat-option *ngFor="let option of selectOptionObj.sourceType" [value]="option">
-                            {{ option }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="submissionForm.get('source')!.hasError('required')">Choose Source
-                    </mat-error>
-                </mat-form-field>
+
 
                 <mat-form-field appearance="fill">
                     <mat-label>Submitted to</mat-label>

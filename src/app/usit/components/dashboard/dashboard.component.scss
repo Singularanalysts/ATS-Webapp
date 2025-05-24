@@ -46,7 +46,7 @@ ul.breadcrumb li a:hover {
 .header-text {
   padding-left: 8px;
   font-weight: 600;
- 
+
 }
 
 .header-container-leading-resources {
@@ -144,12 +144,15 @@ ul.breadcrumb li a:hover {
 .table-container {
   // padding-top: 10px;
   flex: 1;
-  min-height: 400px; /* Adjust based on your layout */
+  min-height: 400px;
+  /* Adjust based on your layout */
 
 }
-.table-data{
+
+.table-data {
   min-height: 560px !important;
 }
+
 .table-container-dice {
   padding-top: 10px;
   flex: 1;
@@ -431,30 +434,35 @@ b {
   }
 
 }
+
 .date-picker-field {
   display: flex;
   align-items: center;
-  
+
 }
 
 .date-picker-container {
   position: relative;
-  flex: 1; /* Allow the input to expand */
+  flex: 1;
+  /* Allow the input to expand */
 }
 
 /* Adjust the margin as needed */
 .mat-form-field.mat-form-field-appearance-fill .mat-form-field-wrapper {
   margin-right: 8px;
 }
+
 .mat-form-field {
-  margin-bottom: 5px; /* Adjust as needed */
-  
+  margin-bottom: 5px;
+  /* Adjust as needed */
+
 }
 
 .search {
   height: 35px;
   padding: 0px 8px;
 }
+
 .header {
   display: flex;
   flex-direction: row;
@@ -488,6 +496,7 @@ b {
   padding: 15px;
   overflow-y: auto;
 }
+
 .ratingcontent {
   display: flex;
   justify-content: center;
@@ -501,7 +510,8 @@ b {
   display: flex;
   align-items: center;
   gap: 25px;
-  flex-wrap: wrap; /* Allow wrapping */
+  flex-wrap: wrap;
+  /* Allow wrapping */
   justify-content: center;
   text-align: center;
   position: relative;
@@ -575,11 +585,12 @@ b {
   position: relative;
   bottom: 8px !important;
 }
+
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 8px; 
+  padding: 0 8px;
   flex-wrap: nowrap;
   width: 100%;
 }
@@ -629,31 +640,33 @@ b {
 
 
 
-.icon-design{
-  color: #3f51b5 !important; /* Danger color for delete icon */
-  font-size: 24px !important; 
+.icon-design {
+  color: #3f51b5 !important;
+  /* Danger color for delete icon */
+  font-size: 24px !important;
 }
+
 .load-more-container {
   text-align: center;
   margin-top: 10px;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 10px 15px;
   font-size: 16px;
 }
 
 .custom-pagination {
   position: sticky;
   bottom: 0;
-  right: 20px; 
+  right: 20px;
   background: white;
   padding: 17px;
   display: flex;
   align-items: center;
   gap: 1px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  justify-content: flex-end; 
+  justify-content: flex-end;
 }
 
 .custom-pagination button {
@@ -662,19 +675,19 @@ button {
   color: white;
   font-size: 12px;
   cursor: pointer;
-  padding: 6px 10px; 
+  padding: 6px 10px;
   margin: 0;
-  border-radius: 4px; 
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 37px; 
-  height: 30px; 
+  width: 37px;
+  height: 30px;
 }
 
 .custom-pagination button.active {
   font-weight: bold;
-  background: #0056b3; 
+  background: #0056b3;
 }
 
 .custom-pagination mat-icon {
@@ -683,29 +696,31 @@ button {
   width: 20px;
   height: 20px;
 }
+
 .vms {
-  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.4); 
+  box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.4);
 }
 
 .sub-sales {
-  box-shadow: 0px 4px 10px rgba(40, 167, 69, 0.4); 
+  box-shadow: 0px 4px 10px rgba(40, 167, 69, 0.4);
 }
 
 .sub-recruiting {
-  box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.4); 
+  box-shadow: 0px 4px 10px rgba(255, 193, 7, 0.4);
 }
 
 .sub-domrecruiting {
-  box-shadow: 0px 4px 10px rgba(220, 53, 69, 0.4); 
+  box-shadow: 0px 4px 10px rgba(220, 53, 69, 0.4);
 }
 
 .submission {
-  box-shadow: 0px 4px 10px rgba(108, 117, 125, 0.4); 
+  box-shadow: 0px 4px 10px rgba(108, 117, 125, 0.4);
 }
 
 .interview {
   box-shadow: 0px 4px 10px rgba(102, 16, 242, 0.4);
 }
+
 // .paginatorrecent {
 //   position: sticky;
 //   bottom: 0;
@@ -721,14 +736,21 @@ button {
 .sticky-activity {
   position: sticky !important;
   top: 0;
-  background-color: white; /* Ensures it stays white */
-  z-index: 1000; /* Keeps it above other elements */
+  background-color: white;
+  /* Ensures it stays white */
+  z-index: 1000;
+  /* Keeps it above other elements */
   padding: 10px;
-  border-bottom: 1px solid #ddd; /* Adds a subtle separator */
+  border-bottom: 1px solid #ddd;
+  /* Adds a subtle separator */
   top: -21px;
 }
-.deletestatus{
+
+.deletestatus {
   color: red;
   padding: 6px;
   font-weight: 600;
 }
+
+
+
