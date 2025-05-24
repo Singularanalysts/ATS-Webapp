@@ -12,6 +12,10 @@ export class H1bImmigrantService {
   getCompanies() {
     return this.apiServ.get("auth/company/allcompanies"); 
   }
+
+  getCompaniesDropdown() {
+    return this.apiServ.get("auth/company/getCompaniesDropdown"); 
+  }
 getAllCompanies(){
   return this.apiServ.get("auth/company/allAssociatedCompanies");
 }

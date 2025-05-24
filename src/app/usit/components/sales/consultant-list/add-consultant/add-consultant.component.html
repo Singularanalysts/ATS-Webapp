@@ -141,9 +141,10 @@
             </mat-select>
             <button matSuffix mat-icon-button
               (click)="onAddCompany();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-            <mat-error *ngIf="isCompanyToDisplay && consultantForm.get('company')!.hasError('required')">Company is
-              Required
-            </mat-error>
+              <mat-error *ngIf="consultantForm.get('company')!.hasError('required')">
+                Company is Required
+              </mat-error>
+              
           </mat-form-field>
         </div>
 

@@ -70,6 +70,7 @@ export class Consultantinfo {
 
     teamlead:any;
     executive: any;
+    cid: any;
     
 }
 

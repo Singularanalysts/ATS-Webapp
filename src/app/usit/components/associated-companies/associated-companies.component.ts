@@ -443,7 +443,7 @@ export class AssociatedCompaniesComponent {
 }
 
   getCompanies() {
-    this.immigratonServ.getCompanies().subscribe({
+    this.immigratonServ.getCompaniesDropdown().subscribe({
       next: (response: any) => {
         this.companyList = response.map(([id, name]: [number, string]) => ({
           id,

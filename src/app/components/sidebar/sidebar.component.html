@@ -99,7 +99,7 @@
         <mat-icon class="icon">person</mat-icon>
       </button>
          <!-- User Settings -->
-<button mat-menu-item *ngIf="role != 'Employee'" routerLink="usit/associated-companies">
+<button mat-menu-item *ngIf="role === 'Super Administrator' && isManagingToDispaly" routerLink="usit/associated-companies">
   Manage Companies
   <mat-icon class="icon">business</mat-icon>
 </button>

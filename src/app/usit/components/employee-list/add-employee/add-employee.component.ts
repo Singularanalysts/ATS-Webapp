@@ -69,7 +69,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class  AddEmployeeComponent {
+export class AddEmployeeComponent {
   departmentOptions: string[] = [
     'Administration',
     'Recruiting',
@@ -131,10 +131,10 @@ export class  AddEmployeeComponent {
 
   isCompanyToDisplay: boolean = false;
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
     this.checkCompany(localStorage.getItem('companyid'));
     this.getCompanies();
-    this.getRoles();
+    this.getRolesForOtherCompanies();
     this.getManager();
     if (this.data.actionName === 'edit-employee') {
       this.initilizeAddEmployeeForm('');
@@ -146,9 +146,10 @@ export class  AddEmployeeComponent {
             const managerId = response.data.manager;
             this.getTeamLead(managerId);
             this.initilizeAddEmployeeForm(this.empObj);
+            this.checkSpecificCompany();
             this.validateControls();
             const roleId = response.data.role.roleid;
-            if ( roleId == 5 || roleId == 6 ) {
+            if (roleId == 5 || roleId == 6) {
               this.managerflg = true;
               this.teamleadflg = false;
             } else if (roleId == 7 || roleId == 8) {
@@ -162,17 +163,18 @@ export class  AddEmployeeComponent {
           }
         })
     } else {
-    //     if(this.isCompanyToDisplay){
-    //     this.initilizeAddEmployeeFormValidation(null);
-    //      this.validateControls();
-    //   this.toggleOtherDetails(false);
-    //     }
-    //     else{
-    //   this.initilizeAddEmployeeForm(null);
-    //   this.validateControls();
-    //   this.toggleOtherDetails(false);
-    // }
-    this.initilizeAddEmployeeForm(null);
+      //     if(this.isCompanyToDisplay){
+      //     this.initilizeAddEmployeeFormValidation(null);
+      //      this.validateControls();
+      //   this.toggleOtherDetails(false);
+      //     }
+      //     else{
+      //   this.initilizeAddEmployeeForm(null);
+      //   this.validateControls();
+      //   this.toggleOtherDetails(false);
+      // }
+      this.initilizeAddEmployeeForm(null);
+      this.checkSpecificCompany();
       this.validateControls();
       this.toggleOtherDetails(false);
     }
@@ -234,29 +236,38 @@ export class  AddEmployeeComponent {
       }),
       banterno: [employeeData ? employeeData.banterno : ''],
 
-      added: [localStorage.getItem('userid')] ,
+      added: [localStorage.getItem('userid')],
+
+
 
       cid: [
-        employeeData ? this.getCompanyByCid(employeeData.cid) : null,
+        employeeData ? employeeData.cid : null, // Not an array!
         this.isCompanyToDisplay ? [Validators.required] : []
       ],
-      
+
+
+
     });
 
-  this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
-    if (value) {
-      const banterNumber = value.slice(-10);
-      this.employeeForm.get('banterno').setValue(banterNumber);
+    this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
+      if (value) {
+        const banterNumber = value.slice(-10);
+        this.employeeForm.get('banterno').setValue(banterNumber);
+      }
+    });
+
+    if (!this.isCompanyToDisplay) {
+      const storedCompanyId = localStorage.getItem('companyid');
+      if (storedCompanyId) {
+        this.employeeForm.get('cid')?.setValue(storedCompanyId);
+      }
     }
-  });
 
   }
   getCompanyByCid(cid: string): any {
-    console.log(cid,'ciddddddddddddddddddddddd');
-    
     return this.companyOptions.find((c) => c.cid === cid);
   }
-  
+
   // private initilizeAddEmployeeFormValidation(employeeData: any) {
   //   this.employeeForm = this.formBuilder.group({
   //     fullname: [
@@ -354,6 +365,13 @@ export class  AddEmployeeComponent {
     });
   }
 
+  checkSpecificCompany() {
+
+    this.employeeForm.get('cid').valueChanges.subscribe((res: any) => {
+      this.getRoles(res);
+
+    });
+  }
 
   get addEmpForm() {
     return this.employeeForm.controls;
@@ -372,8 +390,10 @@ export class  AddEmployeeComponent {
 
           )
         );
+        
       return
-    } else if (type === "manager") {
+    } 
+    else if (type === "manager") {
       this.filteredManagerOptions =
         this.employeeForm.controls.manager.valueChanges.pipe(
           startWith(''),
@@ -383,7 +403,8 @@ export class  AddEmployeeComponent {
           }
           )
         );
-    } else if (type === "department") {
+    } 
+    else if (type === "department") {
       this.filteredDepartmentOptions =
         this.employeeForm.controls.department.valueChanges.pipe(
           startWith(''),
@@ -391,7 +412,8 @@ export class  AddEmployeeComponent {
             this._filterOptions(value || '', this.departmentOptions)
           )
         );
-    } else {
+    } 
+    else {
       this.filteredTeamLeadOptions =
         this.employeeForm.controls.teamlead.valueChanges.pipe(
           startWith(''),
@@ -422,7 +444,34 @@ export class  AddEmployeeComponent {
     return obj && obj.rolename ? obj.rolename : '';
   }
 
-  getRoles() {
+  getRoles(companyid: any) {
+
+    if(companyid!==null){
+
+    this.empManagementServ
+      .getRolesDropdown(companyid)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.rolearr = response.data;
+          this.roleOptions = response.data;
+          console.log(this.roleOptions, 'roleoptionss');
+
+        },
+        error: (err) => {
+          this.dataTobeSentToSnackBarService.message = err.message;
+          this.dataTobeSentToSnackBarService.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataTobeSentToSnackBarService
+          );
+        },
+      });
+    }
+  }
+
+  getRolesForOtherCompanies() {
 
     this.empManagementServ
       .getRolesDropdown(localStorage.getItem('companyid'))
@@ -431,8 +480,8 @@ export class  AddEmployeeComponent {
         next: (response: any) => {
           this.rolearr = response.data;
           this.roleOptions = response.data;
-          console.log(this.roleOptions,'roleoptionss');
-          
+          console.log(this.roleOptions, 'roleoptionss');
+
         },
         error: (err) => {
           this.dataTobeSentToSnackBarService.message = err.message;
@@ -445,7 +494,8 @@ export class  AddEmployeeComponent {
         },
       });
   }
-  companyOptionsdata:any
+
+  companyOptionsdata: any
   getCompanies() {
     this.empManagementServ
       .getCompaniesDropdown()
@@ -454,8 +504,8 @@ export class  AddEmployeeComponent {
         next: (response: any) => {
           this.companyarr = response.data;
           this.companyOptions = response.data;
-      
-          
+
+
         },
         error: (err) => {
           this.dataTobeSentToSnackBarService.message = err.message;
@@ -468,33 +518,39 @@ export class  AddEmployeeComponent {
         },
       });
   }
-  displayCompanyName(company: any): string {
-    console.log(company,);
-    
-    return company && company.companyName ? company.companyName : '';
+
+
+  displayCompanyName = (companyId: string): string => {
+    const company = this.companyOptions.find(opt => opt.cid === companyId);
+    return company ? company.companyName : '';
   }
-  
-checkCompany(companyid:any){
 
-  this.empManagementServ
-  .getValidDateCompanyGiven(companyid)
-  .pipe(takeUntil(this.destroyed$))
-  .subscribe({
-    next: (response: any) => {
-      this.isCompanyToDisplay = response.data;
-    },
-    error: (err) => {
-      this.dataTobeSentToSnackBarService.message = err.message;
-      this.dataTobeSentToSnackBarService.panelClass = [
-        'custom-snack-failure',
-      ];
-      this.snackBarServ.openSnackBarFromComponent(
-        this.dataTobeSentToSnackBarService
-      );
-    },
-  });
 
-}
+
+
+
+
+  checkCompany(companyid: any) {
+
+    this.empManagementServ
+      .getValidDateCompanyGiven(companyid)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.isCompanyToDisplay = response.data;
+        },
+        error: (err) => {
+          this.dataTobeSentToSnackBarService.message = err.message;
+          this.dataTobeSentToSnackBarService.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataTobeSentToSnackBarService
+          );
+        },
+      });
+
+  }
 
   getManager() {
     this.empManagementServ
@@ -549,32 +605,30 @@ checkCompany(companyid:any){
     this.submitted = true;
     const joiningDateFormControl = this.employeeForm.get('joiningdate');
     const relievingDateFormControl = this.employeeForm.get('relievingdate');
-    const compId = this.employeeForm.get('companyid');
+
     if (joiningDateFormControl.value) {
       const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
       const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl.value, 'yyyy-MM-dd');
       joiningDateFormControl.setValue(formattedJoiningDate);
       relievingDateFormControl.setValue(formattedRelievingDate);
     }
+
     if (this.employeeForm.invalid) {
       this.displayFormErrors();
-      this.isFormSubmitted = false
-      console.log(this.employeeForm.value,'submitformmmm');
-      
+      this.isFormSubmitted = false;
       return;
+    } else {
+      this.isFormSubmitted = true;
     }
-    else{
-      this.isFormSubmitted = true
-    } 
-   
-  this.employeeForm.patchValue({
-    added: localStorage.getItem('userid') 
-  });
+
+    this.employeeForm.patchValue({
+      added: localStorage.getItem('userid')
+    });
+
+    let saveObj: any;
 
     if (this.data.actionName === "edit-employee") {
-   console.log("ttttttt");
-   
- 
+
       [this.employeeForm.value].forEach((formVal, idx) => {
         this.empObj.aadharno = formVal.aadharno;
         this.empObj.accno = formVal.accno;
@@ -598,26 +652,35 @@ checkCompany(companyid:any){
         this.empObj.teamlead = formVal.teamlead;
         this.empObj.role = formVal.role;
         this.empObj.banterno = formVal.banterno;
-        this.empObj.cid = formVal.cid?.cid;
-        this.empObj.added=localStorage.getItem('userid');
+        this.empObj.cid = formVal.cid;
+        // this.empObj.userid=this.useriddata
+        this.empObj.added = localStorage.getItem('userid');
+        // console.log(this.empObj.userid=this.useriddata,'this.empObj.userid=this.useriddata');
+
       })
-    }
-    this.trimSpacesFromFormValues();
-    let saveObj: any;
-
-    if (this.data.actionName === "edit-employee") {
-      saveObj = this.empObj;
-    } else {
-      
       saveObj = { ...this.employeeForm.value };
-    
-      // overwrite 'cid' field to be only cid string
-      saveObj.cid = saveObj.cid?.cid ;
+
+      if (!this.isCompanyToDisplay) {
+        saveObj.cid = localStorage.getItem('companyid');
+      }
+      saveObj = this.empObj;
+
+
+
+    } else {
+
+      //  saveObj.cid = saveObj.cid?.cid
+      saveObj = { ...this.employeeForm.value };
+      saveObj.cid = saveObj.cid;
+
+      if (!this.isCompanyToDisplay) {
+        saveObj.cid = localStorage.getItem('companyid');
+      }
+
+      // saveObj.cid = saveObj.cid; // This will already be an array from the form
     }
-    
 
-
- this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
+    this.empManagementServ.addOrUpdateEmployee(saveObj, this.data.actionName).pipe(takeUntil(this.destroyed$)).subscribe({
       next: (data: any) => {
         if (data.status == 'success') {
           this.submit(data.data.userid);
@@ -637,7 +700,6 @@ checkCompany(companyid:any){
           this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
         }
-
       },
       error: (err) => {
         this.dataTobeSentToSnackBarService.message =
@@ -873,72 +935,26 @@ checkCompany(companyid:any){
 
   downloadfile(id: number, filename: string, flg: string) {
     var items = filename.split(".");
-     this.fileService
-       .downloadresume(id, flg)
-       .subscribe(blob => {
-         if (items[1] == 'pdf' || items[1] == 'PDF') {
-           var fileURL: any = URL.createObjectURL(blob);
-           var a = document.createElement("a");
-           a.href = fileURL;
-           a.target = '_blank';
-           a.click();
-         }
-         else {
-           saveAs(blob, filename)
-         }
-       }
-       );
+    this.fileService
+      .downloadresume(id, flg)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          a.click();
+        }
+        else {
+          saveAs(blob, filename)
+        }
+      }
+      );
 
   }
 
   deletefile(id: number, doctype: string) {
-      const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
-        title: 'Confirmation',
-        message: 'Are you sure you want to delete?',
-        confirmText: 'Yes',
-        cancelText: 'No',
-        actionData: id,
-        actionName: 'delete-employee'
-      };
-      const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: true, edit: false, add: false});
-      const dialogRef = this.dialogServ.openDialogWithComponent(
-        ConfirmComponent,
-        dialogConfig
-      );
-      // call delete api after  clicked 'Yes' on dialog click
-      dialogRef.afterClosed().subscribe({
-        next: (resp) => {
-          if (dialogRef.componentInstance.allowAction) {
-            // call delete api
-            this.fileService.removefile(id,doctype).pipe(takeUntil(this.destroyed$)).subscribe({
-              next: (response: any) => {
-                if (response.status == 'success') {
-                  this.dataTobeSentToSnackBarService.message =
-                    'File Deleted successfully';
-                    this.dialogRef.close();
-                } else {
-                  this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
-                  this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
-                }
-                this.snackBarServ.openSnackBarFromComponent(
-                  this.dataTobeSentToSnackBarService
-                );
-              },
-              error: (err) => {
-                this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
-                this.dataTobeSentToSnackBarService.message = err.message;
-                this.snackBarServ.openSnackBarFromComponent(
-                  this.dataTobeSentToSnackBarService
-                );
-              },
-            });
-          }
-        },
-      });
-  }
-
-  deletemultiple(id: number) {
-     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
       message: 'Are you sure you want to delete?',
       confirmText: 'Yes',
@@ -946,7 +962,53 @@ checkCompany(companyid:any){
       actionData: id,
       actionName: 'delete-employee'
     };
-    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog,{delete: true, edit: false, add: false});
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
+    const dialogRef = this.dialogServ.openDialogWithComponent(
+      ConfirmComponent,
+      dialogConfig
+    );
+    // call delete api after  clicked 'Yes' on dialog click
+    dialogRef.afterClosed().subscribe({
+      next: (resp) => {
+        if (dialogRef.componentInstance.allowAction) {
+          // call delete api
+          this.fileService.removefile(id, doctype).pipe(takeUntil(this.destroyed$)).subscribe({
+            next: (response: any) => {
+              if (response.status == 'success') {
+                this.dataTobeSentToSnackBarService.message =
+                  'File Deleted successfully';
+                this.dialogRef.close();
+              } else {
+                this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+                this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
+              }
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataTobeSentToSnackBarService
+              );
+            },
+            error: (err) => {
+              this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+              this.dataTobeSentToSnackBarService.message = err.message;
+              this.snackBarServ.openSnackBarFromComponent(
+                this.dataTobeSentToSnackBarService
+              );
+            },
+          });
+        }
+      },
+    });
+  }
+
+  deletemultiple(id: number) {
+    const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
+      title: 'Confirmation',
+      message: 'Are you sure you want to delete?',
+      confirmText: 'Yes',
+      cancelText: 'No',
+      actionData: id,
+      actionName: 'delete-employee'
+    };
+    const dialogConfig = this.getDialogConfigData(dataToBeSentToDailog, { delete: true, edit: false, add: false });
     const dialogRef = this.dialogServ.openDialogWithComponent(
       ConfirmComponent,
       dialogConfig
@@ -961,7 +1023,7 @@ checkCompany(companyid:any){
               if (response.status == 'success') {
                 this.dataTobeSentToSnackBarService.message =
                   'File Deleted successfully';
-                  this.dialogRef.close();
+                this.dialogRef.close();
               } else {
                 this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
                 this.dataTobeSentToSnackBarService.message = 'Record Deletion failed';
@@ -985,23 +1047,23 @@ checkCompany(companyid:any){
 
   type!: any;
   filedetails(fileData: FileData) {
-  this.type = fileData.filename;
-     var items = this.type.split(".");
-     this.fileService
-       .downloadfile(fileData.docid)
-       .subscribe(blob => {
-         if (items[1] == 'pdf' || items[1] == 'PDF') {
-           var fileURL: any = URL.createObjectURL(blob);
-           var a = document.createElement("a");
-           a.href = fileURL;
-           a.target = '_blank';
-           a.click();
-         }
-         else {
-           saveAs(blob, fileData.filename)
-         }
-       }
-       );
+    this.type = fileData.filename;
+    var items = this.type.split(".");
+    this.fileService
+      .downloadfile(fileData.docid)
+      .subscribe(blob => {
+        if (items[1] == 'pdf' || items[1] == 'PDF') {
+          var fileURL: any = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = fileURL;
+          a.target = '_blank';
+          a.click();
+        }
+        else {
+          saveAs(blob, fileData.filename)
+        }
+      }
+      );
 
   }
 
@@ -1012,13 +1074,13 @@ checkCompany(companyid:any){
     const bankAccountNoControl = this.employeeForm.get('accno');
     const bankIfscControl = this.employeeForm.get('ifsc');
     const bankBranchNameControl = this.employeeForm.get('branch');
-    
+
     if (checked) {
       this.showOtherDetails = true;
       // Add validators when checkbox is checked
       aadharControl?.setValidators([Validators.required, Validators.pattern(/^\d{12}$/)]);
       panControl?.setValidators([Validators.required, Validators.pattern(/^[A-Z]{5}\d{4}[A-Z]{1}$/)],);
-      bankNameControl?.setValidators( [Validators.required, Validators.maxLength(100)]);
+      bankNameControl?.setValidators([Validators.required, Validators.maxLength(100)]);
       bankAccountNoControl?.setValidators([Validators.required, Validators.pattern(/^\d{1,15}$/)]);
       bankIfscControl?.setValidators([Validators.required, Validators.pattern(/^([A-Za-z]{4}\d{7})$/)]);
       bankBranchNameControl?.setValidators([Validators.required]);
@@ -1037,16 +1099,16 @@ checkCompany(companyid:any){
     aadharControl?.updateValueAndValidity();
     panControl?.updateValueAndValidity();
     bankNameControl?.updateValueAndValidity();
-      bankAccountNoControl?.updateValueAndValidity();
-      bankIfscControl?.updateValueAndValidity();
-      bankBranchNameControl?.updateValueAndValidity();
+    bankAccountNoControl?.updateValueAndValidity();
+    bankIfscControl?.updateValueAndValidity();
+    bankBranchNameControl?.updateValueAndValidity();
   }
 
   camelCase(event: any) {
     const inputValue = event.target.value;
     event.target.value = this.capitalizeFirstLetter(inputValue);
   }
-  
+
   capitalizeFirstLetter(input: string): string {
     return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
       return char.toUpperCase();
@@ -1069,8 +1131,8 @@ checkCompany(companyid:any){
 
   emailDuplicate(event: any) {
     const email = event.target.value;
-    
-    this.empManagementServ.emailDuplicateCheck(email,localStorage.getItem('companyid')).subscribe((response: any) => {
+
+    this.empManagementServ.emailDuplicateCheck(email, localStorage.getItem('companyid')).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {

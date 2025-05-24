@@ -256,7 +256,6 @@ export class ConsultantListComponent
   ngOnInit(): void {
     this.filteredLocations = this.visadata; // Initialize with all locations
     const mvt = this.privilegeServ.hasPrivilege('MOVETOSALES_PRESALES');
-     console.log(mvt,'mvtttttt');
      
     if (mvt) {
       this.move2sales = true;
@@ -440,7 +439,7 @@ triggerFilterAPI(): void {
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       // keyword: this.field,
-      keyword: "empty",
+      keyword: this.field,
       flag: this.flag,
       role: this.role,
       userId: this.userid,
@@ -883,6 +882,9 @@ if(this.isFilter){
         this.filterData(this.request,this.currentPageIndex+1 );
         
       }else{
+
+
+
         this.getAllData(event.pageIndex + 1);
 
       }

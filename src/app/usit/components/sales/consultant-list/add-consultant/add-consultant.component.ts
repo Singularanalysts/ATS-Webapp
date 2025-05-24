@@ -40,7 +40,7 @@ import { FileManagementService } from 'src/app/usit/services/file-management.ser
 import { ApiService } from 'src/app/core/services/api.service';
 
 import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
-import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { EmployeeManagementService } from 'src/app/usit/services/employee-management.service';
 
 @Component({
@@ -110,7 +110,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   empArr: any = [];
   employees: any[] = [];
   employeedata: any = [];
-  userid!:any; 
+  userid!: any;
   private empManagementServ = inject(EmployeeManagementService);
 
   selectOptionObj = {
@@ -147,7 +147,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   searchTechOptions$!: Observable<any>;
   technologyOptions!: any;
   isTechnologyDataAvailable: boolean = false;
-  isCompanyToDisplay: boolean = false;
+  isCompanyToDisplay: boolean = true;
 
   constructor(
 
@@ -156,10 +156,32 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     return this.consultantForm.controls;
   }
 
-  kiran!:any;
-  ngOnInit(): void {
-    this.checkCompany(localStorage.getItem('companyid'));
+  kiran!: any;
+    ngOnInit() {
+
+    const companyId = localStorage.getItem('companyid');
+
+  if (companyId) {
+    this.empManagementServ
+      .getValidDateCompanyGiven(companyId)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          if (response.status === 'success') {
+            this.isCompanyToDisplay = true;
+          } else {
+            this.isCompanyToDisplay = false;
+          }
+        },
+        error: (err) => {
+          console.error('API Error:', err);
+          this.isCompanyToDisplay = false;
+        },
+      });
+  }
+
     this.role = localStorage.getItem('role');
+
     // below apis are common for add / update consultant
     this.getvisa();
     this.gettech();
@@ -190,32 +212,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           }
 
         );
-    } else {
+    } else {  
       this.initConsultantForm(new Consultantinfo());
+
     }
   }
 
-  checkCompany(companyid:any){
-
-    this.empManagementServ
-    .getValidDateCompanyGiven(companyid)
-    .pipe(takeUntil(this.destroyed$))
-    .subscribe({
-      next: (response: any) => {
-        this.isCompanyToDisplay = response.data;
-      },
-      error: (err) => {
-        this.dataToBeSentToSnackBar.message = err.message;
-        this.dataToBeSentToSnackBar.panelClass = [
-          'custom-snack-failure',
-        ];
-        this.snackBarServ.openSnackBarFromComponent(
-          this.dataToBeSentToSnackBar
-        );
-      },
-    });
   
-  }
 
   get controls() {
     return this.consultantForm.controls;
@@ -234,7 +237,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
     this.controls['empid']!.setValue(null);
   }
-  
+
   remove(employee: any): void {
 
     const index = this.selectData.indexOf(employee);
@@ -260,7 +263,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   onSelectAll(event: MatCheckboxChange) {
-   
+
     this.isAllOptionsSelected = event.checked;
     this.empArr.map(
       (x: any) => x.selected = event.checked
@@ -302,40 +305,39 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     // Map the selected employee data to API format and update empid form control
     const mappedData = this.selectData.map(mapToApiFormat);
     this.consultantForm.get('empid')!.setValue(mappedData);
-    
+
   }
 
   getEmployee() {
 
-    if(!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')){
-      const companyId=localStorage.getItem('companyid');
-    this.consultantServ.getEmployee(this.userid,companyId).subscribe(
-      (response: any) => {
-        this.empArr = response.data;
-        this.empArr.map((x: any) => x.selected = false);
-        this.prepopulateSelectedEmployees();
-      }
-    )
-  }
-  else if((this.flag === 'DomRecruiting')){
-    this.consultantServ.getDomEmployee().subscribe(
-      (response: any) => {
-        this.empArr = response.data;
-        this.empArr.map((x: any) => x.selected = false);
-        this.prepopulateSelectedEmployees();
-      }
-    )
-  }
-  else
-  {
-    this.consultantServ.getRecruiters().subscribe(
-      (response: any) => {
-        this.empArr = response.data;
-        this.empArr.map((x: any) => x.selected = false);
-        this.prepopulateSelectedEmployees();
-      }
-    )
-  }
+    if (!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')) {
+      const companyId = localStorage.getItem('companyid');
+      this.consultantServ.getEmployee(this.userid, companyId).subscribe(
+        (response: any) => {
+          this.empArr = response.data;
+          this.empArr.map((x: any) => x.selected = false);
+          this.prepopulateSelectedEmployees();
+        }
+      )
+    }
+    else if ((this.flag === 'DomRecruiting')) {
+      this.consultantServ.getDomEmployee().subscribe(
+        (response: any) => {
+          this.empArr = response.data;
+          this.empArr.map((x: any) => x.selected = false);
+          this.prepopulateSelectedEmployees();
+        }
+      )
+    }
+    else {
+      this.consultantServ.getRecruiters().subscribe(
+        (response: any) => {
+          this.empArr = response.data;
+          this.empArr.map((x: any) => x.selected = false);
+          this.prepopulateSelectedEmployees();
+        }
+      )
+    }
   }
 
   prepopulateSelectedEmployees() {
@@ -366,7 +368,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   getFlag(type: string) {
-    //alert(type)
     if (type === 'sales') {
       this.flag = 'sales';
     } else if (type === 'presales') {
@@ -377,12 +378,12 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.flag = 'DomRecruiting';
     }
   }
-  
+
 
   initConsultantForm(consultantData: Consultantinfo) {
 
 
-    if( this.flag ==='DomRecruiting' || this.role==='Sales Executive' || this.role==='Recruiter' || this.role==='Recruiting Manager'){
+    if (this.flag === 'DomRecruiting' || this.role === 'Sales Executive' || this.role === 'Recruiter' || this.role === 'Recruiting Manager') {
 
       this.consultantForm = this.formBuilder.group({
         consultantid: [consultantData ? consultantData.consultantid : ''],
@@ -427,8 +428,14 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         university: [consultantData ? consultantData.university : ''],
         yop: [consultantData ? consultantData.yop : ''],
         emprefname: [consultantData ? consultantData.emprefname : ''],
-        company: [consultantData ? consultantData.company : '', 
-          this.isCompanyToDisplay ? [Validators.required] : []],
+        // company: [consultantData ? consultantData.company : '', 
+        //   this.isCompanyToDisplay ? [Validators.required] : []],  
+        cid: [consultantData ? consultantData.cid : ''],
+
+
+        company: [consultantData ? consultantData.company : '',this.isCompanyToDisplay ? [Validators.required] : []
+        ],
+
         //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
         emprefemail: [consultantData ? consultantData.emprefemail : ''],
         //emprefcont: new FormControl(consultantData ? consultantData.emprefcont : ''),
@@ -440,7 +447,15 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
         refcont: [consultantData ? consultantData.refcont : ''],
         // // number: ['', Validators.required],
-        empid: [consultantData ? consultantData.empid : ''],
+        // empid: [consultantData ? consultantData.empid : ''],
+
+        empid: [
+          consultantData ? consultantData.empid : '',
+          (['Team Leader Sales', 'Team Leader Recruiting', 'Sales Manager', 'Super Administrator'].includes(this.role))
+            ? Validators.required
+            : []
+        ],
+
         // empid:[this.consultantForm.empid, Validators.required],
         // empid: [this.consultantForm.empid : '', Validators.required],
         relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
@@ -453,9 +468,9 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         addedby: localStorage.getItem('userid'),
         preSource: [0]
       });
-    
-    }else{
-    
+
+    } else {
+
       this.consultantForm = this.formBuilder.group({
         consultantid: [consultantData ? consultantData.consultantid : ''],
         consultantno: [consultantData ? consultantData.consultantno : ''],
@@ -485,9 +500,18 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         visa: [consultantData ? consultantData.visa : '', Validators.required],
         availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
         priority: [consultantData ? consultantData.priority : ''],
-        // company: [consultantData ? consultantData.company : '', Validators.required],
-        company: [consultantData ? consultantData.company : '', 
-          this.isCompanyToDisplay ? [Validators.required] : []],
+        cid: [consultantData ? consultantData.cid : ''],
+
+
+        company: [
+          consultantData ? consultantData.company : '',
+          this.isCompanyToDisplay ? Validators.required : []
+        ],
+        // company: [consultantData ? consultantData.company : '' ],
+
+
+        // company: [consultantData ? consultantData.company : '', 
+        //   this.isCompanyToDisplay ? [Validators.required] : []],
         position: [consultantData ? consultantData.position : '', Validators.required],
         status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
@@ -513,9 +537,16 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         //refcont: new FormControl(consultantData ? consultantData.refcont : ''),
         refcont: [consultantData ? consultantData.refcont : ''],
         // // number: ['', Validators.required],
-        empid: [consultantData ? consultantData.empid : '', Validators.required],
-        // empid:[this.consultantForm.empid, Validators.required],
-        // empid: [this.consultantForm.empid : '', Validators.required],
+        // empid: [consultantData ? consultantData.empid : '', Validators.required],
+
+        empid: [
+          consultantData ? consultantData.empid : '',
+          (['Team Leader Sales', 'Team Leader Recruiting', 'Sales Manager', 'Super Administrator'].includes(this.role))
+            ? Validators.required
+            : []
+        ],
+
+
         relocation: [consultantData ? consultantData.relocation : '', Validators.required],//  kiran
         relocatOther: [consultantData ? consultantData.relocatOther : ''],//,kiran
         consultantflg: this.data.flag.toLocaleLowerCase(),
@@ -528,36 +559,35 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       });
 
     }
-        
-       
-        if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
-          this.clrValidators();
+
+
+    if (this.data.actionName === "edit-consultant" && this.role === 'Employee') {
+      this.clrValidators();
+    }
+
+    if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
+      this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
+        (technology: any) => {
+          if (technology && technology.data) {
+            this.techid = technology.data[0].id;
+            this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
+          }
+        },
+        (error: any) => {
+          console.error('Error fetching consultant details:', error);
         }
-    
-        if (this.data.actionName === "edit-consultant" && consultantData && consultantData.technology) {
-          this.consultantServ.gettechDropDown(consultantData.technology).subscribe(
-            (technology: any) => {
-              if (technology && technology.data) {
-                this.techid = technology.data[0].id;
-                this.consultantForm.get('technology').setValue(technology.data[0].technologyarea);
-              }
-            },
-            (error: any) => {
-              console.error('Error fetching consultant details:', error);
-            }
-          );
-        }
-    
-        this.validateControls();
-      }
+      );
+    }
+
+    this.validateControls();
+  }
 
 
   private validateControls() {
     if (this.kiran !== "edit" && (this.flag === 'Recruiting' || this.flag === 'sales')) {
-      // alert()
       this.consultantForm.get('status').setValue('Active');
-  }
-  
+    }
+
 
 
     this.consultantForm.get('status').valueChanges.subscribe((res: any) => {
@@ -685,7 +715,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       }
       relocatOther.updateValueAndValidity();
     });
-    
+
     // this.consultantForm.get('consultanttype').valueChanges.subscribe((res: any) => {
     //   if (res == "Future") {
     //     this.consultantForm.get('projectavailabity').clearValidators();
@@ -728,10 +758,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     if (this.flag == 'sales') {
       priority.setValidators(Validators.required);
       this.consultantForm.get('requirements')?.patchValue(null);
-    } else if(this.flag=='presales' && this.role !== 'Employee') {
+    } else if (this.flag == 'presales' && this.role !== 'Employee') {
       priority.setValidators(Validators.required);
       this.consultantForm.get('requirements')?.patchValue(null);
-    }else if(this.flag=='presales' && this.role === 'Employee') {
+    } else if (this.flag == 'presales' && this.role === 'Employee') {
       priority.clearValidators();
     } else {
       priority.clearValidators();
@@ -792,6 +822,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.onFileSubmitted = true;
     this.submitted = true;
+    this.consultantForm.markAllAsTouched();
+    
+    
+    // add this
+    if(!this.isCompanyToDisplay){
+      this.consultantForm.get('company')?.setValue('0');
+    }
+   
+    this.consultantForm.get('cid')?.setValue( localStorage.getItem("companyid"));
+   
+
     // stop here if consultantForm is invalid
     if (this.consultantForm.invalid) {
       this.isFormSubmitted = false
@@ -800,16 +841,20 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.displayFormErrors();
       return;
     }
+
     else {
       this.isFormSubmitted = true
     }
+
+    // console.log("trr", this.consultantForm.company.invalid)
+
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
     if (this.data.actionName === "edit-consultant") {
-    //   this.selectData = consultantData.empid || []; // Assuming empid is an array of employee objects
-    // this.consultantForm.get('empid')?.setValue(this.selectData);
-    // this.consultantForm.get('empid')?.setValue(this.employeedata);
-    this.consultantForm.get('empid')?.setValue(this.empArr);
+      //   this.selectData = consultantData.empid || []; // Assuming empid is an array of employee objects
+      // this.consultantForm.get('empid')?.setValue(this.selectData);
+      // this.consultantForm.get('empid')?.setValue(this.employeedata);
+      this.consultantForm.get('empid')?.setValue(this.empArr);
       [this.consultantForm.value].forEach((formVal, idx) => {
         this.entity.firstname = formVal.firstname.trim();
         this.entity.lastname = formVal.lastname.trim();
@@ -844,6 +889,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         this.entity.relocatOther = formVal.relocatOther;
         // this.entity.empid = formVal.empid;
         this.entity.empid = this.selectData;
+        this.entity.cid = localStorage.getItem('companyid');
       })
     }
     this.trimSpacesFromFormValues();
@@ -945,7 +991,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   emailDuplicate(event: any) {
     const email = event.target.value;
     const companyId = localStorage.getItem('companyid');
-    this.consultantServ.duplicatecheckEmail(email,companyId).subscribe((response: any) => {
+    this.consultantServ.duplicatecheckEmail(email, companyId).subscribe((response: any) => {
       if (response.status == 'success') {
         this.message = '';
       } else if (response.status == 'fail') {
