@@ -69,6 +69,7 @@ export class AuthService {
     localStorage.removeItem('rnum');
     localStorage.removeItem('vnum');
     localStorage.removeItem('privileges');
+    localStorage.removeItem('companyid');
 
   }
   signout() {

@@ -1,0 +1,223 @@
+<!-- <ng-container *ngIf="role === 'Super Administrator'">
+  <div class="container mt-4">
+    <mat-card>
+      <mat-card-title class="title">Company Management</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="form">
+          <table class="mat-elevation-z8 table table-bordered w-100">
+            <thead>
+              <tr>
+                <th style="width: 35%;">Company</th>
+                <th style="width: 35%;">Associated Company</th>
+                <th style="width: 30%;">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="rows">
+              <tr *ngFor="let row of rowsControls; let i = index" [formGroupName]="i" class="align-middle">
+                <td>
+                  <mat-form-field appearance="fill" class="w-100 me-3">
+                    <mat-select placeholder="Select Company" formControlName="company" (selectionChange)="onCompanyChange(i)">
+                      <mat-option *ngFor="let company of companyList" [value]="company.id">
+                        {{ company.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="fill" class="w-100 ms-3">
+                    <mat-select placeholder="Select Associated Company" formControlName="associatedCompany">
+                      <mat-option *ngFor="let ac of getAssociatedCompaniesOptions(row.get('company')?.value)" [value]="ac.id">
+                        {{ ac.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <button mat-raised-button color="primary" (click)="saveRow(i)" [disabled]="row.get('isSaved')?.value">
+                      Save
+                    </button>
+                    <button mat-raised-button color="warn" (click)="removeRow(i)">
+                      Remove
+                    </button>
+                    <button mat-icon-button color="primary" *ngIf="i === rowsControls.length - 1" (click)="addRow()">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container> -->
+
+<!-- <ng-container *ngIf="role === 'Super Administrator'">
+  <div class="container mt-4">
+    <mat-card>
+      <mat-card-title class="title">Company Management</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="form">
+          <table class="table table-bordered w-100">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Associated Company</th>
+                <th class="text-center">Action</th>
+                <th class="text-center">Remove</th>
+                <th class="text-center">Add</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="rows">
+              <tr *ngFor="let row of rowsControls; let i = index" [formGroupName]="i">
+                <td>
+                  <mat-form-field appearance="fill" class="full-width">
+                    <mat-select
+                      placeholder="Select Company"
+                      formControlName="company"
+                      (selectionChange)="onCompanyChange(i)">
+                      <mat-option *ngFor="let company of companyList" [value]="company.id">
+                        {{ company.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="fill" class="full-width">
+                    <mat-select
+                      placeholder="Select Associated Company"
+                      formControlName="associatedCompany">
+                      <mat-option
+                        *ngFor="let ac of getAssociatedCompaniesOptions(row.get('company')?.value)"
+                        [value]="ac.id">
+                        {{ ac.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+
+                <td class="text-center">
+                  <ng-container *ngIf="!row.get('isSaved')?.value; else savedAction">
+                    <button mat-raised-button color="primary" (click)="saveRow(i)">
+                      Save
+                    </button>
+                  </ng-container>
+                  <ng-template #savedAction>
+                    <button mat-raised-button color="accent" (click)="deleteRow(i)">
+                      Delete
+                    </button>
+                  </ng-template>
+                </td>
+
+                <td class="text-center">
+                  <button
+                    *ngIf="!row.get('isSaved')?.value"
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeRow(i)"
+                    aria-label="Remove">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </td>
+
+                <td class="text-center">
+                  <button
+                    *ngIf="i === rowsControls.length - 1"
+                    mat-icon-button
+                    color="primary"
+                    (click)="addRow()"
+                    aria-label="Add">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container> -->
+
+
+
+<ng-container *ngIf="role === 'Super Administrator'"   (mousedown)="$event.preventDefault()" 
+>
+  <div class="container mt-4">
+    <mat-card>
+      <mat-card-title class="title">Company Management</mat-card-title>
+      <mat-card-content>
+        <h3 class="association-headings">Add New Association</h3>
+        <form [formGroup]="form">
+          <table class="table table-bordered w-100">
+            <thead>
+            </thead>
+            <tbody formArrayName="rows">
+              <tr *ngFor="let row of rowsControls; let i = index" [formGroupName]="i">
+                <td>
+                  <mat-form-field appearance="fill" class="full-width"
+                    [ngClass]="{ 'has-error': row.get('company')?.invalid && row.get('company')?.touched }">
+                    <mat-select placeholder="Select Company" formControlName="company">
+                      <mat-option *ngFor="let company of companyList" [value]="company.id">
+                        {{ company.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="row.get('company')?.hasError('required') && row.get('company')?.touched">
+                      Company is required
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td>
+                  <mat-form-field appearance="fill" class="full-width"
+                    [ngClass]="{ 'has-error': row.get('associatedCompany')?.invalid && row.get('associatedCompany')?.touched }">
+                    <mat-select placeholder="Select Associated Company" formControlName="associatedCompany">
+                      <mat-option *ngFor="let ac of getAssociatedCompaniesOptions(row.get('company')?.value)"
+                        [value]="ac.id">
+                        {{ ac.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="row.get('associatedCompany')?.hasError('required') && row.get('associatedCompany')?.touched">
+                      Associated Company is required
+                    </mat-error>
+                  </mat-form-field>
+                </td>
+                <td class="text-center">
+                  <button mat-raised-button color="primary" type="button" (click)="saveRow(i)">
+                    Save
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+
+        <!-- Existing Associations -->
+        <h3 class="association-headings">Saved Associations</h3>
+        <table class="table table-bordered w-100" *ngIf="savedData.length > 0">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Associated Company</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of savedData">
+              <td>{{ row.cmpname }}</td>
+              <td>{{ row.associtedname }}</td>
+              <td class="text-center">
+                <button mat-raised-button color="warn" (click)="deleteAssociation(row.id)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container>

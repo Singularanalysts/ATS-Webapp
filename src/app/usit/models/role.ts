@@ -14,4 +14,6 @@ export class Role {
   //hero = new Employee();
   addedby = localStorage.getItem('userid');
   updatedby = localStorage.getItem('userid');
+  selectedOptions: any=[];
+  companyid: any;
 }

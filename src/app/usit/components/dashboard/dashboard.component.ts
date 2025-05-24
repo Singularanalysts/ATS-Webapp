@@ -159,7 +159,7 @@ export class DashboardComponent implements OnInit {
   }
   
   getPerformanceRatings(filter?: string) {
-    this.privilegeServ.getPerformanceRatings(filter).subscribe({
+    this.privilegeServ.getPerformanceRatings(filter, localStorage.getItem('companyid')).subscribe({
       next: (response: any) => {
         this.performanceData = response.data;
         this.calculateStars(response.data.avg_rating);
@@ -235,7 +235,7 @@ pageSizeOptions = [50, 75, 100];
         this.countCallingHigherRole();
       }
   
-      this.dashboardServ.vmstransactions().subscribe(
+      this.dashboardServ.vmstransactions(localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.datarr = response.data;
         })
@@ -287,7 +287,7 @@ console.log(previlage,'previlage');
       // this.getReqVendorCount();
       // this.getReqCatergoryCount();
       // this.getEmployeeNames();
-      this.dashboardServ.vmstransactions().subscribe(
+      this.dashboardServ.vmstransactions(localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.datarr = response.data;
         })
@@ -342,7 +342,7 @@ console.log(previlage,'previlage');
     }
   }
   countCallingHigherRole() {
-    this.dashboardServ.getClosureCount('monthly').subscribe(
+    this.dashboardServ.getClosureCount('monthly', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -355,7 +355,7 @@ console.log(previlage,'previlage');
         });
       })
     );
-    this.dashboardServ.getInterviewCount('daily').subscribe(
+    this.dashboardServ.getInterviewCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -368,7 +368,7 @@ console.log(previlage,'previlage');
         });
       })
     );
-    this.dashboardServ.getsubmissionCount('daily').subscribe(
+    this.dashboardServ.getsubmissionCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -381,7 +381,7 @@ console.log(previlage,'previlage');
         });
       })
     );
-    this.dashboardServ.getsourcingCount('daily').subscribe(
+    this.dashboardServ.getsourcingCount('daily', localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.sourcingcountArr = response.data;
         this.sourcingVerifiedcount = response.data.verified;
@@ -438,7 +438,7 @@ console.log(previlage,'previlage');
     this.subcount = 0;
     this.reccount = 0;
     this.submissionFlag = flg;
-    this.dashboardServ.getsubmissionCount(flag).subscribe(
+    this.dashboardServ.getsubmissionCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.subCountArr = response.data;
         this.subCountArr.forEach((ent: any) => {
@@ -475,7 +475,7 @@ console.log(previlage,'previlage');
     this.interviewFlag = flg;
     this.sintcount = 0;
     this.rintcount = 0;
-    this.dashboardServ.getInterviewCount(flag).subscribe(
+    this.dashboardServ.getInterviewCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.intCountArr = response.data;
         this.intCountArr.forEach((ent: any) => {
@@ -512,7 +512,7 @@ console.log(previlage,'previlage');
     this.closureFlag = flg;
     this.sclosecount = 0;
     this.rclosecount = 0;
-    this.dashboardServ.getClosureCount(flag).subscribe(
+    this.dashboardServ.getClosureCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.closecountArr = response.data;
         this.closecountArr.forEach((ent: any) => {
@@ -552,7 +552,7 @@ console.log(previlage,'previlage');
     this.sourcingCompletedcount = 0;
     this.sourcingVerifiedcount = 0;
     this.sourcingMoveToSalescount = 0;
-    this.dashboardServ.getsourcingCount(flag).subscribe(
+    this.dashboardServ.getsourcingCount(flag, localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.sourcingcountArr = response.data;
         this.sourcingVerifiedcount = response.data.verified;
@@ -587,7 +587,7 @@ console.log(previlage,'previlage');
       userId: this.userid
     };
   
-    this.dashboardServ.getSourcingLeads(payload).subscribe(
+    this.dashboardServ.getSourcingLeads(payload,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.dataSource.data = response.data.content;
         const totalRecords = response.data.totalElements;
@@ -803,7 +803,7 @@ console.log(totalRecords,'totalrecords');
       role:this.role
     };
   
-    this.dashboardServ.getDiceRequirements(payload).subscribe(
+    this.dashboardServ.getDiceRequirements(payload,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.dataSourceDice.data = response.data.content;
         console.log(this.dataSourceDice.data, 'this.dataSourceDice.data');
@@ -1103,7 +1103,7 @@ console.log(totalRecords,'totalrecords');
       pageSize: this.pageSizedice
      }; // Send data in the request body
   
-    this.dashboardServ.getFilteredEmployee(payload)
+    this.dashboardServ.getFilteredEmployee(payload,localStorage.getItem('companyid'))
       .subscribe(
         (response: any) => {
           if (response && response.data) {

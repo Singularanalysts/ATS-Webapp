@@ -17,7 +17,7 @@ export class CandidateAppliedJobsComponent {
  
   ngOnInit(): void {
     if (this.data) {
-      this.reportServ.candidateAppliedJobsPopup(this.data).subscribe({
+      this.reportServ.candidateAppliedJobsPopup(this.data,localStorage.getItem('companyid')).subscribe({
         next: (response: any) => {
           this.dataSource = response.data;
         },

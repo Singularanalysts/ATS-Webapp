@@ -26,67 +26,63 @@
         </div>
       </button>
     </mat-menu>
-    <button 
-    *ngIf="privilegeServ.hasPrivilege('SUB_APPROVAL_NOTIFICATION')" 
-    mat-icon-button 
-    [matBadge]="pendingSubmissionsCount" 
-    matBadgeColor="warn" 
-    matBadgePosition="above after"
-    [matMenuTriggerFor]="submissionMenu" 
-    matTooltip="Submission Action" 
-     class="submission-badge"
-    >
-    <mat-icon >assignment</mat-icon>
-  </button>
-  
-    
+    <button *ngIf="privilegeServ.hasPrivilege('SUB_APPROVAL_NOTIFICATION')" mat-icon-button
+      [matBadge]="pendingSubmissionsCount" matBadgeColor="warn" matBadgePosition="above after"
+      [matMenuTriggerFor]="submissionMenu" matTooltip="Submission Action" class="submission-badge">
+      <mat-icon>assignment</mat-icon>
+    </button>
+
+
     <!-- Submission Menu -->
-<!-- Submission Menu -->
-<mat-menu #submissionMenu="matMenu" xPosition="before" class="custom-submission-menu">
-  <div *ngFor="let submission of submissions" style="padding: 10px; width: 300px; border-bottom: 1px solid #e0e0e0;">
-    
-    <!-- First line -->
-    <div style="display: flex; flex-direction: row; align-items: flex-start;">
-      <!-- Left side: Time -->
-      <div style="min-width: 60px; font-size: 14px; color: rgb(96 151 101); font-weight: 700;">
-        {{ submission.trtime }}
-      </div>
-    
-      <!-- Right side: Submission details -->
-      <div style="font-weight: 500; display: flex; flex-direction: column;">
-        <span>
-          <strong style="color: #0275D8; font-weight: 700;">{{ submission.pseudoname }}</strong> has requested a submission for 
-          <span style="color: #008000; font-weight: 700;">{{ submission.consultantname }}</span> to 
-          <span style="color: #0000D3; font-weight: 700;">{{ submission.company }} (C),</span>   
-          <span style="font-weight: 700;">{{ submission.endClient }}</span> 
-          <span style="font-weight: 700;">{{ submission.implpartner }}</span> at a rate of 
-          <span style="font-weight: 700;">${{ submission.submission_rate }}</span>.
-        </span>
-      </div>
-    </div>
-    
-    
+    <!-- Submission Menu -->
+    <mat-menu #submissionMenu="matMenu" xPosition="before" class="custom-submission-menu">
+      <div *ngFor="let submission of submissions"
+        style="padding: 10px; width: 300px; border-bottom: 1px solid #e0e0e0;">
 
-    <!-- Conditional Status or Action Buttons -->
-    <div style="margin-top: 0px; display: flex; justify-content: flex-end; gap: 10px;">
-      <ng-container *ngIf="submission.status !== 'Approved' && submission.status !== 'Rejected'; else statusBox">
-        <button mat-raised-button color="primary" (click)="approve(submission.id)" class="buttondata">Approve</button>
-        <button mat-raised-button color="warn" (click)="reject(submission.id)" class="buttondata">Reject</button>
-      </ng-container>
+        <!-- First line -->
+        <div style="display: flex; flex-direction: row; align-items: flex-start;">
+          <!-- Left side: Time -->
+          <div style="min-width: 60px; font-size: 14px; color: rgb(96 151 101); font-weight: 700;">
+            {{ submission.trtime }}
+          </div>
 
-      <!-- Show status box if already approved or rejected -->
-      <ng-template #statusBox>
-        <div 
-          style="box-shadow: 0 2px 4px rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 4px; font-weight: bold;"
-          [ngStyle]="{ 'color': submission.status === 'Approved' ? 'green' : 'red' }">
-          {{ submission.status }}
+          <!-- Right side: Submission details -->
+          <div style="font-weight: 500; display: flex; flex-direction: column;">
+            <span>
+              <strong style="color: #0275D8; font-weight: 700;">{{ submission.pseudoname }}</strong> has requested a
+              submission for
+              <span style="color: #008000; font-weight: 700;">{{ submission.consultantname }}</span> to
+              <span style="color: #0000D3; font-weight: 700;">{{ submission.company }} (C),</span>
+              <span style="font-weight: 700;">{{ submission.endClient }}</span>
+              <span style="font-weight: 700;">{{ submission.implpartner }}</span> at a rate of
+              <span style="font-weight: 700;">${{ submission.submission_rate }}</span>.
+            </span>
+          </div>
         </div>
-      </ng-template>
-    </div>
-  </div>
-</mat-menu>
 
-    
+
+
+        <!-- Conditional Status or Action Buttons -->
+        <div style="margin-top: 0px; display: flex; justify-content: flex-end; gap: 10px;">
+          <ng-container *ngIf="submission.status !== 'Approved' && submission.status !== 'Rejected'; else statusBox">
+            <button mat-raised-button color="primary" (click)="approve(submission.id)"
+              class="buttondata">Approve</button>
+            <button mat-raised-button color="warn" (click)="reject(submission.id)" class="buttondata">Reject</button>
+          </ng-container>
+
+          <!-- Show status box if already approved or rejected -->
+          <ng-template #statusBox>
+            <div
+              style="box-shadow: 0 2px 4px rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 4px; font-weight: bold;"
+              [ngStyle]="{ 'color': submission.status === 'Approved' ? 'green' : 'red' }">
+              {{ submission.status }}
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </mat-menu>
+
+
     <button mat-icon-button matTooltip="Refresh" (click)="globalRefresh()">
       <mat-icon>refresh</mat-icon>
     </button>
@@ -102,6 +98,13 @@
         My Profile
         <mat-icon class="icon">person</mat-icon>
       </button>
+         <!-- User Settings -->
+<button mat-menu-item *ngIf="role === 'Super Administrator' && isManagingToDispaly" routerLink="usit/associated-companies">
+  Manage Companies
+  <mat-icon class="icon">business</mat-icon>
+</button>
+
+
       <button mat-menu-item [matMenuTriggerFor]="accountSettingsMenu" *ngIf="role != 'Employee'">
         <mat-icon class="icon">settings</mat-icon>
         Account Settings

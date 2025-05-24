@@ -284,13 +284,13 @@ myRoles(){
           "routerLink": "/usit/sales-closures",
           "roles":["Super Administrator"]  
         },
-        {
-          "test": "SALES_TRASH_BIN",
-          "text": "Submission Trash Bin",
-          "icon": "check_circle",
-          "routerLink": "/usit/sales-submissionsTrash",
-          "roles":["Super Administrator"]  
-        }
+        // {
+        //   "test": "SALES_TRASH_BIN",
+        //   "text": "Submission Trash Bin",
+        //   "icon": "check_circle",
+        //   "routerLink": "/usit/sales-submissionsTrash",
+        //   "roles":["Super Administrator"]  
+        // }
       ]
     } ,
         {
@@ -333,13 +333,13 @@ myRoles(){
           "routerLink": "/usit/rec-closures",
           "roles":["Super Administrator"] 
         },
-        {
-          "test":"RECRUITING_TRASH_BIN",
-          "text": "Submission Trash Bin",
-          "icon": "check_circle",
-          "routerLink": "/usit/Recruitment-submissionsTrash",
-          "roles":["Super Administrator"] 
-        }
+        // {
+        //   "test":"RECRUITING_TRASH_BIN",
+        //   "text": "Submission Trash Bin",
+        //   "icon": "check_circle",
+        //   "routerLink": "/usit/Recruitment-submissionsTrash",
+        //   "roles":["Super Administrator"] 
+        // }
       ]
     },
     {
@@ -382,13 +382,13 @@ myRoles(){
           "routerLink": "/usit/dom-closures",
           "roles":["Super Administrator"]  
         },
-        {
-          "test":"DOM_TRASH_BIN",
-          "text": "Submission Trash Bin",
-          "icon": "check_circle",
-          "routerLink": "/usit/Dom-submissionTrash",
-          "roles":["Super Administrator"]  
-        }
+        // {
+        //   "test":"DOM_TRASH_BIN",
+        //   "text": "Submission Trash Bin",
+        //   "icon": "check_circle",
+        //   "routerLink": "/usit/Dom-submissionTrash",
+        //   "roles":["Super Administrator"]  
+        // }
       ]
     },
     {
@@ -601,6 +601,13 @@ myRoles(){
           "icon": "business",
           "routerLink": "/usit/companies",
           "roles":["Super Administrator"]  
+        },
+        {
+          "test": "SUPERADMINS",
+          "text": "SuperAdmins Data",
+          "icon": "people",
+          "routerLink": "/usit/othercompaniessupderadmindata",
+          "roles":["Super Administrator"]  
         }
       ]
     },
@@ -724,10 +731,7 @@ myRoles(){
         "roles":["Super Administrator"] 
         }],
       
-  }
-  
-  
-  ,
+  },
   {
     "test":"EMPLOYEE_LOGIN_APPLIED_JOBS",
     "text": "Applied Jobs",

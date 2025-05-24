@@ -238,6 +238,7 @@ export class AddRequirementComponent {
   }
 
   private initializeRequirementForm(requirementData: any) {
+    const cid = localStorage.getItem('companyid')
     this.requirementForm = this.formBuilder.group({
       reqnumber: [requirementData ? requirementData.reqnumber : '', Validators.required],
       postedon: [requirementData ? requirementData.postedon : '', Validators.required],
@@ -267,7 +268,8 @@ export class AddRequirementComponent {
       maxnumber: [requirementData ? requirementData.maxnumber : ''],
       dommaxnumber: [requirementData ? requirementData.dommaxnumber : ''],
       // requirementid: [this.requirementForm.requirementid],
-      requirementid: [requirementData ? requirementData.requirementid : '']
+      requirementid: [requirementData ? requirementData.requirementid : ''],
+      cid:[cid]
     });
     if (this.data.actionName === 'edit-requirement') {
       this.requirementForm.addControl('status', this.formBuilder.control(requirementData ? requirementData.status : ''));
@@ -507,7 +509,7 @@ export class AddRequirementComponent {
                this.data.actionName === 'add-requirement'
                  ? 'Requirement added successfully'
                  : 'Requirement updated successfully';
-                 console.log(resp,'requremrntdata');
+                //  console.log(resp,'requremrntdata');
                  
              this.dialogRef.close();
            } else {
@@ -689,7 +691,7 @@ export class AddRequirementComponent {
   getSaveData() {
     if (this.data.actionName === 'edit-requirement') {
 
-      return { ...this.entity, ...this.requirementForm.value }
+      return { ...this.entity, ...this.requirementForm.value ,  }
     }
     return this.requirementForm.value;
   }

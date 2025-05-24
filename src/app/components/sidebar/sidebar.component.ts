@@ -6,11 +6,13 @@ import { ProgressBarMode } from '@angular/material/progress-bar';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs';
 import { LoaderService } from 'src/app/services/loader.service';
 import { PermissionsService } from 'src/app/services/permissions.service';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
 import { UserManagementService } from 'src/app/services/user-management.service';
+import { EmployeeManagementService } from 'src/app/usit/services/employee-management.service';
 import { WebsocketService } from 'src/app/usit/services/websocket.service';
 
 const keyFrames = [
@@ -33,6 +35,7 @@ const keyFrames = [
 export class SidebarComponent implements OnInit {
   protected privilegeServ = inject(PrivilegesService);
 
+  private empManagementServ = inject(EmployeeManagementService);
   private snackBarServ = inject(SnackBarService);
   protected permissionServ = inject(PermissionsService);
   protected userManagementServ = inject(UserManagementService);
@@ -53,10 +56,11 @@ export class SidebarComponent implements OnInit {
   submissions: any[] = [];
   pendingSubmissionsCount: number = 0;
   isManager: boolean = false;
+  managingCompanyOpt: string | null = null;
+isManagingToDispaly: boolean = false;
 
   getsubmissions() {
-    this.permissionServ.getsubmission().subscribe((res: any) => {
-      console.log('Submissions:', res);
+    this.permissionServ.getsubmission(localStorage.getItem('companyid')).subscribe((res: any) => {
       this.submissions = res.data || [];
   
       // Filter count for new submissions not approved or rejected
@@ -83,10 +87,15 @@ reject(submissionId: number) {
 
   globalRefresh(): void {
     window.location.reload();
-
- 
   }
-  ngOnInit() {
+
+ngOnInit(): void {
+  this.managingCompanyOpt = localStorage.getItem('companyid');
+
+  this.isManagingToDispaly = this.managingCompanyOpt === 'tJiels9DKKE4HXvMZSuI7A==';
+
+  console.log('isManagingToDispaly:', this.isManagingToDispaly);
+
     this.getsubmissions()
     this.role  = localStorage.getItem('role');
     this.department  = localStorage.getItem('department');
@@ -167,6 +176,7 @@ reject(submissionId: number) {
     localStorage.removeItem('rnum');
     localStorage.removeItem('vnum');
     localStorage.removeItem('privileges');
+    localStorage.removeItem('companyid');
     //alertify.warning("Token expired please login");
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: 'You have signed out!',

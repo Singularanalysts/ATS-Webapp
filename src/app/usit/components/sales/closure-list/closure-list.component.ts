@@ -97,7 +97,7 @@ export class ClosureListComponent implements OnInit, OnDestroy {
   }
 
   getAll() {
-    this.interviewServ.getOnboardedDetails(this.flag).pipe(takeUntil(this.destroyed$)).subscribe(
+    this.interviewServ.getOnboardedDetails(this.flag, localStorage.getItem('companyid')).pipe(takeUntil(this.destroyed$)).subscribe(
       (response: any) => {
         this.entity = response.data;
         this.dataSource.data = response.data;

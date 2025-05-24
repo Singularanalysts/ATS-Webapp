@@ -169,6 +169,7 @@ export class RequirementListComponent implements OnInit, OnDestroy {
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       keyword: this.field,
+      cid:localStorage.getItem('companyid')
     }
 
     return this.requirementServ
@@ -210,6 +211,7 @@ export class RequirementListComponent implements OnInit, OnDestroy {
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         keyword: keyword,
+        cid:localStorage.getItem('companyid')
       }
       return this.requirementServ
       .getAllRequirementData(pagObj)
@@ -411,7 +413,6 @@ export class RequirementListComponent implements OnInit, OnDestroy {
   }
   Assignedrequirements(){
     this.router.navigate(['/usit/assigned-requirements']);
-    console.log('routinggggg');
     
 
   }

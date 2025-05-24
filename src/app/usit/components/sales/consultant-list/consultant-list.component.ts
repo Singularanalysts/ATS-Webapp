@@ -176,6 +176,7 @@ export class ConsultantListComponent
   selectedPriorityOptions = new Set<string>();
 
   onPriorityChange(event: any): void {
+    this.isFilter=true  
     const selectedValues = event.value;
     this.selectedPriorityOptions = new Set(selectedValues); // Track selected values
   
@@ -191,7 +192,10 @@ export class ConsultantListComponent
     const visa = this.myForm.get('visa')?.value;
     const experience = this.myForm.get('experience')?.value;
     const consultantflg = this.flag;
-  
+    const companyId= localStorage.getItem('companyid');
+    const sortField= this.sortField;
+    const sortOrder= this.sortOrder;
+
     // Prepare request payload
     this.request = {
       position,
@@ -199,7 +203,13 @@ export class ConsultantListComponent
       visaStatus: visa,
       priority: Array.from(this.selectedPriorityOptions), // Convert Set to Array
       experience,
-      consultantflg
+      consultantflg,
+      companyId,
+      sortOrder,
+      sortField
+      
+
+      
     };
   
     this.filterData(this.request, this.page);
@@ -246,7 +256,6 @@ export class ConsultantListComponent
   ngOnInit(): void {
     this.filteredLocations = this.visadata; // Initialize with all locations
     const mvt = this.privilegeServ.hasPrivilege('MOVETOSALES_PRESALES');
-     console.log(mvt,'mvtttttt');
      
     if (mvt) {
       this.move2sales = true;
@@ -273,10 +282,9 @@ export class ConsultantListComponent
 
   filterData(request: any,page:any) {
   this.filterApply=true
-    return this.consultantServ.getFilteredConsults(page,this.pageSize ,request).subscribe(
+    return this.consultantServ.getFilteredConsultant(page,this.pageSize,request).subscribe(
       ((response: any) => {
         this.consultant = response.data.content;
-        console.log(this.consultant,'consultantttt');
         
         this.dataSource.data = response.data.content;
         this.dataSource.data.map((x: any, i) => {
@@ -305,6 +313,8 @@ export class ConsultantListComponent
   selectedVisaOptions = new Set<string>(); // Store selected visa options
 
   onVisaChange(event: MatSelectChange): void {
+    this.isFilter=true
+  
     this.selectedVisaOptions = new Set(event.value); // Update selected options
   
     // Update form control with selected values
@@ -327,13 +337,16 @@ triggerFilterAPI(): void {
     visaStatus: Array.from(this.selectedVisaOptions), // Pass selected visa values
     priority: this.myForm.get('priority')?.value,
     experience: this.myForm.get('experience')?.value,
-    consultantflg: this.flag
+    consultantflg: this.flag,
+    companyId: localStorage.getItem('companyid'),
+    sortField: this.sortField,
+    sortOrder: this.sortOrder
+
   };
 
   this.filterApply = true;
-  this.consultantServ.getFilteredConsults(this.page, this.pageSize, request).subscribe((response: any) => {
+  this.consultantServ.getFilteredConsultant(this.page, this.pageSize, request).subscribe((response: any) => {
     this.consultant = response.data.content;
-    console.log(this.consultant, 'consultantttt');
 
     this.dataSource.data = response.data.content;
     this.dataSource.data.forEach((x: any, i: number) => {
@@ -426,11 +439,12 @@ triggerFilterAPI(): void {
       sortField: this.sortField,
       sortOrder: this.sortOrder,
       // keyword: this.field,
-      keyword: "empty",
+      keyword: this.field,
       flag: this.flag,
       role: this.role,
       userId: this.userid,
       preSource: 0,
+      companyId:localStorage.getItem('companyid')
     }
 
     return this.consultantServ
@@ -482,6 +496,7 @@ triggerFilterAPI(): void {
         role: this.role,
         userId: this.userid,
         preSource: 0,
+        companyId: localStorage.getItem('companyid')
       }
       return this.consultantServ.getAllConsultantData(pagObj).subscribe(
           ((response: any) => {
@@ -523,9 +538,38 @@ preventSubmit(event: Event): void {
 
     this.sortOrder = event.direction;
 
-    if (event.direction != '') {
-      this.getAllData();
-    }
+if(this.isFilter){
+  if (event.direction != '') {
+
+    const position = this.myForm.get('position').value;
+    const location = this.myForm.get('location').value;
+    const visa = this.myForm.get('visa').value;
+    const priority = this.myForm.get('priority').value;
+    const experience = this.myForm.get('experience').value;
+    const consultantflg = this.flag;
+
+    const sortField = this.sortField
+    const sortOrder = this.sortOrder;
+    this.request.sortOrder = sortOrder; 
+    this.request.sortField = sortField;
+    this.request.position = position; 
+    this.request.location = location;
+    this.request.visaStatus = visa;
+    this.request.priority = priority;
+    this.request.experience = experience;
+    this.request.consultantflg=consultantflg;
+    this.request.companyId=localStorage.getItem('companyid');
+    this.filterData(this.request,this.page );
+  }
+
+}else{
+
+  if (event.direction != '') {
+    this.getAllData();
+  }
+}
+    
+   
   }
 
   navTo(to: string, id: any) {
@@ -561,7 +605,7 @@ preventSubmit(event: Event): void {
     };
 
     return this.consultantServ
-      .consultant_DrillDown_report(drilldownReportObj)
+      .consultant_DrillDown_report(drilldownReportObj,localStorage.getItem('companyid'))
       .subscribe((response: any) => {
         this.consultant_data = response.data;
       });
@@ -832,15 +876,24 @@ preventSubmit(event: Event): void {
         const priority = this.myForm.get('priority').value;
         const experience = this.myForm.get('experience').value;
         const consultantflg = this.flag;
+
+        const sortField = this.sortField
+        const sortOrder = this.sortOrder;
+        this.request.sortOrder = sortOrder; 
+        this.request.sortField = sortField;
         this.request.position = position; 
         this.request.location = location;
         this.request.visaStatus = visa;
         this.request.priority = priority;
         this.request.experience = experience;
         this.request.consultantflg=consultantflg;
+        this.request.companyId=localStorage.getItem('companyid');
         this.filterData(this.request,this.currentPageIndex+1 );
         
       }else{
+
+
+
         this.getAllData(event.pageIndex + 1);
 
       }
@@ -877,19 +930,28 @@ preventSubmit(event: Event): void {
     const priority = this.myForm.get('priority').value;
     const experience = this.myForm.get('experience').value;
     const consultantflg =this.flag;
+    const sortField =this.sortField;
+    const sortOrder =this.sortOrder;
+
+
     
+     this.request.sortOrder = sortOrder;
+    this.request.sortField = sortField;
     this.request.position = position;
     this.request.location = location;
     this.request.visaStatus = visa;
     this.request.priority = priority;
     this.request.experience = experience;
     this.request.consultantflg=consultantflg;
+    this.request.companyId=localStorage.getItem('companyid');
 
     this.filterData(this.request,this.page);
   }
   selectedExperienceOptions = new Set<string>();
 
+   isFilter!:boolean
   onExperienceChange(event: any): void {
+    this.isFilter=true
     const selectedValues = event.value;
     this.selectedExperienceOptions = new Set(selectedValues); // Track selected values
   
@@ -905,7 +967,11 @@ preventSubmit(event: Event): void {
     const visa = this.myForm.get('visa')?.value;
     const priority = this.myForm.get('priority')?.value;
     const consultantflg = this.flag;
-  
+    const companyId=localStorage.getItem('companyid');
+
+    const sortField = this.sortField;
+    const sortOrder=this.sortOrder;
+
     // Prepare request payload
     this.request = {
       position,
@@ -913,7 +979,11 @@ preventSubmit(event: Event): void {
       visaStatus: visa,
       priority,
       experience: Array.from(this.selectedExperienceOptions), // Convert Set to Array
-      consultantflg
+      consultantflg,
+      companyId,
+      sortField,
+      sortOrder
+
     };
   
     this.filterData(this.request, this.page);
@@ -952,7 +1022,7 @@ preventSubmit(event: Event): void {
     handleExport() {
       this.filterApply = true;
       if (JSON.stringify(this.request) !== '{}') { 
-      return this.consultantServ.getFilteredConsults(1, 1000, this.request).subscribe(
+      return this.consultantServ.getFilteredConsultant(1, 1000, this.request).subscribe(
         (response: any) => {
           this.consultant = response.data.content;
           this.dataSource.data = response.data.content;
@@ -1038,6 +1108,11 @@ export class FilterRequest {
   priority: any;
   experience: any;
   consultantflg:any;
+  companyId: any;
+  sortOrder: any;
+  sortField: any;
+
+
 }
 
 export interface ReportVo {

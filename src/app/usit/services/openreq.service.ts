@@ -26,6 +26,9 @@ export class OpenreqService {
     return this.http.get("openreqs/dice/allreqs/" + pageNo + "/" + pageSize + "/" + field + "/" + source + "/" + country);
   }
 
+  public getNewRequirementsAlertData(){
+    return this.http.get("openreqs/dice/getNewRequirements");
+  }
   public linkedinProfiles() {
     return this.http.get("openreqs/linked/all");
   }
@@ -203,6 +206,7 @@ export class OpenreqService {
 assignedrequirements(payload:any){
   return this.http.post("requirement/getAssignedRequirementUsers",payload);
 
+
 }
 Requirementsreport(payload:any){
   return this.http.post("requirement/getAssignedRequirementsPopup",payload);
@@ -219,5 +223,10 @@ submissiondata(reqNumber: string) {
 ResumeUpload(payload:any){
   return this.http.post(`openreqs/resume/getPercentage`,payload);
 }
+
+  allactiveUserEmails(){
+    return this.http.get("auth/users/getAllActiveUsersEmails");
+  }
+
 
 }

@@ -66,6 +66,12 @@ export class Consultantinfo {
     recmaxno!:number;
     consultanttype!: string;
     empid!: number;
+    // tl: any;
+
+    teamlead:any;
+    executive: any;
+    cid: any;
+    
 }
 
 

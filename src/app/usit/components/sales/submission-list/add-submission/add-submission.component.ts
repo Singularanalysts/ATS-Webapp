@@ -65,9 +65,7 @@ import { PermissionsService } from 'src/app/services/permissions.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatCardModule,
-    NgxMatIntlTelInputComponent,
     NgxGpAutocompleteModule,
     MatRadioModule,
     MatCheckboxModule,
@@ -265,8 +263,7 @@ raiseApprovalRequest(payload: any) {
 }
 
 getsubmissions() {
-  this.permissionServ.getsubmission().subscribe((res: any) => {
-    console.log('Submissions:', res);
+  this.permissionServ.getsubmission(localStorage.getItem('companyid')).subscribe((res: any) => {
   });
 }
 selectedCompany: any = null;
@@ -361,6 +358,7 @@ showSubmissionRateError = false;
 
 
   private initilizeSubmissionForm(submissionData: any) {
+
     this.submissionForm = this.formBuilder.group({
       // user:  [submissionData ? submissionData?.user : this.userid],
       user: [this.data.actionName === "edit-submission" ? submissionData?.user : localStorage.getItem('userid')],
@@ -369,7 +367,7 @@ showSubmissionRateError = false;
       position: [submissionData ? submissionData.position : '', [Validators.required]],
       ratetype: [submissionData ? submissionData.ratetype : '', [Validators.required]],
       submissionrate: [submissionData ? submissionData.submissionrate : '', [Validators.required]],
-      
+      feedback:[submissionData ? submissionData.feedback : ''],
       endclient: [submissionData ? submissionData.endclient : ''],
       implpartner: [submissionData ? submissionData.implpartner : ''],
       vendor: [submissionData ? submissionData.vendor : ''],
@@ -386,9 +384,11 @@ showSubmissionRateError = false;
       remarks: [submissionData ? submissionData.remarks : ''],
       substatus: [this.data.actionName === "edit-submission" ? submissionData.substatus : 'Submitted'],
       dommaxno: [submissionData ? submissionData.dommaxno : ''],
+     
     });
     if (this.data.actionName === "edit-submission" && submissionData && submissionData.consultant) {
-      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant).subscribe(
+      const companyId = localStorage.getItem('companyid');
+      this.submissionServ.getConsultantDropdown(this.flag, submissionData.consultant,companyId).subscribe(
         (consultant: any) => {
           if (consultant && consultant.data[0].consultantname) {
             this.obj = consultant.data[0].consultantid;
@@ -470,7 +470,9 @@ showSubmissionRateError = false;
   }
 
   getRequirements(flg: string) {
-    this.submissionServ.getRequirements(flg).subscribe(
+
+
+    this.submissionServ.getRequirements(flg,localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.requirementdata = response.data;
       }
@@ -500,7 +502,8 @@ showSubmissionRateError = false;
   }
 
   getConsultant(flg: string) {
-    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0).pipe(
+    const companyId = localStorage.getItem('companyid');
+    this.searchConsultantOptions$ = this.submissionServ.getConsultantDropdown(flg, 0,companyId).pipe(
       map((response: any) => response.data),
       tap(resp => {
         if (resp && resp.length) {
@@ -784,7 +787,11 @@ isRateValid: boolean = true;
     }
     else {
       this.isFormSubmitted = true
+      
     }
+         
+
+    
     this.submitted = true;
     const dataToBeSentToSnackBar: ISnackBarData = {
       message: '',
@@ -866,6 +873,8 @@ isRateValid: boolean = true;
     if (this.data.actionName === 'edit-submission') {
       return { ...this.entity, ...this.submissionForm.value }
     }
+    console.log(this.submissionForm.value,'submissionvalueee');
+    
     return this.submissionForm.value;
   }
 

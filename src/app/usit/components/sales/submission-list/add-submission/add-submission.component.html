@@ -246,6 +246,11 @@
                     <mat-error *ngIf="submissionForm.get('status')!.hasError('required')">Submitted to is
                         Required</mat-error>
                 </mat-form-field>
+                
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Feedback</mat-label>
+            <textarea matInput formControlName="feedback" rows="5" placeholder="Enter Feedback"></textarea>
+          </mat-form-field>
 
             </div>
         </div>

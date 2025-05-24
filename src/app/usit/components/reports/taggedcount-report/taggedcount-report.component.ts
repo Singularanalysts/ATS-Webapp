@@ -112,7 +112,7 @@ export class TaggedcountReportComponent {
       endDate: formattedEndDate,
     };
 
-    this.service.getCommentReport(this.payload).subscribe((res: any) => {
+    this.service.getCommentReport(this.payload,localStorage.getItem('companyid')).subscribe((res: any) => {
       this.c_data = res.data;
       this.dataSource.data = res.data;
 

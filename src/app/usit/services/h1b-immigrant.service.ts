@@ -10,9 +10,21 @@ export class H1bImmigrantService {
 
   //to get comapnies
   getCompanies() {
-    return this.apiServ.get("auth/company/allcompanies");
+    return this.apiServ.get("auth/company/allcompanies"); 
   }
 
+  getCompaniesDropdown() {
+    return this.apiServ.get("auth/company/getCompaniesDropdown"); 
+  }
+getAllCompanies(){
+  return this.apiServ.get("auth/company/allAssociatedCompanies");
+}
+saveCompanies(data : any){
+  return this.apiServ.post("auth/company/saveAssociatedcompany" , data);
+}
+deleteCompany(id : any){
+  return this.apiServ.delete(`auth/company/deleteAssociatedCompany/${id}`);
+}
   //to get visas
   getVisas() {
     return this.apiServ.get("auth/visa/h1visas");

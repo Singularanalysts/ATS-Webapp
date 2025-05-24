@@ -134,7 +134,8 @@ export class InterviewListComponent implements OnInit, OnDestroy{
     this.userid = localStorage.getItem('userid');
     this.interviewServ.getPaginationlist(
       this.flag, this.hasAcces, this.userid, pagIdx, this.itemsPerPage, 
-      this.field, this.sortField, this.sortOrder
+      this.field, this.sortField, this.sortOrder, localStorage.getItem('companyid')
+      
     )
     .pipe(takeUntil(this.destroyed$))
     .subscribe((response: any) => {
@@ -253,10 +254,11 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   }
   applyFilter(event: any) {
     const keyword = event.target.value;
+    this.field=keyword
     if (keyword != '') {
       return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
         this.sortField,
-        this.sortOrder).subscribe(
+        this.sortOrder, localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.dataSource.data  = response.data.content;

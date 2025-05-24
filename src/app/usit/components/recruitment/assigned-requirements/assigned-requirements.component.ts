@@ -111,8 +111,8 @@ export class AssignedRequirementsComponent {
 
   getAssignedRequirements(fromDate: string | null, toDate: string | null) {
    
-
-    const payload = { fromDate, toDate };
+const cid =localStorage.getItem('companyid')
+    const payload = { fromDate, toDate ,cid};
 
 
     this.service.assignedrequirements(payload)

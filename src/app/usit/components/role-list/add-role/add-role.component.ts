@@ -18,13 +18,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import {
   ISnackBarData,
   SnackBarService,
 } from 'src/app/services/snack-bar.service';
 import { UserManagementService } from 'src/app/services/user-management.service';
 import { Role } from 'src/app/usit/models/role';
+import { EmployeeManagementService } from 'src/app/usit/services/employee-management.service';
 import { RoleManagementService } from 'src/app/usit/services/role-management.service';
+import {MatSelectModule} from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+
 
 @Component({
   selector: 'app-add-role',
@@ -39,6 +44,8 @@ import { RoleManagementService } from 'src/app/usit/services/role-management.ser
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
+    MatChipsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -52,22 +59,32 @@ export class AddRoleComponent {
   showValidationError = false;
   protected isFormSubmitted: boolean = false;
   roleDescription = ''
+   companyId!:any
   roleName = ''
   roleid = ''
+  selectedOptions =''
   alloAction = false;
+  isCompanyToDisplay: boolean = false;
+  companyOptions: any[] = [];
+  private empManagementServ = inject(EmployeeManagementService);
+private destroyed$ = new Subject<void>();
+// options: string[] = ['Narvee', 'singular', 'probpm', 'hcl'];
+options: any[] = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<AddRoleComponent>
   ) {}
 
   ngOnInit(): void {
-
-
-
+    this.checkCompany(localStorage.getItem('companyid'));
+    this.companyId=this.data.companyId
+    this.getCompanies();
     if(this.data.actionName === "update-role"){
       this.roleName = this.data.roleData.rolename;
       this.roleid = this.data.roleData.roleid;
       this.roleDescription = this.data.roleData.description;
+      this.selectedOptions = this.data.roleData.selectedOptions;
       this.initializeRoleForm(this.data.roleData);
     }else{
       this.initializeRoleForm(this.data.roleData);
@@ -80,6 +97,10 @@ export class AddRoleComponent {
       //roleId: ['', Validators.required],
       description: [data ? data.description : ''],
       roleid: [data ? data.roleid : ''],
+      // companyid: [data? data.company: '', Validators.required],
+      // companyid: [data? data.company: '', 
+      //   this.isCompanyToDisplay ? [Validators.required] : []],
+      selectedOptions: [[], this.isCompanyToDisplay ? [Validators.required]: []],
     });
   }
 
@@ -102,21 +123,25 @@ export class AddRoleComponent {
       return;
     }
     const userId = localStorage.getItem('userid');
+    const selectedOptions = this.addRoleForm.get('selectedOptions')?.value;
     const addObj = {
       addedby: userId,
       updatedby: userId,
       rolename: this.addRoleForm.get('rolename').value,
-      description: this.addRoleForm.get('description').value
+      description: this.addRoleForm.get('description').value,
+      selectedOptions: selectedOptions,
     };
     const updateObj = {
       ...this.data.roleData,
       rolename: this.addRoleForm.get('rolename').value,
       updatedby: userId,
-      description: this.addRoleForm.get('description').value
+      description: this.addRoleForm.get('description').value,
+      selectedOptions: selectedOptions,
+      companyid: localStorage.getItem('companyid')
     };
     const saveObj = this.data.actionName === "update-role" ? updateObj : addObj;
 
-    this.roleManagementServ.addOrUpdateRole(saveObj, this.data.actionName).subscribe(
+    this.roleManagementServ.addOrUpdateRole(saveObj, this.data.actionName,localStorage.getItem('companyid')).subscribe(
       {
       next:(data: any) => {
 
@@ -151,4 +176,59 @@ export class AddRoleComponent {
   onAction(type: string) {
     this.dialogRef.close();
   }
+
+  dataTobeSentToSnackBarService: ISnackBarData = {
+      message: '',
+      duration: 2500,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      direction: 'above',
+      panelClass: ['custom-snack-success'],
+    };
+
+  checkCompany(companyid:any){
+
+    this.empManagementServ
+    .getValidDateCompanyGiven(companyid)
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe({
+      next: (response: any) => {
+        this.isCompanyToDisplay = response.data;
+      },
+      error: (err) => {
+        this.dataTobeSentToSnackBarService.message = err.message;
+        this.dataTobeSentToSnackBarService.panelClass = [
+          'custom-snack-failure',
+        ];
+        this.snackBarServ.openSnackBarFromComponent(
+          this.dataTobeSentToSnackBarService
+        );
+      },
+    });
+  
+  }
+  
+  getCompanies() {
+    this.empManagementServ
+      .getCompaniesDropdown()
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe({
+        next: (response: any) => {
+          this.companyOptions = response.data;
+          this.options= response.data;
+          console.log(this.companyOptions,'roleoptionss');
+          
+        },
+        error: (err) => {
+          this.dataTobeSentToSnackBarService.message = err.message;
+          this.dataTobeSentToSnackBarService.panelClass = [
+            'custom-snack-failure',
+          ];
+          this.snackBarServ.openSnackBarFromComponent(
+            this.dataTobeSentToSnackBarService
+          );
+        },
+      });
+  }
+
 }

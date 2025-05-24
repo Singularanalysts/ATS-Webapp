@@ -14,8 +14,8 @@ export class ConsultantService {
     return this.http.get("consultant/duplicatecheck/" + phonenumber);  
   }
 
-  public duplicatecheckEmail(email: string) {
-    return this.http.get("consultant/duplicateMail/" + email);
+  public duplicatecheckEmail(email: string,companyId:any) {
+    return this.http.get(`consultant/duplicateMail/${email}/${companyId}`);
   }
 
   public duplicatecheckedit(phonenumber: number, id: number) {
@@ -123,33 +123,33 @@ export class ConsultantService {
 
   // for report
   //register consultant
-  public consultant_report(entity: any) {
-    return this.http.post("report/creport", entity);
-  }
+  // public consultant_report(entity: any) {
+  //   return this.http.post("report/creport", entity);
+  // }
 
   public sourcingreport(entity: any) {
     return this.http.post("report/sourcingreport", entity);
   }
 
-  //register consultant
-  public consultant_DrillDown_report(vo: any) {
+  // register consultant
+  public consultant_DrillDown_report(vo: any, companyId: any) {
     if (vo.status == 'submission') {
-      return this.http.post("report/popupSub", vo);
+      return this.http.post(`report/popupSub/${companyId}`, vo);
     }
     else if (vo.status == 'interview') {
-      return this.http.post("report/popupInt", vo);
+      return this.http.post(`report/popupInt/${companyId}`, vo);
     }
     else if (vo.status == 'consultant') {
-      return this.http.post("report/recruiterleads", vo);
+      return this.http.post(`report/recruiterleads/${companyId}`, vo);
     }
     else {
-      return this.http.post("report/popup", vo);
+      return this.http.post(`report/popup/${companyId}`, vo);
     }
   }
 
   //register consultant
-  public sourcing_DrillDown_report(vo: any) {
-    return this.http.post("report/sourceleads", vo);
+  public sourcing_DrillDown_report(vo: any, companyId: any) {
+    return this.http.post(`report/sourceleads/${companyId}`, vo);
   }
 
   uploadexcels(file: any) {
@@ -165,8 +165,8 @@ export class ConsultantService {
     return this.http.get("consultant/hotlist/" + page + "/" + size + "/" + field);
   }
 
-  getSalesAllHotListWithUserid(id: any) {
-    return this.http.get("consultant/getAssginConsultantList/"+id);
+  getSalesAllHotListWithUserid(id: any, company: any) {
+    return this.http.get("consultant/getAssginConsultantList/"+id+"/"+company);
   }
 
   getOptCptList(page: any, size: any, field: any, sortField: any, sortOrder: any) {
@@ -190,6 +190,10 @@ export class ConsultantService {
     return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
   }
 
+  getFilteredConsultant(pageno: any, pagesize: any, request:any) {
+    return this.http.post(`consultant/allConsultantFilter/${pageno}/${pagesize}`,request);
+  }
+
   public getregtech() {
     return this.http.get("consultant/technology");
   }
@@ -202,8 +206,8 @@ export class ConsultantService {
     return this.http.get(`consultant/getByAddedby/${userid}`);
   }
 
-  getEmployee(userid: any) {
-    return this.http.get(`consultant/salesExecutivesList/${userid}`);
+  getEmployee(userid: any,companyId: any) {
+    return this.http.get(`consultant/salesExecutivesList/${userid}/${companyId}`);
   }
 
   getDomEmployee() {

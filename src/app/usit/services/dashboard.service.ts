@@ -8,24 +8,24 @@ export class DashboardService {
 
   private apiServ = inject(ApiService);
 
-  public vmstransactions() {
-    return this.apiServ.get("dashboard/dailyvmsTrack");
+  public vmstransactions(companyId: any) {
+    return this.apiServ.get("dashboard/dailyvmsTrack/"+companyId);
   }
 
   public getUserTrack(id: number) {
     return this.apiServ.get("dashboard/getUserTrack/" + id);
   }
 
-  public getsubmissionCount(flag: string) {
-    return this.apiServ.get("dashboard/submissionscount/" + flag);
+  public getsubmissionCount(flag: string, company: any) {
+    return this.apiServ.get("dashboard/submissionscount/" + flag +"/"+company);
   }
 
-  public getInterviewCount(flag: string) {
-    return this.apiServ.get("dashboard/interviewscount/" + flag);
+  public getInterviewCount(flag: string, companyId: any) {
+    return this.apiServ.get("dashboard/interviewscount/" + flag +"/" +companyId);
   }
 
-  public getClosureCount(flag: string) {
-    return this.apiServ.get("dashboard/closurecount/" + flag);
+  public getClosureCount(flag: string, companyId: any) {
+    return this.apiServ.get("dashboard/closurecount/" + flag +"/"+companyId);
   }
 
   // public getDiceRequirements(role: any, empid:any) {
@@ -44,9 +44,9 @@ export class DashboardService {
   //     return this.apiServ.get("dashboard/getTaggedcounts/empty/empty/0"); // Default case
   //   }
   //  }
-  public getDiceRequirements(payload: { role: any; userId: any; pageNumber: any; pageSize: any }) {
+  public getDiceRequirements(payload: { role: any; userId: any; pageNumber: any; pageSize: any }, companyId: any) {
     if (payload.role === 'Team Leader Sales' || payload.role == 'Sales Manager' || payload.role == 'Super Administrator') {
-      return this.apiServ.post("dashboard/getTaggedcounts", payload);
+      return this.apiServ.post(`dashboard/getTaggedcounts/${companyId}`, payload);
     } else if (payload.role === 'Recruiter' || payload.role === 'Team Leader Recruiting' || payload.role === 'Recruiting Manager') {
       return this.apiServ.get("requirement/postedInLastDays");
     } else if (payload.role === 'Sales Executive') {
@@ -72,36 +72,36 @@ export class DashboardService {
      return this.apiServ.get("dashboard/getBanchSalesEmps");
     }
 
-  public getSourcingLeads(data: any) {
-    return this.apiServ.post("dashboard/all" , data);
+  public getSourcingLeads(data: any, comapnyId:any) {
+    return this.apiServ.post(`dashboard/all/${comapnyId}` , data);
   }
 
   // for executive and lead
   public getClosureCountForExAndLead(flag: string, userid: number) {
-    return this.apiServ.get("dashboard/closurecount/" + flag + "/" + userid);
+    return this.apiServ.get("dashboard/closurecountboardreport/" + flag + "/" + userid);
   }
 
   public getsubmissionCountForExAndLead(flag: string, userid: number) {
-    return this.apiServ.get("dashboard/submissionscount/" + flag + "/" + userid);
+    return this.apiServ.get("dashboard/submissionsdashboardreport/" + flag + "/" + userid);
   }
 
   public getInterviewCountForExAndLead(flag: string, userid: number) {
-    return this.apiServ.get("dashboard/interviewscount/" + flag + "/" + userid);
+    return this.apiServ.get("dashboard/interviewscountboardreport/" + flag + "/" + userid);
   }
 
   // for count pop ups
-  public getClosureCountPopup(flag: string, duration: string) {
-    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration);
+  public getClosureCountPopup(flag: string, duration: string,companyId:any) {
+    return this.apiServ.get("dashboard/dashboardclosurespopUp/" + flag + "/" + duration + "/" + companyId);
   }
 
-  public getsubmissionCountPopup(flag: string, duration: string) {
-    return this.apiServ.get("dashboard/subpopups/" + flag + "/" + duration);
+  public getsubmissionCountPopup(flag: string, duration: string,companyId: any) {
+    return this.apiServ.get("dashboard/dashboardsubpopups/" + flag + "/" + duration+"/" + companyId);
   }
 
 
 
-  public getInterviewCountPopup(flag: string, duration: string) {
-    return this.apiServ.get("dashboard/interviewpopUp/" + flag + "/" + duration);
+  public getInterviewCountPopup(flag: string, duration: string,companyId:any) {
+    return this.apiServ.get("dashboard/dashboardinterviewpopUp/" + flag + "/" + duration+"/" + companyId);
   }
 
   public getsubmissionCountPopupemp(flag: string, duration: string, userid:any) {
@@ -113,15 +113,15 @@ export class DashboardService {
   }
 
   public getClosureCountPopupEmp(flag: string, duration: string, userid:any) {
-    return this.apiServ.get("dashboard/closurespopUp/" + flag + "/" + duration+"/"+userid);
+    return this.apiServ.get("dashboard/dashboardclosurespopUp/" + flag + "/" + duration+"/"+userid);
   }
 
-  public getsourcingCount(flag: string) {
-    return this.apiServ.get("dashboard/sourcingCount/" + flag);
+  public getsourcingCount(flag: string, companyId: any) {
+    return this.apiServ.get("dashboard/sourcingCount/" + flag+"/"+companyId);
   }
 
-  public getSourcingCountPopup(flag: string, duration: string) {
-    return this.apiServ.get("dashboard/sourcingCountPopup/" + flag + "/" + duration);
+  public getSourcingCountPopup(flag: string, duration: string,companyId:any) {
+    return this.apiServ.get("dashboard/sourcingCountPopup/" + flag + "/" + duration+"/"+companyId);
   }
 
   public getReqCounts(search: string,flag: string, type: string, date: any) {
@@ -131,8 +131,8 @@ export class DashboardService {
   // getFilteredEmployee(startDate:any ,endDate:any ,id:any){
   //   return this.apiServ.get("dashboard/getTaggedcounts/"+startDate+"/"+endDate+"/"+id)
   // }
-  getFilteredEmployee(payload: { fromDate: any; toDate: any; userId: any ;pageNumber: number; pageSize: number }) {
-    return this.apiServ.post("dashboard/getTaggedcounts", payload);
+  getFilteredEmployee(payload: { fromDate: any; toDate: any; userId: any ;pageNumber: number; pageSize: number },companyid:any) {
+    return this.apiServ.post(`dashboard/getTaggedcounts/${companyid}`, payload);
   }
   
 

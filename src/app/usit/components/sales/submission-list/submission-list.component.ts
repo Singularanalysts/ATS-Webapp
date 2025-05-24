@@ -171,7 +171,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   getAllData(pageIndex = 1 ) {
     this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, pageIndex, this.pageSize, this.field,
       this.sortField,
-      this.sortOrder).subscribe(
+      this.sortOrder, localStorage.getItem('companyid')).subscribe(
       (response: any) => {
         this.entity = response.data.content;
         this.dataSource.data =  response.data.content;
@@ -193,7 +193,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     if (keyword != '') {
       return this.submissionServ.getsubmissiondataPagination(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
         this.sortField,
-        this.sortOrder).subscribe(
+        this.sortOrder, localStorage.getItem('companyid')).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
           this.totalItems = response.data.totalElements;
@@ -214,6 +214,7 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   sortField = 'updateddate';
   sortOrder = 'desc';
   onSort(event: Sort) {
+
     if (event.active == 'SerialNum')
       this.sortField = 'updateddate'
     else
@@ -221,9 +222,19 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     
       this.sortOrder = event.direction;
     
+   if(this.getfilterSubmissions){
+    
+
     if (event.direction != ''){
-    this.getAllData();
-    }
+      this.getfiltersubmission();
+      }
+
+   }else{
+
+    if (event.direction != ''){
+      this.getAllData();
+      }
+   }
   }
 
   goToSubmissionInfo(element: any, flag: any) {
@@ -233,30 +244,33 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
   goToSubmissionDrillDownReport(element: any, flag: any) {
 
   }
-  pageNumberfilter = 1;
-  pageSizefilter = 50;
-  sortFieldfilter = 'position';
-  sortOrderfilter = 'asc';
-  getfiltersubmission(): void {
+
+  getfilterSubmissions!:boolean;
+
+ 
+  getfiltersubmission(pageIndex=this.page): void {
+    this.getfilterSubmissions=true;
     const position = this.filterForm.get('position')?.value?.trim();
     const location = this.filterForm.get('location')?.value?.trim();
   
     // If both filters are empty, load all data
     if (!position && !location) {
-      this.getAllData(this.pageNumberfilter);
+      this.getAllData(this.page);
       return;
     }
   
     const payload = {
+
       position: position,
       location: location,
-      pageNumber: this.pageNumberfilter,
-      pageSize: this.pageSizefilter,
-      sortField: this.sortFieldfilter,
-      sortOrder: this.sortOrderfilter
+      pageNumber: pageIndex,
+      pageSize: this.pageSize,
+      sortField: this.sortField,
+      sortOrder:  this.sortOrder,
+      flag: this.flag
     };
-  
-    this.submissionServ.filterSubmission(payload).subscribe({
+
+    this.submissionServ.filterSubmission(payload,localStorage.getItem('companyid')).subscribe({
       next: (res: any) => {
         this.entity = res.data.content;
         this.dataSource.data = res.data.content;
@@ -383,11 +397,23 @@ export class SubmissionListComponent implements OnInit, OnDestroy{
     return serialNumber;
   }
   handlePageEvent(event: PageEvent) {
-    if (event) {
-      this.pageEvent = event;
-      this.currentPageIndex = event.pageIndex;
-      this.getAllData(event.pageIndex + 1)
+
+    if(this.getfilterSubmissions){
+      if (event) {
+        this.pageEvent = event;
+        this.currentPageIndex = event.pageIndex;
+        this.getfiltersubmission(event.pageIndex + 1)
+      }
+
+    }else{
+      if (event) {
+        this.pageEvent = event;
+        this.currentPageIndex = event.pageIndex;
+        this.getAllData(event.pageIndex + 1)
+      }
+
     }
+   
     return;
   }
 

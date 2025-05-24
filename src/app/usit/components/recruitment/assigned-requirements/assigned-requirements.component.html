@@ -7,7 +7,7 @@
       </span>
     </div>
     <div class="right-header">
-      <button class="search" mat-raised-button color="primary" style="margin-bottom: 9px;" (click)="exportExcel()" *ngIf="privilegeServ.hasPrivilege('ASSIGNED_REQ_COUNT')" >Excel Import</button>
+      <button class="search" mat-raised-button color="primary" style="margin-bottom: 9px;" (click)="exportExcel()" *ngIf="privilegeServ.hasPrivilege('ASSIGNED_REQ_COUNT')" >Excel Export</button>
       <button mat-icon-button color="primary" (click)="refreshForm()" style="position:relative;top: 8px;">
         <mat-icon>refresh</mat-icon>
       </button>
