@@ -298,7 +298,7 @@
             <mat-card *ngIf="privilegeServ.hasPrivilege('SUBMISSION_REPORT')">
               <div class="card">
                 <mat-card-title>Submissions <span>| {{ submissionFlag }}</span></mat-card-title>
-                <button mat-icon-button [matMenuTriggerFor]="menu">
+                <button mat-icon-button class="more-options-icon" [matMenuTriggerFor]="menu">
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">

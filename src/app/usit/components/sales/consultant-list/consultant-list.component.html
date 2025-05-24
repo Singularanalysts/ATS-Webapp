@@ -67,7 +67,15 @@
           <input matInput *ngIf="flag == 'Recruiting'" type="search" formControlName="position" style="" class="search" placeholder="Search Position" (keyup)="ondataChange($event)">
           <input matInput *ngIf="flag == 'Recruiting' || flag == 'DomRecruiting'" type="search" formControlName="location" style="margin-left:0.4rem; margin-right: 0.4rem;" class="search" placeholder="Search Location" (keyup)="ondataChange($event)" >
           <!-- <mat-icon class="item-icon">person_search</mat-icon> -->
-          <input matInput type="search" class="search" placeholder="search consultant" (keyup)="applyFilter($event)">
+<input
+  matInput
+  type="search"
+  class="search"
+  placeholder="Search consultant"
+  (keyup)="applyFilter($event)"
+  (keydown.enter)="preventSubmit($event)"
+>
+
         </div>
         <button [disabled]="!privilegeServ.hasPrivilege('ADD_CONSULTANT_SALES')"  *ngIf="flag === 'sales'" mat-icon-button class="add-user"
         (click)="addConsultant()" matTooltip="Add" matTooltipPosition="left">

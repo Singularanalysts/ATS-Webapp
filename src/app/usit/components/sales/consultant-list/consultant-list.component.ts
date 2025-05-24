@@ -498,8 +498,15 @@ triggerFilterAPI(): void {
     if (keyword == '') {
       this.field = 'empty';
     }
+ event.preventDefault();
+  event.stopPropagation();
     return this.getAllData(this.currentPageIndex + 1);
   }
+preventSubmit(event: Event): void {
+  const keyboardEvent = event as KeyboardEvent;
+  keyboardEvent.preventDefault();
+}
+
 
   /**
    * Sort
@@ -621,6 +628,8 @@ triggerFilterAPI(): void {
    * Send this.flag value - to distinguish sales , recruiting, presales
    */
   addConsultant() {
+    console.log('addconsultant');
+    
     const actionData = {
       title: 'Add Consultant',
       consultantData: null,
