@@ -149,10 +149,12 @@ export class AddEmployeeComponent {
             this.checkSpecificCompany();
             this.validateControls();
             const roleId = response.data.role.roleid;
-            if (roleId == 5 || roleId == 6) {
+            console.log(roleId,'companyroleId');
+            
+            if (this.getRoleNameById(roleId) ==='Team Leader Sales' || this.getRoleNameById(roleId) ==='Team Leader Recruiting' ) {
               this.managerflg = true;
               this.teamleadflg = false;
-            } else if (roleId == 7 || roleId == 8) {
+            } else if (this.getRoleNameById(roleId) === 'Sales Executive'|| this.getRoleNameById(roleId) == 'Recruiter') {
               this.managerflg = true;
               this.teamleadflg = true;
             } else {
@@ -191,7 +193,7 @@ export class AddEmployeeComponent {
           Validators.maxLength(100),
         ],
       ],
-      pseudoname: [employeeData ? employeeData.pseudoname : ''],
+      pseudoname: [employeeData ? employeeData.pseudoname : '',Validators.required],
       email: [
         employeeData ? employeeData.email : '',
         [
@@ -335,8 +337,16 @@ export class AddEmployeeComponent {
 
   // }
 
+getRoleNameById(roleid: number): string {
+  const role = this.roleOptions.find(option => option.roleid === roleid);
+  return role ? role.rolename : '';
+}
+
+
   validateControls() {
     this.employeeForm.get('department').valueChanges.subscribe((res: any) => {
+      console.log(res,'departmentresponseee');
+      
       const pseudoname = this.employeeForm.get('pseudoname');
       if (res == 'Bench Sales') {
         pseudoname.setValidators(Validators.required);
@@ -346,13 +356,15 @@ export class AddEmployeeComponent {
       pseudoname.updateValueAndValidity();
     });
     this.employeeForm.get('role.roleid').valueChanges.subscribe((res: any) => {
+      
+      
       const manager = this.employeeForm.get('manager');
       const tl = this.employeeForm.get('teamlead');
-      if (res == 5 || res == 6) {
+      if (this.getRoleNameById(res) ==='Team Leader Sales' || this.getRoleNameById(res) ==='Team Leader Recruiting' ) {
         this.managerflg = true;
         this.teamleadflg = false;
         manager.setValidators(Validators.required);
-      } else if (res == 7 || res == 8) {
+      } else if (this.getRoleNameById(res) === 'Sales Executive'|| this.getRoleNameById(res) == 'Recruiter') {
         this.managerflg = true;
         this.teamleadflg = true;
         manager.setValidators(Validators.required);
@@ -504,7 +516,8 @@ export class AddEmployeeComponent {
         next: (response: any) => {
           this.companyarr = response.data;
           this.companyOptions = response.data;
-
+      console.log(this.companyOptions,'companyoptionsss');
+      
 
         },
         error: (err) => {
