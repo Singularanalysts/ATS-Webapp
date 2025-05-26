@@ -20,8 +20,8 @@
 
           <div class="form-container" style="border-radius:30px">
             <ng-container *ngIf="flag !== 'presales'  && flag !== 'DomRecruiting'">
-              <mat-form-field class="custom-mat-select visa  dropdownvisa ">
-                <mat-label>Visa</mat-label> <!-- ✅ Added mat-label -->
+              <!-- <mat-form-field class="custom-mat-select visa  dropdownvisa ">
+                <mat-label>Visa</mat-label>
                 <mat-select formControlName="visa" multiple (selectionChange)="onVisaChange($event)" class="visa-select">
                   <mat-option *ngFor="let option of visadata" [value]="option[0]">
                     <mat-checkbox [checked]="selectedVisaOptions.has(option[0])">
@@ -29,36 +29,86 @@
                     </mat-checkbox>
                   </mat-option>
                 </mat-select>
-              </mat-form-field>
-  
+              </mat-form-field> -->
+  <mat-form-field class="custom-mat-select visa dropdownvisa">
+  <mat-label>Visa</mat-label>
+  <mat-select formControlName="visa" multiple (selectionChange)="onVisaChange($event)" class="visa-select">
+    
+    <!-- Select All / Deselect All -->
+    <mat-option (click)="toggleAllVisaSelection()" [value]="selectAllVisaValue" class="no-checkbox-option"style="position: relative;right: 4px;">
+      <mat-icon
+        class="select-icon"
+        style="vertical-align: middle; margin-right: 8px; color: #3f51b5; ">
+        {{ isAllVisaSelected() ? 'check_box' : 'check_box_outline_blank' }}
+      </mat-icon>
+      {{ isAllVisaSelected() ? 'Deselect All' : 'Select All' }}
+    </mat-option>
+
+    <!-- Visa Options -->
+    <mat-option *ngFor="let option of visadata" [value]="option[0]">
+      <mat-checkbox [checked]="selectedVisaOptions.has(option[0])">
+        {{ option[1] }}
+      </mat-checkbox>
+    </mat-option>
+
+  </mat-select>
+</mat-form-field>
+
             </ng-container>
           </div>
           <ng-container *ngIf="flag !== 'presales' && flag !== 'Recruiting' && flag !== 'DomRecruiting'">
-            <mat-form-field class="custom-mat-select experience dropdownpriority">
-              <mat-label>Priority</mat-label>
-              <mat-select formControlName="priority" multiple (selectionChange)="onPriorityChange($event)">
-                <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
-                  <mat-checkbox [checked]="selectedPriorityOptions.has(option.code)">
-                    {{ option.code }}
-                  </mat-checkbox>
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+     <mat-form-field class="custom-mat-select experience dropdownpriority">
+  <mat-label>Priority</mat-label>
+  <mat-select formControlName="priority" multiple (selectionChange)="onPriorityChange($event)">
+    
+    <!-- Select All / Deselect All Option -->
+    <mat-option (click)="toggleAllPrioritySelection()" [value]="selectAllPriorityValue" class="no-checkbox-option"style="position: relative;right: 4px;">
+      <mat-icon
+        class="select-icon"
+        style="vertical-align: middle; margin-right: 8px; color: #3f51b5;">
+        {{ isAllPrioritySelected() ? 'check_box' : 'check_box_outline_blank' }}
+      </mat-icon>
+      {{ isAllPrioritySelected() ? 'Deselect All' : 'Select All' }}
+    </mat-option>
+
+    <!-- Actual Priority Options -->
+    <mat-option *ngFor="let option of PRIORITY" [value]="option.code">
+      <mat-checkbox [checked]="selectedPriorityOptions.has(option.code)">
+        {{ option.code }}
+      </mat-checkbox>
+    </mat-option>
+
+  </mat-select>
+</mat-form-field>
+
             
           </ng-container>
         
           <div>
             <ng-container *ngIf="flag !== 'presales'">
-              <mat-form-field class="custom-mat-select experience dropdownexperience">
-                <mat-label>Experience</mat-label> <!-- Added mat-label -->
-                <mat-select formControlName="experience" multiple (selectionChange)="onExperienceChange($event)">
-                  <mat-option *ngFor="let exp of experiences" [value]="exp">
-                    <mat-checkbox [checked]="selectedExperienceOptions.has(exp)">
-                      {{ exp }}
-                    </mat-checkbox>
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+           <mat-form-field class="custom-mat-select experience dropdownexperience">
+  <mat-label>Experience</mat-label>
+  <mat-select formControlName="experience" multiple (selectionChange)="onExperienceChange($event)">
+    
+    <!-- Select All / Deselect All option -->
+    <mat-option (click)="toggleAllExperienceSelection()" [value]="selectAllExperienceValue" class="no-checkbox-option"style="position: relative;right: 4px;">
+      <mat-icon
+        style="vertical-align: middle; margin-right: 8px; color: #3f51b5; ">
+        {{ isAllExperienceSelected() ? 'check_box' : 'check_box_outline_blank' }}
+      </mat-icon>
+      {{ isAllExperienceSelected() ? 'Deselect All' : 'Select All' }}
+    </mat-option>
+
+    <!-- Actual Experience Ranges -->
+    <mat-option *ngFor="let exp of experiences" [value]="exp">
+      <mat-checkbox [checked]="selectedExperienceOptions.has(exp)">
+        {{ exp }}
+      </mat-checkbox>
+    </mat-option>
+
+  </mat-select>
+</mat-form-field>
+
             </ng-container>
             
           </div>

@@ -14,10 +14,11 @@
               <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
               <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
-              <mat-error *ngIf="sourcingreport.get('startDate')!.hasError('required')">Starting Date is required</mat-error>
+              <mat-error *ngIf="sourcingreport.get('startDate')!.hasError('required')">Starting Date is
+                required</mat-error>
             </mat-form-field>
             &nbsp;&nbsp;
-      
+
             <mat-form-field color="accent">
               <mat-label>Choose Ending Date</mat-label>
               <input matInput [matDatepicker]="picker2" class="form-control" formControlName="endDate" />
@@ -27,70 +28,101 @@
               <mat-error *ngIf="sourcingreport.get('endDate')!.hasError('required')">Ending Date is required</mat-error>
             </mat-form-field>
             &nbsp;&nbsp;
-      
-            <mat-form-field>
+            <mat-form-field appearance="fill">
               <mat-label>Select Skillset</mat-label>
-              <mat-select formControlName="groupby" multiple>
-                <mat-option *ngFor="let option of allOptions" [value]="option">{{option}}</mat-option>
-          
+              <mat-select formControlName="groupby" multiple (selectionChange)="onSelectionChange($event)">
+
+                <!-- Select All / Deselect All -->
+                <mat-option class="no-checkbox-option" (click)="toggleAllSelection()" [value]="selectAllValue" style="position: relative;
+    right: 4px;">
+                  <mat-icon class="select-icon" style="vertical-align: middle; margin-right: 8px; color: #3f51b5;">
+                    {{ isAllSelected() ? 'check_box' : 'check_box_outline_blank' }}
+                  </mat-icon>
+                  {{ isAllSelected() ? 'Deselect All' : 'Select All' }}
+                </mat-option>
+
+
+                <!-- Regular Options -->
+                <mat-option *ngFor="let option of allOptions" [value]="option">
+                  {{ option }}
+                </mat-option>
+
               </mat-select>
-              <mat-error *ngIf="sourcingreport.get('groupby')!.hasError('required')">Skillset is required</mat-error>
+
+              <mat-error *ngIf="sourcingreport.get('groupby')?.hasError('required')">
+                Skillset is required
+              </mat-error>
             </mat-form-field>
-              
-            
-      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <button mat-raised-button color="primary">Submit</button>&nbsp;
             <button mat-raised-button color="warn" (click)="reset()">Reset</button>&nbsp;
 
             <button *ngIf="showReport" mat-raised-button style="background-color: #4CAF50; color: white;"
-            (click)="excelImport()">Excel Export</button>
+              (click)="excelImport()">Excel Export</button>
             &nbsp;&nbsp;
           </mat-card-content>
         </mat-card>
       </form>
     </div>
-  
+
     <div class="banter-table">
       <mat-card class="matcards ">
         <mat-card-content>
           <div id="table-container" class="table-wrapper">
-            <section >
+            <section>
               <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
-        
+
                 <!--- Note that these columns can be defined in any order.
                       The actual rendered columns are set as a property on the row definition" -->
-        
+
                 <!-- ID Column mat-sort-header sortActionDescription="Sort by Serial Number"-->
                 <ng-container matColumnDef="SerialNum">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" style="width: 2%"> S.No </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number"
+                    style="width: 2%"> S.No </th>
                   <td mat-cell *matCellDef="let element" style="width: 2%"> {{element?.serialNum}} </td>
                 </ng-container>
-        
-                
-        
+
+
+
                 <!-- Recruiter Name -->
                 <ng-container matColumnDef="skillset">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by skillset" style="width: 20%"> Skill Set  </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by skillset"
+                    style="width: 20%"> Skill Set </th>
                   <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.category_skill }} </td>
                 </ng-container>
-        
+
                 <!-- Recruiter Email -->
                 <ng-container matColumnDef="vendorcount">
-                  <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendorcount"  mat-sort-header style="width: 10%">  Vendor Count
+                  <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendorcount" mat-sort-header
+                    style="width: 10%"> Vendor Count
                   </th>
                   <td mat-cell *matCellDef="let element" style="width: 10%">
-                    <span class="count"
-                    (click)="vendorCategoryPopup(element)">
-                    {{element.vendorcount}}
-                  </span>
+                    <span class="count" (click)="vendorCategoryPopup(element)">
+                      {{element.vendorcount}}
+                    </span>
                   </td>
                 </ng-container>
-        
+
                 <!-- table columns ends  -->
-        
+
                 <!-- table ROW -->
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngStyle]="{'background-color': row.isexist ? 'rgba(185	,245	,210)' : ''}"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"
+                  [ngStyle]="{'background-color': row.isexist ? 'rgba(185	,245	,210)' : ''}"></tr>
               </table>
               <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
             </section>
@@ -99,8 +131,9 @@
           <!-- paginator -->
           <div class="paginator" *ngIf="dataSource.filteredData.length">
             <mat-paginator (page)="pageChanged($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
-              [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
-              [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
+              [showFirstLastButtons]="showFirstLastButtons"
+              [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []" [hidePageSize]="true"
+              [pageIndex]="currentPageIndex" aria-label="Select page">
             </mat-paginator>
           </div>
         </mat-card-content>

@@ -27,6 +27,9 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { Recruiter } from 'src/app/usit/models/recruiter';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import { OpenRequirementPopupListComponent } from './open-requirement-popup-list/open-requirement-popup-list.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -42,7 +45,12 @@ import { OpenRequirementPopupListComponent } from './open-requirement-popup-list
     MatSelectModule,
     MatInputModule,
     ReactiveFormsModule,
-    MatSortModule
+    MatSortModule,
+    MatCheckboxModule,
+     MatSelectModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    MatIconModule
   ],
   providers: [DatePipe, { provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
   templateUrl: './open-requirements-reports.component.html',
@@ -102,16 +110,12 @@ export class OpenRequirementsReportsComponent {
   recrData: Recruiter[] = [];
   entity: any[] = [];
   totalItems: number = 0;
-  // pagination code
-  // page: number = 1;
+ 
   itemsPerPage = 50;
-  // AssignedPageNum!: any;
   field = 'empty';
   isRejected: boolean = false;
-  // to clear subscriptions
   private destroyed$ = new Subject<void>();
   payload: any;
-  // paginator
 
 
  
@@ -128,6 +132,32 @@ export class OpenRequirementsReportsComponent {
     });
 
   }
+
+selectAllValue = 'ALL_OPTIONS';
+
+  isAllSelected(): boolean {
+    const selected = this.sourcingreport.get('groupby')?.value || [];
+    return selected.length === this.allOptions.length;
+  }
+
+  toggleAllSelection() {
+    const control = this.sourcingreport.get('groupby');
+    if (this.isAllSelected()) {
+      control?.setValue([]);
+    } else {
+      control?.setValue([...this.allOptions]);
+    }
+  }
+
+  onSelectionChange(event: any) {
+    const selected = this.sourcingreport.get('groupby')?.value || [];
+    if (selected.includes(this.selectAllValue)) {
+      const filtered = selected.filter((val: string) => val !== this.selectAllValue);
+      this.sourcingreport.get('groupby')?.setValue(filtered);
+    }
+  }
+
+
 
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;

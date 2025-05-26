@@ -519,3 +519,10 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
     font-size: 12px;
   }
 }
+::ng-deep .no-checkbox-option.mat-selected .mat-pseudo-checkbox {
+  display: none !important;
+}
+
+::ng-deep .no-checkbox-option .mat-pseudo-checkbox {
+  display: none !important;
+}
