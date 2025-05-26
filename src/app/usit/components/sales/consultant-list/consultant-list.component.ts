@@ -215,7 +215,7 @@ triggerPriorityFilter(): void {
   this.filterData(this.request, this.page);
 }
 
- onPriorityChange(event: any): void {
+onPriorityChange(event: any): void {
   this.isFilter = true;
 
   const selectedValues = (event.value || []).filter((v: any) => v !== this.selectAllPriorityValue);
@@ -230,19 +230,24 @@ triggerPriorityFilter(): void {
 
   const position = this.myForm.get('position')?.value;
   const location = this.myForm.get('location')?.value;
-  const visa = this.myForm.get('visa')?.value;
-  const experience = this.myForm.get('experience')?.value;
+  const visa = this.myForm.get('visa')?.value || [];
+  const experience = this.myForm.get('experience')?.value || [];
   const consultantflg = this.flag;
   const companyId = localStorage.getItem('companyid');
   const sortField = this.sortField;
   const sortOrder = this.sortOrder;
 
+  // Convert empty arrays to null
+  const visaStatus = visa.length > 0 ? visa : null;
+  const experienceVal = experience.length > 0 ? experience : null;
+  const priorityVal = selectedValues.length > 0 ? selectedValues : null;
+
   this.request = {
     position,
     location,
-    visaStatus: visa,
-    priority: Array.from(this.selectedPriorityOptions),
-    experience,
+    visaStatus,
+    priority: priorityVal,
+    experience: experienceVal,
     consultantflg,
     companyId,
     sortOrder,
@@ -251,6 +256,7 @@ triggerPriorityFilter(): void {
 
   this.filterData(this.request, this.page);
 }
+
 
   
   http: any;
@@ -404,30 +410,37 @@ toggleAllVisaSelection(): void {
 
 
 triggerFilterAPI(): void {
-  const request = {
-    position: this.myForm.get('position')?.value,
-    location: this.myForm.get('location')?.value,
-    visaStatus: Array.from(this.selectedVisaOptions), // Pass selected visa values
-    priority: this.myForm.get('priority')?.value,
-    experience: this.myForm.get('experience')?.value,
-    consultantflg: this.flag,
-    companyId: localStorage.getItem('companyid'),
-    sortField: this.sortField,
-    sortOrder: this.sortOrder
+  // Get all current form values and selections
+  const position = this.myForm.get('position')?.value;
+  const location = this.myForm.get('location')?.value;
+  const visa = Array.from(this.selectedVisaOptions);
+  const priority = this.myForm.get('priority')?.value;
+  const experience = this.myForm.get('experience')?.value;
+  const consultantflg = this.flag;
+  const companyId = localStorage.getItem('companyid');
+  const sortField = this.sortField;
+  const sortOrder = this.sortOrder;
 
+  // Convert empty arrays to null
+  const visaStatus = visa.length > 0 ? visa : null;
+  const priorityVal = (priority && priority.length > 0) ? priority : null;
+  const experienceVal = (experience && experience.length > 0) ? experience : null;
+
+  const request = {
+    position,
+    location,
+    visaStatus,
+    priority: priorityVal,
+    experience: experienceVal,
+    consultantflg,
+    companyId,
+    sortField,
+    sortOrder
   };
 
-  this.filterApply = true;
-  this.consultantServ.getFilteredConsultant(this.page, this.pageSize, request).subscribe((response: any) => {
-    this.consultant = response.data.content;
-
-    this.dataSource.data = response.data.content;
-    this.dataSource.data.forEach((x: any, i: number) => {
-      x.serialNum = this.generateSerialNumber(i);
-    });
-    this.totalItems = response.data.totalElements;
-  });
+  this.filterData(request, this.page);
 }
+
 
   
   //
@@ -507,30 +520,7 @@ toggleAllExperienceSelection(): void {
   this.myForm.get('experience')?.setValue(Array.from(this.selectedExperienceOptions));
   this.triggerExperienceFilter();
 }
-triggerExperienceFilter(): void {
-  const position = this.myForm.get('position')?.value;
-  const location = this.myForm.get('location')?.value;
-  const visa = this.myForm.get('visa')?.value;
-  const priority = this.myForm.get('priority')?.value;
-  const consultantflg = this.flag;
-  const companyId = localStorage.getItem('companyid');
-  const sortField = this.sortField;
-  const sortOrder = this.sortOrder;
 
-  this.request = {
-    position,
-    location,
-    visaStatus: visa,
-    priority,
-    experience: Array.from(this.selectedExperienceOptions),
-    consultantflg,
-    companyId,
-    sortField,
-    sortOrder
-  };
-
-  this.filterData(this.request, this.page);
-}
 
   /**
    * pageIndex : default value is 1 , will get updated whenever the page number changes
@@ -644,47 +634,53 @@ preventSubmit(event: Event): void {
 
   sortField = 'updateddate';
   sortOrder = 'desc';
-  onSort(event: Sort) {
-    if (event.active == 'SerialNum')
-      this.sortField = 'updateddate'
-    else
-      this.sortField = event.active;
-
-    this.sortOrder = event.direction;
-
-if(this.isFilter){
-  if (event.direction != '') {
-
-    const position = this.myForm.get('position').value;
-    const location = this.myForm.get('location').value;
-    const visa = this.myForm.get('visa').value;
-    const priority = this.myForm.get('priority').value;
-    const experience = this.myForm.get('experience').value;
-    const consultantflg = this.flag;
-
-    const sortField = this.sortField
-    const sortOrder = this.sortOrder;
-    this.request.sortOrder = sortOrder; 
-    this.request.sortField = sortField;
-    this.request.position = position; 
-    this.request.location = location;
-    this.request.visaStatus = visa;
-    this.request.priority = priority;
-    this.request.experience = experience;
-    this.request.consultantflg=consultantflg;
-    this.request.companyId=localStorage.getItem('companyid');
-    this.filterData(this.request,this.page );
+onSort(event: Sort) {
+  if (event.active === 'SerialNum') {
+    this.sortField = 'updateddate';
+  } else {
+    this.sortField = event.active;
   }
 
-}else{
+  this.sortOrder = event.direction;
 
-  if (event.direction != '') {
-    this.getAllData();
+  if (this.isFilter) {
+    if (event.direction !== '') {
+      const position = this.myForm.get('position')?.value;
+      const location = this.myForm.get('location')?.value;
+      const visa = this.myForm.get('visa')?.value || [];
+      const priority = this.myForm.get('priority')?.value || [];
+      const experience = this.myForm.get('experience')?.value || [];
+
+      const consultantflg = this.flag;
+      const sortField = this.sortField;
+      const sortOrder = this.sortOrder;
+
+      // Convert to null if empty
+      const visaStatus = visa.length > 0 ? visa : null;
+      const priorityVal = priority.length > 0 ? priority : null;
+      const experienceVal = experience.length > 0 ? experience : null;
+
+      this.request = {
+        position,
+        location,
+        visaStatus,
+        priority: priorityVal,
+        experience: experienceVal,
+        consultantflg,
+        companyId: localStorage.getItem('companyid'),
+        sortField,
+        sortOrder
+      };
+
+      this.filterData(this.request, this.page);
+    }
+  } else {
+    if (event.direction !== '') {
+      this.getAllData();
+    }
   }
 }
-    
-   
-  }
+
 
   navTo(to: string, id: any) {
     this.router.navigate([
@@ -1064,8 +1060,7 @@ event.preventDefault();
   }
 
    isFilter!:boolean
-
-  onExperienceChange(event: any): void {
+onExperienceChange(event: any): void {
   this.isFilter = true;
 
   const selectedValues = (event.value || []).filter((val: any) => val !== this.selectAllExperienceValue);
@@ -1082,6 +1077,36 @@ event.preventDefault();
 }
 
 
+triggerExperienceFilter(): void {
+  const position = this.myForm.get('position')?.value;
+  const location = this.myForm.get('location')?.value;
+  const visa = this.myForm.get('visa')?.value || [];
+  const priority = this.myForm.get('priority')?.value || [];
+  const consultantflg = this.flag;
+  const companyId = localStorage.getItem('companyid');
+  const sortField = this.sortField;
+  const sortOrder = this.sortOrder;
+
+  // Convert empty arrays to null
+  const visaStatus = visa.length > 0 ? visa : null;
+  const priorityVal = priority.length > 0 ? priority : null;
+  const experienceVal = Array.from(this.selectedExperienceOptions);
+  const experience = experienceVal.length > 0 ? experienceVal : null;
+
+  this.request = {
+    position,
+    location,
+    visaStatus,
+    priority: priorityVal,
+    experience,
+    consultantflg,
+    companyId,
+    sortField,
+    sortOrder
+  };
+
+  this.filterData(this.request, this.page);
+}
 
   
   refreshForm(): void {
