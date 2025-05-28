@@ -220,6 +220,9 @@ resumeupload(formData: FormData, params: HttpParams): Observable<any> {
 submissiondata(reqNumber: string) {
   return this.http.get(`requirement/getSubmissions/${reqNumber}`);
 }
+servedcount(payload: any) {
+  return this.http.post(`requirement/getServedCountPopup`,payload);
+}
 ResumeUpload(payload:any){
   return this.http.post(`openreqs/resume/getPercentage`,payload);
 }
