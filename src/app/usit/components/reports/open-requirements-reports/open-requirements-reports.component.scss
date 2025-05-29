@@ -436,3 +436,21 @@ ul.breadcrumb li:last-child {
 .vendor-table-style {
   max-height: calc(100% - 48px);
 }
+
+
+::ng-deep .select-all-option.mat-option {
+  padding-left: 10px;
+}
+
+::ng-deep .select-all-option .mat-checkbox {
+  margin-left: -8px;
+}
+/* Hide the default mat checkbox icon for this option */
+::ng-deep .no-checkbox-option.mat-selected .mat-pseudo-checkbox {
+  display: none !important;
+}
+
+::ng-deep .no-checkbox-option .mat-pseudo-checkbox {
+  display: none !important;
+}
+

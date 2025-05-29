@@ -174,46 +174,90 @@ export class ConsultantListComponent
     { code: 'P10', desc: 'P10' },
   ]
   selectedPriorityOptions = new Set<string>();
+selectAllPriorityValue = 'ALL_PRIORITY';
 
-  onPriorityChange(event: any): void {
-    this.isFilter=true  
-    const selectedValues = event.value;
-    this.selectedPriorityOptions = new Set(selectedValues); // Track selected values
-  
-    // If all checkboxes are unchecked, call getAllData
-    if (this.selectedPriorityOptions.size === 0) {
-      this.getAllData(1);
-      return;
-    }
-  
-    // Get other form values
-    const position = this.myForm.get('position')?.value;
-    const location = this.myForm.get('location')?.value;
-    const visa = this.myForm.get('visa')?.value;
-    const experience = this.myForm.get('experience')?.value;
-    const consultantflg = this.flag;
-    const companyId= localStorage.getItem('companyid');
-    const sortField= this.sortField;
-    const sortOrder= this.sortOrder;
+isAllPrioritySelected(): boolean {
+  return this.PRIORITY.length > 0 && this.selectedPriorityOptions.size === this.PRIORITY.length;
+}
 
-    // Prepare request payload
-    this.request = {
-      position,
-      location,
-      visaStatus: visa,
-      priority: Array.from(this.selectedPriorityOptions), // Convert Set to Array
-      experience,
-      consultantflg,
-      companyId,
-      sortOrder,
-      sortField
-      
-
-      
-    };
-  
-    this.filterData(this.request, this.page);
+toggleAllPrioritySelection(): void {
+  if (this.isAllPrioritySelected()) {
+    this.selectedPriorityOptions.clear();
+  } else {
+    this.PRIORITY.forEach(p => this.selectedPriorityOptions.add(p.code));
   }
+
+  this.myForm.get('priority')?.setValue(Array.from(this.selectedPriorityOptions));
+  this.triggerPriorityFilter();
+}
+triggerPriorityFilter(): void {
+  const position = this.myForm.get('position')?.value;
+  const location = this.myForm.get('location')?.value;
+  const visa = this.myForm.get('visa')?.value;
+  const experience = this.myForm.get('experience')?.value;
+  const consultantflg = this.flag;
+  const companyId = localStorage.getItem('companyid');
+  const sortField = this.sortField;
+  const sortOrder = this.sortOrder;
+
+  this.request = {
+    position,
+    location,
+    visaStatus: visa,
+    priority: Array.from(this.selectedPriorityOptions),
+    experience,
+    consultantflg,
+    companyId,
+    sortOrder,
+    sortField
+  };
+
+  this.filterData(this.request, this.page);
+}
+
+onPriorityChange(event: any): void {
+  this.isFilter = true;
+
+  const selectedValues = (event.value || []).filter((v: any) => v !== this.selectAllPriorityValue);
+  this.selectedPriorityOptions = new Set(selectedValues);
+
+  this.myForm.get('priority')?.setValue(selectedValues);
+
+  if (this.selectedPriorityOptions.size === 0) {
+    this.getAllData(1);
+    return;
+  }
+
+  const position = this.myForm.get('position')?.value;
+  const location = this.myForm.get('location')?.value;
+  const visa = this.myForm.get('visa')?.value || [];
+  const experience = this.myForm.get('experience')?.value || [];
+  const consultantflg = this.flag;
+  const companyId = localStorage.getItem('companyid');
+  const sortField = this.sortField;
+  const sortOrder = this.sortOrder;
+
+  // Convert empty arrays to null
+  const visaStatus = visa.length > 0 ? visa : null;
+  const experienceVal = experience.length > 0 ? experience : null;
+  const priorityVal = selectedValues.length > 0 ? selectedValues : null;
+
+  this.request = {
+    position,
+    location,
+    visaStatus,
+    priority: priorityVal,
+    experience: experienceVal,
+    consultantflg,
+    companyId,
+    sortOrder,
+    sortField
+  };
+
+  this.filterData(this.request, this.page);
+}
+
+
   
   http: any;
   filteredConsultants: any;
@@ -303,6 +347,26 @@ export class ConsultantListComponent
       this.locations = response.data;
     });
   }
+  selectAllVisaValue = 'ALL_VISAS'; // special value for select all
+selectedVisaOptions = new Set<string>(); // store selected visas
+
+isAllVisaSelected(): boolean {
+  return this.visadata.length > 0 && this.selectedVisaOptions.size === this.visadata.length;
+}
+
+toggleAllVisaSelection(): void {
+  if (this.isAllVisaSelected()) {
+    this.selectedVisaOptions.clear();
+  } else {
+    this.visadata.forEach((visa: any) => {
+      this.selectedVisaOptions.add(visa[0]);
+    });
+  }
+
+  // Update form control and trigger filter
+  this.myForm.get('visa')?.setValue(Array.from(this.selectedVisaOptions));
+  this.triggerFilterAPI();
+}
 
   //lavanya
   getvisa() {
@@ -310,51 +374,73 @@ export class ConsultantListComponent
       this.visadata = response.data;
     });
   }
-  selectedVisaOptions = new Set<string>(); // Store selected visa options
 
+  // onVisaChange(event: MatSelectChange): void {
+  //   this.isFilter=true
+  
+  //   this.selectedVisaOptions = new Set(event.value); // Update selected options
+  
+  //   // Update form control with selected values
+  //   this.myForm.get('visa')?.setValue(Array.from(this.selectedVisaOptions));
+  
+  //   if (this.selectedVisaOptions.size === 0) {
+  //     // If no visa options are selected, fetch all data
+  //     this.getAllData(1);
+  //   } else {
+  //     // Otherwise, call the filter API
+  //     this.triggerFilterAPI();
+  //   }
+  // }
   onVisaChange(event: MatSelectChange): void {
-    this.isFilter=true
-  
-    this.selectedVisaOptions = new Set(event.value); // Update selected options
-  
-    // Update form control with selected values
-    this.myForm.get('visa')?.setValue(Array.from(this.selectedVisaOptions));
-  
-    if (this.selectedVisaOptions.size === 0) {
-      // If no visa options are selected, fetch all data
-      this.getAllData(1);
-    } else {
-      // Otherwise, call the filter API
-      this.triggerFilterAPI();
-    }
+  this.isFilter = true;
+
+  // Remove the select-all placeholder value if present
+  const selected = (event.value || []).filter((v: any) => v !== this.selectAllVisaValue);
+
+  this.selectedVisaOptions = new Set(selected);
+
+  this.myForm.get('visa')?.setValue(selected);
+
+  if (selected.length === 0) {
+    this.getAllData(1);
+  } else {
+    this.triggerFilterAPI();
   }
-  
+}
+
 
 triggerFilterAPI(): void {
-  const request = {
-    position: this.myForm.get('position')?.value,
-    location: this.myForm.get('location')?.value,
-    visaStatus: Array.from(this.selectedVisaOptions), // Pass selected visa values
-    priority: this.myForm.get('priority')?.value,
-    experience: this.myForm.get('experience')?.value,
-    consultantflg: this.flag,
-    companyId: localStorage.getItem('companyid'),
-    sortField: this.sortField,
-    sortOrder: this.sortOrder
+  // Get all current form values and selections
+  const position = this.myForm.get('position')?.value;
+  const location = this.myForm.get('location')?.value;
+  const visa = Array.from(this.selectedVisaOptions);
+  const priority = this.myForm.get('priority')?.value;
+  const experience = this.myForm.get('experience')?.value;
+  const consultantflg = this.flag;
+  const companyId = localStorage.getItem('companyid');
+  const sortField = this.sortField;
+  const sortOrder = this.sortOrder;
 
+  // Convert empty arrays to null
+  const visaStatus = visa.length > 0 ? visa : null;
+  const priorityVal = (priority && priority.length > 0) ? priority : null;
+  const experienceVal = (experience && experience.length > 0) ? experience : null;
+
+  const request = {
+    position,
+    location,
+    visaStatus,
+    priority: priorityVal,
+    experience: experienceVal,
+    consultantflg,
+    companyId,
+    sortField,
+    sortOrder
   };
 
-  this.filterApply = true;
-  this.consultantServ.getFilteredConsultant(this.page, this.pageSize, request).subscribe((response: any) => {
-    this.consultant = response.data.content;
-
-    this.dataSource.data = response.data.content;
-    this.dataSource.data.forEach((x: any, i: number) => {
-      x.serialNum = this.generateSerialNumber(i);
-    });
-    this.totalItems = response.data.totalElements;
-  });
+  this.filterData(request, this.page);
 }
+
 
   
   //
@@ -417,6 +503,24 @@ triggerFilterAPI(): void {
     }
 
   }
+selectAllExperienceValue = 'ALL_EXPERIENCE';
+selectedExperienceOptions = new Set<string>();
+
+isAllExperienceSelected(): boolean {
+  return this.experiences.length > 0 && this.selectedExperienceOptions.size === this.experiences.length;
+}
+
+toggleAllExperienceSelection(): void {
+  if (this.isAllExperienceSelected()) {
+    this.selectedExperienceOptions.clear();
+  } else {
+    this.experiences.forEach(exp => this.selectedExperienceOptions.add(exp));
+  }
+
+  this.myForm.get('experience')?.setValue(Array.from(this.selectedExperienceOptions));
+  this.triggerExperienceFilter();
+}
+
 
   /**
    * pageIndex : default value is 1 , will get updated whenever the page number changes
@@ -530,47 +634,53 @@ preventSubmit(event: Event): void {
 
   sortField = 'updateddate';
   sortOrder = 'desc';
-  onSort(event: Sort) {
-    if (event.active == 'SerialNum')
-      this.sortField = 'updateddate'
-    else
-      this.sortField = event.active;
-
-    this.sortOrder = event.direction;
-
-if(this.isFilter){
-  if (event.direction != '') {
-
-    const position = this.myForm.get('position').value;
-    const location = this.myForm.get('location').value;
-    const visa = this.myForm.get('visa').value;
-    const priority = this.myForm.get('priority').value;
-    const experience = this.myForm.get('experience').value;
-    const consultantflg = this.flag;
-
-    const sortField = this.sortField
-    const sortOrder = this.sortOrder;
-    this.request.sortOrder = sortOrder; 
-    this.request.sortField = sortField;
-    this.request.position = position; 
-    this.request.location = location;
-    this.request.visaStatus = visa;
-    this.request.priority = priority;
-    this.request.experience = experience;
-    this.request.consultantflg=consultantflg;
-    this.request.companyId=localStorage.getItem('companyid');
-    this.filterData(this.request,this.page );
+onSort(event: Sort) {
+  if (event.active === 'SerialNum') {
+    this.sortField = 'updateddate';
+  } else {
+    this.sortField = event.active;
   }
 
-}else{
+  this.sortOrder = event.direction;
 
-  if (event.direction != '') {
-    this.getAllData();
+  if (this.isFilter) {
+    if (event.direction !== '') {
+      const position = this.myForm.get('position')?.value;
+      const location = this.myForm.get('location')?.value;
+      const visa = this.myForm.get('visa')?.value || [];
+      const priority = this.myForm.get('priority')?.value || [];
+      const experience = this.myForm.get('experience')?.value || [];
+
+      const consultantflg = this.flag;
+      const sortField = this.sortField;
+      const sortOrder = this.sortOrder;
+
+      // Convert to null if empty
+      const visaStatus = visa.length > 0 ? visa : null;
+      const priorityVal = priority.length > 0 ? priority : null;
+      const experienceVal = experience.length > 0 ? experience : null;
+
+      this.request = {
+        position,
+        location,
+        visaStatus,
+        priority: priorityVal,
+        experience: experienceVal,
+        consultantflg,
+        companyId: localStorage.getItem('companyid'),
+        sortField,
+        sortOrder
+      };
+
+      this.filterData(this.request, this.page);
+    }
+  } else {
+    if (event.direction !== '') {
+      this.getAllData();
+    }
   }
 }
-    
-   
-  }
+
 
   navTo(to: string, id: any) {
     this.router.navigate([
@@ -948,49 +1058,55 @@ event.preventDefault();
   event.stopPropagation();
     this.filterData(this.request,this.page);
   }
-  selectedExperienceOptions = new Set<string>();
 
    isFilter!:boolean
-  onExperienceChange(event: any): void {
-    this.isFilter=true
-    const selectedValues = event.value;
-    this.selectedExperienceOptions = new Set(selectedValues); // Track selected values
-  
-    // If all checkboxes are unchecked, call getAllData
-    if (this.selectedExperienceOptions.size === 0) {
-      this.getAllData(1);
-      return;
-    }
-  
-    // Get other form values
-    const position = this.myForm.get('position')?.value;
-    const location = this.myForm.get('location')?.value;
-    const visa = this.myForm.get('visa')?.value;
-    const priority = this.myForm.get('priority')?.value;
-    const consultantflg = this.flag;
-    const companyId=localStorage.getItem('companyid');
+onExperienceChange(event: any): void {
+  this.isFilter = true;
 
-    const sortField = this.sortField;
-    const sortOrder=this.sortOrder;
+  const selectedValues = (event.value || []).filter((val: any) => val !== this.selectAllExperienceValue);
+  this.selectedExperienceOptions = new Set(selectedValues);
 
-    // Prepare request payload
-    this.request = {
-      position,
-      location,
-      visaStatus: visa,
-      priority,
-      experience: Array.from(this.selectedExperienceOptions), // Convert Set to Array
-      consultantflg,
-      companyId,
-      sortField,
-      sortOrder
+  this.myForm.get('experience')?.setValue(selectedValues);
 
-    };
-  
-    this.filterData(this.request, this.page);
+  if (this.selectedExperienceOptions.size === 0) {
+    this.getAllData(1);
+    return;
   }
-  
 
+  this.triggerExperienceFilter();
+}
+
+
+triggerExperienceFilter(): void {
+  const position = this.myForm.get('position')?.value;
+  const location = this.myForm.get('location')?.value;
+  const visa = this.myForm.get('visa')?.value || [];
+  const priority = this.myForm.get('priority')?.value || [];
+  const consultantflg = this.flag;
+  const companyId = localStorage.getItem('companyid');
+  const sortField = this.sortField;
+  const sortOrder = this.sortOrder;
+
+  // Convert empty arrays to null
+  const visaStatus = visa.length > 0 ? visa : null;
+  const priorityVal = priority.length > 0 ? priority : null;
+  const experienceVal = Array.from(this.selectedExperienceOptions);
+  const experience = experienceVal.length > 0 ? experienceVal : null;
+
+  this.request = {
+    position,
+    location,
+    visaStatus,
+    priority: priorityVal,
+    experience,
+    consultantflg,
+    companyId,
+    sortField,
+    sortOrder
+  };
+
+  this.filterData(this.request, this.page);
+}
 
   
   refreshForm(): void {

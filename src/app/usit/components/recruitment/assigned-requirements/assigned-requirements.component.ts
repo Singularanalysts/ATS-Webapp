@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { AssignedCountComponent } from '../assigned-count/assigned-count.component';
+import { ServedCountComponent } from '../served-count/served-count.component';
 
 @Component({
   selector: 'app-assigned-requirements',
@@ -86,7 +87,26 @@ export class AssignedRequirementsComponent {
   
     this.getAssignedRequirements(formattedFromDate, formattedToDate);
   }
-  
+  servedcount(element:any){
+    const actionData = {
+              title: 'Assigned Requirements Served Count Report',
+              userid: element.userid,
+             
+              actionName: 'requirement-report'
+            };     
+              const dialogConfig = new MatDialogConfig();
+                dialogConfig.width = '70vw';
+                dialogConfig.disableClose = false;
+                dialogConfig.panelClass = 'add-interview';
+                dialogConfig.data = actionData; 
+              
+                const dialogRef = this.dialogServ.openDialogWithComponent(ServedCountComponent, dialogConfig);
+              
+                dialogRef.afterClosed().subscribe((result: { success: any }) => {
+                  if (result?.success) {  
+                  }
+                });
+  }
   formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
