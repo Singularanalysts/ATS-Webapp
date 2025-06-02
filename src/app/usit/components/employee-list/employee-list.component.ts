@@ -42,6 +42,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { MatTabsModule, MatTabChangeEvent  } from '@angular/material/tabs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { TeamFlowComponent } from '../team-flow/team-flow.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -495,7 +496,25 @@ onFilter(event: any) {
     this.router.navigateByUrl('/usit/dashboard');
   }
   //lavanya
-  
+  Teamflow(){
+   const actionData = {
+          title: 'Team Architecture',
+         
+          actionName: 'requirement-report'
+        };     
+          const dialogConfig = new MatDialogConfig();
+            dialogConfig.width = '80vw';
+            dialogConfig.disableClose = false;
+            dialogConfig.panelClass = 'add-interview';
+            dialogConfig.data = actionData; 
+          
+            const dialogRef = this.dialogServ.openDialogWithComponent(TeamFlowComponent, dialogConfig);
+          
+            dialogRef.afterClosed().subscribe((result: { success: any }) => {
+              if (result?.success) {  
+              }
+            });
+            }
 }
 
 

@@ -120,8 +120,8 @@ tbody {
 }
 
 .interview-table-style {
+  max-height: 78vh; /* Or any height you want */
   overflow: auto;
-  display: block;
 }
 
 .mdc-data-table__cell,

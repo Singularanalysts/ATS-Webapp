@@ -37,7 +37,7 @@ ul.breadcrumb li a:hover {
 
 .table-wrapper {
   flex: 1;
-  overflow: auto;
+margin-bottom: -36px !important;
 }
 
 table {
@@ -134,8 +134,8 @@ tbody {
 }
 
 .recruiter-table-style {
-  width: 100%;
-  overflow-y: auto;
+    max-height: 78vh; /* Or any height you want */
+  overflow: auto;
 }
 .action-btns{
   display: flex;
@@ -257,4 +257,9 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 .approve-reject-buttons {
   width: fit-content;
   height: auto;
+}
+::ng-deep.mat-mdc-paginator-range-actions {
+    display: flex;
+    align-items: center;
+        margin-bottom: -16px !important;
 }

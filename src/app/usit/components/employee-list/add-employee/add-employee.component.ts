@@ -43,6 +43,7 @@ import { FileManagementService } from 'src/app/usit/services/file-management.ser
 import { Employee } from 'src/app/usit/models/employee';
 import { HttpClient } from '@angular/common/http';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionSelectionChange } from '@angular/material/core';
 
 @Component({
   selector: 'app-add-employee',
@@ -63,7 +64,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     NgxMatIntlTelInputComponent,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    
   ],
   providers: [DatePipe],
 
@@ -438,6 +440,14 @@ getRoleNameById(roleid: number): string {
     }
 
   }
+onDepartmentSelectionChange(event: MatOptionSelectionChange, option: string): void {
+  const currentValue = this.employeeForm.controls.department.value;
+
+  if (event.isUserInput && currentValue === option) {
+    // Deselect by clearing the input value
+    this.employeeForm.controls.department.setValue('');
+  }
+}
 
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();

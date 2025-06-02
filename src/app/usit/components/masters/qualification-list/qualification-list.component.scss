@@ -165,3 +165,7 @@ ul.breadcrumb li a:hover {
 .delete-icon {
   color: rgb(99, 98, 98);
 }
+.table-style{
+  max-height: 78vh; /* Or any height you want */
+  overflow: auto;
+}

@@ -174,3 +174,7 @@ ul.breadcrumb li a:hover {
   overflow: auto;
   display: block;
 }
+.vendor-table-style {
+  max-height: 80vh; /* Or any height you want */
+  overflow: auto;
+}

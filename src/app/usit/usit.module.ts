@@ -10,10 +10,11 @@ import { ResumeVendorComponent } from './components/openreqs/resume-vendor/resum
 import { AddResumeVendorComponent } from './components/openreqs/add-resume-vendor/add-resume-vendor.component';
 import { AddResumeRecruiterComponent } from './components/openreqs/add-resume-recruiter/add-resume-recruiter.component';
 import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
+import { TeamFlowComponent } from './components/team-flow/team-flow.component';
 
 @NgModule({
   declarations: [
-    ResumeDescriptionComponent,H1BVendorsComponent,
+    ResumeDescriptionComponent,H1BVendorsComponent, TeamFlowComponent,
   ],
   imports: [
     CommonModule,

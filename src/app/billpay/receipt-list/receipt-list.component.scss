@@ -268,3 +268,7 @@
   table {
     width: 100%;
   }
+  .purchase-order-table-style{
+      max-height: 78vh; /* Or any height you want */
+  overflow: auto;
+  }

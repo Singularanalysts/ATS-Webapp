@@ -163,9 +163,8 @@ ul.breadcrumb li a:hover {
 }
 
 .company-list-table-style {
-  width: 100%;
+    max-height: 78vh; /* Or any height you want */
   overflow: auto;
-  display: block;
 }
 
 ::ng-deep .mat-mdc-paginator {

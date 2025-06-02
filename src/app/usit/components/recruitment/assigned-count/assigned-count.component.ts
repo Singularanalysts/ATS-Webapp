@@ -231,7 +231,11 @@ pseudoname:any
           return '';
       }
     }
-    goback(){
-      this.router.navigate(['/usit/assigned-requirements'])
-    }
+   goback() {
+  const preservedState = history.state?.preservedState;
+  this.router.navigate(['/usit/assigned-requirements'], {
+    state: { preservedState }
+  });
+}
+
 }

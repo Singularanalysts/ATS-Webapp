@@ -5,9 +5,9 @@
   </ul>
   <!-- <app-bread-crumbs [breadcrumbs] = "breadCrumbsData"></app-bread-crumbs> -->
   <div class="header-container mat-elevation-z1">
-    <span class="header-text">
-      Employees
-    </span>
+    <span class="header-text">Employees
+      <mat-icon class="item-account"  matTooltip="Team Architecture" style="cursor:pointer" (click)="Teamflow()">account_tree</mat-icon>
+</span>
     <div class="emp-actions">
       <button [disabled]="!privilegeServ.hasPrivilege('ADD_EMPLOYEE')" mat-icon-button disableRipple class="add-user"
         (click)="addEmployee()" matTooltip="Add Employee" matTooltipPosition="left">

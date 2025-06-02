@@ -84,6 +84,7 @@ import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors
 import { SubmissionTrashComponent } from './components/sales/submission-trash/submission-trash.component';
 import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
 import { AssociatedCompaniesComponent } from './components/associated-companies/associated-companies.component';
+import { TeamFlowComponent } from './components/team-flow/team-flow.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -434,6 +435,9 @@ const routes: Routes = [
   },
   { 
     path: 'othercompaniessupderadmindata', component: OthercompaniessuperadminsComponent,
+  },
+   {
+    path: 'Team-Overflow', component: TeamFlowComponent,
   },
 ];
 

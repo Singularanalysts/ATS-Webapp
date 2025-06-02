@@ -127,9 +127,8 @@ tbody {
 }
 
 .requirement-table-style {
-  width: 100%;
+  max-height: 78vh; /* Or any height you want */
   overflow: auto;
-  display: block;
 }
 
 .submission-icon,

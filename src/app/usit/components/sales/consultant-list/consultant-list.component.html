@@ -142,7 +142,7 @@
   </div>
   <div id="table-container" class="table-wrapper">
     <section class="mat-elevation-z8"
-      [ngClass]="{'dom-consultant-table-style': flag === 'Domrecruiting', 'consultant-table-style': flag !== 'Domrecruiting'}">
+      [ngClass]="{'dom-consultant-table-style': flag === 'Domrecruiting', 'consultant-table-style': flag !== 'Domrecruiting'}" class="vendor-table-style">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
 
         <!--- Note that these columns can be defined in any order.
