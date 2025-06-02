@@ -400,3 +400,7 @@ ul.breadcrumb li:last-child {
   padding: 10px;
   box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
 }
+.vendor-table-style {
+  max-height: 78vh ; /* Or any height you want */
+  overflow: auto;
+}

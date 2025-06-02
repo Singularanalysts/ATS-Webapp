@@ -87,6 +87,7 @@ export class AssignedRequirementsComponent {
   
     this.getAssignedRequirements(formattedFromDate, formattedToDate);
   }
+  
   servedcount(element:any){
     const actionData = {
               title: 'Assigned Requirements Served Count Report',
@@ -124,9 +125,34 @@ export class AssignedRequirementsComponent {
   ];
 
 
-  ngOnInit(): void {
+  // ngOnInit(): void {
+  //   this.getAssignedRequirements(null, null);
+  // }
+
+ngOnInit(): void {
+  const state: any = history.state;
+console.log('statee',state)
+  if (state?.preservedState) {
+    // Restore state if coming back
+    const { startDate, endDate, tableData } = state.preservedState;
+
+    this.RequirementReport.patchValue({
+      startDate,
+      endDate,
+    });
+         
+    this.dataSource.data = tableData;
+
+    const formattedFromDate = this.formatDate(startDate);
+    const formattedToDate = this.formatDate(endDate);
+    console.log('formattedToDate',formattedFromDate,formattedToDate)
+    this.getAssignedRequirements(formattedFromDate, formattedToDate);
+
+  } else {
+    // On initial load, send nulls
     this.getAssignedRequirements(null, null);
   }
+}
 
 
   getAssignedRequirements(fromDate: string | null, toDate: string | null) {
@@ -179,24 +205,47 @@ const cid =localStorage.getItem('companyid')
   }
   
  
-  requirementreportdata(element: any) {
-    const fromDate = this.RequirementReport.value.startDate ? this.formatDate(this.RequirementReport.value.startDate) : null;
-    const toDate = this.RequirementReport.value.endDate ? this.formatDate(this.RequirementReport.value.endDate) : null;
+  // requirementreportdata(element: any) {
+  //   const fromDate = this.RequirementReport.value.startDate ? this.formatDate(this.RequirementReport.value.startDate) : null;
+  //   const toDate = this.RequirementReport.value.endDate ? this.formatDate(this.RequirementReport.value.endDate) : null;
   
-    const actionData = {
-      title: 'Requirement Report',
-      userid: element.userid,
-      pseudoname: element.pseudoname,
-      fromDate: fromDate,
-      toDate: toDate,
-      actionName: 'requirement-report'
-    };
+  //   const actionData = {
+  //     title: 'Requirement Report',
+  //     userid: element.userid,
+  //     pseudoname: element.pseudoname,
+  //     fromDate: fromDate,
+  //     toDate: toDate,
+  //     actionName: 'requirement-report'
+  //   };
   
-    this.router.navigate(['/usit/requirement-reportdata'], { state: { data: actionData } });
-  }
+  //   this.router.navigate(['/usit/requirement-reportdata'], { state: { data: actionData } });
+  // }
 
-  
-  
+requirementreportdata(element: any) {
+  const fromDate = this.RequirementReport.value.startDate;
+  const toDate = this.RequirementReport.value.endDate;
+
+  const actionData = {
+    title: 'Requirement Report',
+    userid: element.userid,
+    pseudoname: element.pseudoname,
+    fromDate: this.formatDate(fromDate),
+    toDate: this.formatDate(toDate),
+    actionName: 'requirement-report'
+  };
+
+  this.router.navigate(['/usit/requirement-reportdata'], {
+    state: {
+      data: actionData,
+      preservedState: {
+        startDate: fromDate,
+        endDate: toDate,
+        tableData: this.dataSource.data
+      }
+    }
+  });
+}
+
   
   refreshForm(){
     this.RequirementReport.reset();

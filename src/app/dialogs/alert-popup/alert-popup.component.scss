@@ -124,3 +124,7 @@
   // font-weight: bold;
   border-bottom: 1px solid #ccc;
 }
+.hot-list-table-style{
+  max-height: 78vh; /* Or any height you want */
+  overflow: auto;
+}

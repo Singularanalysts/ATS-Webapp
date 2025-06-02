@@ -141,12 +141,8 @@
   }
   
   .table-style {
-    width: 100%;
-    // max-height: 61vh;
-    // max-height: calc(100% - 52px);
-    // padding: 0 2px;
-    overflow: auto;
-    display: block;
+ max-height: 78vh; /* Or any height you want */
+  overflow: auto;
   }
   
   .action-btns{

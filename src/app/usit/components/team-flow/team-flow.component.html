@@ -1,0 +1,93 @@
+<div class="dialog-header">
+  <span class="dialog-title">Team Architecture</span>
+  <mat-icon class="close-icon" (click)="dialogRef.close()">close</mat-icon>
+</div>
+
+<div class="container">
+  <div style="text-align: center; margin-bottom: 45px;">
+    <label class="label">Manager:</label>
+
+    <select [(ngModel)]="selectedMember" (change)="onManagerSelected()" class="dropdown">
+      <option [ngValue]="null" disabled hidden>Select a manager</option>
+      <option *ngFor="let member of teamMembers" [ngValue]="member">
+        {{ member.pseudoname }}
+      </option>
+    </select>
+  </div>
+
+  <div class="tree-layout" *ngIf="currentTree">
+    <!-- Manager Row -->
+    <div class="manager-row vertical-tree">
+      <!-- Manager Node -->
+      <div class="node-card-wrapper manager">
+        <div class="node-card">
+          <div class="info">
+            <span class="name">{{ currentTree.pseudo }} <span class="pseudo">({{ currentTree.name }})</span></span>
+            <span class="role" style="color:green; font-weight: 600;">{{ currentTree.role }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow and Direct Exec Nodes -->
+      <ng-container *ngFor="let child of currentTree.children">
+        <ng-container *ngIf="!child.children?.length">
+          <div class="arrow-horizontal-container">
+            <!-- Horizontal arrow only for first direct exec -->
+            <div *ngIf="child.showHorizontalArrow" class="arrow-horizontal"></div>
+
+            <!-- Direct Exec Node -->
+            <div class="node-card-wrapper direct-exec-node">
+              <div class="node-card">
+                <div class="info">
+                  <span class="name">{{ child.pseudo }} <span class="pseudo">({{ child.name }})</span></span>
+                  <span class="role" style="color:blue; font-weight: 600;">{{ child.role }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Team Leads and Executives -->
+    <div class="team-leads-executives">
+      <ng-container *ngFor="let child of currentTree.children">
+        <div *ngIf="child.children?.length" class="team-lead-block">
+          <!-- Vertical Arrow from Manager to Team Lead -->
+          <div *ngIf="child.showVerticalArrow" class="vertical-arrow"></div>
+
+          <div class="team-lead-row">
+            <!-- Team Lead Node -->
+            <div class="node-card-wrapper team-lead-node">
+              <div class="node-card">
+                <div class="info">
+                  <span class="name">{{ child.pseudo }} <span class="pseudo">({{ child.name }})</span></span>
+                  <span class="role" style="color:red; font-weight: 600;">{{ child.role }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executives Row -->
+            <div class="executives-row">
+              <ng-container *ngFor="let grand of child.children">
+                <div class="arrow-horizontal-container">
+                  <!-- Horizontal arrow only for first exec of first team lead -->
+                  <div *ngIf="grand.showHorizontalArrow" class="arrow-horizontal"></div>
+
+                  <div class="node-card-wrapper executive-node">
+                    <div class="node-card">
+                      <div class="info">
+                        <span class="name">{{ grand.pseudo }} <span class="pseudo">({{ grand.name }})</span></span>
+                        <span class="role" style="color:orange; font-weight: 600;">{{ grand.role }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

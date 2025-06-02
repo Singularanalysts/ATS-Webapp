@@ -17,7 +17,9 @@
       </div>
     </div>
   </div>
-  <div id="table-container" class="table-wrapper">
+  <div class="table-container" class="table-wrapper">
+      <div class="sticky-wrapper">
+
     <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
       <mat-tab *ngFor="let tab of tabs" [label]="tab">
         <ng-container *ngTemplateOutlet="tableTemplate; context: { status: tab }"></ng-container>
@@ -25,71 +27,61 @@
     </mat-tab-group>
 
     <ng-template #tableTemplate>
+      
       <section class="vendor-table-style">
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
   
-          <!--- Note that these columns can be defined in any order.
-                The actual rendered columns are set as a property on the row definition" -->
-  
-          <!-- Serial Number Column -->
+      
           <ng-container matColumnDef="SerialNum">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number"> S.No </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Serial Number" sticky> S.No </th>
             <td mat-cell *matCellDef="let element"> {{element?.serialNum}} </td>
           </ng-container>
   
-          <!-- Company Column -->
           <ng-container matColumnDef="Company">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header mat-sort-header sortActionDescription="Sort by Company"> Company</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Company" sticky> Company</th>
             <td mat-cell *matCellDef="let element">
               <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company| titlecase}}</span>
             </td>
           </ng-container>
   
-          <!-- HeadQuarter Column -->
           <ng-container matColumnDef="HeadQuarter">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Head Quarter"> Head
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Head Quarter" sticky> Head
               Quarter </th>
             <td mat-cell *matCellDef="let element" style="width: 20%"> {{element.headquerter | titlecase}} </td>
           </ng-container>
   
-          <!-- VendorType Column -->
           <ng-container matColumnDef="VendorType">
-            <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendortype"  mat-sort-header> Vendor Type
+            <th mat-header-cell *matHeaderCellDef sortActionDescription="Sort by vendortype"  mat-sort-header sticky> Vendor Type
             </th>
             <td mat-cell *matCellDef="let element"> {{element.vendortype}} </td>
           </ng-container>
   
-          <!-- TierType Column -->
           <ng-container matColumnDef="TierType">
-            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by tyretype"> Tier Type
+            <th mat-header-cell *matHeaderCellDef  mat-sort-header sortActionDescription="Sort by tyretype" sticky> Tier Type
             </th>
             <td mat-cell *matCellDef="let element"> {{element.tyretype}} </td>
           </ng-container>
   
-          <!-- AddedBy Column -->
           <ng-container matColumnDef="AddedBy">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname"> Added By </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by pseudoname" sticky> Added By </th>
             <td mat-cell *matCellDef="let element">
               <span class="user-info" (click)="goToUserInfo(element.addedby)"> {{element.pseudoname  | titlecase}}  </span>
             </td>
           </ng-container>
   
-          <!-- AddedOn Column -->
           <ng-container matColumnDef="AddedOn">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by createddate"> Added On </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by createddate " sticky> Added On </th>
             <td mat-cell *matCellDef="let element"> {{element.createddate | date:'MM-dd-yyyy'}} </td>
           </ng-container>
   
-          <!-- LastUpdated Column -->
           <ng-container matColumnDef="LastUpdated">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by updateddate"> Last
+            <th mat-header-cell *matHeaderCellDef mat-sort-header  sortActionDescription="Sort by updateddate" sticky> Last
               Updated </th>
             <td mat-cell *matCellDef="let element"> {{element.updateddate  | date:'MM-dd-yyyy'}} </td>
           </ng-container>
   
-          <!-- Action Column -->
           <ng-container matColumnDef="Action">
-            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <th mat-header-cell *matHeaderCellDef sticky> Action </th>
             <td mat-cell *matCellDef="let vendor" style="white-space: nowrap;">
               <span class="action-buttons">
                 <button [disabled]="!privilegeServ.hasPrivilege('EDIT_VENDOR')" mat-icon-button
@@ -107,7 +99,6 @@
             </td>
           </ng-container>
   
-          <!-- Approve/Reject Column -->
           <ng-container matColumnDef="ApproveOrReject">
             <th mat-header-cell *matHeaderCellDef  sortActionDescription="Sort by ApproveOrReject" >
               Approve/Reject </th>
@@ -121,7 +112,6 @@
                 </button>
               </ng-container>
               <ng-template #ifNotApproved>
-                <!-- Initiated BUTTON -->
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
                   *ngIf="['Initiated', 'Approved'].includes(vendor.vms_stat)" mat-raised-button class="approve-reject-buttons"
                   (click)="onApproveOrRejectVMS(vendor)" [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;"
@@ -130,14 +120,12 @@
               
                 &nbsp;
               
-                <!-- Reject BUTTON -->
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')"
                   *ngIf="vendor.vms_stat !== 'Approved' && vendor.vms_stat !== 'Rejected' && vendor.vms_stat !== 'Blacklisted'"
                   mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor ,true)"
                   [ngStyle]="{ color: 'white' }" style="width: 75px; height: 25px;" [ngClass]="'mat-warn'"> {{'Reject'}}
                 </button>
               
-                <!-- Blacklisted BUTTON -->
                 <button [disabled]="!privilegeServ.hasPrivilege('STATUS_VENDOR')" *ngIf="vendor.vms_stat === 'Blacklisted'"
                   mat-raised-button class="approve-reject-buttons" (click)="onApproveOrRejectVMS(vendor, true)"
                   [ngStyle]="{ color: 'white' }" style="width: 80px; height: 25px;" [ngClass]="'mat-warn'">
@@ -152,9 +140,7 @@
             </td>
           </ng-container>
   
-          <!-- table columns ends  -->
-  
-          <!-- table ROW -->
+        
           <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngClass]="getVendorRowClass(row)"></tr>
         </table>
@@ -162,7 +148,7 @@
       </section>
       <hr>
     </ng-template>
-
+</div>
   </div>
   <!-- paginator -->
   <div class="paginator" *ngIf="dataSource.filteredData.length">

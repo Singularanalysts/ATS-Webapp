@@ -526,3 +526,7 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
 ::ng-deep .no-checkbox-option .mat-pseudo-checkbox {
   display: none !important;
 }
+.vendor-table-style{
+   max-height: 78vh; /* Or any height you want */
+  overflow: auto;
+}

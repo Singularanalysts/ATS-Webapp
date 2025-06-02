@@ -391,3 +391,7 @@ ul.breadcrumb li:last-child {
 .banter-table mat-card-content {
   height: 100%;
 }
+.vendor-table-style {
+  max-height: 80vh; /* Or any height you want */
+  overflow: auto;
+}

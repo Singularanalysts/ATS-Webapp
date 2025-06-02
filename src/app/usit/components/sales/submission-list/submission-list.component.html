@@ -44,7 +44,7 @@
         </div>
     </div>
     <div id="table-container" class="table-wrapper">
-        <section class="mat-elevation-z8" [ngClass]="{'dom-submission-table-style': flag === 'Domrecruiting', 'submission-table-style': flag !== 'Domrecruiting'}">
+        <section class="mat-elevation-z8" [ngClass]="{'dom-submission-table-style': flag === 'Domrecruiting', 'submission-table-style': flag !== 'Domrecruiting'}" class="vendor-table-style">
             <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false "       class="sticky-table"
             >
 
