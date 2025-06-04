@@ -623,6 +623,13 @@ onDepartmentSelectionChange(event: MatOptionSelectionChange, option: string): vo
         },
       });
   }
+clearTeamLead() {
+  const currentValue = this.employeeForm.get('teamlead')?.value;
+  if (currentValue) {
+    this.employeeForm.get('teamlead')?.setValue(null);
+  }
+}
+
 
   onSubmit() {
     this.submitted = true;

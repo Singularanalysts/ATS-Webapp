@@ -1,7 +1,14 @@
 <section class="header-container" id="mainHeader">
-    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+  <div style="display: flex;">
+      <span class="header-text" mat-dialog-title id="mainHeaderTitle">
       {{data.title}}
+   
     </span>
+         <button mat-icon-button color="primary" style="margin: 3px;" (click)="openEmailClient()" aria-label="Email">
+  <mat-icon>email</mat-icon>
+</button>
+  </div>
+  
     <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
       <mat-icon>close</mat-icon>
     </button>

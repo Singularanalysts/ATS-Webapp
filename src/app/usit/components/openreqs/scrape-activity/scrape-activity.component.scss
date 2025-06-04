@@ -75,15 +75,17 @@
   }
   
   .mat-column-SerialNum,
-  .mat-column-pubdate,
-  .mat-column-company,
-  .mat-column-feedTitle,
-  .mat-column-city,
-  .mat-column-jobtype,
-  .mat-column-payrate,
-  .mat-column-empemail,
-  .mat-column-empfirstname
-  {
+  .mat-column-Name,
+  .mat-column-Technology,
+  .mat-column-Visa,
+  .mat-column-Experience,
+  .mat-column-Rate,
+  .mat-column-Priority,
+  .mat-column-CurrentLocation,
+  .mat-column-Relocation,
+  .mat-column-Phone,
+  .mat-column-Email,
+  .mat-column-AssignTo {
     border-right: 1px solid lightgray;
   }
   
@@ -121,7 +123,7 @@
   }
   
   .hot-list-table-style {
-    max-height: 78vh; /* Or any height you want */
+     max-height: 78vh; /* Or any height you want */
   overflow: auto;
   }
   
@@ -179,7 +181,7 @@
   }
   
   .mat-mdc-row {
-    height: 30px !important;
+    height: 40px !important;
   }
   
   .filter-button {
@@ -192,7 +194,41 @@
     pointer-events: none;
   }
 
-  a {
-    text-decoration: none;
-    color: #0d6efd;
-  }
+  //lavanya
+.form-container {
+  margin-right: 7rem;
+  /* Adjust as needed */
+  margin-top: 1rem;
+  width: 10rem;
+
+}
+
+.bold-label {
+  font-weight: bold;
+}
+::ng-deep.mdc-data-table__row:last-child .mat-mdc-cell {
+    border-bottom: none;
+    width: 13rem !important;
+}
+  .mdc-data-table__cell, .mdc-data-table__header-cell {
+    padding: 0 4px 0 4px;
+    border-right: 1px solid lightgray !important;
+}
+.status-completed {
+    color: green;
+    padding: 6px 30px;
+    border-radius: 9px;
+    background-color: #e6ffe6;
+    margin: 28px;
+    font-weight: 700;
+}
+
+.status-inprogress {
+  color: red;
+    padding: 6px 30px;
+  border-radius: 4px;
+  background-color: #ffe6e6;
+      margin: 28px;
+    font-weight: 700;
+
+}

@@ -11,6 +11,9 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { MatSortModule, Sort } from '@angular/material/sort';
+import { LinkedInProfilesComponent } from '../dashboard/linked-in-profiles/linked-in-profiles.component';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { DialogService } from 'src/app/services/dialog.service';
 
 @Component({
   selector: 'app-linkedprofiles',
@@ -40,6 +43,8 @@ export class LinkedprofilesComponent implements OnInit {
     'job_title'
   ];
   // paginator
+    private dialogServ = inject(DialogService);
+  
   length = 50;
   pageIndex = 0;
   pageSize = 50;
@@ -105,7 +110,28 @@ export class LinkedprofilesComponent implements OnInit {
       }
     )
   }
-
+addLinkedInProfile(){
+     const actionData = {
+        title: 'LinkedIn Profiles ',
+        interviewData: null,
+        actionName: 'add-executiverating',
+    
+      };
+    
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '50vw';
+      dialogConfig.disableClose = false;
+      dialogConfig.panelClass = 'add-interview';
+      dialogConfig.data = actionData;
+    
+      const dialogRef = this.dialogServ.openDialogWithComponent(LinkedInProfilesComponent, dialogConfig);
+    
+      dialogRef.afterClosed().subscribe(result => {
+        if (result?.success) {  
+          this.getAllData();  
+        }
+      });
+}
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;

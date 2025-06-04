@@ -5,7 +5,11 @@ import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
+import { RequirementService } from 'src/app/usit/services/requirement.service';
+interface Recruiter {
+  recruitername: string;
+  recruiteremail: string;
+}
 @Component({
   selector: 'app-job-description',
   standalone: true,
@@ -19,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./job-description.component.scss']
 })
 export class JobDescriptionComponent implements OnInit {
+  private requirementServ = inject(RequirementService);
 
   dataSource: any;
   private openReqServ = inject(OpenreqService);
@@ -50,7 +55,23 @@ export class JobDescriptionComponent implements OnInit {
       }
     )
   }
+  recruiters: Recruiter[] = [{ recruitername: '', recruiteremail: '' }];
 
+ openEmailClient() {
+  const toEmail = localStorage.getItem('UserProfileEmail');
+
+  this.requirementServ.getRecruiters(this.data.vendor).subscribe((response: any) => {
+    if (response.status === 'success' && response.data) {
+      this.recruiters = response.data;
+
+      const bccEmails = this.recruiters.map((r: any) => r.email).join(',');
+      const mailtoLink = `mailto:${toEmail}?bcc=${bccEmails}`;
+      window.location.href = mailtoLink;
+    } else {
+      console.error('Failed to load recruiters');
+    }
+  });
+}
 
   getFulltimeReqInfo() {
     this.openReqServ.getOpenFulltimeReqsById(this.data.id).subscribe(

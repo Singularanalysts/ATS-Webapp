@@ -1,4 +1,4 @@
-import { HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -8,7 +8,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 })
 export class OpenreqService {
 
-  constructor(private http: ApiService) { }
+  constructor(private http: ApiService,private hhtpclient:HttpClient) { }
 
   readmail(entity: any) {
      return this.http.post("mail/extractEmail", entity);
@@ -231,5 +231,8 @@ ResumeUpload(payload:any){
     return this.http.get("auth/users/getAllActiveUsersEmails");
   }
 
-
+ ScrapeLinkedInprofile(payload: any) {
+    const scrapeUrl = 'http://192.168.0.167:5001/scrape-profiles';
+    return this.hhtpclient.post(scrapeUrl, payload);
+  }
 }

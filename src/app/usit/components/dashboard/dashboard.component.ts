@@ -335,6 +335,10 @@ console.log(previlage,'previlage');
     console.log(vendorName,'vendornameee');
     
   }
+   getRowClass(row: any): string {
+  return row.isExists == '1' ? 'highlighted-row' : '';
+}
+
   ngOnDestroy() {
     // Unsubscribe from the interval to prevent memory leaks
     if (this.intervalSubscription) {

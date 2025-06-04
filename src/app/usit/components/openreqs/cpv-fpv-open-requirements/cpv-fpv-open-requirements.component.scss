@@ -118,9 +118,8 @@ tbody {
 }
 
 .hot-list-table-style {
-  width: 100%;
+   max-height: 78vh; /* Or any height you want */
   overflow: auto;
-  display: block;
 }
 
 .mdc-data-table__cell,

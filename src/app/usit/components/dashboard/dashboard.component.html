@@ -1314,7 +1314,7 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+<tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;" [ngClass]="getRowClass(row)"></tr>
             </table>
 
             <hr>
@@ -1841,7 +1841,7 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+<tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;" [ngClass]="getRowClass(row)"></tr>
             </table>
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
@@ -2807,7 +2807,7 @@
 
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
+<tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;" [ngClass]="getRowClass(row)"></tr>
             </table>
             <hr>
             <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>

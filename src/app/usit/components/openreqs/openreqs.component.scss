@@ -37,7 +37,6 @@ ul.breadcrumb li a:hover {
 
 .table-wrapper {
   flex: 1;
-  overflow: auto;
 }
 
 table {
@@ -95,7 +94,7 @@ action-button-ed
   justify-content: space-between;
   height: 48px;
   top: 0;
-  overflow: hidden;
+  // overflow: hidden;
   background-color: rgb(228, 231, 234);
 }
 
@@ -120,9 +119,8 @@ action-button-ed
 }
 
 .hot-list-table-style {
-  width: 100%;
+  max-height: 78vh; /* Or any height you want */
   overflow: auto;
-  display: block;
 }
 
 .mdc-data-table__cell,

@@ -472,7 +472,14 @@ myRoles(){
               "icon": "business_center",
               "routerLink": "/usit/email-extraction-list",
               "roles":["Super Administrator"]  
-            }
+            },
+              {
+              "test": "Rss",
+              "text": "Scrape Activity Monitor",
+              "icon": "business_center",
+              "routerLink": "/usit/Scrape-Activity",
+              "roles":["Super Administrator"]  
+            },
           ]
         },
       {

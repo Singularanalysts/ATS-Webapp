@@ -27,6 +27,8 @@
           <input matInput formControlName="email" maxlength="50">
           <mat-error *ngIf="h1bForm.get('email')?.hasError('required')"> Email is
             required</mat-error>
+              <mat-error *ngIf="h1bForm.get('email')?.hasError('email') && !h1bForm.get('email')?.hasError('required')"> Email is
+            Invalid</mat-error>
         </mat-form-field>
 
         <!-- Personal Contact Number-->

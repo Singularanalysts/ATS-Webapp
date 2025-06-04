@@ -337,4 +337,7 @@
     background-color: green !important;
     color: white !important;
   }
-  
+  .interview-table-style{
+     max-height: 78vh; /* Or any height you want */
+  overflow: auto;
+  }

@@ -85,6 +85,7 @@ import { SubmissionTrashComponent } from './components/sales/submission-trash/su
 import { ResumeUploaderComponent } from './components/openreqs/resume-uploader/resume-uploader.component';
 import { AssociatedCompaniesComponent } from './components/associated-companies/associated-companies.component';
 import { TeamFlowComponent } from './components/team-flow/team-flow.component';
+import { ScrapeActivityComponent } from './components/openreqs/scrape-activity/scrape-activity.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, pathMatch: 'full' },
@@ -438,6 +439,9 @@ const routes: Routes = [
   },
    {
     path: 'Team-Overflow', component: TeamFlowComponent,
+  },
+     {
+    path: 'Scrape-Activity', component: ScrapeActivityComponent,
   },
 ];
 
