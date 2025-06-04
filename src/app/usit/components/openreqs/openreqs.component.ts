@@ -251,6 +251,7 @@ export class OpenreqsComponent implements OnInit {
     const actionData = {
       title: `${element.job_title}`,
       id: element.id,
+      vendor:element.vendor,
       actionName: 'job-description',
     };
 

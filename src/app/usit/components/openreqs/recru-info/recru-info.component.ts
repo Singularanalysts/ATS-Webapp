@@ -50,6 +50,8 @@ export class RecruInfoComponent {
   }
 
   getRecruiters() {
+    console.log(this.data.id,'dataiddd');
+    
     this.requirementServ
       .getRecruiters(this.data.id)
       .subscribe((response: any) => {
@@ -60,6 +62,8 @@ export class RecruInfoComponent {
         }
       });
   }
+
+
 
   addvendor() {
     const actionData = {

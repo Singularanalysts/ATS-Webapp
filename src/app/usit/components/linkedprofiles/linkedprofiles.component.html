@@ -8,6 +8,13 @@
             Talent Pool
         </span>
         <div class="hot-list-actions">
+             <button  
+            mat-icon-button matTooltip="Add" matTooltipPosition="left" 
+            class="add-submission" 
+            (click)="addLinkedInProfile()">
+        <mat-icon class="custom-icon" style="color: #3f51b5;" >add_circle</mat-icon>
+    </button>
+    
             <div class="search-hot-list">
                 <input matInput type="text" class="search" placeholder="search " (keyup)="applyFilter($event)">
             </div>

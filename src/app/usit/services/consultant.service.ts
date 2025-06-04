@@ -221,6 +221,10 @@ export class ConsultantService {
   getAssignedRecruiter(id: number) {
     return this.http.get("consultant/getSalesExecutiveById/" + id);
   }    
+  getScrapDetails(payload:any){
+  return this.http.post("openreqs/jobPortal/getAll",payload );
+
+  }
   
   public getTeamLeadersDropdown() {
     return this.http.get("auth/roles/getroles");
@@ -229,5 +233,6 @@ export class ConsultantService {
   public getExecutivesDropdown(id: any) {
     return this.http.get("auth/users/TlDropDown/"+id);
   }
+
 
 }

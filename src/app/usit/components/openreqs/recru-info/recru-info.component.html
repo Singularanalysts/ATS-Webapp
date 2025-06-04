@@ -3,6 +3,7 @@
     <li class="header-text">Vendor </li>
     <li class="header-text slash">-</li>
     <li class="header-text" mat-dialog-title id="mainHeaderTitle">{{ data.title }}</li>
+  
   </ul>
   <div class="button-container">
     <ng-container *ngIf="data.isExist === '1'; else addVendor">
@@ -10,7 +11,13 @@
     </ng-container>
     <ng-template #addVendor>
       <button mat-button mat-raised-button color="primary" (click)="addvendor()">Add Vendor</button>
+
     </ng-template>
+    <span>
+
+
+    </span>
+
   </div>
   <button mat-icon-button (click)="onClick()">
     <mat-icon aria-label="Close">close</mat-icon>

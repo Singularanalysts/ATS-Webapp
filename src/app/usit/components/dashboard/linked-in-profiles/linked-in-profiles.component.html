@@ -1,0 +1,86 @@
+<div class="header-container mat-elevation-z1">
+    <span class="header-text" mat-dialog-title>
+        {{data.title}}
+    </span>
+    <button mat-icon-button (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-card class="center-card">
+    <form [formGroup]="LinkedInProfile" class="vendor-form">
+        <div class="form">
+            <div class="form-column-left">
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username" type="text">
+
+                    <mat-error *ngIf="LinkedInProfile.get('username')?.hasError('required')">
+                        Username is required
+                    </mat-error>
+
+                    <mat-error
+                        *ngIf="LinkedInProfile.get('username')?.hasError('email') && !LinkedInProfile.get('username')?.hasError('required')">
+                        Please enter a valid email
+                    </mat-error>
+                </mat-form-field>
+
+              
+   <mat-form-field appearance="fill">
+                    <mat-label>Location</mat-label>
+                    <input matInput formControlName="location" type="text" min="0" max="5">
+
+                    <mat-error *ngIf="LinkedInProfile.get('location')?.hasError('required')">
+                        Rating is required
+                    </mat-error>
+
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Category</mat-label>
+                    <input matInput formControlName="category" type="text" placeholder="eg:open to work ...">
+
+                    <mat-error *ngIf="LinkedInProfile.get('category')?.hasError('required')">
+                        Category is required
+                    </mat-error>
+
+                </mat-form-field>
+            </div>
+
+            <div class="form-column-right">
+               <mat-form-field appearance="fill" style="    margin-bottom: 24px;">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+                    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                        [attr.aria-label]="'Hide or show password'" [attr.aria-pressed]="!hidePassword" type="button">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+
+                    <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('required')">
+                        Password is required
+                    </mat-error>
+                    <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('minlength')">
+                        Minimum 8 characters required
+                    </mat-error>
+                    <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('pattern')">
+                        Password must include 1 uppercase, 1 lowercase
+                    </mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Search String</mat-label>
+                    <input matInput formControlName="search_string" placeholder="eg:Java Developer ...">
+                    <mat-error *ngIf="LinkedInProfile.get('search_string')?.hasError('required')">
+                        Search String is required
+                    </mat-error>
+
+
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+    <div class="form-button-right">
+        <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">Submit</button>
+    </div>
+</mat-card>

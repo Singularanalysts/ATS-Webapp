@@ -267,6 +267,8 @@ export class LoginComponent implements OnInit {
               if (result.status == 'success') {
                 this.loggedInUserData = result.data;
                 this.department = result.data.department;
+                localStorage.setItem('UserProfileEmail', this.form.controls.email.value);
+
                 this.permissionServ.login(this.loggedInUserData).subscribe((data) => {
                   this.router.navigate(['usit/dashboard']);
                   const message = 'You have logged in successfully!';
