@@ -120,7 +120,7 @@ tbody {
 }
 
 .interview-table-style {
- max-height: 78vh; /* Or any height you want */
+ max-height: 77vh; /* Or any height you want */
   overflow: auto;
 }
 
@@ -306,4 +306,15 @@ ul.breadcrumb li:last-child {
 ::ng-deep .action-button-ed .mat-mdc-focus-indicator {
   width: 24px !important;
   height: 24px !important;
+}
+.mat-mdc-paginator-container {
+    display: flex
+;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    width: 100%;
+    margin-bottom: 30px !important;
+    min-height: var(--mat-paginator-container-size);
 }

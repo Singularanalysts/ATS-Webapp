@@ -48,6 +48,7 @@ export class OpenreqsComponent implements OnInit {
     'SerialNum',
     'posted_on',
     'job_title',
+    'Consultants_Name',
     // 'category_skill',
     'employment_type',
     'job_location',
@@ -125,6 +126,11 @@ export class OpenreqsComponent implements OnInit {
   consultantData: any[] = [];
   searchText: string = '';
   selectedElement: any;
+consultants = [
+  { job_title: 'John Doe', job_source: 'https://example.com/1', id: 1 },
+  { job_title: 'Alice Smith', job_source: 'https://example.com/2', id: 2 },
+  { job_title: 'Bob Johnson', job_source: 'https://example.com/3', id: 3 },
+];
 
   constructor() {
     this.currentOptions = this.tabOptions['All'];

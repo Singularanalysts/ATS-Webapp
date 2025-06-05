@@ -120,7 +120,7 @@
   }
   
   .hot-list-table-style {
-     max-height: 78vh; /* Or any height you want */
+     max-height: 77vh; /* Or any height you want */
   overflow: auto;
   }
   
@@ -265,4 +265,11 @@
     height: 24px;
     width: 24px;
   }
-  
+  .paginator .mat-mdc-paginator {
+    display: block;
+    line-height: var(--mat-paginator-container-text-line-height);
+    font-size: var(--mat-paginator-container-text-size);
+    font-weight: var(--mat-paginator-container-text-weight);
+    letter-spacing: var(--mat-paginator-container-text-tracking);
+    margin-bottom: 22px !important;
+}

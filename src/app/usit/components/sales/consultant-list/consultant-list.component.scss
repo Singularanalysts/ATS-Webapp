@@ -43,7 +43,7 @@ ul.breadcrumb li a:hover {
 
 .table-wrapper{
   flex: 1;
-  overflow: auto;
+  // overflow: auto;
   // padding: 4px;
 }
 table {
@@ -527,6 +527,17 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
   display: none !important;
 }
 .vendor-table-style{
-   max-height: 78vh; /* Or any height you want */
+   max-height: 77vh; /* Or any height you want */
   overflow: auto;
+}
+.mat-mdc-paginator-container {
+    display: flex
+;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    width: 100%;
+    min-height: var(--mat-paginator-container-size);
+    margin-bottom: 19px !important;
 }
