@@ -37,7 +37,7 @@
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Category</mat-label>
-                    <input matInput formControlName="category" type="text" placeholder="eg:open to work ...">
+                    <input matInput formControlName="category" type="text" placeholder="eg:Java , Python ...">
 
                     <mat-error *ngIf="LinkedInProfile.get('category')?.hasError('required')">
                         Category is required
@@ -69,7 +69,7 @@
 
                 <mat-form-field appearance="fill">
                     <mat-label>Search String</mat-label>
-                    <input matInput formControlName="search_string" placeholder="eg:Java Developer ...">
+                    <input matInput formControlName="search_string" placeholder="eg:AWS ...">
                     <mat-error *ngIf="LinkedInProfile.get('search_string')?.hasError('required')">
                         Search String is required
                     </mat-error>
