@@ -56,7 +56,9 @@ export class ServedCountComponent {
     private service = inject(OpenreqService);
     private destroyed$ = new Subject<void>();
     constructor(public dialogRef: MatDialogRef<ServedCountComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any,){}
+      @Inject(MAT_DIALOG_DATA) public data: any,){
+        console.log('datadatesss',data)
+      }
     dataSource = new MatTableDataSource<any>([]);
     dataTableColumns: string[] = [
       'SerialNum',
@@ -83,6 +85,8 @@ currentPage: number = 1; // Start from page 1
   const payload = {
     userId: this.data?.userid, 
       pageSize: this.pageSize, 
+                fromDate: this.data.fromDate || null, // Send fromDate if available, else null
+          toDate: this.data.toDate || null, // Send toDate if available, else null
       pageNumber: this.currentPage 
   };
 

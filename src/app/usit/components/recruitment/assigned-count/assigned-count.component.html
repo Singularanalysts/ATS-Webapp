@@ -28,7 +28,7 @@
                 <ng-container matColumnDef="RequirementNumber">
                     <th mat-header-cell *matHeaderCellDef >
                         Requirement Number</th>
-                    <td mat-cell *matCellDef="let element" (click)="submissionreport(element)" class="requirementcount"> {{ element?.reqnumber }} </td>
+                    <td mat-cell *matCellDef="let element" > {{ element?.reqnumber }} </td>
                 </ng-container>
                 <ng-container matColumnDef="EmployeeType">
                     <th mat-header-cell *matHeaderCellDef> Employee Type </th>

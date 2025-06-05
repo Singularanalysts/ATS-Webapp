@@ -89,10 +89,13 @@ export class AssignedRequirementsComponent {
   }
   
   servedcount(element:any){
+     const fromDate = this.RequirementReport.value.startDate;
+  const toDate = this.RequirementReport.value.endDate;
     const actionData = {
               title: 'Assigned Requirements Served Count Report',
               userid: element.userid,
-             
+              fromDate: fromDate ? this.formatDate(fromDate) : null,
+    toDate: toDate ? this.formatDate(toDate) : null,
               actionName: 'requirement-report'
             };     
               const dialogConfig = new MatDialogConfig();
@@ -108,13 +111,14 @@ export class AssignedRequirementsComponent {
                   }
                 });
   }
-  formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-  
+
+formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
   
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
@@ -229,8 +233,8 @@ requirementreportdata(element: any) {
     title: 'Requirement Report',
     userid: element.userid,
     pseudoname: element.pseudoname,
-    fromDate: this.formatDate(fromDate),
-    toDate: this.formatDate(toDate),
+    fromDate: fromDate ? this.formatDate(fromDate) : null,
+    toDate: toDate ? this.formatDate(toDate) : null,
     actionName: 'requirement-report'
   };
 

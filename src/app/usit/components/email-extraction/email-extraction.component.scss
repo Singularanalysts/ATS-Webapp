@@ -124,7 +124,7 @@ tbody {
 }
 
 .hot-list-table-style {
-  max-height: 78vh; /* Or any height you want */
+  max-height: 77vh; /* Or any height you want */
   overflow: auto;
 }
 
@@ -393,3 +393,17 @@ button:hover .tooltip {
   color: #d32f2f !important; /* Danger color for delete icon */
   font-size: 24px !important; /* Ensures all icons are the same size */
 }
+.mat-mdc-paginator {
+    display: block;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    color: var(--mat-paginator-container-text-color);
+    background-color: var(--mat-paginator-container-background-color);
+    font-family: var(--mat-paginator-container-text-font);
+    line-height: var(--mat-paginator-container-text-line-height);
+    font-size: var(--mat-paginator-container-text-size);
+    font-weight: var(--mat-paginator-container-text-weight);
+    letter-spacing: var(--mat-paginator-container-text-tracking);
+    margin-bottom: 25px;
+}
+

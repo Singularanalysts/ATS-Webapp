@@ -127,7 +127,7 @@ tbody {
 }
 
 .vendor-table-style {
-  max-height: 80vh; /* Or any height you want */
+  max-height: 77vh; /* Or any height you want */
   overflow: auto;
 }
 .no-data-found {
@@ -270,4 +270,17 @@ ul.breadcrumb li:last-child {
   line-height: var(--mat-table-header-headline-line-height);
   font-size: var(--mat-table-header-headline-size, 14px);
   font-weight: var(--mat-table-header-headline-weight, 500);
+}
+.mat-mdc-paginator {
+    display: block;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    color: var(--mat-paginator-container-text-color);
+    background-color: var(--mat-paginator-container-background-color);
+    font-family: var(--mat-paginator-container-text-font);
+    line-height: var(--mat-paginator-container-text-line-height);
+    font-size: var(--mat-paginator-container-text-size);
+    font-weight: var(--mat-paginator-container-text-weight);
+    letter-spacing: var(--mat-paginator-container-text-tracking);
+    margin-bottom: 17px !important;
 }

@@ -141,7 +141,7 @@ td:nth-child(2) {
 }
 
 .table-style {
-  max-height: 73vh; /* Or any height you want */
+  max-height: 72vh; /* Or any height you want */
   overflow: auto;
 }
 
@@ -269,3 +269,15 @@ ul.breadcrumb li:last-child {
     left: 12px;
     color: #3f51b5;
 }
+.mat-mdc-paginator-container {
+    display: flex
+;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 8px;
+    flex-wrap: wrap-reverse;
+    width: 100%;
+    margin-bottom: 20px !important;
+    min-height: var(--mat-paginator-container-size);
+}
+
