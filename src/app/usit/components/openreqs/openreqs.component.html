@@ -65,14 +65,7 @@
                                     (click)="empTag(element.id)">{{element?.job_title | titlecase}}</a>
                             </span> </td>
                     </ng-container>
-                    <ng-container matColumnDef="Consultants_Name">
-                        <th mat-header-cell *matHeaderCellDef style="width: 20%">
-                            ConsultantsName </th>
-                        <td mat-cell *matCellDef="let element" style="width: 20%"><span class="consultant-name"><a
-                                    href="{{element?.job_source}}" target="_blank"
-                                    (click)="empTag(element.id)">{{element?.job_title | titlecase}}</a>
-                            </span> </td>
-                    </ng-container>
+                 
                     <!-- Visa Column mat-sort-header sortActionDescription="Sort by Visa" -->
                     <!-- <ng-container matColumnDef="category_skill">
                         <th mat-header-cell *matHeaderCellDef style="width: 13%">

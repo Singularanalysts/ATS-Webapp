@@ -93,26 +93,7 @@ pseudoname:any
 
       currentPage: number = 1; // Start from page 1
       totalPages: number = 0;
-      submissionreport(element:any){
-        const actionData = {
-          title: 'Requirement Report',
-          reqnumber: element.reqnumber,
-         
-          actionName: 'requirement-report'
-        };     
-          const dialogConfig = new MatDialogConfig();
-            dialogConfig.width = '70vw';
-            dialogConfig.disableClose = false;
-            dialogConfig.panelClass = 'add-interview';
-            dialogConfig.data = actionData; 
-          
-            const dialogRef = this.dialogServ.openDialogWithComponent(SubmissionReportComponent, dialogConfig);
-          
-            dialogRef.afterClosed().subscribe((result: { success: any }) => {
-              if (result?.success) {  
-              }
-            });
-       }
+  
       getrequirementdata() {
         if (!this.data?.userid) {
           console.error("User ID is missing");
