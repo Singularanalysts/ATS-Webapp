@@ -254,8 +254,9 @@ export class InterviewListComponent implements OnInit, OnDestroy{
   }
   applyFilter(event: any) {
     const keyword = event.target.value;
-    this.field=keyword
+    
     if (keyword != '') {
+      this.field=keyword
       return this.interviewServ.getPaginationlist(this.flag, this.hasAcces, this.userid, 1, this.itemsPerPage, keyword,
         this.sortField,
         this.sortOrder, localStorage.getItem('companyid')).subscribe(
@@ -270,6 +271,7 @@ export class InterviewListComponent implements OnInit, OnDestroy{
         })
       );
     }
+    this.field='empty'
     return  this.getAll(this.currentPageIndex + 1)
   }
 

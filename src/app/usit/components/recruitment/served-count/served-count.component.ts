@@ -97,8 +97,8 @@ currentPage: number = 1; // Start from page 1
               this.length = response.data.totalElements || response.data.length; // Update total items if API provides it
               this.totalPages = Math.ceil(this.length / this.pageSize); // Calculate total pages
       this.dataSource.data = response.data.content.map((item: any, index: number) => ({
-              serialNum: index + 1,
-              consultantName: item.consultantname,
+        serialNum: index + 1 + (this.currentPage - 1) * this.pageSize,
+        consultantName: item.consultantname,
               jobTitle:item.jobtitle,
               endClient:item.endclient,
               implPartner:item.implpartner,
