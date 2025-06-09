@@ -336,7 +336,7 @@ margin-bottom: 0px !important;
   color: white !important;
 }
 .mdc-data-table__cell, .mdc-data-table__header-cell {
-  padding: 0 4px 0 4px;
+  padding: 0 10px 0 17px;;
   border-right: 1px solid lightgray !important;
 }
 .avatar-list {
@@ -374,3 +374,117 @@ margin-bottom: 0px !important;
     margin-bottom: 16px !important;
 }
 
+/* recruiter-table.component.scss */
+.avatar-group {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: -8px;       /* overlap a bit */
+  border: 2px solid white;  /* white outline between them */
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.more-badge {
+  background: #BDBDBD;
+  cursor: default;
+}
+  .custom-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    justify-content: end;
+    margin-top: 15px;
+  }
+  
+  .custom-pagination button {
+    padding: 5px 10px;
+    border: none;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.3s;
+  }
+  
+  .custom-pagination button.active {
+    background-color: #1976d2;
+    color: white;
+  }
+  
+  .custom-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+table {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 4px 8px;
+}
+
+
+.mat-mdc-dialog-actions {
+    justify-content: end !important;
+}
+.truncate-skill {
+  max-width: 200px;       // adjust width as needed
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mat-mdc-header-row{
+    height: 45px !important;
+    position: sticky;
+}
+.dialog-header {
+display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(228, 231, 234);
+  padding: 8px 12px;
+
+  .title-text {
+    font-weight: 700;
+    font-size: 19px;
+  }
+
+  .header-left {
+    flex: 1;
+    text-align: left;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+
+  .close-button {
+    margin-left: auto;
+  }
+
+  .mat-icon {
+    font-size: 20px;
+  }
+    .searchconsultant-hot-list .search {
+    padding: 4px 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    height: 32px;
+    width: 200px;
+  }
+}
