@@ -58,12 +58,7 @@
                     <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('required')">
                         Password is required
                     </mat-error>
-                    <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('minlength')">
-                        Minimum 8 characters required
-                    </mat-error>
-                    <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('pattern')">
-                        Password must include 1 uppercase, 1 lowercase
-                    </mat-error>
+                  
 
                 </mat-form-field>
 

@@ -68,8 +68,7 @@ export class LinkedInProfilesComponent {
         '',
         [
           Validators.required,
-          Validators.minLength(8),
-          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z]).{8,}$'),
+        
         ],
       ],
 

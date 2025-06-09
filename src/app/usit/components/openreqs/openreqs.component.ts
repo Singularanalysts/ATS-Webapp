@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +8,7 @@ import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/materi
 import { OpenreqService } from '../../services/openreq.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatDialog, MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { RecruInfoComponent } from './recru-info/recru-info.component';
 import { DialogService } from 'src/app/services/dialog.service';
 import { JobDescriptionComponent } from './job-description/job-description.component';
@@ -49,6 +49,7 @@ export class OpenreqsComponent implements OnInit {
     'posted_on',
     'job_title',
     // 'category_skill',
+    'consultantName',
     'employment_type',
     'job_location',
     'vendor',
@@ -160,9 +161,9 @@ consultants = [
 
   goToReqInfo(element: any) {
     const actionData = {
-      title: `${element.vendor}`,
-      id: element.vendor,
-      isExist: element.isexist,
+      title: `${element.requirement.vendor}`,
+      id: element.requirement.vendor,
+      isExist: element.requirement.isexist,
       actionName: 'req-info',
     };
 
@@ -198,7 +199,70 @@ consultants = [
       }
     )
   }
+  dialogRef!: MatDialogRef<any>; // store the reference
 
+@ViewChild('consultantDialog') consultantDialogTpl!: TemplateRef<any>;
+
+  // When user clicks the serialNum, we store that row's consultants here:
+  dialogConsultants: any[] = [];
+
+  // Pagination state
+  pageSizeConsultants = 25;
+  currentPage = 1;
+  totalPages = 0;
+
+
+  openConsultantDialog(consultants: any[]) {
+    this.dialogConsultants = consultants;
+    this.currentPage = 1;
+    this.totalPages = Math.ceil(consultants.length / this.pageSizeConsultants);
+    this.dialogRef =this.dialog.open(this.consultantDialogTpl, {
+      width: '80vw'  // adjust as needed
+    });
+    console.log(consultants,'consultantsonsultantssss');
+    
+  }
+  onCancel() {
+  if (this.dialogRef) {
+    this.dialogRef.close();
+  }
+}
+
+  /** Returns just the slice of consultants for the current page */
+  get pagedConsultants(): any[] {
+    const start = (this.currentPage - 1) * this.pageSizeConsultants;
+    return this.dialogConsultants.slice(start, start + this.pageSizeConsultants);
+  }
+
+  /** Build a sliding window of up to 4 page numbers around currentPage */
+  getPageNumbers(): number[] {
+    const total = this.totalPages;
+    const maxButtons = 4;
+    if (total <= maxButtons) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+    let start = Math.max(1, this.currentPage - Math.floor(maxButtons / 2));
+    if (start + maxButtons - 1 > total) {
+      start = total - maxButtons + 1;
+    }
+    return Array.from({ length: maxButtons }, (_, i) => start + i);
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+  goToPage(page: number) {
+    this.currentPage = page;
+  }
+  avatarColors: string[] = ['#E57373', '#64B5F6', '#81C784'];
+
+  // optional helper, if you want to keep template a bit cleaner:
+  firstThree(arr: any[]) {
+    return arr.slice(0, 3);
+  }
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
@@ -254,9 +318,9 @@ consultants = [
 
   goToJobDescription(element: any) {
     const actionData = {
-      title: `${element.job_title}`,
-      id: element.id,
-      vendor:element.vendor,
+      title: `${element.requirement.job_title}`,
+      id: element.requirement.id,
+      vendor:element.requirement.vendor,
       actionName: 'job-description',
     };
 
@@ -302,7 +366,7 @@ consultants = [
     const data =this.dialog.open(JobApplicationCommentsComponent, {
       width: '60vw',
       data: {
-        title: job.job_title,
+        title: job.requirement.job_title,
         jobData: job
       },
     });
@@ -374,12 +438,12 @@ onFileSelectedata(event: any, element: any): void {
 
   const formData = new FormData();
   formData.append('resume', file);
-  formData.append('requirementId', element.id); // now correct ID
+  formData.append('requirementId', element.requirement.id); // now correct ID
   formData.append('userId',userId); 
 
   this.service.ResumeUpload(formData).subscribe({
     next: (res: any) => {
-      element.percentage = res?.data || '100';
+      element.requirement.percentage = res?.data || '100';
     },
     error: (err) => {
       console.error('Upload failed', err);
