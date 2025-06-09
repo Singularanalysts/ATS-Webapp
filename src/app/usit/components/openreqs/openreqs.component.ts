@@ -199,6 +199,7 @@ consultants = [
       }
     )
   }
+
   dialogRef!: MatDialogRef<any>; // store the reference
 
 @ViewChild('consultantDialog') consultantDialogTpl!: TemplateRef<any>;
@@ -211,17 +212,38 @@ consultants = [
   currentPage = 1;
   totalPages = 0;
 
+searchTerm: string = '';
+filteredConsultants: any[] = []; // this will store filtered results
 
-  openConsultantDialog(consultants: any[]) {
-    this.dialogConsultants = consultants;
-    this.currentPage = 1;
-    this.totalPages = Math.ceil(consultants.length / this.pageSizeConsultants);
-    this.dialogRef =this.dialog.open(this.consultantDialogTpl, {
-      width: '80vw'  // adjust as needed
-    });
-    console.log(consultants,'consultantsonsultantssss');
-    
-  }
+openConsultantDialog(consultants: any[]) {
+  this.dialogConsultants = consultants;
+  this.filteredConsultants = [...consultants]; // apply initially
+  this.currentPage = 1;
+  this.totalPages = Math.ceil(this.filteredConsultants.length / this.pageSizeConsultants);
+
+  this.dialogRef = this.dialog.open(this.consultantDialogTpl, {
+    width: '80vw'
+  });
+}
+
+
+consultanttable(event: KeyboardEvent) {
+  const target = event.target as HTMLInputElement;
+  const filterValue = target.value.trim().toLowerCase();
+
+  this.filteredConsultants = this.dialogConsultants.filter(c =>
+    c.conName?.toLowerCase().includes(filterValue) ||
+    c.matchedSkills?.toLowerCase().includes(filterValue) ||
+    c.unMatchedSkills?.toLowerCase().includes(filterValue) ||
+    c.percentage?.toString().toLowerCase().includes(filterValue)
+  );
+
+  this.totalPages = Math.ceil(this.filteredConsultants.length / this.pageSizeConsultants);
+  this.currentPage = 1;
+}
+
+
+
   onCancel() {
   if (this.dialogRef) {
     this.dialogRef.close();
@@ -229,10 +251,11 @@ consultants = [
 }
 
   /** Returns just the slice of consultants for the current page */
-  get pagedConsultants(): any[] {
-    const start = (this.currentPage - 1) * this.pageSizeConsultants;
-    return this.dialogConsultants.slice(start, start + this.pageSizeConsultants);
-  }
+get pagedConsultants(): any[] {
+  const start = (this.currentPage - 1) * this.pageSizeConsultants;
+  return this.filteredConsultants.slice(start, start + this.pageSizeConsultants);
+}
+
 
   /** Build a sliding window of up to 4 page numbers around currentPage */
   getPageNumbers(): number[] {
