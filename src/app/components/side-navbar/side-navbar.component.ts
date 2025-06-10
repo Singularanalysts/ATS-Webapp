@@ -466,13 +466,7 @@ myRoles(){
               "routerLink": "/usit/rssfeed",
               "roles":["Super Administrator"]  
             },
-            {
-              "test": "Email Extraction",
-              "text": "Email Extraction",
-              "icon": "business_center",
-              "routerLink": "/usit/email-extraction-list",
-              "roles":["Super Administrator"]  
-            },
+           
               {
               "test": "Rss",
               "text": "Scrape Activity Monitor",
@@ -481,6 +475,16 @@ myRoles(){
               "roles":["Super Administrator"]  
             },
           ]
+        },
+
+        {
+           
+              "test": "Email Extraction",
+              "text": "Email Extraction",
+              "icon": "business_center",
+              "routerLink": "/usit/email-extraction-list",
+              "roles":["Super Administrator"]  
+            
         },
       {
         "test": "OPEN_REQS_JOB_APPLICATION",

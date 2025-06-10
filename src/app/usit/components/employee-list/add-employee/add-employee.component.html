@@ -258,14 +258,16 @@
           </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field *ngIf="teamleadflg && employeeForm?.get('teamlead')" appearance="fill">
-          <mat-label>Select Team Lead</mat-label>
-          <mat-select formControlName="teamlead" (keydown.backspace)="clearTeamLead()">
-            <mat-option *ngFor="let option of teamLeadOptions" [value]="option[0]">
-              {{ option[1] }} {{ option[2] ? ('- ' + option[2]) : '' }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+     <mat-form-field *ngIf="teamleadflg && employeeForm?.get('teamlead')" appearance="fill">
+  <mat-label>Select Team Lead</mat-label>
+  <mat-select formControlName="teamlead">
+    <mat-option [value]="null">None</mat-option>
+    <mat-option *ngFor="let option of teamLeadOptions" [value]="option[0]">
+      {{ option[1] }} {{ option[2] ? ('- ' + option[2]) : '' }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
 
 
       </div>

@@ -110,7 +110,7 @@ export class JobApplicationCommentsComponent implements OnInit {
   }
 
   getAll() {
-    this.openServ.jobComments(this.data.jobData.id)
+    this.openServ.jobComments(this.data.jobData.requirement.id)
       .pipe(takeUntil(this.destroyed$)).subscribe(
         (response: any) => {
           this.entity = response.data;
@@ -132,7 +132,7 @@ export class JobApplicationCommentsComponent implements OnInit {
   private initializeJobApplicationCommentsForm(data: any) {
 
     this.jobApplyCommentsForm = this.formBuilder.group({
-      reqId: [this.data.jobData.id, Validators.required],
+      reqId: [this.data.jobData.requirement.id, Validators.required],
       consultantId: [data ? data.consultantname : '', Validators.required],
       issueType: [data ? data.issue_type : '', [Validators.required]],
       comment: [data ? data.comment : '', Validators.required],
