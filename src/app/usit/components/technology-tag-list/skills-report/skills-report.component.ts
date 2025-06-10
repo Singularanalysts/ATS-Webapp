@@ -65,9 +65,12 @@ export class SkillsReportComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder
   ) {
-    this.skillform = this.formBuilder.group({
-      skills: ['', [Validators.required, noWhitespaceValidator()]]
-    });
+    const addedBy=localStorage.getItem('userid')
+  this.skillform = this.formBuilder.group({
+  skills: ['', [Validators.required, Validators.minLength(3), noWhitespaceValidator()]],
+  addedBy:[addedBy]
+});
+
     
     
     

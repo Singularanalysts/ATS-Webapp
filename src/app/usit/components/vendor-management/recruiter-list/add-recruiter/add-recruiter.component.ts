@@ -87,12 +87,20 @@ export class AddRecruiterComponent implements OnInit {
     }));
     if (this.data.actionName === 'edit-recruiter') {
       this.iniRecruiterForm(new Recruiter());
-      this.recruiterServ.getEntity(this.data.recruiterData.id).subscribe(
-        (response: any) => {
-          this.recruiterObj = response.data;
-          this.iniRecruiterForm(response.data);
-        }
-      );
+     this.recruiterServ.getEntity(this.data.recruiterData.id).subscribe(
+  (response: any) => {
+    const recruiterData = response.data;
+    
+    // Capitalize status if it exists
+   // Only capitalize 'approved'
+    if (recruiterData.status?.toLowerCase() === 'approved') {
+      recruiterData.status = 'Approved';
+    }
+
+    this.recruiterObj = recruiterData;
+    this.iniRecruiterForm(recruiterData);
+  }
+);
 
 
     } else {

@@ -324,7 +324,7 @@ get pagedConsultants(): any[] {
   }
 
   getRowStyles(row: any): any {
-    const companyStatus = row.isexist;
+    const companyStatus = row.requirement.isexist;
     let backgroundColor = '';
 
     switch (companyStatus) {
