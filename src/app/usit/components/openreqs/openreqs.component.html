@@ -222,26 +222,20 @@
 <!-- … your mat-table for the main list … -->
 
 <ng-template #consultantDialog>
-<h2 mat-dialog-title class="dialog-header">
-  <div class="header-left">
-    <span class="title-text">Consultants</span>
-  </div>
-
-  <div class="header-right">
-    <div class="searchconsultant-hot-list">
-      <input
-        matInput
-        type="text"
-        class="search"
-        placeholder="Search"
-        (keyup)="consultanttable($event)"
-      />
+  <h2 mat-dialog-title class="dialog-header">
+    <div class="header-left">
+      <span class="title-text">Consultants</span>
     </div>
-    <button mat-icon-button class="close-button" (click)="onCancel()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-</h2>
+
+    <div class="header-right">
+      <div class="searchconsultant-hot-list">
+        <input matInput type="text" class="search" placeholder="Search" (keyup)="consultanttable($event)" />
+      </div>
+      <button mat-icon-button class="close-button" (click)="onCancel()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </h2>
 
 
 
@@ -274,7 +268,7 @@
       <!-- Matched Skills Column -->
       <ng-container matColumnDef="matchedSkills">
         <th mat-header-cell *matHeaderCellDef sticky>Matched Skills</th>
-        <td mat-cell *matCellDef="let c">
+        <td mat-cell *matCellDef="let c" style="    max-width: 24rem;">
 
           {{ c.matchedSkills || "-" }}
         </td>
@@ -283,7 +277,7 @@
       <!-- Unmatched Skills Column -->
       <ng-container matColumnDef="unMatchedSkills">
         <th mat-header-cell *matHeaderCellDef sticky>MisMatched Skills</th>
-        <td mat-cell *matCellDef="let c">
+        <td mat-cell *matCellDef="let c" style="    max-width: 24rem;">
 
           {{ c.unMatchedSkills || "-" }}
         </td>

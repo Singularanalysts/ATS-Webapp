@@ -65,7 +65,7 @@ import { MatOptionSelectionChange } from '@angular/material/core';
     NgxMatIntlTelInputComponent,
     MatTableModule,
     MatCheckboxModule,
-    
+
   ],
   providers: [DatePipe],
 
@@ -91,7 +91,7 @@ export class AddEmployeeComponent {
   filteredRoleOptions!: Observable<any[]>;
   filteredManagerOptions!: Observable<any[]>;
   filteredTeamLeadOptions!: Observable<any[]>;
-  employeeForm: any = FormGroup;
+  employeeForm!: FormGroup;
   submitted = false;
   rolearr: any = [];
   companyarr: any = [];
@@ -133,56 +133,198 @@ export class AddEmployeeComponent {
 
   isCompanyToDisplay: boolean = false;
 
-  ngOnInit(): void {  
-    this.checkCompany(localStorage.getItem('companyid'));
-    this.getCompanies();
-    this.getRolesForOtherCompanies();
+  async ngOnInit(): Promise<void> {
+    console.log(this.data.actionName, 'actionnmaee');
+
+
+
+    await this.getCompanies(); // Wait for companyOptions to load first
+
+
+    await this.getRolesForOtherCompanies(); // Other async calls
     this.getManager();
+
+
+
     if (this.data.actionName === 'edit-employee') {
-      this.initilizeAddEmployeeForm('');
       this.empManagementServ.getEmployeeById(this.data.employeeData.userid).subscribe(
         (response: any) => {
           if (response && response.data) {
             this.empObj = response.data;
+            console.log(this.empObj, 'employeeeobjecyttt');
+
             this.filesArr = response.data.edoc;
+
             const managerId = response.data.manager;
+            const roleId = response.data.role.roleid;
+
             this.getTeamLead(managerId);
-            this.initilizeAddEmployeeForm(this.empObj);
+            this.initilizeAddEmployeeForm(this.empObj); // Pre-populate form with data
             this.checkSpecificCompany();
             this.validateControls();
-            const roleId = response.data.role.roleid;
-            console.log(roleId,'companyroleId');
-            
-            if (this.getRoleNameById(roleId) ==='Team Leader Sales' || this.getRoleNameById(roleId) ==='Team Leader Recruiting' ) {
-              this.managerflg = true;
-              this.teamleadflg = false;
-            } else if (this.getRoleNameById(roleId) === 'Sales Executive'|| this.getRoleNameById(roleId) == 'Recruiter') {
-              this.managerflg = true;
-              this.teamleadflg = true;
-            } else {
-              this.managerflg = false;
-              this.teamleadflg = false;
-            }
+
+            const roleName = this.getRoleNameById(roleId);
+            this.managerflg = roleName === 'Team Leader Sales' || roleName === 'Team Leader Recruiting' || roleName === 'Sales Executive';
+            this.teamleadflg = roleName === 'Sales Executive' || roleName === 'Recruiter';
+            console.log(this.teamleadflg, 'teamleadflg');
+            console.log(this.managerflg, 'managerflg');
+
+
             this.toggleOtherDetails(false);
           }
-        })
+        }
+      );
     } else {
-      //     if(this.isCompanyToDisplay){
-      //     this.initilizeAddEmployeeFormValidation(null);
-      //      this.validateControls();
-      //   this.toggleOtherDetails(false);
-      //     }
-      //     else{
-      //   this.initilizeAddEmployeeForm(null);
-      //   this.validateControls();
-      //   this.toggleOtherDetails(false);
-      // }
-      this.initilizeAddEmployeeForm(null);
-      this.checkSpecificCompany();
-      this.validateControls();
-      this.toggleOtherDetails(false);
+     this.initilizeAddEmployeeForm(null); // Initialize blank form for add mode
+    this.validateControls(); // Setup dynamic validation after form init
+
+    const selectedRoleId = this.employeeForm.get('role.roleid')?.value;
+    if (selectedRoleId) {
+      const roleName = this.getRoleNameById(selectedRoleId)?.trim() || '';
+      this.updateManagerAndTeamLeadFlags(roleName); // Apply flags if role is preselected
     }
+
+    this.toggleOtherDetails(false);
+    }
+  const companyId = localStorage.getItem('companyid');
+  if (companyId) {
+    this.checkCompany(companyId); // Validate company
+  }
     this.optionsMethod('department');
+  }
+  updateManagerAndTeamLeadFlags(roleName: string): void {
+    console.log(roleName, 'rolenameee');
+
+    const manager = this.employeeForm.get ('manager');
+
+    if (roleName === 'Team Leader Sales' || roleName === 'Team Leader Recruiting') {
+      this.managerflg = true;
+      this.teamleadflg = false;
+      manager?.setValidators(Validators.required);
+    } else if (roleName === 'Sales Executive' || roleName === 'Recruiter') {
+      this.managerflg = true;
+      this.teamleadflg = true;
+      manager?.setValidators(Validators.required);
+    } else {
+      this.managerflg = false;
+      this.teamleadflg = false;
+      manager?.clearValidators();
+    }
+
+    manager?.updateValueAndValidity();
+  }
+
+
+
+
+  companyOptionsdata: any
+  // getCompanies() {
+  //   this.empManagementServ
+  //     .getCompaniesDropdown()
+  //     .pipe(takeUntil(this.destroyed$))
+  //     .subscribe({
+  //       next: (response: any) => {
+  //         this.companyarr = response.data;
+  //         this.companyOptions = response.data;
+  //         console.log(this.companyOptions, 'companyoptionsss');
+
+
+  //       },
+  //       error: (err) => {
+  //         this.dataTobeSentToSnackBarService.message = err.message;
+  //         this.dataTobeSentToSnackBarService.panelClass = [
+  //           'custom-snack-failure',
+  //         ];
+  //         this.snackBarServ.openSnackBarFromComponent(
+  //           this.dataTobeSentToSnackBarService
+  //         );
+  //       },
+  //     });
+  // }
+  //   ngOnInit(): void {
+  //   this.checkCompany(localStorage.getItem('companyid'));
+  //   this.getRolesForOtherCompanies();
+  //   this.getManager();
+  //   this.optionsMethod('department');
+
+  //   this.getCompanies().then(() => {
+  //     if (this.data.actionName === 'edit-employee') {
+  //       this.initilizeAddEmployeeForm('');
+  //       this.empManagementServ.getEmployeeById(this.data.employeeData.userid).subscribe(
+  //         (response: any) => {
+  //           if (response && response.data) {
+  //             this.empObj = response.data;
+
+  //             console.log(this.empObj, 'employeesdataaaa');
+
+  //             this.filesArr = response.data.edoc;
+  //             const managerId = response.data.manager;
+  //             this.getTeamLead(managerId);
+  //             this.initilizeAddEmployeeForm(this.empObj);
+  //             this.checkSpecificCompany();
+  //             this.validateControls();
+  //             const roleId = response.data.role.roleid;
+  //             console.log(roleId, 'companyroleId');
+
+  //             if (this.getRoleNameById(roleId) === 'Team Leader Sales' || this.getRoleNameById(roleId) === 'Team Leader Recruiting') {
+  //               this.managerflg = true;
+  //               this.teamleadflg = false;
+  //             } else if (this.getRoleNameById(roleId) === 'Sales Executive' || this.getRoleNameById(roleId) === 'Recruiter') {
+  //               this.managerflg = true;
+  //               this.teamleadflg = true;
+  //             } else {
+  //               this.managerflg = false;
+  //               this.teamleadflg = false;
+  //             }
+  //             this.toggleOtherDetails(false);
+  //           }
+  //         });
+  //     } else {
+  //       this.initilizeAddEmployeeForm(null);
+  //       this.checkSpecificCompany();
+  //       this.validateControls();
+  //       this.toggleOtherDetails(false);
+  //     }
+  //   });
+  // }
+
+  getCompanies(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.empManagementServ
+        .getCompaniesDropdown()
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
+          next: (response: any) => {
+            this.companyarr = response.data;
+            this.companyOptions = response.data;
+            console.log(this.companyOptions, 'companyoptionsss');
+            resolve();
+          },
+          error: (err) => {
+            this.dataTobeSentToSnackBarService.message = err.message;
+            this.dataTobeSentToSnackBarService.panelClass = ['custom-snack-failure'];
+            this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
+            reject(err);
+          },
+        });
+    });
+  }
+
+  displayCompanyName = (companyId: string): string => {
+    // Log all cids from the options
+    console.log('All cids in companyOptions:', this.companyOptions.map(opt => opt.cid));
+
+    // Log the incoming companyId
+    console.log('Incoming companyId:', companyId);
+
+    // Find the matching company
+    const company = this.companyOptions.find(opt => opt.cid === companyId);
+
+    // Log the matched company object
+    console.log('Matched company:', company);
+
+    // Return the company name or empty string
+    return company ? company.companyName : '';
   }
 
   private initilizeAddEmployeeForm(employeeData: any) {
@@ -195,7 +337,7 @@ export class AddEmployeeComponent {
           Validators.maxLength(100),
         ],
       ],
-      pseudoname: [employeeData ? employeeData.pseudoname : '',Validators.required],
+      pseudoname: [employeeData ? employeeData.pseudoname : '', Validators.required],
       email: [
         employeeData ? employeeData.email : '',
         [
@@ -253,10 +395,10 @@ export class AddEmployeeComponent {
 
     });
 
-    this.employeeForm.get('companycontactnumber').valueChanges.subscribe((value: string | any[]) => {
+    this.employeeForm.get('companycontactnumber')!.valueChanges.subscribe((value: string | any[]) => {
       if (value) {
         const banterNumber = value.slice(-10);
-        this.employeeForm.get('banterno').setValue(banterNumber);
+        this.employeeForm.get('banterno')?.setValue(banterNumber);
       }
     });
 
@@ -339,49 +481,33 @@ export class AddEmployeeComponent {
 
   // }
 
-getRoleNameById(roleid: number): string {
-  const role = this.roleOptions.find(option => option.roleid === roleid);
-  return role ? role.rolename : '';
-}
+  getRoleNameById(roleid: number): string {
+    const role = this.roleOptions.find(option => option.roleid === roleid);
+    return role ? role.rolename : '';
+  }
 
 
   validateControls() {
-    this.employeeForm.get('department').valueChanges.subscribe((res: any) => {
-      console.log(res,'departmentresponseee');
-      
+    this.employeeForm.get('department')?.valueChanges.subscribe((res: any) => {
       const pseudoname = this.employeeForm.get('pseudoname');
-      if (res == 'Bench Sales') {
-        pseudoname.setValidators(Validators.required);
+      if (res === 'Bench Sales') {
+        pseudoname?.setValidators(Validators.required);
       } else {
-        pseudoname.clearValidators();
+        pseudoname?.clearValidators();
       }
-      pseudoname.updateValueAndValidity();
+      pseudoname?.updateValueAndValidity();
     });
-    this.employeeForm.get('role.roleid').valueChanges.subscribe((res: any) => {
-      
-      
-      const manager = this.employeeForm.get('manager');
-      const tl = this.employeeForm.get('teamlead');
-      if (this.getRoleNameById(res) ==='Team Leader Sales' || this.getRoleNameById(res) ==='Team Leader Recruiting' ) {
-        this.managerflg = true;
-        this.teamleadflg = false;
-        manager.setValidators(Validators.required);
-      } else if (this.getRoleNameById(res) === 'Sales Executive'|| this.getRoleNameById(res) == 'Recruiter') {
-        this.managerflg = true;
-        this.teamleadflg = true;
-        manager.setValidators(Validators.required);
-      } else {
-        this.managerflg = false;
-        this.teamleadflg = false;
-        manager.clearValidators();
-      }
-      manager.updateValueAndValidity();
+
+    this.employeeForm.get('role.roleid')?.valueChanges.subscribe((roleId: any) => {
+      const roleName = this.getRoleNameById(roleId)?.trim() || '';
+      this.updateManagerAndTeamLeadFlags(roleName); // 👈 this updates the flags & validators
     });
   }
 
+
   checkSpecificCompany() {
 
-    this.employeeForm.get('cid').valueChanges.subscribe((res: any) => {
+    this.employeeForm.get('cid')?.valueChanges.subscribe((res: any) => {
       this.getRoles(res);
 
     });
@@ -395,7 +521,7 @@ getRoleNameById(roleid: number): string {
 
     if (type === "roles") {
       this.filteredRoleOptions =
-        this.employeeForm.controls.role.valueChanges.pipe(
+        this.employeeForm.controls['role'].valueChanges.pipe(
           startWith(''),
           map((value: any) => {
             const name = typeof value === 'string' ? value : value?.name;
@@ -404,12 +530,12 @@ getRoleNameById(roleid: number): string {
 
           )
         );
-        
+
       return
-    } 
+    }
     else if (type === "manager") {
       this.filteredManagerOptions =
-        this.employeeForm.controls.manager.valueChanges.pipe(
+        this.employeeForm.controls['manager'].valueChanges.pipe(
           startWith(''),
           map((value: any) => {
             const name = typeof value === 'string' ? value : value?.name;
@@ -417,19 +543,19 @@ getRoleNameById(roleid: number): string {
           }
           )
         );
-    } 
+    }
     else if (type === "department") {
       this.filteredDepartmentOptions =
-        this.employeeForm.controls.department.valueChanges.pipe(
+        this.employeeForm.controls['department'].valueChanges.pipe(
           startWith(''),
           map((value: any) =>
             this._filterOptions(value || '', this.departmentOptions)
           )
         );
-    } 
+    }
     else {
       this.filteredTeamLeadOptions =
-        this.employeeForm.controls.teamlead.valueChanges.pipe(
+        this.employeeForm.controls['teamlead'].valueChanges.pipe(
           startWith(''),
           map((value: any) => {
             const name = typeof value === 'string' ? value : value?.name;
@@ -440,19 +566,20 @@ getRoleNameById(roleid: number): string {
     }
 
   }
-onDepartmentSelectionChange(event: MatOptionSelectionChange, option: string): void {
-  const currentValue = this.employeeForm.controls.department.value;
+  onDepartmentSelectionChange(event: MatOptionSelectionChange, option: string): void {
+    const currentValue = this.employeeForm.controls['department'].value;
 
-  if (event.isUserInput && currentValue === option) {
-    // Deselect by clearing the input value
-    this.employeeForm.controls.department.setValue('');
+    if (event.isUserInput && currentValue === option) {
+      // Deselect by clearing the input value
+      // Deselect by clearing the input value
+      this.employeeForm.controls['department'].setValue('');
+    }
   }
-}
 
   private _filter(name: string): any[] {
     const filterValue = name.toLowerCase();
 
-    return this.roleOptions.filter(option => option.rolename.toLowerCase().includes(filterValue));
+    return this.roleOptions.filter(option => option.rolename?.toLowerCase().includes(filterValue));
   }
 
   private _filterOptions(value: string, options: string[]): string[] {
@@ -468,85 +595,83 @@ onDepartmentSelectionChange(event: MatOptionSelectionChange, option: string): vo
 
   getRoles(companyid: any) {
 
-    if(companyid!==null){
+    if (companyid !== null) {
 
-    this.empManagementServ
-      .getRolesDropdown(companyid)
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          this.rolearr = response.data;
-          this.roleOptions = response.data;
-          console.log(this.roleOptions, 'roleoptionss');
+      this.empManagementServ
+        .getRolesDropdown(companyid)
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
+          next: (response: any) => {
+            this.rolearr = response.data;
+            this.roleOptions = response.data;
+            console.log(this.roleOptions, 'roleoptionss');
 
-        },
-        error: (err) => {
-          this.dataTobeSentToSnackBarService.message = err.message;
-          this.dataTobeSentToSnackBarService.panelClass = [
-            'custom-snack-failure',
-          ];
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataTobeSentToSnackBarService
-          );
-        },
-      });
+          },
+          error: (err) => {
+            this.dataTobeSentToSnackBarService.message = err.message;
+            this.dataTobeSentToSnackBarService.panelClass = [
+              'custom-snack-failure',
+            ];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataTobeSentToSnackBarService
+            );
+          },
+        });
     }
   }
 
-  getRolesForOtherCompanies() {
+  // getRolesForOtherCompanies() {
 
-    this.empManagementServ
-      .getRolesDropdown(localStorage.getItem('companyid'))
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          this.rolearr = response.data;
-          this.roleOptions = response.data;
-          console.log(this.roleOptions, 'roleoptionss');
+  //   this.empManagementServ
+  //     .getRolesDropdown(localStorage.getItem('companyid'))
+  //     .pipe(takeUntil(this.destroyed$))
+  //     .subscribe({
+  //       next: (response: any) => {
+  //         this.rolearr = response.data;
+  //         this.roleOptions = response.data;
+  //         console.log(this.roleOptions, 'roleoptionss');
 
-        },
-        error: (err) => {
-          this.dataTobeSentToSnackBarService.message = err.message;
-          this.dataTobeSentToSnackBarService.panelClass = [
-            'custom-snack-failure',
-          ];
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataTobeSentToSnackBarService
-          );
-        },
-      });
+  //       },
+  //       error: (err) => {
+  //         this.dataTobeSentToSnackBarService.message = err.message;
+  //         this.dataTobeSentToSnackBarService.panelClass = [
+  //           'custom-snack-failure',
+  //         ];
+  //         this.snackBarServ.openSnackBarFromComponent(
+  //           this.dataTobeSentToSnackBarService
+  //         );
+  //       },
+  //     });
+  // }
+
+
+  getRolesForOtherCompanies(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.empManagementServ
+        .getRolesDropdown(localStorage.getItem('companyid'))
+        .pipe(takeUntil(this.destroyed$))
+        .subscribe({
+          next: (response: any) => {
+            this.rolearr = response.data;
+            this.roleOptions = response.data;
+            console.log(this.roleOptions, 'roleOptions');
+            resolve(); // Resolve after setting roleOptions
+          },
+          error: (err) => {
+            this.dataTobeSentToSnackBarService.message = err.message;
+            this.dataTobeSentToSnackBarService.panelClass = [
+              'custom-snack-failure',
+            ];
+            this.snackBarServ.openSnackBarFromComponent(
+              this.dataTobeSentToSnackBarService
+            );
+            reject(err); // Reject on error
+          },
+        });
+    });
   }
 
-  companyOptionsdata: any
-  getCompanies() {
-    this.empManagementServ
-      .getCompaniesDropdown()
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe({
-        next: (response: any) => {
-          this.companyarr = response.data;
-          this.companyOptions = response.data;
-      console.log(this.companyOptions,'companyoptionsss');
-      
 
-        },
-        error: (err) => {
-          this.dataTobeSentToSnackBarService.message = err.message;
-          this.dataTobeSentToSnackBarService.panelClass = [
-            'custom-snack-failure',
-          ];
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataTobeSentToSnackBarService
-          );
-        },
-      });
-  }
-
-
-  displayCompanyName = (companyId: string): string => {
-    const company = this.companyOptions.find(opt => opt.cid === companyId);
-    return company ? company.companyName : '';
-  }
 
 
 
@@ -623,12 +748,12 @@ onDepartmentSelectionChange(event: MatOptionSelectionChange, option: string): vo
         },
       });
   }
-clearTeamLead() {
-  const currentValue = this.employeeForm.get('teamlead')?.value;
-  if (currentValue) {
-    this.employeeForm.get('teamlead')?.setValue(null);
+  clearTeamLead() {
+    const currentValue = this.employeeForm.get('teamlead')?.value;
+    if (currentValue) {
+      this.employeeForm.get('teamlead')?.setValue(null);
+    }
   }
-}
 
 
   onSubmit() {
@@ -636,11 +761,11 @@ clearTeamLead() {
     const joiningDateFormControl = this.employeeForm.get('joiningdate');
     const relievingDateFormControl = this.employeeForm.get('relievingdate');
 
-    if (joiningDateFormControl.value) {
-      const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl.value, 'yyyy-MM-dd');
-      const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl.value, 'yyyy-MM-dd');
+    if (joiningDateFormControl?.value) {
+      const formattedJoiningDate = this.datePipe.transform(joiningDateFormControl?.value, 'yyyy-MM-dd');
+      const formattedRelievingDate = this.datePipe.transform(relievingDateFormControl?.value, 'yyyy-MM-dd');
       joiningDateFormControl.setValue(formattedJoiningDate);
-      relievingDateFormControl.setValue(formattedRelievingDate);
+      relievingDateFormControl?.setValue(formattedRelievingDate);
     }
 
     if (this.employeeForm.invalid) {
@@ -745,7 +870,7 @@ clearTeamLead() {
   trimSpacesFromFormValues() {
     Object.keys(this.employeeForm.controls).forEach((controlName: string) => {
       const control = this.employeeForm.get(controlName);
-      if (control.value && typeof control.value === 'string') {
+      if (control?.value && typeof control?.value === 'string') {
         control.setValue(control.value.trim());
       }
     });
@@ -845,7 +970,8 @@ clearTeamLead() {
     var items = file.name.split(".");
     const str = items[0];
     if (str.length > 20) {
-      this.aadharFileNameLength = true;
+      this.aadharFileNameLength = true; "tJiels9DKKE4HXvMZSuI7A=="
+
     }
     if (fileSizeInKB > 2048) {
       this.flg = false;
@@ -1167,7 +1293,7 @@ clearTeamLead() {
         this.message = '';
       } else if (response.status == 'fail') {
         const cn = this.employeeForm.get('email');
-        cn.setValue('');
+        cn?.setValue('');
         this.message = 'Record already available with given Mail address';
         this.dataToBeSentToSnackBar.message = 'Record already available with given Mail address';
         this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];

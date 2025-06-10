@@ -27,7 +27,10 @@ selectedMember: any = null;
 teamMembers: any[] = [];
 
 getDropdown() {
-  this.service.getManageListDropdown().subscribe((res: any) => {
+  const managerid=localStorage.getItem('companyid')
+  console.log(managerid,'managerid');
+  
+  this.service.getManageListDropdown(managerid).subscribe((res: any) => {
     if (res && res.data) {
       this.teamMembers = res.data;
     }

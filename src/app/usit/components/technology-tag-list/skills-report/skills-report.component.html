@@ -20,6 +20,10 @@
         <mat-error class="error-message" *ngIf="skillform.get('skills')?.touched && skillform.get('skills')?.hasError('required')">
           Skills are Required
         </mat-error>
+        
+<mat-error class="error-message" *ngIf="skillform.get('skills')?.touched && skillform.get('skills')?.hasError('minlength')">
+  Minimum 3 characters required
+</mat-error>
       </form>
       <div class="actions">
         <button mat-raised-button (click)="onCancel()">Cancel</button>

@@ -83,8 +83,8 @@ export class EmployeeManagementService {
   /** EMPLOYEE SERVICES - END */
 
   //FILES UPLOAD
-  getManageListDropdown(){
-    return this.apiServ.get(`auth/users/AllmanageDropDown`)
+  getManageListDropdown(managerid:any){
+    return this.apiServ.get(`auth/users/AllmanageDropDown/${managerid}`)
   }
   ManagerSelection(userid:any){
     return this.apiServ.get(`auth/users/getAllUserByManagerId/${userid}`)
