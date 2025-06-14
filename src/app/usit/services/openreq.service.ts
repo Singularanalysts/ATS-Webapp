@@ -232,7 +232,7 @@ ResumeUpload(payload:any){
   }
 
  ScrapeLinkedInprofile(payload: any) {
-    const scrapeUrl = 'http://192.168.0.167:5001/scrape-profiles';
+    const scrapeUrl = 'http://183.82.119.245:5001/scrape-profiles';
     return this.hhtpclient.post(scrapeUrl, payload);
   }
 }

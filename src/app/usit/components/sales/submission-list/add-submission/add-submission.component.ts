@@ -269,6 +269,14 @@ getsubmissions() {
 selectedCompany: any = null;
 setSelectedCompany(company: any): void {
   this.selectedCompany = company; // store entire company object (with vmsid)
+  
+}
+selectedImplementCompanyv:any=null
+setSelectedImplementPartnerCompany(company:any):void{
+   this.selectedImplementCompanyv = company; // store entire company object (with vmsid)
+   this.submissionForm.patchValue({
+    implpartnerId: company.vmsid  // Assuming `vmsid` is the required ID
+  });
 }
 showSubmissionRateError = false;
 
@@ -277,6 +285,8 @@ showSubmissionRateError = false;
     this.getCompany();
     this.getFlag(this.data.flag.toLocaleLowerCase());
     this.getConsultant(this.flag)
+    console.log(this.flag,'flaggggggg');
+    
     if (this.data.actionName === "edit-submission") {
       this.initilizeSubmissionForm(new SubmissionInfo());
       this.submissionServ.getsubdetailsbyid(this.data.submissionData.submissionid).subscribe(
@@ -370,6 +380,8 @@ showSubmissionRateError = false;
       feedback:[submissionData ? submissionData.feedback : ''],
       endclient: [submissionData ? submissionData.endclient : ''],
       implpartner: [submissionData ? submissionData.implpartner : ''],
+        implpartnerId: [submissionData ? submissionData.implpartnerId : ''],
+
       vendor: [submissionData ? submissionData.vendor : ''],
       recruiter: [submissionData ? submissionData.recruiter : ''],
       empcontact: [submissionData ? submissionData.empcontact : ''],
@@ -700,11 +712,7 @@ isRateValid: boolean = true;
     if (role == 'Super Administrator' || role == 'Administrator' || role == 'Sales Manager' || role == 'Recruiting Manager') {
       this.flg = "all";
     }
-    // this.submissionServ.getCompanies(this.flg).subscribe(
-    //   (response: any) => {
-    //     this.vendordata = response.data;
-    //   }
-    // )
+
 
     this.searchCompanyOptions$ = this.submissionServ.getCompanies(this.flg).pipe(
       map((response: any) => response.data),

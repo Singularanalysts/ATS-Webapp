@@ -84,6 +84,8 @@ pseudoname:any
         'RequirementNumber',
         'EmployeeType',
         'JobTitle',
+           'EndClient',
+        'ImplementaionPartner',
         'Location',
         'PostedOn',
         'Status'
@@ -122,7 +124,9 @@ pseudoname:any
                 jobtitle: item.jobtitle,
                 location: item.location,
                 postedon: item.postedon,
-                status: item.status
+                status: item.status,
+                client:item.client,
+                vendor:item.vendor
               }));
             }
           });
