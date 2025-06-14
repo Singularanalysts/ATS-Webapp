@@ -7,7 +7,7 @@
           <mat-card-title>Login to Your Account</mat-card-title>
       </mat-card-header> -->
 
-        <mat-tab-group class="custom-tabs" *ngIf="!otpFormVisible">
+        <mat-tab-group class="custom-tabs" *ngIf="!otpFormVisible" (selectedTabChange)="onTabChange($event)">
             <mat-tab label="Employer Login">
                 <mat-card-content class="no-padding">
                     <form class="login-form" [formGroup]="form" (ngSubmit)="userLogin('Employee')">
@@ -23,7 +23,7 @@
                                 email address</mat-error>
                         </mat-form-field>
 
-                        <mat-form-field class="full-width">
+                        <!-- <mat-form-field class="full-width">
                             <mat-label>Password</mat-label>
                             <input matInput type="{{ hidePassword ? 'password' : 'text' }}" formControlName="password"
                                 maxlength="25">
@@ -34,7 +34,7 @@
                             <mat-error
                                 *ngIf="isFormSubmitted && loginFrom.password.errors && loginFrom.password.errors.required">Password
                                 is required</mat-error>
-                        </mat-form-field>
+                        </mat-form-field> -->
                         
                         <div class="forgot-password">
                             <a routerLink="/forgot-password">Forgot Password?</a>

@@ -65,6 +65,7 @@ export class RequirementListComponent implements OnInit, OnDestroy {
     'RequirementNumber',
     'Date',
     'JobTitle',
+    
     'Location',
     'IPVendor',
     'EmployementType',

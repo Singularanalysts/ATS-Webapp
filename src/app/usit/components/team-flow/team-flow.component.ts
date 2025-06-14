@@ -59,13 +59,15 @@ onManagerSelected() {
             name: exec.name,
             pseudo: exec.pseudoname,
             role: exec.role,
-            showHorizontalArrow: execIndex === 0  // first exec only for each team lead
+            type: 'executive',
+            showHorizontalArrow: execIndex === 0
           }));
 
           return {
             name: tl.name,
             pseudo: tl.pseudoname,
             role: tl.role,
+            type: 'teamLead',
             children: executives,
             showVerticalArrow
           };
@@ -79,6 +81,7 @@ onManagerSelected() {
           name: exec.name,
           pseudo: exec.pseudoname,
           role: exec.role,
+          type: 'executive',
           showHorizontalArrow: index === 0
         }));
 
@@ -89,6 +92,7 @@ onManagerSelected() {
     });
   }
 }
+
 
 
 

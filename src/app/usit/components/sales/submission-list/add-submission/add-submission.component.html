@@ -117,10 +117,28 @@
                     <input matInput formControlName="endclient" maxlength="60" (input)="camelCase($event)">
                 </mat-form-field>
 
+                <!-- Implementation Partner field -->
                 <mat-form-field appearance="fill">
                     <mat-label>Implementation Partner</mat-label>
-                    <input matInput formControlName="implpartner" maxlength="120" (input)="camelCase($event)">
+
+                    <!-- Show autocomplete input when flag is 'Recruiting' -->
+                    <ng-container *ngIf="flag.trim() === 'Recruiting'; else regularInput">
+                        <input matInput formControlName="implpartner" [matAutocomplete]="implPartnerAutoCmp" />
+                        <mat-autocomplete #implPartnerAutoCmp="matAutocomplete">
+                            <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company"
+                                (click)="setSelectedImplementPartnerCompany(option)">
+                                {{ option.company }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </ng-container>
+
+                    <!-- Show regular input when flag is NOT 'Recruiting' -->
+                    <ng-template #regularInput>
+                        <input matInput formControlName="implpartner" maxlength="120" (input)="camelCase($event)" />
+                    </ng-template>
                 </mat-form-field>
+
+
 
                 <mat-form-field appearance="fill">
                     <mat-label>Submission Rate</mat-label>
@@ -246,11 +264,11 @@
                     <mat-error *ngIf="submissionForm.get('status')!.hasError('required')">Submitted to is
                         Required</mat-error>
                 </mat-form-field>
-                
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Feedback</mat-label>
-            <textarea matInput formControlName="feedback" rows="5" placeholder="Enter Feedback"></textarea>
-          </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Feedback</mat-label>
+                    <textarea matInput formControlName="feedback" rows="5" placeholder="Enter Feedback"></textarea>
+                </mat-form-field>
 
             </div>
         </div>
