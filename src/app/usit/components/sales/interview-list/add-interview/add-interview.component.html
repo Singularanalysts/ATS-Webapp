@@ -44,11 +44,14 @@
 
         <!-- interview-date time -->
         <mat-form-field appearance="fill">
-          <mat-label>Interview Date & Time</mat-label>
-          <input matInput type="datetime-local" formControlName="interviewdate" placeholder="DD/MM/YYYY">
-          <mat-error *ngIf="interviewForm.get('interviewdate')!.hasError('required')"> Interview Date is
-            Required</mat-error>
+          <mat-label>Interview Date & Time <span style="color: red">*</span></mat-label>
+          <input matInput type="datetime-local" formControlName="interviewdate" [min]="minDateTime"
+            placeholder="DD/MM/YYYY" />
+          <mat-error *ngIf="interviewForm.get('interviewdate')?.hasError('required')">
+            Interview Date is Required
+          </mat-error>
         </mat-form-field>
+
 
         <!--  Time Zone -->
         <mat-form-field appearance="fill">
@@ -65,7 +68,7 @@
 
         <!-- Round of Interview -->
         <div style="width: 80%;">
-          <mat-label>Round of Interview</mat-label><br>
+          <mat-label>Round of Interview <span style="color: red">*</span></mat-label><br>
           <mat-radio-group formControlName="round" aria-label="Select an option">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.interviewround" [value]="opt.value"
               (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
@@ -78,7 +81,7 @@
       <div class="form-column-right">
         <!-- Mode of Interview -->
         <div style="width: 80%;">
-          <mat-label>Mode of Interview</mat-label><br>
+          <mat-label>Mode of Interview <span style="color: red">*</span></mat-label><br>
           <mat-radio-group formControlName="mode" aria-label="Select an option">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.interviewmode" [value]="opt.value"
               (change)="onModeRadioChange($event)">{{opt.value}}</mat-radio-button>
@@ -97,7 +100,7 @@
         </mat-form-field>
 
         <div style="width: 80%;">
-          <mat-label>Status</mat-label><br>
+          <mat-label>Status <span style="color: red">*</span></mat-label><br>
           <mat-radio-group formControlName="interviewstatus" aria-label="Select an option">
             <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.interviewstatus" [value]="opt.value"
               (change)="onStatusRadioChange($event)" (click)="Closure('false')">{{opt.value}}</mat-radio-button>

@@ -1,10 +1,12 @@
 import { Component, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -27,6 +29,7 @@ import { AddTechnologyTagComponent } from "../../technology-tag-list/add-technol
 import { DialogService } from "src/app/services/dialog.service";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Techsupport } from "src/app/usit/models/TechSupport";
+import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 
 @Component({
   selector: "app-add-tech-support",
@@ -47,7 +50,8 @@ import { Techsupport } from "src/app/usit/models/TechSupport";
     MatTableModule,
     MatFormFieldModule,
     MatCardModule,
-    NgxGpAutocompleteModule
+    NgxGpAutocompleteModule,
+    NgxMatIntlTelInputComponent
   ],
   providers: [
     {
@@ -136,14 +140,15 @@ export class AddTechSupportComponent implements OnInit {
   }
   private initializeRequirementForm(requirementData: any) {
     this.registerForm = this.formBuilder.group({
-      name: [requirementData ? requirementData.name : '', Validators.required],
+      name: [requirementData ? requirementData.name : '',[ Validators.required,this.noInvalidFullName.bind(this)]
+],
       // pseudoname: [requirementData ? requirementData.pseudoname : '', Validators.required],
       location: [requirementData ? requirementData.location : '', Validators.required, this.registerForm.location],
       email: [
         requirementData ? requirementData.email : '',
-        [
+        [  Validators.required,
           Validators.email,
-          Validators.pattern("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"),
+          Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$"),
         ],
       ],
       mobile: [requirementData ? requirementData.mobile : '', Validators.required],
@@ -157,6 +162,24 @@ export class AddTechSupportComponent implements OnInit {
       this.registerForm.addControl('status', this.formBuilder.control(requirementData ? requirementData.status : ''));
     }
   }
+noInvalidFullName(control: AbstractControl): ValidationErrors | null {
+  const value = control.value || '';
+
+  // Trim and check only whitespace
+  if (value.trim() === '') {
+    return { whitespace: true };
+  }
+
+  // Reject if it contains only digits or only special characters
+  const onlyDigits = /^[0-9]+$/.test(value);
+  const onlySpecial = /^[^A-Za-z0-9]+$/.test(value);
+
+  if (onlyDigits || onlySpecial) {
+    return { invalidChars: true };
+  }
+
+  return null; // Valid
+}
 
   private destroyed$ = new Subject<void>();
   getSaveData() {

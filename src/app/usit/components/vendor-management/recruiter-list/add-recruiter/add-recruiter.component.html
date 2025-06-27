@@ -7,44 +7,56 @@
   </button>
 </div>
 <mat-card class="center-card">
-  <form [formGroup]="recruiterForm"  class="vendor-form">
+  <form [formGroup]="recruiterForm" class="vendor-form">
     <div class="form">
       <div class="form-column-left">
         <!-- Company Name-->
-        <div formGroupName = "vendor" class="search-company-field">   
-        <mat-form-field appearance="fill">
-          <mat-label>Company Name</mat-label>
+        <div formGroupName="vendor" class="search-company-field">
+          <mat-form-field appearance="fill">
+            <mat-label>Company Name</mat-label>
             <input matInput formControlName="company" [matAutocomplete]="companyAutoCmp" />
-          <mat-autocomplete #companyAutoCmp="matAutocomplete">
-            <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company.trim()" (onSelectionChange)="onVendorSelect(option)">{{ option.company.trim() }}</mat-option>
-          </mat-autocomplete>
-          <button matSuffix mat-icon-button (click)="navigateToAddVendor()"><mat-icon>add</mat-icon></button>
-          <mat-hint *ngIf="isCompanyDataAvailable">No results found, click '+' to add vendor</mat-hint>
-          <mat-error *ngIf="recruiterForm.get('vendor.company')!.hasError('required')">Company Name is Required</mat-error>
+            <mat-autocomplete #companyAutoCmp="matAutocomplete">
+              <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company.trim()"
+                (onSelectionChange)="onVendorSelect(option)">{{ option.company.trim() }}</mat-option>
+            </mat-autocomplete>
+            <button matSuffix mat-icon-button (click)="navigateToAddVendor()"><mat-icon>add</mat-icon></button>
+            <mat-hint *ngIf="isCompanyDataAvailable">No results found, click '+' to add vendor</mat-hint>
+            <mat-error *ngIf="recruiterForm.get('vendor.company')!.hasError('required')">Company Name is
+              Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Country -->
+        <mat-form-field>
+          <mat-label>Select Country</mat-label>
+          <mat-select formControlName="country">
+            <mat-option value="USA">USA</mat-option>
+            <mat-option value="UAE">UAE</mat-option>
+          </mat-select>
+          <mat-error *ngIf="recruiterForm.get('country')!.hasError('required')"> Country is
+            required</mat-error>
         </mat-form-field>
-      </div>
-      
-      <!-- Country -->
-      <mat-form-field>
-        <mat-label>Select Country</mat-label>
-        <mat-select formControlName="country">
-          <mat-option value="USA">USA</mat-option>
-          <mat-option value="UAE">UAE</mat-option>
-        </mat-select>
-        <mat-error *ngIf="recruiterForm.get('country')!.hasError('required')"> Country is
-          required</mat-error>
-      </mat-form-field>
 
         <!-- staff   -->
         <mat-form-field appearance="fill">
           <mat-label>Recruiter Name</mat-label>
-          <input matInput formControlName="recruiter" maxlength="30" (input)="camelCase($event)"/>
+          <input matInput formControlName="recruiter" maxlength="30" (input)="camelCase($event)" />
+
+          <mat-error *ngIf="recruiterForm.get('recruiter')?.hasError('whitespace')">
+            Whitespace-only value is not allowed.
+          </mat-error>
+
+          <mat-error *ngIf="recruiterForm.get('recruiter')?.hasError('invalidName')">
+            Must contain at least one letter.
+          </mat-error>
         </mat-form-field>
+
 
         <!-- Email -->
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)"  maxlength="50" />
+          <input matInput formControlName="email" (change)="emailDuplicate($event)" (input)="convertToLowerCase($event)"
+            maxlength="50" />
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('required')">Email is Required</mat-error>
           <mat-error *ngIf="recruiterForm.get('email')!.hasError('pattern')">Invalid Email Address</mat-error>
         </mat-form-field>
@@ -52,8 +64,9 @@
         <!-- Company Contact Number -->
         <mat-form-field appearance="fill">
           <mat-label>Contact Number </mat-label>
-          <ngx-mat-intl-tel-input  [preferredCountries]="['us','ae','in']" matInput class="intl-input" formControlName="contactnumber" [enablePlaceholder]="true"
-            [enableSearch]="true" name="contactnumber" id="intlInput" #personalcontactnumber #pNumb>
+          <ngx-mat-intl-tel-input [preferredCountries]="['us','ae','in']" matInput class="intl-input"
+            formControlName="contactnumber" [enablePlaceholder]="true" [enableSearch]="true" name="contactnumber"
+            id="intlInput" #personalcontactnumber #pNumb>
           </ngx-mat-intl-tel-input>
           <!-- <mat-error
               *ngIf="vendorForm.get('personalcontactnumber')!.hasError('required')">Personal
@@ -69,22 +82,23 @@
         <!-- Company Contact Number -->
         <mat-form-field appearance="fill">
           <mat-label>Extension Number</mat-label>
-          <input matInput formControlName="extension" maxlength="30" (input)="camelCase($event)"/>
+          <input matInput formControlName="extension" maxlength="30" (input)="camelCase($event)" />
         </mat-form-field>
-     
+
 
 
         <mat-form-field appearance="fill">
           <mat-label>Alternate Contact Number</mat-label>
-          <ngx-mat-intl-tel-input  [preferredCountries]="['us','ae','in']" matInput class="intl-input" formControlName="alternatecontactnumber" [enablePlaceholder]="true"
-            [enableSearch]="true" name="contactnumber" id="intlInput">
+          <ngx-mat-intl-tel-input [preferredCountries]="['us','ae','in']" matInput class="intl-input"
+            formControlName="alternatecontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
+            name="contactnumber" id="intlInput">
           </ngx-mat-intl-tel-input>
           <!-- <mat-error
               *ngIf="vendorForm.get('personalcontactnumber')!.hasError('required')">Personal
               Contact
               Number is required</mat-error> -->
         </mat-form-field>
-        
+
         <!-- website -->
         <!-- <mat-form-field appearance="fill">
           <mat-label>Alternate Contact Number</mat-label>
@@ -93,12 +107,12 @@
 
         <mat-form-field appearance="fill" *ngIf="data.actionName === 'edit-recruiter'">
           <mat-label>Select Status</mat-label>
-            <mat-select formControlName="status">
-              <mat-option *ngFor="let option of selectOptionObj.statusType"
-              [value]="option" [disabled]="(option === 'Approved' || option === 'Rejected') && (designation == 'Executive' || designation == 'Team Lead')">
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let option of selectOptionObj.statusType" [value]="option"
+              [disabled]="(option === 'Approved' || option === 'Rejected') && (designation == 'Executive' || designation == 'Team Lead')">
               {{ option }}
             </mat-option>
-            </mat-select>
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -108,7 +122,8 @@
             <mat-option value="Bench Sales">Sales</mat-option>
             <mat-option value="Both">Both</mat-option>
           </mat-select>
-          <mat-error *ngIf="recruiterForm.get('recruitertype')!.hasError('required')">Recruiter Type is Required</mat-error>
+          <mat-error *ngIf="recruiterForm.get('recruitertype')!.hasError('required')">Recruiter Type is
+            Required</mat-error>
         </mat-form-field>
 
         <!-- <mat-form-field appearance="fill" *ngIf="data.actionName === 'edit-recruiter'">
@@ -130,7 +145,7 @@
   <div class="form-button-right">
     <!-- <div class="form-button-inner"> -->
     <button mat-raised-button color="white" (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" [disabled]="isFormSubmitted" (click)="onSubmit()">
+    <button mat-raised-button color="primary" [disabled]="isFormSubmitted ||recruiterForm.invalid" (click)="onSubmit()">
       Submit
     </button>
     <!-- </div> -->

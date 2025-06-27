@@ -18,19 +18,33 @@
         <mat-form-field appearance="fill">
           <mat-label>Full Name</mat-label>
           <input matInput formControlName="fullname" maxlength="50" (input)="camelCase($event)">
-          <mat-error *ngIf="employeeForm.get('fullname')?.hasError('required')">Full
-            Name is required</mat-error>
-          <mat-error *ngIf="employeeForm.get('fullname')?.hasError('minlength')">Full Name must be at least 6
-            characters</mat-error>
-          <mat-error *ngIf="employeeForm.get('fullname')?.hasError('maxlength')">Full Name must not exceed 100
-            characters</mat-error>
+             <mat-error *ngIf="employeeForm.get('fullname')?.hasError('required')">Full Name is Required</mat-error>
+            <mat-error *ngIf="employeeForm.get('fullname')?.hasError('minlength')">Full Name must be at least 6
+              characters</mat-error>
+            <mat-error *ngIf="employeeForm.get('fullname')?.hasError('maxlength')">Full Name must not exceed 100
+              characters</mat-error>
+            <mat-error *ngIf="employeeForm.get('fullname')?.hasError('whitespace')">
+              Whitespace-only value is not allowed
+            </mat-error>
+            <mat-error *ngIf="employeeForm.get('fullname')?.hasError('invalidChars')">
+              Only digits or only special characters are not allowed
+            </mat-error>
         </mat-form-field>
         <!-- Psuedo Name -->
         <mat-form-field appearance="fill">
           <mat-label>Psuedo Name</mat-label>
           <input matInput formControlName="pseudoname" maxlength="15" (input)="camelCase($event)">
-          <mat-error *ngIf="employeeForm.get('pseudoname')?.hasError('required')">Psuedo
-            Name is required</mat-error>
+                 <mat-error *ngIf="employeeForm.get('pseudoname')?.hasError('required')">Full Name is Required</mat-error>
+            <mat-error *ngIf="employeeForm.get('pseudoname')?.hasError('minlength')">Full Name must be at least 6
+              characters</mat-error>
+            <mat-error *ngIf="employeeForm.get('pseudoname')?.hasError('maxlength')">Full Name must not exceed 100
+              characters</mat-error>
+            <mat-error *ngIf="employeeForm.get('pseudoname')?.hasError('whitespace')">
+              Whitespace-only value is not allowed
+            </mat-error>
+            <mat-error *ngIf="employeeForm.get('pseudoname')?.hasError('invalidChars')">
+              Only digits or only special characters are not allowed
+            </mat-error>
         </mat-form-field>
         <!-- Official Email -->
         <mat-form-field appearance="fill">
@@ -53,7 +67,7 @@
         </mat-form-field>
         <!-- Personal Contact -->
         <mat-form-field appearance="fill">
-          <mat-label>Personal Contact Number </mat-label>
+          <mat-label>Personal Contact Number <span style="color: red">*</span></mat-label>
           <ngx-mat-intl-tel-input class="intl-input" [preferredCountries]="['in','us']"
             formControlName="personalcontactnumber" [enablePlaceholder]="true" [enableSearch]="true"
             name="personalcontactnumber" id="intlInput" #personalcontactnumber #pNumb

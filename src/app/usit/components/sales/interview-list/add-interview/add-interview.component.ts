@@ -100,7 +100,8 @@ export class AddInterviewComponent implements OnInit {
     return this.interviewForm.controls;
   }
 
-  
+    today: Date = new Date();
+
 
   getFlag(type: string) {
     if (type === 'sales') {
@@ -111,7 +112,10 @@ export class AddInterviewComponent implements OnInit {
       this.flag = 'Domrecruiting';
     }
   }
+minDateTime: string = '';
   ngOnInit(): void {
+     const now = new Date();
+  this.minDateTime = now.toISOString().slice(0, 16); // Format: 'YYYY-MM-DDTHH:MM'
     this.getFlag(this.data.flag.toLocaleLowerCase());
     this.getsubdetails(this.flag);
     if (this.flag == 'sales') {

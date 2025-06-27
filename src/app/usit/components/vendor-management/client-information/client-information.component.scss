@@ -144,7 +144,7 @@ tbody {
 }
 
 .tcvr-table-style {
-    max-height: 77vh; /* Or any height you want */
+    max-height: 80vh; /* Or any height you want */
   overflow: auto;
 }
 
@@ -340,4 +340,15 @@ ul.breadcrumb li:last-child {
     font-weight: var(--mat-paginator-container-text-weight);
     letter-spacing: var(--mat-paginator-container-text-tracking);
     margin-bottom: 14px !important;
+}
+.mat-mdc-paginator {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  padding: 8px 16px !important;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) !important;
+  margin: 0 !important; /* remove any default margin */
 }

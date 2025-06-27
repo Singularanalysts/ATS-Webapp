@@ -90,7 +90,7 @@ getScrapDetails() {
   const payload = {
     pageNumber: this.pageIndex + 1,
     pageSize: this.pageSize,
-    sortField: this.sortField || 'status',
+    sortField: this.sortField || 'end_time',
     sortOrder: this.sortOrder || 'asc',
     keyword: this.keyword
   };

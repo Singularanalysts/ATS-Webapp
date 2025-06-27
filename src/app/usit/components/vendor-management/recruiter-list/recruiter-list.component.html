@@ -13,6 +13,8 @@
     </div>
   </div>
   <div id="table-container" class="table-wrapper">
+      <div class="table-scroll-wrapper">
+
     <mat-tab-group (selectedTabChange)="onTabChanged($event)" mat-stretch-tabs="false" mat-align-tabs="start" color="primary" backgroundColor="primary">
       <mat-tab *ngFor="let tab of tabs" [label]="tab">
         <ng-container *ngTemplateOutlet="tableTemplate; context: { status: tab }"></ng-container>
@@ -141,7 +143,7 @@
       </section>
       <hr>
     </ng-template>
-    
+    </div>
   </div>
   <div class="paginator">
     <!-- paginator -->
@@ -151,4 +153,5 @@
       [pageIndex]="currentPageIndex" aria-label="Select page">
     </mat-paginator>
   </div>
+  
 </div>

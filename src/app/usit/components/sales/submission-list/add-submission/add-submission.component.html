@@ -102,7 +102,7 @@
 
 
                 <div style="width: 80%;">
-                    <mat-label>Rate Type</mat-label><br>
+                    <mat-label>Rate Type <span style="color: red">*</span></mat-label><br>
                     <mat-radio-group formControlName="ratetype" aria-label="Select an option">
                         <mat-radio-button *ngFor="let opt of selectOptionObj.radioOptions.rate" [value]="opt.value"
                             (change)="onRadioChange($event)">{{opt.value}}</mat-radio-button>
@@ -214,7 +214,15 @@
                     <input matInput formControlName="position" maxlength="150" (input)="camelCase($event)">
                     <mat-error *ngIf="submissionForm.get('position')!.hasError('required')"> Position Title is
                         Required</mat-error>
+                    <mat-error *ngIf="submissionForm.get('position')?.hasError('whitespace')">
+                        Whitespace-only value is not allowed.
+                    </mat-error>
+
+                    <mat-error *ngIf="submissionForm.get('position')?.hasError('invalidName')">
+                        Must contain at least one letter.
+                    </mat-error>
                 </mat-form-field>
+
                 <mat-form-field appearance="fill">
                     <mat-label>Project Location</mat-label>
                     <input matInput formControlName="projectlocation" ngx-gp-autocomplete [options]='options'
@@ -222,6 +230,13 @@
                     <mat-error *ngIf="submissionForm.get('projectlocation')!.hasError('required')"> Location is
                         Required</mat-error>
                 </mat-form-field>
+                       <mat-error *ngIf="submissionForm.get('projectlocation')?.hasError('whitespace')">
+            Whitespace-only value is not allowed.
+          </mat-error>
+
+          <mat-error *ngIf="submissionForm.get('projectlocation')?.hasError('invalidName')">
+            Must contain at least one letter.
+          </mat-error>
                 <div class="fg-div">
                     <mat-form-field appearance="fill">
                         <mat-label>Select Recruiter</mat-label>

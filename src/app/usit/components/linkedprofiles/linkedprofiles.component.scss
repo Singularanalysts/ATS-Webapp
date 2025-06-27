@@ -203,3 +203,14 @@
 .right-align {
   margin-left: auto;
 }
+.mat-mdc-paginator {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  padding: 8px 16px !important;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) !important;
+  margin: 0 !important; /* remove any default margin */
+}

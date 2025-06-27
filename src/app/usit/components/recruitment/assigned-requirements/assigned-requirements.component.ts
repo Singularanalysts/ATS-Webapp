@@ -185,7 +185,8 @@ const cid =localStorage.getItem('companyid')
     const exportData = this.dataSource.data.map(item => ({
       SerialNum: item.serialNum,
       ExecutiveName: item.pseudoname,
-      RequirementCount: item.requirementsCount
+      RequirementCount: item.requirementsCount,
+      ServedCount:item.served_count
     }));
 
     // Generate a worksheet from the mapped data

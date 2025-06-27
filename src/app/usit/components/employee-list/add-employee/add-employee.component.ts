@@ -14,6 +14,7 @@ import {
   ReactiveFormsModule,
   FormControl,
   AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -175,27 +176,27 @@ export class AddEmployeeComponent {
         }
       );
     } else {
-     this.initilizeAddEmployeeForm(null); // Initialize blank form for add mode
-    this.validateControls(); // Setup dynamic validation after form init
+      this.initilizeAddEmployeeForm(null); // Initialize blank form for add mode
+      this.validateControls(); // Setup dynamic validation after form init
 
-    const selectedRoleId = this.employeeForm.get('role.roleid')?.value;
-    if (selectedRoleId) {
-      const roleName = this.getRoleNameById(selectedRoleId)?.trim() || '';
-      this.updateManagerAndTeamLeadFlags(roleName); // Apply flags if role is preselected
-    }
+      const selectedRoleId = this.employeeForm.get('role.roleid')?.value;
+      if (selectedRoleId) {
+        const roleName = this.getRoleNameById(selectedRoleId)?.trim() || '';
+        this.updateManagerAndTeamLeadFlags(roleName); // Apply flags if role is preselected
+      }
 
-    this.toggleOtherDetails(false);
+      this.toggleOtherDetails(false);
     }
-  const companyId = localStorage.getItem('companyid');
-  if (companyId) {
-    this.checkCompany(companyId); // Validate company
-  }
+    const companyId = localStorage.getItem('companyid');
+    if (companyId) {
+      this.checkCompany(companyId); // Validate company
+    }
     this.optionsMethod('department');
   }
   updateManagerAndTeamLeadFlags(roleName: string): void {
     console.log(roleName, 'rolenameee');
 
-    const manager = this.employeeForm.get ('manager');
+    const manager = this.employeeForm.get('manager');
 
     if (roleName === 'Team Leader Sales' || roleName === 'Team Leader Recruiting') {
       this.managerflg = true;
@@ -335,15 +336,18 @@ export class AddEmployeeComponent {
           Validators.required,
           Validators.minLength(5),
           Validators.maxLength(100),
+          this.noInvalidFullName.bind(this)
         ],
       ],
-      pseudoname: [employeeData ? employeeData.pseudoname : '', Validators.required],
+      pseudoname: [employeeData ? employeeData.pseudoname : '', [Validators.required, Validators.minLength(5),
+      Validators.maxLength(100),
+      this.noInvalidFullName.bind(this)]],
       email: [
         employeeData ? employeeData.email : '',
         [
           Validators.required,
           Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
         ],
       ],
       personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
@@ -357,7 +361,7 @@ export class AddEmployeeComponent {
         [
           Validators.required,
           Validators.email,
-          Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
         ],
       ],
       manager: [employeeData ? employeeData.manager : ''],
@@ -409,6 +413,24 @@ export class AddEmployeeComponent {
       }
     }
 
+  }
+  noInvalidFullName(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
+
+    // Trim and check only whitespace
+    if (value.trim() === '') {
+      return { whitespace: true };
+    }
+
+    // Reject if it contains only digits or only special characters
+    const onlyDigits = /^[0-9]+$/.test(value);
+    const onlySpecial = /^[^A-Za-z0-9]+$/.test(value);
+
+    if (onlyDigits || onlySpecial) {
+      return { invalidChars: true };
+    }
+
+    return null; // Valid
   }
   getCompanyByCid(cid: string): any {
     return this.companyOptions.find((c) => c.cid === cid);

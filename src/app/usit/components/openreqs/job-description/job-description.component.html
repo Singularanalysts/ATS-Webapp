@@ -7,6 +7,8 @@
          <button mat-icon-button color="primary" style="margin: 3px;" (click)="openEmailClient()" aria-label="Email">
   <mat-icon>email</mat-icon>
 </button>
+      <button  class="search"  mat-raised-button color="primary" style="margin: 12px; "(click)="copyJobDescription(jobDesc)">Copy</button>
+
   </div>
   
     <button mat-icon-button (click)="dialogRef.close()" class="btn-close" id="btnClose">
@@ -18,7 +20,7 @@
       <div class="info-container">
         <div class="info-item">
           <span class="static-label">Job Description :</span>
-          <span class="dynamic-value" [innerHTML]="jobDescriptionWithLineBreaks"></span>
+          <span class="dynamic-value" [innerHTML]="jobDescriptionWithLineBreaks" #jobDesc></span>
         </div>
       </div>
     </mat-card-content>
