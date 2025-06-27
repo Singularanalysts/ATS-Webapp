@@ -28,7 +28,8 @@
 
     <ng-template #tableTemplate>
       
-      <section class="vendor-table-style">
+      <section class="vendor-table-wrapper">
+        <div class="vendor-table-style">
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSort($event)" oncopy="return false">
   
       
@@ -145,17 +146,20 @@
           <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngClass]="getVendorRowClass(row)"></tr>
         </table>
         <p class="no-data-found" *ngIf="!dataSource.filteredData.length">{{'No matching data found'}}</p>
-      </section>
-      <hr>
-    </ng-template>
-</div>
-  </div>
-  <!-- paginator -->
+          <!-- paginator -->
   <div class="paginator" *ngIf="dataSource.filteredData.length">
     <mat-paginator (page)="handlePageEvent($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
       [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
       [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
     </mat-paginator>
   </div>
+  </div>
+
+      </section>
+      <hr>
+    </ng-template>
+</div>
+  </div>
+
 
 </div>

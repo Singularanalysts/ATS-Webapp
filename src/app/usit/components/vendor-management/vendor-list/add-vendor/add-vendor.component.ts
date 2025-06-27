@@ -7,6 +7,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -167,7 +168,7 @@ export class AddVendorComponent implements OnInit, OnDestroy {
    */
   private iniVendorForm(vendorData: Vms) {
     this.vendorForm = this.formBuilder.group({
-      company: [vendorData ? vendorData.company : '', [Validators.required]],
+      company: [vendorData ? vendorData.company : '', [Validators.required , this.noLeadingTrailingOrOnlySpaces]],
       vendortype: [vendorData ? vendorData.vendortype : '', Validators.required],
       companytype: [vendorData ? vendorData.companytype : '', Validators.required],
       country: [vendorData ? vendorData.country : '', Validators.required],
@@ -209,6 +210,16 @@ export class AddVendorComponent implements OnInit, OnDestroy {
     }
     this.validateControls(this.data.actionName);
   }
+noLeadingTrailingOrOnlySpaces(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (typeof value === 'string' && value.trim().length === 0) {
+    return { whitespace: true }; // only spaces
+  }
+  if (/^\s|\s$/.test(value)) {
+    return { whitespace: true }; // leading or trailing space
+  }
+  return null;
+}
 
   atLeastTwoNumbers(control: AbstractControl): { [key: string]: boolean } | null {
     const value: string = control.value || '';

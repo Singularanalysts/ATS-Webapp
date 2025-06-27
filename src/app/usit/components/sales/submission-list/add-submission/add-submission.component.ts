@@ -1,11 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -372,9 +374,9 @@ showSubmissionRateError = false;
     this.submissionForm = this.formBuilder.group({
       // user:  [submissionData ? submissionData?.user : this.userid],
       user: [this.data.actionName === "edit-submission" ? submissionData?.user : localStorage.getItem('userid')],
-      requirement: [submissionData ? submissionData?.requirement : '', [Validators.required]],
+      requirement: [submissionData ? submissionData?.requirement : '', [Validators.required ,]],
       consultant: [submissionData ? submissionData?.consultant : '', [Validators.required]],
-      position: [submissionData ? submissionData.position : '', [Validators.required]],
+      position: [submissionData ? submissionData.position : '', [Validators.required,this.noInvalidPositionName]],
       ratetype: [submissionData ? submissionData.ratetype : '', [Validators.required]],
       submissionrate: [submissionData ? submissionData.submissionrate : '', [Validators.required]],
       feedback:[submissionData ? submissionData.feedback : ''],
@@ -387,7 +389,7 @@ showSubmissionRateError = false;
       empcontact: [submissionData ? submissionData.empcontact : ''],
       empmail: [submissionData ? submissionData.empmail : ''],
       source: [submissionData ? submissionData.source : '', [Validators.required]],
-      projectlocation: [submissionData ? submissionData.projectlocation : '', [Validators.required]],
+      projectlocation: [submissionData ? submissionData.projectlocation : '', [Validators.required ,this.noInvalidPositionName]],
       flg: [this.data.flag ? this.data.flag.toLocaleLowerCase() : ''],
       // user: [submissionData ? submissionData.user: ''],
       submissionid: [submissionData ? submissionData.submissionid : ''],
@@ -428,6 +430,23 @@ showSubmissionRateError = false;
     // this.submissionForm.get('consultant')?.setValue(submissionData?.consultant);
     this.validateControls();
   }
+ noInvalidPositionName(control: AbstractControl): ValidationErrors | null {
+  const value = control.value || '';
+
+  if (value === '') return null; // optional field
+
+  if (value.trim() === '') {
+    return { whitespace: true }; // only whitespace
+  }
+
+  const hasLetter = /[A-Za-z]/.test(value);
+
+  if (!hasLetter) {
+    return { invalidName: true }; // must contain at least one letter
+  }
+
+  return null; // valid
+}
 
   private validateControls() {
     const requirement = this.submissionForm.get('requirement');
@@ -746,6 +765,8 @@ isRateValid: boolean = true;
     this.submissionServ.getRecruiterOfTheVendor(id, this.flgOpposite).subscribe(
       (response: any) => {
         this.recruiterName = response.data;
+                console.log( this.recruiterName,' this.recruiterNameinfooo');
+
       }
     );
   }
@@ -757,6 +778,8 @@ isRateValid: boolean = true;
     this.submissionServ.getRecruiterOfTheVendor(newVal, this.flgOpposite).subscribe(
       (response: any) => {
         this.recruiterName = response.data;
+        console.log( this.recruiterName,' this.recruiterName');
+        
         this.submissionForm.get("empcontact").patchValue('');
         this.submissionForm.get("empmail").patchValue('');
         this.submissionForm.get("recruiter").patchValue('');

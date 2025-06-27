@@ -136,6 +136,8 @@ tbody {
 .recruiter-table-style {
     max-height: 77vh; /* Or any height you want */
   overflow: auto;
+    padding-bottom: 80px; /* Add padding so paginator doesn't overlap last rows */
+
 }
 .action-btns{
   display: flex;
@@ -262,6 +264,7 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
     display: flex;
     align-items: center;
         margin-bottom: -16px !important;
+        
 }
 .mat-mdc-paginator-container {
     display: flex
@@ -273,4 +276,20 @@ td.approve-buttons.cdk-cell.cdk-column-Approve-Reject.mat-column-Approve-Reject.
     width: 100%;
     min-height: var(--mat-paginator-container-size);
         margin-bottom: 16px !important;
+}
+.mat-mdc-paginator {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  padding: 8px 16px !important;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) !important;
+  margin: 0 !important; /* remove any default margin */
+}
+::ng-deep .mat-mdc-paginator-range-actions {
+  display: flex;
+  align-items: center;
+  margin-bottom: -16px !important;
 }

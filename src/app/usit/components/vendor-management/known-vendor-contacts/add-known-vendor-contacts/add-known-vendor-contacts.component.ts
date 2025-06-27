@@ -2,10 +2,12 @@ import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VendorService } from 'src/app/usit/services/vendor.service';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -124,8 +126,8 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
 
     this.hotlistForm = this.formBuilder.group({
       vendor: [hotlistProviderData ? hotlistProviderData.vendor : '', [Validators.required]],
-      employeeName: [hotlistProviderData ? hotlistProviderData.employeeName : '', [Validators.required]],
-      email: [hotlistProviderData ? hotlistProviderData.email : '', [ Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      employeeName: [hotlistProviderData ? hotlistProviderData.employeeName : '', [Validators.required ,this.noInvalidEmployeeName]],
+      email: [hotlistProviderData ? hotlistProviderData.email : '', [ Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$')]],
       referenceContactNumber: [hotlistProviderData ? hotlistProviderData.referenceContactNumber : ''],
       client: [hotlistProviderData ? hotlistProviderData.client : ''],
       linkedinProfilesUrl: [hotlistProviderData ? hotlistProviderData.linkedinProfilesUrl : '', [Validators.required]],
@@ -145,6 +147,22 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
       );
     }
   }
+noInvalidEmployeeName(control: AbstractControl): ValidationErrors | null {
+  const value = control.value || '';
+
+  // Reject empty or whitespace-only strings
+  if (value.trim() === '') {
+    return { whitespace: true };
+  }
+
+  // Require at least one letter
+  const hasLetter = /[A-Za-z]/.test(value);
+  if (!hasLetter) {
+    return { invalidName: true };
+  }
+
+  return null; // valid
+}
 
 
   /**

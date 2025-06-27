@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
@@ -87,20 +87,20 @@ export class AddRecruiterComponent implements OnInit {
     }));
     if (this.data.actionName === 'edit-recruiter') {
       this.iniRecruiterForm(new Recruiter());
-     this.recruiterServ.getEntity(this.data.recruiterData.id).subscribe(
-  (response: any) => {
-    const recruiterData = response.data;
-    
-    // Capitalize status if it exists
-   // Only capitalize 'approved'
-    if (recruiterData.status?.toLowerCase() === 'approved') {
-      recruiterData.status = 'Approved';
-    }
+      this.recruiterServ.getEntity(this.data.recruiterData.id).subscribe(
+        (response: any) => {
+          const recruiterData = response.data;
 
-    this.recruiterObj = recruiterData;
-    this.iniRecruiterForm(recruiterData);
-  }
-);
+          // Capitalize status if it exists
+          // Only capitalize 'approved'
+          if (recruiterData.status?.toLowerCase() === 'approved') {
+            recruiterData.status = 'Approved';
+          }
+
+          this.recruiterObj = recruiterData;
+          this.iniRecruiterForm(recruiterData);
+        }
+      );
 
 
     } else {
@@ -114,8 +114,10 @@ export class AddRecruiterComponent implements OnInit {
   private iniRecruiterForm(recruiterData: any) {
     this.recruiterForm = this.formBuilder.group(
       {
-        recruiter: [recruiterData ? recruiterData.recruiter : ''],
-        email: [recruiterData ? recruiterData.email : '', [Validators.required, Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')]],
+        recruiter: [
+          recruiterData ? recruiterData.recruiter : '',
+          [this.noInvalidRecruiterName]
+        ], email: [recruiterData ? recruiterData.email : '', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$')]],
         usnumber: [recruiterData ? recruiterData.usnumber : ''],
         contactnumber: [recruiterData ? recruiterData.contactnumber : ''],
         extension: [recruiterData ? recruiterData.extension : ''],
@@ -125,11 +127,11 @@ export class AddRecruiterComponent implements OnInit {
         addedby: [this.data.actionName !== "edit-recruiter" ? localStorage.getItem('userid') : recruiterData.addedby],
         updatedby: [this.data.actionName === "edit-recruiter" ? localStorage.getItem('userid') : null],
         vendor: this.formBuilder.group({
-        vmsid: [recruiterData ? recruiterData.vendor.vmsid : ''],
-        company: [recruiterData ? recruiterData.vendor.company : '', Validators.required],
+          vmsid: [recruiterData ? recruiterData.vendor.vmsid : ''],
+          company: [recruiterData ? recruiterData.vendor.company : '', Validators.required],
         }),
         user: [this.data.actionName !== "edit-recruiter" ? localStorage.getItem('userid') : recruiterData.user],
-         
+
         country: [recruiterData ? recruiterData.country : '', Validators.required],
       }
     );
@@ -141,7 +143,27 @@ export class AddRecruiterComponent implements OnInit {
       this.recruiterForm.addControl('rec_stat', this.formBuilder.control(recruiterData ? recruiterData.rec_stat : ''));
     }
     this.validateControls()
+    console.log(this.data.actionName,'data.actionName');
+    
   }
+ noInvalidRecruiterName(control: AbstractControl): ValidationErrors | null {
+  const value = control.value || '';
+
+  if (value === '') return null; // optional field
+
+  if (value.trim() === '') {
+    return { whitespace: true }; // only whitespace
+  }
+
+  const hasLetter = /[A-Za-z]/.test(value);
+
+  if (!hasLetter) {
+    return { invalidName: true }; // must contain at least one letter
+  }
+
+  return null; // valid
+}
+
 
   validateControls(action = 'add-recruiter') {
     if (action === 'edit-recruiter') {
@@ -171,7 +193,7 @@ export class AddRecruiterComponent implements OnInit {
     );
   }
 
-  emailValue: string = ''; 
+  emailValue: string = '';
   toLowercase(value: string) {
     this.emailValue = value.toLowerCase();
   }
@@ -199,7 +221,7 @@ export class AddRecruiterComponent implements OnInit {
     const saveReqObj = this.getSaveData();
     this.recruiterServ.addOrUpdateRecruiter(saveReqObj, this.data.actionName)
       .subscribe({
-         next: (data: any) => {
+        next: (data: any) => {
           if (data.status == 'success') {
             dataToBeSentToSnackBar.message =
               this.data.actionName === 'add-recruiter'
@@ -227,7 +249,7 @@ export class AddRecruiterComponent implements OnInit {
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
           this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
         },
-  });
+      });
   }
 
   trimSpacesFromFormValues() {
@@ -317,7 +339,7 @@ export class AddRecruiterComponent implements OnInit {
     this.recruiterServ.duplicatecheckEmail(email).subscribe(
       (response: any) => {
         if (response.status == 'success') {
-          
+
         }
         else if (response.status == 'duplicate') {
           const cn = this.recruiterForm.get('email');
@@ -384,7 +406,7 @@ export class AddRecruiterComponent implements OnInit {
     const inputValue = event.target.value;
     event.target.value = this.capitalizeFirstLetter(inputValue);
   }
-   
+
   capitalizeFirstLetter(input: string): string {
     return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
       return char.toUpperCase();

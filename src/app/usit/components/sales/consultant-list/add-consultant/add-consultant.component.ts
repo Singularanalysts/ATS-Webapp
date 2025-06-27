@@ -7,6 +7,8 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
@@ -395,8 +397,18 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         resume: [consultantData ? consultantData.resume : ''],
         dlcopy: [consultantData ? consultantData.dlcopy : ''],
         // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
-        firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
-        lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
+        firstname: [consultantData ? consultantData.firstname : '',         [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+          this.noInvalidFullName.bind(this)
+        ],], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
+        lastname: [consultantData ? consultantData.lastname : '',         [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+          this.noInvalidFullName.bind(this)
+        ],], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
         consultantemail: [
           consultantData ? consultantData.consultantemail : '',
           [
@@ -414,7 +426,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         visa: [consultantData ? consultantData.visa : '', Validators.required],
         availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
         priority: [consultantData ? consultantData.priority : ''],
-        position: [consultantData ? consultantData.position : '', Validators.required],
+        position: [consultantData ? consultantData.position : '', [Validators.required ,this.noInvalidRecruiterName]],
         status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
         experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -422,7 +434,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         skills: [consultantData ? consultantData.skills : ''],
         ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
         technology: [consultantData ? consultantData.technology : '', Validators.required],
-        currentlocation: [consultantData ? consultantData.currentlocation : '', Validators.required],
+        currentlocation: [consultantData ? consultantData.currentlocation : '', [Validators.required ,this.noInvalidRecruiterName]],
         summary: [consultantData ? consultantData.summary : ''],
         qualification: [consultantData ? consultantData.qualification : '', Validators.required],
         university: [consultantData ? consultantData.university : ''],
@@ -481,14 +493,24 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         resume: [consultantData ? consultantData.resume : ''],
         dlcopy: [consultantData ? consultantData.dlcopy : ''],
         // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
-        firstname: [consultantData ? consultantData.firstname : '', Validators.required], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
-        lastname: [consultantData ? consultantData.lastname : '', Validators.required], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
+        firstname: [consultantData ? consultantData.firstname : '',  [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+          this.noInvalidFullName.bind(this)
+        ],], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
+        lastname: [consultantData ? consultantData.lastname : '',  [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(100),
+          this.noInvalidFullName.bind(this)
+        ],], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
         consultantemail: [
           consultantData ? consultantData.consultantemail : '',
           [
             Validators.required,
             Validators.email,
-            Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+            Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
           ],
         ],
         contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
@@ -512,7 +534,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
         // company: [consultantData ? consultantData.company : '', 
         //   this.isCompanyToDisplay ? [Validators.required] : []],
-        position: [consultantData ? consultantData.position : '', Validators.required],
+        position: [consultantData ? consultantData.position : '', [Validators.required, this.noInvalidRecruiterName]],
         status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
         experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -520,7 +542,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         skills: [consultantData ? consultantData.skills : ''],
         ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
         technology: [consultantData ? consultantData.technology : '', Validators.required],
-        currentlocation: [consultantData ? consultantData.currentlocation : '', Validators.required],
+        currentlocation: [consultantData ? consultantData.currentlocation : '',[Validators.required ,this.noInvalidRecruiterName]],
         summary: [consultantData ? consultantData.summary : ''],
         qualification: [consultantData ? consultantData.qualification : '', Validators.required],
         university: [consultantData ? consultantData.university : ''],
@@ -581,8 +603,42 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
     this.validateControls();
   }
+ noInvalidRecruiterName(control: AbstractControl): ValidationErrors | null {
+  const value = control.value || '';
 
+  if (value === '') return null; // optional field
 
+  if (value.trim() === '') {
+    return { whitespace: true }; // only whitespace
+  }
+
+  const hasLetter = /[A-Za-z]/.test(value);
+
+  if (!hasLetter) {
+    return { invalidName: true }; // must contain at least one letter
+  }
+
+  return null; // valid
+}
+
+ noInvalidFullName(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
+
+    // Trim and check only whitespace
+    if (value.trim() === '') {
+      return { whitespace: true };
+    }
+
+    // Reject if it contains only digits or only special characters
+    const onlyDigits = /^[0-9]+$/.test(value);
+    const onlySpecial = /^[^A-Za-z0-9]+$/.test(value);
+
+    if (onlyDigits || onlySpecial) {
+      return { invalidChars: true };
+    }
+
+    return null; // Valid
+  }
   private validateControls() {
     if (this.kiran !== "edit" && (this.flag === 'Recruiting' || this.flag === 'sales')) {
       this.consultantForm.get('status').setValue('Active');
@@ -1445,8 +1501,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 }
 export const IV_AVAILABILITY = [
-  'Availabity for the interviews *',
-  'Anytime',
+'Anytime',
   'Morning session',
   'afternoon session'
 ]
