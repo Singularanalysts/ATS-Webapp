@@ -255,11 +255,16 @@ export class BanterReportComponent {
     });
   }
 
-  reset() {
-    this.sourcingreport.reset();
-    this.employeeSearchControl.setValue(''); 
 
-  }
+reset() {
+  this.sourcingreport.reset();      // Reset the form
+  this.submitted = false;          // Reset submission state
+      this.employeeSearchControl.setValue(''); 
+
+  this.showReport = false;         // Hide table if you're using conditional display
+  this.dataSource.data = [];       // Clear the table data
+  this.totalItems = 0;             // Reset total item count if applicable
+}
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');

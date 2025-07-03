@@ -38,6 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class JobApplicationCommentsComponent implements OnInit {
   data = inject(MAT_DIALOG_DATA);
+  
   dialogRef = inject(MatDialogRef<JobApplicationCommentsComponent>);
   private openServ = inject(OpenreqService);
   jobApplyCommentsForm: any = FormGroup;
@@ -76,16 +77,39 @@ export class JobApplicationCommentsComponent implements OnInit {
   isEdit!: boolean;
   commentData: any;
 
-  ngOnInit(): void {
-    this.userId = localStorage.getItem('userid');
+  // ngOnInit(): void {
+  //   this.userId = localStorage.getItem('userid');
+  //   this.getAll();
+  //   this.initializeJobApplicationCommentsForm(null);
+  //   this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+  //     if (resp && resp.length) {
+  //       this.getConsultantOptionsForAutoComplete(resp);
+  //     }
+  //   }));
+  // }
+
+ngOnInit(): void {
+  this.userId = localStorage.getItem('userid');
+
+  if (this.data?.jobData?.id || this.data?.jobData?.requirement?.id) {
     this.getAll();
-    this.initializeJobApplicationCommentsForm(null);
-    this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+  } else {
+    console.warn('Job data not available in ngOnInit');
+  }
+
+  this.initializeJobApplicationCommentsForm(null);
+
+  this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(
+    map((x: any) => x.data),
+    tap(resp => {
       if (resp && resp.length) {
         this.getConsultantOptionsForAutoComplete(resp);
       }
-    }));
-  }
+    })
+  );
+  console.log(this.data?.jobData?.id,'this.data?.jobData?.requirement?.id');
+  
+}
 
   getConsultantOptionsForAutoComplete(data: any) {
     this.consultantOptions = data;
@@ -109,42 +133,68 @@ export class JobApplicationCommentsComponent implements OnInit {
     return filteredData;
   }
 
-  getAll() {
-    this.openServ.jobComments(this.data.jobData.requirement.id)
-      .pipe(takeUntil(this.destroyed$)).subscribe(
-        (response: any) => {
-          this.entity = response.data;
-          this.dataSource.data = response.data;
-          // for serial-num {}
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-        }
-      )
+  // getAll() {
+  //   this.openServ.jobComments(this.data.jobData.requirement.id)
+  //     .pipe(takeUntil(this.destroyed$)).subscribe(
+  //       (response: any) => {
+  //         this.entity = response.data;
+  //         this.dataSource.data = response.data;
+  //         // for serial-num {}
+  //         this.dataSource.data.map((x: any, i) => {
+  //           x.serialNum = this.generateSerialNumber(i);
+  //         });
+  //       }
+  //     )
+  // }
+getAll() {
+  const reqId =
+    this.data?.jobData?.id || // From CPV Portal Requirements
+    this.data?.jobData?.requirement?.id || // From other component structure
+    '';  if (!reqId) {
+    console.error('Requirement ID not available');
+    return;
   }
+
+  this.openServ.jobComments(reqId)
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe((response: any) => {
+      this.entity = response.data;
+      this.dataSource.data = response.data;
+      this.dataSource.data.forEach((x: any, i) => {
+        x.serialNum = this.generateSerialNumber(i);
+      });
+    });
+}
 
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * 50 + index + 1;
     return serialNumber;
   }
+private initializeJobApplicationCommentsForm(data: any) {
+  // ✅ Conditionally pick ID based on presence
+  const reqId =
+    this.data?.jobData?.id || // From CPV Portal Requirements
+    this.data?.jobData?.requirement?.id || // From other component structure
+    '';
 
-  private initializeJobApplicationCommentsForm(data: any) {
+  this.jobApplyCommentsForm = this.formBuilder.group({
+    reqId: [reqId, Validators.required],
+    consultantId: [data ? data.consultantname : '', Validators.required],
+    issueType: [data ? data.issue_type : '', Validators.required],
+    comment: [data ? data.comment : '', Validators.required],
+    commentedBy: [this.userId, Validators.required],
+    commentId: [data ? data.comment_id : ''],
+  });
+}
 
-    this.jobApplyCommentsForm = this.formBuilder.group({
-      reqId: [this.data.jobData.requirement.id, Validators.required],
-      consultantId: [data ? data.consultantname : '', Validators.required],
-      issueType: [data ? data.issue_type : '', [Validators.required]],
-      comment: [data ? data.comment : '', Validators.required],
-      commentedBy: [this.userId, Validators.required],
-      commentId: [data ? data.comment_id : ''],
 
-    });
-  }
 
   onSubmit() {
     if (this.jobApplyCommentsForm.invalid) {
       this.jobApplyCommentsForm.markAllAsTouched();
+      console.log(this.jobApplyCommentsForm.value ,'this.jobApplyCommentsForm');
+      
       return;
     }
 

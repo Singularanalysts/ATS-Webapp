@@ -228,6 +228,8 @@ export class CpvFpvOpenRequirementsComponent implements OnInit {
   }
 
   jobComments(job: any) {
+    console.log(job,'jobbbb');
+    
     this.dialog.open(JobApplicationCommentsComponent, {
       
       width: '60vw',

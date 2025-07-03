@@ -334,7 +334,7 @@ export class AddEmployeeComponent {
         employeeData ? employeeData.fullname : '',
         [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],

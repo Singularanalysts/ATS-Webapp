@@ -399,13 +399,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
         firstname: [consultantData ? consultantData.firstname : '',         [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
         lastname: [consultantData ? consultantData.lastname : '',         [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$
@@ -414,7 +414,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           [
             Validators.required,
             Validators.email,
-            Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+            Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
           ],
         ],
         contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],

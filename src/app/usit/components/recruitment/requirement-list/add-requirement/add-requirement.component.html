@@ -8,14 +8,14 @@
 </div>
 <mat-card class="center-card">
 
-  <form [formGroup]="requirementForm"  class="vendor-form" >
+  <form [formGroup]="requirementForm" class="vendor-form">
     <div class="form">
       <div class="form-column-left">
         <input type="hidden" name="maxnumber" formControlName="maxnumber">
         <input type="hidden" name="dommaxnumber" formControlName="dommaxnumber">
         <input type="hidden" formControlName="requirementid" name="requirementid">
         <input type="hidden" formControlName="flag" name="flag">
-                            
+
         <!-- Req Number -->
         <mat-form-field appearance="fill">
           <mat-label>Req Number</mat-label>
@@ -49,21 +49,21 @@
 
         <div class="fg-div">
           <mat-form-field appearance="fill">
-              <mat-label>Select Vendor/Impl</mat-label>
-              <input matInput formControlName="vendorimpl" [matAutocomplete]="companyAutoCmp">
-              <mat-autocomplete #companyAutoCmp="matAutocomplete">
-                  <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company"
-                  (click)="recruiterList(option)">
-                      {{option.company}}
-                  </mat-option>
-              </mat-autocomplete>
-              <button type="button" matSuffix mat-icon-button (click)="addVendor()"><mat-icon>add</mat-icon></button>
-              <mat-hint *ngIf="isCompanyDataAvailable" style="color: red;">Please Select Available Company</mat-hint>
-              <mat-error *ngIf="requirementForm.get('vendorimpl')!.hasError('required')">Vendor Company
-                  is Required
-              </mat-error>
+            <mat-label>Select Vendor/Impl</mat-label>
+            <input matInput formControlName="vendorimpl" [matAutocomplete]="companyAutoCmp">
+            <mat-autocomplete #companyAutoCmp="matAutocomplete">
+              <mat-option *ngFor="let option of (searchCompanyOptions$ | async)" [value]="option.company"
+                (click)="recruiterList(option)">
+                {{option.company}}
+              </mat-option>
+            </mat-autocomplete>
+            <button type="button" matSuffix mat-icon-button (click)="addVendor()"><mat-icon>add</mat-icon></button>
+            <mat-hint *ngIf="isCompanyDataAvailable" style="color: red;">Please Select Available Company</mat-hint>
+            <mat-error *ngIf="requirementForm.get('vendorimpl')!.hasError('required')">Vendor Company
+              is Required
+            </mat-error>
           </mat-form-field>
-      </div>
+        </div>
 
         <!-- Client -->
         <mat-form-field appearance="fill">
@@ -74,8 +74,15 @@
         <!-- Job Title -->
         <mat-form-field appearance="fill">
           <mat-label>Job Title</mat-label>
-          <input matInput formControlName="jobtitle"  maxlength="120">
+          <input matInput formControlName="jobtitle" maxlength="120">
           <mat-error *ngIf="requirementForm.get('jobtitle')!.hasError('required')"> Job Title is Required</mat-error>
+          <mat-error *ngIf="requirementForm.get('jobtitle')?.hasError('whitespace')">
+            Whitespace-only value is not allowed.
+          </mat-error>
+
+          <mat-error *ngIf="requirementForm.get('jobtitle')?.hasError('invalidName')">
+            Must contain at least one letter.
+          </mat-error>
         </mat-form-field>
 
         <!-- Select Technology -->
@@ -93,22 +100,25 @@
         <div class="fg-div">
           <mat-form-field appearance="fill" class="form-technology">
             <mat-label>Select Technology</mat-label>
-            <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp" >
+            <input matInput formControlName="technology" [matAutocomplete]="techAutoCmp">
             <mat-autocomplete #techAutoCmp="matAutocomplete">
-              <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techSkills(option)" [value]="option.technologyarea">
+              <mat-option *ngFor="let option of (searchTechOptions$ | async)" (click)="techSkills(option)"
+                [value]="option.technologyarea">
                 {{ option.technologyarea }}
               </mat-option>
             </mat-autocomplete>
-            <button matSuffix mat-icon-button (click)="addTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-            <mat-error *ngIf="requirementForm.get('technology')!.hasError('required')">Technology is Required</mat-error>
+            <button matSuffix mat-icon-button
+              (click)="addTechnology();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
+            <mat-error *ngIf="requirementForm.get('technology')!.hasError('required')">Technology is
+              Required</mat-error>
             <mat-error *ngIf="requirementForm.get('technology')?.hasError('techNotSelected')">
               Please select a valid technology.
             </mat-error>
-            
+
           </mat-form-field>
         </div>
 
-         <!-- Skills -->
+        <!-- Skills -->
         <mat-form-field class="description-field">
           <mat-label>Skills</mat-label>
           <textarea formControlName="jobskills" matInput rows="3" maxlength="10000"></textarea>
@@ -118,90 +128,100 @@
         <mat-form-field class="description-field">
           <mat-label>Job Description</mat-label>
           <textarea formControlName="jobdescription" matInput rows="4" maxlength="10000"></textarea>
-            <mat-error *ngIf="requirementForm.get('jobdescription')!.hasError('required')"> Job Description is Required</mat-error>
+          <mat-error *ngIf="requirementForm.get('jobdescription')!.hasError('required')"> Job Description is
+            Required</mat-error>
         </mat-form-field>
 
-          <!-- Location -->
-          <mat-form-field appearance="fill">
-            <mat-label>Location</mat-label>
-            <input matInput formControlName="location" ngx-gp-autocomplete [options]='options' (onAddressChange)="handleAddressChange($event)" maxlength="140">
-            <mat-error *ngIf="requirementForm.get('location')!.hasError('required')"> Location is Required</mat-error>
-          </mat-form-field>
+        <!-- Location -->
+        <mat-form-field appearance="fill">
+          <mat-label>Location</mat-label>
+          <input matInput formControlName="location" ngx-gp-autocomplete [options]='options'
+            (onAddressChange)="handleAddressChange($event)" maxlength="140">
+          <mat-error *ngIf="requirementForm.get('location')!.hasError('required')"> Location is Required</mat-error>
+          <mat-error *ngIf="requirementForm.get('location')?.hasError('whitespace')">
+            Whitespace-only value is not allowed.
+          </mat-error>
+
+          <mat-error *ngIf="requirementForm.get('location')?.hasError('invalidName')">
+            Must contain at least one letter.
+          </mat-error>
+        </mat-form-field>
       </div>
 
       <div class="form-column-right">
         <!-- Job Experience   -->
         <mat-form-field appearance="fill">
           <mat-label>Job Experience</mat-label>
-          <input matInput  formControlName="jobexperience" maxlength="2">
+          <input matInput formControlName="jobexperience" maxlength="2">
         </mat-form-field>
 
         <!-- Rate Type -->
         <div style="width: 80%;">
-          <mat-label>Rate Type</mat-label><br>
+          <mat-label>Employment Type <span style="color: red">* </span></mat-label><br>
           <mat-radio-group formControlName="employmenttype" (change)="onRadioChange($event)">
             <mat-radio-button value="C2C">C2C</mat-radio-button>
             <mat-radio-button value="1099">1099</mat-radio-button>
             <mat-radio-button value="W2">W2</mat-radio-button>
             <mat-radio-button value="Full Time">Full Time</mat-radio-button>
             <mat-radio-button value="C2H">C2H</mat-radio-button>
-            <mat-error *ngIf="requirementForm.get('employmenttype')!.hasError('required')  && isRadSelected">Employment Type is Required</mat-error>
+            <mat-error *ngIf="requirementForm.get('employmenttype')!.hasError('required')  && isRadSelected">Employment
+              Type is Required</mat-error>
           </mat-radio-group>
         </div>
-        
+
         <!-- Assign Recruiter -->
         <mat-form-field *ngIf="data.flag === 'Recruiting'" appearance="fill">
           <mat-label>Assign Recruiter</mat-label>
-            <mat-chip-grid #chipGrid aria-label="Assign Recruiter" formControlName="empid">
-              <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
-                {{ employee.fullname }}
-                <button matChipRemove [attr.aria-label]="'remove ' + employee">
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </mat-chip-row>
-            </mat-chip-grid>
-            
-            <input
-              #employeeInput
-              formControlName="empid"
-              [matChipInputFor]="chipGrid"
-              [matAutocomplete]="auto"
-              (matChipInputTokenEnd)="add($event)"
-            />
-            <mat-autocomplete #auto="matAutocomplete" formControlName="empid">
-              <mat-checkbox [checked]="isAllOptionsSelected" color="primary" (change)="onSelectAll($event)">{{ isAllOptionsSelected ? 'UnSelect All': 'Select All'}}</mat-checkbox>
-              <mat-option *ngFor="let employee of empArr">
-                <div (click)="optionClicked($event, employee)">
-                  <mat-checkbox [checked]="employee.selected" color="primary" (change)="toggleSelection(employee)" (click)="$event.stopPropagation()">
-                    {{ employee.fullname }}
-                  </mat-checkbox>
-                </div>
-              </mat-option>
-            </mat-autocomplete>
-          <mat-error *ngIf="requirementForm.get('empid')!.hasError('required') || requirementForm.get('empid')?.value ">Select Recruiter</mat-error>
+          <mat-chip-grid #chipGrid aria-label="Assign Recruiter" formControlName="empid">
+            <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
+              {{ employee.fullname }}
+              <button matChipRemove [attr.aria-label]="'remove ' + employee">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+          </mat-chip-grid>
+
+          <input #employeeInput formControlName="empid" [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+            (matChipInputTokenEnd)="add($event)" />
+          <mat-autocomplete #auto="matAutocomplete" formControlName="empid">
+            <mat-checkbox [checked]="isAllOptionsSelected" color="primary" (change)="onSelectAll($event)">{{
+              isAllOptionsSelected ? 'UnSelect All': 'Select All'}}</mat-checkbox>
+            <mat-option *ngFor="let employee of empArr">
+              <div (click)="optionClicked($event, employee)">
+                <mat-checkbox [checked]="employee.selected" color="primary" (change)="toggleSelection(employee)"
+                  (click)="$event.stopPropagation()">
+                  {{ employee.fullname }}
+                </mat-checkbox>
+              </div>
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error
+            *ngIf="requirementForm.get('empid')!.hasError('required') || requirementForm.get('empid')?.value ">Select
+            Recruiter</mat-error>
         </mat-form-field>
 
-         <!-- Select POC -->
-         <div class="fg-div">
+        <!-- Select POC -->
+        <div class="fg-div">
           <mat-form-field>
             <mat-label>Select POC </mat-label>
             <mat-select formControlName="recruiter" (selectionChange)="recruiterContact($event)">
               <mat-option *ngFor="let obj of recruiterArr" [value]="obj.id">{{obj.recruiter}}</mat-option>
             </mat-select>
             <button type="button" matSuffix mat-icon-button (click)="addRecruiter()"><mat-icon>add</mat-icon></button>
-            <mat-error *ngIf="requirementForm.get('recruiter')!.hasError('required')">Contact Person Name is Required</mat-error>
+            <mat-error *ngIf="requirementForm.get('recruiter')!.hasError('required')">Contact Person Name is
+              Required</mat-error>
           </mat-form-field>
-         </div>
+        </div>
 
-         <!-- POC Position -->
-         <mat-form-field appearance="fill">
+        <!-- POC Position -->
+        <mat-form-field appearance="fill">
           <mat-label>POC Position</mat-label>
           <input matInput formControlName="pocposition" maxlength="50">
         </mat-form-field>
 
         <!-- POC Email -->
         <mat-form-field appearance="fill">
-          <mat-label>POC Email</mat-label >
+          <mat-label>POC Email</mat-label>
           <input matInput formControlName="pocemail" maxlength="50">
         </mat-form-field>
 
@@ -210,7 +230,7 @@
           <mat-label>POC Contact Number</mat-label>
           <input matInput formControlName="pocphonenumber" maxlength="40">
         </mat-form-field>
-        
+
         <!-- Salary / Hourly Rate -->
         <mat-form-field appearance="fill">
           <mat-label>Salary / Hourly Rate</mat-label>
@@ -221,20 +241,20 @@
         <mat-form-field appearance="fill">
           <mat-label>Project Duration</mat-label>
           <input matInput formControlName="duration" maxlength="30">
-          <mat-error *ngIf="requirementForm.get('duration')!.hasError('required')"> Project duration is Required</mat-error>
+          <mat-error *ngIf="requirementForm.get('duration')!.hasError('required')"> Project duration is
+            Required</mat-error>
         </mat-form-field>
 
 
         <!-- Select Status -->
         <mat-form-field appearance="fill" *ngIf="data.actionName === 'edit-requirement'">
           <mat-label>Select Status</mat-label>
-            <mat-select formControlName="status">
-              <mat-option *ngFor="let option of selectOptionObj.statusType"
-              [value]="option">
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let option of selectOptionObj.statusType" [value]="option">
               {{ option }}
             </mat-option>
-            </mat-select>
-            <mat-error *ngIf="requirementForm.get('status')!.hasError('required')"> Status is Required</mat-error>
+          </mat-select>
+          <mat-error *ngIf="requirementForm.get('status')!.hasError('required')"> Status is Required</mat-error>
         </mat-form-field>
       </div>
     </div>

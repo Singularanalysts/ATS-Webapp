@@ -78,11 +78,19 @@ export class ResumeUploaderComponent {
   }
 
   clearFile() {
-    console.log('clearrrrrr')
-    this.selectedFile = null;
-    this.percentage = null; // Reset percentage
-    this.fileInput.nativeElement.value = ''; // Reset file input
-  }
+  console.log('clearrrrrr');
+  
+  this.selectedFile = null;
+  this.percentage = null;
+  this.fileInput.nativeElement.value = ''; // Reset file input element
+
+  // Reset table data
+  this.allData = [];
+  this.dataSource.data = [];  // Clear mat-table data
+  this.totalElements = 0;
+  this.currentPageIndex = 0;
+}
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {

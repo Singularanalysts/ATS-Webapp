@@ -20,7 +20,7 @@
             <input matInput formControlName="fullname" maxlength="50" (input)="camelCase($event)">
             <mat-error *ngIf="employeeForm.get('fullname').hasError('required')">Full
               Name is required</mat-error>
-            <mat-error *ngIf="employeeForm.get('fullname').hasError('minlength')">Full Name must be at least 6
+            <mat-error *ngIf="employeeForm.get('fullname').hasError('minlength')">Full Name must be at least 2
               characters</mat-error>
             <mat-error *ngIf="employeeForm.get('fullname').hasError('maxlength')">Full Name must not exceed 100
               characters</mat-error>

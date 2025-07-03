@@ -161,6 +161,7 @@ form {
     color: var(--mdc-protected-button-label-text-color, inherit);
     margin-left: 3rem;
 }
+
 .container {
   display: flex;
   flex-direction: column;
@@ -428,3 +429,4 @@ ul.breadcrumb li:last-child {
   opacity: 1; /* Ensure full visibility */
   padding: 22px !important;
 }
+

@@ -258,7 +258,7 @@ requirementreportdata(element: any) {
 
   }
   goback(){
-    this.router.navigate(['/usit/rec-requirements']);
+    this.router.navigate(['/usit/dom-requirements']);
   }
   }
   

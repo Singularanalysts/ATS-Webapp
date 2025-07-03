@@ -20,20 +20,26 @@
                     </mat-error>
 
                     <mat-error
-                        *ngIf="LinkedInProfile.get('username')?.hasError('email') && !LinkedInProfile.get('username')?.hasError('required')">
-                        Please enter a valid email
+                        *ngIf="(LinkedInProfile.get('username')?.hasError('username') || LinkedInProfile.get('username')?.hasError('pattern')) && LinkedInProfile.get('username')?.touched">
+                        Enter a valid email address.
                     </mat-error>
                 </mat-form-field>
 
-              
-   <mat-form-field appearance="fill">
+
+                <mat-form-field appearance="fill">
                     <mat-label>Location</mat-label>
                     <input matInput formControlName="location" type="text" min="0" max="5">
 
                     <mat-error *ngIf="LinkedInProfile.get('location')?.hasError('required')">
                         Rating is required
                     </mat-error>
+      <mat-error *ngIf="LinkedInProfile.get('location')?.hasError('whitespace')">
+            Whitespace-only value is not allowed.
+          </mat-error>
 
+          <mat-error *ngIf="LinkedInProfile.get('location')?.hasError('invalidName')">
+            Must contain at least one letter.
+          </mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Category</mat-label>
@@ -42,12 +48,18 @@
                     <mat-error *ngIf="LinkedInProfile.get('category')?.hasError('required')">
                         Category is required
                     </mat-error>
+  <mat-error *ngIf="LinkedInProfile.get('category')?.hasError('whitespace')">
+            Whitespace-only value is not allowed.
+          </mat-error>
 
+          <mat-error *ngIf="LinkedInProfile.get('category')?.hasError('invalidName')">
+            Must contain at least one letter.
+          </mat-error>
                 </mat-form-field>
             </div>
 
             <div class="form-column-right">
-               <mat-form-field appearance="fill" style="    margin-bottom: 24px;">
+                <mat-form-field appearance="fill" style="    margin-bottom: 24px;">
                     <mat-label>Password</mat-label>
                     <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
                     <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
@@ -58,8 +70,10 @@
                     <mat-error *ngIf="LinkedInProfile.get('password')?.hasError('required')">
                         Password is required
                     </mat-error>
-                  
 
+<mat-error *ngIf="LinkedInProfile.get('password')?.hasError('whitespace')">
+  Password must not contain whitespace.
+</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">

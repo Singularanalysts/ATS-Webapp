@@ -131,8 +131,13 @@ export class CandidateReportComponent {
   }
 
   reset() {
-    this.candidatereport.reset();
-  }
+  this.candidatereport.reset();       // Reset the form
+  this.submitted = false;            // Reset submission state
+  this.showReport = false;           // Hide report/table if you're conditionally showing it
+  this.dataSource.data = [];         // Clear the table data
+  this.totalItems = 0;               // Reset total item count if applicable
+  this.c_data = [];                  // Also reset raw data array if you're using it
+}
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
