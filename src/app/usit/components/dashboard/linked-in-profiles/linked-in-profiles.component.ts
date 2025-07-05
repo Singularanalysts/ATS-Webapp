@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -63,20 +64,44 @@ export class LinkedInProfilesComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.LinkedInProfile = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.email]],
+      username: ['', [Validators.required, Validators.email ,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$')]],
       password: [
         '',
         [
-          Validators.required,
-        
+          Validators.required,      this.noWhitespaceValidator
+
+         
         ],
       ],
 
-      category: ['', [Validators.required]],
-      location: ['', [Validators.required]],
+      category: ['', [Validators.required ,this.noInvalidRecruiterName]],
+      location: ['', [Validators.required ,this.noInvalidRecruiterName]],
       search_string: ['', [Validators.required]],
     });
   }
+   noInvalidRecruiterName(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
+  
+    if (value === '') return null; // optional field
+  
+    if (value.trim() === '') {
+      return { whitespace: true }; // only whitespace
+    }
+  
+    const hasLetter = /[A-Za-z]/.test(value);
+  
+    if (!hasLetter) {
+      return { invalidName: true }; // must contain at least one letter
+    }
+  
+    return null; // valid
+  }
+  noWhitespaceValidator(control: AbstractControl): { [key: string]: any } | null {
+  const value = control.value || '';
+  const hasWhitespace = /\s/.test(value);
+  return hasWhitespace ? { whitespace: true } : null;
+}
+
   onCancel() {
     this.dialogRef.close();
   }

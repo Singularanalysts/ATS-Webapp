@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, ViewChild, inject } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {
@@ -24,6 +24,7 @@ import { ConsultantReportComponent } from './consultant-report/consultant-report
 import { SubmissionReportComponent } from './submission-report/submission-report.component';
 import { PrivilegesService } from 'src/app/services/privileges.service';
 import { RequirementReportComponent } from './requirement-report/requirement-report.component';
+import { ValidatorFn } from '@iplab/ngx-file-upload';
 
 interface Select {
   value: string;
@@ -110,9 +111,27 @@ clearSearch() {
   ];
   consultant: any;
   protected privilegeServ = inject(PrivilegesService);
-  reset() {
-    this.employeeReport.reset();
-  }
+ reset() {
+  this.employeeReport.reset();          // reset the form
+  this.submitted = false;              // reset submission state
+  this.showReport = false;             // hide the table
+  this.c_data = [];                    // clear fetched data
+  this.filteredData = [];             // clear filtered data shown in table
+
+  // Optional: reset totals
+  this.subTotal = 0;
+  this.intTotal = 0;
+  this.scheduleTotal = 0;
+  this.holdTotal = 0;
+  this.closedTotal = 0;
+  this.rejectTotal = 0;
+  this.onboardedCnt = 0;
+  this.selectTotal = 0;
+  this.backoutCnt = 0;
+  this.consultantTotal = 0;
+  this.reqsTotal = 0;
+}
+
   private router = inject(Router);
   disFlg!: boolean;
   flag!: boolean;
@@ -355,19 +374,29 @@ clearSearch() {
   }
 
   ngOnInit(): void {
-    this.employeeReport = this.formBuilder.group({
+  this.employeeReport = this.formBuilder.group(
+    {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       groupby: ['', Validators.required],
       flg: ['', Validators.required],
-    });
+    },
+  { validators: this.endDateAfterStartDateValidator  } // ✅ Corrected
+  );
 
-    // Subscribe to form value changes
-    this.employeeReport.valueChanges.subscribe(() => {
-      this.updateDisplayedColumns();
-    });
+  this.employeeReport.valueChanges.subscribe(() => {
+    this.updateDisplayedColumns();
+  });
+}
+  endDateAfterStartDateValidator(group: AbstractControl): ValidationErrors | null {
+    const start = group.get('startDate')?.value;
+    const end = group.get('endDate')?.value;
+
+    if (start && end && new Date(end) < new Date(start)) {
+      return { endDateBeforeStartDate: true };
+    }
+    return null;
   }
-
   selectDepartment: Select[] = [
     { value: '', display: 'Select Department' },
     { value: 'sales', display: 'Sales' },

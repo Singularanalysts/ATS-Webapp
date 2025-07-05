@@ -24,7 +24,7 @@
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstname" maxlength="50" (input)="camelCase($event)">
          <mat-error *ngIf="consultantForm.get('firstname')?.hasError('required')">First Name is Required</mat-error>
-            <mat-error *ngIf="consultantForm.get('firstname')?.hasError('minlength')">First Name must be at least 6
+            <mat-error *ngIf="consultantForm.get('firstname')?.hasError('minlength')">First Name must be at least 2
               characters</mat-error>
             <mat-error *ngIf="consultantForm.get('firstname')?.hasError('maxlength')">First Name must not exceed 100
               characters</mat-error>
@@ -41,7 +41,7 @@
           <mat-label>Last Name</mat-label>
           <input matInput formControlName="lastname" maxlength="35" (input)="camelCase($event)">
           <mat-error *ngIf="consultantForm.get('lastname')?.hasError('required')">Last Name is Required</mat-error>
-            <mat-error *ngIf="consultantForm.get('lastname')?.hasError('minlength')">Last Name must be at least 6
+            <mat-error *ngIf="consultantForm.get('lastname')?.hasError('minlength')">Last Name must be at least 2
               characters</mat-error>
             <mat-error *ngIf="consultantForm.get('lastname')?.hasError('maxlength')">Last Name must not exceed 100
               characters</mat-error>

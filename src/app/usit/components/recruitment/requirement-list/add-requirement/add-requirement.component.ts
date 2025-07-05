@@ -13,6 +13,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
   AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
@@ -242,12 +243,12 @@ export class AddRequirementComponent {
     this.requirementForm = this.formBuilder.group({
       reqnumber: [requirementData ? requirementData.reqnumber : '', Validators.required],
       postedon: [requirementData ? requirementData.postedon : '', Validators.required],
-      location: [requirementData ? requirementData.location : '', Validators.required],
+      location: [requirementData ? requirementData.location : '', [Validators.required ,this.noInvalidRecruiterName]],
       // vendor: [requirementData ? requirementData.vendor : '', Validators.required],
       client: [requirementData ? requirementData.client : '',],
       jobexperience: [requirementData ? requirementData.jobexperience : '',],
       employmenttype: [requirementData ? requirementData.employmenttype : '', Validators.required],
-      jobtitle: [requirementData ? requirementData.jobtitle : '', Validators.required],
+      jobtitle: [requirementData ? requirementData.jobtitle : '', [Validators.required ,this.noInvalidRecruiterName]],
       jobskills: [requirementData ? requirementData.jobskills : ''],
       jobdescription: [requirementData ? requirementData.jobdescription : '', Validators.required],
       duration: [requirementData ? requirementData.duration : '', Validators.required],
@@ -317,7 +318,23 @@ export class AddRequirementComponent {
     this.requirementForm.get('empid')?.updateValueAndValidity();
   }
   
+ noInvalidRecruiterName(control: AbstractControl): ValidationErrors | null {
+  const value = control.value || '';
 
+  if (value === '') return null; // optional field
+
+  if (value.trim() === '') {
+    return { whitespace: true }; // only whitespace
+  }
+
+  const hasLetter = /[A-Za-z]/.test(value);
+
+  if (!hasLetter) {
+    return { invalidName: true }; // must contain at least one letter
+  }
+
+  return null; // valid
+}
   techSelectionValidator() {
     return (control: AbstractControl) => {
       const selectedValue = control.value;

@@ -1,7 +1,8 @@
 <section class="header-container" id="mainHeader">
-    <span class="header-text" mat-dialog-title id="mainHeaderTitle">
-        {{data.title}} - {{data.jobData.requirement.posted_on}}
-    </span>
+  <span class="header-text" mat-dialog-title id="mainHeaderTitle">
+  {{ data?.title }} - {{ data?.jobData?.requirement?.posted_on | date: 'MM-dd-yyyy HH:mm' }}
+</span>
+
     <button mat-icon-button (click)="onCancel()" class="btn-close" id="btnClose">
         <mat-icon>close</mat-icon>
     </button>

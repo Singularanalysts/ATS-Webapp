@@ -386,6 +386,7 @@ get pagedConsultants(): any[] {
   }
 
   jobComments(job: any) {
+    console.log(job,'jobrequiremnet')
     const data =this.dialog.open(JobApplicationCommentsComponent, {
       width: '60vw',
       data: {

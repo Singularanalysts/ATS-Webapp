@@ -117,9 +117,20 @@ export class SourcingReportsComponent {
   }
 
 
-  reset() {
-    this.sourcingreport.reset();
-  }
+ reset() {
+  this.sourcingreport.reset();  // Reset the form
+  this.c_data = [];             // Clear the table data
+  this.submitted = false;       // Reset submission state
+  this.showReport = false;      // Hide the report/table
+
+  // Reset totals
+  this.initiated = 0;
+  this.completed = 0;
+  this.verified = 0;
+  this.rejected = 0;
+  this.sales = 0;
+}
+
   submenuflg = "";
   exname = '';
   //consult_data:any = [];
