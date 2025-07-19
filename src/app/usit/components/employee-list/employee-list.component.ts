@@ -43,6 +43,7 @@ import { PrivilegesService } from 'src/app/services/privileges.service';
 import { MatTabsModule, MatTabChangeEvent  } from '@angular/material/tabs';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TeamFlowComponent } from '../team-flow/team-flow.component';
+import { LoginTrackingComponent } from '../login-tracking/login-tracking.component';
 
 @Component({
   selector: 'app-employee-list',
@@ -157,6 +158,25 @@ export class EmployeeListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.snackBarServ.openSnackBarFromComponent(this.dataTobeSentToSnackBarService);
       },
     });
+  }
+  trackLogin(){
+    
+    const actionData = {
+              title: 'Login Tracking',
+            
+            };     
+              const dialogConfig = new MatDialogConfig();
+                dialogConfig.width = '70vw';
+                dialogConfig.disableClose = false;
+                dialogConfig.panelClass = 'add-interview';
+                dialogConfig.data = actionData; 
+              
+                const dialogRef = this.dialogServ.openDialogWithComponent(LoginTrackingComponent, dialogConfig);
+              
+                dialogRef.afterClosed().subscribe((result: { success: any }) => {
+                  if (result?.success) {  
+                  }
+                });
   }
 
  /* onSort(event: Sort) {
