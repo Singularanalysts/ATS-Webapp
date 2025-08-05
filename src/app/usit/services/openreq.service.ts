@@ -235,4 +235,8 @@ ResumeUpload(payload:any){
     const scrapeUrl = 'http://183.82.119.245:5001/scrape-profiles';
     return this.hhtpclient.post(scrapeUrl, payload);
   }
+  loginTracking(payload:any){
+      return this.http.post(`auth/loginTrack/getAll`,payload);
+
+  }
 }

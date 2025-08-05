@@ -81,6 +81,7 @@ import { EmployeeManagementService } from 'src/app/usit/services/employee-manage
 })
 export class AddconsultantComponent implements OnInit, OnDestroy {
   flag!: string;
+  
   // private baseUrl: string = environment.API_BASE_URL;
   protected isFormSubmitted: boolean = false;
   private api = inject(ApiService);
@@ -189,6 +190,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.gettech();
     this.getQualification();
     this.getCompanies();
+    console.log(this.data.flag,'flaggggggggg');
+    
     this.getFlag(this.data.flag.toLocaleLowerCase());
     this.userid = localStorage.getItem('userid');
     this.getEmployee();
@@ -218,6 +221,27 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
       this.initConsultantForm(new Consultantinfo());
 
     }
+   
+if (this.data?.flag === 'DomRecruiting') {
+  this.consultantForm.get('visa')?.clearValidators();
+  this.consultantForm.get('empid')?.clearValidators();
+  this.consultantForm.get('ratetype')?.clearValidators();
+  this.consultantForm.get('hourlyrate')?.clearValidators();
+
+} else {
+  this.consultantForm.get('visa')?.setValidators([Validators.required]);
+  this.consultantForm.get('empid')?.setValidators([Validators.required]);
+    this.consultantForm.get('ratetype')?.setValidators([Validators.required]);
+    this.consultantForm.get('hourlyrate')?.setValidators([Validators.required]);
+
+}
+
+this.consultantForm.get('visa')?.updateValueAndValidity();
+this.consultantForm.get('empid')?.updateValueAndValidity();
+this.consultantForm.get('ratetype')?.updateValueAndValidity();
+this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
+
+
   }
 
   

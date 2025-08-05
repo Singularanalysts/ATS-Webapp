@@ -321,6 +321,27 @@ onPriorityChange(event: any): void {
       priority: [null], // Set default value if needed
       experience: [null] // Set default value if needed
     });
+console.log(this.flag,'domrecrut');
+this.dataTableColumns = [
+  'SerialNum',
+  'Date',
+  'Name',
+  'Email',
+  'ContactNumber',
+  'CurrentLocation',
+  'Company',
+  'Position',
+  'Experience',
+  'Relocation',
+  'Priority',
+  'Status',
+  'Action'
+];
+
+if (this.flag !== 'DomRecruiting') {
+  this.dataTableColumns.splice(5, 0, 'Visa'); // Insert Visa at correct index
+  this.dataTableColumns.splice(11, 0, 'Rate'); // Insert Rate at correct index
+}
 
   }
 
