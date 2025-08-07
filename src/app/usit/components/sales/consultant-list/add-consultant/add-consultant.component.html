@@ -98,20 +98,29 @@
 
       <div class="form-column-right">
         <!-- immigration status -->
-        <div class="select-visa-field">
-          <mat-form-field appearance="fill">
-            <mat-label>Select Immigraion Status</mat-label>
-            <mat-select name="visa" formControlName="visa">
-              <mat-option *ngFor="let option of visadata" [value]="option[0]">
-                {{ option[1] }}
-              </mat-option>
-            </mat-select>
-            <button matSuffix mat-icon-button
-              (click)="onAddVisa();$event.preventDefault();$event.stopImmediatePropagation()"><mat-icon>add</mat-icon></button>
-            <mat-error *ngIf="consultantForm.get('visa').hasError('required')">Immigration
-              status is Required</mat-error>
-          </mat-form-field>
-        </div>
+<!-- Show only if NOT DomRecruiting -->
+<div class="select-visa-field" *ngIf="data?.flag !== 'DomRecruiting'">
+  <mat-form-field appearance="fill">
+    <mat-label>Select Immigration Status</mat-label>
+    <mat-select name="visa" formControlName="visa">
+      <mat-option *ngFor="let option of visadata" [value]="option[0]">
+        {{ option[1] }}
+      </mat-option>
+    </mat-select>
+
+    <button
+      matSuffix
+      mat-icon-button
+      (click)="onAddVisa(); $event.preventDefault(); $event.stopImmediatePropagation()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <mat-error *ngIf="consultantForm.get('visa')?.hasError('required')">
+      Immigration status is Required
+    </mat-error>
+  </mat-form-field>
+</div>
 
         <!-- Availability for the Interviews   -->
         <mat-form-field appearance="fill">
@@ -192,37 +201,55 @@
 <!-- Assign consultant -->
 
 <!-- <mat-form-field appearance="fill" *ngIf="this.role !== 'Employee'"> -->
-  <mat-form-field appearance="fill" *ngIf="this.role !== 'Employee' && this.role==='Team Leader Sales' || this.role==='Team Leader Recruiting' || this.role==='Sales Manager' || this.role==='Super Administrator'">
-<!-- <mat-form-field appearance="fill" *ngIf="this.role !== 'Employee' && flag !== 'DomRecruiting'"> -->
+  <mat-form-field appearance="fill" 
+  *ngIf="(role === 'Team Leader Sales' 
+        || role === 'Team Leader Recruiting' 
+        || role === 'Sales Manager' 
+        || role === 'Super Administrator') 
+        && data?.flag !== 'DomRecruiting'">
 
   <mat-label>Assign Consultant To</mat-label>
-    <mat-chip-grid #chipGrid aria-label="Assign consultant" formControlName="empid">
-      <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
-        {{ employee.fullname }}
-        <button matChipRemove [attr.aria-label]="'remove ' + employee">
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
-    </mat-chip-grid>
-    
-    <input
-      #employeeInput
-      formControlName="empid"
-      [matChipInputFor]="chipGrid"
-      [matAutocomplete]="auto"
-      (matChipInputTokenEnd)="add($event)"
-    />
-    <mat-autocomplete #auto="matAutocomplete" formControlName="empid">
-      <mat-checkbox [checked]="isAllOptionsSelected" color="primary" (change)="onSelectAll($event)">{{ isAllOptionsSelected ? 'UnSelect All': 'Select All'}}</mat-checkbox>
-      <mat-option *ngFor="let employee of empArr">
-        <div (click)="optionClicked($event, employee)">
-          <mat-checkbox [checked]="employee.selected" color="primary" (change)="toggleSelection(employee)" (click)="$event.stopPropagation()">
-            {{ employee.fullname }}
-          </mat-checkbox>
-        </div>
-      </mat-option>
-    </mat-autocomplete>
-  <mat-error *ngIf="consultantForm.get('empid')!.hasError('required') || consultantForm.get('empid')?.value ">Select Executive</mat-error>
+
+  <mat-chip-grid #chipGrid aria-label="Assign consultant" formControlName="empid">
+    <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
+      {{ employee.fullname }}
+      <button matChipRemove [attr.aria-label]="'remove ' + employee">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip-row>
+  </mat-chip-grid>
+
+  <input
+    #employeeInput
+    formControlName="empid"
+    [matChipInputFor]="chipGrid"
+    [matAutocomplete]="auto"
+    (matChipInputTokenEnd)="add($event)"
+  />
+
+  <mat-autocomplete #auto="matAutocomplete" formControlName="empid">
+    <mat-checkbox
+      [checked]="isAllOptionsSelected"
+      color="primary"
+      (change)="onSelectAll($event)">
+      {{ isAllOptionsSelected ? 'UnSelect All' : 'Select All' }}
+    </mat-checkbox>
+
+    <mat-option *ngFor="let employee of empArr">
+      <div (click)="optionClicked($event, employee)">
+        <mat-checkbox
+          [checked]="employee.selected"
+          color="primary"
+          (change)="toggleSelection(employee)"
+          (click)="$event.stopPropagation()">
+          {{ employee.fullname }}
+        </mat-checkbox>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+
+  <mat-error *ngIf="consultantForm.get('empid')!.hasError('required')">Select Executive</mat-error>
+
 </mat-form-field>
 
       </div>
@@ -307,7 +334,7 @@
       <div class="form-column-right">
 
         <!-- Hourly Rate -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" *ngIf="data?.flag !== 'DomRecruiting'">
           <mat-label *ngIf="flag=='DomRecruiting'">Monthly Salary</mat-label>
           <mat-label *ngIf="flag!='DomRecruiting'">Hourly Rate</mat-label>
           <input matInput formControlName="hourlyrate" placeholder="Hourly Rate" maxlength="10"   (keypress)="onlyNumberKey($event)">
@@ -315,7 +342,7 @@
         </mat-form-field>
 
         <!-- Rate Radio group-->
-        <div class="radio-group" style="width: 80%;">
+        <div class="radio-group" style="width: 80%;" *ngIf="data?.flag !== 'DomRecruiting'">
 
           <mat-label>Rate Type <span style="color: red">* </span></mat-label>
           <mat-radio-group aria-label="Select an option" formControlName="ratetype">
