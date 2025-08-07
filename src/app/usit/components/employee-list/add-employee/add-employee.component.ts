@@ -339,7 +339,7 @@ export class AddEmployeeComponent {
           this.noInvalidFullName.bind(this)
         ],
       ],
-      pseudoname: [employeeData ? employeeData.pseudoname : '', [Validators.required, Validators.minLength(5),
+      pseudoname: [employeeData ? employeeData.pseudoname : '', [Validators.required, Validators.minLength(2),
       Validators.maxLength(100),
       this.noInvalidFullName.bind(this)]],
       email: [

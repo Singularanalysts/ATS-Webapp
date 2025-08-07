@@ -495,13 +495,13 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
         // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
         firstname: [consultantData ? consultantData.firstname : '',  [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
         lastname: [consultantData ? consultantData.lastname : '',  [
           Validators.required,
-          Validators.minLength(5),
+          Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],], ///^[+]\d{12}$   /^[+]\d{12}$   ^[0-9]*$

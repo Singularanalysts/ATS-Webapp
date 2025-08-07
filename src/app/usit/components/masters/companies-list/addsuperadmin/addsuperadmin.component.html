@@ -31,7 +31,7 @@
             <input matInput formControlName="pseudoname" maxlength="50" (input)="camelCase($event)">
             <mat-error *ngIf="employeeForm.get('pseudoname').hasError('required')">Psudo
               Name is required</mat-error>
-            <mat-error *ngIf="employeeForm.get('pseudoname').hasError('minlength')">Psudo Name must be at least 6
+            <mat-error *ngIf="employeeForm.get('pseudoname').hasError('minlength')">Psudo Name must be at least 2
               characters</mat-error>
             <mat-error *ngIf="employeeForm.get('pseudoname').hasError('maxlength')">Psudo Name must not exceed 100
               characters</mat-error>

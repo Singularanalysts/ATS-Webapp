@@ -46,7 +46,6 @@ import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    SearchPipe,
     MatTableModule,
     MatFormFieldModule,
     MatCardModule,
