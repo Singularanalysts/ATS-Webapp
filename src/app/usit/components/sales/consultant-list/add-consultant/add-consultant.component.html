@@ -22,7 +22,7 @@
         <!-- First Name -->
         <mat-form-field appearance="fill">
           <mat-label>First Name</mat-label>
-          <input matInput formControlName="firstname" maxlength="50" (input)="camelCase($event)">
+          <input matInput formControlName="firstname" maxlength="50">
          <mat-error *ngIf="consultantForm.get('firstname')?.hasError('required')">First Name is Required</mat-error>
             <mat-error *ngIf="consultantForm.get('firstname')?.hasError('minlength')">First Name must be at least 2
               characters</mat-error>
@@ -39,7 +39,7 @@
         <!-- last Name -->
         <mat-form-field appearance="fill">
           <mat-label>Last Name</mat-label>
-          <input matInput formControlName="lastname" maxlength="35" (input)="camelCase($event)">
+          <input matInput formControlName="lastname" maxlength="35" >
           <mat-error *ngIf="consultantForm.get('lastname')?.hasError('required')">Last Name is Required</mat-error>
             <mat-error *ngIf="consultantForm.get('lastname')?.hasError('minlength')">Last Name must be at least 2
               characters</mat-error>
@@ -172,7 +172,7 @@
         <!-- Position *ngIf="flag !== 'Recruiting' && flag !== 'sales'" -->
         <mat-form-field appearance="fill">
           <mat-label>Position</mat-label>
-          <input matInput formControlName="position" placeholder="Position" maxlength="30" (input)="camelCase($event)">
+          <input matInput formControlName="position" placeholder="Position" maxlength="30" >
           <mat-error *ngIf="consultantForm.get('position')!.hasError('required')">Position
             is Required</mat-error>
                <mat-error *ngIf="consultantForm.get('position')?.hasError('whitespace')">
@@ -424,7 +424,7 @@
         <!-- Ref Person Name -->
         <mat-form-field appearance="fill">
           <mat-label>Reference Person Name</mat-label>
-          <input matInput formControlName="emprefname" maxlength="30" (input)="camelCase($event)">
+          <input matInput formControlName="emprefname" maxlength="30" >
 
         </mat-form-field>
         <!-- Ref Email -->
@@ -486,7 +486,7 @@
         <!-- Reference Name-->
         <mat-form-field appearance="fill">
           <mat-label>Reference Name</mat-label>
-          <input matInput formControlName="refname" maxlength="30" (input)="camelCase($event)">
+          <input matInput formControlName="refname" maxlength="30" >
 
         </mat-form-field>
       </div>

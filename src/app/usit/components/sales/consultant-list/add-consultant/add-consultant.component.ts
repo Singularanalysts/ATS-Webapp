@@ -1521,15 +1521,15 @@ if (this.data?.flag === 'DomRecruiting') {
     this.destroyed$.complete();
   }
 
-  camelCase(event: any) {
-    const inputValue = event.target.value;
-    event.target.value = this.capitalizeFirstLetter(inputValue);
-  }
-  capitalizeFirstLetter(input: string): string {
-    return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
-      return char.toUpperCase();
-    });
-  }
+  // camelCase(event: any) {
+  //   const inputValue = event.target.value;
+  //   event.target.value = this.capitalizeFirstLetter(inputValue);
+  // }
+  // capitalizeFirstLetter(input: string): string {
+  //   return input.toLowerCase().replace(/(?:^|\s)\S/g, function (char) {
+  //     return char.toUpperCase();
+  //   });
+  // }
 
   convertToLowerCase(event: any) {
     const inputValue = event.target.value;
