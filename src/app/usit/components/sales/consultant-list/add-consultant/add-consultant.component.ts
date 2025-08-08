@@ -223,28 +223,34 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     }
    
 if (this.data?.flag === 'DomRecruiting') {
+  this.clearDomRecruitingValidators();
+} else {
+  this.consultantForm.get('visa')?.setValidators([Validators.required]);
+  this.consultantForm.get('empid')?.setValidators([Validators.required]);
+  this.consultantForm.get('ratetype')?.setValidators([Validators.required]);
+  this.consultantForm.get('hourlyrate')?.setValidators([Validators.required]);
+
+  this.consultantForm.get('visa')?.updateValueAndValidity();
+  this.consultantForm.get('empid')?.updateValueAndValidity();
+  this.consultantForm.get('ratetype')?.updateValueAndValidity();
+  this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
+}
+
+
+  }
+
+  clearDomRecruitingValidators() {
   this.consultantForm.get('visa')?.clearValidators();
   this.consultantForm.get('empid')?.clearValidators();
   this.consultantForm.get('ratetype')?.clearValidators();
   this.consultantForm.get('hourlyrate')?.clearValidators();
 
-} else {
-  this.consultantForm.get('visa')?.setValidators([Validators.required]);
-  this.consultantForm.get('empid')?.setValidators([Validators.required]);
-    this.consultantForm.get('ratetype')?.setValidators([Validators.required]);
-    this.consultantForm.get('hourlyrate')?.setValidators([Validators.required]);
-
+  this.consultantForm.get('visa')?.updateValueAndValidity();
+  this.consultantForm.get('empid')?.updateValueAndValidity();
+  this.consultantForm.get('ratetype')?.updateValueAndValidity();
+  this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
 }
 
-this.consultantForm.get('visa')?.updateValueAndValidity();
-this.consultantForm.get('empid')?.updateValueAndValidity();
-this.consultantForm.get('ratetype')?.updateValueAndValidity();
-this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
-
-
-  }
-
-  
 
   get controls() {
     return this.consultantForm.controls;
@@ -904,7 +910,17 @@ this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
     this.submitted = true;
     this.consultantForm.markAllAsTouched();
     
-    
+      if (this.data?.flag === 'DomRecruiting') {
+    this.consultantForm.get('visa')?.clearValidators();
+    this.consultantForm.get('empid')?.clearValidators();
+    this.consultantForm.get('ratetype')?.clearValidators();
+    this.consultantForm.get('hourlyrate')?.clearValidators();
+
+    this.consultantForm.get('visa')?.updateValueAndValidity();
+    this.consultantForm.get('empid')?.updateValueAndValidity();
+    this.consultantForm.get('ratetype')?.updateValueAndValidity();
+    this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
+  }
     // add this
     if(!this.isCompanyToDisplay){
       this.consultantForm.get('company')?.setValue('0');
@@ -919,7 +935,10 @@ this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
       this.isRadSelected = true;
       this.isRelocationRadSelected = true;
       this.displayFormErrors();
+            console.log(this.consultantForm.value,'consultantformmmmm');
+
       return;
+      
     }
 
     else {
