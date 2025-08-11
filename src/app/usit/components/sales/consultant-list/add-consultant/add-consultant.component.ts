@@ -216,6 +216,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.consultantForm.get('empid')?.clearValidators();
     this.consultantForm.get('empid')?.updateValueAndValidity();
   }
+    if (this.role === 'Sales Executive') {
+    // Recruiters don't need empid required
+    this.consultantForm.get('empid')?.clearValidators();
+    this.consultantForm.get('empid')?.updateValueAndValidity();
+  }
+  if (this.role === 'Recruiting Manager') {
+    // Recruiters don't need empid required
+    this.consultantForm.get('empid')?.clearValidators();
+    this.consultantForm.get('empid')?.updateValueAndValidity();
+  }
+
 
   if (this.data?.flag === 'DomRecruiting') {
     this.clearDomRecruitingValidators();
@@ -903,7 +914,14 @@ clearDomRecruitingValidators() {
       this.consultantForm.get('empid')?.clearValidators();
       this.consultantForm.get('empid')?.updateValueAndValidity();
     }
-
+    if (this.role === 'Sales Executive') {
+      this.consultantForm.get('empid')?.clearValidators();
+      this.consultantForm.get('empid')?.updateValueAndValidity();
+    }
+      if (this.role === 'Recruiting Manager') {
+      this.consultantForm.get('empid')?.clearValidators();
+      this.consultantForm.get('empid')?.updateValueAndValidity();
+    }
     if (this.data?.flag === 'DomRecruiting') {
       this.consultantForm.get('visa')?.clearValidators();
       this.consultantForm.get('empid')?.clearValidators();
