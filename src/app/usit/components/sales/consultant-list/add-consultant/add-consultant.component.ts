@@ -81,7 +81,7 @@ import { EmployeeManagementService } from 'src/app/usit/services/employee-manage
 })
 export class AddconsultantComponent implements OnInit, OnDestroy {
   flag!: string;
-  
+
   // private baseUrl: string = environment.API_BASE_URL;
   protected isFormSubmitted: boolean = false;
   private api = inject(ApiService);
@@ -160,95 +160,85 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   kiran!: any;
-    ngOnInit() {
-
-    const companyId = localStorage.getItem('companyid');
-
+ ngOnInit() {
+  const companyId = localStorage.getItem('companyid');
   if (companyId) {
     this.empManagementServ
       .getValidDateCompanyGiven(companyId)
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (response: any) => {
-          if (response.status === 'success') {
-            this.isCompanyToDisplay = true;
-          } else {
-            this.isCompanyToDisplay = false;
-          }
+          this.isCompanyToDisplay = (response.status === 'success');
         },
-        error: (err) => {
-          console.error('API Error:', err);
+        error: () => {
           this.isCompanyToDisplay = false;
         },
       });
   }
 
-    this.role = localStorage.getItem('role');
+  this.role = localStorage.getItem('role');
 
-    // below apis are common for add / update consultant
-    this.getvisa();
-    this.gettech();
-    this.getQualification();
-    this.getCompanies();
-    console.log(this.data.flag,'flaggggggggg');
-    
-    this.getFlag(this.data.flag.toLocaleLowerCase());
-    this.userid = localStorage.getItem('userid');
-    this.getEmployee();
+  // Common APIs
+  this.getvisa();
+  this.gettech();
+  this.getQualification();
+  this.getCompanies();
+  this.getFlag(this.data.flag?.toLocaleLowerCase());
+  this.userid = localStorage.getItem('userid');
+  this.getEmployee();
 
-    if (this.data.actionName === "edit-consultant") {
-      this.kiran = 'edit'
-      this.initConsultantForm(new Consultantinfo());
-      this.consultantServ.getConsultantById(this.data.consultantData.consultantid)
-        .subscribe(
-          {
-            next: (response: any) => {
-              this.entity = response.data;
-              this.cno = this.entity.consultantno;
-              this.autoskills = response.data.skills;
-              this.filesArr = response.data.fileupload;
-              this.getAssignedEmployee();
-              this.initConsultantForm(response.data);
-            }, error: err => {
-              this.dataToBeSentToSnackBar.message = err.message;
-              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-              this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-            }
-          }
-
-        );
-    } else {  
-      this.initConsultantForm(new Consultantinfo());
-
-    }
-   
-if (this.data?.flag === 'DomRecruiting') {
-  this.clearDomRecruitingValidators();
-} else {
-  this.consultantForm.get('visa')?.setValidators([Validators.required]);
-  this.consultantForm.get('empid')?.setValidators([Validators.required]);
-  this.consultantForm.get('ratetype')?.setValidators([Validators.required]);
-  this.consultantForm.get('hourlyrate')?.setValidators([Validators.required]);
-
-  this.consultantForm.get('visa')?.updateValueAndValidity();
-  this.consultantForm.get('empid')?.updateValueAndValidity();
-  this.consultantForm.get('ratetype')?.updateValueAndValidity();
-  this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
-}
-
-
+  if (this.data.actionName === "edit-consultant") {
+    this.kiran = 'edit';
+    this.initConsultantForm(new Consultantinfo());
+    this.consultantServ.getConsultantById(this.data.consultantData.consultantid)
+      .subscribe({
+        next: (response: any) => {
+          this.entity = response.data;
+          this.cno = this.entity.consultantno;
+          this.autoskills = response.data.skills;
+          this.filesArr = response.data.fileupload;
+          this.getAssignedEmployee();
+          this.initConsultantForm(response.data);
+        },
+        error: err => {
+          this.dataToBeSentToSnackBar.message = err.message;
+          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+        }
+      });
+  } else {
+    this.initConsultantForm(new Consultantinfo());
   }
 
-  clearDomRecruitingValidators() {
-  this.consultantForm.get('visa')?.clearValidators();
-  this.consultantForm.get('empid')?.clearValidators();
-  this.consultantForm.get('ratetype')?.clearValidators();
-  this.consultantForm.get('hourlyrate')?.clearValidators();
+  // ✅ Adjust validators here
+  if (this.role === 'Recruiter') {
+    // Recruiters don't need empid required
+    this.consultantForm.get('empid')?.clearValidators();
+    this.consultantForm.get('empid')?.updateValueAndValidity();
+  }
 
-  this.consultantForm.get('visa')?.updateValueAndValidity();
-  this.consultantForm.get('empid')?.updateValueAndValidity();
-  this.consultantForm.get('ratetype')?.updateValueAndValidity();
-  this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
+  if (this.data?.flag === 'DomRecruiting') {
+    this.clearDomRecruitingValidators();
+  } else {
+    this.consultantForm.get('visa')?.setValidators([Validators.required]);
+    if (this.role !== 'Recruiter') {
+      this.consultantForm.get('empid')?.setValidators([Validators.required]);
+    }
+    this.consultantForm.get('ratetype')?.setValidators([Validators.required]);
+    this.consultantForm.get('hourlyrate')?.setValidators([Validators.required]);
+
+    this.consultantForm.get('visa')?.updateValueAndValidity();
+    this.consultantForm.get('empid')?.updateValueAndValidity();
+    this.consultantForm.get('ratetype')?.updateValueAndValidity();
+    this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
+  }
+}
+
+clearDomRecruitingValidators() {
+  ['visa', 'empid', 'ratetype', 'hourlyrate'].forEach(ctrl => {
+    this.consultantForm.get(ctrl)?.clearValidators();
+    this.consultantForm.get(ctrl)?.updateValueAndValidity();
+  });
 }
 
 
@@ -427,13 +417,13 @@ if (this.data?.flag === 'DomRecruiting') {
         resume: [consultantData ? consultantData.resume : ''],
         dlcopy: [consultantData ? consultantData.dlcopy : ''],
         // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
-        firstname: [consultantData ? consultantData.firstname : '',         [
+        firstname: [consultantData ? consultantData.firstname : '', [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
-        lastname: [consultantData ? consultantData.lastname : '',         [
+        lastname: [consultantData ? consultantData.lastname : '', [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
@@ -456,7 +446,7 @@ if (this.data?.flag === 'DomRecruiting') {
         visa: [consultantData ? consultantData.visa : '', Validators.required],
         availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
         priority: [consultantData ? consultantData.priority : ''],
-        position: [consultantData ? consultantData.position : '', [Validators.required ,this.noInvalidRecruiterName]],
+        position: [consultantData ? consultantData.position : '', [Validators.required, this.noInvalidRecruiterName]],
         status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
         experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
@@ -464,7 +454,7 @@ if (this.data?.flag === 'DomRecruiting') {
         skills: [consultantData ? consultantData.skills : ''],
         ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
         technology: [consultantData ? consultantData.technology : '', Validators.required],
-        currentlocation: [consultantData ? consultantData.currentlocation : '', [Validators.required ,this.noInvalidRecruiterName]],
+        currentlocation: [consultantData ? consultantData.currentlocation : '', [Validators.required, this.noInvalidRecruiterName]],
         summary: [consultantData ? consultantData.summary : ''],
         qualification: [consultantData ? consultantData.qualification : '', Validators.required],
         university: [consultantData ? consultantData.university : ''],
@@ -475,7 +465,7 @@ if (this.data?.flag === 'DomRecruiting') {
         cid: [consultantData ? consultantData.cid : ''],
 
 
-        company: [consultantData ? consultantData.company : '',this.isCompanyToDisplay ? [Validators.required] : []
+        company: [consultantData ? consultantData.company : '', this.isCompanyToDisplay ? [Validators.required] : []
         ],
 
         //emprefemail: new FormControl(consultantData ? consultantData.emprefemail : ''),
@@ -523,13 +513,13 @@ if (this.data?.flag === 'DomRecruiting') {
         resume: [consultantData ? consultantData.resume : ''],
         dlcopy: [consultantData ? consultantData.dlcopy : ''],
         // consultanttype: [consultantData ? consultantData.consultanttype : '', Validators.required],
-        firstname: [consultantData ? consultantData.firstname : '',  [
+        firstname: [consultantData ? consultantData.firstname : '', [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
           this.noInvalidFullName.bind(this)
         ],], //['', [Validators.required, Validators.pattern("^[a-zA-Z][a-zA-Z]*$")]],
-        lastname: [consultantData ? consultantData.lastname : '',  [
+        lastname: [consultantData ? consultantData.lastname : '', [
           Validators.required,
           Validators.minLength(2),
           Validators.maxLength(100),
@@ -572,7 +562,7 @@ if (this.data?.flag === 'DomRecruiting') {
         skills: [consultantData ? consultantData.skills : ''],
         ratetype: [consultantData ? consultantData.ratetype : '', Validators.required],
         technology: [consultantData ? consultantData.technology : '', Validators.required],
-        currentlocation: [consultantData ? consultantData.currentlocation : '',[Validators.required ,this.noInvalidRecruiterName]],
+        currentlocation: [consultantData ? consultantData.currentlocation : '', [Validators.required, this.noInvalidRecruiterName]],
         summary: [consultantData ? consultantData.summary : ''],
         qualification: [consultantData ? consultantData.qualification : '', Validators.required],
         university: [consultantData ? consultantData.university : ''],
@@ -633,25 +623,25 @@ if (this.data?.flag === 'DomRecruiting') {
 
     this.validateControls();
   }
- noInvalidRecruiterName(control: AbstractControl): ValidationErrors | null {
-  const value = control.value || '';
+  noInvalidRecruiterName(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
 
-  if (value === '') return null; // optional field
+    if (value === '') return null; // optional field
 
-  if (value.trim() === '') {
-    return { whitespace: true }; // only whitespace
+    if (value.trim() === '') {
+      return { whitespace: true }; // only whitespace
+    }
+
+    const hasLetter = /[A-Za-z]/.test(value);
+
+    if (!hasLetter) {
+      return { invalidName: true }; // must contain at least one letter
+    }
+
+    return null; // valid
   }
 
-  const hasLetter = /[A-Za-z]/.test(value);
-
-  if (!hasLetter) {
-    return { invalidName: true }; // must contain at least one letter
-  }
-
-  return null; // valid
-}
-
- noInvalidFullName(control: AbstractControl): ValidationErrors | null {
+  noInvalidFullName(control: AbstractControl): ValidationErrors | null {
     const value = control.value || '';
 
     // Trim and check only whitespace
@@ -909,36 +899,41 @@ if (this.data?.flag === 'DomRecruiting') {
     this.onFileSubmitted = true;
     this.submitted = true;
     this.consultantForm.markAllAsTouched();
-    
-      if (this.data?.flag === 'DomRecruiting') {
-    this.consultantForm.get('visa')?.clearValidators();
-    this.consultantForm.get('empid')?.clearValidators();
-    this.consultantForm.get('ratetype')?.clearValidators();
-    this.consultantForm.get('hourlyrate')?.clearValidators();
+    if (this.role === 'Recruiter') {
+      this.consultantForm.get('empid')?.clearValidators();
+      this.consultantForm.get('empid')?.updateValueAndValidity();
+    }
 
-    this.consultantForm.get('visa')?.updateValueAndValidity();
-    this.consultantForm.get('empid')?.updateValueAndValidity();
-    this.consultantForm.get('ratetype')?.updateValueAndValidity();
-    this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
-  }
+    if (this.data?.flag === 'DomRecruiting') {
+      this.consultantForm.get('visa')?.clearValidators();
+      this.consultantForm.get('empid')?.clearValidators();
+      this.consultantForm.get('ratetype')?.clearValidators();
+      this.consultantForm.get('hourlyrate')?.clearValidators();
+
+      this.consultantForm.get('visa')?.updateValueAndValidity();
+      this.consultantForm.get('empid')?.updateValueAndValidity();
+      this.consultantForm.get('ratetype')?.updateValueAndValidity();
+      this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
+    }
     // add this
-    if(!this.isCompanyToDisplay){
+    if (!this.isCompanyToDisplay) {
       this.consultantForm.get('company')?.setValue('0');
     }
-   
-    this.consultantForm.get('cid')?.setValue( localStorage.getItem("companyid"));
-   
+
+    this.consultantForm.get('cid')?.setValue(localStorage.getItem("companyid"));
+
 
     // stop here if consultantForm is invalid
     if (this.consultantForm.invalid) {
+      //  alert("function invalid")
       this.isFormSubmitted = false
       this.isRadSelected = true;
       this.isRelocationRadSelected = true;
       this.displayFormErrors();
-            console.log(this.consultantForm.value,'consultantformmmmm');
+      console.log(this.consultantForm.value, 'consultantformmmmm');
 
       return;
-      
+
     }
 
     else {
@@ -946,6 +941,7 @@ if (this.data?.flag === 'DomRecruiting') {
     }
 
     // console.log("trr", this.consultantForm.company.invalid)
+    console.log(this.consultantForm.value, 'consultanttttt');
 
     this.consultantForm.get('technology').setValue(this.techid);
     this.trimSpacesFromFormValues();
@@ -1544,7 +1540,7 @@ if (this.data?.flag === 'DomRecruiting') {
   }
 }
 export const IV_AVAILABILITY = [
-'Anytime',
+  'Anytime',
   'Morning session',
   'afternoon session'
 ]
