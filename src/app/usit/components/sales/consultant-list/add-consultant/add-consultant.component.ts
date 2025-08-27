@@ -85,7 +85,6 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   // private baseUrl: string = environment.API_BASE_URL;
   protected isFormSubmitted: boolean = false;
   private api = inject(ApiService);
-  uploadedfiles: string[] = [];
   message: any;
   consultantForm: any = FormGroup;
   visadata: any = [];
@@ -160,6 +159,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   kiran!: any;
+  otherDocuments:any
  ngOnInit() {
   const companyId = localStorage.getItem('companyid');
   if (companyId) {
@@ -187,9 +187,10 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   this.userid = localStorage.getItem('userid');
   this.getEmployee();
 
-  if (this.data.actionName === "edit-consultant") {
+    if (this.data.actionName === "edit-consultant") {
     this.kiran = 'edit';
     this.initConsultantForm(new Consultantinfo());
+
     this.consultantServ.getConsultantById(this.data.consultantData.consultantid)
       .subscribe({
         next: (response: any) => {
@@ -199,6 +200,24 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           this.filesArr = response.data.fileupload;
           this.getAssignedEmployee();
           this.initConsultantForm(response.data);
+
+          // 👉 Call the other API here
+          this.consultantServ.getConsultantOtherDocuments(this.data.consultantData.consultantid)
+            .subscribe({
+              next: (docRes: any) => {
+                console.log("Other documents:", docRes);
+                // store response in variable if needed
+                this.otherDocuments = docRes.data; 
+                console.log(this.otherDocuments,'otherdocumentssss');
+                
+              },
+              error: err => {
+                this.dataToBeSentToSnackBar.message = err.message;
+                this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+                this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+              }
+            });
+
         },
         error: err => {
           this.dataToBeSentToSnackBar.message = err.message;
@@ -206,6 +225,7 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
       });
+
   } else {
     this.initConsultantForm(new Consultantinfo());
   }
@@ -907,6 +927,8 @@ clearDomRecruitingValidators() {
   }
   enableButton = ''
   onSubmit() {
+    console.log('submitteedddddddd');
+    
     this.onFileSubmitted = true;
     this.submitted = true;
     this.consultantForm.markAllAsTouched();
@@ -1150,34 +1172,89 @@ clearDomRecruitingValidators() {
   onContryChange(event: any) {
     this.dailCode = event.dialCode;
   }
-  @ViewChild('multifiles')
-  multifiles: any = ElementRef;
   sum = 0;
-  onFileChange(event: any) {
-    for (var i = 0; i < event.target.files.length; i++) {
-      const file = event.target.files[i];
-      var items = file.name.split('.');
-      const str = items[0];
-      if (str.length > 20) {
-        this.dataToBeSentToSnackBar.message = 'File name is too large, please rename the file before upload, it should be 15 to 20 characters';
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-        this.multifiles.nativeElement.value = '';
-      }
-      const fileSizeInKB = Math.round(file.size / 1024);
-      this.sum = this.sum + fileSizeInKB;
-      if (fileSizeInKB < 4300) {
-        this.uploadedfiles.push(event.target.files[i]);
-      } else {
-        this.multifiles.nativeElement.value = '';
-        this.uploadedfiles = [];
-        this.dataToBeSentToSnackBar.message = 'Files size should not exceed 4 mb';
-        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
-      }
-      //this.uploadedfiles.push(event.target.files[i]);
+@ViewChild('multifiles') multifiles!: ElementRef;
+
+otherDocumentsDisplay: string = '';
+uploadedfiles: File[] = [];
+
+onFileChange(event: any) {
+  const files: FileList = event.target.files;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    // validation: filename length
+    if (file.name.split('.')[0].length > 20) {
+      this.snackBarServ.openSnackBarFromComponent({
+        message: 'File name too long (max 20 chars before extension)',
+        panelClass: ['custom-snack-failure'],
+        duration: 0
+      });
+      this.multifiles.nativeElement.value = '';
+      return;
+    }
+
+    // validation: file size
+    if (file.size > 4 * 1024 * 1024) { // > 4 MB
+      this.snackBarServ.openSnackBarFromComponent({
+        message: 'Files size should not exceed 4 MB',
+        panelClass: ['custom-snack-failure'],
+        duration: 0
+      });
+      this.multifiles.nativeElement.value = '';
+      return;
+    }
+
+    // ✅ Prevent duplicates (by name)
+    if (!this.uploadedfiles.some(f => f.name === file.name)) {
+      this.uploadedfiles.push(file);
     }
   }
+
+  // Update display string
+  this.otherDocumentsDisplay = this.uploadedfiles.map(f => f.name).join(', ');
+
+  // Reset file input so user can re-select the same file if needed
+  this.multifiles.nativeElement.value = '';
+}
+
+onFileSubmit(id: number) {
+  const formData = new FormData();
+
+  // append multiple files
+  this.uploadedfiles.forEach(file => {
+    formData.append('files', file, file.name);
+  });
+
+  if (this.resumeupload) {
+    formData.append('resume', this.resumeupload, this.resumeupload.name);
+  }
+
+  if (this.h1bupload) {
+    formData.append('h1b', this.h1bupload, this.h1bupload.name);
+  }
+
+  if (this.dlupload) {
+    formData.append('dl', this.dlupload, this.dlupload.name);
+  }
+
+  this.fileService.ConUploadFile(formData, id).subscribe({
+    next: (response: any) => {
+      if (response.status !== 200) {
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.dataToBeSentToSnackBar.message = 'File upload failed';
+        this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      }
+    },
+    error: () => {
+      this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+      this.dataToBeSentToSnackBar.message = 'File upload failed';
+      this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+    }
+  });
+}
+
 
   @ViewChild('resume')
   resume: any = ElementRef;
@@ -1246,41 +1323,8 @@ clearDomRecruitingValidators() {
       this.flg = true;
     }
   }
-  onFileSubmit(id: number) {
-    const formData = new FormData();
-    for (var i = 0; i < this.uploadedfiles.length; i++) {
-      formData.append('files', this.uploadedfiles[i]);
-    }
 
-    if (this.resumeupload != null) {
-      formData.append('resume', this.resumeupload, this.resumeupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
-    }
 
-    if (this.h1bupload != null) {
-      formData.append('h1b', this.h1bupload, this.h1bupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
-    }
-
-    if (this.dlupload != null) {
-      formData.append('dl', this.dlupload, this.dlupload.name);
-      // formData.append("files",this.resumeupload,this.resumeupload.name);
-    }
-
-    //upload
-    this.fileService
-      .ConUploadFile(formData, id)
-      .subscribe((response: any) => {
-        if (response.status === 200) {
-        } else {
-          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          this.dataToBeSentToSnackBar.message = 'File upload failed';
-          this.snackBarServ.openSnackBarFromComponent(
-            this.dataToBeSentToSnackBar
-          );
-        }
-      });
-  }
   /** to display form validation messages */
   displayFormErrors() {
     Object.keys(this.consultantForm.controls).forEach((field) => {
@@ -1376,6 +1420,8 @@ clearDomRecruitingValidators() {
   // fileList?: FileData[];
   type!: any;
   filedetails(fileData: FileData) {
+    console.log('filesss');
+    
     this.type = fileData.filename;
     var items = this.type.split(".");
     this.fileService
@@ -1397,6 +1443,24 @@ clearDomRecruitingValidators() {
       );
 
   }
+  downloadotherdocuments(doc: any) {
+  this.fileService.downloadConsultantfile(doc.docid).subscribe((blob: Blob) => {
+    // Extract file extension from filename
+    const extension = doc.filename.split('.').pop()?.toLowerCase();
+
+    if (extension === 'pdf') {
+      // Open PDFs in new tab
+      const fileURL = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = fileURL;
+      a.target = "_blank";
+      a.click();
+    } else {
+      // Download other files directly with filename
+      saveAs(blob, doc.filename);
+    }
+  });
+}
   downloadfile(id: number, filename: string, flg: string) {
 
     var items = filename.split(".");
