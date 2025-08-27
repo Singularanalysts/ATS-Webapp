@@ -568,76 +568,123 @@
               style="display: none;" />
           </div>
         </mat-form-field>
-        <mat-form-field class="upload">
-          <mat-label for="otherDocumentsUploadFile">Other Documents</mat-label>
-          <div class="upload-container">
-            <input matInput multiple readonly name="otherDocumentsName" class="file-input" />
-            <label for="otherDocumentsUploadFile" class="browse-button-label">
-              <button type="button" mat-icon-button
-                (click)="multifiles.click()"><mat-icon>upload_file</mat-icon></button>
-            </label>
-            <input type="file" id="otherDocumentsUploadFile" (change)="onFileChange($event)" multiple #multifiles
-              name="otherDocumentsUploadFile" multiple="multiple"
-              accept=".zip,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-              style="display: none;" />
-          </div>
+<mat-form-field class="upload">
+  <mat-label>Other Documents</mat-label>
+  <div class="upload-container">
+    <input matInput 
+           readonly
+           [value]="otherDocumentsDisplay || 'No files chosen'" />
 
-        </mat-form-field>
+    <label for="otherDocumentsUploadFile" class="browse-button-label">
+      <button type="button" mat-icon-button (click)="multifiles.click()">
+        <mat-icon>upload_file</mat-icon>
+      </button>
+    </label>
+
+    <input type="file"
+           id="otherDocumentsUploadFile"
+           (change)="onFileChange($event)"
+           multiple
+           #multifiles
+           accept=".zip,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+           style="display: none;" />
+  </div>
+</mat-form-field>
+
+
       </div>
     </div>
     <div class="header-container" *ngIf="data.actionName === 'edit-consultant'">
       <span class="header-text">List Documents</span>
     </div>
-    <div class="list-documents" *ngIf="data.actionName === 'edit-consultant'">
-      <table>
-        <tr>
-          <th>Document Name</th>
-          <th>Delete</th>
-        </tr>
-        <tr>
-          <td *ngIf="entity.resume !==null "><a class="download-file"
-              (click)="downloadfile(entity.consultantid,entity.resume,'resume')">{{entity.resume}}</a>
-          </td>
-          <td *ngIf="entity.resume !==null ">
-            <button mat-icon-button type="button" class="action-button-ed"
-              (click)="deletefile(entity.consultantid,'resume')">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td *ngIf="entity.h1bcopy !==null "><a class="download-file"
-              (click)="downloadfile(entity.consultantid,entity.h1bcopy,'h1b')">{{entity.h1bcopy}}</a>
-          </td>
-          <td *ngIf="entity.h1bcopy !==null ">
-            <button mat-icon-button type="button" class="action-button-ed"
-              (click)="deletefile(entity.consultantid,'h1bcopy')">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </tr>
+   <div class="list-documents" *ngIf="data.actionName === 'edit-consultant'">
+  <table>
+    <tr>
+      <th>Document Name</th>
+      <th>Delete</th>
+    </tr>
 
-        <tr>
-          <td *ngIf="entity.dlcopy !==null "><a class="download-file"
-              (click)="downloadfile(entity.consultantid,entity.dlcopy,'dl')">{{entity.dlcopy}}</a>
-          </td>
-          <td *ngIf="entity.dlcopy !==null ">
-            <button mat-icon-button type="button" class="action-button-ed"
-              (click)="deletefile(entity.consultantid,'dlcopy')">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </tr>
-        <tr *ngFor="let data of filesArr">
-          <td><a class="download-file" (click)="filedetails(data)">{{data.filename}}</a></td>
-          <td width="6%">
-            <button mat-icon-button type="button" class="action-button-ed" (click)="deletemultiple(data.docid)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <!-- Resume -->
+    <tr *ngIf="entity.resume !== null">
+      <td>
+        <a class="download-file"
+           (click)="downloadfile(entity.consultantid, entity.resume, 'resume')">
+          {{ entity.resume }}
+        </a>
+      </td>
+      <td>
+        <button mat-icon-button type="button" class="action-button-ed"
+                (click)="deletefile(entity.consultantid, 'resume')">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+
+    <!-- H1B -->
+    <tr *ngIf="entity.h1bcopy !== null">
+      <td>
+        <a class="download-file"
+           (click)="downloadfile(entity.consultantid, entity.h1bcopy, 'h1b')">
+          {{ entity.h1bcopy }}
+        </a>
+      </td>
+      <td>
+        <button mat-icon-button type="button" class="action-button-ed"
+                (click)="deletefile(entity.consultantid, 'h1bcopy')">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+
+    <!-- DL -->
+    <tr *ngIf="entity.dlcopy !== null">
+      <td>
+        <a class="download-file"
+           (click)="downloadfile(entity.consultantid, entity.dlcopy, 'dl')">
+          {{ entity.dlcopy }}
+        </a>
+      </td>
+      <td>
+        <button mat-icon-button type="button" class="action-button-ed"
+                (click)="deletefile(entity.consultantid, 'dlcopy')">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+
+    <!-- Existing uploaded files -->
+    <tr *ngFor="let data of filesArr">
+      <td>
+        <a class="download-file" (click)="filedetails(data)">
+          {{ data.filename }}
+        </a>
+      </td>
+      <td width="6%">
+        <button mat-icon-button type="button" class="action-button-ed"
+                (click)="deletemultiple(data.docid)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+
+    <!-- Other documents (from new API) -->
+    <tr *ngFor="let doc of otherDocuments">
+      <td>
+        <a class="download-file" (click)="filedetails(doc)">
+          {{ doc.filename }}
+        </a>
+      </td>
+      <td width="6%">
+        <button mat-icon-button type="button" class="action-button-ed"
+                (click)="deletemultiple(doc.docid)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+
+  </table>
+</div>
+
   </form>
   <div class="form-button-right">
     <!-- <div class="form-button-inner"> -->

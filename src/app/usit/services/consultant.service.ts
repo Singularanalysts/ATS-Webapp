@@ -233,6 +233,8 @@ export class ConsultantService {
   public getExecutivesDropdown(id: any) {
     return this.http.get("auth/users/TlDropDown/"+id);
   }
-
+public getConsultantOtherDocuments(consultantid:any){
+return this.http.get(`consultant/consultantFilesById/${consultantid}`)
+}
 
 }
