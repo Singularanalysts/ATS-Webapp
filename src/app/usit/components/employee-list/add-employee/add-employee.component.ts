@@ -101,7 +101,6 @@ export class AddEmployeeComponent {
   teamleadflg = false;
   managerarr: any = [];
   tlarr: any = [];
-  uploadedfiles: string[] = []
   uploadedFileNames: string[] = [];
   displayedColumns: string[] = ['date', 'document_name', 'delete'];
   allDocumentsData: any = [];
@@ -1056,38 +1055,58 @@ export class AddEmployeeComponent {
   @ViewChild('multifiles')
   multifiles: any = ElementRef;
   sum = 0;
-  onFileChange(event: any) {
-    this.uploadedFileNames = [];
-    for (var i = 0; i < event.target.files.length; i++) {
-      const file = event.target.files[i];
-      var items = file.name.split(".");
-      const str = items[0];
-      const fileSizeInKB = Math.round(file.size / 1024);
-      this.sum = this.sum + fileSizeInKB;
-      if (str.length > 20) {
-        this.multifilesFileNameLength = true;
-      }
-      if (fileSizeInKB < 4048) {
-        this.uploadedfiles.push(event.target.files[i]);
-        this.uploadedFileNames.push(file.name);
-        this.multifilesError = false;
-      }
-      else {
-        this.multifiles.nativeElement.value = "";
-        this.uploadedfiles = [];
-        this.multifilesError = true;
-        this.multifilesFileNameLength = false;
-      }
+ otherDocumentsDisplay: string = '';
+uploadedfiles: File[] = [];
+
+onFileChange(event: any) {
+  const files: FileList = event.target.files;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    // validation: filename length
+    if (file.name.split('.')[0].length > 20) {
+      this.snackBarServ.openSnackBarFromComponent({
+        message: 'File name too long (max 20 chars before extension)',
+        panelClass: ['custom-snack-failure'],
+        duration: 0
+      });
+      this.multifiles.nativeElement.value = '';
+      return;
+    }
+
+    // validation: file size
+    if (file.size > 4 * 1024 * 1024) { // > 4 MB
+      this.snackBarServ.openSnackBarFromComponent({
+        message: 'Files size should not exceed 4 MB',
+        panelClass: ['custom-snack-failure'],
+        duration: 0
+      });
+      this.multifiles.nativeElement.value = '';
+      return;
+    }
+
+    // ✅ Prevent duplicates (by name)
+    if (!this.uploadedfiles.some(f => f.name === file.name)) {
+      this.uploadedfiles.push(file);
     }
   }
+
+  // Update display string
+  this.otherDocumentsDisplay = this.uploadedfiles.map(f => f.name).join(', ');
+
+  // Reset file input so user can re-select the same file if needed
+  this.multifiles.nativeElement.value = '';
+}
   private fileService = inject(FileManagementService);
 
   submit(id: number) {
     const formData = new FormData();
+  // append multiple files
+  this.uploadedfiles.forEach(file => {
+    formData.append('files', file, file.name);
+  });
 
-    for (var i = 0; i < this.uploadedfiles.length; i++) {
-      formData.append("files", this.uploadedfiles[i]);
-    }
     if (this.resumeupload != null) {
       formData.append('resume', this.resumeupload, this.resumeupload.name);
     }
