@@ -263,6 +263,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.consultantForm.get('ratetype')?.updateValueAndValidity();
     this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
   }
+  console.log(this.data.flag,'flagconditionnnn');
+  
 }
 
 clearDomRecruitingValidators() {

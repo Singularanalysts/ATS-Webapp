@@ -539,9 +539,10 @@
               accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               style="display: none;" />
           </div>
+        
         </mat-form-field>
-        <mat-form-field class="upload">
-          <mat-label for="h1b">H1B</mat-label>
+        <mat-form-field class="upload" *ngIf="this.data.flag !== 'DomRecruiting'">
+          <mat-label for="h1b">VISA</mat-label>
           <div class="upload-container">
             <input matInput readonly name="h1b" class="file-input"
               [value]="h1bupload ? h1bupload.name : 'No file chosen'" />
@@ -554,8 +555,8 @@
           </div>  
         </mat-form-field>
       </div>
-      <div class="form-column-right">
-        <mat-form-field class="upload">
+      <div class="form-column-right" >
+        <mat-form-field class="upload" *ngIf="this.data.flag !== 'DomRecruiting'">
           <mat-label for="h1b">DL</mat-label>
           <div class="upload-container">
             <input matInput readonly name="dl" class="file-input"
