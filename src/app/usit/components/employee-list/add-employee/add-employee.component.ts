@@ -346,7 +346,7 @@ export class AddEmployeeComponent {
         [
           Validators.required,
           Validators.email,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
+    Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
         ],
       ],
       personalcontactnumber: [employeeData ? employeeData.personalcontactnumber : '', [Validators.required]],
@@ -355,14 +355,15 @@ export class AddEmployeeComponent {
       department: [employeeData ? employeeData.department : '', Validators.required],
       joiningdate: [employeeData ? employeeData.joiningdate : '', Validators.required],
       relievingdate: [employeeData ? employeeData.relievingdate : '', [this.relievingDateValidator]],
-      personalemail: [
-        employeeData ? employeeData.personalemail : '',
-        [
-          Validators.required,
-          Validators.email,
-          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
-        ],
-      ],
+personalemail: [
+  employeeData ? employeeData.personalemail : '',
+  [
+    Validators.required,
+    Validators.email,
+    Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+  ],
+],
+
       manager: [employeeData ? employeeData.manager : ''],
       aadharno: [
         employeeData ? employeeData.aadharno : ''

@@ -64,7 +64,8 @@ export class LinkedInProfilesComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.LinkedInProfile = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.email ,Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$')]],
+      username: ['', [Validators.required, Validators.email ,    Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+]],
       password: [
         '',
         [

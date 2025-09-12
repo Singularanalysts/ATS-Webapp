@@ -127,7 +127,8 @@ export class AddKnownVendorContactsComponent implements OnInit, OnDestroy {
     this.hotlistForm = this.formBuilder.group({
       vendor: [hotlistProviderData ? hotlistProviderData.vendor : '', [Validators.required]],
       employeeName: [hotlistProviderData ? hotlistProviderData.employeeName : '', [Validators.required ,this.noInvalidEmployeeName]],
-      email: [hotlistProviderData ? hotlistProviderData.email : '', [ Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$')]],
+      email: [hotlistProviderData ? hotlistProviderData.email : '', [ Validators.required, Validators.email,     Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+]],
       referenceContactNumber: [hotlistProviderData ? hotlistProviderData.referenceContactNumber : ''],
       client: [hotlistProviderData ? hotlistProviderData.client : ''],
       linkedinProfilesUrl: [hotlistProviderData ? hotlistProviderData.linkedinProfilesUrl : '', [Validators.required]],

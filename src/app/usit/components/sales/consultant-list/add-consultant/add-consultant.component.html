@@ -58,12 +58,10 @@
           <mat-label>Email</mat-label>
           <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)"
             (input)="convertToLowerCase($event)">
-          <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('required')">Email
-            is
-            Required</mat-error>
-          <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('email')">Invalid
-            email
-            address</mat-error>
+           <mat-error *ngIf="consultantForm.get('consultantemail')?.hasError('required')">Email
+            is required</mat-error>
+          <mat-error *ngIf="consultantForm.get('consultantemail')?.hasError('consultantemail')">Invalid
+            email address</mat-error>
         </mat-form-field>
 
         <!-- Contact Number-->

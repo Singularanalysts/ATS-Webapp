@@ -122,7 +122,8 @@ export class AddActiveComponent implements OnInit {
 
     this.h1bForm = this.formBuilder.group({
       employeename: [h1bData ? h1bData.employeename : '', Validators.required],
-      email: [h1bData ? h1bData.email : '', [Validators.required, Validators.email]],
+      email: [h1bData ? h1bData.email : '', [Validators.required, Validators.email,    Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+]],
       contactnumber: [h1bData ? h1bData.contactnumber : '', Validators.required],
       visa: [h1bData ? h1bData.visa : '', Validators.required],
       // noticetype: [h1bData ? h1bData.noticetype : '', Validators.required],
