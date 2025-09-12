@@ -263,6 +263,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.consultantForm.get('ratetype')?.updateValueAndValidity();
     this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
   }
+  console.log(this.data.flag,'flagconditionnnn');
+  
 }
 
 clearDomRecruitingValidators() {
@@ -463,9 +465,9 @@ clearDomRecruitingValidators() {
         consultantemail: [
           consultantData ? consultantData.consultantemail : '',
           [
-            Validators.required,
-            Validators.email,
-            Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
+           [ Validators.required,
+           
+    Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),]
           ],
         ],
         contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
@@ -560,8 +562,7 @@ clearDomRecruitingValidators() {
           consultantData ? consultantData.consultantemail : '',
           [
             Validators.required,
-            Validators.email,
-            Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$'),
+Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
           ],
         ],
         contactnumber: [consultantData ? consultantData.contactnumber : '', Validators.required],
@@ -730,8 +731,7 @@ clearDomRecruitingValidators() {
         if (consultantemail) {
           consultantemail.setValidators([
             Validators.required,
-            Validators.email,
-            Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+    Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
           ]);
         }
         if (contactnumber) {

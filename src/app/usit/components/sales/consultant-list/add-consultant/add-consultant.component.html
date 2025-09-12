@@ -58,12 +58,10 @@
           <mat-label>Email</mat-label>
           <input matInput formControlName="consultantemail" maxlength="50" (change)="emailDuplicate($event)"
             (input)="convertToLowerCase($event)">
-          <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('required')">Email
-            is
-            Required</mat-error>
-          <mat-error *ngIf="consultantForm.get('consultantemail')!.hasError('email')">Invalid
-            email
-            address</mat-error>
+           <mat-error *ngIf="consultantForm.get('consultantemail')?.hasError('required')">Email
+            is required</mat-error>
+          <mat-error *ngIf="consultantForm.get('consultantemail')?.hasError('consultantemail')">Invalid
+            email address</mat-error>
         </mat-form-field>
 
         <!-- Contact Number-->
@@ -539,9 +537,10 @@
               accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
               style="display: none;" />
           </div>
+        
         </mat-form-field>
-        <mat-form-field class="upload">
-          <mat-label for="h1b">H1B</mat-label>
+        <mat-form-field class="upload" *ngIf="this.data.flag !== 'DomRecruiting'">
+          <mat-label for="h1b">VISA</mat-label>
           <div class="upload-container">
             <input matInput readonly name="h1b" class="file-input"
               [value]="h1bupload ? h1bupload.name : 'No file chosen'" />
@@ -554,8 +553,8 @@
           </div>  
         </mat-form-field>
       </div>
-      <div class="form-column-right">
-        <mat-form-field class="upload">
+      <div class="form-column-right" >
+        <mat-form-field class="upload" *ngIf="this.data.flag !== 'DomRecruiting'">
           <mat-label for="h1b">DL</mat-label>
           <div class="upload-container">
             <input matInput readonly name="dl" class="file-input"

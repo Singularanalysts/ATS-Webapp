@@ -157,7 +157,6 @@ const routes: Routes = [
     component: InterviewListComponent,
     data: { isDomInt: true },
   },
-
   { path: 'visa', component: VisaListComponent },
   { path: 'qualification', component: QualificationListComponent },
   { path: 'companies', component: CompaniesListComponent },

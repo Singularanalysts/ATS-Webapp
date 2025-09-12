@@ -117,7 +117,9 @@ export class AddRecruiterComponent implements OnInit {
         recruiter: [
           recruiterData ? recruiterData.recruiter : '',
           [this.noInvalidRecruiterName]
-        ], email: [recruiterData ? recruiterData.email : '', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z]{2,}\\.[a-zA-Z]{2,}$')]],
+        ], email: [recruiterData ? recruiterData.email : '', [Validators.required, Validators.email,         Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+
+]],
         usnumber: [recruiterData ? recruiterData.usnumber : ''],
         contactnumber: [recruiterData ? recruiterData.contactnumber : ''],
         extension: [recruiterData ? recruiterData.extension : ''],

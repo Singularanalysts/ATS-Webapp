@@ -103,7 +103,7 @@ export class AlertPopupComponent {
   };
   currentPageIndex = 0;
   disableClose = true;
-  remainingTime = 30;
+  remainingTime = 5;
   pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
   intervalId: any;
   field = "empty";
