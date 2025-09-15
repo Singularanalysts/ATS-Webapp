@@ -23,15 +23,15 @@
         <mat-form-field appearance="fill">
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstname" maxlength="50">
-         <mat-error *ngIf="consultantForm.get('firstname')?.hasError('required')">First Name is Required</mat-error>
-            <mat-error *ngIf="consultantForm.get('firstname')?.hasError('minlength')">First Name must be at least 2
+         <mat-error *ngIf="consultantForm?.get('firstname')?.hasError('required')">First Name is Required</mat-error>
+            <mat-error *ngIf="consultantForm?.get('firstname')?.hasError('minlength')">First Name must be at least 2
               characters</mat-error>
-            <mat-error *ngIf="consultantForm.get('firstname')?.hasError('maxlength')">First Name must not exceed 100
+            <mat-error *ngIf="consultantForm?.get('firstname')?.hasError('maxlength')">First Name must not exceed 100
               characters</mat-error>
-            <mat-error *ngIf="consultantForm.get('firstname')?.hasError('whitespace')">
+            <mat-error *ngIf="consultantForm?.get('firstname')?.hasError('whitespace')">
               Whitespace-only value is not allowed
             </mat-error>
-            <mat-error *ngIf="consultantForm.get('firstname')?.hasError('invalidChars')">
+            <mat-error *ngIf="consultantForm?.get('firstname')?.hasError('invalidChars')">
               Only digits or only special characters are not allowed
             </mat-error>
         </mat-form-field>

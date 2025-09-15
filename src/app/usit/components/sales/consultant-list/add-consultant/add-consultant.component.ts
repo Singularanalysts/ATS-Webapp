@@ -160,7 +160,9 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   kiran!: any;
   otherDocuments:any
- ngOnInit() {
+ngOnInit() {
+    // Always init the form first
+  this.initConsultantForm(new Consultantinfo());
   const companyId = localStorage.getItem('companyid');
   if (companyId) {
     this.empManagementServ
@@ -177,19 +179,20 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
   }
 
   this.role = localStorage.getItem('role');
+  this.userid = localStorage.getItem('userid');
 
   // Common APIs
   this.getvisa();
   this.gettech();
   this.getQualification();
   this.getCompanies();
-  this.getFlag(this.data.flag?.toLocaleLowerCase());
-  this.userid = localStorage.getItem('userid');
+  this.getFlag(this.data.flag?.toLowerCase());
   this.getEmployee();
 
-    if (this.data.actionName === "edit-consultant") {
+
+
+  if (this.data.actionName === "edit-consultant") {
     this.kiran = 'edit';
-    this.initConsultantForm(new Consultantinfo());
 
     this.consultantServ.getConsultantById(this.data.consultantData.consultantid)
       .subscribe({
@@ -199,54 +202,25 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
           this.autoskills = response.data.skills;
           this.filesArr = response.data.fileupload;
           this.getAssignedEmployee();
+
+          // Rebuild form with API data
           this.initConsultantForm(response.data);
 
-          // 👉 Call the other API here
           this.consultantServ.getConsultantOtherDocuments(this.data.consultantData.consultantid)
             .subscribe({
               next: (docRes: any) => {
-                console.log("Other documents:", docRes);
-                // store response in variable if needed
                 this.otherDocuments = docRes.data; 
-                console.log(this.otherDocuments,'otherdocumentssss');
-                
-              },
-              error: err => {
-                this.dataToBeSentToSnackBar.message = err.message;
-                this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-                this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
               }
             });
-
-        },
-        error: err => {
-          this.dataToBeSentToSnackBar.message = err.message;
-          this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
-          this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
         }
       });
-
-  } else {
-    this.initConsultantForm(new Consultantinfo());
   }
 
-  // ✅ Adjust validators here
-  if (this.role === 'Recruiter') {
-    // Recruiters don't need empid required
+  // 🔹 Role-based validator adjustments (inline, no helper function needed)
+  if (this.role === 'Recruiter' || this.role === 'Sales Executive' || this.role === 'Recruiting Manager') {
     this.consultantForm.get('empid')?.clearValidators();
     this.consultantForm.get('empid')?.updateValueAndValidity();
   }
-    if (this.role === 'Sales Executive') {
-    // Recruiters don't need empid required
-    this.consultantForm.get('empid')?.clearValidators();
-    this.consultantForm.get('empid')?.updateValueAndValidity();
-  }
-  if (this.role === 'Recruiting Manager') {
-    // Recruiters don't need empid required
-    this.consultantForm.get('empid')?.clearValidators();
-    this.consultantForm.get('empid')?.updateValueAndValidity();
-  }
-
 
   if (this.data?.flag === 'DomRecruiting') {
     this.clearDomRecruitingValidators();
@@ -263,9 +237,8 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
     this.consultantForm.get('ratetype')?.updateValueAndValidity();
     this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
   }
-  console.log(this.data.flag,'flagconditionnnn');
-  
 }
+
 
 clearDomRecruitingValidators() {
   ['visa', 'empid', 'ratetype', 'hourlyrate'].forEach(ctrl => {
@@ -435,7 +408,7 @@ clearDomRecruitingValidators() {
   }
 
 
-  initConsultantForm(consultantData: Consultantinfo) {
+  initConsultantForm(consultantData?: Consultantinfo) {
 
 
     if (this.flag === 'DomRecruiting' || this.role === 'Sales Executive' || this.role === 'Recruiter' || this.role === 'Recruiting Manager') {
@@ -480,7 +453,7 @@ clearDomRecruitingValidators() {
         availabilityforinterviews: [consultantData ? consultantData.availabilityforinterviews : '', Validators.required],
         priority: [consultantData ? consultantData.priority : ''],
         position: [consultantData ? consultantData.position : '', [Validators.required, this.noInvalidRecruiterName]],
-        status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
+        status: [this.data.actionName === "edit-consultant" ? consultantData?.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
         experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
         hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
@@ -587,7 +560,7 @@ Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
         // company: [consultantData ? consultantData.company : '', 
         //   this.isCompanyToDisplay ? [Validators.required] : []],
         position: [consultantData ? consultantData.position : '', [Validators.required, this.noInvalidRecruiterName]],
-        status: [this.data.actionName === "edit-consultant" ? consultantData.status : 'Initiated'],
+        status: [this.data.actionName === "edit-consultant" ? consultantData?.status : 'Initiated'],
         // status: [this.data.actionName === "edit-consultant" ? consultantData.status : '', Validators.required],
         experience: [consultantData ? consultantData.experience : '', [Validators.required, Validators.pattern('^[0-9]*$')]],
         hourlyrate: [consultantData ? consultantData.hourlyrate : '', Validators.required],
@@ -707,7 +680,7 @@ Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
       );
       const position = this.consultantForm.get('position');
       const experience = this.consultantForm.get('experience');
-      const firstname = this.consultantForm.get('firstname');
+      const firstname = this.consultantForm?.get('firstname');
       const lastname = this.consultantForm.get('lastname');
       const ratetype = this.consultantForm.get('ratetype');
       const currentlocation = this.consultantForm.get('currentlocation');
