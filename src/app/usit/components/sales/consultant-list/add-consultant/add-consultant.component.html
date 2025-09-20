@@ -199,42 +199,47 @@
 <!-- Assign consultant -->
 
 <!-- <mat-form-field appearance="fill" *ngIf="this.role !== 'Employee'"> -->
-  <mat-form-field appearance="fill" 
-  *ngIf="(role === 'Team Leader Sales' 
-        || role === 'Team Leader Recruiting' 
-        || role === 'Sales Manager' 
-       
-        || role === 'Super Administrator') 
-        && data?.flag !== 'DomRecruiting'">
-
+<mat-form-field appearance="fill">
   <mat-label>Assign Consultant To</mat-label>
 
+  <!-- Chips -->
   <mat-chip-grid #chipGrid aria-label="Assign consultant" formControlName="empid">
     <mat-chip-row *ngFor="let employee of selectData" class="chip-style" (removed)="remove(employee)">
       {{ employee.fullname }}
-      <button matChipRemove [attr.aria-label]="'remove ' + employee">
+      <button matChipRemove [attr.aria-label]="'remove ' + employee.fullname">
         <mat-icon>cancel</mat-icon>
       </button>
     </mat-chip-row>
   </mat-chip-grid>
 
-  <input
-    #employeeInput
-    formControlName="empid"
-    [matChipInputFor]="chipGrid"
-    [matAutocomplete]="auto"
-    (matChipInputTokenEnd)="add($event)"
-  />
+  <!-- Input -->
+<input
+  #employeeInput
+  [formControl]="employeeCtrl"
+  [matChipInputFor]="chipGrid"
+  [matAutocomplete]="auto"
+  (matChipInputTokenEnd)="add($event)"
+  (focus)="openAuto()"
+/>
 
-  <mat-autocomplete #auto="matAutocomplete" formControlName="empid">
-    <mat-checkbox
-      [checked]="isAllOptionsSelected"
-      color="primary"
-      (change)="onSelectAll($event)">
-      {{ isAllOptionsSelected ? 'UnSelect All' : 'Select All' }}
-    </mat-checkbox>
 
-    <mat-option *ngFor="let employee of empArr">
+  <!-- Autocomplete -->
+<mat-autocomplete #auto="matAutocomplete">
+  <!-- Capture async value once -->
+  <ng-container *ngIf="filteredEmployees | async as filtered">
+
+    <!-- Select All - show only if filtered list has items -->
+    <mat-option class="select-all-option" *ngIf="filtered.length > 0">
+      <mat-checkbox
+        [checked]="isAllOptionsSelected"
+        color="primary"
+        (change)="onSelectAll($event)">
+        {{ isAllOptionsSelected ? 'Unselect All' : 'Select All' }}
+      </mat-checkbox>
+    </mat-option>
+
+    <!-- Employee options -->
+    <mat-option *ngFor="let employee of filtered">
       <div (click)="optionClicked($event, employee)">
         <mat-checkbox
           [checked]="employee.selected"
@@ -245,11 +250,23 @@
         </mat-checkbox>
       </div>
     </mat-option>
-  </mat-autocomplete>
 
-  <mat-error *ngIf="consultantForm.get('empid')!.hasError('required')">Select Executive</mat-error>
+    <!-- No employees found -->
+    <mat-option *ngIf="filtered.length === 0" disabled style="    color: rgb(0 0 0 / 97%);
+    font-weight: 700;">
+      No employees found
+    </mat-option>
 
+  </ng-container>
+</mat-autocomplete>
+
+
+
+  <mat-error *ngIf="consultantForm.get('empid')?.hasError('required')">
+    Select Executive
+  </mat-error>
 </mat-form-field>
+
 
       </div>
     </div>
