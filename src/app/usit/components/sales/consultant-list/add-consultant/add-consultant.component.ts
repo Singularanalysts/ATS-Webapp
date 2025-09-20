@@ -9,13 +9,14 @@ import {
   ReactiveFormsModule,
   AbstractControl,
   ValidationErrors,
+  FormControl,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConsultantService } from 'src/app/usit/services/consultant.service';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject, map, startWith, takeUntil, tap } from 'rxjs';
 import { NgxGpAutocompleteModule } from '@angular-magic/ngx-gp-autocomplete';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -160,6 +161,17 @@ export class AddconsultantComponent implements OnInit, OnDestroy {
 
   kiran!: any;
   otherDocuments:any
+  employeeCtrl = new FormControl('');  // control for input
+filteredEmployees!: Observable<any[]>; // filtered list
+@ViewChild(MatAutocompleteTrigger) autoTrigger!: MatAutocompleteTrigger;
+
+openAuto() {
+  if (this.autoTrigger) {
+    this.autoTrigger.openPanel();  // only opens when user clicks/focus
+  }
+}
+
+
 ngOnInit() {
     // Always init the form first
   this.initConsultantForm(new Consultantinfo());
@@ -237,9 +249,27 @@ ngOnInit() {
     this.consultantForm.get('ratetype')?.updateValueAndValidity();
     this.consultantForm.get('hourlyrate')?.updateValueAndValidity();
   }
+ this.filteredEmployees = this.employeeCtrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterEmployees(value || ''))
+    );
+
 }
 
 
+// filtering logic
+private _filterEmployees(value: string): any[] {
+  const filterValue = value?.toLowerCase() ?? '';
+  return !filterValue
+    ? this.empArr        // show all if empty
+    : this.empArr.filter((emp: { fullname: string; }) => emp.fullname.toLowerCase().includes(filterValue));
+}
+
+
+ /** ✅ Map employee object to API format */
+  private mapToApiFormat(emp: any) {
+    return { userid: emp.userid, fullname: emp.fullname };
+  }
 clearDomRecruitingValidators() {
   ['visa', 'empid', 'ratetype', 'hourlyrate'].forEach(ctrl => {
     this.consultantForm.get(ctrl)?.clearValidators();
@@ -266,107 +296,181 @@ clearDomRecruitingValidators() {
     this.controls['empid']!.setValue(null);
   }
 
-  remove(employee: any): void {
+  // remove(employee: any): void {
 
-    const index = this.selectData.indexOf(employee);
+  //   const index = this.selectData.indexOf(employee);
+  //   if (index >= 0) {
+  //     this.selectData.splice(index, 1);
+  //   }
+  //   this.empArr.find((y: any) => y.userid === employee.userid).selected = false;
+  //   // this.toggleSelection(employee);
+  //   this.controls['empid'].updateValueAndValidity();
+
+  //   const mapToApiFormat = (emp: any) => ({
+  //     userid: emp.userid,
+  //     fullname: emp.fullname,
+  //   });
+  //   const mappedData = this.selectData.map(mapToApiFormat);
+  //   this.consultantForm.get('empid')!.setValue(mappedData);
+
+  // }
+  remove(employee: any): void {
+    const index = this.selectData.findIndex(
+      (      emp: { userid: any; }) => emp.userid === employee.userid
+    );
     if (index >= 0) {
       this.selectData.splice(index, 1);
     }
-    this.empArr.find((y: any) => y.userid === employee.userid).selected = false;
-    // this.toggleSelection(employee);
-    this.controls['empid'].updateValueAndValidity();
 
-    const mapToApiFormat = (emp: any) => ({
-      userid: emp.userid,
-      fullname: emp.fullname,
-    });
-    const mappedData = this.selectData.map(mapToApiFormat);
-    this.consultantForm.get('empid')!.setValue(mappedData);
+    const found = this.empArr.find((y: { userid: any; }) => y.userid === employee.userid);
+    if (found) {
+      found.selected = false;
+    }
 
+    this.isAllOptionsSelected = !this.empArr.some((x: { selected: any; }) => !x.selected);
+
+    this.updateFormValue();
   }
 
-  optionClicked(event: any, employee: any): void {
+  // optionClicked(event: any, employee: any): void {
+  //   event.stopPropagation();
+  //   this.toggleSelection(employee);
+  // }
+ optionClicked(event: Event, employee: any): void {
     event.stopPropagation();
     this.toggleSelection(employee);
   }
 
+  // onSelectAll(event: MatCheckboxChange) {
+
+  //   this.isAllOptionsSelected = event.checked;
+  //   this.empArr.map(
+  //     (x: any) => x.selected = event.checked
+  //   )
+  //   if (event.checked) {
+  //     this.selectData = this.empArr;
+  //   }
+  //   else {
+  //     this.selectData = []
+  //   }
+
+  // }
   onSelectAll(event: MatCheckboxChange) {
-
     this.isAllOptionsSelected = event.checked;
-    this.empArr.map(
-      (x: any) => x.selected = event.checked
-    )
+    this.empArr.forEach((x: { selected: boolean; }) => (x.selected = event.checked));
+
     if (event.checked) {
-      this.selectData = this.empArr;
-    }
-    else {
-      this.selectData = []
+      this.selectData = [...this.empArr];
+    } else {
+      this.selectData = [];
     }
 
+    this.updateFormValue();
+    this.employeeCtrl.setValue('');
+    this.openAuto();
   }
+  // toggleSelection(employee: any) {
 
-  toggleSelection(employee: any) {
+  //   // Mapping function to convert employee object to API format
+  //   const mapToApiFormat = (emp: any) => ({
+  //     userid: emp.userid,
+  //     fullname: emp.fullname,
+  //   });
 
-    // Mapping function to convert employee object to API format
-    const mapToApiFormat = (emp: any) => ({
-      userid: emp.userid,
-      fullname: emp.fullname,
-    });
+  //   // Toggle the selected status of the employee
+  //   employee.selected = !employee.selected;
 
-    // Toggle the selected status of the employee
+  //   if (employee.selected) {
+  //     // If employee is selected, add to selectData array
+  //     this.selectData.push(employee);
+  //   } else {
+  //     // If employee is deselected, find index and remove from selectData array
+  //     const index = this.selectData.findIndex((emp: any) => emp.userid === employee.userid);
+  //     if (index !== -1) {
+  //       this.selectData.splice(index, 1);
+  //     }
+  //   }
+
+  //   // Update the isAllOptionsSelected flag based on selection status of all employees
+  //   this.isAllOptionsSelected = !this.empArr.some((x: any) => !x.selected);
+
+  //   // Map the selected employee data to API format and update empid form control
+  //   const mappedData = this.selectData.map(mapToApiFormat);
+  //   this.consultantForm.get('empid')!.setValue(mappedData);
+
+  // }
+ toggleSelection(employee: any) {
     employee.selected = !employee.selected;
 
     if (employee.selected) {
-      // If employee is selected, add to selectData array
       this.selectData.push(employee);
     } else {
-      // If employee is deselected, find index and remove from selectData array
-      const index = this.selectData.findIndex((emp: any) => emp.userid === employee.userid);
+      const index = this.selectData.findIndex(
+        (        emp: { userid: any; }) => emp.userid === employee.userid
+      );
       if (index !== -1) {
         this.selectData.splice(index, 1);
       }
     }
 
-    // Update the isAllOptionsSelected flag based on selection status of all employees
-    this.isAllOptionsSelected = !this.empArr.some((x: any) => !x.selected);
+    // ✅ Update select all checkbox
+    this.isAllOptionsSelected = !this.empArr.some((x: { selected: any; }) => !x.selected);
 
-    // Map the selected employee data to API format and update empid form control
-    const mappedData = this.selectData.map(mapToApiFormat);
+    this.updateFormValue();
+
+    // ✅ Clear input and reopen panel
+    this.employeeCtrl.setValue('');
+    this.openAuto();
+  }
+    private updateFormValue() {
+    const mappedData = this.selectData.map((emp: any) => this.mapToApiFormat(emp));
     this.consultantForm.get('empid')!.setValue(mappedData);
+  }
+getEmployee() {
+
+  const initializeFiltered = () => {
+    // Initialize filteredEmployees so that the autocomplete shows all employees by default
+    this.filteredEmployees = this.employeeCtrl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterEmployees(value || ''))
+    );
+
 
   }
 
-  getEmployee() {
-
-    if (!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')) {
-      const companyId = localStorage.getItem('companyid');
-      this.consultantServ.getEmployee(this.userid, companyId).subscribe(
-        (response: any) => {
-          this.empArr = response.data;
-          this.empArr.map((x: any) => x.selected = false);
-          this.prepopulateSelectedEmployees();
-        }
-      )
-    }
-    else if ((this.flag === 'DomRecruiting')) {
-      this.consultantServ.getDomEmployee().subscribe(
-        (response: any) => {
-          this.empArr = response.data;
-          this.empArr.map((x: any) => x.selected = false);
-          this.prepopulateSelectedEmployees();
-        }
-      )
-    }
-    else {
-      this.consultantServ.getRecruiters().subscribe(
-        (response: any) => {
-          this.empArr = response.data;
-          this.empArr.map((x: any) => x.selected = false);
-          this.prepopulateSelectedEmployees();
-        }
-      )
-    }
+  if (!(this.flag === 'Recruiting') && !(this.flag === 'DomRecruiting')) {
+    const companyId = localStorage.getItem('companyid');
+    this.consultantServ.getEmployee(this.userid, companyId).subscribe(
+      (response: any) => {
+        this.empArr = response.data;
+        this.empArr.map((x: any) => x.selected = false);
+        this.prepopulateSelectedEmployees();
+        initializeFiltered();
+      }
+    )
   }
+  else if ((this.flag === 'DomRecruiting')) {
+    this.consultantServ.getDomEmployee().subscribe(
+      (response: any) => {
+        this.empArr = response.data;
+        this.empArr.map((x: any) => x.selected = false);
+        this.prepopulateSelectedEmployees();
+        initializeFiltered();
+      }
+    )
+  }
+  else {
+    this.consultantServ.getRecruiters().subscribe(
+      (response: any) => {
+        this.empArr = response.data;
+        this.empArr.map((x: any) => x.selected = false);
+        this.prepopulateSelectedEmployees();
+        initializeFiltered();
+      }
+    )
+  }
+}
+
 
   prepopulateSelectedEmployees() {
     // Clear the existing employees array
