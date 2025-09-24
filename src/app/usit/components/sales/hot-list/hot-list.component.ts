@@ -304,6 +304,7 @@ export class HotListComponent implements OnInit {
       'Relocation',
       'Phone',
       'Email',
+      'Assign To'
     ]];
     const excelData = this.dataSource.data.map(c => [
       c.consultantname,
@@ -315,7 +316,8 @@ export class HotListComponent implements OnInit {
       c.currentlocation,
       c.relocation,
       c.contactnumber,
-      c.consultantemail
+      c.consultantemail,
+      c.assignto
     ]);
 
     const wb = utils.book_new();
