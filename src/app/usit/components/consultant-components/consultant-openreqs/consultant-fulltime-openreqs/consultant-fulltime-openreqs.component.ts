@@ -119,30 +119,40 @@ handleDialogResponse(status: boolean): void {
   };
 
   if (!status) {
-    // user clicked "No" → show remarks field
+    // User clicked "No" → show remarks field, don't call API yet
     this.showReason = true;
-
-    const trimmedRemarks = (this.remarks || '').trim();
-
-    // invalid input (empty or whitespace only)
-    if (!trimmedRemarks) {
-      // clear spaces and mark as touched to trigger mat-error
-      this.remarks = '';
-      const textArea = document.querySelector(
-        'textarea[matinput]'
-      ) as HTMLTextAreaElement | null;
-      if (textArea) textArea.focus(); // mark touched visually
-      return; // stop API call
-    }
-
-    //  valid remarks
-    payload.remarks = trimmedRemarks;
+    return;
   } else {
-    // user clicked "Yes" → hide field and clear data
+    // User clicked "Yes" → normal API flow
     this.resetRemarks();
+    this.submitApplication(payload);
+  }
+}
+
+submitRemarks(): void {
+  const trimmedRemarks = (this.remarks || '').trim();
+
+  if (!trimmedRemarks) {
+    this.remarks = '';
+    const textArea = document.querySelector(
+      'textarea[matinput]'
+    ) as HTMLTextAreaElement | null;
+    if (textArea) textArea.focus();
+    return;
   }
 
-  // Proceed with API call
+  const userId = localStorage.getItem('userid');
+  const payload: any = {
+    applied_by: userId,
+    fulltimejobid: this.selectedJob?.id,
+    status: false,
+    remarks: trimmedRemarks,
+  };
+
+  this.submitApplication(payload);
+}
+
+private submitApplication(payload: any): void {
   this.openServ.JobApplicationStatus(payload).subscribe({
     next: (resp: any) => {
       const dataToBeSentToSnackBar: ISnackBarData = {
@@ -162,7 +172,6 @@ handleDialogResponse(status: boolean): void {
       };
 
       this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
-
       this.resetRemarks();
       this.dialogRef.close();
       this.getAllData();
@@ -182,7 +191,6 @@ handleDialogResponse(status: boolean): void {
   });
 }
 
-// ✅ Reusable cleanup method
 resetRemarks(): void {
   this.remarks = '';
   this.showReason = false;

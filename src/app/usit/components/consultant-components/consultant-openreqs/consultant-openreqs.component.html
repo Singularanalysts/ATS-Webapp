@@ -168,36 +168,48 @@
       <strong class="highlight-job">{{ data.jobTitle | titlecase }}</strong>?
     </p>
 
-    <!-- Show reason textarea only if user clicked No -->
-  <!-- Show this only when user clicked "No" -->
-<mat-form-field
-  *ngIf="showReason"
-  appearance="outline"
-  class="remarks-textarea">
-  <mat-label>Reason for not applying</mat-label>
-  <textarea
-    matInput
-    placeholder="Enter reason"
-    [(ngModel)]="remarks"
-    #remarksRef="ngModel"
-    name="remarks"
-    maxlength="250"
-    rows="4"
-    required>
-  </textarea>
+    <!-- Remarks textarea only when user clicked "No" -->
+    <mat-form-field
+      *ngIf="showReason"
+      appearance="outline"
+      class="remarks-textarea">
+      <mat-label>Reason for not applying</mat-label>
+      <textarea
+        matInput
+        placeholder="Enter reason"
+        [(ngModel)]="remarks"
+        #remarksRef="ngModel"
+        name="remarks"
+        maxlength="250"
+        rows="4"
+        required>
+      </textarea>
 
-  <mat-hint align="end">{{ remarks?.length || 0 }} / 250</mat-hint>
+      <mat-hint align="end">{{ remarks?.length || 0 }} / 250</mat-hint>
 
-  <!-- Display error message below field -->
-  <mat-error *ngIf="remarksRef.invalid && remarksRef.touched">
-    Please provide a valid reason. Only spaces are not allowed.
-  </mat-error>
-</mat-form-field>
-
+      <mat-error *ngIf="remarksRef.invalid && remarksRef.touched">
+        Please provide a valid reason. Only spaces are not allowed.
+      </mat-error>
+    </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button (click)="handleDialogResponse(false)">No</button>
-    <button mat-raised-button color="primary" (click)="handleDialogResponse(true)">Yes</button>
+    <!-- Show Yes/No only initially -->
+    <ng-container *ngIf="!showReason; else submitButton">
+      <button mat-button (click)="handleDialogResponse(false)">No</button>
+      <button mat-raised-button color="primary" (click)="handleDialogResponse(true)">Yes</button>
+    </ng-container>
+
+    <!-- Show Submit button when remarks field is visible -->
+    <ng-template #submitButton>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="submitRemarks()"
+        [disabled]="!remarks?.trim()">
+        Submit
+      </button>
+    </ng-template>
   </mat-dialog-actions>
 </ng-template>
+
