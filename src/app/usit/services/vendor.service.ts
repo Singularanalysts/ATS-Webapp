@@ -126,9 +126,12 @@ export class VendorService {
     return this.apiServ.get(`vms/vendor/move/${vendorType}/${id}/${userid}`);
   }
   
-  moveToBlacklistedOrBack(status: any, id: any, userid: any) {
-    return this.apiServ.get(`vms/vendor/blacklisted/${status}/${id}/${userid}`);
-  }
+ moveToBlacklistedOrBack(status: any, id: any, userid: any, remarks?: string) {
+  const encodedRemarks = encodeURIComponent(remarks || '');
+  return this.apiServ.get(`vms/vendor/blacklisted/${status}/${id}/${userid}/${encodedRemarks}`);
+}
+
+
 
   public saveKnownVendorContact(entity: any) {
     return this.apiServ.post("vms/knownContact/saveContact", entity);

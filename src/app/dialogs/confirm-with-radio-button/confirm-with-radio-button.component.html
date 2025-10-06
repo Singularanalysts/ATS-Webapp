@@ -1,28 +1,60 @@
 <div class="dialog-container">
-    <div class="header">
-        <h2 mat-dialog-title>{{ data.title }}</h2>
-        <hr />
-        <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
-            <mat-icon>close</mat-icon>
-        </button>
-    </div>
+  <div class="header">
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <hr />
+    <button mat-icon-button (click)="onAction('SAFE_CLOSE')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 
-    <div class="content" mat-dialog-content>
-        {{ data.message }}
-    </div>
+  <div class="content" mat-dialog-content>
+    {{ data.message }}
+  </div>
 
-    <div class="radio" mat-dialog-content>
-        <mat-radio-group [(ngModel)]="selectedOption" aria-label="Select an option">
-            <mat-radio-button *ngFor="let option of data.radioButtons" [value]="option">{{ option }}</mat-radio-button>
-        </mat-radio-group>
-    </div>
+  <div class="radio" mat-dialog-content>
+    <mat-radio-group [(ngModel)]="selectedOption" aria-label="Select an option">
+      <mat-radio-button *ngFor="let option of data.radioButtons" [value]="option">
+        {{ option }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+<!-- Show textarea only when Blacklisted is selected -->
+<div *ngIf="selectedOption === 'Blacklisted'" class="remarks-box" mat-dialog-content>
+  <mat-form-field appearance="outline" class="remarks-textarea">
+    <mat-label>Reason for Blacklisted</mat-label>
+    <textarea
+      matInput
+      placeholder="Enter reason"
+      [(ngModel)]="remarks"
+      #remarksRef="ngModel"
+      name="remarks"
+      maxlength="250"
+      rows="4"
+      required>
+    </textarea>
 
-    <div class="actions" mat-dialog-actions>
-        <button mat-raised-button (click)="onAction('NO')">
-            {{ data.cancelText }}
-        </button>
-        <button mat-raised-button color="primary" [disabled]="!selectedOption" (click)="onAction('YES')">
-            {{ data.confirmText }}
-        </button>
-    </div>
+    <mat-hint align="end">{{ remarks?.length || 0 }} / 250</mat-hint>
+
+    <!-- ✅ Error automatically appears when invalid and touched -->
+    <mat-error *ngIf="remarksRef.invalid && remarksRef.touched">
+      Please enter a valid reason. Only spaces are not allowed.
+    </mat-error>
+  </mat-form-field>
+</div>
+
+
+
+
+  <div class="actions" mat-dialog-actions>
+    <button mat-raised-button (click)="onAction('NO')">
+      {{ data.cancelText }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="!selectedOption || (selectedOption === 'Blacklisted' && !remarks)"
+      (click)="onAction('YES')">
+      {{ data.confirmText }}
+    </button>
+  </div>
 </div>

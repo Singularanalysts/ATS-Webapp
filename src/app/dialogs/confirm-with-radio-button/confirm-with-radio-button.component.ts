@@ -5,45 +5,67 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { IConfirmRadioDialogData } from '../models/confirm-dialog-with-radio-data';
 import { MatRadioModule } from '@angular/material/radio';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-confirm-with-radio-button',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatDialogModule, MatRadioModule, FormsModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatDialogModule, MatRadioModule, FormsModule,    MatFormFieldModule,    MatInputModule,    MatAutocompleteModule,
+      ReactiveFormsModule,
+  
+  
+  ],
   templateUrl: './confirm-with-radio-button.component.html',
   styleUrls: ['./confirm-with-radio-button.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ConfirmWithRadioButtonComponent {
-
   private dialog = inject(MatDialog);
   allowAction: boolean = false;
   selectedOption!: string;
-  constructor(@Inject(MAT_DIALOG_DATA) protected data: IConfirmRadioDialogData,
-    public dialogRef: MatDialogRef<ConfirmWithRadioButtonComponent>) {
+  remarks: string = ''; // new field for remarks
 
+  constructor(
+    @Inject(MAT_DIALOG_DATA) protected data: IConfirmRadioDialogData,
+    public dialogRef: MatDialogRef<ConfirmWithRadioButtonComponent>
+  ) {}
+remarksError:any
+onAction(action: string) {
+  if (action === 'SAFE_CLOSE' || action === 'NO') {
+    this.dialogRef.close();
+    return;
   }
 
-  onAction(action: string) {
+  if (action === 'YES') {
+    this.allowAction = true;
 
-    if (action === "SAFE_CLOSE") {
-      this.dialogRef.close()
-    }
+    if (this.selectedOption === 'Blacklisted') {
+      const trimmedRemarks = (this.remarks || '').trim();
 
-    if (action === "NO") {
-      this.dialogRef.close()
-    }
+      // validate whitespace-only case
+      if (!trimmedRemarks) {
+        this.remarks = '';             // clear any spaces
+        const textArea = document.querySelector(
+          'textarea[matinput]'
+        ) as HTMLTextAreaElement | null;
+        if (textArea) textArea.focus(); // force touched state
+        return;                         // stop dialog close
+      }
 
-    if (action === "YES") {
-      // call delete apis
-      this.allowAction = true;
-      this.dialogRef.close(this.selectedOption)
+      // close dialog and send trimmed remarks
+      this.dialogRef.close({
+        option: this.selectedOption,
+        remarks: trimmedRemarks,
+      });
+    } else {
+      this.dialogRef.close(this.selectedOption);
     }
-    else {
-      this.dialogRef.close();
-    }
-
   }
+}
+
 
 }
+

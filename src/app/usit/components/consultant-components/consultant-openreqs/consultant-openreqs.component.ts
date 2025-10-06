@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +8,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { RecruInfoComponent } from '../../openreqs/recru-info/recru-info.component';
@@ -19,6 +19,8 @@ import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.servi
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
 import { AddResumeComponent } from './add-resume/add-resume.component';
 import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-consultant-openreqs',
@@ -35,7 +37,8 @@ import { IConfirmDialogData } from 'src/app/dialogs/models/confirm-dialog-data';
     MatDialogModule,
     MatSortModule,
     MatTabsModule,
-
+FormsModule,
+MatInputModule
   ],
   templateUrl: './consultant-openreqs.component.html',
   styleUrls: ['./consultant-openreqs.component.scss'],
@@ -50,7 +53,8 @@ export class ConsultantOpenreqsComponent implements OnInit {
     'category_skill',
     'employment_type',
     'job_location',
-    'Action'
+    'Action',
+    'Comment'
   ];
   // pagination code
   page: number = 1;
@@ -98,7 +102,105 @@ export class ConsultantOpenreqsComponent implements OnInit {
       data: { vendor: vendor },
     });
   }
+   @ViewChild('commentDialog') commentDialog!: TemplateRef<any>;
+    dialogRef!: MatDialogRef<any>;
+showReason = false;
+  remarks: string = '';
+    selectedJob: any; // make sure you pass job data into dialog
+    constructor( private matdialog:MatDialog){}
+    
+ openCommentDialog(element: any): void {
+    this.selectedJob = element; // store row data
+    this.dialogRef = this.matdialog.open(this.commentDialog, {
+      width: '600px',
+      data: { jobTitle: element?.job_title }
+    });
+  }
 
+
+handleDialogResponse(status: boolean): void {
+  const userId = localStorage.getItem('userid');
+  const payload: any = {
+    applied_by: userId,
+    jobid: this.selectedJob?.id,
+    status: status
+  };
+
+  if (!status) {
+    // user clicked "No" → show remarks field
+    this.showReason = true;
+
+    const trimmedRemarks = (this.remarks || '').trim();
+
+    // invalid input (empty or whitespace only)
+    if (!trimmedRemarks) {
+      // clear spaces and mark as touched to trigger mat-error
+      this.remarks = '';
+      const textArea = document.querySelector(
+        'textarea[matinput]'
+      ) as HTMLTextAreaElement | null;
+      if (textArea) textArea.focus(); // mark touched visually
+      return; // stop API call
+    }
+
+    //  valid remarks
+    payload.remarks = trimmedRemarks;
+  } else {
+    // user clicked "Yes" → hide field and clear data
+    this.resetRemarks();
+  }
+
+  // Proceed with API call
+  this.openServ.ContractJobApplicationStatus(payload).subscribe({
+    next: (resp: any) => {
+      const dataToBeSentToSnackBar: ISnackBarData = {
+        message:
+          resp.message ||
+          (resp.status === 'success'
+            ? 'Application processed successfully'
+            : 'Submission failed'),
+        duration: 2500,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass:
+          resp.status === 'success'
+            ? ['custom-snack-success']
+            : ['custom-snack-failure'],
+      };
+
+      this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+
+      this.resetRemarks();
+      this.dialogRef.close();
+      this.getAllData();
+    },
+    error: () => {
+      this.snackBarServ.openSnackBarFromComponent({
+        message: 'Something went wrong. Please try again.',
+        duration: 2500,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass: ['custom-snack-failure'],
+      });
+      this.resetRemarks();
+      this.dialogRef.close();
+    },
+  });
+}
+
+// ✅ Reusable cleanup method
+resetRemarks(): void {
+  this.remarks = '';
+  this.showReason = false;
+}
+
+  closeDialog(): void {
+  this.showReason = false;  // hide remarks field
+  this.remarks = '';        // clear text
+  this.dialogRef.close();
+}
   goToReqInfo(element: any) {
     const actionData = {
       title: `${element.vendor}`,
@@ -242,7 +344,7 @@ export class ConsultantOpenreqsComponent implements OnInit {
       applied_by: this.userid,
       jobid: data.id
     }
-    // console.log(applyObj);
+    // console.log(applyObj);0000000000000000000
     const dataToBeSentToDailog = {
       title: 'Add resume',
       empployeeData: applyObj,
@@ -258,5 +360,9 @@ export class ConsultantOpenreqsComponent implements OnInit {
       }
     })
   }
-
+openJob(url: string): void {
+  if (url) {
+    window.open(url, '_blank'); // opens in new tab
+  }
+}
 }

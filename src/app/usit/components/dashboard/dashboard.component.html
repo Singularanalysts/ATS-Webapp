@@ -199,7 +199,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                 <span class="deletestatus"> {{data.status}}</span> <b>
+                  <span class="deletestatus"> {{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -780,7 +780,7 @@
                           class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                       <ng-template #normal>
-                        <span class="bold-text deletestatus" >{{data.status}}</span>
+                        <span class="bold-text deletestatus">{{data.status}}</span>
                       </ng-template>
                     </span>
                     &nbsp;
@@ -791,7 +791,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                 <span class="deletestatus">{{data.status}} </span> <b>
+                  <span class="deletestatus">{{data.status}} </span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -1260,10 +1260,14 @@
 
               <!-- Job Title Column -->
               <ng-container matColumnDef="JobTitle">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job
-                  Title
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle">
+                  Job Title
                 </th>
-                <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+                <td mat-cell *matCellDef="let element">
+                  <a href="javascript:void(0)" (click)="onJobTitleClick(element)" class="jobtitle">
+                    {{ element?.job_title }}
+                  </a>
+                </td>
               </ng-container>
 
               <!-- Job Location Column -->
@@ -1283,20 +1287,19 @@
               </ng-container>
 
               <!-- Owner Column -->
-              <ng-container matColumnDef="TaggedDate">
+              <!-- <ng-container matColumnDef="TaggedDate">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job
                   Source
 
                 </th>
-                <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
-    target="_blank">{{element?.job_source}}</a></td> -->
+             
 
                 <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
                 </td>
-              </ng-container>
+              </ng-container> -->
 
               <!-- Track Column -->
               <ng-container matColumnDef="TaggedBy">
@@ -1312,9 +1315,24 @@
                   </a>
                 </td>
               </ng-container>
+              <!-- Other columns... -->
 
-              <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-<tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;" [ngClass]="getRowClass(row)"></tr>
+              <ng-container matColumnDef="Comments">
+                <th mat-header-cell *matHeaderCellDef style="width: 3%"> Comments </th>
+                <td mat-cell *matCellDef="let element" style="width: 3%">
+                  <span class="action-buttons">
+                    <button mat-icon-button class="action-button-ed"  (click)="jobComments(element)">
+                      <mat-icon>comment</mat-icon>
+                    </button>
+                    <!-- Optional: show comment count -->
+                    <!-- <span class="bold-text">({{ element?.requirement?.commentsCount || "0" }})</span> -->
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="dataTableColumnsDiceAssigned; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataTableColumnsDiceAssigned;" [ngClass]="getRowClass(row)">
+              </tr>
             </table>
 
             <hr>
@@ -1423,7 +1441,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                <span class="deletestatus"> {{data.status}}</span>  <b>
+                  <span class="deletestatus"> {{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -1787,12 +1805,19 @@
               </ng-container>
 
               <!-- Job Title Column -->
+              <!-- Job Title Column -->
               <ng-container matColumnDef="JobTitle">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job
-                  Title
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle">
+                  Job Title
                 </th>
-                <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+                <td mat-cell *matCellDef="let element">
+                  <a href="javascript:void(0)" (click)="onJobTitleClick(element)" class="jobtitle">
+                    {{ element?.job_title }}
+                  </a>
+                </td>
               </ng-container>
+
+
 
               <!-- Job Location Column -->
               <ng-container matColumnDef="JobLocation">
@@ -1811,20 +1836,19 @@
               </ng-container>
 
               <!-- Owner Column -->
-              <ng-container matColumnDef="TaggedDate">
+              <!-- <ng-container matColumnDef="TaggedDate">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job
                   Source
 
                 </th>
-                <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
-        target="_blank">{{element?.job_source}}</a></td> -->
+              
 
                 <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
                 </td>
-              </ng-container>
+              </ng-container> -->
 
               <!-- Track Column -->
               <ng-container matColumnDef="TaggedBy">
@@ -1839,12 +1863,27 @@
                   </a>
                 </td>
               </ng-container>
+              <!-- Other columns... -->
 
-              <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-<tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;" [ngClass]="getRowClass(row)"></tr>
+              <ng-container matColumnDef="Comments">
+                <th mat-header-cell *matHeaderCellDef style="width: 3%"> Comments </th>
+                <td mat-cell *matCellDef="let element" style="width: 3%">
+                  <span class="action-buttons">
+                    <button mat-icon-button class="action-button-ed" (click)="jobComments(element)">
+                      <mat-icon>comment</mat-icon>
+                    </button>
+                    <!-- Optional: show comment count -->
+                    <!-- <span class="bold-text">({{ element?.requirement?.commentsCount || "0" }})</span> -->
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="dataTableColumnsDiceAssigned; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataTableColumnsDiceAssigned;" [ngClass]="getRowClass(row)">
+              </tr>
             </table>
             <hr>
-            <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+            <p class="no-data-found" *ngIf="!dataSourceDicelax.filteredData.length">{{'No matching data found'}}</p>
           </section>
           <div class="paginator" *ngIf="dataSourceDicelax.filteredData.length">
             <!-- paginator -->
@@ -2077,7 +2116,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                <span class="deletestatus"> {{data.status}}</span>  <b>
+                  <span class="deletestatus"> {{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -2752,10 +2791,14 @@
 
               <!-- Job Title Column -->
               <ng-container matColumnDef="JobTitle">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle"> Job
-                  Title
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by JobTitle">
+                  Job Title
                 </th>
-                <td mat-cell *matCellDef="let element">{{element?.job_title}} </td>
+                <td mat-cell *matCellDef="let element">
+                  <a href="javascript:void(0)" (click)="onJobTitleClick(element)" class="jobtitle">
+                    {{ element?.job_title }}
+                  </a>
+                </td>
               </ng-container>
 
               <!-- Job Location Column -->
@@ -2775,20 +2818,19 @@
               </ng-container>
 
               <!-- Owner Column -->
-              <ng-container matColumnDef="TaggedDate">
+              <!-- <ng-container matColumnDef="TaggedDate">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by TaggedDate"> Job
                   Source
 
                 </th>
-                <!-- <td mat-cell *matCellDef="let element"><a href="{{ element.job_source }}"
-          target="_blank">{{element?.job_source}}</a></td> -->
+              
 
                 <td mat-cell *matCellDef="let element" (click)="empTag(element.id)">
                   <button style="color:#4154f1" mat-button (click)="openLink(element.job_source)">
                     Link
                   </button>
                 </td>
-              </ng-container>
+              </ng-container> -->
 
               <!-- Track Column -->
               <ng-container matColumnDef="TaggedBy">
@@ -2805,12 +2847,27 @@
                 </td>
               </ng-container>
 
+              <!-- Other columns... -->
 
-              <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
-<tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;" [ngClass]="getRowClass(row)"></tr>
+              <ng-container matColumnDef="Comments">
+                <th mat-header-cell *matHeaderCellDef style="width: 3%"> Comments </th>
+                <td mat-cell *matCellDef="let element" style="width: 3%">
+                  <span class="action-buttons">
+                    <button mat-icon-button class="action-button-ed" (click)="jobComments(element)">
+                      <mat-icon>comment</mat-icon>
+                    </button>
+                    <!-- Optional: show comment count -->
+                    <!-- <span class="bold-text">({{ element?.requirement?.commentsCount || "0" }})</span> -->
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="dataTableColumnsDiceAssigned; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: dataTableColumnsDiceAssigned;" [ngClass]="getRowClass(row)">
+              </tr>
             </table>
             <hr>
-            <p class="no-data-found" *ngIf="!dataSourceDice.filteredData.length">{{'No matching data found'}}</p>
+            <p class="no-data-found" *ngIf="!dataSourceDicelax.filteredData.length">{{'No matching data found'}}</p>
           </section>
 
           <div class="paginator" *ngIf="dataSourceDicelax.filteredData.length">
@@ -3044,7 +3101,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                 <span class="deletestatus"> {{data.status}}</span> <b>
+                  <span class="deletestatus"> {{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -3399,7 +3456,6 @@
                 <th mat-header-cell *matHeaderCellDef> Tagged Count </th>
                 <td mat-cell *matCellDef="let element"> {{ element.taggedcount }} </td>
               </ng-container>
-
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
@@ -3912,7 +3968,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-            <span class="deletestatus">{{data.status}} </span>      <b>
+                  <span class="deletestatus">{{data.status}} </span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -4623,7 +4679,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-               <span class="deletestatus">{{data.status}}</span>    <b>
+                  <span class="deletestatus">{{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -5232,7 +5288,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-                <span class="deletestatus">{{data.status}}</span>   <b>
+                  <span class="deletestatus">{{data.status}}</span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>
@@ -5428,7 +5484,6 @@
                 <th mat-header-cell *matHeaderCellDef> Tagged Count </th>
                 <td mat-cell *matCellDef="let element"> {{ element.taggedcount }} </td>
               </ng-container>
-
 
               <tr mat-header-row *matHeaderRowDef="dataTableColumnsDice; sticky: true"></tr>
               <tr mat-row *matRowDef="let row; columns: dataTableColumnsDice;"></tr>
@@ -5939,7 +5994,7 @@
                 <div class="activity-content" *ngIf="data.flg=='SUB-sales'">
                   <b> <a (click)="goToUserInfo(data.userid)" class="bold-text consultant-id">{{data.pseudoname}}</a>
                   </b>
-               <span class="deletestatus">{{data.status}} </span>   <b>
+                  <span class="deletestatus">{{data.status}} </span> <b>
                     <a (click)="goToConsultantInfo(data.consultantid)"
                       class="bold-text consultant-id">{{data.consultantname}}</a>
                   </b>

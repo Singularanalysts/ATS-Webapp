@@ -673,63 +673,54 @@ export class VendorListComponent implements OnInit {
       ConfirmWithRadioButtonComponent,
       dialogConfig
     );
-    dialogRef.afterClosed().subscribe({
-      next: (selectedOption: string) => {
-        if (dialogRef.componentInstance.allowAction) {
-          if (selectedOption == 'Blacklisted') {
-            this.vendorServ
-              .moveToBlacklistedOrBack(
-                selectedOption,
-                vendor.id,
-                this.loginId
-              )
-              .subscribe((resp: any) => {
-                if (resp.status == 'success') {
-                  this.dataToBeSentToSnackBar.panelClass = [
-                    'custom-snack-success',
-                  ];
-                  this.dataToBeSentToSnackBar.message = resp.message;
+  dialogRef.afterClosed().subscribe({
+  next: (result: any) => {
+    if (dialogRef.componentInstance.allowAction && result) {
+      const selectedOption = result.option || result;  // either object or string
+      const remarks = result.remarks || ''; // optional field
 
-                } else {
-                  this.dataToBeSentToSnackBar.panelClass = [
-                    'custom-snack-failure',
-                  ];
-                  this.dataToBeSentToSnackBar.message = resp.message;
-                }
-                this.snackBarServ.openSnackBarFromComponent(
-                  this.dataToBeSentToSnackBar
-                );
-                this.getAllData(this.currentPageIndex + 1);
-              });
-          } else {
-            this.vendorServ
-              .moveToCPVOrFPV(
-                selectedOption,
-                vendor.id,
-                this.loginId
-              )
-              .subscribe((resp: any) => {
-                if (resp.status == 'success') {
-                  this.dataToBeSentToSnackBar.panelClass = [
-                    'custom-snack-success',
-                  ];
-                  this.dataToBeSentToSnackBar.message = resp.message;
+      if (selectedOption === 'Blacklisted') {
+        this.vendorServ
+          .moveToBlacklistedOrBack(
+            selectedOption,
+            vendor.id,
+            this.loginId,
+            remarks // <-- pass remarks here
+          )
+          .subscribe((resp: any) => {
+            if (resp.status === 'success') {
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+              this.dataToBeSentToSnackBar.message = resp.message;
+            } else {
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.dataToBeSentToSnackBar.message = resp.message;
+            }
+            this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+            this.getAllData(this.currentPageIndex + 1);
+          });
+      } else {
+        this.vendorServ
+          .moveToCPVOrFPV(
+            selectedOption,
+            vendor.id,
+            this.loginId
+          )
+          .subscribe((resp: any) => {
+            if (resp.status === 'success') {
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+              this.dataToBeSentToSnackBar.message = resp.message;
+            } else {
+              this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+              this.dataToBeSentToSnackBar.message = resp.message;
+            }
+            this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+            this.getAllData(this.currentPageIndex + 1);
+          });
+      }
+    }
+  },
+});
 
-                } else {
-                  this.dataToBeSentToSnackBar.panelClass = [
-                    'custom-snack-failure',
-                  ];
-                  this.dataToBeSentToSnackBar.message = resp.message;
-                }
-                this.snackBarServ.openSnackBarFromComponent(
-                  this.dataToBeSentToSnackBar
-                );
-                this.getAllData(this.currentPageIndex + 1);
-              });
-          }
-        }
-      },
-    });
   }
 
   onTabChanged(event: MatTabChangeEvent) {

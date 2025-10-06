@@ -22,3 +22,39 @@
 .radio .mdc-dialog .mdc-dialog__content {
   height: 44px;
 }
+.full-width {
+  width: 100%;
+}
+.mat-form-field {
+  width: 100%;
+}
+/* Style wrapper */
+.remarks-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Apply consistent textarea design */
+.remarks-textarea {
+  width: 90%; /* match your Other Details field width */
+}
+
+.remarks-textarea .mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+/* Custom textarea look */
+textarea[matInput] {
+  min-height: 100px;  /* comfortable height */
+  resize: vertical;   /* allow vertical resize */
+  line-height: 1.5;
+  padding: 8px;
+  box-sizing: border-box;
+}
+.show-error .mat-mdc-form-field-subscript-wrapper {
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+}

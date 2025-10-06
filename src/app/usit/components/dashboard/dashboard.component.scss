@@ -96,7 +96,7 @@ ul.breadcrumb li a:hover {
 
   .container .right-div {
     width: 29%;
-    overflow: auto;
+    // overflow: auto;
     height: 100%;
   }
 
@@ -171,11 +171,14 @@ ul.breadcrumb li a:hover {
 
 .mat-mdc-header-row {
   height: 30px !important;
-  background-color: rgb(147, 204, 204);
+  background-color: rgb(147, 204, 204) !important;
+  border-right: 1px solid lightgrey !important;
+
 }
 
 .mat-mdc-row {
   height: 30px !important;
+  border-right: 1px solid lightgrey !important;
 }
 
 .no-data-found {
@@ -756,4 +759,27 @@ button {
 
 ::ng-deep.highlighted-row {
   background-color: #b9f5d2 !important;
+}
+
+.jobtitle {
+  color: #4154f1
+}
+
+.jobtitle:hover {
+  text-decoration: underline;
+  cursor: pointer;
+
+}
+
+.mat-mdc-table tbody,
+.mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-cell,
+.mat-mdc-footer-cell,
+.mat-mdc-header-row,
+.mat-mdc-row,
+.mat-mdc-footer-row,
+.mat-mdc-table .mat-mdc-header-cell {
+  background: inherit;
+  border-right: 1px solid lightgray !important;
 }

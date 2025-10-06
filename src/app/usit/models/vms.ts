@@ -31,4 +31,5 @@ export class Vms {
     linkedinid!: string;
     twitterid!: string;
     autoInput!:string;
+  comment: any;
 }
