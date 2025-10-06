@@ -35,6 +35,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatPaginator } from '@angular/material/paginator';
 import { OpenreqService } from '../../services/openreq.service';
+import { JobApplicationCommentsComponent } from '../openreqs/job-application-comments/job-application-comments.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -68,10 +69,25 @@ export class DashboardComponent implements OnInit {
     'JobTitle',
     'JobLocation',
     'Vendor',
-    'TaggedDate',
+    // 'TaggedDate',
+    // 'Comments',
     'TaggedBy',
-    'TCount'
+    'TCount',
+
   ];
+    dataTableColumnsDiceAssigned: string[] = [
+    'PostedDate',
+    'JobTitle',
+    'JobLocation',
+    'Vendor',
+    // 'TaggedDate',
+    // 'Comments',
+    'TaggedBy',
+    'TCount',
+   'Comments'
+  ];
+
+
   dataTableColumnsTechAnalysis: string[] = [
     'SNo',
     'Date',
@@ -84,6 +100,22 @@ export class DashboardComponent implements OnInit {
     'Vendor',
     'CategoryCount',
   ];
+   jobComments(job: any) {
+    console.log(job,'jobrequiremnet')
+    const data =this.dialog.open(JobApplicationCommentsComponent, {
+      width: '60vw',
+      data: {
+        title: job.job_title ,
+        jobData: job
+      },
+    });
+
+    data.afterClosed().subscribe(() => {
+      if(data.componentInstance.submitted){
+        //  this.getAllreqsData();
+      }
+    })
+  }
   showReport: boolean = false;
   entity: any;
   datarr: any[] = [];
@@ -248,7 +280,9 @@ pageSizeOptions = [50, 75, 100];
   refreshFlg = 'executive';
   department!: any;
   sourcingLead = true;
+  isAssignedTable:any
   ngOnInit(): void {
+
     this.getPerformanceRatings(this.ratingflag)
 const previlage= localStorage.getItem('privileges')
 console.log(previlage,'previlage');
@@ -318,7 +352,11 @@ console.log(previlage,'previlage');
 
   }
     private service = inject(OpenreqService);
-  
+  onJobTitleClick(element: any): void {
+  this.empTag(element.id);        // call tagging
+  this.openLink(element.job_source); // open job source in new tab
+}
+
   empTag(id: number) {
     this.service.openReqsEmpTagging(id, this.userid).subscribe(
       (response: any) => {
@@ -567,17 +605,7 @@ console.log(previlage,'previlage');
     );
   }
 
-  // getSourcingLeads() {
-  //   this.dashboardServ.getSourcingLeads(this.userid).subscribe(
-  //     (response: any) => {
-  //       //this.entity = response.data;
-  //       this.dataSource.data = response.data;
-  //       // this.dataSource.data.map((x: any, i) => {
-  //       //   x.serialNum = i + 1;
-  //       // });
-  //     }
-  //   )
-  // }
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   currentPage = 1;
@@ -659,12 +687,7 @@ console.log(totalRecords,'totalrecords');
     })
 
 
-    // dialogRef.afterClosed().subscribe(() => {
-    //   if(dialogRef.componentInstance.allowAction){
-    //     //this.getAllVisa();
-    //     this.getSourcingLeads();
-    //   }
-    // })
+   
   }
 
   subPop(element: any, condition: any) {
@@ -788,6 +811,7 @@ console.log(totalRecords,'totalrecords');
     this.router.navigate(['usit/user-info', 'dashboard', id])
   }
 
+
   currentPagedice = 1;
   pageSizedice = 13;
   totalPagesdice = 1;
@@ -850,51 +874,8 @@ console.log(totalRecords,'totalrecords');
     return Array.from({ length: (endPage - startPage + 1) }, (_, i) => startPage + i);
   }
   
-  // allData: any = []; // Stores full data
-  // pageSizedata = 20; // Number of items per load
-  // currentPage = 1; // Tracks the page number
-  // getDiceReqs() {
-  //   this.dashboardServ.getDiceRequirements(this.role, this.userid).subscribe((response: any) => {
-  //     this.allData = response.data;
-      
-  //     this.loadMore();
-  //   });
-  // }
-  // displayedColumns: string[] = ['PostedDate', 'JobTitle', 'Category', 'JobLocation', 'Vendor', 'TaggedDate', 'TaggedBy', 'TCount'];
 
-  // loadMore() {
-  //   const nextData = this.allData.slice(0, this.currentPage * this.pageSizedata);
-  //   this.dataSourceDice.data = nextData;
-  //   console.log( this.dataSourceDice.data ,' this.dataSourceDice.data ');
-    
-  //   this.currentPage++;
-  // }
-
-  // getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any="Postedon", sortOrder: any = "desc" , keyword: any = "empty") {
-  //   // getDiceReqss(sortField: any="Title", sortOrder: any = "asc") {
-  //   const actData = {
-  //     pageNumber: pagIdx,
-  //     pageSize: pagesize,
-  //     sortField: sortField,
-  //     sortOrder: sortOrder,
-  //     keyword: keyword,
-  //     userid :this.userid
-  //   };
-
-  //   this.dashboardServ.getDiceRequirementslax(this.role, actData).subscribe(
-  //     (response: any) => {
-  //       //this.entity = response.data;
-  //       this.dataSourceDicelax.data = response.data.content;
-  //       console.log( this.dataSourceDicelax.data,'other same data');
-        
-  //       this.totalItems = response.data.totalElements;
-  //       this.dataSourceDicelax.data.map((x: any, i) => {
-  //         // x.serialNum = i + 1;
-  //         x.serialNum = this.generateSerialNumber(i);
-  //       });
-  //     }
-  //   );
-  // }
+ 
   getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any = "Postedon", sortOrder: any = "desc", keyword: any = "empty") {
     const actData = {
       pageNumber: pagIdx,
@@ -940,13 +921,7 @@ console.log(totalRecords,'totalrecords');
     return serialNumber;
   }
 
-  // getDiceReqss() {
-  //   this.dashboardServ.getDiceRequirementss().subscribe(
-  //     (response: any) => {
-  //       this.dataSourceDice.data = response.data;
-  //     }
-  //   );
-  // }
+
 
   openLink(url: string): void {
     if (url) {
@@ -1069,31 +1044,11 @@ console.log(totalRecords,'totalrecords');
   }
   
 
-  // onEmployeeChange(event: any): void {
-  //   const fromDate = this.myForm.get('startDate').value;
-  //   const toDate = this.myForm.get('endDate').value;
-  //   const empId = event.value;
-  //   const formatedStartDate = this.formatDate(fromDate);
-  //   const formatedEndDate = this.formatDate(toDate);
-  //   this.filterData(formatedStartDate, formatedEndDate, empId);
 
-  // }
   employeeControl = new FormControl('');
 
   selectedEmployeeName:any
-  // onEmployeeChange(selectedOption: any): void {
-  //   if (!selectedOption) return;
 
-  //   this.selectedEmployeeName = selectedOption.value[1]; // Set the name for display
-  //   const empId = selectedOption.value[0]; // Get ID for API
-
-  //   const fromDate = this.myForm.get('startDate').value;
-  //   const toDate = this.myForm.get('endDate').value;
-  //   const formatedStartDate = this.formatDate(fromDate);
-  //   const formatedEndDate = this.formatDate(toDate);
-
-  //   this.filterData(formatedStartDate, formatedEndDate, empId);
-  // }
   formatDate(date: string): string {
     const selectedDate = new Date(date);
     const year = selectedDate.getFullYear();

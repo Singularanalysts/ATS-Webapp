@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatDialogConfig, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
 import { OpenreqService } from 'src/app/usit/services/openreq.service';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
@@ -21,6 +21,8 @@ import { AddResumeComponent } from '../add-resume/add-resume.component';
 import { JobDescriptionComponent } from '../../../openreqs/job-description/job-description.component';
 import { RecruInfoComponent } from '../../../openreqs/recru-info/recru-info.component';
 import { AddFulltimeResumeComponent } from '../add-fulltime-resume/add-fulltime-resume.component';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -38,7 +40,9 @@ import { AddFulltimeResumeComponent } from '../add-fulltime-resume/add-fulltime-
     MatSelectModule,
     MatDialogModule,
     MatSortModule,
-    MatTabsModule
+    MatTabsModule,
+    MatInputModule,
+    FormsModule
   ],
   styleUrls: ['./consultant-fulltime-openreqs.component.scss']
 })
@@ -52,7 +56,8 @@ export class ConsultantFulltimeOpenreqsComponent {
     'category_skill',
     'employment_type',
     'job_location',
-    'Action'
+    'Action',
+    'Comment'
   ];
   // pagination code
   page: number = 1;
@@ -84,6 +89,106 @@ export class ConsultantFulltimeOpenreqsComponent {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
+   @ViewChild('commentDialog') commentDialog!: TemplateRef<any>;
+  dialogRef!: MatDialogRef<any>;
+constructor( private matdialog:MatDialog){}
+showReason = false;
+  remarks: string = '';
+    selectedJob: any; // make sure you pass job data into dialog
+
+ openCommentDialog(element: any): void {
+    this.selectedJob = element; // store row data
+    this.dialogRef = this.matdialog.open(this.commentDialog, {
+      width: '600px',
+      data: { jobTitle: element?.job_title }
+    });
+  }
+  closeDialog(): void {
+  this.showReason = false;  // hide remarks field
+  this.remarks = '';        // clear text
+  this.dialogRef.close();
+}
+
+
+handleDialogResponse(status: boolean): void {
+  const userId = localStorage.getItem('userid');
+  const payload: any = {
+    applied_by: userId,
+    fulltimejobid: this.selectedJob?.id,
+    status: status
+  };
+
+  if (!status) {
+    // user clicked "No" → show remarks field
+    this.showReason = true;
+
+    const trimmedRemarks = (this.remarks || '').trim();
+
+    // invalid input (empty or whitespace only)
+    if (!trimmedRemarks) {
+      // clear spaces and mark as touched to trigger mat-error
+      this.remarks = '';
+      const textArea = document.querySelector(
+        'textarea[matinput]'
+      ) as HTMLTextAreaElement | null;
+      if (textArea) textArea.focus(); // mark touched visually
+      return; // stop API call
+    }
+
+    //  valid remarks
+    payload.remarks = trimmedRemarks;
+  } else {
+    // user clicked "Yes" → hide field and clear data
+    this.resetRemarks();
+  }
+
+  // Proceed with API call
+  this.openServ.JobApplicationStatus(payload).subscribe({
+    next: (resp: any) => {
+      const dataToBeSentToSnackBar: ISnackBarData = {
+        message:
+          resp.message ||
+          (resp.status === 'success'
+            ? 'Application processed successfully'
+            : 'Submission failed'),
+        duration: 2500,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass:
+          resp.status === 'success'
+            ? ['custom-snack-success']
+            : ['custom-snack-failure'],
+      };
+
+      this.snackBarServ.openSnackBarFromComponent(dataToBeSentToSnackBar);
+
+      this.resetRemarks();
+      this.dialogRef.close();
+      this.getAllData();
+    },
+    error: () => {
+      this.snackBarServ.openSnackBarFromComponent({
+        message: 'Something went wrong. Please try again.',
+        duration: 2500,
+        verticalPosition: 'top',
+        horizontalPosition: 'center',
+        direction: 'above',
+        panelClass: ['custom-snack-failure'],
+      });
+      this.resetRemarks();
+      this.dialogRef.close();
+    },
+  });
+}
+
+// ✅ Reusable cleanup method
+resetRemarks(): void {
+  this.remarks = '';
+  this.showReason = false;
+}
+
+
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
@@ -115,7 +220,7 @@ export class ConsultantFulltimeOpenreqsComponent {
     dialogConfig.data = actionData;
     this.dialogServ.openDialogWithComponent(RecruInfoComponent, dialogConfig);
   }
-
+jobsource:any
   getAllData(pagIdx = 1) {
     const pagObj = {
       pageNumber: pagIdx,
@@ -128,6 +233,8 @@ export class ConsultantFulltimeOpenreqsComponent {
     this.openServ.getConsultantOpenReqsFulltimeByPaginationSortandFilter(pagObj).subscribe((response: any) => {
 
         this.dataSource.data = response.data.content;
+        this.jobsource=response.data.content.map((item:any)=>item.job_source)
+        console.log(this.jobsource,'jobsource')
         this.totalItems = response.data.totalElements;
       
         this.dataSource.data.map((x: any, i) => {
@@ -254,5 +361,10 @@ export class ConsultantFulltimeOpenreqsComponent {
     })
 
   }
+openJob(url: string): void {
+  if (url) {
+    window.open(url, '_blank'); // opens in new tab
+  }
+}
 
 }

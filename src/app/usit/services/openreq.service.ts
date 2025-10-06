@@ -91,6 +91,7 @@ export class OpenreqService {
     return this.http.post("openreqs/dice/allEmpFulltimeReqs", data);
   }
 
+
   // applyJob(data: any) {
   //   return this.http.post("openreqs/apply/applyJob", data);
   // }
@@ -237,6 +238,13 @@ ResumeUpload(payload:any){
   }
   loginTracking(payload:any){
       return this.http.post(`auth/loginTrack/getAll`,payload);
+
+  }
+  JobApplicationStatus(payload:any){
+    return this.http.post(`openreqs/apply/applyFulltimeJobStatusBased`,payload)
+  }
+  ContractJobApplicationStatus(payload:any){
+        return this.http.post(`openreqs/apply/applyContractJobStatusBased`,payload)
 
   }
 }

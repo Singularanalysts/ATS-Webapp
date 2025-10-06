@@ -14,7 +14,7 @@ import { TeamFlowComponent } from './components/team-flow/team-flow.component';
 
 @NgModule({
   declarations: [
-    ResumeDescriptionComponent,H1BVendorsComponent, TeamFlowComponent,
+    ResumeDescriptionComponent,H1BVendorsComponent, TeamFlowComponent, 
   ],
   imports: [
     CommonModule,
@@ -23,7 +23,6 @@ import { TeamFlowComponent } from './components/team-flow/team-flow.component';
     FormsModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
-
   ]
 })
 export class UsitModule { }

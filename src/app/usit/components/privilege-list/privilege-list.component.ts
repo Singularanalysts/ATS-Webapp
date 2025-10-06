@@ -550,13 +550,13 @@ selectedRole: string = '';
           ? this.kpt.every((priv: any) => priv.selected === true)
           : false,
       },
-      {
-        title: 'Task Management',
-        privileges: this.taskmanagement,
-        isSelected: this.taskmanagement
-          ? this.taskmanagement.every((priv: any) => priv.selected === true)
-          : false,
-      },
+      // {
+      //   title: 'Task Management',
+      //   privileges: this.taskmanagement,
+      //   isSelected: this.taskmanagement
+      //     ? this.taskmanagement.every((priv: any) => priv.selected === true)
+      //     : false,
+      // },
       {
         title: 'projects',
         privileges: this.projects,

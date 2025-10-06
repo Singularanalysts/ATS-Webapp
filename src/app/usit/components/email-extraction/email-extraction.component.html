@@ -197,7 +197,7 @@
 
                 <!-- table ROW -->
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: dataTableColumns;" [ngClass]="{'vendor-exited-true': row.vendorexsisted === true}"></tr>
             </table>
             <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
         </section>

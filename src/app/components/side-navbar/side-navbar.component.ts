@@ -657,20 +657,20 @@ myRoles(){
         }
       ]
     },
-    {
-      "test": "TASKMANAGEMENT",
-      "text": "Task Management",
-      "icon": "task",
-      "children": [
-        {
-          "test": "PROJECTS",
-          "text": "Projects",
-          "icon": "work",
-          "routerLink": "/task-management/projects",
-          "roles":["Super Administrator"]  
-        }
-      ]
-    },
+    // {
+    //   "test": "TASKMANAGEMENT",
+    //   "text": "Task Management",
+    //   "icon": "task",
+    //   "children": [
+    //     {
+    //       "test": "PROJECTS",
+    //       "text": "Projects",
+    //       "icon": "work",
+    //       "routerLink": "/task-management/projects",
+    //       "roles":["Super Administrator"]  
+    //     }
+    //   ]
+    // },
     {
       "test": "KPT",
       "text": "KPT",

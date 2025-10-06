@@ -42,6 +42,7 @@ import { AddFuturePrimaryVendorComponent } from './add-future-primary-vendor/add
 import { IConfirmRadioDialogData } from 'src/app/dialogs/models/confirm-dialog-with-radio-data';
 import { ConfirmWithRadioButtonComponent } from 'src/app/dialogs/confirm-with-radio-button/confirm-with-radio-button.component';
 import { VendorCompanyRecInfoComponent } from '../vendor-list/vendor-company-rec-info/vendor-company-rec-info.component';
+import { CompanyFormatPipe } from 'src/app/usit/company-format.pipe';
 
 
 @Component({
@@ -58,7 +59,9 @@ import { VendorCompanyRecInfoComponent } from '../vendor-list/vendor-company-rec
     MatPaginatorModule,
     CommonModule,
     MatTooltipModule,
+    CompanyFormatPipe
   ],
+ 
   templateUrl: './future-primary-vendor-list.component.html',
   styleUrls: ['./future-primary-vendor-list.component.scss'],
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }],
