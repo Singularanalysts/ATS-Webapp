@@ -49,10 +49,12 @@
                 <!-- Feedback   -->
                 <mat-form-field class="description-field">
                     <mat-label>Comments</mat-label>
-                    <textarea formControlName="comment" rows="4" maxlength="256" matInput></textarea>
+                    <textarea formControlName="comment" rows="4" maxlength="256" matInput    (keydown.space)="preventLeadingSpace($event)"
+></textarea>
                     <mat-error *ngIf="jobApplyCommentsForm.get('comment')!.hasError('required')">Comments
                         are Required
                     </mat-error>
+               
                 </mat-form-field>
             </div>
         </div>

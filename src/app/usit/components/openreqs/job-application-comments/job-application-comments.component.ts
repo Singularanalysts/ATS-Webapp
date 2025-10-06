@@ -188,6 +188,15 @@ private initializeJobApplicationCommentsForm(data: any) {
   });
 }
 
+preventLeadingSpace(event: Event): void {
+  const keyboardEvent = event as KeyboardEvent; // type assertion
+
+  const input = (keyboardEvent.target as HTMLTextAreaElement).value;
+  if (input.length === 0 && keyboardEvent.code === 'Space') {
+    keyboardEvent.preventDefault();
+  }
+}
+
 
 
   onSubmit() {
