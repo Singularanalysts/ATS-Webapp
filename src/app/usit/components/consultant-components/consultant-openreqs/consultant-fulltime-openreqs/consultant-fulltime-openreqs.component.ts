@@ -201,6 +201,10 @@ resetRemarks(): void {
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getAllData();
+        const saved = localStorage.getItem('fulltimeappliedJobs');
+    if (saved) {
+      this.appliedJobs = new Set(JSON.parse(saved));
+    }
   }
 
   onSelectionChange(event: MatSelectChange) {
@@ -369,10 +373,18 @@ jobsource:any
     })
 
   }
-openJob(url: string): void {
-  if (url) {
-    window.open(url, '_blank'); // opens in new tab
+    appliedJobs: Set<number> = new Set(); // store job IDs the user applied for
+ private saveAppliedJobs(): void {
+    localStorage.setItem('fulltimeappliedJobs', JSON.stringify(Array.from(this.appliedJobs)));
   }
-}
+   openJob(url: string, jobId: number): void {
+    if (url) {
+      window.open(url, '_blank');
+    }
 
+    // Mark job as applied locally
+    this.appliedJobs.add(jobId);
+    this.saveAppliedJobs();
+  }
+ 
 }

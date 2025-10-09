@@ -90,6 +90,10 @@ export class ConsultantOpenreqsComponent implements OnInit {
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
     this.getAllData();
+    const saved = localStorage.getItem('appliedJobs');
+    if (saved) {
+      this.appliedJobs = new Set(JSON.parse(saved));
+    }
   }
 
   onSelectionChange(event: MatSelectChange) {
@@ -135,7 +139,9 @@ handleDialogResponse(status: boolean): void {
     this.submitApplication(payload);
   }
 }
-
+  private saveAppliedJobs(): void {
+    localStorage.setItem('appliedJobs', JSON.stringify(Array.from(this.appliedJobs)));
+  }
 submitRemarks(): void {
   const trimmedRemarks = (this.remarks || '').trim();
 
@@ -367,9 +373,16 @@ resetRemarks(): void {
       }
     })
   }
-openJob(url: string): void {
-  if (url) {
-    window.open(url, '_blank'); // opens in new tab
+    appliedJobs: Set<number> = new Set(); // store job IDs the user applied for
+
+   openJob(url: string, jobId: number): void {
+    if (url) {
+      window.open(url, '_blank');
+    }
+
+    // Mark job as applied locally
+    this.appliedJobs.add(jobId);
+    this.saveAppliedJobs();
   }
-}
+
 }

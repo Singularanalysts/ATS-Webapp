@@ -95,7 +95,7 @@ myRoles(){
           },
           {
             "test": "Blacklisted Companies",
-            "text": "Blocklisted Companies",
+            "text": "Blacklisted Companies",
             "icon": "block",
             "routerLink": "/usit/blacklisted-companies",
             "roles":["Super Administrator"]  
