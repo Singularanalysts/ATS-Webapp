@@ -112,28 +112,39 @@
                         </span>
                     </ng-template>
                 </td> -->
+
                     <td mat-cell *matCellDef="let element" style="width: 3%">
                         <span *ngIf="element?.status === 'Applied'" style="font-weight: bold; color: green;">
                             {{ element?.status }}
                         </span>
 
+                        <!-- Apply button -->
                         <button *ngIf="element?.status !== 'Applied'" mat-flat-button color="primary"
-                            style="width: max-content; height: max-content" (click)="openJob(element?.job_source)">
+                            style="width: max-content; height: max-content"
+                            (click)="openJob(element?.job_source, element?.id)">
                             {{ element?.status }}
                         </button>
                     </td>
 
                 </ng-container>
+                <!-- ===== Comment Button Column ===== -->
+                <ng-container matColumnDef="Comment">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 3%">Comment</th>
 
-   <ng-container matColumnDef="Comment">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Comment"
-                        style="width: 3%"> Comment </th>
-                    <td mat-cell *matCellDef="let element" style="width: 3%">
+                    <td mat-cell *matCellDef="let element" style="width: 3%; text-align: center;">
                         <span class="action-buttons">
-                            <button mat-icon-button class="action-button-ed" (click)="openCommentDialog(element)">
+                            <!-- Show comment button if job applied by user (before they click Yes) -->
+                            <button
+                                *ngIf="appliedJobs.has(element?.id) && element?.status !== 'Applied'; else noComment"
+                                mat-icon-button class="action-button-ed" (click)="openCommentDialog(element)">
                                 <mat-icon>comment</mat-icon>
                             </button>
                         </span>
+
+                        <!-- Show '-' when comment button not visible -->
+                        <ng-template #noComment>
+                            <span style="color: #888;">-</span>
+                        </ng-template>
                     </td>
                 </ng-container>
 
@@ -155,61 +166,46 @@
     </div>
 </div>
 <ng-template #commentDialog let-data>
-  <h2 mat-dialog-title class="header-textjob">
-    Job Application
-    <button mat-icon-button class="close-btn" (click)="closeDialog()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </h2>
+    <h2 mat-dialog-title class="header-textjob">
+        Job Application
+        <button mat-icon-button class="close-btn" (click)="closeDialog()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h2>
 
-  <mat-dialog-content class="dialog-content">
-    <p>
-      Did you apply for the position
-      <strong class="highlight-job">{{ data.jobTitle | titlecase }}</strong>?
-    </p>
+    <mat-dialog-content class="dialog-content">
+        <p>
+            Did you apply for the position
+            <strong class="highlight-job">{{ data.jobTitle | titlecase }}</strong>?
+        </p>
 
-    <!-- Remarks textarea only when user clicked "No" -->
-    <mat-form-field
-      *ngIf="showReason"
-      appearance="outline"
-      class="remarks-textarea">
-      <mat-label>Reason for not applying</mat-label>
-      <textarea
-        matInput
-        placeholder="Enter reason"
-        [(ngModel)]="remarks"
-        #remarksRef="ngModel"
-        name="remarks"
-        maxlength="250"
-        rows="4"
-        required>
+        <!-- Remarks textarea only when user clicked "No" -->
+        <mat-form-field *ngIf="showReason" appearance="outline" class="remarks-textarea">
+            <mat-label>Reason for not applying</mat-label>
+            <textarea matInput placeholder="Enter reason" [(ngModel)]="remarks" #remarksRef="ngModel" name="remarks"
+                maxlength="250" rows="4" required>
       </textarea>
 
-      <mat-hint align="end">{{ remarks?.length || 0 }} / 250</mat-hint>
+            <mat-hint align="end">{{ remarks?.length || 0 }} / 250</mat-hint>
 
-      <mat-error *ngIf="remarksRef.invalid && remarksRef.touched">
-        Please provide a valid reason. Only spaces are not allowed.
-      </mat-error>
-    </mat-form-field>
-  </mat-dialog-content>
+            <mat-error *ngIf="remarksRef.invalid && remarksRef.touched">
+                Please provide a valid reason. Only spaces are not allowed.
+            </mat-error>
+        </mat-form-field>
+    </mat-dialog-content>
 
-  <mat-dialog-actions align="end">
-    <!-- Show Yes/No only initially -->
-    <ng-container *ngIf="!showReason; else submitButton">
-      <button mat-button (click)="handleDialogResponse(false)">No</button>
-      <button mat-raised-button color="primary" (click)="handleDialogResponse(true)">Yes</button>
-    </ng-container>
+    <mat-dialog-actions align="end">
+        <!-- Show Yes/No only initially -->
+        <ng-container *ngIf="!showReason; else submitButton">
+            <button mat-button (click)="handleDialogResponse(false)">No</button>
+            <button mat-raised-button color="primary" (click)="handleDialogResponse(true)">Yes</button>
+        </ng-container>
 
-    <!-- Show Submit button when remarks field is visible -->
-    <ng-template #submitButton>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="submitRemarks()"
-        [disabled]="!remarks?.trim()">
-        Submit
-      </button>
-    </ng-template>
-  </mat-dialog-actions>
+        <!-- Show Submit button when remarks field is visible -->
+        <ng-template #submitButton>
+            <button mat-raised-button color="primary" (click)="submitRemarks()" [disabled]="!remarks?.trim()">
+                Submit
+            </button>
+        </ng-template>
+    </mat-dialog-actions>
 </ng-template>
-

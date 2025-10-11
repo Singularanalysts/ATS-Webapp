@@ -91,32 +91,43 @@
                         </span>
                     </ng-template>
                 </td> -->
-                    <td mat-cell *matCellDef="let element" style="width: 3%">
-                        <!-- If status is Applied, show text -->
+                     <td mat-cell *matCellDef="let element" style="width: 3%">
                         <span *ngIf="element?.status === 'Applied'" style="font-weight: bold; color: green;">
                             {{ element?.status }}
                         </span>
 
-                        <!-- Otherwise, show button -->
+                        <!-- Apply button -->
                         <button *ngIf="element?.status !== 'Applied'" mat-flat-button color="primary"
-                            style="width: max-content; height: max-content" (click)="openJob(element?.job_source)">
+                            style="width: max-content; height: max-content"
+                            (click)="openJob(element?.job_source, element?.id)">
                             {{ element?.status }}
                         </button>
                     </td>
 
 
+
                 </ng-container>
+                  <!-- ===== Comment Button Column ===== -->
                 <ng-container matColumnDef="Comment">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by Comment"
-                        style="width: 3%"> Comment </th>
-                    <td mat-cell *matCellDef="let element" style="width: 3%">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 3%">Comment</th>
+
+                    <td mat-cell *matCellDef="let element" style="width: 3%; text-align: center;">
                         <span class="action-buttons">
-                            <button mat-icon-button class="action-button-ed" (click)="openCommentDialog(element)">
+                            <!-- Show comment button if job applied by user (before they click Yes) -->
+                            <button
+                                *ngIf="appliedJobs.has(element?.id) && element?.status !== 'Applied'; else noComment"
+                                mat-icon-button class="action-button-ed" (click)="openCommentDialog(element)">
                                 <mat-icon>comment</mat-icon>
                             </button>
                         </span>
+
+                        <!-- Show '-' when comment button not visible -->
+                        <ng-template #noComment>
+                            <span style="color: #888;">-</span>
+                        </ng-template>
                     </td>
                 </ng-container>
+
 
                 <!-- table ROW -->
                 <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
