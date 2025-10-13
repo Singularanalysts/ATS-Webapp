@@ -43,7 +43,9 @@ export class MatchProfileJobDescriptionComponent implements OnInit {
   searchConsultantOptions$!: Observable<any>;
 
   ngOnInit(): void {
-    this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+      const userId = localStorage.getItem('userid');
+
+    this.searchConsultantOptions$ = this.openServ.getHotlist(userId).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getConsultantOptionsForAutoComplete(resp);
       }

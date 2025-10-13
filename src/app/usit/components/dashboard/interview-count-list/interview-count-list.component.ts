@@ -28,7 +28,10 @@ export class InterviewCountListComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: any,
     public dialogRef: MatDialogRef<InterviewCountListComponent>
-  ) { }
+  ) { 
+    console.log(data,'dialogdataaaaaa');
+    
+  }
   dataSource = new MatTableDataSource<any>([]);
   length = 50;
   pageSize = 50; // items per page
@@ -67,6 +70,8 @@ export class InterviewCountListComponent {
   ngOnInit(): void {
     const userid = localStorage.getItem('userid');
     if (this.data.condition == 'admin') {
+            console.log(this.data.duration,'adminrolee');
+
     this.dashboardServ.getInterviewCountPopup(this.data.flag, this.data.duration,localStorage.getItem('companyid')).subscribe(
       ((response: any) => {
         this.dataSource.data = response.data;
@@ -76,7 +81,9 @@ export class InterviewCountListComponent {
       }));
     }
     else{
-      this.dashboardServ.getInterviewCountPopupEmp(this.data.flag, this.data.duration,userid).subscribe(
+      console.log(this.data.duration,'otherrolesssss');
+      
+      this.dashboardServ.getInterviewCountPopupEmp(this.data.flag, this.data.userduration,userid).subscribe(
         ((response: any) => {
           this.dataSource.data = response.data;
           this.dataSource.data.map((x: any, i) => {

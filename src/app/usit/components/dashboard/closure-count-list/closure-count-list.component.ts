@@ -80,7 +80,7 @@ export class ClosureCountListComponent {
 
     }
     else {
-      this.dashboardServ.getClosureCountPopupEmp(this.data.flag, this.data.duration, userid).subscribe(
+      this.dashboardServ.getClosureCountPopupEmp(this.data.flag, this.data.userduration, userid).subscribe(
         ((response: any) => {
           this.dataSource.data = response.data;
           this.dataSource.data.map((x: any, i) => {
