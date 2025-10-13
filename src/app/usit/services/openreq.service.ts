@@ -177,8 +177,8 @@ export class OpenreqService {
     return this.http.put(`mail/emailcredentials/credentialUpdate`, data);
   }
 
-  getHotlist() {
-    return this.http.get(`consultant/analyz/hotListDropdown`);
+  getHotlist(userid:any) {
+    return this.http.get(`consultant/analyz/hotListDropdown/${userid}`);
   }
 
   matchResume(consultantId: number, jobDescription: string) {

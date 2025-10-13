@@ -79,7 +79,7 @@ data = inject(MAT_DIALOG_DATA);
     this.userId = localStorage.getItem('userid');
     this.getAll();
     this.initializeJobApplicationCommentsForm(null);
-    this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+    this.searchConsultantOptions$ = this.openServ.getHotlist(this.userId).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getConsultantOptionsForAutoComplete(resp);
       }
@@ -206,7 +206,7 @@ data = inject(MAT_DIALOG_DATA);
 
     
 
-    this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+    this.searchConsultantOptions$ = this.openServ.getHotlist(this.userId).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getConsultantOptionsForAutoComplete(resp);
       }

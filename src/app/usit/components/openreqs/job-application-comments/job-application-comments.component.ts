@@ -99,7 +99,7 @@ ngOnInit(): void {
 
   this.initializeJobApplicationCommentsForm(null);
 
-  this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(
+  this.searchConsultantOptions$ = this.openServ.getHotlist(this.userId).pipe(
     map((x: any) => x.data),
     tap(resp => {
       if (resp && resp.length) {
@@ -266,7 +266,7 @@ preventLeadingSpace(event: Event): void {
 
     
 
-    this.searchConsultantOptions$ = this.openServ.getHotlist().pipe(map((x: any) => x.data), tap(resp => {
+    this.searchConsultantOptions$ = this.openServ.getHotlist(this.userId).pipe(map((x: any) => x.data), tap(resp => {
       if (resp && resp.length) {
         this.getConsultantOptionsForAutoComplete(resp);
       }
