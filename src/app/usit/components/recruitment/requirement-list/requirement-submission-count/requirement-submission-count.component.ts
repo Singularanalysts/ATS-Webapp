@@ -11,9 +11,9 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Subject } from 'rxjs';
 import { FileManagementService } from 'src/app/usit/services/file-management.service';
 import * as saveAs from 'file-saver';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-requirement-submission-count',
@@ -62,34 +62,44 @@ export class RequirementSubmissionCountComponent implements OnInit {
   ngOnInit(): void {
     this.getReqSubmissionPopupRecords();
   }
+    private destroyed$ = new Subject<void>();
+    length = 50;
 
-  getReqSubmissionPopupRecords() {
-    const pagObj = {
-      pageNumber: 1,
-      pageSize: this.pageSize,
-      sortField: "updateddate",
-      sortOrder: "asc",
-      keyword: this.field,
-      reqid: this.data.subCountData.requirementid,
-    }
-    this.requirementServ.getReqSubmisiionPopupRecords(pagObj).subscribe({
+getReqSubmissionPopupRecords() {
+  const pagObj = {
+    pageNumber: this.currentPage,   // dynamic page number
+    pageSize: this.pageSize,
+    sortField: "updateddate",
+    sortOrder: "asc",
+    keyword: this.field,
+    reqid: this.data.subCountData.requirementid,
+  };
+
+  this.requirementServ.getReqSubmisiionPopupRecords(pagObj)
+    .pipe(takeUntil(this.destroyed$))
+    .subscribe({
       next: (resp: any) => {
-        if (resp.status === 'Success') {
-          if (resp.data) {
-            this.dataSource.data = resp.data.content;
-            // for serial-num {}
-            this.dataSource.data.map((x: any, i) => {
-              x.serialNum = this.generateSerialNumber(i);
-            });
-          }
+        if (resp?.status === 'Success' && resp?.data) {
+
+          // ✅ Add pagination handling like getservedcount()
+          this.length = resp.data.totalElements || resp.data.length || 0;
+          this.totalPages = Math.ceil(this.length / this.pageSize);
+
+          // ✅ Assign data to table
+          this.dataSource.data = resp.data.content;
+
+          // ✅ Add serial number across pages
+          this.dataSource.data.forEach((x: any, i: number) => {
+            x.serialNum = i + 1 + (this.currentPage - 1) * this.pageSize;
+          });
         }
       },
       error: (err: any) => {
-
+        console.error("Error fetching submission popup records:", err);
       }
-    }
-    )
-  }
+    });
+}
+
 
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
@@ -120,5 +130,54 @@ export class RequirementSubmissionCountComponent implements OnInit {
       );
 
   }
-
+  currentPage: number = 1; // Start from page 1
+      totalPages: number = 0;
+  goToPage(page: number) {
+        this.currentPage = page;
+        this.getReqSubmissionPopupRecords();
+      }
+      
+      nextPage() {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+          this.getReqSubmissionPopupRecords();
+        }
+      }
+      
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+          this.getReqSubmissionPopupRecords();
+        }
+      }
+    getPageNumbers(): any[] {
+        const visiblePages = 4; 
+        const pageNumbers: any[] = [];
+      
+        if (this.totalPages <= 6) {
+          return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+        }
+      
+        pageNumbers.push(1); 
+      
+        let start = Math.max(2, this.currentPage - Math.floor(visiblePages / 2));
+        let end = Math.min(this.totalPages - 1, start + visiblePages - 1);
+      
+        if (end === this.totalPages - 1) {
+          start = Math.max(2, this.totalPages - visiblePages);
+        }
+      
+        for (let i = start; i <= end; i++) {
+          pageNumbers.push(i);
+        }
+      
+        if (end < this.totalPages - 1) {
+          pageNumbers.push("..."); 
+        }
+      
+        pageNumbers.push(this.totalPages); 
+      
+        return pageNumbers;
+      }
+      
 }
