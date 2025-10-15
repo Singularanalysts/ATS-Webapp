@@ -9,6 +9,8 @@
 
 <div id="table-container" class="table-wrapper">
     <section class="mat-elevation-z8 hot-list-table-style">
+        <div class="table-container">
+
       <table mat-table [dataSource]="dataSource"  matSort (matSortChange)="onSort($event)" oncopy="return false">
 
         <!--- Note that these columns can be defined in any order.
@@ -70,6 +72,26 @@
         <tr mat-header-row *matHeaderRowDef="dataTableColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: dataTableColumns;"></tr>
       </table>
+      </div>
       <p class="no-data-found" *ngIf="!dataSource.data.length">{{'No matching data found'}}</p>
     </section>
   </div>
+    <div class="custom-pagination">
+        <!-- Previous Page Button -->
+        <button mat-icon-button (click)="prevPage()" [disabled]="currentPage === 1">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+      
+        <!-- Page Numbers -->
+        <button 
+          *ngFor="let page of getPageNumbers()" 
+          (click)="goToPage(page)" 
+          [class.active]="currentPage === page">
+          {{ page }}
+        </button>
+      
+        <!-- Next Page Button -->
+        <button mat-icon-button (click)="nextPage()" [disabled]="currentPage === totalPages">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
