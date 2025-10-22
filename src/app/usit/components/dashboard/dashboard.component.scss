@@ -310,9 +310,11 @@ mat-typography p {
 }
 
 .mat-mdc-card.activity-card-individual {
-  height: 389px;
-  padding: 20px;
-  overflow-y: auto;
+ height: 552px;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+    bottom: 14px;
 }
 
 .mat-mdc-card.activity-card {
