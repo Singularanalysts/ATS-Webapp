@@ -213,7 +213,7 @@ export class DashboardComponent implements OnInit {
 page: number = 1;
 itemsPerPage = 50;
 AssignedPageNum !: any;
-totalItems: any;
+totalItems!: 0;
 field = "empty";
 currentPageIndex = 0;
 pageEvent!: PageEvent;
@@ -609,7 +609,7 @@ console.log(previlage,'previlage');
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   currentPage = 1;
-  pageSize = 13;
+  pageSize = 20;
   totalPages = 1;
   
   getSourcingLeads() {
@@ -813,7 +813,7 @@ console.log(totalRecords,'totalrecords');
 
 
   currentPagedice = 1;
-  pageSizedice = 13;
+  pageSizedice = 20;
   totalPagesdice = 1;
     showTable = false;  // Initially hide the table
 
@@ -876,50 +876,89 @@ console.log(totalRecords,'totalrecords');
   
 
  
-  getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any = "Postedon", sortOrder: any = "desc", keyword: any = "empty") {
-    const actData = {
-      pageNumber: pagIdx,
-      pageSize: pagesize,
-      sortField: sortField,
-      sortOrder: sortOrder,
-      keyword: keyword,
-      userid: this.userid
-    };
+  // getDiceReqss(pagIdx: any = 1, pagesize: any = 50, sortField: any = "Postedon", sortOrder: any = "desc", keyword: any = "empty") {
+  //   const actData = {
+  //     pageNumber: pagIdx,
+  //     pageSize: pagesize,
+  //     sortField: sortField,
+  //     sortOrder: sortOrder,
+  //     keyword: keyword,
+  //     userid: this.userid
+  //   };
   
-    const apiCall = this.dashboardServ.getDiceRequirementslax(this.role, actData);
+  //   const apiCall = this.dashboardServ.getDiceRequirementslax(this.role, actData);
   
-    if (apiCall) { // Only make API call if apiCall is not null
-      apiCall.subscribe(
-        (response: any) => {
-          this.dataSourceDicelax.data = response.data.content;
-          console.log(this.dataSourceDicelax.data, 'other same data');
+  //   if (apiCall) { // Only make API call if apiCall is not null
+  //     apiCall.subscribe(
+  //       (response: any) => {
+  //         this.dataSourceDicelax.data = response.data.content;
+  //         console.log(this.dataSourceDicelax.data, 'other same data');
   
-          this.totalItems = response.data.totalElements;
-          this.dataSourceDicelax.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-        }
-      );
-    } else {
-      console.log("No API call required for this role.");
-    }
-  }
-  
+  //         this.totalItems = response.data.totalElements;
+  //         this.dataSourceDicelax.data.map((x: any, i) => {
+  //           x.serialNum = this.generateSerialNumber(i);
+  //         });
+  //       }
+  //     );
+  //   } else {
+  //     console.log("No API call required for this role.");
+  //   }
+  // }
+  getDiceReqss(pagIdx: number = 1, pagesize: number = this.pageSize, sortField: any = "Postedon", sortOrder: any = "desc", keyword: any = "empty") {
+  // keep component state in sync
+  this.pageSize = pagesize;
+  this.currentPageIndex = Math.max(0, pagIdx - 1); // keep zero-based internally
 
-  handlePageEvent(event: PageEvent) {
-    if (event) {
-      this.pageEvent = event;
-      this.currentPageIndex = event.pageIndex;
-      this.getDiceReqss(event.pageIndex + 1);
-    }
+  const actData = {
+    pageNumber: pagIdx,   // API expects 1-based
+    pageSize: pagesize,
+    sortField,
+    sortOrder,
+    keyword,
+    userid: this.userid
+  };
+
+  const apiCall = this.dashboardServ.getDiceRequirementslax(this.role, actData);
+
+  if (!apiCall) {
+    console.log("No API call required for this role.");
     return;
   }
 
-  generateSerialNumber(index: number): number {
-    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
-    const serialNumber = (pagIdx - 1) * 50 + index + 1;
-    return serialNumber;
-  }
+  apiCall.subscribe((response: any) => {
+    // set datasource
+    this.dataSourceDicelax.data = response.data.content || [];
+    this.totalItems = response.data.totalElements || 0;
+
+    // add serial numbers using the actual pageSize and zero-based page index
+    this.dataSourceDicelax.data.forEach((row: any, i: number) => {
+      row.serialNum = this.generateSerialNumber(i);
+    });
+
+    console.log(this.dataSourceDicelax.data, 'paged data with serial numbers');
+  });
+}
+
+// paginator event — pass both pageIndex and pageSize to API
+handlePageEvent(event: PageEvent) {
+  if (!event) { return; }
+
+  this.pageEvent = event;
+  this.currentPageIndex = event.pageIndex;
+  this.pageSize = event.pageSize;
+
+  // API expects 1-based page number, so add 1
+  this.getDiceReqss(event.pageIndex + 1, event.pageSize);
+
+  return;
+}
+
+// simplified serial number generator (zero-based page index)
+generateSerialNumber(index: number): number {
+  // currentPageIndex is zero-based. pageSize is current page size.
+  const pageSize = this.pageSize || 50;
+  return this.currentPageIndex * pageSize + index + 1;
+}
 
 
 
