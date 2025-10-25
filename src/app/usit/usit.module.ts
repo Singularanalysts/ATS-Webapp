@@ -11,6 +11,7 @@ import { AddResumeVendorComponent } from './components/openreqs/add-resume-vendo
 import { AddResumeRecruiterComponent } from './components/openreqs/add-resume-recruiter/add-resume-recruiter.component';
 import { H1BVendorsComponent } from './components/vendor-management/h1-b-vendors/h1-b-vendors.component';
 import { TeamFlowComponent } from './components/team-flow/team-flow.component';
+import { AddViewEmployeeDataComponent } from './components/vendor-management/add-view-employee-data/add-view-employee-data.component';
 
 @NgModule({
   declarations: [

@@ -129,13 +129,13 @@ myRoles(){
             "routerLink": "/usit/tcvr",
             "roles":["Super Administrator"]  
           },
-          // {
-          //   "test": "TCVR",
-          //   "text": "H1B Vendors",
-          //   "icon": "handshake",
-          //   "routerLink": "/usit/h1b-vendor",
-          //   "roles":["Super Administrator"]  
-          // }
+          {
+            "test": "TCVR",
+            "text": "H1B Data Hub",
+            "icon": "group",
+            "routerLink": "/usit/h1b-view-employee-datahub",
+            "roles":["Super Administrator"]  
+          }
         ]
       },
       {

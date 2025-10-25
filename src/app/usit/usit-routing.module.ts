@@ -405,6 +405,10 @@ const routes: Routes = [
     path: 'tcvr',
     loadComponent: () => import('../usit/components/vendor-management/client-information/client-information.component').then(m => m.ClientInformationComponent)
   },
+    {
+    path: 'h1b-view-employee-datahub',
+    loadComponent: () => import('../usit/components/vendor-management/view-employee-data/view-employee-data.component').then(m => m.ViewEmployeeDataComponent)
+  },
   {
     path: 'sourcing',
     loadComponent: () => import('../usit/components/pre-sourcing/sourcing/sourcing.component').then(m => m.SourcingComponent)
@@ -442,6 +446,7 @@ const routes: Routes = [
      {
     path: 'Scrape-Activity', component: ScrapeActivityComponent,
   },
+   
 ];
 
 @NgModule({
