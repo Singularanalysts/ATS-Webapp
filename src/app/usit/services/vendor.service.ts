@@ -16,7 +16,10 @@ export class VendorService {
   public registerEntity(entity: any) {
     return this.apiServ.post("vms/vendor/save", entity);
   }
+saveemployeehub(entity:any){
+  return this.apiServ.post("vms/H1BDataHub/save", entity);
 
+}
   public duplicatecheck(vendor: string,id:number) {
     return this.apiServ.get("vms/vendor/duplicatecheck/" + vendor+"/"+id);
   }
@@ -79,7 +82,9 @@ export class VendorService {
   addORUpdateVendor(entity: any, action: 'edit-vendor' | 'add-vendor'){
     return action === 'edit-vendor' ? this.updateEntity(entity): this.registerEntity(entity);
   }
-
+addORUpdateEmployeeHub(entity: any, action: 'edit-H1B-Employee-Data-Hub' | 'add-H1B-Employee-Data-Hub'){
+    return action === 'edit-H1B-Employee-Data-Hub' ? this.updateEntity(entity): this.saveemployeehub(entity);
+  }
   approveORRejectVendor(entity: any, action: 'Approved' | 'Reject'){
     return action === 'Approved' ? this.approvevms(entity.action, entity.id, entity.userid): this.rejectVendor(entity.id, entity.remarks, entity.userid);
   }
@@ -156,5 +161,11 @@ export class VendorService {
   deleteKnownVendorContact(id: number) {
     return this.apiServ.delete(`vms/knownContact/deleteById/${id}`);
   }
+  geth1bemployeedata(payload:any){
+    return this.apiServ.post(`vms/H1BDataHub/all`,payload)
+  }
+   employeeh1bimport(payload: FormData, userid: number) {
+  return this.apiServ.post(`vms/H1BDataHub/uploadExcel/${userid}`, payload);
+}
 
 }
