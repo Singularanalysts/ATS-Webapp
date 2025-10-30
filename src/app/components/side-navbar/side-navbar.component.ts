@@ -130,7 +130,7 @@ myRoles(){
             "roles":["Super Administrator"]  
           },
           {
-            "test": "TCVR",
+            "test": "HB_DATA_HUB",
             "text": "H1B Data Hub",
             "icon": "group",
             "routerLink": "/usit/h1b-view-employee-datahub",
