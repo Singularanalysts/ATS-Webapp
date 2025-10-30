@@ -12,7 +12,7 @@
   <span>
   <!-- <button class="search me-2" mat-raised-button color="primary">Export</button> -->
   
-  <button class="search" mat-raised-button style="background-color:#4caf50; color:white;"
+  <button class="search"  [disabled]="!privilegeServ.hasPrivilege('IMPORT_EXCEL')" mat-raised-button style="background-color:#4caf50; color:white;"
     (click)="fileInput.click()">
     Import
   </button>
@@ -85,7 +85,7 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by petitionerCity"
                 sticky>Petitioner City </th>
               <td mat-cell *matCellDef="let element">
-                <span class="user-info" (click)="goToUserInfo(element.addedby)"> {{element.petitionerCity | titlecase}}
+                <span > {{element.petitionerCity | titlecase}}
                 </span>
               </td>
             </ng-container>

@@ -598,9 +598,6 @@ export class ViewEmployeeDataComponent {
       })
   }
 
-  goToUserInfo(id: any) {
-    this.router.navigate(['usit/user-info', 'vendor', id])
-  }
 onFileSelected(event: any) {
   const file = event.target.files[0];
   if (!file) return;

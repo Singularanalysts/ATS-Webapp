@@ -194,7 +194,7 @@ selectedRole: string = '';
     this.getAll();
     
   }
-
+h1b_data_hub:any
   /**
    * fetch privileges
    */
@@ -277,6 +277,7 @@ selectedRole: string = '';
         this.docsynch = response.data.docsynch;
         this.ratings=response.data.ratings;
         this.othercompaniessuperadmin= response.data.othercompaniessuperadmin;
+        this.h1b_data_hub=response.data.h1b_data_hub;
 
         this.selecedPrivileges();
 
@@ -348,6 +349,13 @@ selectedRole: string = '';
         privileges: this.vendor,
         isSelected: this.vendor
           ? this.vendor.every((priv: any) => priv.selected === true)
+          : false,
+      },
+      {
+         title: 'h1b_data_hub',
+        privileges: this.h1b_data_hub,
+        isSelected: this.h1b_data_hub
+          ? this.h1b_data_hub.every((priv: any) => priv.selected === true)
           : false,
       },
       {
@@ -836,6 +844,17 @@ selectedRole: string = '';
         if (this.tech_support != null) {
           this.tech_support.forEach((ele) => {
             response.data.tech_support.forEach((resp: any) => {
+              if (ele.id === resp.id) {
+                this.entity.privilegeIds.push(resp.id);
+                ele.selected = true;
+                this.flg = true;
+              }
+            });
+          });
+        }
+         if (this.h1b_data_hub != null) {
+          this.h1b_data_hub.forEach((ele:any) => {
+            response.data.h1b_data_hub.forEach((resp: any) => {
               if (ele.id === resp.id) {
                 this.entity.privilegeIds.push(resp.id);
                 ele.selected = true;
