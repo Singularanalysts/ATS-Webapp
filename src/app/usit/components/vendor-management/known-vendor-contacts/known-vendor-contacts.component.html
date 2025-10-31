@@ -136,7 +136,7 @@
     <!-- paginator -->
     <div class="paginator" *ngIf="dataSource.filteredData.length">
       <mat-paginator (page)="handlePageEvent($event)" [pageSize]="pageSize" [length]="totalItems" [disabled]="false"
-        [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+        [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
         [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
       </mat-paginator>
     </div>

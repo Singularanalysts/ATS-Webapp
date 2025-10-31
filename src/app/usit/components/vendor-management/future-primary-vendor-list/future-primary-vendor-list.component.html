@@ -47,11 +47,8 @@
           <ng-container matColumnDef="Company">
             <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 16%"> Company</th>
             <td mat-cell *matCellDef="let element" style="width: 16%">
-  <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)">
-    {{ element.company }}
-  </span>
-</td>
-
+              <span class="company-recruiter-info" (click)="goToCompanyRecInfo(element)"> {{element.company}}</span>
+            </td>
           </ng-container>
   
           <!-- HeadQuarter Column mat-sort-header sortActionDescription="Sort by Head Quarter"-->

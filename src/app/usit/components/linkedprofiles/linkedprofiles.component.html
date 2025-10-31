@@ -1,7 +1,7 @@
 <div class="hot-list-container">
     <!-- <ul class="breadcrumb">
         <li><a (click)="navigateToDashboard()">Home</a></li>
-        <li class="last">Talent Pool</li>
+        <li class="last">t Pool</li>
     </ul> -->
     <div class="header-container mat-elevation-z1">
         <span class="header-text">
@@ -110,7 +110,7 @@
     <div class="paginator" *ngIf="dataSource.filteredData.length">
         <!-- paginator -->
         <mat-paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageSize" [disabled]="false"
-            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
             [hidePageSize]="true" [pageIndex]="currentPageIndex" aria-label="Select page">
         </mat-paginator>
     </div>

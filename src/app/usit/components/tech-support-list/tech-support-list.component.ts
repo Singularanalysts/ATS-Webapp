@@ -44,12 +44,10 @@ import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
   templateUrl: './tech-support-list.component.html',
   styleUrls: ['./tech-support-list.component.scss']
 })
-
 export class TechSupportListComponent {
   flag: any;
   consultant: any;
   entity: any;
-  
 
   onStatusUpdate(_t44: any) {
     throw new Error('Method not implemented.');
@@ -95,7 +93,7 @@ export class TechSupportListComponent {
   // pagination code
   page: number = 1;
   itemsPerPage = 50;
-  AssignedPageNum !: any;
+  AssignedPageNum!: any;
   totalItems: any;
   ser: number = 1;
   userid!: any;
@@ -107,12 +105,16 @@ export class TechSupportListComponent {
   showFirstLastButtons = true;
   pageSizeOptions = [5, 10, 25];
 
+  //  variable to remember active search keyword
+  activeSearchKeyword: string = '';
+
   constructor(private service: TechsupportService, private router: Router) { }
+
   ngOnInit(): void {
     this.hasAcces = localStorage.getItem('role');
     this.getAll();
-
   }
+
   getAllDataList() {
     this.service.getTechSupportList().subscribe(
       (response: any) => {
@@ -123,8 +125,7 @@ export class TechSupportListComponent {
           });
         }
       }
-
-    )
+    );
   }
 
   getAll(pagIdx = 1) {
@@ -133,25 +134,31 @@ export class TechSupportListComponent {
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      keyword: this.field,
-    }
+
+      // active search keyword instead of resetting it
+      keyword: this.activeSearchKeyword || this.field,
+    };
+
     this.service.getTechSupportListwithPaginationSortAndFilter(pagObj)
       .pipe(takeUntil(this.destroyed$)).subscribe(
         (response: any) => {
           this.entity = response.data.content;
           this.dataSource.data = response.data.content;
           this.totalItems = response.data.totalElements;
-          // for serial-num {}
+
+          // serial number generation
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
           });
         }
-      )
+      );
   }
-
 
   applyFilter(event: any) {
     const keyword = event.target.value;
+    //  store active keyword globally
+    this.activeSearchKeyword = keyword;
+
     if (keyword != '') {
       const pagObj = {
         pageNumber: 1,
@@ -159,34 +166,39 @@ export class TechSupportListComponent {
         sortField: this.sortField,
         sortOrder: this.sortOrder,
         keyword: keyword,
-      }
+      };
 
       return this.service.getTechSupportListwithPaginationSortAndFilter(pagObj).subscribe(
         ((response: any) => {
           this.entity = response.data.content;
-          this.dataSource.data  = response.data.content;
-           // for serial-num {}
-           this.dataSource.data.map((x: any, i) => {
+          this.dataSource.data = response.data.content;
+          this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
           });
           this.totalItems = response.data.totalElements;
         })
       );
     }
-    return  this.getAll(this.currentPageIndex + 1)
+
+    //    search box is cleared, reset filter tracking
+    this.activeSearchKeyword = '';
+    return this.getAll(this.currentPageIndex + 1);
   }
 
   sortField = 'updateddate';
   sortOrder = 'desc';
+
   onSort(event: Sort) {
     if (event.active == 'SerialNum')
-      this.sortField = 'updateddate'
+      this.sortField = 'updateddate';
     else
       this.sortField = event.active;
-      this.sortOrder = event.direction;
-    
-    if (event.direction != ''){
-    this.getAll();
+
+    this.sortOrder = event.direction;
+
+    //   Keep sorting only when direction exists, and use active filter keyword
+    if (event.direction != '') {
+      this.getAll(this.currentPageIndex + 1);
     }
   }
 
@@ -194,14 +206,15 @@ export class TechSupportListComponent {
     this.submitted = true;
     if (this.query == '') {
       this.getAll();
-    }
-    else {
+    } else {
       this.tech = this.tech.filter((res: Techsupport) => {
-        return res.name.toLowerCase().match(this.query.toLowerCase()) || res.email.toLowerCase().match(this.query.toLowerCase())
-
-          || res.mobile.match(this.query)
-          || res.skills.toLowerCase().match(this.query.toLowerCase());
-      })
+        return (
+          res.name.toLowerCase().match(this.query.toLowerCase()) ||
+          res.email.toLowerCase().match(this.query.toLowerCase()) ||
+          res.mobile.match(this.query) ||
+          res.skills.toLowerCase().match(this.query.toLowerCase())
+        );
+      });
     }
   }
 
@@ -211,8 +224,6 @@ export class TechSupportListComponent {
       consultantData: consultant,
       actionName: 'edit-tech-support',
       flag: this.flag,
-
-
     };
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '65vw';
@@ -222,7 +233,6 @@ export class TechSupportListComponent {
     const dialogRef = this.dialogServ.openDialogWithComponent(
       AddTechSupportComponent,
       dialogConfig
-
     );
 
     dialogRef.afterClosed().subscribe(() => {
@@ -240,15 +250,13 @@ export class TechSupportListComponent {
       actionName: 'add-tech-support'
     };
 
-
     const dialogConfig = this.getDialogConfigData(actionData, { delete: false, edit: false, add: true });
     const dialogRef = this.dialogServ.openDialogWithComponent(AddTechSupportComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.submitted) {
-        this.getAll()
+        this.getAll();
       }
-    })
-
+    });
   }
 
   private getDialogConfigData(dataToBeSentToDailog: Partial<IConfirmDialogData>, action: { delete: boolean; edit: boolean; add: boolean, updateSatus?: boolean }) {
@@ -268,28 +276,26 @@ export class TechSupportListComponent {
     }
     this.service.changeTechSupportStatus(this.techent).subscribe(
       (response: any) => {
-        // alertify.success("Status Updated successfully");
         this.getAll();
-      })
+      });
   }
-
-
 
   onTableDataChange(event: any) {
     this.page = event;
     this.getAll();
   }
+
   onTableSizeChange(event: any): void {
-    // this.tableSize = event.target.value;
     this.page = 1;
     this.getAll();
   }
 
   navigateToDashboard() {
     this.router.navigateByUrl('/usit/dashboard');
-
   }
+
   private destroyed$ = new Subject<void>();
+
   deleteEntity(id: any) {
     const dataToBeSentToDailog: Partial<IConfirmDialogData> = {
       title: 'Confirmation',
@@ -308,8 +314,6 @@ export class TechSupportListComponent {
       ConfirmComponent,
       dialogConfig
     );
-
-    // call delete api after  clicked 'Yes' on dialog click
 
     dialogRef.afterClosed().subscribe({
       next: (resp) => {
@@ -344,7 +348,7 @@ export class TechSupportListComponent {
       },
     });
   }
-  
+
   generateSerialNumber(index: number): number {
     const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
     const serialNumber = (pagIdx - 1) * this.pageSize + index + 1;
@@ -368,12 +372,10 @@ export class TechSupportListComponent {
         next: (response: any) => {
           this.consultant = response.data.content;
           this.dataSource.data = response.data.content;
-          // for serial-num {}
           this.dataSource.data.map((x: any, i) => {
             x.serialNum = this.generateSerialNumber(i);
           });
           this.totalItems = response.data.totalElements;
-          //  this.length = response.data.totalElements;
         },
         error: (err: any) => {
           dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
@@ -404,31 +406,15 @@ export class TechSupportListComponent {
     this.dataSource.data = this.dataSource.data.sort((a: any, b: any) => {
       switch (activeSortHeader) {
         case 'SerialNum':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.serialNum || '').localeCompare(b.serialNum || '')
-          );
+          return ((isAsc ? 1 : -1) * (a.serialNum || '').localeCompare(b.serialNum || ''));
         case 'Name':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.name || '').localeCompare(b.name || '')
-          );
+          return ((isAsc ? 1 : -1) * (a.name || '').localeCompare(b.name || ''));
         case 'Experience':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.experience || '').localeCompare(b.experience || '')
-          );
+          return ((isAsc ? 1 : -1) * (a.experience || '').localeCompare(b.experience || ''));
         case 'Email':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.email || '').localeCompare(b.email || '')
-          );
-
+          return ((isAsc ? 1 : -1) * (a.email || '').localeCompare(b.email || ''));
         case 'Technology':
-          return (
-            (isAsc ? 1 : -1) *
-            (a.technology || '').localeCompare(b.technology || '')
-          );
+          return ((isAsc ? 1 : -1) * (a.technology || '').localeCompare(b.technology || ''));
         default:
           return 0;
       }

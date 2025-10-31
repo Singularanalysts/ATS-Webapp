@@ -116,17 +116,29 @@ export class TechnologyTagListComponent implements OnInit {
   sortField = 'technologyarea';
   sortOrder = 'asc';
   onSort(event: Sort) {
-    if (event.active == 'SerialNum')
-      this.sortField = 'technologyarea'
-    else
-      this.sortField = event.active;
-    
-      this.sortOrder = event.direction;
-    
-    if (event.direction != ''){
-    this.getAllData();
-    }
-  }
+  if (!event.direction) return;
+
+  // Map frontend column name → backend column name
+  const mappedSortField = this.getSortField(event.active);
+
+  console.log("Sorting triggered:");
+  console.log("Frontend column:", event.active);
+  console.log("Mapped backend field:", mappedSortField);
+  console.log("Sort Order:", event.direction);
+
+  this.sortField = mappedSortField;
+  this.sortOrder = event.direction;
+
+  // Fetch sorted data
+  this.getAllData();
+}
+
+  getSortField(field: string): string {
+  if (field === 'Technology') return 'technologyarea';
+  if (field === 'FunctionalSkills') return 'functionalSkills';
+  if (field === 'TechnicalSkills') return 'listofkeyword';
+  return 'updateddate'; // fallback
+}
 
   handlePageEvent(event: PageEvent) {
     if (event) {
@@ -248,7 +260,7 @@ export class TechnologyTagListComponent implements OnInit {
   openskill(){
     const actionData = {
       title: 'Add Skills',
-    
+   
       actionName: 'add-technology'
     };
     const dialogConfig = new MatDialogConfig();
@@ -260,9 +272,10 @@ export class TechnologyTagListComponent implements OnInit {
     const dialogRef = this.dialogServ.openDialogWithComponent(SkillsReportComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(() => {
       if (dialogRef.componentInstance.allowAction) {
-      
+     
       }
     })
 
   }
 }
+
