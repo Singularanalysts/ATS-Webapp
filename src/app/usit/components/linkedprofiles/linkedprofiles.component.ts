@@ -6,14 +6,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorIntl, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
+import { MatDialogConfig } from '@angular/material/dialog';
+
 import { OpenreqService } from '../../services/openreq.service';
 import { ISnackBarData, SnackBarService } from 'src/app/services/snack-bar.service';
-import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { PaginatorIntlService } from 'src/app/services/paginator-intl.service';
-import { MatSortModule, Sort } from '@angular/material/sort';
-import { LinkedInProfilesComponent } from '../dashboard/linked-in-profiles/linked-in-profiles.component';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { DialogService } from 'src/app/services/dialog.service';
+import { LinkedInProfilesComponent } from '../dashboard/linked-in-profiles/linked-in-profiles.component';
 
 @Component({
   selector: 'app-linkedprofiles',
@@ -33,6 +34,7 @@ import { DialogService } from 'src/app/services/dialog.service';
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlService }]
 })
 export class LinkedprofilesComponent implements OnInit {
+  // Table & paginator
   dataSource = new MatTableDataSource<any>([]);
   dataTableColumns: string[] = [
     'SerialNum',
@@ -42,27 +44,34 @@ export class LinkedprofilesComponent implements OnInit {
     'experience_summary',
     'job_title'
   ];
-  // paginator
-    private dialogServ = inject(DialogService);
-  
+
+  // Dialog service
+  private dialogServ = inject(DialogService);
+
+  // Pagination
   length = 50;
   pageIndex = 0;
   pageSize = 50;
   currentPageIndex = 0;
   pageSizeOptions = [50, 75, 100];
-  hidePageSize = false;
-  showPageSizeOptions = true;
   showFirstLastButtons = true;
   pageEvent!: PageEvent;
-  // pagination code
-  page: number = 1;
+
+  // API & filtering
   itemsPerPage = 50;
-  totalItems: number = 0;
-  field = 'empty';
+  totalItems = 0;
+  field = 'empty'; // search keyword
+  status = 'all'; // tab status (all/usa/uae)
+  tabs = ['USA']; // example tabs
+  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
+  sortField = 'updateddate';
+  sortOrder: 'asc' | 'desc' = 'desc';
   private router = inject(Router);
   private service = inject(OpenreqService);
   private snackBarServ = inject(SnackBarService);
   userid!: any;
+
+  // SnackBar default data
   dataToBeSentToSnackBar: ISnackBarData = {
     message: '',
     duration: 1500,
@@ -71,155 +80,101 @@ export class LinkedprofilesComponent implements OnInit {
     direction: 'above',
     panelClass: ['custom-snack-success'],
   };
-  sortField = 'updateddate';
-  sortOrder = 'desc';
-  // tabs = ['All', 'USA', 'UAE'];
-  tabs = ['USA'];
-  status = 'all';
-  pageIndices: { [key: string]: number } = { all: 0, usa: 0, uae: 0 };
 
   ngOnInit(): void {
     this.userid = localStorage.getItem('userid');
-    this.getAllData();
+    this.getAllData(); // initial load
   }
 
-  empTag(id: number) {
-    this.service.openReqsEmpTagging(id, this.userid).subscribe(
-      (response: any) => {
-
-      })
+  // Generate serial number for each row
+  generateSerialNumber(index: number): number {
+    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
+    return (pagIdx - 1) * this.pageSize + index + 1;
   }
 
-  getAllData(pagIdx = 1, status: string = 'all') {
+  // API call for fetching data with pagination, sort & search
+  getAllData(pagIdx = 1, status: string = this.status) {
     const pagObj = {
       pageNumber: pagIdx,
       pageSize: this.itemsPerPage,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      keyword: this.field,
+      keyword: this.field === '' ? 'empty' : this.field, // send 'empty' if no search
       country: status
-    }
-    this.service.linkedInPagination(pagObj).subscribe(
-      (response: any) => {
-        this.dataSource.data = response.data.content;
-        this.totalItems = response.data.totalElements;
-        // for serial-num {
-        this.dataSource.data.map((x: any, i) => {
-          x.serialNum = this.generateSerialNumber(i);
-        });
+    };
+
+    this.service.linkedInPagination(pagObj).subscribe((response: any) => {
+      this.dataSource.data = response.data.content;
+      this.totalItems = response.data.totalElements;
+      this.dataSource.data.forEach((x: any, i) => x.serialNum = this.generateSerialNumber(i));
+    });
+  }
+
+  // Open add LinkedIn Profile dialog
+  addLinkedInProfile() {
+    const actionData = {
+      title: 'LinkedIn Profiles',
+      interviewData: null,
+      actionName: 'add-executiverating',
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '50vw';
+    dialogConfig.disableClose = false;
+    dialogConfig.panelClass = 'add-interview';
+    dialogConfig.data = actionData;
+
+    const dialogRef = this.dialogServ.openDialogWithComponent(LinkedInProfilesComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success) {
+        this.getAllData(this.currentPageIndex + 1);
       }
-    )
-  }
-addLinkedInProfile(){
-     const actionData = {
-        title: 'LinkedIn Profiles ',
-        interviewData: null,
-        actionName: 'add-executiverating',
-    
-      };
-    
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.width = '50vw';
-      dialogConfig.disableClose = false;
-      dialogConfig.panelClass = 'add-interview';
-      dialogConfig.data = actionData;
-    
-      const dialogRef = this.dialogServ.openDialogWithComponent(LinkedInProfilesComponent, dialogConfig);
-    
-      dialogRef.afterClosed().subscribe(result => {
-        if (result?.success) {  
-          this.getAllData();  
-        }
-      });
-}
-  generateSerialNumber(index: number): number {
-    const pagIdx = this.currentPageIndex === 0 ? 1 : this.currentPageIndex + 1;
-    const serialNumber = (pagIdx - 1) * 50 + index + 1;
-    return serialNumber;
+    });
   }
 
-  onFilter(event: any) {
-    this.dataSource.filter = event.target.value;
-  }
-
-  onSort(event: Sort) {
-    if (event.active == 'SerialNum')
-      this.sortField = 'updateddate'
-    else
-      this.sortField = event.active;
-      this.sortOrder = event.direction;
-    
-    if (event.direction != ''){
-    this.getAllData();
-    }
-  }
-
+  // Search/filter
   applyFilter(event: any) {
     const keyword = event.target.value;
-    const pagObj = {
-      pageNumber: 1,
-      pageSize: this.itemsPerPage,
-      sortField: this.sortField,
-      sortOrder: this.sortOrder,
-      keyword: keyword,
-      country: this.status
-    }
-    if (keyword != '') {
-      return this.service.linkedInPagination(pagObj).subscribe(
-        ((response: any) => {
-          this.dataSource.data = response.data.content;
-          // for serial-num {}
-          this.dataSource.data.map((x: any, i) => {
-            x.serialNum = this.generateSerialNumber(i);
-          });
-          this.totalItems = response.data.totalElements;
-
-        })
-      );
-    }
-    if (keyword == '') {
-      this.field = 'empty';
-    }
-    return this.getAllData(this.currentPageIndex + 1, this.status);
+    this.field = keyword || 'empty';
+    this.currentPageIndex = 0; // reset to first page
+    this.getAllData(1, this.status);
   }
 
+  // Sorting
+  onSort(event: Sort) {
+    if (!event.direction) return; // ignore empty
+    this.sortField = event.active === 'SerialNum' ? 'updateddate' : event.active;
+    this.sortOrder = event.direction as 'asc' | 'desc';
+    this.getAllData(this.currentPageIndex + 1, this.status);
+  }
+
+  // Pagination
   handlePageEvent(event: PageEvent) {
-    if (event) {
-      this.pageEvent = event;
-      this.currentPageIndex = event.pageIndex;
-      this.getAllData(event.pageIndex + 1, this.status)
-    }
-    return;
+    this.pageSize = event.pageSize;
+    this.currentPageIndex = event.pageIndex;
+    this.getAllData(event.pageIndex + 1, this.status);
   }
 
+  // Lock profile
   lockProfile(id: number) {
-    this.service.lockProfiles(id, this.userid).subscribe(
-      (response: any) => {
-
-        if (response.status == 'success') {
-          this.dataToBeSentToSnackBar.panelClass = [
-            'custom-snack-success',
-          ];
-          this.dataToBeSentToSnackBar.message =
-            'Profile locked successfully';
-        } else {
-          this.dataToBeSentToSnackBar.panelClass = [
-            'custom-snack-failure',
-          ];
-          this.dataToBeSentToSnackBar.message = response.message;
-        }
-        this.snackBarServ.openSnackBarFromComponent(
-          this.dataToBeSentToSnackBar
-        );
-        this.getAllData();
+    this.service.lockProfiles(id, this.userid).subscribe((response: any) => {
+      if (response.status === 'success') {
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-success'];
+        this.dataToBeSentToSnackBar.message = 'Profile locked successfully';
+      } else {
+        this.dataToBeSentToSnackBar.panelClass = ['custom-snack-failure'];
+        this.dataToBeSentToSnackBar.message = response.message;
       }
-    )
+      this.snackBarServ.openSnackBarFromComponent(this.dataToBeSentToSnackBar);
+      this.getAllData(this.currentPageIndex + 1, this.status);
+    });
   }
 
+  // Tab change
   onTabChanged(event: MatTabChangeEvent) {
     this.status = event.tab.textLabel.toLowerCase();
-    this.currentPageIndex = this.pageIndices[this.status];
+    this.currentPageIndex = this.pageIndices[this.status] || 0;
     this.getAllData(this.currentPageIndex + 1, this.status);
   }
 }
-
